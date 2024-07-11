@@ -52,6 +52,7 @@ model User {
   oabUf                     String?                     @map("oab_uf") @db.Char(2) // UF da OAB
   crm                       String?                     @db.VarChar(10) // CRM do médico
   crmUf                     String?                     @map("crm_uf") @db.Char(2) // UF do CRM
+  active                    Boolean                     @default(true) // se o usuário está ativo
   profileId                 Int                         @map("profile_id") // código do perfil do usuário
   isActive                  Boolean                     @default(true) @map("is_active") // se o usuário está ativo
   createdAt                 DateTime                    @default(now()) @map("created_at") // data e hora da criação do registro

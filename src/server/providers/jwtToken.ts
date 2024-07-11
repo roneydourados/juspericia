@@ -4,53 +4,25 @@ import { UserProps } from "@/types/User";
 export const useJwtToken = () => {
   const config = useRuntimeConfig();
 
-  const issuer = config.public.tokenIssuer as string;
-  const audience = config.public.tokenAudiance as string;
-  const secret = config.public.tokenSecret as string;
+  const issuer = "app.token.issuer.juspericia";
+  const audience = "app.token.audience.juspericia";
+  const secret = config.tokenSecret as string;
 
-  const createToken = ({
-    email,
-    name,
-    id,
-    stripeSubscriptionId,
-    stripeCustomerId,
-    stripePriceId,
-    stripeSubscriptionStatus,
-    active,
-    ownerId,
-    userType,
-    clientId,
-    years,
-    UserRoutes,
-    plan,
-  }: UserProps) => {
-    return jwt.sign(
+  const createToken = (payload: UserProps) => {
+    const token = jwt.sign(
       {
-        data: {
-          email,
-          name,
-          id,
-          stripeSubscriptionId,
-          stripeCustomerId,
-          stripePriceId,
-          stripeSubscriptionStatus,
-          active,
-          ownerId,
-          userType,
-          clientId,
-          years,
-          UserRoutes,
-          plan,
-        },
+        data: payload,
       },
       secret,
       {
         expiresIn: "1 days",
-        subject: id!.toString(),
+        subject: payload.id!.toString(),
         issuer,
         audience,
       }
     );
+
+    return token;
   };
 
   const verifyToken = (token: string) => {
@@ -74,18 +46,9 @@ export const useJwtToken = () => {
       });
     } catch (error) {
       return {
+        id: 0,
         email: "",
         name: "",
-        id: 0,
-        stripeSubscriptionId: "",
-        stripeCustomerId: "",
-        stripePriceId: "",
-        stripeSubscriptionStatus: "",
-        plan: "",
-        active: false,
-        ownerId: 0,
-        userType: "",
-        clientId: 0,
       };
     }
   };

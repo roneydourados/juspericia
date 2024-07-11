@@ -14,18 +14,20 @@ export interface UserProps {
   createdAt?: string;
   updatedAt?: string;
   active?: boolean;
+  Profile?: UserProfileProps;
 }
 
-export interface UserProfile {
+export interface UserProfileProps {
   id?: number;
-  profile?: string;
+  profileName?: string;
+  type?: ProfileType;
   UserRoutes?: UserRoutesProps[];
   isAdmin?: boolean;
 }
 
 export interface UserRoutesProps {
   id?: number;
-  userId?: number;
+  profileId?: number;
   title?: string;
   to?: string;
   icon?: string;
@@ -33,10 +35,14 @@ export interface UserRoutesProps {
   isMenu?: boolean;
 }
 
-export type ProfileType =
-  | { name: "Administrador"; role: "ADMIN" }
-  | { name: "Advogado"; role: "ADVOGADO" }
-  | { name: "Médico"; role: "MEDICO" };
+const profileType = ["ADMIN", "ADVOGADO", "MEDICO"] as const;
+
+export type ProfileType = (typeof profileType)[number];
+
+// export type ProfileType =
+//   | { name: "Administrador"; role: "ADMIN" }
+//   | { name: "Advogado"; role: "ADVOGADO" }
+//   | { name: "Médico"; role: "MEDICO" };
 
 export type PaymentType =
   | {

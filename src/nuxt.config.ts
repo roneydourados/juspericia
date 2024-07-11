@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     "nuxt-security",
   ],
   imports: {
-    dirs: ["store, types"],
+    dirs: ["store", "types"],
     //autoImport: true,
   },
   app: {
@@ -109,13 +109,17 @@ export default defineNuxtConfig({
       compilerOptions: {
         target: "es2021",
         verbatimModuleSyntax: false,
+        paths: {
+          "@/*": ["./*"],
+          "@/server*": ["./server/*"],
+        },
       },
     },
   },
   runtimeConfig: {
-    tokenAudiance: process.env.TOKEN_AUDIENCE ?? "",
-    tokenIssuer: process.env.TOKEN_ISSUER ?? "",
     tokenSecret: process.env.JWT_SECRET ?? "",
-    baseUrl: process.env.API_BASE_URL ?? "",
+    public: {
+      apiBaseUrl: process.env.API_BASE_URL ?? "",
+    },
   },
 });
