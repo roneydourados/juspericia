@@ -10,11 +10,11 @@ export type ProfileType = (typeof profileType)[number];
 export const appRoutes = [
   {
     title: "Home",
-    to: "/home",
+    to: "/home-admin",
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADMIN", "ADMIN"],
+    profiles: ["ADMIN"],
   },
   {
     title: "Home",
@@ -22,7 +22,7 @@ export const appRoutes = [
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADVOGADO", "ADMIN"],
+    profiles: ["ADVOGADO"],
   },
   {
     title: "Solicitações",
@@ -38,7 +38,7 @@ export const appRoutes = [
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
-    profiles: ["MEDICO", "ADMIN"],
+    profiles: ["MEDICO"],
   },
   {
     title: "Advogados",

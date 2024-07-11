@@ -101,7 +101,7 @@ const submmitForm = async () => {
       password: form.value.password,
     });
 
-    await route.push("/dashboard");
+    await route.push("/home-admin");
 
     if (form.value.saveCredentials) {
       localStorage.setItem("email", form.value.email);

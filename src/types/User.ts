@@ -21,7 +21,7 @@ export interface UserProfileProps {
   id?: number;
   profileName?: string;
   type?: ProfileType;
-  UserRoutes?: UserRoutesProps[];
+  ProfileRoute?: UserRoutesProps[];
   isAdmin?: boolean;
 }
 

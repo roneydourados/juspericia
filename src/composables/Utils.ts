@@ -108,7 +108,11 @@ export const useUtils = () => {
   };
 
   const getInitials = (name: string) => {
-    const [firstName, lastName] = name.split(" ");
+    const hasSpace = !name.includes(" ") ? name.includes(" ") : name;
+
+    const formattedName = hasSpace ? name : `${name} `;
+    const [firstName, lastName] = formattedName.split(" ");
+
     return `${firstName.charAt(0).toUpperCase()}${lastName
       .charAt(0)
       .toUpperCase()}`;

@@ -1,40 +1,56 @@
 <template>
   <v-navigation-drawer
     v-model="changeDrawer"
-    color="white"
+    color="#fff"
     auto
     @update:model-value="$emit('update:drawer', changeDrawer)"
   >
     <template v-slot:prepend>
-      <v-list-item
-        lines="two"
-        prepend-avatar="https://randomuser.me/api/portraits/women/81.jpg"
-        subtitle="Logged in"
-        title="Jane Smith"
-      ></v-list-item>
+      <v-list-item lines="two">
+        <template #prepend>
+          <v-avatar color="primary">
+            <span class="text-h6">{{ $user?.initials }}</span>
+          </v-avatar>
+        </template>
+        <template #title>
+          <span>{{ $user?.name }}</span>
+        </template>
+        <template #subtitle> {{ $user?.Profile?.profileName }}</template>
+      </v-list-item>
     </template>
 
     <v-divider />
     <v-list density="compact" nav>
       <v-list-item
-        prepend-icon="mdi-home-city"
-        title="Home"
-        value="home"
-        @click="closeDrawer"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-account"
-        title="My Account"
-        value="account"
-        @click="closeDrawer"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-account-group-outline"
-        title="Users"
-        value="users"
-        @click="closeDrawer"
-      ></v-list-item>
+        v-for="(item, index) in itemsMenu"
+        :key="index"
+        :prepend-icon="item.icon"
+        :value="item.to"
+        :to="item.to"
+        active-class="item-menu"
+        @click="handleClick"
+      >
+        <template #title>
+          <span style="font-size: 1rem">{{ item.title }}</span>
+        </template>
+      </v-list-item>
     </v-list>
+
+    <template v-slot:append>
+      <v-divider />
+
+      <div class="pa-2">
+        <v-btn
+          color="primary"
+          class="text-none mb-12"
+          variant="flat"
+          block
+          @click="logout"
+        >
+          Sair
+        </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -44,11 +60,15 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+
   mobile: {
     type: Boolean,
     required: true,
   },
 });
+const { getInitials } = useUtils();
+const auth = useAuthStore();
+const route = useRouter();
 
 const emit = defineEmits(["update:drawer"]);
 
@@ -58,10 +78,45 @@ watchEffect(() => {
   changeDrawer.value = props.drawer;
 });
 
-const closeDrawer = () => {
+const $user = computed(() => {
+  const initials = getInitials(auth.$currentUser?.name!);
+  return {
+    ...auth.$currentUser,
+    initials,
+  };
+});
+
+const itemsMenu = computed(() => {
+  const items = auth.$currentUser?.Profile.ProfileRoute!.map((item) => {
+    return {
+      title: item.title,
+      to: item.to,
+      icon: item.icon,
+      visible: item.visible,
+      isMenu: item.isMenu,
+    };
+  }).filter((item) => item.visible && item.isMenu);
+
+  return items;
+});
+
+const handleClick = () => {
   if (props.mobile) {
     changeDrawer.value = false;
     emit("update:drawer", changeDrawer.value);
   }
 };
+
+const logout = () => {
+  auth.logout();
+  route.push("/");
+  //window.location.reload();
+};
 </script>
+
+<style scoped>
+.item-menu {
+  background-color: #000;
+  color: #fff;
+}
+</style>

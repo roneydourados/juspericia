@@ -1,4 +1,4 @@
 <template>
-  <h1>Dahsboard em construçã</h1>
+  <h1>Dahsboard em construção</h1>
 </template>
 <script setup lang="ts"></script>
