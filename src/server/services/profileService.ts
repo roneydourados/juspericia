@@ -1,6 +1,5 @@
 import { H3Event } from "h3";
-
-import * as repository from "../repository/profileRepository";
+import * as repository from "@/server/repositories/profileRepository";
 import { UserProfileProps } from "@/types/User";
 
 export const create = async (event: H3Event) => {

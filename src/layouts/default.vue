@@ -8,6 +8,10 @@
       />
 
       <v-app-bar color="primary" title="Application bar drawer" elevation="0">
+        <template #title>
+          <Logo height="30" />
+        </template>
+
         <v-app-bar-nav-icon
           v-if="mobile"
           variant="text"

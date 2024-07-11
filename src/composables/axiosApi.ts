@@ -3,7 +3,7 @@ import axios from "axios";
 export const useAxios = () => {
   const config = useRuntimeConfig();
 
-  const baseURL = config.public.baseUrl as string;
+  const baseURL = config.public.apiBaseUrl as string;
 
   const api = axios.create({
     baseURL,
@@ -28,9 +28,9 @@ export const useAxios = () => {
         error.response.status === 403
         //error.response.status === 404
       ) {
-        //const auth = useAuthStore();
+        const auth = useAuthStore();
 
-        //auth.logout();
+        auth.logout();
 
         console.log("Session Expired!!!", error.response);
 
@@ -113,9 +113,9 @@ export const useAxios = () => {
         error.response.status === 403
         //error.response.status === 404
       ) {
-        //const auth = useAuthStore();
+        const auth = useAuthStore();
 
-        //auth.logout();
+        auth.logout();
 
         console.log("Session Expired!!!", error.response);
 

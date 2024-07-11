@@ -1,6 +1,6 @@
-import { prisma } from "../../../providers/prisma";
+import { prisma } from "@/server/providers/prisma";
 import { UserProfileProps } from "@/types/User";
-import { appRoutes } from "../../../utils/Constants";
+import { appRoutes } from "@/server/utils/Constants";
 
 export const create = async ({ profileName, type }: UserProfileProps) => {
   try {

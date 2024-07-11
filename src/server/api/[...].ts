@@ -1,7 +1,7 @@
 import { apiVersion } from "@/server/utils/Constants";
 
-import * as serviceAuth from "~/server/modules/auth/service/authService";
-import * as serviceProfile from "~/server/modules/profile/service/profileService";
+import * as serviceAuth from "@/server/services/authService";
+import * as serviceProfile from "@/server/services/profileService";
 
 const router = createRouter();
 

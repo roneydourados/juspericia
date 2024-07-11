@@ -1,4 +1,7 @@
 <template>
-  <h1>Dahsboard em construçã</h1>
+  <LoginForm />
 </template>
+
 <script setup lang="ts"></script>
+
+<style scoped></style>

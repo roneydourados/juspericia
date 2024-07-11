@@ -29,7 +29,6 @@ export default defineNuxtConfig({
   ],
   imports: {
     dirs: ["store", "types"],
-    //autoImport: true,
   },
   app: {
     head: {

@@ -1,7 +1,7 @@
-import { prisma } from "../../../providers/prisma";
 import { JwtPayload } from "jsonwebtoken";
-import { useHash } from "../../../providers/hash";
-import { useJwtToken } from "../../../providers/jwtToken";
+import { prisma } from "@/server/providers/prisma";
+import { useHash } from "@/server/providers/hash";
+import { useJwtToken } from "@/server/providers/jwtToken";
 import { UserProfileProps, UserProps } from "@/types/User";
 
 export const login = async ({ email, password }: UserProps) => {

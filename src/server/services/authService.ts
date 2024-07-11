@@ -1,5 +1,5 @@
 import { H3Event } from "h3";
-import * as repository from "../repository/authRepository";
+import * as repository from "@/server/repositories/authRepository";
 import { UserProps } from "@/types/User";
 
 export const login = async (event: H3Event) => {
