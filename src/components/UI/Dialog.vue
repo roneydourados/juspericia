@@ -38,7 +38,7 @@
           class="text-none"
           size="small"
           variant="flat"
-          color="success"
+          color="primary"
           :disabled="okDisabled"
           @click="$emit('confirm')"
         >

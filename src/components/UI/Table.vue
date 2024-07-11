@@ -1,5 +1,5 @@
 <template>
-  <v-card max-height="550" :width="width">
+  <v-card class="mx-auto" max-height="550" flat>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
       <v-data-table
@@ -39,7 +39,7 @@
               <div class="d-flex align-center" style="gap: 0.5rem">
                 <v-btn
                   variant="flat"
-                  color="success"
+                  color="primary"
                   class="text-none"
                   size="small"
                   @click="$emit('add')"
@@ -80,10 +80,6 @@ const props = defineProps({
   itemsPerPage: {
     type: Number,
     default: 6,
-  },
-  width: {
-    type: String,
-    default: "80%",
   },
   title: {
     type: String,

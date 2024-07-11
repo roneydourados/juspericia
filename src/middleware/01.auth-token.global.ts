@@ -2,7 +2,7 @@ import moment from "moment";
 
 export default defineNuxtRouteMiddleware((to) => {
   const stoken = localStorage.getItem("token");
-
+  const auth = useAuthStore();
   // se não tem um token e não esta no login então expulsa para o login
   if (
     !stoken &&
@@ -31,7 +31,13 @@ export default defineNuxtRouteMiddleware((to) => {
       }
 
       if (to.path === "/") {
-        return navigateTo("/home-admin");
+        if (auth.$currentUser?.Profile.type === "ADMIN") {
+          return navigateTo("/home-admin");
+        } else if (auth.$currentUser?.Profile.type === "ADVOGADO") {
+          return navigateTo("/home-lawyer");
+        } else if (auth.$currentUser?.Profile.type === "MEDICO") {
+          return navigateTo("/home-medic");
+        }
       }
     } catch {
       console.log("Erro ao verificar token");

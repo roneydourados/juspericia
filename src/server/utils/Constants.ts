@@ -89,8 +89,8 @@ export const appRoutes = [
     profiles: ["ADMIN"],
   },
   {
-    title: "Usuários",
-    to: "/users",
+    title: "Administradores",
+    to: "/admins",
     icon: "mdi-account-multiple-check-outline",
     visible: true,
     isMenu: true,

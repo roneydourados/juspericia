@@ -1,4 +1,4 @@
 <template>
-  <MedicTable />
+  <AdminTable />
 </template>
 <script setup lang="ts"></script>
