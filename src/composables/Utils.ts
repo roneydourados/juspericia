@@ -108,6 +108,10 @@ export const useUtils = () => {
   };
 
   const getInitials = (name: string) => {
+    if (!name) {
+      return "";
+    }
+
     const hasSpace = !name.includes(" ") ? name.includes(" ") : name;
 
     const formattedName = hasSpace ? name : `${name} `;

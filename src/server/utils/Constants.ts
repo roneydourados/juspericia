@@ -49,6 +49,14 @@ export const appRoutes = [
     profiles: ["ADMIN"],
   },
   {
+    title: "Médicos parceiros",
+    to: "/medics",
+    icon: "mdi-stethoscope",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADMIN"],
+  },
+  {
     title: "Pacientes",
     to: "/patient",
     icon: "mdi-account-multiple-outline",

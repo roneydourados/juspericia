@@ -2,7 +2,7 @@ import { ThemeDefinition } from "vuetify";
 
 export const MainThemeColors = {
   background: "#E5E5E5",
-  primary: "#0000",
+  primary: "#263238",
   warning: "#FEAA09",
 };
 

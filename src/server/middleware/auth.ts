@@ -19,7 +19,6 @@ export default defineEventHandler((event) => {
 
   // se for um endpoint liberado então passar
   if (openEndpoints.includes(event.path) || clientSideRoutes) {
-    console.log("liberado");
     return;
   }
 

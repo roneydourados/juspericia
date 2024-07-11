@@ -110,13 +110,12 @@ const handleClick = () => {
 const logout = () => {
   auth.logout();
   route.push("/");
-  //window.location.reload();
 };
 </script>
 
 <style scoped>
 .item-menu {
-  background-color: #000;
+  background-color: #37474f;
   color: #fff;
 }
 </style>
