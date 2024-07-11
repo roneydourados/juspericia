@@ -39,21 +39,6 @@ const profileType = ["ADMIN", "ADVOGADO", "MEDICO"] as const;
 
 export type ProfileType = (typeof profileType)[number];
 
-// export type ProfileType =
-//   | { name: "Administrador"; role: "ADMIN" }
-//   | { name: "Advogado"; role: "ADVOGADO" }
-//   | { name: "Médico"; role: "MEDICO" };
+const paymentType = ["CREDIT_CARD", "PIX", "BOLETO"] as const;
 
-export type PaymentType =
-  | {
-      name: "Cartão de crédito";
-      value: "CREDIT_CARD";
-    }
-  | {
-      name: "Pix";
-      value: "PIX";
-    }
-  | {
-      name: "Boleto";
-      value: "BOLETO";
-    };
+export type PaymentType = (typeof paymentType)[number];

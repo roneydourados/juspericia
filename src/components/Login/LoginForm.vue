@@ -94,6 +94,8 @@ onMounted(() => {
   };
 });
 
+const $user = computed(() => auth.$currentUser);
+
 const submmitForm = async () => {
   try {
     await auth.login({
@@ -101,7 +103,15 @@ const submmitForm = async () => {
       password: form.value.password,
     });
 
-    await route.push("/home-admin");
+    //await route.push("/home-admin");
+
+    if ($user?.value?.Profile.type === "ADMIN") {
+      return navigateTo("/home-admin");
+    } else if ($user?.value?.Profile.type === "ADVOGADO") {
+      return navigateTo("/home-lawyer");
+    } else if ($user?.value?.Profile.type === "MEDICO") {
+      return navigateTo("/home-medic");
+    }
 
     if (form.value.saveCredentials) {
       localStorage.setItem("email", form.value.email);
