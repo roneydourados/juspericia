@@ -1,7 +1,3 @@
-export const apiVersion = {
-  verson1: "/api/v1",
-};
-
 // tipagem da prioridade gut gravidade
 const profileType = ["ADMIN", "COBRADOR"] as const;
 
