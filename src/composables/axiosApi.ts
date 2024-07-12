@@ -79,7 +79,6 @@ export const useAxios = () => {
       return response;
     },
     function (error) {
-      console.log("🚀 ~ useAxios ~ error:", error);
       const config = error.config;
 
       switch (config.method) {

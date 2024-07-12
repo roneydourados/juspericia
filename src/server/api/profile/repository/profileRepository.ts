@@ -24,7 +24,8 @@ export const create = async ({ profileName, type }: UserProfileProps) => {
         },
       },
     });
-  } catch {
+  } catch (error) {
+    console.log("🚀 ~ create profile ~ error:", error);
     throw createError({
       statusCode: 400,
       message: "error create profile",

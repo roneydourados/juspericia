@@ -87,7 +87,7 @@ export const login = async ({ email, password }: UserProps) => {
       },
     };
   } catch (error) {
-    console.log("🚀 ~ token:", error);
+    console.log("🚀 ~ token - login:", error);
     throw createError({
       statusCode: 500,
       statusMessage: "Internal server error on login",
@@ -130,6 +130,7 @@ export const register = async ({
       name: user.name,
     };
   } catch (error) {
+    console.log("🚀 ~ register user error:", error);
     throw createError({
       statusCode: 500,
       statusMessage: "Internal server error on register user",
@@ -194,6 +195,7 @@ export const verifyUser = async (id: number) => {
       },
     };
   } catch (error) {
+    console.log("🚀 ~ verifyUser ~ error:", error);
     throw createError({
       statusCode: 500,
       statusMessage: "Internal server error on login",
