@@ -255,13 +255,15 @@ model Patient {
   id                  Int                   @id @default(autoincrement())
   userId              Int                   @map("user_id") // advogado que cadastrou o paciente
   name                String                @db.VarChar(200) // nome do paciente
-  email               String                @unique @db.VarChar(1000) // email do paciente
+  email               String?               @unique @db.VarChar(1000) // email do paciente
   motherName          String?               @map("mother_name") @db.VarChar(200) // nome da mãe do paciente
   phone               String?               @db.VarChar(20) // telefone do paciente
   cpf                 String                @db.VarChar(30) // CPF do paciente
   rg                  String                @db.VarChar(30) // RG do paciente
   birthDate           DateTime              @map("birth_date") @db.Date // data de nascimento do paciente
   proccessNumber      String?               @map("proccess_number") @db.VarChar(30) // número do processo do paciente, caso exista
+  status              String                @default("A") @db.Char(1) // status do paciente, A = ativo, I = inativo
+  sexy                String                @db.Char(1)
   benefitTypeId       Int                   @map("benefit_type_id") // tipo de benefício
   reportPurposeId     Int                   @map("report_purpose_id") // finalidade do laudo
   ReportPurpose       ReportPurpose         @relation(fields: [reportPurposeId], references: [id], onDelete: NoAction, onUpdate: NoAction)

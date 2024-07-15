@@ -25,7 +25,7 @@
               <v-text-field
                 v-model="search"
                 density="compact"
-                label="Pesquisar..."
+                label="Digite algo para efetuar consulta..."
                 prepend-inner-icon="mdi-magnify"
                 variant="solo-filled"
                 flat

@@ -13,10 +13,10 @@ async function main() {
 
   // admin
   await prisma.user.upsert({
-    where: { email: "admin@admin.com" },
+    where: { email: "admin@juspericia.com" },
     update: {},
     create: {
-      email: "admin@admin.com",
+      email: "admin@juspericia.com",
       name: "Admin",
       password,
       Profile: {
@@ -46,10 +46,10 @@ async function main() {
 
   // advogado
   await prisma.user.upsert({
-    where: { email: "advogado@advogado.com" },
+    where: { email: "advogado@juspericia.com" },
     update: {},
     create: {
-      email: "advogado@advogado.com",
+      email: "advogado@juspericia.com",
       name: "Advogado",
       password: passwordAdvogado,
       Profile: {
@@ -79,10 +79,10 @@ async function main() {
 
   // medico
   await prisma.user.upsert({
-    where: { email: "medico@medico.com" },
+    where: { email: "medico@juspericia.com" },
     update: {},
     create: {
-      email: "medico@medico.com",
+      email: "medico@juspericia.com",
       name: "Médico",
       password: passwordMedico,
       Profile: {
@@ -108,6 +108,42 @@ async function main() {
         },
       },
     },
+  });
+
+  //tipos de benefícios
+  await prisma.benefitType.createMany({
+    data: [
+      {
+        name: "Auxilio doença",
+      },
+      {
+        name: "Auxilio acidente",
+      },
+      {
+        name: "Aposentadoria",
+      },
+      {
+        name: "BPC LOAS",
+      },
+      {
+        name: "DPVAT",
+      },
+      {
+        name: "Trabalhista",
+      },
+    ],
+  });
+
+  //finalidade do laudo
+  await prisma.reportPurpose.createMany({
+    data: [
+      {
+        name: "Administrativo",
+      },
+      {
+        name: "Judicial",
+      },
+    ],
   });
 }
 

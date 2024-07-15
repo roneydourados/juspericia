@@ -11,7 +11,7 @@
         <Logo height="30" />
       </template>
 
-      <span v-if="!mobile">{{ $currentScreen }}</span>
+      <span v-if="!mobile" class="text-h6">{{ $currentScreen }}</span>
       <v-spacer v-if="!mobile" />
 
       <v-app-bar-nav-icon

@@ -3,6 +3,21 @@ const profileType = ["ADMIN", "COBRADOR"] as const;
 
 export type ProfileType = (typeof profileType)[number];
 
+export const addressCategoryType = {
+  patient: "PATIENT",
+  medic: "MEDIC",
+  lawyer: "LAWYER",
+  admin: "ADMIN",
+};
+
+export const filesCategoryType = {
+  patient: "PATIENT",
+  medic: "MEDIC",
+  lawyer: "LAWYER",
+  userAvatar: "USER_AVATAR",
+  query: "QUERY",
+};
+
 export const appRoutes = [
   {
     title: "Home",
