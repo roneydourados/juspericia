@@ -32,8 +32,8 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: "App Title",
-      titleTemplate: "App Title",
+      title: "Juspericia",
+      titleTemplate: "Juspericia",
       // meta: [
       //   {
       //     name: "theme-color",

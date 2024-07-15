@@ -3,17 +3,9 @@ import moment from "moment";
 export default defineNuxtRouteMiddleware((to) => {
   const stoken = localStorage.getItem("token");
   const auth = useAuthStore();
+
   // se não tem um token e não esta no login então expulsa para o login
-  if (
-    !stoken &&
-    //!openUrls.includes(to.path)
-    to.path !== "/"
-    // to.path !== "/signup" &&
-    // !to.path.includes("/login-client") &&
-    // !to.path.includes("/activate-account") &&
-    // !to.path.includes("/activate-account/suc0cess") &&
-    // !to.path.includes("/terms")
-  ) {
+  if (!stoken && to.path !== "/") {
     console.log(to.path);
     return navigateTo("/");
   }

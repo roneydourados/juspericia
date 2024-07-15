@@ -12,6 +12,9 @@
           <Logo height="30" />
         </template>
 
+        <span v-if="!mobile">{{ $currentScreen }}</span>
+        <v-spacer v-if="!mobile" />
+
         <v-app-bar-nav-icon
           v-if="mobile"
           variant="text"
@@ -33,6 +36,9 @@ import { useDisplay } from "vuetify";
 const drawer = ref(true);
 
 const { mobile } = useDisplay();
+const screen = useScreenStore();
+
+const $currentScreen = computed(() => screen.$currentScreen);
 
 onMounted(() => {
   closeDrawer();

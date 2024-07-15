@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware((to) => {
   const auth = useAuthStore();
+  const screen = useScreenStore();
   const stoken = localStorage.getItem("token");
 
   if (auth.$currentUser && stoken) {
@@ -7,28 +8,30 @@ export default defineNuxtRouteMiddleware((to) => {
     //   return;
     // }
 
-    const userRoute = auth.$currentUser.Profile.ProfileRoute?.find(
-      (route) => route.to === to.path && route.visible === true
-    );
+    // const userRoute = auth.$currentUser.Profile.ProfileRoute?.find(
+    //   (route) => route.to === to.path && route.visible === true
+    // );
 
-    const isValidRoute = userRoute ? true : false;
+    // const isValidRoute = userRoute ? true : false;
 
-    if (to.path !== "/profile" && !isValidRoute) {
-      return navigateTo("/");
-    }
+    // if (to.path !== "/profile" && !isValidRoute) {
+    //   return navigateTo("/");
+    // }
 
     try {
       //se esta tudo ok com token então verificar se a rota acessada é liberada para o usário
       const userRoute = auth.$currentUser.Profile.ProfileRoute?.find(
         (route) => {
-          let pathUrl = to.path;
-          if (route.to === pathUrl.replace(/\/\d+$/, "") && route.visible) {
+          let pathUrl = to.path.replace(/\/\d+$/, "");
+          if (route.to === pathUrl && route.visible) {
             return route;
           }
         }
       );
 
       const isValidRoute = userRoute ? true : false;
+
+      screen.setScreen(userRoute?.title ?? "");
 
       if (!isValidRoute) {
         const userRouteLib = auth.$currentUser.Profile.ProfileRoute?.find(

@@ -1,4 +1,4 @@
 <template>
-  <h1>construção</h1>
+  <SolicitationTable />
 </template>
 <script setup lang="ts"></script>
