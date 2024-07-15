@@ -25,7 +25,12 @@
           <span>Nº Processo:</span>
           <span class="font-weight-bold">{{ solicitation.processNumber }}</span>
         </v-col>
-        <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
+        <v-col
+          cols="12"
+          lg="2"
+          class="d-flex align-center justify-end"
+          style="gap: 0.5rem"
+        >
           <span>Status:</span>
           <span class="font-weight-bold">{{ solicitation.status }}</span>
         </v-col>
@@ -42,12 +47,7 @@
           }}</span>
         </v-col>
       </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Total:</span>
-          <span class="font-weight-bold">{{ solicitation.total }}</span>
-        </v-col>
-      </v-row>
+      <v-row dense> </v-row>
       <v-row dense>
         <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
           <span>Paciente:</span>
@@ -61,9 +61,25 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
+        <v-col
+          cols="12"
+          lg="10"
+          class="d-flex align-center"
+          style="gap: 0.5rem"
+        >
           <span>Data limite para solicitar correção:</span>
           <span class="font-weight-bold">{{ solicitation.deadline }}</span>
+        </v-col>
+        <v-col
+          cols="12"
+          lg="2"
+          class="d-flex align-center justify-end"
+          style="gap: 0.5rem"
+        >
+          <span class="text-grey-darken-1">Total:</span>
+          <span class="font-weight-bold text-h6 text-grey-darken-3">{{
+            solicitation.total
+          }}</span>
         </v-col>
       </v-row>
       <v-divider class="mt-2" />
