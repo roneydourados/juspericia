@@ -11,6 +11,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 1,
   },
   {
     title: "Home",
@@ -19,14 +20,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
-  },
-  {
-    title: "Solicitações",
-    to: "/solicitations",
-    icon: "mdi-file-document-edit-outline",
-    visible: true,
-    isMenu: true,
-    profiles: ["ADVOGADO", "ADMIN"],
+    order: 1,
   },
   {
     title: "Home",
@@ -35,6 +29,16 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["MEDICO"],
+    order: 1,
+  },
+  {
+    title: "Solicitações",
+    to: "/solicitations",
+    icon: "mdi-file-document-edit-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO", "ADMIN"],
+    order: 2,
   },
   {
     title: "Advogados",
@@ -43,6 +47,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 3,
   },
   {
     title: "Médicos parceiros",
@@ -51,6 +56,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 4,
   },
   {
     title: "Pacientes",
@@ -59,6 +65,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
+    order: 5,
   },
   {
     title: "Agendamentos",
@@ -67,6 +74,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 6,
   },
   {
     title: "Consultas",
@@ -75,6 +83,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
+    order: 7,
   },
   {
     title: "Consultas agendadas",
@@ -83,6 +92,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["MEDICO"],
+    order: 8,
   },
   {
     title: "Pacotes de Serviços",
@@ -91,6 +101,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 9,
   },
   {
     title: "Administradores",
@@ -99,6 +110,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 10,
   },
   {
     title: "Perfil",
@@ -107,6 +119,7 @@ export const appRoutes = [
     visible: true,
     isMenu: false,
     profiles: ["ADMIN", "MEDICO", "ADVOGADO"],
+    order: -1,
   },
   {
     title: "Estatísticas",
@@ -115,6 +128,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
+    order: 11,
   },
   {
     title: "Meu financeiro",
@@ -123,6 +137,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 12,
   },
   {
     title: "Relatório de vendas",
@@ -131,5 +146,6 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 13,
   },
 ];

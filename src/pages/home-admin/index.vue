@@ -1,4 +1,4 @@
 <template>
-  <h1>Home usuários admin</h1>
+  <HomeAdmin />
 </template>
 <script setup lang="ts"></script>

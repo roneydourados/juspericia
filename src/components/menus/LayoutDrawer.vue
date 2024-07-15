@@ -31,7 +31,7 @@
         @click="handleClick"
       >
         <template #title>
-          <span style="font-size: 1rem">{{ item.title }}</span>
+          <span>{{ item.title }}</span>
         </template>
       </v-list-item>
     </v-list>
