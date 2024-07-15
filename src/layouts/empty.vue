@@ -7,10 +7,7 @@
         </template>
       </v-app-bar>
 
-      <v-main
-        class="d-flex align-center justify-center"
-        style="min-height: 300px"
-      >
+      <v-main class="d-flex align-center justify-center">
         <div class="w-100">
           <slot />
         </div>

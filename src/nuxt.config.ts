@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   css: [
     "notivue/notification.css", // Only needed if using built-in notifications
     "notivue/animations.css", // Only needed if using built-in animations
+    "@/assets/styles/main.css",
   ],
   components: [{ path: "@/components", pathPrefix: false }],
   modules: [
@@ -119,6 +120,7 @@ export default defineNuxtConfig({
     tokenSecret: process.env.JWT_SECRET ?? "",
     public: {
       apiBaseUrl: process.env.API_BASE_URL ?? "",
+      version: process.env.VERSION ?? "",
     },
   },
 });

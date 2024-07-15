@@ -1,4 +1,5 @@
 <template>
-  <h1>construção</h1>
+  <div>relatórios</div>
 </template>
+
 <script setup lang="ts"></script>

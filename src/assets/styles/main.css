@@ -1,0 +1,11 @@
+*,
+html,
+body {
+  font-size: 14px;
+}
+
+.tooltip-background {
+  background-color: rgb(var(--v-theme-tooltipColor)) !important;
+  color: #424242 !important;
+  font-weight: 600 !important;
+}

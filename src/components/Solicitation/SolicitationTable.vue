@@ -14,7 +14,6 @@
 
     <v-tabs
       v-model="tab"
-      color="primary"
       :grow="mobile"
       @update:model-value="handleChangeTable"
     >

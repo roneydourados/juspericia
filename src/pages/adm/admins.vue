@@ -1,4 +1,4 @@
 <template>
-  <h1>construção</h1>
+  <AdmTable />
 </template>
 <script setup lang="ts"></script>

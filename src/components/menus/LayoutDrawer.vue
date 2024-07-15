@@ -2,7 +2,6 @@
   <v-navigation-drawer
     v-model="changeDrawer"
     color="#fff"
-    auto
     @update:model-value="$emit('update:drawer', changeDrawer)"
   >
     <template v-slot:prepend>

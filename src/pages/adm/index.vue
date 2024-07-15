@@ -1,4 +1,5 @@
 <template>
-  <MedicTable />
+  <AdmMenu />
 </template>
+
 <script setup lang="ts"></script>
