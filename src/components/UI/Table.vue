@@ -1,8 +1,9 @@
 <template>
-  <v-card class="mx-auto" max-height="550" flat>
+  <v-card class="mx-auto" :max-height="!mobile ? '550' : ''" flat>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
       <v-data-table
+        v-if="!mobile"
         v-model:page="page"
         :headers="headers"
         :items="items"
@@ -10,16 +11,12 @@
         :items-per-page="itemsPerPage"
         no-data-text="Nenhum dado encontrado"
       >
-        <!--
-          Aqui vem os slotes que são enviados para componente
-          Referente a itens, pode ser n itens
-        -->
         <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
           <slot v-if="slotProps" :name="name" v-bind="slotProps" />
           <slot v-else :name="name" v-bind="slotProps" />
         </template>
 
-        <template v-slot:top>
+        <template v-slot:top="{ items }">
           <v-row dense align="center">
             <v-col cols="12" lg="10">
               <v-text-field
@@ -32,7 +29,7 @@
                 hide-details
                 single-line
                 rounded="lg"
-                @update:model-value="$emit('search', search)"
+                @update:model-value="handleSearch(items)"
               />
             </v-col>
             <v-col cols="12" lg="2">
@@ -63,11 +60,40 @@
           </div>
         </template>
       </v-data-table>
+
+      <v-window v-else touch v-model="page" direction="vertical">
+        <v-window-item :value="page">
+          <v-row dense>
+            <v-col cols="12">
+              <template v-for="(item, index) in slicedItems">
+                <v-card flat rounded="lg">
+                  <v-card-text>
+                    <slot name="mobileContent" v-bind="{ item, index }" />
+                  </v-card-text>
+                  <v-card-actions class="d-flex align-end">
+                    <slot name="mobileActions" v-bind="{ item, index }" />
+                  </v-card-actions>
+                </v-card>
+              </template>
+            </v-col>
+          </v-row>
+        </v-window-item>
+
+        <v-pagination
+          v-model="page"
+          :length="pageCount"
+          rounded="circle"
+          color="primary"
+          density="compact"
+        />
+      </v-window>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+
 const props = defineProps({
   headers: {
     type: Array as PropType<{ title: string; key: string }[]>,
@@ -87,12 +113,26 @@ const props = defineProps({
   },
 });
 
-defineEmits(["search", "add"]);
+const emit = defineEmits(["search", "add"]);
+
+const { mobile } = useDisplay();
 
 const pageCount = computed(() => {
   return Math.ceil(props.items.length / props.itemsPerPage);
 });
 
+const slicedItems = computed(() => {
+  const startIndex = (page.value - 1) * props.itemsPerPage;
+  return props.items.slice(startIndex, startIndex + props.itemsPerPage);
+});
+
 const search = ref("");
 const page = ref(1);
+
+const handleSearch = (items: any[]) => {
+  // somente emitir o evento de busca se não houver itens na tabela, ai sim executar a busca na api
+  if (items.length <= 1) {
+    emit("search", search.value);
+  }
+};
 </script>

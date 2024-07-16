@@ -3,7 +3,7 @@ import { addressCategoryType } from "~/server/utils/Constants";
 import { PatientProps } from "~/types/Patient";
 
 export const create = async ({
-  benefitTypeId,
+  //benefitTypeId,
   birthDate,
   cpf,
   email,
@@ -11,7 +11,7 @@ export const create = async ({
   name,
   phone,
   proccessNumber,
-  reportPurposeId,
+  //reportPurposeId,
   rg,
   userId,
   Address,
@@ -21,8 +21,8 @@ export const create = async ({
     const patient = await prisma.patient.create({
       data: {
         sexy: String(sexy),
-        benefitTypeId: Number(benefitTypeId),
-        reportPurposeId: Number(reportPurposeId),
+        // benefitTypeId: Number(benefitTypeId),
+        // reportPurposeId: Number(reportPurposeId),
         userId: Number(userId),
         birthDate: new Date(birthDate!),
         cpf: String(cpf),
@@ -66,7 +66,7 @@ export const create = async ({
 };
 
 export const update = async ({
-  benefitTypeId,
+  //benefitTypeId,
   birthDate,
   cpf,
   email,
@@ -74,9 +74,9 @@ export const update = async ({
   name,
   phone,
   proccessNumber,
-  reportPurposeId,
+  //reportPurposeId,
   rg,
-  userId,
+  //userId,
   Address,
   sexy,
   id,
@@ -95,9 +95,9 @@ export const update = async ({
     const patient = await prisma.patient.update({
       data: {
         sexy,
-        benefitTypeId: Number(benefitTypeId),
-        reportPurposeId: Number(reportPurposeId),
-        userId: Number(userId),
+        // benefitTypeId: Number(benefitTypeId),
+        // reportPurposeId: Number(reportPurposeId),
+        //userId: Number(userId),
         birthDate: new Date(birthDate!),
         cpf: String(cpf),
         rg: String(rg),
@@ -105,7 +105,7 @@ export const update = async ({
         name: String(name),
         phone,
         motherName,
-        proccessNumber,
+        proccessNumber: email ? String(proccessNumber) : undefined,
         status,
       },
       where: {
@@ -209,7 +209,7 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  return prisma.patient.findFirst({
+  const patient = await prisma.patient.findFirst({
     where: {
       id,
     },
@@ -237,4 +237,16 @@ const exists = async (id: number) => {
       },
     },
   });
+
+  const Address = await prisma.address.findFirst({
+    where: {
+      ownerId: patient?.id,
+      addressCategory: addressCategoryType.patient,
+    },
+  });
+
+  return {
+    ...patient,
+    Address,
+  };
 };

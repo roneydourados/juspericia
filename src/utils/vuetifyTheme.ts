@@ -6,6 +6,9 @@ export const MainThemeColors = {
   pink: "#FA00FF",
   inputColor: "#1E88E5",
   warning: "#FEAA09",
+  info: "#2196F3",
+  green: "#4CAF50",
+  tooltipColor: "#E3F2FD",
 };
 
 export const MAIN_THEME = "mainTheme";
