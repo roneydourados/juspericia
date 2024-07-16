@@ -153,7 +153,7 @@ export const update = async ({
   }
 };
 
-export const remove = async (id: number) => {
+export const destroy = async (id: number) => {
   const existsPatient = await exists(id);
 
   if (!existsPatient) {

@@ -42,9 +42,9 @@
         </v-col>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor atencipação:</span>
-          <span class="font-weight-bold">{{
-            solicitation.antecipationValue
-          }}</span>
+          <span class="font-weight-bold">
+            {{ solicitation.antecipationValue }}
+          </span>
         </v-col>
       </v-row>
       <v-row dense> </v-row>
@@ -77,9 +77,9 @@
           style="gap: 0.5rem"
         >
           <span class="text-grey-darken-1">Total:</span>
-          <span class="font-weight-bold text-h6 text-grey-darken-3">{{
-            solicitation.total
-          }}</span>
+          <span class="font-weight-bold text-h6 text-grey-darken-3">
+            {{ solicitation.total }}
+          </span>
         </v-col>
       </v-row>
       <v-divider class="mt-2" />
