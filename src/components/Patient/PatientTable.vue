@@ -12,6 +12,8 @@
         <v-row dense>
           <v-col cols="12">
             <InfoLabel
+              font-size="1"
+              font-size-content="1.2"
               title="Nome"
               icon="mdi-account-outline"
               color-icon="info"
@@ -26,6 +28,8 @@
               title="CPF"
               icon="mdi-clipboard-account-outline"
               color-icon="info"
+              font-size="1"
+              font-size-content="1.2"
               :content="formatCPF(item.cpf)"
               :show-divider="true"
             />
@@ -34,6 +38,8 @@
         <v-row dense>
           <v-col cols="12">
             <InfoLabel
+              font-size="1"
+              font-size-content="1.2"
               title="Whatsapp"
               icon="mdi-whatsapp"
               color-icon="green"
@@ -43,27 +49,49 @@
           </v-col>
         </v-row>
       </template>
+      <template #mobileActions="{ item }">
+        <v-btn icon color="orange" variant="text" size="small">
+          <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Editar
+          </v-tooltip>
+        </v-btn>
+        <v-btn icon color="error" variant="text" size="small">
+          <v-icon icon="mdi-delete-outline" size="20"></v-icon>
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Apagar
+          </v-tooltip>
+        </v-btn>
+      </template>
       <template v-slot:item.name="{ item }">
-        <span style="cursor: pointer" class="d-flex text-info">
+        <span style="cursor: pointer" class="d-flex align-center text-info">
           <v-icon icon="mdi-account-outline" size="24" start />
-          <span style="font-size: 1rem">{{ item.name }}</span>
+          <span>{{ item.name }}</span>
         </span>
       </template>
       <template v-slot:item.cpf="{ item }">
-        <span class="d-flex">
+        <span class="d-flex align-center">
           <v-icon
             icon="mdi-clipboard-account-outline"
             size="24"
             color="info"
             start
           />
-          <span style="font-size: 1rem">{{ formatCPF(item.cpf) }}</span>
+          <span>{{ formatCPF(item.cpf) }}</span>
         </span>
       </template>
       <template v-slot:item.phone="{ item }">
-        <span class="d-flex">
+        <span class="d-flex align-center">
           <v-icon icon="mdi-whatsapp" size="24" color="green" start />
-          <span style="font-size: 1rem">
+          <span>
             {{ formatTelephoneNumber(item.phone ?? "") }}
           </span>
         </span>

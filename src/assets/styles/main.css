@@ -1,7 +1,12 @@
+:root {
+  font-size: 62.5%; /* 1rem = 10px */
+}
+
 *,
 html,
 body {
-  font-size: 14px;
+  font-size: 1.4rem;
+  line-height: 100%;
 }
 
 .tooltip-background {

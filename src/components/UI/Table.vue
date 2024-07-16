@@ -63,22 +63,17 @@
 
       <v-window v-else touch v-model="page" direction="vertical">
         <v-window-item :value="page">
-          <v-row dense>
-            <v-col cols="12">
-              <template v-for="(item, index) in slicedItems">
-                <v-card flat rounded="lg">
-                  <v-card-text>
-                    <slot name="mobileContent" v-bind="{ item, index }" />
-                  </v-card-text>
-                  <v-card-actions class="d-flex align-end">
-                    <slot name="mobileActions" v-bind="{ item, index }" />
-                  </v-card-actions>
-                </v-card>
-              </template>
-            </v-col>
-          </v-row>
+          <template v-for="(item, index) in slicedItems">
+            <v-card flat rounded="lg">
+              <v-card-text>
+                <slot name="mobileContent" v-bind="{ item, index }" />
+              </v-card-text>
+              <v-card-actions class="d-flex align-center justify-end w-100">
+                <slot name="mobileActions" v-bind="{ item, index }" />
+              </v-card-actions>
+            </v-card>
+          </template>
         </v-window-item>
-
         <v-pagination
           v-model="page"
           :length="pageCount"
@@ -129,7 +124,7 @@ const slicedItems = computed(() => {
 const search = ref("");
 const page = ref(1);
 
-const handleSearch = (items: any[]) => {
+const handleSearch = (items: unknown[]) => {
   // somente emitir o evento de busca se não houver itens na tabela, ai sim executar a busca na api
   if (items.length <= 1) {
     emit("search", search.value);

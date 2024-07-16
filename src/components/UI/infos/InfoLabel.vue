@@ -4,7 +4,7 @@
       <slot name="icon-title-preppend" />
       <v-icon v-if="icon" :color="colorIcon" class="mr-2">{{ icon }}</v-icon>
 
-      <span :class="!mdAndUp ? 'text-truncate' : ''">
+      <span :class="!mdAndUp ? 'text-truncate' : ''" style="font-size: 1.2rem">
         {{ title }}
       </span>
 
