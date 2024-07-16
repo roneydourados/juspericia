@@ -9,6 +9,9 @@ export const MainThemeColors = {
   info: "#2196F3",
   green: "#4CAF50",
   tooltipColor: "#E3F2FD",
+  tooltipTextColor: "#424242",
+  backMenu: "#37474f",
+  itemMenu: "#fff",
 };
 
 export const MAIN_THEME = "mainTheme";

@@ -3,28 +3,44 @@ import { addressCategoryType } from "~/server/utils/Constants";
 import { PatientProps } from "~/types/Patient";
 
 export const create = async ({
-  //benefitTypeId,
   birthDate,
   cpf,
   email,
   motherName,
   name,
+  surname,
   phone,
-  proccessNumber,
-  //reportPurposeId,
   rg,
   userId,
   Address,
   sexy,
 }: PatientProps) => {
+  const exists = await prisma.patient.findFirst({
+    where: {
+      OR: [
+        {
+          cpf: cpf ? { equals: cpf } : undefined,
+        },
+        {
+          rg: rg ? { equals: rg } : undefined,
+        },
+      ],
+    },
+  });
+
+  if (exists) {
+    throw createError({
+      statusCode: 409,
+      message: "Patient already exists",
+    });
+  }
+
   try {
     const patient = await prisma.patient.create({
       data: {
         sexy: String(sexy),
-        // benefitTypeId: Number(benefitTypeId),
-        // reportPurposeId: Number(reportPurposeId),
         userId: Number(userId),
-        birthDate: new Date(birthDate!),
+        birthDate: String(birthDate!),
         cpf: String(cpf),
         rg: String(rg),
         email: email ? String(email) : undefined,
@@ -32,7 +48,7 @@ export const create = async ({
         status: "A",
         phone,
         motherName,
-        proccessNumber,
+        surname: String(surname),
       },
     });
 
@@ -66,21 +82,18 @@ export const create = async ({
 };
 
 export const update = async ({
-  //benefitTypeId,
   birthDate,
   cpf,
   email,
   motherName,
   name,
   phone,
-  proccessNumber,
-  //reportPurposeId,
   rg,
-  //userId,
   Address,
   sexy,
   id,
   status,
+  surname,
 }: PatientProps) => {
   const existsPatient = await exists(id!);
 
@@ -95,18 +108,15 @@ export const update = async ({
     const patient = await prisma.patient.update({
       data: {
         sexy,
-        // benefitTypeId: Number(benefitTypeId),
-        // reportPurposeId: Number(reportPurposeId),
-        //userId: Number(userId),
-        birthDate: new Date(birthDate!),
+        birthDate: String(birthDate!),
         cpf: String(cpf),
         rg: String(rg),
         email: email ? String(email) : undefined,
         name: String(name),
         phone,
         motherName,
-        proccessNumber: email ? String(proccessNumber) : undefined,
         status,
+        surname: String(surname),
       },
       where: {
         id: existsPatient.id,
@@ -194,12 +204,18 @@ export const index = async (inputQuery: string) => {
           name: { contains: inputQuery, mode: "insensitive" },
         },
         {
+          surname: { contains: inputQuery, mode: "insensitive" },
+        },
+        {
           cpf: { contains: inputQuery, mode: "insensitive" },
         },
         {
           phone: { contains: inputQuery, mode: "insensitive" },
         },
       ],
+    },
+    orderBy: {
+      name: "asc",
     },
   });
 };
@@ -220,15 +236,11 @@ const exists = async (id: number) => {
       email: true,
       motherName: true,
       name: true,
+      surname: true,
       phone: true,
-      proccessNumber: true,
       rg: true,
       sexy: true,
       userId: true,
-      benefitTypeId: true,
-      reportPurposeId: true,
-      BenefitType: true,
-      ReportPurpose: true,
       User: {
         select: {
           email: true,

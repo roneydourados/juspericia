@@ -2,6 +2,7 @@ export interface PatientProps {
   id?: number;
   userId?: number;
   name?: string;
+  surname?: string;
   email?: string;
   motherName?: string;
   phone?: string;

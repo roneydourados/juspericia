@@ -14,7 +14,11 @@
         <template #title>
           <span>{{ $user?.name }}</span>
         </template>
-        <template #subtitle> {{ $user?.Profile?.profileName }}</template>
+        <template #subtitle>
+          <span style="font-size: 0.8rem">
+            {{ $user?.Profile?.profileName }}
+          </span>
+        </template>
       </v-list-item>
     </template>
 
@@ -114,7 +118,7 @@ const logout = () => {
 
 <style scoped>
 .item-menu {
-  background-color: #37474f;
-  color: #fff;
+  background-color: rgb(var(--v-theme-backMenu)) !important;
+  color: rgb(var(--v-theme-itemMenu)) !important;
 }
 </style>

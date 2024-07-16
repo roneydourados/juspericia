@@ -50,7 +50,13 @@
         </v-row>
       </template>
       <template #mobileActions="{ item }">
-        <v-btn icon color="orange" variant="text" size="small">
+        <v-btn
+          icon
+          color="orange"
+          variant="text"
+          size="small"
+          @click="handleEdit(item as PatientProps)"
+        >
           <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
           <v-tooltip
             activator="parent"
@@ -60,7 +66,13 @@
             Editar
           </v-tooltip>
         </v-btn>
-        <v-btn icon color="error" variant="text" size="small">
+        <v-btn
+          icon
+          color="error"
+          variant="text"
+          size="small"
+          @click="getItemDelete(item as PatientProps)"
+        >
           <v-icon icon="mdi-delete-outline" size="20"></v-icon>
           <v-tooltip
             activator="parent"
@@ -97,7 +109,13 @@
         </span>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-btn icon color="orange" variant="text" size="small">
+        <v-btn
+          icon
+          color="orange"
+          variant="text"
+          size="small"
+          @click="handleEdit(item)"
+        >
           <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
           <v-tooltip
             activator="parent"
@@ -107,7 +125,13 @@
             Editar
           </v-tooltip>
         </v-btn>
-        <v-btn icon color="error" variant="text" size="small">
+        <v-btn
+          icon
+          color="error"
+          variant="text"
+          size="small"
+          @click="getItemDelete(item)"
+        >
           <v-icon icon="mdi-delete-outline" size="20"></v-icon>
           <v-tooltip
             activator="parent"
@@ -119,7 +143,22 @@
         </v-btn>
       </template>
     </Table>
-    <PatientForm :show="showForm" title="Paciente" />
+    <PatientForm
+      :show="showForm"
+      title="Dados do Paciente"
+      @close="handleCloseForm"
+      :data="itemSelected"
+      width="800"
+    />
+    <Dialog
+      title="CONFIRME"
+      :dialog="showDelete"
+      @cancel="showDelete = false"
+      @confirm="handleDeleteItem"
+      show-cancel
+    >
+      <span>Apagar {{ itemSelected?.name }} ? </span>
+    </Dialog>
   </div>
 </template>
 
@@ -129,6 +168,7 @@ import { formatCPF } from "@brazilian-utils/brazilian-utils";
 
 const itemStore = usePatientStore();
 const $all = computed(() => itemStore.$all);
+const $single = computed(() => itemStore.$single);
 
 const { formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
@@ -139,6 +179,8 @@ onMounted(async () => {
 
 const itemSelected = ref<PatientProps>();
 const showForm = ref(false);
+const showDelete = ref(false);
+
 const headers = [
   { title: "Nome", key: "name" },
   { title: "CPF", key: "cpf" },
@@ -147,7 +189,27 @@ const headers = [
 ];
 
 const handleSearch = async (search: string) => {
-  console.log("🚀 ~ handleSearch ~ search:", search);
-  //await itemStore.index(search);
+  await itemStore.index(search);
+};
+
+const handleEdit = async (item: PatientProps) => {
+  await itemStore.show(item.id!);
+  itemSelected.value = $single.value;
+  showForm.value = true;
+};
+
+const getItemDelete = (item: PatientProps) => {
+  itemSelected.value = item;
+  showDelete.value = true;
+};
+
+const handleDeleteItem = async () => {
+  await itemStore.destroy(itemSelected.value!.id!);
+  showDelete.value = false;
+};
+
+const handleCloseForm = () => {
+  showForm.value = false;
+  itemSelected.value = undefined;
 };
 </script>

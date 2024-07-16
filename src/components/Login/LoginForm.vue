@@ -50,12 +50,11 @@
       </v-row>
       <v-row>
         <v-col cols="12">
-          <v-checkbox
-            v-model="form.saveCredentials"
-            color="info"
-            label="Salvar credenciais neste dispotivo"
-            hide-details
-          ></v-checkbox>
+          <v-checkbox v-model="form.saveCredentials" color="info" hide-details>
+            <template #label>
+              <span>Salvar credenciais neste dispotivo</span>
+            </template>
+          </v-checkbox>
         </v-col>
       </v-row>
       <v-row dense justify="center">

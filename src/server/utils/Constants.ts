@@ -1,8 +1,3 @@
-// tipagem da prioridade gut gravidade
-const profileType = ["ADMIN", "COBRADOR"] as const;
-
-export type ProfileType = (typeof profileType)[number];
-
 export const addressCategoryType = {
   patient: "PATIENT",
   medic: "MEDIC",

@@ -9,7 +9,7 @@
         {{ solicitation.title }}
       </span>
     </v-card-title>
-    <v-card-text>
+    <v-card-text class="px-8">
       <v-row dense>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Solicitado:</span>
@@ -35,7 +35,7 @@
           <span class="font-weight-bold">{{ solicitation.status }}</span>
         </v-col>
       </v-row>
-      <v-row dense>
+      <v-row v-if="$currentUser?.Profile.type !== 'MEDICO'" dense>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor:</span>
           <span class="font-weight-bold">{{ solicitation.value }}</span>
@@ -71,21 +71,63 @@
           <span class="font-weight-bold">{{ solicitation.deadline }}</span>
         </v-col>
         <v-col
+          v-if="$currentUser?.Profile.type !== 'MEDICO'"
           cols="12"
           lg="2"
           class="d-flex align-center justify-end"
           style="gap: 0.5rem"
         >
           <span class="text-grey-darken-1">Total:</span>
-          <span class="font-weight-bold text-h6 text-grey-darken-3">
+          <span
+            class="font-weight-bold text-blue-darken-3"
+            style="font-size: 1.3rem"
+          >
             {{ solicitation.total }}
           </span>
         </v-col>
       </v-row>
       <v-divider class="mt-2" />
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="$currentUser?.Profile.type !== 'MEDICO'" class="px-8">
       <v-row dense align="center">
+        <v-col cols="12" lg="2">
+          <v-btn
+            class="text-none font-weight-bold"
+            prepend-icon="mdi-file-document-refresh-outline"
+            color="indigo"
+          >
+            Solicitar correção
+          </v-btn>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-btn
+            class="text-none font-weight-bold"
+            prepend-icon="mdi-calendar-clock-outline"
+            color="info"
+          >
+            Solicitar antecipação
+          </v-btn>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-btn
+            class="text-none font-weight-bold"
+            prepend-icon="mdi-dots-vertical"
+            color="pink"
+            @click="handleDetailsClick(1)"
+          >
+            Visualizar detalhes
+          </v-btn>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-btn
+            class="text-none font-weight-bold"
+            prepend-icon="mdi-cash-multiple"
+            color="success"
+            @click="handleDetailsClick(1)"
+          >
+            Dar Gorjeta
+          </v-btn>
+        </v-col>
         <v-col cols="12" lg="3" class="d-flex align-center px-4">
           <v-btn
             v-if="rating === 0"
@@ -104,34 +146,6 @@
             ></v-rating>
           </div>
         </v-col>
-        <v-col cols="12" lg="2">
-          <v-btn
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-file-document-refresh-outline"
-            color="indigo"
-          >
-            Solicitar correção
-          </v-btn>
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-btn
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-calendar-clock-outline"
-            color="success"
-          >
-            Solicitar antecipação
-          </v-btn>
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-btn
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-dots-vertical"
-            color="pink"
-            @click="handleDetailsClick(1)"
-          >
-            Visualizar detalhes
-          </v-btn>
-        </v-col>
       </v-row>
     </v-card-actions>
   </v-card>
@@ -144,9 +158,11 @@ defineProps({
     default: () => {},
   },
 });
-
+const auth = useAuthStore();
 const rounter = useRouter();
 const rating = ref(0);
+
+const $currentUser = computed(() => auth.$currentUser);
 
 const handleDetailsClick = async (id: number) => {
   await rounter.push(`/solicitations/${id}`);

@@ -22,15 +22,19 @@
               <v-text-field
                 v-model="search"
                 density="compact"
-                label="Digite algo para efetuar consulta..."
                 prepend-inner-icon="mdi-magnify"
                 variant="solo-filled"
                 flat
                 hide-details
                 single-line
                 rounded="lg"
-                @update:model-value="handleSearch(items)"
-              />
+                @update:model-value="handleSearch(Array.from(items))"
+                style="font-size: 1.4rem"
+              >
+                <template #label>
+                  <span> Digite algo para efetuar consulta... </span>
+                </template>
+              </v-text-field>
             </v-col>
             <v-col cols="12" lg="2">
               <div class="d-flex align-center" style="gap: 0.5rem">
@@ -56,6 +60,7 @@
               :length="pageCount"
               rounded="circle"
               color="primary"
+              density="comfortable"
             />
           </div>
         </template>

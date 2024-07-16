@@ -1,16 +1,19 @@
-:root {
-  font-size: 62.5%; /* 1rem = 10px */
-}
-
 *,
 html,
 body {
-  font-size: 1.4rem;
-  line-height: 100%;
+  font-size: 14px;
 }
 
 .tooltip-background {
   background-color: rgb(var(--v-theme-tooltipColor)) !important;
-  color: #424242 !important;
+  color: rgb(var(--v-theme-tooltipTextColor)) !important;
   font-weight: 600 !important;
 }
+
+/* .v-text-field .v-label {
+  font-weight: 400;
+} */
+
+/* .v-field__input {
+  font-weight: 500;
+} */
