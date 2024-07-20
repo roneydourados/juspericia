@@ -40,6 +40,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@tiptap/extension-highlight": "^2.5.4",
+    "@tiptap/extension-text-align": "^2.5.4",
+    "@tiptap/extension-text-style": "^2.5.4",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/nodemailer": "^6.4.15",
