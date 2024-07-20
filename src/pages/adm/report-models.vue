@@ -1,5 +1,5 @@
 <template>
-  <div>relatórios</div>
+  <Editor />
 </template>
 
 <script setup lang="ts"></script>
