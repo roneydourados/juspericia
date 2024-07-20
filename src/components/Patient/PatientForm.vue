@@ -253,11 +253,11 @@ const submitForm = async (data: any) => {
     }
 
     await itemStore.index("");
+    emit("close");
   } catch (error) {
     console.error(error);
   } finally {
     clearModel();
-    emit("close");
   }
 };
 

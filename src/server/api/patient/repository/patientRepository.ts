@@ -95,14 +95,7 @@ export const update = async ({
   status,
   surname,
 }: PatientProps) => {
-  const existsPatient = await exists(id!);
-
-  if (!existsPatient) {
-    throw createError({
-      statusCode: 404,
-      message: "Patient not found",
-    });
-  }
+  await exists(id!);
 
   try {
     const patient = await prisma.patient.update({
@@ -119,7 +112,7 @@ export const update = async ({
         surname: String(surname),
       },
       where: {
-        id: existsPatient.id,
+        id,
       },
     });
 
@@ -164,23 +157,14 @@ export const update = async ({
 };
 
 export const destroy = async (id: number) => {
-  const existsPatient = await exists(id);
-
-  if (!existsPatient) {
-    throw createError({
-      statusCode: 404,
-      message: "Patient not found",
-    });
-  }
+  await exists(id);
 
   try {
     await prisma.patient.delete({
       where: {
-        id: existsPatient.id,
+        id,
       },
     });
-
-    return existsPatient;
   } catch (error) {
     console.log("🚀 ~ error remove patient:", error);
     throw createError({
@@ -197,6 +181,11 @@ export const index = async (inputQuery: string) => {
       name: true,
       cpf: true,
       phone: true,
+      User: {
+        select: {
+          name: true,
+        },
+      },
     },
     where: {
       OR: [
@@ -249,6 +238,13 @@ const exists = async (id: number) => {
       },
     },
   });
+
+  if (!patient) {
+    throw createError({
+      statusCode: 404,
+      message: "Not found",
+    });
+  }
 
   const Address = await prisma.address.findFirst({
     where: {

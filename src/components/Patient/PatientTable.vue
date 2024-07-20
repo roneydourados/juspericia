@@ -17,8 +17,9 @@
               title="Nome"
               icon="mdi-account-outline"
               color-icon="info"
-              :content="item.name"
+              :content="`${item.name} ${item.surname}`"
               :show-divider="true"
+              @click="handlePatientInfo(item.id)"
             />
           </v-col>
         </v-row>
@@ -48,45 +49,56 @@
             />
           </v-col>
         </v-row>
+        <v-row dense>
+          <v-col cols="12">
+            <InfoLabel
+              font-size="1"
+              font-size-content="1.2"
+              title="Advogado"
+              icon="mdi-account-tie-outline"
+              color-icon="blue"
+              :content="item.User.name"
+              :show-divider="true"
+            />
+          </v-col>
+        </v-row>
       </template>
       <template #mobileActions="{ item }">
         <v-btn
-          icon
           color="orange"
-          variant="text"
+          variant="flat"
           size="small"
+          prepend-icon="mdi-pencil-outline"
           @click="handleEdit(item as PatientProps)"
+          class="text-none text-white"
         >
-          <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Editar
-          </v-tooltip>
+          Editar
         </v-btn>
         <v-btn
-          icon
           color="error"
-          variant="text"
+          variant="flat"
           size="small"
+          class="text-none text-white"
+          prepend-icon="mdi-delete-outline"
           @click="getItemDelete(item as PatientProps)"
         >
-          <v-icon icon="mdi-delete-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Apagar
-          </v-tooltip>
+          Apagar
         </v-btn>
       </template>
       <template v-slot:item.name="{ item }">
-        <span style="cursor: pointer" class="d-flex align-center text-info">
+        <span
+          style="cursor: pointer"
+          class="d-flex align-center text-info"
+          @click="handlePatientInfo(item.id)"
+        >
           <v-icon icon="mdi-account-outline" size="24" start />
           <span>{{ item.name }}</span>
+        </span>
+      </template>
+      <template v-slot:item.User.name="{ item }">
+        <span style="cursor: pointer" class="d-flex align-center text-info">
+          <v-icon icon="mdi-account-tie-outline" size="24" start />
+          <span>{{ item.User.name }}</span>
         </span>
       </template>
       <template v-slot:item.cpf="{ item }">
@@ -172,6 +184,7 @@ const $single = computed(() => itemStore.$single);
 
 const { formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
+const rounter = useRouter();
 
 onMounted(async () => {
   await itemStore.index("");
@@ -185,6 +198,7 @@ const headers = [
   { title: "Nome", key: "name" },
   { title: "CPF", key: "cpf" },
   { title: "Whatsapp", key: "phone" },
+  { title: "Advogado", key: "User.name" },
   { title: "Ações", key: "actions" },
 ];
 
@@ -211,5 +225,9 @@ const handleDeleteItem = async () => {
 const handleCloseForm = () => {
   showForm.value = false;
   itemSelected.value = undefined;
+};
+
+const handlePatientInfo = async (id: number) => {
+  await rounter.push(`/patient/${id}`);
 };
 </script>

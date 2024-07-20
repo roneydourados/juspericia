@@ -19,14 +19,7 @@ export const create = async ({ name }: ReportPurposeProps) => {
 };
 
 export const update = async ({ id, name }: ReportPurposeProps) => {
-  const existsItem = await exists(id!);
-
-  if (!existsItem) {
-    throw createError({
-      statusCode: 404,
-      message: "Not found",
-    });
-  }
+  await exists(id!);
 
   try {
     return await prisma.reportPurpose.update({
@@ -34,7 +27,7 @@ export const update = async ({ id, name }: ReportPurposeProps) => {
         name: String(name),
       },
       where: {
-        id: existsItem.id,
+        id,
       },
     });
   } catch (error) {
@@ -47,23 +40,14 @@ export const update = async ({ id, name }: ReportPurposeProps) => {
 };
 
 export const destroy = async (id: number) => {
-  const existsItem = await exists(id);
-
-  if (!existsItem) {
-    throw createError({
-      statusCode: 404,
-      message: "Not found",
-    });
-  }
+  await exists(id);
 
   try {
     await prisma.reportPurpose.delete({
       where: {
-        id: existsItem.id,
+        id,
       },
     });
-
-    return existsItem;
   } catch (error) {
     console.log("🚀 ~ error remove:", error);
     throw createError({
@@ -93,7 +77,7 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  return prisma.reportPurpose.findFirst({
+  const data = await prisma.reportPurpose.findFirst({
     where: {
       id,
     },
@@ -102,4 +86,11 @@ const exists = async (id: number) => {
       name: true,
     },
   });
+
+  if (!data) {
+    throw createError({
+      statusCode: 404,
+      message: "Not found",
+    });
+  }
 };
