@@ -27,7 +27,11 @@ export default defineNuxtConfig({
     "notivue/nuxt",
     "@pinia/nuxt",
     "nuxt-security",
+    "nuxt-tiptap-editor",
   ],
+  tiptap: {
+    prefix: "Tiptap", //prefix for Tiptap imports, composables not included
+  },
   imports: {
     dirs: ["store", "types"],
   },
