@@ -26,11 +26,16 @@ export interface ReportPurposeProps {
   name?: string;
 }
 
+export interface ReportModelProps {
+  id?: number;
+  title?: string;
+  content?: string;
+}
+
 export interface BenefitTypeProps {
   id?: number;
   name?: string;
 }
-
 export interface PatientConsultationProps {
   id?: number;
   patientId?: number;
