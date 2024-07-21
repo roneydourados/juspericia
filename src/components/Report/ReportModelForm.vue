@@ -11,10 +11,10 @@
                 required
               />
             </v-col>
-            <v-col cols="12" lg="6" />
+            <v-col cols="12" lg="4" />
             <v-col
               cols="12"
-              lg="2"
+              lg="3"
               class="d-flex align-center"
               style="gap: 0.5rem"
             >
@@ -33,7 +33,8 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <EditorTinyMCE v-model="model.content" />
+          <!-- <EditorTinyMCE v-model="model.content" /> -->
+          <CKEditor v-model="model.content" />
         </v-card-text>
       </v-card>
     </FormCrud>
