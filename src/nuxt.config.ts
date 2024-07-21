@@ -1,10 +1,10 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
-const rateLimiter = {
-  interval: 300000,
-  tokensPerInterval: 150,
-  throwError: true,
-};
+// const rateLimiter = {
+//   interval: 300000,
+//   tokensPerInterval: 150,
+//   throwError: true,
+// };
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     },
     "notivue/nuxt",
     "@pinia/nuxt",
-    "nuxt-security",
     "nuxt-tiptap-editor",
   ],
   tiptap: {

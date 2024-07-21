@@ -10,15 +10,6 @@ export const useReportModelStore = defineStore("reportModel", () => {
   const $all = computed(() => reportModels.value);
   const $single = computed(() => reportModel.value);
 
-  const create = async (payload: ReportModelProps) => {
-    const { data } = await api.post<ReportModelProps>(
-      "/report-models",
-      payload
-    );
-
-    reportModel.value = data;
-  };
-
   const index = async (inputQuery: string) => {
     const config = {
       params: {
@@ -36,6 +27,15 @@ export const useReportModelStore = defineStore("reportModel", () => {
 
   const update = async (payload: ReportModelProps) => {
     const { data } = await api.put<ReportModelProps>("/report-models", payload);
+
+    reportModel.value = data;
+  };
+
+  const create = async (payload: ReportModelProps) => {
+    const { data } = await api.post<ReportModelProps>(
+      "/report-models",
+      payload
+    );
 
     reportModel.value = data;
   };

@@ -11,21 +11,39 @@
                 required
               />
             </v-col>
-            <v-col cols="12" lg="4" />
+            <v-col cols="12" lg="5" />
             <v-col
               cols="12"
               lg="3"
               class="d-flex align-center"
               style="gap: 0.5rem"
             >
-              <v-btn color="primary" prepend-icon="mdi-check" type="submit">
+              <v-btn
+                color="info"
+                prepend-icon="mdi-printer"
+                type="submit"
+                size="small"
+                variant="flat"
+                @click="handlePDF"
+              >
+                Imprimir
+              </v-btn>
+              <v-btn
+                color="primary"
+                prepend-icon="mdi-check"
+                type="submit"
+                size="small"
+                variant="flat"
+              >
                 Salvar
               </v-btn>
               <v-btn
+                variant="flat"
                 color="error"
                 prepend-icon="mdi-cancel"
                 type="submit"
                 @click="$emit('close')"
+                size="small"
               >
                 cancelar
               </v-btn>
@@ -101,5 +119,27 @@ const handleSubmit = async () => {
 const handleClose = () => {
   clearModel();
   emit("close");
+};
+
+const handlePDF = () => {
+  const html = model.value.content;
+
+  // Criar um iframe temporário
+  const iframe = document.createElement("iframe");
+
+  iframe.style.visibility = "hidden";
+  document.body.appendChild(iframe);
+
+  // Escrever o conteúdo HTML no iframe e chamar a impressão
+  if (iframe.contentDocument) {
+    iframe.contentDocument.open();
+    iframe.contentDocument.write(html);
+    iframe.contentDocument.close();
+  }
+
+  if (iframe.contentWindow) {
+    iframe.contentWindow.onafterprint = () => document.body.removeChild(iframe); // Remover após a impressão
+    iframe.contentWindow.print();
+  }
 };
 </script>

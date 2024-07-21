@@ -46,6 +46,15 @@
     </v-card-text>
   </v-card>
   <ReportModelForm v-if="showForm" :data="selected" @close="handleCloseForm" />
+  <Dialog
+    title="CONFIRME"
+    :dialog="showDelete"
+    @cancel="showDelete = false"
+    @confirm="handleDeleteItem"
+    show-cancel
+  >
+    <span>Apagar {{ selected?.title }} ? </span>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -81,6 +90,13 @@ const deleteItem = (item: ReportModelProps) => {
 
 const handleCloseForm = () => {
   showForm.value = false;
+  selected.value = undefined;
+};
+
+const handleDeleteItem = async () => {
+  await reportModel.destroy(selected.value!.id!);
+  await reportModel.index("");
+  showDelete.value = false;
   selected.value = undefined;
 };
 </script>

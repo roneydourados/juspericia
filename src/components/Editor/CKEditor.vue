@@ -1,31 +1,50 @@
 <template>
   <ckeditor
-    :editor="editor"
     v-model="value"
+    tag-name="textarea"
+    :editor="Editor"
     :config="config"
-    @blur="handleBlur"
-    @input="handleChange"
-  ></ckeditor>
+    @ready="onReady"
+    @focus="onFocus"
+    @blur="onBlur"
+    @input="onInput"
+    @destroy="onDestroy"
+    style="height: 40rem"
+  />
 </template>
 
 <script setup lang="ts">
 import {
   ClassicEditor,
-  Bold,
   Essentials,
-  Italic,
-  Mention,
   Paragraph,
+  Heading,
+  Bold,
+  Italic,
   Undo,
+  Alignment,
+  EventInfo,
 } from "ckeditor5";
-import "ckeditor5/ckeditor5.css";
 
-// import coreTranslations from "ckeditor5/translations/pl.js";
+import coreTranslations from "ckeditor5/translations/pt.js";
+import "ckeditor5/ckeditor5.css";
 
 import { useField } from "vee-validate";
 import { v4 as uuidv4 } from "uuid";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+
+class Editor extends ClassicEditor {
+  static override builtinPlugins = [
+    Essentials,
+    Paragraph,
+    Heading,
+    Bold,
+    Italic,
+    Undo,
+    Alignment,
+  ];
+}
 
 defineProps({
   modelValue: {
@@ -36,12 +55,24 @@ defineProps({
 
 defineEmits(["update:modelValue"]);
 
-const editor = ref(ClassicEditor);
+const editorInstance = ref<Editor | null>(null);
 
 const config = reactive({
-  toolbar: ["heading", "|", "bold", "italic"],
+  toolbar: [
+    "heading",
+    "|",
+    "bold",
+    "italic",
+    "|",
+    "undo",
+    "|",
+    "numberedList",
+    "alignment",
+  ],
+  translations: [coreTranslations],
 });
 
+/*
 const editorConfig = ref({
   menubar: {
     isVisible: true,
@@ -71,6 +102,7 @@ const editorConfig = ref({
     // Mention configuration
   },
 });
+*/
 
 const fieldName = computed<MaybeRef>(() => {
   return uuidv4();
@@ -80,11 +112,29 @@ const validationRules = computed<MaybeRef>(() => {
   return toTypedSchema(zod.string().nullish().optional());
 });
 
-const { value, handleBlur, handleChange } = useField<string>(
-  fieldName,
-  validationRules,
-  {
-    syncVModel: true,
-  }
-);
+const { value } = useField<string>(fieldName, validationRules, {
+  syncVModel: true,
+});
+
+const onReady = (editor: Editor) => {
+  editorInstance.value = editor;
+
+  console.log("Editor is ready.", { editor });
+};
+
+const onFocus = (event: EventInfo, editor: Editor) => {
+  console.log("Editor focused.", { event, editor });
+};
+
+const onBlur = (event: EventInfo, editor: Editor) => {
+  console.log("Editor blurred.", { event, editor });
+};
+
+const onInput = (data: string, event: EventInfo, editor: Editor) => {
+  console.log("Editor data input.", { event, editor, data });
+};
+
+const onDestroy = () => {
+  console.log("Editor destroyed.");
+};
 </script>

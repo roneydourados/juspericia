@@ -1,3 +1,4 @@
-export default defineEventHandler((event) => {
-  console.log("Acessando: " + getRequestURL(event));
+export default defineEventHandler(async (event) => {
+  console.log("route: " + getRequestURL(event));
+  console.log("Method: " + event.method);
 });
