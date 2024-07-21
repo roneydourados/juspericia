@@ -19,6 +19,7 @@
     "@mdi/font": "^7.4.47",
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.16.1",
+    "@tinymce/tinymce-vue": "^5",
     "@vee-validate/zod": "^4.13.2",
     "apexcharts": "^3.50.0",
     "axios": "^1.7.2",

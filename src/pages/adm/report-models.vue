@@ -1,5 +1,3 @@
 <template>
-  <Editor />
+  <ReportModelTable />
 </template>
-
-<script setup lang="ts"></script>

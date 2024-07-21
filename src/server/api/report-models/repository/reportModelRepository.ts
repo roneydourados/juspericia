@@ -7,7 +7,7 @@ export const create = async ({ title, content }: ReportModelProps) => {
     return prisma.reportModel.create({
       data: {
         title: String(title),
-        content: String(content),
+        content: content ?? "",
       },
     });
   } catch (error) {
@@ -26,7 +26,7 @@ export const update = async ({ id, title, content }: ReportModelProps) => {
     return await prisma.reportModel.update({
       data: {
         title: String(title),
-        content: String(content),
+        content: content ?? "",
       },
       where: {
         id,
@@ -96,4 +96,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
+
+  return data;
 };
