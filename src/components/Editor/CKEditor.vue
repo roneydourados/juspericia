@@ -72,38 +72,6 @@ const config = reactive({
   translations: [coreTranslations],
 });
 
-/*
-const editorConfig = ref({
-  menubar: {
-    isVisible: true,
-  },
-  language: {
-    ui: "pt",
-    content: "pt",
-  },
-  plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo],
-  toolbar: {
-    items: [
-      "bold",
-      "italic",
-      "|",
-      "undo",
-      "redo",
-      "-",
-      "numberedList",
-      "bulletedList",
-    ],
-
-    shouldNotGroupWhenFull: true,
-  },
-  licenseKey:
-    "bC93YTBlWG9XMFV1dlJxRVBTM2V0MWdMMXBmYndyOWMwOWZBMnJuUVV6OWhxRWRURHZCY0gvQ1VqQzB6ZXc9PS1NakF5TkRBNE1qQT0=",
-  mention: {
-    // Mention configuration
-  },
-});
-*/
-
 const fieldName = computed<MaybeRef>(() => {
   return uuidv4();
 });

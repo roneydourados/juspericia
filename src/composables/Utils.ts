@@ -183,6 +183,28 @@ export const useUtils = () => {
     return formatCNPJ(value);
   };
 
+  const stringToHandlePDF = (value: string) => {
+    // Criar um iframe temporário
+    const iframe = document.createElement("iframe");
+
+    iframe.style.visibility = "hidden";
+    document.body.appendChild(iframe);
+
+    // Escrever o conteúdo HTML no iframe e chamar a impressão
+    if (iframe.contentDocument) {
+      iframe.contentDocument.open();
+      iframe.contentDocument.write(value);
+      iframe.contentDocument.close();
+    }
+
+    if (iframe.contentWindow) {
+      // Remover após a impressão
+      iframe.contentWindow.onafterprint = () =>
+        document.body.removeChild(iframe);
+      iframe.contentWindow.print();
+    }
+  };
+
   return {
     amountFormated,
     cardInvoices,
@@ -198,5 +220,6 @@ export const useUtils = () => {
     difDays,
     extenseDate,
     formatCPFOrCNPJ,
+    stringToHandlePDF,
   };
 };

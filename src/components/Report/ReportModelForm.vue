@@ -19,11 +19,22 @@
               style="gap: 0.5rem"
             >
               <v-btn
+                variant="flat"
+                color="info"
+                prepend-icon="mdi-arrow-left"
+                @click="$emit('close')"
+                class="text-none"
+                size="small"
+              >
+                Voltar
+              </v-btn>
+
+              <v-btn
                 color="info"
                 prepend-icon="mdi-printer"
-                type="submit"
                 size="small"
                 variant="flat"
+                class="text-none"
                 @click="handlePDF"
               >
                 Imprimir
@@ -33,19 +44,10 @@
                 prepend-icon="mdi-check"
                 type="submit"
                 size="small"
+                class="text-none"
                 variant="flat"
               >
                 Salvar
-              </v-btn>
-              <v-btn
-                variant="flat"
-                color="error"
-                prepend-icon="mdi-cancel"
-                type="submit"
-                @click="$emit('close')"
-                size="small"
-              >
-                cancelar
               </v-btn>
             </v-col>
           </v-row>
@@ -68,6 +70,7 @@ const props = defineProps({
 });
 
 const reportModel = useReportModelStore();
+const { stringToHandlePDF } = useUtils();
 const emit = defineEmits(["close"]);
 
 const model = ref({
@@ -122,24 +125,6 @@ const handleClose = () => {
 };
 
 const handlePDF = () => {
-  const html = model.value.content;
-
-  // Criar um iframe temporário
-  const iframe = document.createElement("iframe");
-
-  iframe.style.visibility = "hidden";
-  document.body.appendChild(iframe);
-
-  // Escrever o conteúdo HTML no iframe e chamar a impressão
-  if (iframe.contentDocument) {
-    iframe.contentDocument.open();
-    iframe.contentDocument.write(html);
-    iframe.contentDocument.close();
-  }
-
-  if (iframe.contentWindow) {
-    iframe.contentWindow.onafterprint = () => document.body.removeChild(iframe); // Remover após a impressão
-    iframe.contentWindow.print();
-  }
+  stringToHandlePDF(model.value.content);
 };
 </script>
