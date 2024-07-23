@@ -71,13 +71,16 @@
           </v-btn>
         </v-col>
       </v-row>
+      <NuxtTurnstile v-model="cloudFlareToken" />
     </FormCrud>
   </v-card>
 </template>
 
 <script setup lang="ts">
 const auth = useAuthStore();
-const route = useRouter();
+//const route = useRouter();
+
+const cloudFlareToken = ref("");
 
 const form = ref({
   email: "",
@@ -97,9 +100,12 @@ const $user = computed(() => auth.$currentUser);
 
 const submmitForm = async () => {
   try {
+    console.log("token cloude", cloudFlareToken.value);
+
     await auth.login({
       email: form.value.email,
       password: form.value.password,
+      tokenCapcha: cloudFlareToken.value,
     });
 
     //await route.push("/home-admin");

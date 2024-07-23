@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     "notivue/nuxt",
     "@pinia/nuxt",
     "nuxt-tiptap-editor",
+    "@nuxtjs/turnstile",
   ],
   tiptap: {
     prefix: "Tiptap", //prefix for Tiptap imports, composables not included
@@ -119,11 +120,20 @@ export default defineNuxtConfig({
       },
     },
   },
+  turnstile: {
+    siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
+    //addValidateEndpoint: true,
+  },
   runtimeConfig: {
     tokenSecret: process.env.JWT_SECRET ?? "",
     public: {
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       version: process.env.VERSION ?? "",
+      turnstile: {
+        // This can be overridden at runtime via the NUXT_TURNSTILE_SECRET_KEY
+        // environment variable.
+        secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
+      },
     },
   },
 });

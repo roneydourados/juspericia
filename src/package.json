@@ -18,6 +18,8 @@
     "@brazilian-utils/brazilian-utils": "^1.0.0-rc.12",
     "@ckeditor/ckeditor5-vue": "^6.0.0",
     "@mdi/font": "^7.4.47",
+    "@nuxt/scripts": "^0.6.4",
+    "@nuxtjs/turnstile": "^0.9.3",
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.16.1",
     "@tinymce/tinymce-vue": "^5",

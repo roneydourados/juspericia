@@ -3,8 +3,9 @@ import { prisma } from "@/server/providers/prisma";
 import { useHash } from "@/server/providers/hash";
 import { useJwtToken } from "@/server/providers/jwtToken";
 import { UserProfileProps, UserProps } from "@/types/User";
+import { AuthProps } from "~/types/Auth";
 
-export const login = async ({ email, password }: UserProps) => {
+export const login = async ({ email, password }: AuthProps) => {
   const { validHash } = useHash();
   const { createToken, tokenData } = useJwtToken();
 
