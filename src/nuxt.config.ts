@@ -122,7 +122,7 @@ export default defineNuxtConfig({
   },
   turnstile: {
     siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
-    //addValidateEndpoint: true,
+    addValidateEndpoint: true,
   },
   runtimeConfig: {
     tokenSecret: process.env.JWT_SECRET ?? "",
