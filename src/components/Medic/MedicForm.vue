@@ -144,6 +144,7 @@ const submitForm = async () => {
   });
 
   await medicStore.index("");
+  handleClose();
 };
 
 const handleClose = () => {
