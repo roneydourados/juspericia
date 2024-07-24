@@ -39,6 +39,13 @@ export default defineNuxtConfig({
     head: {
       title: "Juspericia",
       titleTemplate: "Juspericia",
+      script: [
+        {
+          src: "https://challenges.cloudflare.com/turnstile/v0/api.js",
+          async: true,
+          defer: true,
+        },
+      ],
       // meta: [
       //   {
       //     name: "theme-color",
@@ -132,6 +139,7 @@ export default defineNuxtConfig({
       turnstile: {
         // This can be overridden at runtime via the NUXT_TURNSTILE_SECRET_KEY
         // environment variable.
+        siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
         secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
       },
     },

@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="editor">
-    <v-row dense class="pa-4">
+    <v-row dense class="pa-2" no-gutters>
       <v-col cols="12" lg="3">
         <v-btn-toggle variant="outlined" divided>
           <v-btn
@@ -8,7 +8,7 @@
             icon="mdi-format-bold"
             @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
-            :class="{ 'is-active': editor.isActive('bold') }"
+            :color="editor.isActive('bold') ? 'blue' : ''"
           />
           <v-btn
             size="small"
@@ -61,35 +61,42 @@
           />
         </v-btn-toggle>
       </v-col>
-
-      <v-col cols="12" lg="9" class="d-flex" style="gap: 1rem">
-        <StringInput label="Nome do laudo" />
-        <v-btn
-          color="primary"
-          variant="flat"
-          size="small"
-          prepend-icon="mdi-check"
-          >Salvar</v-btn
-        >
+    </v-row>
+    <v-row dense class="pa-2" no-gutters>
+      <v-col cols="12">
+        <v-card variant="flat" class="pa-4 border-thin">
+          <div class="container">
+            <TiptapEditorContent
+              v-model="value"
+              :editor="editor"
+              style="min-height: 40rem"
+            />
+          </div>
+        </v-card>
       </v-col>
     </v-row>
-    <v-card-text>
-      <v-card variant="flat" class="pa-4 border-thin">
-        <div class="container">
-          <TiptapEditorContent :editor="editor" style="min-height: 40rem" />
-        </div>
-      </v-card>
-    </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Highlight } from "@tiptap/extension-highlight";
-import { content } from "./content";
+
+import { useField } from "vee-validate";
+import { v4 as uuidv4 } from "uuid";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+});
+
+defineEmits(["update:modelValue"]);
 
 const editor = useEditor({
-  content,
   editorProps: {
     attributes: {
       spellcheck: "false",
@@ -107,6 +114,31 @@ const editor = useEditor({
 onBeforeUnmount(() => {
   //@ts-ignore
   unref(editor).destroy();
+});
+
+const fieldName = computed<MaybeRef>(() => {
+  return uuidv4();
+});
+
+const validationRules = computed<MaybeRef>(() => {
+  return toTypedSchema(zod.string().nullish().optional());
+});
+
+const { value } = useField<string>(fieldName, validationRules, {
+  syncVModel: true,
+});
+
+// onMounted(() => {
+//   if (!!unref(editor) && editor.value) {
+//     console.log("🚀 ~ onMounted ~ editor:", props.modelValue);
+//     editor.value.commands.setContent(props.modelValue);
+//   }
+// });
+
+watch(editor, () => {
+  if (!!unref(editor) && editor.value) {
+    editor.value.commands.setContent(props.modelValue);
+  }
 });
 </script>
 

@@ -55,6 +55,7 @@
         <v-card-text>
           <!-- <EditorTinyMCE v-model="model.content" /> -->
           <CKEditor v-model="model.content" />
+          <!-- <Editor v-model="model.content" /> -->
         </v-card-text>
       </v-card>
     </FormCrud>
