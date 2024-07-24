@@ -1,7 +1,3 @@
 <template>
-  <div>Médicos parceiros</div>
+  <MedicTable />
 </template>
-
-<script setup lang="ts"></script>
-
-<style scoped></style>

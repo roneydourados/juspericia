@@ -54,21 +54,19 @@ model User {
   crmUf                     String?                     @map("crm_uf") @db.Char(2) // UF do CRM
   active                    Boolean                     @default(true) // se o usuário está ativo
   profileId                 Int                         @map("profile_id") // código do perfil do usuário
-  isActive                  Boolean                     @default(true) @map("is_active") // se o usuário está ativo
   createdAt                 DateTime                    @default(now()) @map("created_at") // data e hora da criação do registro
   updatedAt                 DateTime                    @updatedAt @map("updated_at") // data e hora da última atualização
   Profile                   Profile                     @relation(fields: [profileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient                   Patient[]
   UserConsultationPacket    UserConsultationPacket[]
-  //UserConsultationPacketLog UserConsultationPacketLog[]
   PatientConsultationReport PatientConsultationReport[]
-  schedules                 Schedule[]
+  Schedules                 Schedule[]
   UserLogCredit             UserLogCredit[]
 
   @@index([name], map: "users_idx_name")
   @@index([email], map: "users_idx_email")
   @@index([cpfCnpj], map: "users_idx_cpf_cnpj")
-  @@index([isActive], map: "users_idx_is_active")
+  @@index([active], map: "users_idx_active")
   @@map("users")
 }
 
