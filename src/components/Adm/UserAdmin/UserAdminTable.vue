@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table
-      title="Médicos parceiros"
+      title="Administradores do sistema"
       :items="$all"
       :headers="headers"
       @search="handleSearch($event)"
@@ -154,9 +154,9 @@
     </Table>
   </div>
   <DialogLoading :dialog="loading" />
-  <MedicForm
+  <UserAdminForm
     width="800"
-    title="Médico"
+    title="Administrador"
     :show="showForm"
     :data="selected"
     @close="handleCloseForm"
@@ -173,9 +173,9 @@
 </template>
 
 <script setup lang="ts">
-const medicStore = useMedicStore();
+const userAdminStore = useUserAdminStore();
 const { formatTelephoneNumber } = useUtils();
-const $all = computed(() => medicStore.$all);
+const $all = computed(() => userAdminStore.$all);
 
 const selected = ref<UserProps>();
 const loading = ref(false);
@@ -211,7 +211,7 @@ onMounted(async () => {
 const handleSearch = async (search: string) => {
   loading.value = true;
   try {
-    await medicStore.index(search);
+    await userAdminStore.index(search);
   } finally {
     loading.value = false;
   }
@@ -236,8 +236,8 @@ const handleDeleteItem = async () => {
   showDelete.value = false;
   loading.value = true;
   try {
-    await medicStore.destroy(selected.value?.id!);
-    await medicStore.index("");
+    await userAdminStore.destroy(selected.value?.id!);
+    await userAdminStore.index("");
   } finally {
     loading.value = false;
   }

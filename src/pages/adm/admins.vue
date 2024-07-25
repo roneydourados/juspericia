@@ -1,4 +1,3 @@
 <template>
-  <AdmTable />
+  <UserAdminTable />
 </template>
-<script setup lang="ts"></script>

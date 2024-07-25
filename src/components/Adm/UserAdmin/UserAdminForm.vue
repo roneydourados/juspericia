@@ -34,25 +34,6 @@
           />
         </v-col>
         <v-col cols="12" lg="4">
-          <StringInput
-            v-model="model.crm"
-            label="CRM"
-            placeholder="CRM"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <StatesSelect
-            v-model="model.crmUf"
-            label="UF CRM"
-            placeholder="UF CRM"
-            required
-          />
-        </v-col>
-      </v-row>
-
-      <v-row dense>
-        <v-col cols="12" lg="4">
           <CPFInput
             v-model:model-value="model.cpfCnpj.text"
             v-model:model-number="model.cpfCnpj.value"
@@ -70,6 +51,9 @@
             type="password"
           />
         </v-col>
+      </v-row>
+
+      <v-row dense>
         <v-col cols="12" lg="4">
           <v-switch
             v-model="model.active"
@@ -87,7 +71,6 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { useDisplay } from "vuetify";
-import Loading from "../UI/infos/Loading.vue";
 
 const props = defineProps({
   show: {
@@ -111,7 +94,7 @@ const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
 const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
-const medicStore = useMedicStore();
+const userAdminStore = useUserAdminStore();
 
 const loading = ref(false);
 const model = ref({
@@ -127,8 +110,6 @@ const model = ref({
     text: "",
     value: "",
   },
-  crm: "",
-  crmUf: "",
   active: true,
 });
 
@@ -145,8 +126,6 @@ const clearModel = () => {
       value: "",
     },
     password: "",
-    crm: "",
-    crmUf: "",
     email: "",
     active: true,
   };
@@ -173,15 +152,13 @@ const loadModel = () => {
       value: props.data.cpfCnpj ?? "",
     },
     password: "",
-    crm: props.data.crm ?? "",
-    crmUf: props.data.crmUf ?? "",
     email: props.data.email ?? "",
     active: props.data.active ?? false,
   };
 };
 
 const submitForm = async () => {
-  Loading.value = true;
+  loading.value = true;
   try {
     if (model.value.id && model.value.id > 0) {
       await update();
@@ -189,17 +166,15 @@ const submitForm = async () => {
       await create();
     }
 
-    await medicStore.index("");
+    await userAdminStore.index("");
     handleClose();
   } finally {
-    Loading.value = false;
+    loading.value = false;
   }
 };
 
 const create = async () => {
-  await medicStore.create({
-    crm: model.value.crm,
-    crmUf: model.value.crmUf,
+  await userAdminStore.create({
     email: model.value.email,
     name: model.value.name,
     phone: model.value.phone.value,
@@ -209,10 +184,8 @@ const create = async () => {
 };
 
 const update = async () => {
-  await medicStore.update({
+  await userAdminStore.update({
     id: model.value.id,
-    crm: model.value.crm,
-    crmUf: model.value.crmUf,
     email: model.value.email,
     name: model.value.name,
     phone: model.value.phone.value,

@@ -8,7 +8,7 @@ export const create = async (payload: UserProps) => {
 
   const profile = await prisma.profile.findFirst({
     where: {
-      type: "MEDICO",
+      type: "ADMIN",
     },
   });
 
@@ -30,9 +30,7 @@ export const create = async (payload: UserProps) => {
         name: payload.name!,
         password: hashedpassword,
         active: true,
-        crm: payload.crm,
         cpfCnpj: payload.cpfCnpj,
-        crmUf: payload.crmUf,
         phone: payload.phone,
         profileId: profile.id,
       },
@@ -44,10 +42,10 @@ export const create = async (payload: UserProps) => {
       name: user.name,
     };
   } catch (error) {
-    console.log("🚀 ~ error create Medic:", error);
+    console.log("🚀 ~ error create User Admin:", error);
     throw createError({
       statusCode: 500,
-      message: "Error to create medic",
+      message: "Error to create User Admin",
     });
   }
 };
@@ -63,19 +61,15 @@ export const update = async (payload: UserProps) => {
     : undefined;
 
   try {
-    console.log("🚀 ~ update ~ payload.active:", payload.active);
     const user = await prisma.user.update({
       data: {
         email: payload.email,
         name: payload.name,
         password: hashedpassword,
         active: payload.active,
-        crm: payload.crm,
         cpfCnpj: payload.cpfCnpj,
-        crmUf: payload.crmUf,
         phone: payload.phone,
       },
-
       where: {
         id: payload.id,
       },
@@ -87,10 +81,10 @@ export const update = async (payload: UserProps) => {
       name: user.name,
     };
   } catch (error) {
-    console.log("🚀 ~ error update Medic:", error);
+    console.log("🚀 ~ error update User Admin:", error);
     throw createError({
       statusCode: 500,
-      message: "Error to update Medic",
+      message: "Error to update User Admin",
     });
   }
 };
@@ -105,10 +99,10 @@ export const destroy = async (id: number) => {
       },
     });
   } catch (error) {
-    console.log("🚀 ~ error remove Medic:", error);
+    console.log("🚀 ~ error remove User Admin:", error);
     throw createError({
       statusCode: 500,
-      message: "Error to remove Medic",
+      message: "Error to remove User Admin",
     });
   }
 };
@@ -118,19 +112,9 @@ export const index = async (inputQuery: string) => {
     select: {
       id: true,
       name: true,
-      cpfCnpj: true,
       phone: true,
-      crm: true,
       active: true,
-      crmUf: true,
       email: true,
-      // Profile: {
-      //   select: {
-      //     id: true,
-      //     profileName: true,
-      //     type: true,
-      //   },
-      // },
     },
     where: {
       OR: [
@@ -143,7 +127,7 @@ export const index = async (inputQuery: string) => {
       ],
       AND: [
         {
-          Profile: { type: "MEDICO" },
+          Profile: { type: "ADMIN" },
         },
       ],
     },
@@ -167,20 +151,8 @@ const exists = async (id: number) => {
       name: true,
       cpfCnpj: true,
       phone: true,
-      crm: true,
       active: true,
-      crmUf: true,
       email: true,
-      oab: true,
-      oabUf: true,
-      officeName: true,
-      Profile: {
-        select: {
-          id: true,
-          profileName: true,
-          type: true,
-        },
-      },
     },
   });
 
@@ -204,21 +176,21 @@ const validations = async (payload: UserProps) => {
   if (exists) {
     throw createError({
       statusCode: 409,
-      message: "Medic already exists",
+      message: "User Admin already exists",
     });
   }
 
   if (!payload.email) {
     throw createError({
       statusCode: 409,
-      message: "Medic email is required",
+      message: "User Admin email is required",
     });
   }
 
   if (!payload.name) {
     throw createError({
       statusCode: 409,
-      message: "Medic name is required",
+      message: "User Admin name is required",
     });
   }
 };
