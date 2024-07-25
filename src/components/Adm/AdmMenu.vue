@@ -22,6 +22,23 @@
         flat
         rounded="lg"
         min-height="200"
+        @click="handlClick('/adm/admins')"
+        elevation="8"
+      >
+        <v-card-title class="d-flex justify-center py-4">
+          <AdminMenuAdminsSVG height="50" color="#2196F3" />
+        </v-card-title>
+        <v-card-text class="text-center">
+          Usuários administradores. Gestão dos usuários com acesso total as
+          funcionalidades do sistema.
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="12" lg="3">
+      <v-card
+        flat
+        rounded="lg"
+        min-height="200"
         @click="handlClick('/adm/queries')"
         elevation="8"
       >
@@ -33,7 +50,7 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="3">
+    <!-- <v-col cols="12" lg="3">
       <v-card
         flat
         rounded="lg"
@@ -50,26 +67,7 @@
           lote e com preço mais acessível ao escritório
         </v-card-text>
       </v-card>
-    </v-col>
-    <v-col cols="12" lg="3">
-      <v-card
-        flat
-        rounded="lg"
-        min-height="200"
-        @click="handlClick('/adm/admins')"
-        elevation="8"
-      >
-        <v-card-title class="d-flex justify-center py-4">
-          <AdminMenuAdminsSVG height="50" color="#2196F3" />
-        </v-card-title>
-        <v-card-text class="text-center">
-          Usuários administradores. Gestão dos usuários com acesso total as
-          funcionalidades do sistema.
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
-  <v-row dense>
+    </v-col> -->
     <v-col cols="12" lg="3">
       <v-card
         flat
@@ -87,6 +85,8 @@
         </v-card-text>
       </v-card>
     </v-col>
+  </v-row>
+  <v-row dense>
     <v-col cols="12" lg="3">
       <v-card
         flat

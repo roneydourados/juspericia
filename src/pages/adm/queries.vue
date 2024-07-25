@@ -1,5 +1,5 @@
 <template>
-  <div>Cadastro de consultas</div>
+  <ConsultationTable />
 </template>
 
 <script setup lang="ts"></script>

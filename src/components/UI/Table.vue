@@ -48,6 +48,17 @@
                   <v-icon icon="mdi-plus"> </v-icon>
                   Novo
                 </v-btn>
+
+                <v-btn
+                  variant="flat"
+                  color="info"
+                  class="text-none"
+                  size="small"
+                  @click="$router.back()"
+                >
+                  <v-icon icon="mdi-arrow-left"> </v-icon>
+                  Voltar
+                </v-btn>
                 <slot name="button" />
               </div>
             </v-col>
