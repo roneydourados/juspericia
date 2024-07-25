@@ -218,7 +218,7 @@ const model = ref({
     text: "",
     value: "",
   },
-  sexy: "",
+  sexy: undefined as string | undefined,
   status: "A",
   Address: {
     addressCity: "",
@@ -286,7 +286,7 @@ const clearModel = () => {
       text: "",
       value: "",
     },
-    sexy: "",
+    sexy: undefined,
     status: "A",
     Address: {
       addressCity: "",
@@ -322,7 +322,7 @@ const loadModel = () => {
       text: formatTelephoneNumber(props.data.phone ?? ""),
       value: props.data.phone ?? "",
     },
-    sexy: props.data.sexy ?? "",
+    sexy: props.data.sexy,
     status: props.data.status ?? "A",
     Address: {
       addressCity: props.data.Address.addressCity ?? "",

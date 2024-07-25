@@ -55,13 +55,14 @@
   >
     <span>Apagar {{ selected?.title }} ? </span>
   </Dialog>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
 const reportModel = useReportModelStore();
 
 onMounted(async () => {
-  reportModel.index("");
+  await handleSearch("");
 });
 
 const $all = computed(() => reportModel.$all);
@@ -70,17 +71,23 @@ const $single = computed(() => reportModel.$single);
 const selected = ref<ReportModelProps>();
 const showForm = ref(false);
 const showDelete = ref(false);
+const loading = ref(false);
 
 const getItem = (item: ReportModelProps) => {
   selected.value = item;
 };
 
 const editItem = async (item: ReportModelProps) => {
-  await reportModel.show(item.id!);
+  loading.value = true;
+  try {
+    await reportModel.show(item.id!);
 
-  getItem($single.value!);
+    getItem($single.value!);
 
-  showForm.value = true;
+    showForm.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const deleteItem = (item: ReportModelProps) => {
@@ -94,9 +101,23 @@ const handleCloseForm = () => {
 };
 
 const handleDeleteItem = async () => {
-  await reportModel.destroy(selected.value!.id!);
-  await reportModel.index("");
-  showDelete.value = false;
-  selected.value = undefined;
+  loading.value = true;
+  try {
+    await reportModel.destroy(selected.value!.id!);
+    await reportModel.index("");
+    showDelete.value = false;
+    selected.value = undefined;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleSearch = async (search: string) => {
+  loading.value = true;
+  try {
+    await reportModel.index(search);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

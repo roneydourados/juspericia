@@ -64,7 +64,7 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: undefined,
+    type: String,
     default: null,
   },
   icon: {

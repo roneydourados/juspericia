@@ -171,6 +171,7 @@
     >
       <span>Apagar {{ itemSelected?.name }} ? </span>
     </Dialog>
+    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
@@ -187,12 +188,13 @@ const { mobile } = useDisplay();
 const rounter = useRouter();
 
 onMounted(async () => {
-  await itemStore.index("");
+  await handleSearch("");
 });
 
 const itemSelected = ref<PatientProps>();
 const showForm = ref(false);
 const showDelete = ref(false);
+const loading = ref(false);
 
 const headers = [
   { title: "Nome", key: "name" },
@@ -203,13 +205,23 @@ const headers = [
 ];
 
 const handleSearch = async (search: string) => {
-  await itemStore.index(search);
+  loading.value = true;
+  try {
+    await itemStore.index(search);
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleEdit = async (item: PatientProps) => {
-  await itemStore.show(item.id!);
-  itemSelected.value = $single.value;
-  showForm.value = true;
+  loading.value = true;
+  try {
+    await itemStore.show(item.id!);
+    itemSelected.value = $single.value;
+    showForm.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const getItemDelete = (item: PatientProps) => {
@@ -218,8 +230,13 @@ const getItemDelete = (item: PatientProps) => {
 };
 
 const handleDeleteItem = async () => {
-  await itemStore.destroy(itemSelected.value!.id!);
-  showDelete.value = false;
+  loading.value = true;
+  try {
+    await itemStore.destroy(itemSelected.value!.id!);
+    showDelete.value = false;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleCloseForm = () => {
