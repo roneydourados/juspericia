@@ -172,7 +172,7 @@ const handleDeleteItem = async () => {
   loading.value = true;
   try {
     await consutationStore.destroy(selected.value!.id!);
-    await handleSearch("");
+    await handleSearch("", false);
     showDelete.value = false;
     selected.value = undefined;
   } finally {
@@ -180,9 +180,9 @@ const handleDeleteItem = async () => {
   }
 };
 
-const handleSearch = async (search: string) => {
+const handleSearch = async (search: string, isLoading: boolean = true) => {
   setTimeout(async () => {
-    loading.value = true;
+    loading.value = isLoading;
     try {
       await consutationStore.index(search);
     } finally {

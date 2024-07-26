@@ -34,24 +34,6 @@
           />
         </v-col>
         <v-col cols="12" lg="4">
-          <StringInput
-            v-model="model.crm"
-            label="CRM"
-            placeholder="CRM"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <StatesSelectSearch
-            v-model="model.crmUf"
-            label="UF CRM"
-            placeholder="UF CRM"
-            required
-          />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="4">
           <CPFInput
             v-model:model-value="model.cpfCnpj.text"
             v-model:model-number="model.cpfCnpj.value"
@@ -69,6 +51,34 @@
             type="password"
           />
         </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col cols="12" lg="8">
+          <StringInput
+            v-model="model.officeName"
+            label="Nome do escritório"
+            placeholder="Nome do escritório"
+            required
+          />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <StringInput
+            v-model="model.oab"
+            label="Nª OAB"
+            placeholder="Nª OAB"
+            required
+          />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <StatesSelectSearch
+            v-model="model.oabUf"
+            label="UF OAB"
+            placeholder="UF OAB"
+            required
+          />
+        </v-col>
+      </v-row>
+      <v-row dense>
         <v-col cols="12" lg="4">
           <v-switch
             v-model="model.active"
@@ -84,9 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { useDisplay } from "vuetify";
-import Loading from "../UI/infos/Loading.vue";
 
 const props = defineProps({
   show: {
@@ -110,7 +118,7 @@ const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
 const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
-const medicStore = useMedicStore();
+const userLawyerStore = useUserLawyerStore();
 
 const loading = ref(false);
 const model = ref({
@@ -126,8 +134,9 @@ const model = ref({
     text: "",
     value: "",
   },
-  crm: "",
-  crmUf: "",
+  oab: "",
+  oabUf: "",
+  officeName: "",
   active: true,
 });
 
@@ -144,9 +153,10 @@ const clearModel = () => {
       value: "",
     },
     password: "",
-    crm: "",
-    crmUf: "",
     email: "",
+    oab: "",
+    oabUf: "",
+    officeName: "",
     active: true,
   };
 };
@@ -172,15 +182,16 @@ const loadModel = () => {
       value: props.data.cpfCnpj ?? "",
     },
     password: "",
-    crm: props.data.crm ?? "",
-    crmUf: props.data.crmUf ?? "",
     email: props.data.email ?? "",
     active: props.data.active ?? false,
+    oab: props.data.oab ?? "",
+    oabUf: props.data.oabUf ?? "",
+    officeName: props.data.officeName ?? "",
   };
 };
 
 const submitForm = async () => {
-  Loading.value = true;
+  loading.value = true;
   try {
     if (model.value.id && model.value.id > 0) {
       await update();
@@ -188,36 +199,38 @@ const submitForm = async () => {
       await create();
     }
 
-    await medicStore.index("");
+    await userLawyerStore.index("");
     handleClose();
   } finally {
-    Loading.value = false;
+    loading.value = false;
   }
 };
 
 const create = async () => {
-  await medicStore.create({
-    crm: model.value.crm,
-    crmUf: model.value.crmUf,
+  await userLawyerStore.create({
     email: model.value.email,
     name: model.value.name,
     phone: model.value.phone.value,
     cpfCnpj: model.value.cpfCnpj.value,
     password: model.value.password,
+    oab: model.value.oab,
+    oabUf: model.value.oabUf,
+    officeName: model.value.officeName,
   });
 };
 
 const update = async () => {
-  await medicStore.update({
+  await userLawyerStore.update({
     id: model.value.id,
-    crm: model.value.crm,
-    crmUf: model.value.crmUf,
     email: model.value.email,
     name: model.value.name,
     phone: model.value.phone.value,
     cpfCnpj: model.value.cpfCnpj.value,
     password: model.value.password,
     active: model.value.active,
+    oab: model.value.oab,
+    oabUf: model.value.oabUf,
+    officeName: model.value.officeName,
   });
 };
 

@@ -151,7 +151,7 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <StatesSelect v-model="model.Address.addressState" />
+          <StatesSelectSearch v-model="model.Address.addressState" />
         </v-col>
       </v-row>
       <v-row dense>
@@ -360,7 +360,7 @@ const create = async () => {
       addressNumber: model.value.Address.addressNumber,
       addressState: model.value.Address.addressState,
       addressStreet: model.value.Address.addressStreet,
-      addressZipcode: model.value.Address.addressZipcode,
+      addressZipcode: model.value.CepData.value,
     },
   });
 };
@@ -385,7 +385,7 @@ const update = async () => {
       addressNumber: model.value.Address.addressNumber,
       addressState: model.value.Address.addressState,
       addressStreet: model.value.Address.addressStreet,
-      addressZipcode: model.value.Address.addressZipcode,
+      addressZipcode: model.value.CepData.value,
     },
   });
 };

@@ -173,6 +173,8 @@
 </template>
 
 <script setup lang="ts">
+import { set } from "zod";
+
 const medicStore = useMedicStore();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => medicStore.$all);
@@ -208,13 +210,15 @@ onMounted(async () => {
   await handleSearch("");
 });
 
-const handleSearch = async (search: string) => {
-  loading.value = true;
-  try {
-    await medicStore.index(search);
-  } finally {
-    loading.value = false;
-  }
+const handleSearch = async (search: string, isLoading: boolean = true) => {
+  setTimeout(async () => {
+    loading.value = isLoading;
+    try {
+      await medicStore.index(search);
+    } finally {
+      loading.value = false;
+    }
+  }, 700);
 };
 
 const handleCloseForm = () => {
@@ -237,7 +241,7 @@ const handleDeleteItem = async () => {
   loading.value = true;
   try {
     await medicStore.destroy(selected.value?.id!);
-    await medicStore.index("");
+    await handleSearch("", false);
   } finally {
     loading.value = false;
   }

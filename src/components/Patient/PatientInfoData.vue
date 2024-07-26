@@ -133,7 +133,7 @@
           :content="`${
             $single?.Address?.addressZipcode
               ? formatCEP($single?.Address?.addressZipcode)
-              : 'Não informado!'
+              : '00000-000'
           }`"
           :show-divider="true"
         />

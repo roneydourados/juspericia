@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table
-      title="Administradores do sistema"
+      title="Advogados cadastrados"
       :items="$all"
       :headers="headers"
       @search="handleSearch($event)"
@@ -154,9 +154,9 @@
     </Table>
   </div>
   <DialogLoading :dialog="loading" />
-  <UserAdminForm
+  <UserLawyerForm
     width="800"
-    title="Administrador"
+    title="Advogado"
     :show="showForm"
     :data="selected"
     @close="handleCloseForm"
@@ -173,9 +173,11 @@
 </template>
 
 <script setup lang="ts">
-const userAdminStore = useUserAdminStore();
+import { set } from "zod";
+
+const userLawyerStore = useUserLawyerStore();
 const { formatTelephoneNumber } = useUtils();
-const $all = computed(() => userAdminStore.$all);
+const $all = computed(() => userLawyerStore.$all);
 
 const selected = ref<UserProps>();
 const loading = ref(false);
@@ -212,7 +214,7 @@ const handleSearch = async (search: string, isLoading: boolean = true) => {
   setTimeout(async () => {
     loading.value = isLoading;
     try {
-      await userAdminStore.index(search);
+      await userLawyerStore.index(search);
     } finally {
       loading.value = false;
     }
@@ -238,7 +240,7 @@ const handleDeleteItem = async () => {
   showDelete.value = false;
   loading.value = true;
   try {
-    await userAdminStore.destroy(selected.value?.id!);
+    await userLawyerStore.destroy(selected.value?.id!);
     await handleSearch("", false);
   } finally {
     loading.value = false;

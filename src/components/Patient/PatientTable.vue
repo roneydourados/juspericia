@@ -204,13 +204,15 @@ const headers = [
   { title: "Ações", key: "actions" },
 ];
 
-const handleSearch = async (search: string) => {
-  loading.value = true;
-  try {
-    await itemStore.index(search);
-  } finally {
-    loading.value = false;
-  }
+const handleSearch = async (search: string, isLoading: boolean = true) => {
+  setTimeout(async () => {
+    loading.value = isLoading;
+    try {
+      await itemStore.index(search);
+    } finally {
+      loading.value = false;
+    }
+  }, 700);
 };
 
 const handleEdit = async (item: PatientProps) => {
@@ -231,9 +233,10 @@ const getItemDelete = (item: PatientProps) => {
 
 const handleDeleteItem = async () => {
   loading.value = true;
+  showDelete.value = false;
   try {
     await itemStore.destroy(itemSelected.value!.id!);
-    showDelete.value = false;
+    await handleSearch("", false);
   } finally {
     loading.value = false;
   }

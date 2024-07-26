@@ -104,7 +104,7 @@ const handleDeleteItem = async () => {
   loading.value = true;
   try {
     await reportModel.destroy(selected.value!.id!);
-    await reportModel.index("");
+    await handleSearch("", false);
     showDelete.value = false;
     selected.value = undefined;
   } finally {
@@ -112,12 +112,14 @@ const handleDeleteItem = async () => {
   }
 };
 
-const handleSearch = async (search: string) => {
-  loading.value = true;
-  try {
-    await reportModel.index(search);
-  } finally {
-    loading.value = false;
-  }
+const handleSearch = async (search: string, isLoading: boolean = true) => {
+  setTimeout(async () => {
+    loading.value = isLoading;
+    try {
+      await reportModel.index(search);
+    } finally {
+      loading.value = false;
+    }
+  }, 700);
 };
 </script>

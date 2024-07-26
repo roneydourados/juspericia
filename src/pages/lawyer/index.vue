@@ -1,6 +1,3 @@
 <template>
-  <div>
-    <LawyerTable />
-  </div>
+  <UserLawyerTable />
 </template>
-<script setup lang="ts"></script>
