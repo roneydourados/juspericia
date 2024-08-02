@@ -1,5 +1,5 @@
 <template>
-  <div>Relatório de vendas</div>
+  <ReportSaleFilters />
 </template>
 
 <script setup lang="ts"></script>
