@@ -84,6 +84,7 @@ export const consultationCreate = async (
       },
     });
   } catch (error) {
+    console.log("🚀 ~ error:", error);
     throw createError({
       statusCode: 500,
       message: "Error create solicitation consulta",

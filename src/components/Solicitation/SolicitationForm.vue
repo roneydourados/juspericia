@@ -176,14 +176,28 @@
         </v-row>
       </FormCrud>
     </v-card-text>
-    <!-- <pre>{{ form }}</pre> -->
+    <DialogLoading :dialog="loading" />
+    <pre>{{ form }}</pre>
   </v-card>
 </template>
 <script setup lang="ts">
+import moment from "moment";
 import { useDisplay } from "vuetify";
+
+const props = defineProps({
+  data: {
+    type: Object as PropType<SolicitationConsultationProps>,
+    default: () => ({} as SolicitationConsultationProps),
+  },
+});
+
 const emit = defineEmits(["close"]);
 const { amountFormated } = useUtils();
 const { mobile } = useDisplay();
+
+const storeConsultation = useSolicitationConsultationStore();
+
+const loading = ref(false);
 const judicialItems = ref([
   {
     name: "Processo a distribuir",
@@ -196,6 +210,7 @@ const judicialItems = ref([
 ]);
 
 const form = ref({
+  id: 0,
   consultation: undefined as ConsultationProps | undefined,
   patient: undefined as PatientProps | undefined,
   benefitType: undefined as BenefitTypeProps | undefined,
@@ -206,14 +221,95 @@ const form = ref({
   factsRealityConfirm: false,
 });
 
+const clearModel = () => {
+  form.value = {
+    id: 0,
+    consultation: undefined,
+    patient: undefined,
+    benefitType: undefined,
+    reportPurpose: undefined,
+    processSituation: "",
+    judicialProcessNumber: "",
+    content: "",
+    factsRealityConfirm: false,
+  };
+};
+
+const loadModel = () => {
+  form.value = {
+    id: props.data.id!,
+    consultation: props.data.Consultation,
+    patient: props.data.Patient,
+    benefitType: props.data.BenefitType,
+    reportPurpose: props.data.ReportPurpose,
+    processSituation: props.data.processSituation ?? "",
+    judicialProcessNumber: props.data.proccessNumber ?? "",
+    content: props.data.content!,
+    factsRealityConfirm: false,
+  };
+};
+
 const handleClose = () => {
+  clearModel();
   emit("close");
 };
 
 const submitForm = async () => {
-  console.log("submit form");
+  loading.value = true;
+  try {
+    if (props.data.id) {
+      await update();
+    } else {
+      await create();
+    }
+    handleClose();
+  } finally {
+    loading.value = false;
+  }
 };
 
+const create = async () => {
+  try {
+    await storeConsultation.create({
+      consultationId: form.value.consultation?.id,
+      patientId: form.value.patient?.id,
+      benefitTypeId: form.value.benefitType?.id,
+      reportPurposeId: form.value.reportPurpose?.id,
+      processSituation: form.value.processSituation
+        ? form.value.processSituation
+        : undefined,
+      content: form.value.content,
+      proccessNumber: form.value.judicialProcessNumber
+        ? form.value.judicialProcessNumber
+        : undefined,
+      dateOpen: moment().format("YYYY-MM-DD"),
+    });
+  } catch (error) {
+    console.log("🚀 ~ create ~ error:", error);
+  }
+};
+
+const update = async () => {
+  try {
+    await storeConsultation.create({
+      id: form.value.id,
+      consultationId: form.value.consultation?.id,
+      patientId: form.value.patient?.id,
+      benefitTypeId: form.value.benefitType?.id,
+      reportPurposeId: form.value.reportPurpose?.id,
+      processSituation: form.value.processSituation
+        ? form.value.processSituation
+        : undefined,
+      content: form.value.content,
+      proccessNumber: form.value.judicialProcessNumber
+        ? form.value.judicialProcessNumber
+        : undefined,
+      dateOpen: moment().format("YYYY-MM-DD"),
+    });
+  } catch (error) {
+    console.log("🚀 ~ create ~ error:", error);
+  }
+};
 const handleReportPurpose = () => {
   if (form.value.reportPurpose?.name?.toLowerCase() !== "judicial") {
     form.value.processSituation = "";

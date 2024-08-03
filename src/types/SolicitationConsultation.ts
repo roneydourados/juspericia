@@ -9,6 +9,7 @@ export interface SolicitationConsultationProps {
   reportPurposeId?: number;
   status?: string;
   processSituation?: string;
+  proccessNumber?: string;
   tipValue?: number;
   dateOpen?: string;
   dateClose?: string;

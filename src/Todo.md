@@ -8,15 +8,20 @@
 
 # Regras para solicitação de consulta
 
+[] - Listar as consultas de acordo com api
+[] - Exibir uma consulta de acordo com a api
+[] - Atualizar dados de uma consulta
+[] - Excluir uma consulta
+[] - Verificar porque ainda não gravou numero do processo
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
-[] - Finalidade do laudo
+[x] - Finalidade do laudo
 [] - Para perfil de médico remover informações de valor
 
 - Finalidade do laudo
-  [] - Adminstrativo
-  [] - Judicial (caso selecionar a opção judicial, então habilitar mais essas duas)
-  ---[] - Processo a distribuir
-  ---[] - Processo em andamento (caso escolha esta opção, informar numero de processo)
+  [x] - Adminstrativo
+  [x] - Judicial (caso selecionar a opção judicial, então habilitar mais essas duas)
+  ---[x] - Processo a distribuir
+  ---[x] - Processo em andamento (caso escolha esta opção, informar numero de processo)
 
 # Tabela
 
