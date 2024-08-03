@@ -34,7 +34,7 @@
     "nodemailer": "^6.9.14",
     "nodemailer-express-handlebars": "^6.1.2",
     "notivue": "^2.4.4",
-    "nuxt": "^3.12.3",
+    "nuxt": "^3.12.4",
     "nuxt-tiptap-editor": "^1.1.2",
     "pdfmake": "^0.2.10",
     "uuid": "^10.0.0",

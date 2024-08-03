@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="lg" color="transparent" class="px-6">
+  <v-card v-if="!showForm" flat rounded="lg" color="transparent" class="px-6">
     <v-card-title class="mb-12 d-flex align-center justify-space-between">
       <span class="font-weight-bold"> Solicitações </span>
       <v-btn
@@ -7,6 +7,7 @@
         color="primary"
         size="small"
         prepend-icon="mdi-plus"
+        @click="showForm = true"
       >
         Nova solicitação
       </v-btn>
@@ -39,6 +40,7 @@
       </v-row>
     </v-card-text>
   </v-card>
+  <SolicitationForm v-else @close="showForm = false" />
 </template>
 
 <script setup lang="ts">
@@ -46,7 +48,7 @@ import { useDisplay } from "vuetify";
 
 const { mobile } = useDisplay();
 const tab = ref(1);
-
+const showForm = ref(false);
 const solicitations = ref([
   {
     id: 1,

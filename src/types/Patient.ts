@@ -17,7 +17,7 @@ export interface PatientProps {
   ReportPurpose?: ReportPurposeProps;
   BenefitType?: BenefitTypeProps;
   User?: UserProps;
-  PatientConsultation?: PatientConsultationProps[];
+  PatientConsultation?: SolicitationConsultationProps[];
   Address: AddressProps;
 }
 
@@ -35,14 +35,4 @@ export interface ReportModelProps {
 export interface BenefitTypeProps {
   id?: number;
   name?: string;
-}
-export interface PatientConsultationProps {
-  id?: number;
-  patientId?: number;
-  userId?: number;
-  medicId?: number;
-  consultationId?: number;
-  quantity?: number;
-  content?: string;
-  Patient?: PatientProps;
 }

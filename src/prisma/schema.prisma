@@ -62,6 +62,7 @@ model User {
   PatientConsultationReport PatientConsultationReport[]
   Schedules                 Schedule[]
   UserLogCredit             UserLogCredit[]
+  PatientConsultation       PatientConsultation[]
 
   @@index([name], map: "users_idx_name")
   @@index([email], map: "users_idx_email")
@@ -300,14 +301,16 @@ model PatientConsultation {
   userId                    Int                         @map("user_id") // aqui será o advogado que solicitou a consulta
   medicId                   Int?                        @map("medic_id") // aqui será o médico que atendeu a consulta
   consultationId            Int                         @map("consultation_id") // código da consulta solicitada
-  quantity                  Int                         @default(1) // quantidade de consultas solicitadas
   content                   String                      @db.Text //anotações que o médico poderá fazer durante a consulta
   proccessNumber            String?                     @map("proccess_number") @db.VarChar(30) // número do processo do paciente, caso exista
   benefitTypeId             Int                         @map("benefit_type_id") // tipo de benefício
   reportPurposeId           Int                         @map("report_purpose_id") // finalidade do laudo
-  status                    String                      @default("P") @db.VarChar(30) // status da consulta, PENDENTE, AGENDATA, CANCELADA, PAGA
-  processSituation          String?                     @map("process_situation") @db.VarChar(30) // situação do processo [Processo a distribuir, Processo em andamento]
+  status                    String                      @default("open") @db.VarChar(30) // status da consulta, PENDENTE, AGENDATA, CANCELADA, PAGA
+  processSituation          String?                     @map("process_situation") @db.VarChar(2) // situação do processo [Processo a distribuir, Processo em andamento]
   tipValue                  Decimal                     @default(0) @map("tip_value") @db.Decimal(18, 2) // valor da gorjeta
+  dateOpen                  DateTime                    @default(now()) @map("date_open") @db.Date // data da abertura da consulta
+  dateClose                 DateTime?                   @map("date_close") @db.Date // data da fechamento/encerramento da consulta
+  Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   ReportPurpose             ReportPurpose               @relation(fields: [reportPurposeId], references: [id], onDelete: NoAction, onUpdate: NoAction)

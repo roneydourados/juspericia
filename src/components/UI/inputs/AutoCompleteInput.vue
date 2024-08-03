@@ -122,7 +122,7 @@ const validationRules = computed<MaybeRef>(() => {
             }
           )
           .required({})
-          .refine((value) => Object.keys(value).length > 0, {
+          .refine((value) => Object.keys(value).length <= 0, {
             message: textRequired,
           })
       );

@@ -180,6 +180,7 @@ export const index = async (inputQuery: string) => {
     select: {
       id: true,
       name: true,
+      surname: true,
       cpf: true,
       phone: true,
       User: {
