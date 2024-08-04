@@ -177,7 +177,6 @@
       </FormCrud>
     </v-card-text>
     <DialogLoading :dialog="loading" />
-    <pre>{{ form }}</pre>
   </v-card>
 </template>
 <script setup lang="ts">
@@ -185,6 +184,10 @@ import moment from "moment";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
   data: {
     type: Object as PropType<SolicitationConsultationProps>,
     default: () => ({} as SolicitationConsultationProps),
@@ -219,6 +222,14 @@ const form = ref({
   judicialProcessNumber: "",
   content: "",
   factsRealityConfirm: false,
+});
+
+onMounted(() => {
+  if (props.data.id && props.show) {
+    loadModel();
+  } else {
+    clearModel();
+  }
 });
 
 const clearModel = () => {
@@ -258,10 +269,12 @@ const submitForm = async () => {
   loading.value = true;
   try {
     if (props.data.id) {
+      console.log("🚀 ~ submitForm ~ props.data.id:", props.data.id);
       await update();
     } else {
       await create();
     }
+    await storeConsultation.index("");
     handleClose();
   } finally {
     loading.value = false;
@@ -291,7 +304,7 @@ const create = async () => {
 
 const update = async () => {
   try {
-    await storeConsultation.create({
+    await storeConsultation.update({
       id: form.value.id,
       consultationId: form.value.consultation?.id,
       patientId: form.value.patient?.id,

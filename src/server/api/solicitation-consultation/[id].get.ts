@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 200);
 
-  await consultationShow(id);
+  return await consultationShow(id);
 });

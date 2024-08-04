@@ -50,7 +50,12 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+import { useField } from "vee-validate";
+import { v4 as uuidv4 } from "uuid";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+
+defineProps({
   type: {
     type: String,
     default: "",
@@ -98,8 +103,6 @@ const consultation = useConsultationStore();
 const search = ref("");
 const loadingSearch = ref(false);
 
-const value = props.modelValue;
-
 const $all = computed(() => consultation.$all);
 
 watch(search, async () => {
@@ -111,5 +114,17 @@ watch(search, async () => {
       loadingSearch.value = false;
     }
   }, 700);
+});
+
+const fieldName = computed<MaybeRef>(() => {
+  return uuidv4();
+});
+
+const validationRules = computed<MaybeRef>(() => {
+  return toTypedSchema(zod.object({}).nullish().optional());
+});
+
+const { value } = useField<Object>(fieldName, validationRules, {
+  syncVModel: true,
 });
 </script>

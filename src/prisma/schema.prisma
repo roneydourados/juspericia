@@ -310,6 +310,9 @@ model PatientConsultation {
   tipValue                  Decimal                     @default(0) @map("tip_value") @db.Decimal(18, 2) // valor da gorjeta
   dateOpen                  DateTime                    @default(now()) @map("date_open") @db.Date // data da abertura da consulta
   dateClose                 DateTime?                   @map("date_close") @db.Date // data da fechamento/encerramento da consulta
+  dateAntecipation          DateTime?                   @map("date_antecipation") @db.Date // data da antecipação da consulta
+  dateCorrection            DateTime?                   @map("date_correction") @db.Date // data da correção do laudo
+  rate                      Int?                        @default(0) // avaliação da consulta
   Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: NoAction, onUpdate: NoAction)

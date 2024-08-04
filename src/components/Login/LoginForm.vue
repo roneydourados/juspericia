@@ -71,7 +71,7 @@
           </v-btn>
         </v-col>
       </v-row>
-      <NuxtTurnstile v-model="cloudFlareToken" />
+      <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
     </FormCrud>
   </v-card>
 </template>
@@ -81,6 +81,7 @@ const auth = useAuthStore();
 //const route = useRouter();
 
 const cloudFlareToken = ref("");
+const turnstile = ref();
 
 const form = ref({
   email: "",
@@ -100,7 +101,8 @@ const $user = computed(() => auth.$currentUser);
 
 const submmitForm = async () => {
   try {
-    console.log("token cloude", cloudFlareToken.value);
+    //sempre resetar o token para evitar de enviar um token expirado
+    turnstile.value?.reset();
 
     await auth.login({
       email: form.value.email,

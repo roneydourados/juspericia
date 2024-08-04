@@ -1,49 +1,91 @@
 <template>
   <v-card flat elevation="8" rounded="lg">
     <v-card-title
-      class="d-flex align-center pa-6"
+      class="d-flex align-center justify-space-between pa-6"
       style="gap: 1rem; font-size: 1rem"
     >
-      <span class="text-blue font-weight-bold">#{{ solicitation.id }}</span>
-      <span class="text-truncate">
-        {{ solicitation.title }}
-      </span>
+      <div class="d-flex align-center" style="gap: 1rem">
+        <span class="text-blue font-weight-bold">#{{ solicitation.id }}</span>
+        <span class="text-truncate">
+          Solicitação {{ solicitation.Consultation?.consultationName }}
+        </span>
+      </div>
+
+      <div class="d-flex align-center" style="gap: 1rem">
+        <v-btn
+          prepend-icon="mdi-pencil-outline"
+          color="orange"
+          size="small"
+          variant="outlined"
+          class="text-none text-white"
+          @click="editItem(solicitation)"
+          :disabled="solicitation.status !== 'open'"
+        >
+          Editar
+        </v-btn>
+        <v-chip
+          label
+          :color="solicitation.status === 'open' ? 'info' : 'success'"
+        >
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Status:</span>
+            <span class="font-weight-bold">
+              {{ returnStatus(solicitation.status ?? "open") }}
+            </span>
+          </div>
+        </v-chip>
+      </div>
     </v-card-title>
     <v-card-text class="px-8">
       <v-row dense>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Solicitado:</span>
-          <span class="font-weight-bold">{{ solicitation.date }}</span>
+          <span class="font-weight-bold">
+            {{ moment(solicitation.dateOpen).format("DD/MM/YYYY") }}
+          </span>
         </v-col>
-        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
+        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
           <span>Solicitante:</span>
           <span class="font-weight-bold">
-            {{ solicitation.solicitante }}
+            {{ solicitation.Patient?.User?.name }}
+          </span>
+        </v-col>
+        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
+          <span>Finalidade:</span>
+          <span class="font-weight-bold">
+            {{ solicitation.ReportPurpose?.name }}
+            {{
+              solicitation.processSituation
+                ? solicitation.processSituation === "PD"
+                  ? "Processo distribuido"
+                  : "Processo andamento"
+                : ""
+            }}
           </span>
         </v-col>
         <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
           <span>Nº Processo:</span>
-          <span class="font-weight-bold">{{ solicitation.processNumber }}</span>
-        </v-col>
-        <v-col
-          cols="12"
-          lg="2"
-          class="d-flex align-center justify-end"
-          style="gap: 0.5rem"
-        >
-          <span>Status:</span>
-          <span class="font-weight-bold">{{ solicitation.status }}</span>
+          <span class="font-weight-bold">
+            {{ solicitation.proccessNumber }}
+          </span>
         </v-col>
       </v-row>
       <v-row v-if="$currentUser?.Profile.type !== 'MEDICO'" dense>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor:</span>
-          <span class="font-weight-bold">{{ solicitation.value }}</span>
+          <span class="font-weight-bold">{{
+            amountFormated(solicitation.Consultation?.value ?? 0, true)
+          }}</span>
         </v-col>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor atencipação:</span>
           <span class="font-weight-bold">
-            {{ solicitation.antecipationValue }}
+            {{
+              amountFormated(
+                solicitation.Consultation?.valueAntecipation ?? 0,
+                true
+              )
+            }}
           </span>
         </v-col>
       </v-row>
@@ -51,13 +93,24 @@
       <v-row dense>
         <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
           <span>Paciente:</span>
-          <span class="font-weight-bold">{{ solicitation.patient }}</span>
+          <span class="font-weight-bold">
+            {{ solicitation.Patient?.name }}
+            {{ solicitation.Patient?.surname }}
+          </span>
         </v-col>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
+        <v-col
+          v-if="solicitation.Medic"
+          cols="12"
+          lg="6"
+          class="d-flex align-center"
+          style="gap: 0.5rem"
+        >
           <span>Médico:</span>
-          <span class="font-weight-bold">{{ solicitation.medic }}</span>
+          <span class="font-weight-bold">{{ solicitation.Medic?.name }}</span>
           <span>CRM:</span>
-          <span class="font-weight-bold">{{ solicitation.crm }}</span>
+          <span class="font-weight-bold">
+            {{ solicitation.Medic?.crm }}/{{ solicitation.Medic?.crmUf }}
+          </span>
         </v-col>
       </v-row>
       <v-row dense>
@@ -68,7 +121,26 @@
           style="gap: 0.5rem"
         >
           <span>Data limite para solicitar correção:</span>
-          <span class="font-weight-bold">{{ solicitation.deadline }}</span>
+          <span class="font-weight-bold">
+            {{ moment(solicitation.deadline).format("DD/MM/YYYY") }}
+          </span>
+
+          <span>Data de solicitação de correção:</span>
+          <span class="font-weight-bold">
+            {{
+              solicitation.dateCorrection
+                ? moment(solicitation.dateCorrection).format("DD/MM/YYYY")
+                : "Não solicitado"
+            }}
+          </span>
+          <span>Data de solicitação de atencipação:</span>
+          <span class="font-weight-bold">
+            {{
+              solicitation.dateCorrection
+                ? moment(solicitation.dateAntecipation).format("DD/MM/YYYY")
+                : "Não solicitado"
+            }}
+          </span>
         </v-col>
         <v-col
           v-if="$currentUser?.Profile.type !== 'MEDICO'"
@@ -82,7 +154,13 @@
             class="font-weight-bold text-blue-darken-3"
             style="font-size: 1.3rem"
           >
-            {{ solicitation.total }}
+            {{
+              amountFormated(
+                Number(solicitation.Consultation?.value) +
+                  Number(solicitation.Consultation?.valueAntecipation),
+                true
+              )
+            }}
           </span>
         </v-col>
       </v-row>
@@ -130,20 +208,20 @@
         </v-col>
         <v-col cols="12" lg="3" class="d-flex align-center px-4">
           <v-btn
-            v-if="rating === 0"
+            v-if="solicitation.rate === 0"
             class="text-none font-weight-bold"
             prepend-icon="mdi-star"
             color="orange-darken-1"
-            @click="rating = 1"
+            @click="solicitation.rate = 1"
           >
             Avaliar solicitação
           </v-btn>
-          <div v-if="rating > 0" class="text-center">
+          <div v-if="solicitation.rate ?? 0 > 0" class="text-center">
             <v-rating
-              v-model="rating"
+              v-model="solicitation.rate"
               active-color="orange-darken-1"
               color="orange-lighten-1"
-            ></v-rating>
+            />
           </div>
         </v-col>
       </v-row>
@@ -152,19 +230,40 @@
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
+
 defineProps({
   solicitation: {
-    type: Object,
+    type: Object as PropType<SolicitationConsultationProps>,
     default: () => {},
   },
 });
+
+const emit = defineEmits(["edit"]);
 const auth = useAuthStore();
 const rounter = useRouter();
-const rating = ref(0);
+const { amountFormated } = useUtils();
 
 const $currentUser = computed(() => auth.$currentUser);
 
 const handleDetailsClick = async (id: number) => {
   await rounter.push(`/solicitations/${id}`);
+};
+
+const returnStatus = (status: string) => {
+  switch (status.trim().toLowerCase()) {
+    case "open":
+      return "Pendente";
+    case "scheduled":
+      return "Agendada";
+    case "finished":
+      return "Finalizada";
+    default:
+      return "Pendente";
+  }
+};
+
+const editItem = (item: SolicitationConsultationProps) => {
+  emit("edit", item);
 };
 </script>

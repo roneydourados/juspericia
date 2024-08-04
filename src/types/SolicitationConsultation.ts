@@ -13,6 +13,11 @@ export interface SolicitationConsultationProps {
   tipValue?: number;
   dateOpen?: string;
   dateClose?: string;
+  dateAntecipation?: string;
+  dateCorrection?: string;
+  deadline?: string;
+  rate?: number;
+  Medic?: UserProps;
   Patient?: PatientProps;
   Consultation?: ConsultationProps;
   ReportPurpose?: ReportPurposeProps;
