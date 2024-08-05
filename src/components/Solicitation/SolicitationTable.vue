@@ -45,7 +45,6 @@
       <EmptyContent v-if="!$all" />
     </v-card-text>
   </v-card>
-
   <SolicitationForm
     v-else
     @close="handleCloseForm"

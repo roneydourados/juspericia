@@ -1,4 +1,3 @@
 <template>
-  <h1>Home usuários advogado</h1>
+  <UserLawyerEstatisticsDashboard />
 </template>
-<script setup lang="ts"></script>

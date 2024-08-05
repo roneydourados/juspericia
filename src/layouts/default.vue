@@ -22,7 +22,10 @@
       />
     </v-app-bar>
 
-    <v-main class="container d-flex justify-center">
+    <v-main
+      class="container d-flex justify-center"
+      style="background-color: #f7f9fc"
+    >
       <div class="w-100 px-8 py-8">
         <slot />
       </div>

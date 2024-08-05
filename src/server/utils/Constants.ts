@@ -95,15 +95,15 @@ export const appRoutes = [
     profiles: ["MEDICO"],
     order: 7,
   },
-  {
-    title: "Estatísticas",
-    to: "/estatistics",
-    icon: "mdi-chart-bell-curve-cumulative",
-    visible: true,
-    isMenu: true,
-    profiles: ["ADVOGADO"],
-    order: 8,
-  },
+  // {
+  //   title: "Estatísticas",
+  //   to: "/estatistics",
+  //   icon: "mdi-chart-bell-curve-cumulative",
+  //   visible: true,
+  //   isMenu: true,
+  //   profiles: ["ADVOGADO"],
+  //   order: 8,
+  // },
   {
     title: "Administração",
     to: "/adm",
@@ -111,7 +111,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
-    order: 11,
+    order: 9,
   },
   {
     title: "Relatório de vendas",

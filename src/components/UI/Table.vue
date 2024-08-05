@@ -1,5 +1,6 @@
 <template>
-  <v-card class="mx-auto" :max-height="!mobile ? '550' : ''" flat>
+  <!-- <v-card class="mx-auto" :max-height="!mobile ? '550' : ''" flat> -->
+  <v-card class="mx-auto" flat>
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
       <v-data-table
@@ -17,7 +18,7 @@
         </template>
 
         <template v-slot:top="{ items }">
-          <v-row dense align="center">
+          <v-row dense align="center" v-if="showCrude">
             <v-col cols="12" lg="10">
               <v-text-field
                 v-model="search"
@@ -54,7 +55,7 @@
                   color="info"
                   class="text-none"
                   size="small"
-                  @click="$router.back()"
+                  @click="router.back()"
                 >
                   <v-icon icon="mdi-arrow-left"> </v-icon>
                   Voltar
@@ -122,11 +123,16 @@ const props = defineProps({
     type: String,
     default: "Tabela",
   },
+  showCrude: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits(["search", "add"]);
 
 const { mobile } = useDisplay();
+const router = useRouter();
 
 const pageCount = computed(() => {
   return Math.ceil(props.items.length / props.itemsPerPage);
