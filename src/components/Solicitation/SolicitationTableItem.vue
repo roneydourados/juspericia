@@ -191,7 +191,7 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-dots-vertical"
             color="pink"
-            @click="handleDetailsClick(1)"
+            @click="handleDetailsClick(solicitation.id!)"
           >
             Visualizar detalhes
           </v-btn>

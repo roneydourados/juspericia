@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-100">
     <div :style="`font-size: ${fontSize}rem`" class="d-flex align-center">
       <slot name="icon-title-preppend" />
       <v-icon v-if="icon" :color="colorIcon" class="mr-2">{{ icon }}</v-icon>

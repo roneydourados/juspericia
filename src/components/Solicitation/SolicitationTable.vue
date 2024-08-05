@@ -42,6 +42,7 @@
           />
         </v-col>
       </v-row>
+      <EmptyContent v-if="!$all" />
     </v-card-text>
   </v-card>
 
