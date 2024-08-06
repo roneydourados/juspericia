@@ -63,7 +63,7 @@ export const login = async ({ email, password }: AuthProps) => {
 
   if (!passwordMatch) {
     throw createError({
-      statusCode: 40,
+      statusCode: 403,
       statusMessage: "E-mail is missing password",
     });
   }
