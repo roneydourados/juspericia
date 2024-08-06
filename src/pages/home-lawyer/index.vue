@@ -1,0 +1,3 @@
+<template>
+  <UserLawyerEstatisticsDashboard />
+</template>

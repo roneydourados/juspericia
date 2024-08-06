@@ -50,12 +50,11 @@
       </v-row>
       <v-row>
         <v-col cols="12">
-          <v-checkbox
-            v-model="form.saveCredentials"
-            color="info"
-            label="Salvar credenciais neste dispotivo"
-            hide-details
-          ></v-checkbox>
+          <v-checkbox v-model="form.saveCredentials" color="info" hide-details>
+            <template #label>
+              <span>Salvar credenciais neste dispotivo</span>
+            </template>
+          </v-checkbox>
         </v-col>
       </v-row>
       <v-row dense justify="center">
@@ -72,13 +71,17 @@
           </v-btn>
         </v-col>
       </v-row>
+      <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
     </FormCrud>
   </v-card>
 </template>
 
 <script setup lang="ts">
 const auth = useAuthStore();
-const route = useRouter();
+//const route = useRouter();
+
+const cloudFlareToken = ref("");
+const turnstile = ref();
 
 const form = ref({
   email: "",
@@ -94,14 +97,28 @@ onMounted(() => {
   };
 });
 
+const $user = computed(() => auth.$currentUser);
+
 const submmitForm = async () => {
   try {
+    //sempre resetar o token para evitar de enviar um token expirado
+    turnstile.value?.reset();
+
     await auth.login({
       email: form.value.email,
       password: form.value.password,
+      tokenCapcha: cloudFlareToken.value,
     });
 
-    await route.push("/dashboard");
+    //await route.push("/home-admin");
+
+    if ($user?.value?.Profile.type === "ADMIN") {
+      return navigateTo("/home-admin");
+    } else if ($user?.value?.Profile.type === "ADVOGADO") {
+      return navigateTo("/home-lawyer");
+    } else if ($user?.value?.Profile.type === "MEDICO") {
+      return navigateTo("/home-medic");
+    }
 
     if (form.value.saveCredentials) {
       localStorage.setItem("email", form.value.email);

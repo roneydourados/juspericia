@@ -64,7 +64,7 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: [Object, String, Number],
+    type: String,
     default: null,
   },
   icon: {
@@ -143,9 +143,11 @@ const validationRules = computed<MaybeRef>(() => {
   return toTypedSchema(zod.string().nullish().optional().or(zod.number()));
 });
 
-const { value, errorMessage, handleBlur, handleChange } = useField<
-  string | object
->(fieldName, validationRules, {
-  syncVModel: true,
-});
+const { value, errorMessage, handleBlur, handleChange } = useField(
+  fieldName,
+  validationRules,
+  {
+    syncVModel: true,
+  }
+);
 </script>

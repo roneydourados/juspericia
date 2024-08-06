@@ -54,21 +54,36 @@ model User {
   crmUf                     String?                     @map("crm_uf") @db.Char(2) // UF do CRM
   active                    Boolean                     @default(true) // se o usuário está ativo
   profileId                 Int                         @map("profile_id") // código do perfil do usuário
-  isActive                  Boolean                     @default(true) @map("is_active") // se o usuário está ativo
   createdAt                 DateTime                    @default(now()) @map("created_at") // data e hora da criação do registro
   updatedAt                 DateTime                    @updatedAt @map("updated_at") // data e hora da última atualização
   Profile                   Profile                     @relation(fields: [profileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient                   Patient[]
-  UserConsultationPacket    UserConsultationPacket[]
-  UserConsultationPacketLog UserConsultationPacketLog[]
+  // UserConsultationPacket    UserConsultationPacket[]
   PatientConsultationReport PatientConsultationReport[]
-  schedules                 Schedule[]
+  Schedules                 Schedule[]
+  UserLogCredit             UserLogCredit[]
+  PatientConsultation       PatientConsultation[]
 
   @@index([name], map: "users_idx_name")
   @@index([email], map: "users_idx_email")
   @@index([cpfCnpj], map: "users_idx_cpf_cnpj")
-  @@index([isActive], map: "users_idx_is_active")
+  @@index([active], map: "users_idx_active")
   @@map("users")
+}
+
+model UserLogCredit {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map("created_at") // data e hora da criação do registro
+  userId      Int      @map("user_id") // código do usuário
+  history     String   @db.Text // histórico do crédito
+  oldValue    Decimal  @default(0) @map("old_value") @db.Decimal(18, 2) // valor do crédito
+  inputValue  Decimal  @default(0) @map("input_value") @db.Decimal(18, 2) // valor de entrada
+  outputValue Decimal  @default(0) @map("output_value") @db.Decimal(18, 2) // valor de saída
+  saltValue   Decimal  @default(0) @map("salt_value") @db.Decimal(18, 2) // saldo do crédito
+  User        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([createdAt], map: "user_log_credits_idx_created_at")
+  @@map("user_log_credits")
 }
 
 // cadastro de endereços, tabela para armazenar os endereços dos pacientes, médicos e advogados
@@ -129,9 +144,9 @@ model ProfileRoute {
 //auxílio-doença, auxílio acidente, aposentadoria, BPC LOAS, DPVAT, trabalhista, etc...
 //poderão ser cadastrados quantos forem necessários
 model BenefitType {
-  id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(200) // nome do tipo de benefício
-  Patient Patient[]
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(200) // nome do tipo de benefício
+  PatientConsultation PatientConsultation[]
 
   @@map("benefit_types")
 }
@@ -139,24 +154,27 @@ model BenefitType {
 // cadastro de finalidade de laudo, administrativo, judicial, outros, etc..
 // poderão ser cadastrados quantos forem necessários
 model ReportPurpose {
-  id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(200) // nome da finalidade do laudo
-  Patient Patient[]
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(200) // nome da finalidade do laudo
+  PatientConsultation PatientConsultation[]
 
   @@map("report_purposes")
 }
 
 // cadastro de consultas, tabela para armazear os cadastros de consultas que serão disponibilizadas na plataforma
 model Consultation {
-  id                         Int                          @id @default(autoincrement())
-  consultationName           String                       @map("consultation_name") @db.VarChar(200) // nome da consulta
-  consutationValue           Decimal                      @map("consutation_value") @db.Decimal(18, 2) // valor da consulta
-  createdAt                  DateTime                     @default(now()) @map("created_at") // data e hora da criação do registro
-  updatedAt                  DateTime                     @updatedAt @map("updated_at") // data e hora da última atualização
-  ConsultationsPacketItems   ConsultationsPacketItems[]
-  PatientConsultation        PatientConsultation[]
-  UserConsultationPacketItem UserConsultationPacketItem[]
-  UserConsultationPacketLog  UserConsultationPacketLog[]
+  id                  Int                   @id @default(autoincrement())
+  consultationName    String                @map("consultation_name") @db.VarChar(200) // nome da consulta
+  value               Decimal               @map("value") @db.Decimal(18, 2) // preço cheio da consulta
+  valueCredit         Decimal               @map("value_credit") @db.Decimal(18, 2) // preço da consulta para usar o crédito do usuário
+  valueAntecipation   Decimal               @map("value_antecipation") @db.Decimal(18, 2) // valor da antecipação
+  valuePacket         Decimal               @map("value_packet") @db.Decimal(18, 2) // valor da consulta para pacote
+  createdAt           DateTime              @default(now()) @map("created_at") // data e hora da criação do registro
+  updatedAt           DateTime              @updatedAt @map("updated_at") // data e hora da última atualização
+  // ConsultationsPacketItems   ConsultationsPacketItems[]
+  PatientConsultation PatientConsultation[]
+  // UserConsultationPacketItem UserConsultationPacketItem[]
+  //UserConsultationPacketLog  UserConsultationPacketLog[]
 
   @@map("consultations")
 }
@@ -164,108 +182,108 @@ model Consultation {
 // cadastro de pacotes de consultas, tabela para armazenar o cadastro dos pacotes de consultas a serem oferecidos na plataforma
 // Aqui serão os pacotes montados pela equipe administrativa do sistema
 // onde os usuários advogados poderão comprar e utilizar nas solicitações de consultas posteriormente
-model ConsultationPacket {
-  id                       Int                        @id @default(autoincrement())
-  consultationPacketName   String                     @map("consultation_packet_name") @db.VarChar(200) // nome do pacote de consultas
-  createdAt                DateTime                   @default(now()) @map("created_at") // data e hora da criação do registro
-  updatedAt                DateTime                   @updatedAt @map("updated_at") // data e hora da última atualização
-  ConsultationsPacketItems ConsultationsPacketItems[]
+// model ConsultationPacket {
+//   id                       Int                        @id @default(autoincrement())
+//   consultationPacketName   String                     @map("consultation_packet_name") @db.VarChar(200) // nome do pacote de consultas
+//   createdAt                DateTime                   @default(now()) @map("created_at") // data e hora da criação do registro
+//   updatedAt                DateTime                   @updatedAt @map("updated_at") // data e hora da última atualização
+//   ConsultationsPacketItems ConsultationsPacketItems[]
 
-  @@map("consultation_packets")
-}
+//   @@map("consultation_packets")
+// }
 
 // cadastro de itens do pacote de consultas, items referente ao pacote de consultas
 // esta tabela vai armazenar os itens que compõem o pacote de consultas acima
-model ConsultationsPacketItems {
-  id                      Int                @id @default(autoincrement())
-  consultationPacketId    Int                @map("consultation_packet_id") // código do pacote de consultas
-  quantity                Int                @default(1) // quantidade de consultas no pacote
-  consultationId          Int                @map("consultation_id") // código da consulta
-  consultationValue       Decimal            @map("consultation_value") @db.Decimal(18, 2) // valor unitário da consulta
-  consultationPacketValue Decimal            @map("consultation_packet_value") @db.Decimal(18, 2) // valor do pacote de consultas
-  consultationPacketTotal Decimal            @map("consultation_packet_total") @db.Decimal(18, 2) // total do pacote de consultas
-  createdAt               DateTime           @default(now()) @map("created_at") // data e hora da criação do registro
-  updatedAt               DateTime           @updatedAt @map("updated_at") // data e hora da última atualização
-  ConsultationsPacket     ConsultationPacket @relation(fields: [consultationPacketId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Consultation            Consultation       @relation(fields: [consultationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+// model ConsultationsPacketItems {
+//   id                      Int                @id @default(autoincrement())
+//   consultationPacketId    Int                @map("consultation_packet_id") // código do pacote de consultas
+//   quantity                Int                @default(1) // quantidade de consultas no pacote
+//   consultationId          Int                @map("consultation_id") // código da consulta
+//   consultationValue       Decimal            @map("consultation_value") @db.Decimal(18, 2) // valor unitário da consulta
+//   consultationPacketValue Decimal            @map("consultation_packet_value") @db.Decimal(18, 2) // valor do pacote de consultas
+//   consultationPacketTotal Decimal            @map("consultation_packet_total") @db.Decimal(18, 2) // total do pacote de consultas
+//   createdAt               DateTime           @default(now()) @map("created_at") // data e hora da criação do registro
+//   updatedAt               DateTime           @updatedAt @map("updated_at") // data e hora da última atualização
+//   ConsultationsPacket     ConsultationPacket @relation(fields: [consultationPacketId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+//   Consultation            Consultation       @relation(fields: [consultationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@map("consultations_packets_items")
-}
+//   @@map("consultations_packets_items")
+// }
 
 //Tabela para armazenar os pacotes de consultas comprados pelos usuários advogados
 // aqui vai ser armazenado os dados no ato da compra do pacote
-model UserConsultationPacket {
-  id                         Int                          @id @default(autoincrement())
-  userId                     Int                          @map("user_id") //aqui será usuário do perfil advogado
-  consultationPacketId       Int                          @map("consultation_packet_id") // código do pacote de consultas
-  consultationPacketName     String                       @map("consultation_packet_name") @db.VarChar(200) // nome do pacote de consultas
-  consultationPacketTotal    Decimal                      @map("consultation_packet_total") @db.Decimal(18, 2) // total do pacote de consultas
-  status                     String                       @default("P") @db.Char(1) // status do pacote, P = pendente, A = ativo, C = cancelado
-  paymentType                PaymentType                  @default(CREDIT_CARD) @map("payment_type") //forma de pagamento
-  createdAt                  DateTime                     @default(now()) @map("created_at") // data e hora da compra
-  updatedAt                  DateTime                     @updatedAt @map("updated_at") // data e hora da última atualização
-  User                       User                         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  UserConsultationPacketItem UserConsultationPacketItem[]
-  UserConsultationPacketLog  UserConsultationPacketLog[]
+// model UserConsultationPacket {
+//   id                         Int                          @id @default(autoincrement())
+//   userId                     Int                          @map("user_id") //aqui será usuário do perfil advogado
+//   consultationPacketId       Int                          @map("consultation_packet_id") // código do pacote de consultas
+//   consultationPacketName     String                       @map("consultation_packet_name") @db.VarChar(200) // nome do pacote de consultas
+//   consultationPacketTotal    Decimal                      @map("consultation_packet_total") @db.Decimal(18, 2) // total do pacote de consultas
+//   status                     String                       @default("P") @db.Char(1) // status do pacote, P = pendente, A = ativo, C = cancelado
+//   paymentType                PaymentType                  @default(CREDIT_CARD) @map("payment_type") //forma de pagamento
+//   createdAt                  DateTime                     @default(now()) @map("created_at") // data e hora da compra
+//   updatedAt                  DateTime                     @updatedAt @map("updated_at") // data e hora da última atualização
+//   User                       User                         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+//   UserConsultationPacketItem UserConsultationPacketItem[]
+//   //UserConsultationPacketLog  UserConsultationPacketLog[]
 
-  @@map("users_consultation_packets")
-}
+//   @@map("users_consultation_packets")
+// }
 
 // tabela para armazenar os itens do pacote de consultas comprados pelos usuários advogados
 // aqui vai guardar os itens do pacote de consultas comprados pelo usuário advogado
-model UserConsultationPacketItem {
-  id                       Int                    @id @default(autoincrement())
-  userConsultationPacketId Int                    @map("user_consultation_packet_id") // código do pacote de consultas
-  consultationId           Int                    @map("consultation_id") // código da consulta
-  quantity                 Int                    @default(1) // quantidade de consultas compradas
-  quantityUsed             Int                    @default(0) @map("quantity_used") // quantidade de consultas utilizadas
-  unitValue                Decimal                @map("unit_value") @db.Decimal(18, 2) // valor unitário do item
-  total                    Decimal                @db.Decimal(18, 2) // total do item
-  UserConsultationPacket   UserConsultationPacket @relation(fields: [userConsultationPacketId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Consultation             Consultation           @relation(fields: [consultationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+// model UserConsultationPacketItem {
+//   id                       Int                    @id @default(autoincrement())
+//   userConsultationPacketId Int                    @map("user_consultation_packet_id") // código do pacote de consultas
+//   consultationId           Int                    @map("consultation_id") // código da consulta
+//   quantity                 Int                    @default(1) // quantidade de consultas compradas
+//   quantityUsed             Int                    @default(0) @map("quantity_used") // quantidade de consultas utilizadas
+//   unitValue                Decimal                @map("unit_value") @db.Decimal(18, 2) // valor unitário do item
+//   total                    Decimal                @db.Decimal(18, 2) // total do item
+//   UserConsultationPacket   UserConsultationPacket @relation(fields: [userConsultationPacketId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+//   Consultation             Consultation           @relation(fields: [consultationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@map("users_consultation_packet_items")
-}
+//   @@map("users_consultation_packet_items")
+// }
 
 //tabela para guardar o log de uso do pacote de consultas
 //esta tabela sempre vai guardar a informação de entrada e saída de consultas do pacote
 //tanto quando o advogado efetua a compra quanto o mesmo utiliza para solicitar uma consulta
 //esta tabela fica uma espécie de auditoria de uso do pacote de consultas, assim fica transparênte para usuáro advogado
 //analisar qual seu saldo de crédito referente a compra de pacotes de consultas
-model UserConsultationPacketLog {
-  id                           Int                    @id @default(autoincrement())
-  userId                       Int                    @map("user_id") // código do usuário advogado
-  userConsultationPacketItemId Int                    @map("user_consultation_packet_item_id") // código do item do pacote de consultas
-  userConsultationPacketId     Int                    @map("user_consultation_packet_id") // código do pacote de consultas
-  consultationId               Int                    @map("consultation_id") // código da consulta
-  history                      String                 @db.Text // histórico de uso do pacote de consultas
-  otherQuantity                Int                    @default(0) @map("other_quantity") // quantidade anterior a inserção de registro no log
-  inputQuantity                Int                    @default(0) @map("input_quantity") // quantidade de entrada, quando usuário compra aqui vem total
-  quantityUsed                 Int                    @default(0) @map("quantity_used") // quantidade de saída que vai dar saída quando usa em algum pedido
-  createdAt                    DateTime               @default(now()) @map("created_at") // data e hora da entrada do registro
-  UserConsultationPacket       UserConsultationPacket @relation(fields: [userConsultationPacketId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Consultation                 Consultation           @relation(fields: [consultationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  User                         User                   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+// model UserConsultationPacketLog {
+//   id                           Int                    @id @default(autoincrement())
+//   userId                       Int                    @map("user_id") // código do usuário advogado
+//   userConsultationPacketItemId Int                    @map("user_consultation_packet_item_id") // código do item do pacote de consultas
+//   userConsultationPacketId     Int                    @map("user_consultation_packet_id") // código do pacote de consultas
+//   consultationId               Int                    @map("consultation_id") // código da consulta
+//   history                      String                 @db.Text // histórico de uso do pacote de consultas
+//   otherQuantity                Int                    @default(0) @map("other_quantity") // quantidade anterior a inserção de registro no log
+//   inputQuantity                Int                    @default(0) @map("input_quantity") // quantidade de entrada, quando usuário compra aqui vem total
+//   quantityUsed                 Int                    @default(0) @map("quantity_used") // quantidade de saída que vai dar saída quando usa em algum pedido
+//   createdAt                    DateTime               @default(now()) @map("created_at") // data e hora da entrada do registro
+//   UserConsultationPacket       UserConsultationPacket @relation(fields: [userConsultationPacketId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+//   Consultation                 Consultation           @relation(fields: [consultationId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+//   User                         User                   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@map("users_consultation_packet_logs")
-}
+//   @@map("users_consultation_packet_logs")
+// }
 
 // cadastro de pacientes, aqui será cadastrado os pacientes que serão atendidos, possuirão vinculo com userId do tipo advogado
 model Patient {
   id                  Int                   @id @default(autoincrement())
   userId              Int                   @map("user_id") // advogado que cadastrou o paciente
   name                String                @db.VarChar(200) // nome do paciente
-  email               String                @unique @db.VarChar(1000) // email do paciente
+  surname             String                @db.VarChar(200) // sobrenome do paciente
+  email               String?               @db.VarChar(1000) // email do paciente
   motherName          String?               @map("mother_name") @db.VarChar(200) // nome da mãe do paciente
   phone               String?               @db.VarChar(20) // telefone do paciente
-  cpf                 String                @db.VarChar(30) // CPF do paciente
-  rg                  String                @db.VarChar(30) // RG do paciente
-  birthDate           DateTime              @map("birth_date") @db.Date // data de nascimento do paciente
-  proccessNumber      String?               @map("proccess_number") @db.VarChar(30) // número do processo do paciente, caso exista
-  benefitTypeId       Int                   @map("benefit_type_id") // tipo de benefício
-  reportPurposeId     Int                   @map("report_purpose_id") // finalidade do laudo
-  ReportPurpose       ReportPurpose         @relation(fields: [reportPurposeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  BenefitType         BenefitType           @relation(fields: [benefitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cpf                 String                @unique @db.VarChar(30) // CPF do paciente
+  rg                  String                @unique @db.VarChar(30) // RG do paciente
+  birthDate           String                @map("birth_date") @db.VarChar(10) // data de nascimento do paciente
+  status              String                @default("A") @db.VarChar(1) // status do paciente, A = ativo, I = inativo
+  sexy                String                @db.Char(1)
+  createdAt           DateTime              @default(now()) @map("created_at") // data e hora da compra
+  updatedAt           DateTime              @updatedAt @map("updated_at") // data e hora da última atualização
   User                User                  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   PatientConsultation PatientConsultation[]
 
@@ -283,10 +301,23 @@ model PatientConsultation {
   userId                    Int                         @map("user_id") // aqui será o advogado que solicitou a consulta
   medicId                   Int?                        @map("medic_id") // aqui será o médico que atendeu a consulta
   consultationId            Int                         @map("consultation_id") // código da consulta solicitada
-  quantity                  Int                         @default(1) // quantidade de consultas solicitadas
   content                   String                      @db.Text //anotações que o médico poderá fazer durante a consulta
+  proccessNumber            String?                     @map("proccess_number") @db.VarChar(30) // número do processo do paciente, caso exista
+  benefitTypeId             Int                         @map("benefit_type_id") // tipo de benefício
+  reportPurposeId           Int                         @map("report_purpose_id") // finalidade do laudo
+  status                    String                      @default("open") @db.VarChar(30) // status da consulta, PENDENTE, AGENDATA, CANCELADA, PAGA
+  processSituation          String?                     @map("process_situation") @db.VarChar(2) // situação do processo [Processo a distribuir, Processo em andamento]
+  tipValue                  Decimal                     @default(0) @map("tip_value") @db.Decimal(18, 2) // valor da gorjeta
+  dateOpen                  DateTime                    @default(now()) @map("date_open") @db.Date // data da abertura da consulta
+  dateClose                 DateTime?                   @map("date_close") @db.Date // data da fechamento/encerramento da consulta
+  dateAntecipation          DateTime?                   @map("date_antecipation") @db.Date // data da antecipação da consulta
+  dateCorrection            DateTime?                   @map("date_correction") @db.Date // data da correção do laudo
+  rate                      Int?                        @default(0) // avaliação da consulta
+  Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ReportPurpose             ReportPurpose               @relation(fields: [reportPurposeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  BenefitType               BenefitType                 @relation(fields: [benefitTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   PatientConsultationReport PatientConsultationReport[]
   schedules                 Schedule[]
 

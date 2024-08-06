@@ -22,10 +22,11 @@ export const useAuthStore = defineStore("auth", () => {
     return currentUser.value?.data;
   });
 
-  const login = async ({ email, password }: AuthProps) => {
-    const resp = await api.post("/auth", {
+  const login = async ({ email, password, tokenCapcha }: AuthProps) => {
+    const resp = await api.post<AuthProps>("/auth", {
       email,
       password,
+      tokenCapcha,
     });
 
     localStorage.setItem("token", JSON.stringify(resp.data.token));

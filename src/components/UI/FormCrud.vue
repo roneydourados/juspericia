@@ -4,7 +4,7 @@
     <div class="d-flex align-center pa-4 w-100" v-if="showSubmitButton">
       <v-spacer></v-spacer>
       <v-btn
-        color="success"
+        color="primary"
         variant="flat"
         size="small"
         type="submit"

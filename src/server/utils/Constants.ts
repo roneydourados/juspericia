@@ -1,20 +1,27 @@
-export const apiVersion = {
-  verson1: "/api/v1",
+export const addressCategoryType = {
+  patient: "PATIENT",
+  medic: "MEDIC",
+  lawyer: "LAWYER",
+  admin: "ADMIN",
 };
 
-// tipagem da prioridade gut gravidade
-const profileType = ["ADMIN", "COBRADOR"] as const;
-
-export type ProfileType = (typeof profileType)[number];
+export const filesCategoryType = {
+  patient: "PATIENT",
+  medic: "MEDIC",
+  lawyer: "LAWYER",
+  userAvatar: "USER_AVATAR",
+  query: "QUERY",
+};
 
 export const appRoutes = [
   {
     title: "Home",
-    to: "/home",
+    to: "/home-admin",
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADMIN", "ADMIN"],
+    profiles: ["ADMIN"],
+    order: 1,
   },
   {
     title: "Home",
@@ -22,7 +29,17 @@ export const appRoutes = [
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADVOGADO", "ADMIN"],
+    profiles: ["ADVOGADO"],
+    order: 1,
+  },
+  {
+    title: "Home",
+    to: "/home-medic",
+    icon: "mdi-home-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["MEDICO"],
+    order: 1,
   },
   {
     title: "Solicitações",
@@ -31,14 +48,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO", "ADMIN"],
-  },
-  {
-    title: "Home",
-    to: "/home-medic",
-    icon: "mdi-home-outline",
-    visible: true,
-    isMenu: true,
-    profiles: ["MEDICO", "ADMIN"],
+    order: 2,
   },
   {
     title: "Advogados",
@@ -47,6 +57,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 3,
   },
   {
     title: "Pacientes",
@@ -55,6 +66,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
+    order: 4,
   },
   {
     title: "Agendamentos",
@@ -63,30 +75,52 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 5,
   },
   {
     title: "Consultas",
-    to: "/queries",
+    to: "/adm/queries",
+    icon: "mdi-hospital-box-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN"],
+    order: -1,
+  },
+  {
+    title: "Consultas agendadas",
+    to: "/scheduled-queries",
     icon: "mdi-hospital-box-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
+    profiles: ["MEDICO"],
+    order: 7,
   },
+  // {
+  //   title: "Estatísticas",
+  //   to: "/estatistics",
+  //   icon: "mdi-chart-bell-curve-cumulative",
+  //   visible: true,
+  //   isMenu: true,
+  //   profiles: ["ADVOGADO"],
+  //   order: 8,
+  // },
   {
-    title: "Pacotes de Serviços",
-    to: "/packages",
-    icon: "mdi-package-variant-closed",
+    title: "Administração",
+    to: "/adm",
+    icon: "mdi-shield-account-outline",
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
+    order: 9,
   },
   {
-    title: "Usuários",
-    to: "/users",
-    icon: "mdi-account-multiple-check-outline",
+    title: "Relatório de vendas",
+    to: "/adm/report-sales",
+    icon: "mdi-file-chart-outline",
     visible: true,
-    isMenu: true,
+    isMenu: false,
     profiles: ["ADMIN"],
+    order: -1,
   },
   {
     title: "Perfil",
@@ -95,5 +129,42 @@ export const appRoutes = [
     visible: true,
     isMenu: false,
     profiles: ["ADMIN", "MEDICO", "ADVOGADO"],
+    order: -1,
+  },
+  {
+    title: "Médicos parceiros",
+    to: "/adm/medics",
+    icon: "mdi-stethoscope",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN"],
+    order: -1,
+  },
+  {
+    title: "Pacotes de Serviços",
+    to: "/adm/packages",
+    icon: "mdi-package-variant-closed",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN"],
+    order: 9,
+  },
+  {
+    title: "Cadastro de modelo de laudo",
+    to: "/adm/report-models",
+    icon: "mdi-account-multiple-check-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN"],
+    order: -1,
+  },
+  {
+    title: "Administradores do sistema",
+    to: "/adm/admins",
+    icon: "mdi-account-multiple-check-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN"],
+    order: -1,
   },
 ];

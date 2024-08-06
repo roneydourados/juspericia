@@ -166,7 +166,7 @@ const sendValue = () => {
     .replaceAll("-", "");
 
   emit("update:modelNumber", asValue);
-  emit("update:modelValue", asValue);
+  emit("update:modelValue", value.value);
 };
 
 const handleBlur = async () => {
@@ -184,6 +184,7 @@ const handleBlur = async () => {
           );
 
           emit("update:modelAddress", address.data);
+          sendValue();
         } catch (error) {
           emit("update:modelAddress", {});
         }

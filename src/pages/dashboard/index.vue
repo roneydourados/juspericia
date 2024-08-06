@@ -1,4 +1,0 @@
-<template>
-  <h1>Dahsboard em construçã</h1>
-</template>
-<script setup lang="ts"></script>

@@ -1,9 +1,17 @@
 import { ThemeDefinition } from "vuetify";
 
 export const MainThemeColors = {
-  background: "#E5E5E5",
-  primary: "#0000",
+  background: "#fafafa",
+  primary: "#263238",
+  pink: "#FA00FF",
+  inputColor: "#1E88E5",
   warning: "#FEAA09",
+  info: "#2196F3",
+  green: "#4CAF50",
+  tooltipColor: "#E3F2FD",
+  tooltipTextColor: "#424242",
+  backMenu: "#37474f",
+  itemMenu: "#fff",
 };
 
 export const MAIN_THEME = "mainTheme";

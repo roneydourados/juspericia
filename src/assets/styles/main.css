@@ -1,0 +1,19 @@
+*,
+html,
+body {
+  font-size: 14px;
+}
+
+.tooltip-background {
+  background-color: rgb(var(--v-theme-tooltipColor)) !important;
+  color: rgb(var(--v-theme-tooltipTextColor)) !important;
+  font-weight: 600 !important;
+}
+
+/* .v-text-field .v-label {
+  font-weight: 400;
+} */
+
+/* .v-field__input {
+  font-weight: 500;
+} */

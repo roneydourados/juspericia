@@ -1,19 +1,20 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
-const rateLimiter = {
-  interval: 300000,
-  tokensPerInterval: 150,
-  throwError: true,
-};
+// const rateLimiter = {
+//   interval: 300000,
+//   tokensPerInterval: 150,
+//   throwError: true,
+// };
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   ssr: false,
   css: [
     "notivue/notification.css", // Only needed if using built-in notifications
     "notivue/animations.css", // Only needed if using built-in animations
+    "@/assets/styles/main.css",
   ],
   components: [{ path: "@/components", pathPrefix: false }],
   modules: [
@@ -25,15 +26,26 @@ export default defineNuxtConfig({
     },
     "notivue/nuxt",
     "@pinia/nuxt",
-    "nuxt-security",
+    "nuxt-tiptap-editor",
+    "@nuxtjs/turnstile",
   ],
+  tiptap: {
+    prefix: "Tiptap", //prefix for Tiptap imports, composables not included
+  },
   imports: {
     dirs: ["store", "types"],
   },
   app: {
     head: {
-      title: "App Title",
-      titleTemplate: "App Title",
+      title: "Juspericia",
+      titleTemplate: "Juspericia",
+      script: [
+        {
+          src: "https://challenges.cloudflare.com/turnstile/v0/api.js",
+          async: true,
+          defer: true,
+        },
+      ],
       // meta: [
       //   {
       //     name: "theme-color",
@@ -115,10 +127,21 @@ export default defineNuxtConfig({
       },
     },
   },
+  turnstile: {
+    siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
+    addValidateEndpoint: true,
+  },
   runtimeConfig: {
     tokenSecret: process.env.JWT_SECRET ?? "",
     public: {
       apiBaseUrl: process.env.API_BASE_URL ?? "",
+      version: process.env.VERSION ?? "",
+      turnstile: {
+        // This can be overridden at runtime via the NUXT_TURNSTILE_SECRET_KEY
+        // environment variable.
+        siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
+        secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
+      },
     },
   },
 });
