@@ -44,7 +44,7 @@ const chartConfig = computed(() => {
       },
 
       title: {
-        text: "Pacientes cadstrados",
+        text: "Pacientes cadastrados",
         align: "left",
       },
 
