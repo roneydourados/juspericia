@@ -7,6 +7,7 @@
       @add="showForm = true"
       @search="handleSearch($event)"
       :items-per-page="mobile ? 3 : 6"
+      :loading="loading"
     >
       <template #mobileContent="{ item }: any">
         <v-row dense>
@@ -171,7 +172,6 @@
     >
       <span>Apagar {{ itemSelected?.name }} ? </span>
     </Dialog>
-    <DialogLoading :dialog="loading" />
   </div>
 </template>
 

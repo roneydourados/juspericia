@@ -4,7 +4,7 @@
     v-model:search="search"
     :label="label"
     placeholder="Digite algo para pesquisar..."
-    item-title="name"
+    item-title="consultationName"
     return-object
     :required="required"
     icon="mdi-magnify"

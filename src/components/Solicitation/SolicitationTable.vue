@@ -1,17 +1,28 @@
 <template>
   <v-card v-if="!showForm" flat rounded="lg" color="transparent" class="px-6">
     <v-card-title class="mb-12 d-flex align-center justify-space-between">
-      <span class="font-weight-bold"> Solicitações </span>
+      <span class="font-weight-bold text-h5"> Solicitações </span>
 
-      <v-btn
-        class="text-none"
-        color="primary"
-        size="small"
-        prepend-icon="mdi-plus"
-        @click="showForm = true"
-      >
-        Nova solicitação
-      </v-btn>
+      <div class="d-flex aling-center" style="gap: 0.5rem">
+        <v-btn
+          class="text-none"
+          color="primary"
+          size="small"
+          prepend-icon="mdi-plus"
+          @click="showForm = true"
+        >
+          Nova solicitação
+        </v-btn>
+        <v-btn
+          class="text-none"
+          color="primary"
+          size="small"
+          prepend-icon="mdi-filter"
+          @click="showFilters = !showFilters"
+        >
+          Mais filtros
+        </v-btn>
+      </div>
     </v-card-title>
 
     <v-tabs
@@ -45,17 +56,24 @@
       <EmptyContent v-if="!$all" />
     </v-card-text>
   </v-card>
+
   <SolicitationForm
     v-else
     @close="handleCloseForm"
     :show="showForm"
     :data="selected"
   />
+  <SolicitationFilters
+    v-model:drawer="showFilters"
+    v-model:filters="modelFilters"
+    @update:model-value="search"
+  />
   <DialogLoading :dialog="loading" />
   <!-- <pre>{{ $all }}</pre> -->
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
 import { useDisplay } from "vuetify";
 
 const { mobile } = useDisplay();
@@ -64,29 +82,55 @@ const $all = computed(() => storeConsultation.$all);
 const tab = ref(1);
 const showForm = ref(false);
 const loading = ref(false);
+const showFilters = ref(false);
 const selected = ref<SolicitationConsultationProps>();
 
+const modelFilters = ref<SolicitationConsultationFilterProps>({
+  status: "open",
+  initialDateSolicitation: moment().startOf("month").format("YYYY-MM-DD"),
+  finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
+  benefitType: undefined as BenefitTypeProps | undefined,
+  patient: undefined as PatientProps | undefined,
+  reportPurpose: undefined as ReportPurposeProps | undefined,
+});
+
 onMounted(async () => {
-  await search("");
+  await search();
 });
 
 const handleChangeTable = async () => {
-  await search("");
+  switch (tab.value) {
+    case 1:
+      modelFilters.value.status = "open";
+      break;
+    case 2:
+      modelFilters.value.status = "scheduled";
+      break;
+    case 3:
+      modelFilters.value.status = "closed";
+      break;
+  }
+  await search();
 };
 
-const search = async (value: string) => {
+const search = async () => {
   loading.value = true;
   try {
-    await storeConsultation.index(value);
+    await storeConsultation.index(modelFilters.value);
   } finally {
     loading.value = false;
   }
 };
 
 const getItemEdit = async (item: SolicitationConsultationProps) => {
-  await storeConsultation.show(item.id!);
-  selected.value = storeConsultation.$single;
-  showForm.value = true;
+  loading.value = true;
+  try {
+    await storeConsultation.show(item.id!);
+    selected.value = storeConsultation.$single;
+    showForm.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleCloseForm = () => {

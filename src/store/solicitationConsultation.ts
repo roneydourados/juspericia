@@ -38,10 +38,23 @@ export const useSolicitationConsultationStore = defineStore(
       solicitationConsultation.value = data;
     };
 
-    const index = async (inputQuery: string) => {
+    const index = async (filters: SolicitationConsultationFilterProps) => {
+      const {
+        initialDateSolicitation,
+        finalDateSolicitation,
+        status,
+        benefitTypeId,
+        patientId,
+        reportPurposeId,
+      } = filters;
       const config = {
         params: {
-          inputQuery,
+          initialDateSolicitation,
+          finalDateSolicitation,
+          status,
+          benefitTypeId,
+          patientId,
+          reportPurposeId,
         },
       };
 

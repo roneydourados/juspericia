@@ -16,11 +16,22 @@
         rounded="lg"
         style="font-size: 1.4rem"
         @update:model-value="handleSearch(search)"
+        :loading="loading"
       >
         <template #label>
           <span> Digite algo para efetuar consulta... </span>
         </template>
       </v-text-field>
+      <v-btn
+        variant="flat"
+        color="info"
+        class="text-none"
+        size="small"
+        @click="router.back()"
+      >
+        <v-icon icon="mdi-arrow-left"> </v-icon>
+        Voltar
+      </v-btn>
       <v-btn
         prepend-icon="mdi-plus"
         class="text-none"
@@ -128,12 +139,12 @@
   >
     <span>Apagar {{ selected?.consultationName }} ? </span>
   </Dialog>
-  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
 const consutationStore = useConsultationStore();
 const { amountFormated } = useUtils();
+const router = useRouter();
 
 onMounted(async () => {
   await handleSearch("");

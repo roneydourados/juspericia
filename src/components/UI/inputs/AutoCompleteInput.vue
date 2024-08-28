@@ -1,5 +1,6 @@
 <template>
   <v-autocomplete
+    ref="autocomplete"
     v-model:model-value="value"
     :item-title="itemTitle"
     :item-value="itemValue"
@@ -9,8 +10,8 @@
     density="compact"
     :prepend-inner-icon="icon"
     hide-no-data
-    base-color="primary"
-    color="primary"
+    base-color="inputColor"
+    color="inputColor"
     :chips="chips"
     :return-object="returnObject"
     :clearable="clearable"
@@ -19,7 +20,8 @@
     :readonly="readonly"
     :loading="loading"
     :error-messages="errorMessage"
-    @update:model-value="$emit('update:modelValue', $event)"
+    @update:model-value="handleComplet"
+    @keydown.enter="handleComplet"
   >
     <template v-slot:item="{ props, item }">
       <slot name="items" :props="props" :item="item" />
@@ -103,7 +105,10 @@ const props = defineProps({
   },
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
+const autocomplete = ref();
+const nextField = ref<HTMLDivElement | null>(null);
 
 const fieldName = computed<MaybeRef>(() => {
   return uuidv4();
@@ -150,4 +155,12 @@ const { value, errorMessage, handleBlur, handleChange } = useField<
 >(fieldName, validationRules, {
   syncVModel: true,
 });
+
+const handleComplet = () => {
+  emit("update:modelValue", value.value);
+  // Fecha o menu do autocomplete
+  autocomplete.value?.blur();
+  // Define o foco no próximo campo
+  nextField.value?.focus();
+};
 </script>

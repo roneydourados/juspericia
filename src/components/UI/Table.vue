@@ -1,112 +1,131 @@
 <template>
-  <!-- <v-card class="mx-auto" :max-height="!mobile ? '550' : ''" flat> -->
   <v-card class="mx-auto" flat>
-    <v-card-title>{{ title }}</v-card-title>
+    <v-card-title class="pa-4">
+      <v-row dense>
+        <v-col cols="12">
+          <span class="text-subtitle-1 font-weight-bold">
+            {{ title }}
+          </span>
+        </v-col>
+      </v-row>
+      <v-row v-if="showCrud" dense align="center">
+        <v-col cols="12" lg="10">
+          <v-text-field
+            v-model="search"
+            density="compact"
+            prepend-inner-icon="mdi-magnify"
+            variant="solo-filled"
+            flat
+            hide-details
+            single-line
+            rounded="lg"
+            @update:model-value="handleSearch"
+            style="font-size: 1.4rem"
+            :loading="loading"
+          >
+            <template #label>
+              <span> Digite algo para efetuar consulta... </span>
+            </template>
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <div class="d-flex align-center" style="gap: 0.5rem">
+            <v-btn
+              variant="flat"
+              color="info"
+              class="text-none"
+              size="small"
+              @click="router.back()"
+            >
+              <v-icon icon="mdi-arrow-left"> </v-icon>
+              Voltar
+            </v-btn>
+            <v-btn
+              variant="flat"
+              color="primary"
+              class="text-none"
+              size="small"
+              @click="$emit('add')"
+            >
+              <v-icon icon="mdi-plus"> </v-icon>
+              Novo
+            </v-btn>
+            <slot name="button" />
+          </div>
+        </v-col>
+      </v-row>
+      <v-row align="center">
+        <slot name="filters" />
+      </v-row>
+    </v-card-title>
     <v-card-text>
       <v-data-table
-        v-if="!mobile"
+        v-if="!isVirtual"
+        v-model="value"
         v-model:page="page"
+        :item-value="itemValue"
         :headers="headers"
         :items="items"
-        :search="search"
         :items-per-page="itemsPerPage"
+        :show-select="showSelect"
+        return-object
+        :loading="loading"
+        sticky
+        fixed-header
         no-data-text="Nenhum dado encontrado"
+        loading-text="Buscando dados aguarde..."
       >
         <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
           <slot v-if="slotProps" :name="name" v-bind="slotProps" />
           <slot v-else :name="name" v-bind="slotProps" />
         </template>
 
-        <template v-slot:top="{ items }">
-          <v-row dense align="center" v-if="showCrude">
-            <v-col cols="12" lg="10">
-              <v-text-field
-                v-model="search"
-                density="compact"
-                prepend-inner-icon="mdi-magnify"
-                variant="solo-filled"
-                flat
-                hide-details
-                single-line
-                rounded="lg"
-                @update:model-value="handleSearch(Array.from(items))"
-                style="font-size: 1.4rem"
-              >
-                <template #label>
-                  <span> Digite algo para efetuar consulta... </span>
-                </template>
-              </v-text-field>
-            </v-col>
-            <v-col cols="12" lg="2">
-              <div class="d-flex align-center" style="gap: 0.5rem">
-                <v-btn
-                  variant="flat"
-                  color="primary"
-                  class="text-none"
-                  size="small"
-                  @click="$emit('add')"
-                >
-                  <v-icon icon="mdi-plus"> </v-icon>
-                  Novo
-                </v-btn>
-
-                <v-btn
-                  variant="flat"
-                  color="info"
-                  class="text-none"
-                  size="small"
-                  @click="router.back()"
-                >
-                  <v-icon icon="mdi-arrow-left"> </v-icon>
-                  Voltar
-                </v-btn>
-                <slot name="button" />
-              </div>
-            </v-col>
-          </v-row>
-        </template>
         <template v-slot:bottom>
-          <div class="text-center pt-2">
-            <v-pagination
-              v-model="page"
-              :length="pageCount"
-              rounded="circle"
-              color="primary"
-              density="comfortable"
-            />
-          </div>
+          <v-pagination
+            v-model="page"
+            :length="pageCount"
+            rounded="circle"
+            color="primary"
+            density="comfortable"
+          />
         </template>
       </v-data-table>
-
-      <v-window v-else touch v-model="page" direction="vertical">
-        <v-window-item :value="page">
-          <template v-for="(item, index) in slicedItems">
-            <v-card flat rounded="lg">
-              <v-card-text>
-                <slot name="mobileContent" v-bind="{ item, index }" />
-              </v-card-text>
-              <v-card-actions class="d-flex align-center justify-end w-100">
-                <slot name="mobileActions" v-bind="{ item, index }" />
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-window-item>
-        <v-pagination
-          v-model="page"
-          :length="pageCount"
-          rounded="circle"
-          color="primary"
-          density="compact"
-        />
-      </v-window>
+      <v-data-table-virtual
+        v-else
+        v-model="value"
+        :item-value="itemValue"
+        :headers="headers"
+        :items="items"
+        no-data-text="Nenhum dado encontrado"
+        :show-select="showSelect"
+        return-object
+        :height="`${mobile ? '' : height}`"
+        fixed-header
+        sticky
+        :loading="loading"
+        loading-text="Buscando dados aguarde..."
+      >
+        <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+          <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+          <slot v-else :name="name" v-bind="slotProps" />
+        </template>
+      </v-data-table-virtual>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
+import { v4 as uuidv4 } from "uuid";
+import { useField } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
 
 const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => [],
+  },
   headers: {
     type: Array as PropType<{ title: string; key: string }[]>,
     default: () => [],
@@ -123,33 +142,63 @@ const props = defineProps({
     type: String,
     default: "Tabela",
   },
-  showCrude: {
+  showCrud: {
     type: Boolean,
     default: true,
   },
+  maxHeight: {
+    type: String,
+    default: "550",
+  },
+  height: {
+    type: String,
+    default: "550",
+  },
+  showSelect: {
+    type: Boolean,
+    default: false,
+  },
+  itemValue: {
+    type: String,
+    default: undefined,
+  },
+  ignoreMobile: {
+    type: Boolean,
+    default: true,
+  },
+  isVirtual: {
+    type: Boolean,
+    default: false,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
-
-const emit = defineEmits(["search", "add"]);
-
 const { mobile } = useDisplay();
+const emit = defineEmits(["search", "add", "update:modelValue"]);
 const router = useRouter();
+
+const search = ref("");
+const page = ref(1);
+
+const handleSearch = () => {
+  emit("search", search.value);
+};
 
 const pageCount = computed(() => {
   return Math.ceil(props.items.length / props.itemsPerPage);
 });
 
-const slicedItems = computed(() => {
-  const startIndex = (page.value - 1) * props.itemsPerPage;
-  return props.items.slice(startIndex, startIndex + props.itemsPerPage);
+const fieldName = computed<MaybeRef>(() => {
+  return uuidv4();
 });
 
-const search = ref("");
-const page = ref(1);
+const validationRules = computed<MaybeRef>(() => {
+  return toTypedSchema(zod.array(zod.any()).nullish().optional());
+});
 
-const handleSearch = (items: unknown[]) => {
-  // somente emitir o evento de busca se não houver itens na tabela, ai sim executar a busca na api
-  if (items.length <= 1) {
-    emit("search", search.value);
-  }
-};
+const { value } = useField(fieldName, validationRules, {
+  syncVModel: true,
+});
 </script>

@@ -6,6 +6,7 @@
       :headers="headers"
       @search="handleSearch($event)"
       @add="showForm = true"
+      :loading="loading"
     >
       <template v-slot:item.name="{ item }">
         <span style="cursor: pointer" class="d-flex align-center text-info">
@@ -153,7 +154,6 @@
       </template>
     </Table>
   </div>
-  <DialogLoading :dialog="loading" />
   <UserLawyerForm
     width="800"
     title="Advogado"

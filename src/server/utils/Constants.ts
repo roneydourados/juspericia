@@ -13,6 +13,25 @@ export const filesCategoryType = {
   query: "QUERY",
 };
 
+export const solicitationStates = [
+  {
+    name: "Pendente",
+    value: "open",
+  },
+  {
+    name: "Agendada",
+    value: "scheduled",
+  },
+  {
+    name: "Concluída",
+    value: "closed",
+  },
+  {
+    name: "Cancelada",
+    value: "canceled",
+  },
+];
+
 export const appRoutes = [
   {
     title: "Home",

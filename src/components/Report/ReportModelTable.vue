@@ -1,16 +1,48 @@
 <template>
   <v-card v-if="!showForm" flat rounded="lg">
-    <v-card-title class="d-flex align-center justify-space-between pa-4">
+    <v-card-title
+      class="d-flex align-center justify-space-between pa-4"
+      style="gap: 0.5rem"
+    >
       <strong style="font-size: 1.2rem">Modelos de laudos</strong>
-      <v-btn
-        prepend-icon="mdi-plus"
-        class="text-none"
-        size="small"
-        color="primary"
-        @click="showForm = true"
+      <v-text-field
+        v-model="search"
+        density="compact"
+        prepend-inner-icon="mdi-magnify"
+        variant="solo-filled"
+        flat
+        hide-details
+        single-line
+        rounded="lg"
+        style="font-size: 1.4rem"
+        @update:model-value="handleSearch(search)"
+        :loading="loading"
       >
-        Novo
-      </v-btn>
+        <template #label>
+          <span> Digite algo para efetuar consulta... </span>
+        </template>
+      </v-text-field>
+      <div class="d-flex align-center" style="gap: 0.5rem">
+        <v-btn
+          variant="flat"
+          color="info"
+          class="text-none"
+          size="small"
+          @click="router.back()"
+        >
+          <v-icon icon="mdi-arrow-left"> </v-icon>
+          Voltar
+        </v-btn>
+        <v-btn
+          prepend-icon="mdi-plus"
+          class="text-none"
+          size="small"
+          color="primary"
+          @click="showForm = true"
+        >
+          Novo
+        </v-btn>
+      </div>
     </v-card-title>
     <v-card-text>
       <v-row dense>
@@ -55,12 +87,11 @@
   >
     <span>Apagar {{ selected?.title }} ? </span>
   </Dialog>
-  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
 const reportModel = useReportModelStore();
-
+const router = useRouter();
 onMounted(async () => {
   await handleSearch("");
 });
@@ -72,6 +103,7 @@ const selected = ref<ReportModelProps>();
 const showForm = ref(false);
 const showDelete = ref(false);
 const loading = ref(false);
+const search = ref("");
 
 const getItem = (item: ReportModelProps) => {
   selected.value = item;

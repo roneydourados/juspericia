@@ -1,10 +1,32 @@
 import { prisma } from "@/server/providers/prisma";
 import moment from "moment";
 import { formatDate } from "~/server/utils/functionts";
-import { SolicitationConsultationProps } from "~/types/SolicitationConsultation";
+import {
+  SolicitationConsultationFilterProps,
+  SolicitationConsultationProps,
+} from "~/types/SolicitationConsultation";
 
-export const index = async () => {
+export const index = async (filters: SolicitationConsultationFilterProps) => {
+  const {
+    initialDateSolicitation,
+    finalDateSolicitation,
+    status,
+    benefitTypeId,
+    patientId,
+    reportPurposeId,
+  } = filters;
+
   const data = await prisma.patientConsultation.findMany({
+    where: {
+      dateOpen: {
+        gte: new Date(initialDateSolicitation),
+        lte: new Date(finalDateSolicitation),
+      },
+      status,
+      patientId: patientId ? patientId : undefined,
+      benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
+      reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+    },
     select: {
       id: true,
       dateAntecipation: true,

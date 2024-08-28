@@ -23,3 +23,15 @@ export interface SolicitationConsultationProps {
   ReportPurpose?: ReportPurposeProps;
   BenefitType?: BenefitTypeProps;
 }
+
+export interface SolicitationConsultationFilterProps {
+  initialDateSolicitation: string;
+  finalDateSolicitation: string;
+  status: string;
+  patientId?: number;
+  benefitTypeId?: number; //tipo de benefício
+  reportPurposeId?: number; //finalidade do laudo
+  benefitType?: BenefitTypeProps;
+  patient?: PatientProps;
+  reportPurpose?: ReportPurposeProps;
+}
