@@ -24,7 +24,7 @@
     "@prisma/client": "^5.16.1",
     "@tinymce/tinymce-vue": "^5",
     "@vee-validate/zod": "^4.13.2",
-    "apexcharts": "^3.50.0",
+    "apexcharts": "^3.53.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "ckeditor5": "^42.0.1",
@@ -40,7 +40,7 @@
     "uuid": "^10.0.0",
     "vee-validate": "^4.13.2",
     "vue": "latest",
-    "vue3-apexcharts": "^1.5.3",
+    "vue3-apexcharts": "^1.6.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

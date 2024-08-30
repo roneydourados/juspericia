@@ -136,7 +136,7 @@
           <span>Data de solicitação de atencipação:</span>
           <span class="font-weight-bold">
             {{
-              solicitation.dateCorrection
+              solicitation.dateAntecipation
                 ? moment(solicitation.dateAntecipation).format("DD/MM/YYYY")
                 : "Não solicitado"
             }}
@@ -173,6 +173,11 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
+            :disabled="
+              solicitation.dateCorrection ||
+              moment(solicitation.deadline).isAfter()
+            "
+            @click="showDateCorrection = true"
           >
             Solicitar correção
           </v-btn>
@@ -182,6 +187,8 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-calendar-clock-outline"
             color="info"
+            :disabled="solicitation.dateAntecipation"
+            @click="showDateAntecipation = true"
           >
             Solicitar antecipação
           </v-btn>
@@ -201,7 +208,10 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-cash-multiple"
             color="success"
-            @click="handleDetailsClick(1)"
+            @click="showTipValue = true"
+            :disabled="
+              solicitation.tipValue ? Number(solicitation.tipValue) : 0 > 0
+            "
           >
             Dar Gorjeta
           </v-btn>
@@ -221,18 +231,46 @@
               v-model="solicitation.rate"
               active-color="orange-darken-1"
               color="orange-lighten-1"
+              :readonly="!isRate"
             />
+            <v-btn
+              v-if="isRate"
+              class="text-none font-weight-bold"
+              prepend-icon="mdi-check"
+              color="orange-darken-1"
+              variant="text"
+              @click="handleUpdateRate(solicitation.rate ?? 0)"
+            >
+              Enviar avaliação
+            </v-btn>
           </div>
         </v-col>
       </v-row>
     </v-card-actions>
   </v-card>
+  <SolicitationFormDate
+    title="Data para correção"
+    v-model:show="showDateCorrection"
+    @close="handleUpdateCorrectionDate($event)"
+  />
+  <SolicitationFormDate
+    title="Data para antecipação"
+    v-model:show="showDateAntecipation"
+    @close="handleUpdateAntecipationDate($event)"
+  />
+  <SolicitationTipValue
+    title="Valor da gorjeta"
+    v-model:show="showTipValue"
+    @close="handleTipValue($event)"
+  />
+  <DialogLoading :dialog="loading" />
+  <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
 <script setup lang="ts">
 import moment from "moment";
 
-defineProps({
+const props = defineProps({
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
     default: () => {},
@@ -241,10 +279,25 @@ defineProps({
 
 const emit = defineEmits(["edit"]);
 const auth = useAuthStore();
+const storeConsultation = useSolicitationConsultationStore();
 const rounter = useRouter();
-const { amountFormated } = useUtils();
+const { amountFormated, getSolicitationsFilters } = useUtils();
 
+const isRate = ref(false);
+const showDateCorrection = ref(false);
+const showDateAntecipation = ref(false);
+const showTipValue = ref(false);
+const loading = ref(false);
+const filters = ref(getSolicitationsFilters());
 const $currentUser = computed(() => auth.$currentUser);
+
+watch(
+  () => props.solicitation.id,
+  () => {
+    isRate.value = Number(props.solicitation.rate ?? 0) <= 0;
+  },
+  { immediate: true }
+);
 
 const handleDetailsClick = async (id: number) => {
   await rounter.push(`/solicitations/${id}`);
@@ -265,5 +318,67 @@ const returnStatus = (status: string) => {
 
 const editItem = (item: SolicitationConsultationProps) => {
   emit("edit", item);
+};
+
+const handleUpdateCorrectionDate = async (date: string) => {
+  showDateCorrection.value = false;
+  if (date) {
+    loading.value = true;
+    try {
+      await storeConsultation.update({
+        id: props.solicitation.id,
+        dateCorrection: date,
+      });
+
+      await getSolicitations();
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
+const handleUpdateAntecipationDate = async (date: string) => {
+  showDateAntecipation.value = false;
+  if (date) {
+    loading.value = true;
+    try {
+      await storeConsultation.update({
+        id: props.solicitation.id,
+        dateAntecipation: date,
+      });
+
+      await getSolicitations();
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
+const handleTipValue = async (value: number) => {
+  if (value && value > 0) {
+    loading.value = true;
+    try {
+      await storeConsultation.update({
+        id: props.solicitation.id,
+        tipValue: value,
+      });
+
+      await getSolicitations();
+    } finally {
+      loading.value = false;
+    }
+  }
+};
+
+const handleUpdateRate = async (rate: number) => {
+  await storeConsultation.update({
+    id: props.solicitation.id,
+    rate,
+  });
+  isRate.value = false;
+};
+
+const getSolicitations = async () => {
+  await storeConsultation.index(filters.value);
 };
 </script>

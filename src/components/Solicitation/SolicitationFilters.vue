@@ -51,17 +51,23 @@
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <SelectSearchPatient v-model="modelFilters.patient" />
+              <SelectSearchPatient v-model="modelFilters.patient" clearable />
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <SelectSearchBenefitType v-model="modelFilters.benefitType" />
+              <SelectSearchBenefitType
+                v-model="modelFilters.benefitType"
+                clearable
+              />
             </v-col>
           </v-row>
           <v-row dense>
             <v-col cols="12">
-              <SelectSearchReportPurpose v-model="modelFilters.reportPurpose" />
+              <SelectSearchReportPurpose
+                v-model="modelFilters.reportPurpose"
+                clearable
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -71,6 +77,7 @@
 </template>
 
 <script setup lang="ts">
+const { setSolicitationsFilters } = useUtils();
 const emit = defineEmits(["update:modelValue"]);
 const modelFilters = defineModel<SolicitationConsultationFilterProps>(
   "filters",
@@ -83,6 +90,7 @@ const modelFilters = defineModel<SolicitationConsultationFilterProps>(
 const drawer = defineModel<boolean>("drawer");
 
 const filter = () => {
+  setSolicitationsFilters(modelFilters.value);
   emit("update:modelValue", modelFilters.value);
   drawer.value = !drawer.value;
 };

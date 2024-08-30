@@ -1,7 +1,21 @@
 <template>
   <v-card v-if="!showForm" flat rounded="lg" color="transparent" class="px-6">
     <v-card-title class="mb-12 d-flex align-center justify-space-between">
-      <span class="font-weight-bold text-h5"> Solicitações </span>
+      <div class="d-flex flex-column flex-wrap">
+        <span class="font-weight-bold text-h5"> Solicitações </span>
+        <span class="text-grey-darken-3" style="font-size: 0.8rem">
+          Filtros: Data inicial:
+          {{
+            moment(modelFilters.initialDateSolicitation).format("DD/MM/YYYY")
+          }}
+          - Data final:
+          {{ moment(modelFilters.finalDateSolicitation).format("DD/MM/YYYY") }},
+          Paciente: {{ modelFilters.patient?.name ?? "Todos" }}, Tipo de
+          Benefício: {{ modelFilters.benefitType?.name ?? "Todos" }},
+          Finalidade: {{ modelFilters.reportPurpose?.name ?? "Todos" }}, Status:
+          {{ getStatusName() }}
+        </span>
+      </div>
 
       <div class="d-flex aling-center" style="gap: 0.5rem">
         <v-btn
@@ -69,13 +83,14 @@
     @update:model-value="search"
   />
   <DialogLoading :dialog="loading" />
-  <!-- <pre>{{ $all }}</pre> -->
+  <!-- <pre>{{ modelFilters }}</pre> -->
 </template>
 
 <script setup lang="ts">
 import moment from "moment";
 import { useDisplay } from "vuetify";
 
+const { getSolicitationsFilters, setSolicitationsFilters } = useUtils();
 const { mobile } = useDisplay();
 const storeConsultation = useSolicitationConsultationStore();
 const $all = computed(() => storeConsultation.$all);
@@ -84,15 +99,16 @@ const showForm = ref(false);
 const loading = ref(false);
 const showFilters = ref(false);
 const selected = ref<SolicitationConsultationProps>();
+const modelFilters = ref(getSolicitationsFilters());
 
-const modelFilters = ref<SolicitationConsultationFilterProps>({
-  status: "open",
-  initialDateSolicitation: moment().startOf("month").format("YYYY-MM-DD"),
-  finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
-  benefitType: undefined as BenefitTypeProps | undefined,
-  patient: undefined as PatientProps | undefined,
-  reportPurpose: undefined as ReportPurposeProps | undefined,
-});
+// const modelFilters = ref<SolicitationConsultationFilterProps>({
+//   status: "open",
+//   initialDateSolicitation: moment().startOf("month").format("YYYY-MM-DD"),
+//   finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
+//   benefitType: undefined as BenefitTypeProps | undefined,
+//   patient: undefined as PatientProps | undefined,
+//   reportPurpose: undefined as ReportPurposeProps | undefined,
+// });
 
 onMounted(async () => {
   await search();
@@ -110,7 +126,21 @@ const handleChangeTable = async () => {
       modelFilters.value.status = "closed";
       break;
   }
+  setSolicitationsFilters(modelFilters.value);
   await search();
+};
+
+const getStatusName = () => {
+  switch (modelFilters.value.status) {
+    case "open":
+      return "Pendente";
+    case "scheduled":
+      return "Agendada";
+    case "closed":
+      return "Finalizada";
+    default:
+      return "Pendente";
+  }
 };
 
 const search = async () => {

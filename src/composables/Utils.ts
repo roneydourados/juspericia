@@ -214,6 +214,26 @@ export const useUtils = () => {
     return color;
   };
 
+  const getSolicitationsFilters = () => {
+    const filters = localStorage.getItem("solicitationsFilters");
+
+    if (filters) {
+      return JSON.parse(filters) as SolicitationConsultationFilterProps;
+    }
+
+    return {
+      initialDateSolicitation: moment().startOf("month").format("YYYY-MM-DD"),
+      finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
+      status: "open",
+    };
+  };
+
+  const setSolicitationsFilters = (
+    filter: SolicitationConsultationFilterProps
+  ) => {
+    localStorage.setItem("solicitationsFilters", JSON.stringify(filter));
+  };
+
   return {
     amountFormated,
     cardInvoices,
@@ -231,5 +251,7 @@ export const useUtils = () => {
     formatCPFOrCNPJ,
     stringToHandlePDF,
     generateRandomColor,
+    getSolicitationsFilters,
+    setSolicitationsFilters,
   };
 };

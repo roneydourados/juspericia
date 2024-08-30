@@ -147,12 +147,16 @@ export const consultationUpdate = async (
   try {
     return await prisma.patientConsultation.update({
       data: {
-        content: payload.content,
-        benefitTypeId: payload.benefitTypeId,
-        reportPurposeId: payload.reportPurposeId,
-        patientId: payload.patientId,
+        content: payload.content ? payload.content : undefined,
+        benefitTypeId: payload.benefitTypeId
+          ? Number(payload.benefitTypeId)
+          : undefined,
+        reportPurposeId: payload.reportPurposeId
+          ? Number(payload.reportPurposeId)
+          : undefined,
+        patientId: payload.patientId ? Number(payload.patientId) : undefined,
         medicId: payload.medicId ? Number(payload.medicId) : undefined,
-        status: payload.status,
+        status: payload.status ? String(payload.status) : undefined,
         processSituation: payload.processSituation
           ? String(payload.processSituation)
           : undefined,
@@ -160,21 +164,28 @@ export const consultationUpdate = async (
           ? String(payload.proccessNumber)
           : undefined,
         tipValue: payload.tipValue ? Number(payload.tipValue) : undefined,
-        userId: payload.userId,
-        consultationId: payload.consultationId,
-        dateClose: payload.dateClose,
-        dateAntecipation: payload.dateAntecipation,
-        dateCorrection: payload.dateCorrection,
-        rate: payload.rate,
+        userId: payload.userId ? Number(payload.userId) : undefined,
+        consultationId: payload.consultationId
+          ? Number(payload.consultationId)
+          : undefined,
+        dateClose: payload.dateClose ? new Date(payload.dateClose) : undefined,
+        dateAntecipation: payload.dateAntecipation
+          ? new Date(payload.dateAntecipation)
+          : undefined,
+        dateCorrection: payload.dateCorrection
+          ? new Date(payload.dateCorrection)
+          : undefined,
+        rate: payload.rate ? Number(payload.rate) : undefined,
       },
       where: {
         id: payload.id,
       },
     });
   } catch (error) {
+    console.log("🚀 ~ error:", error);
     throw createError({
       statusCode: 500,
-      message: "Error create solicitation consulta",
+      message: "Error update solicitation consulta",
     });
   }
 };

@@ -195,7 +195,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
-const { amountFormated } = useUtils();
+const { amountFormated, getSolicitationsFilters } = useUtils();
 const { mobile } = useDisplay();
 
 const storeConsultation = useSolicitationConsultationStore();
@@ -223,6 +223,8 @@ const form = ref({
   content: "",
   factsRealityConfirm: false,
 });
+
+const filters = ref(getSolicitationsFilters());
 
 onMounted(() => {
   if (props.data.id && props.show) {
@@ -269,12 +271,11 @@ const submitForm = async () => {
   loading.value = true;
   try {
     if (props.data.id) {
-      console.log("🚀 ~ submitForm ~ props.data.id:", props.data.id);
       await update();
     } else {
       await create();
     }
-    await storeConsultation.index("");
+    await storeConsultation.index(filters.value);
     handleClose();
   } finally {
     loading.value = false;

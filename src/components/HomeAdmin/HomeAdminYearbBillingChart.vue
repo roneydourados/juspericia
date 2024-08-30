@@ -20,94 +20,38 @@ const chartData = computed(() => {
       {
         name: "",
         data: [
-          {
-            x: "Jan",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Fev",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Mar",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Abr",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Mai",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Jun",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Jul",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Ago",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Set",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Out",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Nov",
-            y: Math.floor(Math.random() * 1000),
-          },
-          {
-            x: "Dez",
-            y: Math.floor(Math.random() * 1000),
-          },
+          10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000,
+          110000, 120000,
         ],
       },
     ],
-
     chartOptions: {
-      grid: {
-        yaxis: {
-          lines: {
-            show: true,
-          },
-        },
-        strokeDashArray: 1, // serve para montar um traçado nas linhas
+      chart: {
+        height: 350,
+        type: "bar",
       },
       plotOptions: {
         bar: {
-          borderRadius: 3,
-          distributed: false,
+          borderRadius: 10,
           dataLabels: {
-            position: "bottom", // top, center, bottom
+            position: "top", // top, center, bottom
           },
         },
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
+        formatter: function (val: number) {
+          return val + "%";
+        },
+        offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#304758"],
+        },
       },
+
       xaxis: {
-        categories: [
-          "Jan",
-          "Fev",
-          "Mar",
-          "Abr",
-          "Mai",
-          "Jun",
-          "Jul",
-          "Ago",
-          "Set",
-          "Out",
-          "Nov",
-          "Dez",
-        ],
+        categories: months,
         position: "top",
         axisBorder: {
           show: false,
@@ -128,10 +72,9 @@ const chartData = computed(() => {
           },
         },
         tooltip: {
-          enabled: false,
+          enabled: true,
         },
       },
-
       yaxis: {
         axisBorder: {
           show: false,
@@ -140,19 +83,32 @@ const chartData = computed(() => {
           show: false,
         },
         labels: {
-          show: true,
+          show: false,
           formatter: function (val: number) {
-            return amountFormated(val, true);
+            return val + "%";
           },
         },
       },
+
       title: {
-        text: `Faturamento ${moment().format("YYYY")}`,
+        text: "Faturamento",
         align: "left",
         margin: 10,
         offsetX: 0,
         offsetY: 0,
         floating: false,
+        style: {
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "#000",
+        },
+      },
+      tooltip: {
+        show: false,
+        theme: "dark",
+        style: {
+          fontSize: "16px",
+        },
       },
     },
   };
