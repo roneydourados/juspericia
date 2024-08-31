@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { months } from "@/utils/Monthts";
-
 const randomNumbers = ref<Number[]>([]);
 
 for (let i = 0; i < 12; i++) {
