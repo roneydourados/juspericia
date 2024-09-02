@@ -102,7 +102,7 @@ const $user = computed(() => auth.$currentUser);
 const submmitForm = async () => {
   try {
     //sempre resetar o token para evitar de enviar um token expirado
-    turnstile.value?.reset();
+    //turnstile.value?.reset();
 
     await auth.login({
       email: form.value.email,
