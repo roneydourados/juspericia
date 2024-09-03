@@ -38,7 +38,7 @@
       </v-row>
       <v-row dense>
         <v-col cols="12">
-          <StringInput
+          <PasswordInput
             v-model="form.password"
             label="*Senha"
             type="password"
@@ -134,8 +134,7 @@ const submmitForm = async () => {
     }
   } catch (error) {
     console.log("🚀 ~ file: FormLogin.vue:82 ~ onSubmit ~ error:", error);
+    turnstile.value?.reset();
   }
 };
 </script>
-
-<style scoped></style>

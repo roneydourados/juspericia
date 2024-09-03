@@ -174,7 +174,7 @@
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
             :disabled="
-              solicitation.dateCorrection ||
+              !!solicitation.dateCorrection ||
               moment(solicitation.deadline).isAfter()
             "
             @click="showDateCorrection = true"
@@ -187,7 +187,7 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-calendar-clock-outline"
             color="info"
-            :disabled="solicitation.dateAntecipation"
+            :disabled="!!solicitation.dateAntecipation"
             @click="showDateAntecipation = true"
           >
             Solicitar antecipação
@@ -209,9 +209,7 @@
             prepend-icon="mdi-cash-multiple"
             color="success"
             @click="showTipValue = true"
-            :disabled="
-              solicitation.tipValue ? Number(solicitation.tipValue) : 0 > 0
-            "
+            :disabled="Number(solicitation.tipValue) > 0"
           >
             Dar Gorjeta
           </v-btn>
@@ -307,6 +305,8 @@ const returnStatus = (status: string) => {
   switch (status.trim().toLowerCase()) {
     case "open":
       return "Pendente";
+    case "in_progress":
+      return "Em andamento";
     case "scheduled":
       return "Agendada";
     case "finished":

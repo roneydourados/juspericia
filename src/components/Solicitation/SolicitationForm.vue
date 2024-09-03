@@ -92,6 +92,7 @@
               v-model="form.benefitType"
               required
               :clearable="true"
+              show-new-button
             />
           </v-col>
           <v-col cols="12" lg="3">
@@ -100,6 +101,7 @@
               required
               :clearable="true"
               @update:model-value="handleReportPurpose"
+              show-new-button
             />
           </v-col>
         </v-row>
@@ -192,11 +194,16 @@ const props = defineProps({
     type: Object as PropType<SolicitationConsultationProps>,
     default: () => ({} as SolicitationConsultationProps),
   },
+  showGoBack: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emit = defineEmits(["close"]);
 const { amountFormated, getSolicitationsFilters } = useUtils();
 const { mobile } = useDisplay();
+const router = useRouter();
 
 const storeConsultation = useSolicitationConsultationStore();
 
@@ -264,7 +271,7 @@ const loadModel = () => {
 
 const handleClose = () => {
   clearModel();
-  emit("close");
+  router.push("/solicitations");
 };
 
 const submitForm = async () => {

@@ -11,7 +11,7 @@
         <Logo height="30" />
       </template>
 
-      <span v-if="!mobile" class="text-h6">{{ $currentScreen }}</span>
+      <!-- <span v-if="!mobile" class="text-h6">{{ $currentScreen }}</span> -->
       <v-spacer v-if="!mobile" />
 
       <v-app-bar-nav-icon
@@ -20,6 +20,30 @@
         color="white"
         @click.stop="drawer = !drawer"
       />
+      <template v-slot:append>
+        <div class="d-flex align-center px-4" style="gap: 0.5rem">
+          <v-btn
+            class="text-none"
+            color="success"
+            size="small"
+            variant="flat"
+            prepend-icon="mdi-cart-plus"
+          >
+            Comprar créditos
+          </v-btn>
+
+          <v-btn
+            class="text-none"
+            color="info"
+            size="small"
+            variant="flat"
+            prepend-icon="mdi-cart-plus"
+            @click="handleNewSolicitation"
+          >
+            Nova solicitação
+          </v-btn>
+        </div>
+      </template>
     </v-app-bar>
 
     <v-main
@@ -43,11 +67,13 @@
 import { useDisplay } from "vuetify";
 
 const { mobile } = useDisplay();
-const screen = useScreenStore();
+// const screen = useScreenStore();
 const config = useRuntimeConfig();
+const router = useRouter();
 
 const drawer = ref(true);
-const $currentScreen = computed(() => screen.$currentScreen);
+
+// const $currentScreen = computed(() => screen.$currentScreen);
 const $version = computed(() => config.public.version);
 
 onMounted(() => {
@@ -58,5 +84,9 @@ const closeDrawer = () => {
   if (mobile.value) {
     drawer.value = false;
   }
+};
+
+const handleNewSolicitation = async () => {
+  await router.push("/solicitations/new");
 };
 </script>

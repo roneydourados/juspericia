@@ -41,6 +41,9 @@ export const login = async ({ email, password }: AuthProps) => {
               to: true,
               visible: true,
             },
+            orderBy: {
+              id: "asc",
+            },
           },
         },
       },

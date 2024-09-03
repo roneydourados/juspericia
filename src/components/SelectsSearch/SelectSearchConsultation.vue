@@ -106,14 +106,11 @@ const loadingSearch = ref(false);
 const $all = computed(() => consultation.$all);
 
 watch(search, async () => {
-  setTimeout(async () => {
-    loadingSearch.value = true;
-    try {
-      await consultation.index(search.value);
-    } finally {
-      loadingSearch.value = false;
-    }
-  }, 700);
+  await handleSearch();
+});
+
+onMounted(async () => {
+  await handleSearch();
 });
 
 const fieldName = computed<MaybeRef>(() => {
@@ -127,4 +124,15 @@ const validationRules = computed<MaybeRef>(() => {
 const { value } = useField<Object>(fieldName, validationRules, {
   syncVModel: true,
 });
+
+const handleSearch = async () => {
+  setTimeout(async () => {
+    loadingSearch.value = true;
+    try {
+      await consultation.index(search.value);
+    } finally {
+      loadingSearch.value = false;
+    }
+  }, 700);
+};
 </script>

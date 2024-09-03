@@ -1,6 +1,5 @@
 import { prisma } from "@/server/providers/prisma";
-
-import { ReportPurposeProps } from "~/types/Patient";
+import { ReportPurposeProps } from "~/types/ReportPurpose";
 
 export const create = async ({ name }: ReportPurposeProps) => {
   try {

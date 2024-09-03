@@ -4,7 +4,7 @@
       title="Solicitações por tipo de benefício"
       :headers="headers"
       :items="$temTeste"
-      :show-crude="false"
+      :showCrud="false"
     >
       <template v-slot:item.name="{ item }">
         <InfoLabel :title="item.name" :show-divider="false" font-size="1" />

@@ -54,6 +54,7 @@ import { useField } from "vee-validate";
 import { v4 as uuidv4 } from "uuid";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import { on } from "nodemailer/lib/xoauth2";
 
 defineProps({
   type: {
@@ -104,14 +105,11 @@ const loadingSearch = ref(false);
 const $all = computed(() => patient.$all);
 
 watch(search, async () => {
-  setTimeout(async () => {
-    loadingSearch.value = true;
-    try {
-      await patient.index(search.value);
-    } finally {
-      loadingSearch.value = false;
-    }
-  }, 700);
+  await handleSearch();
+});
+
+onMounted(async () => {
+  await handleSearch();
 });
 
 const fieldName = computed<MaybeRef>(() => {
@@ -125,4 +123,15 @@ const validationRules = computed<MaybeRef>(() => {
 const { value } = useField<Object>(fieldName, validationRules, {
   syncVModel: true,
 });
+
+const handleSearch = async () => {
+  setTimeout(async () => {
+    loadingSearch.value = true;
+    try {
+      await patient.index(search.value);
+    } finally {
+      loadingSearch.value = false;
+    }
+  }, 700);
+};
 </script>

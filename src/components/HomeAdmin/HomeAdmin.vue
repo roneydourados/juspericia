@@ -1,18 +1,13 @@
 <template>
   <v-card flat rounded="lg">
-    <v-card-title class="pa-4 mb-8">
-      <Tabs v-model="tab" :tabs="tabs" />
-      <v-divider></v-divider>
+    <v-card-title class="d-flex flex-column pa-6">
+      <span class="font-weight-bold text-h5">Início</span>
+      <span class="caption text-grey-darken-1">
+        Bem-vindo(a) de volta, {{ $currentUser?.name }} 👏
+      </span>
+      <span class="caption text-grey"> Selecione um serviço para iniciar </span>
     </v-card-title>
     <v-card-text>
-      <v-row dense>
-        <v-col cols="12" lg="6">
-          <HomeAdminYearbBillingChart />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <HomeAdminYearbBillingPaymentFormChart />
-        </v-col>
-      </v-row>
       <div class="py-8">
         <HomeAdminCards />
       </div>
@@ -21,29 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { TabProps } from "@/types/Tab";
-const tab = ref(1);
+const auth = useAuthStore();
 
-const tabs = ref<TabProps[]>([
-  {
-    title: "Hoje",
-    icon: "mdi-check-decagram-outline",
-  },
-  {
-    title: "Semana",
-    icon: "mdi-chart-line-variant",
-  },
-  {
-    title: "Mês",
-    icon: "mdi-calendar-month-outline",
-  },
-  {
-    title: "Ano",
-    icon: "mdi-chart-bell-curve-cumulative",
-  },
-]);
-
-const handleChangeTable = () => {
-  console.log(tab.value);
-};
+const $currentUser = computed(() => auth.$currentUser);
 </script>

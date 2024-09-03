@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware((to) => {
   const auth = useAuthStore();
-  const screen = useScreenStore();
+  //const screen = useScreenStore();
   const stoken = localStorage.getItem("token");
 
   if (auth.$currentUser && stoken) {
@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
       const isValidRoute = userRoute ? true : false;
 
-      screen.setScreen(userRoute?.title ?? "");
+      //screen.setScreen(userRoute?.title ?? "");
 
       if (!isValidRoute) {
         const userRouteLib = auth.$currentUser.Profile.ProfileRoute?.find(

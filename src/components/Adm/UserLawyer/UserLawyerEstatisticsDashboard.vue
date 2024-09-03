@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-card flat class="mb-2 pa-2" rounded="lg">
+      <v-card-title class="d-flex flex-column">
+        <span class="font-weight-bold text-h5">Início</span>
+      </v-card-title>
       <v-row dense>
         <v-col cols="12">
           <Tabs v-model="tab" :tabs="tabs" />

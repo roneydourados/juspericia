@@ -28,7 +28,7 @@
         v-for="(item, index) in itemsMenu"
         :key="index"
         :prepend-icon="item.icon"
-        :value="item.to"
+        :value="item.id"
         :to="item.to"
         active-class="item-menu"
         @click="handleClick"
@@ -97,6 +97,7 @@ const itemsMenu = computed(() => {
       icon: item.icon,
       visible: item.visible,
       isMenu: item.isMenu,
+      id: item.id,
     };
   }).filter((item) => item.visible && item.isMenu);
 

@@ -34,7 +34,7 @@ export const solicitationStates = [
 
 export const appRoutes = [
   {
-    title: "Home",
+    title: "Início",
     to: "/home-admin",
     icon: "mdi-home-outline",
     visible: true,
@@ -49,7 +49,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
-    order: 1,
+    order: 2,
   },
   {
     title: "Home",
@@ -58,7 +58,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["MEDICO"],
-    order: 1,
+    order: 3,
   },
   {
     title: "Solicitações",
@@ -67,7 +67,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO", "ADMIN"],
-    order: 2,
+    order: 4,
   },
   {
     title: "Advogados",
@@ -76,7 +76,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
-    order: 3,
+    order: 5,
   },
   {
     title: "Pacientes",
@@ -85,7 +85,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
-    order: 4,
+    order: 6,
   },
   {
     title: "Agendamentos",
@@ -94,7 +94,54 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
-    order: 5,
+    order: 7,
+  },
+  {
+    title: "Consultas agendadas",
+    to: "/scheduled-queries",
+    icon: "mdi-hospital-box-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["MEDICO"],
+    order: 8,
+  },
+  {
+    title: "Administração",
+    to: "/adm",
+    icon: "mdi-shield-account-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADMIN"],
+    order: 9,
+  },
+  {
+    title: "Dashboard de vendas",
+    to: "/adm/dashobard-sales",
+    icon: "mdi-cart-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADMIN"],
+    order: 10,
+  },
+
+  // Rotas que não serão apresentadas no menu
+  {
+    title: "Nova solicitação",
+    to: "/solicitations/new",
+    icon: "mdi-file-document-edit-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADVOGADO", "ADMIN"],
+    order: -1,
+  },
+  {
+    title: "Editar solicitação",
+    to: "/solicitations/edit",
+    icon: "mdi-file-document-edit-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADVOGADO", "ADMIN"],
+    order: -1,
   },
   {
     title: "Consultas",
@@ -104,33 +151,6 @@ export const appRoutes = [
     isMenu: false,
     profiles: ["ADMIN"],
     order: -1,
-  },
-  {
-    title: "Consultas agendadas",
-    to: "/scheduled-queries",
-    icon: "mdi-hospital-box-outline",
-    visible: true,
-    isMenu: true,
-    profiles: ["MEDICO"],
-    order: 7,
-  },
-  // {
-  //   title: "Estatísticas",
-  //   to: "/estatistics",
-  //   icon: "mdi-chart-bell-curve-cumulative",
-  //   visible: true,
-  //   isMenu: true,
-  //   profiles: ["ADVOGADO"],
-  //   order: 8,
-  // },
-  {
-    title: "Administração",
-    to: "/adm",
-    icon: "mdi-shield-account-outline",
-    visible: true,
-    isMenu: true,
-    profiles: ["ADMIN"],
-    order: 9,
   },
   {
     title: "Relatório de vendas",
@@ -166,7 +186,7 @@ export const appRoutes = [
     visible: true,
     isMenu: false,
     profiles: ["ADMIN"],
-    order: 9,
+    order: -1,
   },
   {
     title: "Cadastro de modelo de laudo",

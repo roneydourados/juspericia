@@ -1,48 +1,66 @@
 <template>
-  <AutoCompleteInput
-    v-model="value"
-    v-model:search="search"
-    :label="label"
-    placeholder="Digite algo para pesquisar..."
-    item-title="name"
-    item-value="id"
-    return-object
-    :required="required"
-    icon="mdi-magnify"
-    :items="$all"
-    :loading="loadingSearch"
-    @click="search = ''"
-    @update:model-value="$emit('update:modelValue', $event)"
-    :clearable="clearable"
-    :disabled="disabled"
-  >
-    <template #items="{ item, props }">
-      <v-list-item v-bind="props" :title="item.raw.name" density="compact">
-      </v-list-item>
-    </template>
-
-    <template #selection="{ item }">
-      <div class="d-flex align-center">
-        <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.name }}
-        </span>
-      </div>
-    </template>
-  </AutoCompleteInput>
-
-  <div v-if="showNewButton" cols="12" lg="2">
-    <v-tooltip text="Novo" content-class="tooltip-background">
-      <template v-slot:activator="{ props }">
-        <v-btn
-          v-bind="props"
-          icon="mdi-plus"
-          size="x-small"
-          color="info"
-          flat
-        />
+  <div class="d-flex" style="gap: 0.5rem">
+    <AutoCompleteInput
+      v-model="value"
+      v-model:search="search"
+      :label="label"
+      placeholder="Digite algo para pesquisar..."
+      item-title="name"
+      item-value="id"
+      return-object
+      :required="required"
+      icon="mdi-magnify"
+      :items="$all"
+      :loading="loadingSearch"
+      @click="search = ''"
+      @update:model-value="$emit('update:modelValue', $event)"
+      :clearable="clearable"
+      :disabled="disabled"
+    >
+      <template #items="{ item, props }">
+        <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+          <template #append>
+            <v-btn
+              icon="mdi-pencil"
+              variant="text"
+              color="warning"
+              @click="getEditItem(item.raw)"
+            ></v-btn>
+          </template>
+        </v-list-item>
       </template>
-    </v-tooltip>
+
+      <template #selection="{ item }">
+        <div class="d-flex align-center">
+          <span class="ml-2 d-inline-block text-truncate">
+            {{ item.raw.name }}
+          </span>
+        </div>
+      </template>
+    </AutoCompleteInput>
+
+    <div v-if="showNewButton">
+      <v-tooltip text="Novo" content-class="tooltip-background">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            v-bind="props"
+            icon="mdi-plus"
+            size="x-small"
+            color="info"
+            flat
+            @click="showForm = true"
+          />
+        </template>
+      </v-tooltip>
+    </div>
   </div>
+  <BenefitTypeForm
+    title="Tipo de benefício"
+    :show="showForm"
+    :data="selected"
+    @close="handleClose"
+    width="400"
+  />
 </template>
 
 <script setup lang="ts">
@@ -50,6 +68,7 @@ import { useField } from "vee-validate";
 import { v4 as uuidv4 } from "uuid";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import { BenefitTypeProps } from "@/types/BenefitType";
 
 defineProps({
   type: {
@@ -93,6 +112,8 @@ defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const benefitType = useBenefitTypeStore();
+const selected = ref<BenefitTypeProps>();
+const showForm = ref(false);
 
 const search = ref("");
 const loadingSearch = ref(false);
@@ -100,14 +121,11 @@ const loadingSearch = ref(false);
 const $all = computed(() => benefitType.$all);
 
 watch(search, async () => {
-  setTimeout(async () => {
-    loadingSearch.value = true;
-    try {
-      await benefitType.index(search.value);
-    } finally {
-      loadingSearch.value = false;
-    }
-  }, 700);
+  await handleSearch();
+});
+
+onMounted(async () => {
+  await handleSearch();
 });
 
 const fieldName = computed<MaybeRef>(() => {
@@ -121,4 +139,25 @@ const validationRules = computed<MaybeRef>(() => {
 const { value } = useField<Object>(fieldName, validationRules, {
   syncVModel: true,
 });
+
+const getEditItem = (item: BenefitTypeProps) => {
+  selected.value = item;
+  showForm.value = true;
+};
+
+const handleClose = () => {
+  showForm.value = false;
+  selected.value = undefined;
+};
+
+const handleSearch = async () => {
+  setTimeout(async () => {
+    loadingSearch.value = true;
+    try {
+      await benefitType.index(search.value);
+    } finally {
+      loadingSearch.value = false;
+    }
+  }, 700);
+};
 </script>

@@ -12,7 +12,7 @@
 <script setup lang="ts">
 const chartData = computed(() => {
   return {
-    series: [44, 55, 33],
+    series: [44, 55, 33, 47],
     chartOptions: {
       chart: {
         width: 380,
@@ -21,7 +21,7 @@ const chartData = computed(() => {
       stroke: {
         show: false,
       },
-      labels: ["PIX", "Cartão", "Boleto"],
+      labels: ["PIX", "Cartão", "Boleto", "Pacote"],
       plotOptions: {
         pie: {
           dataLabels: {

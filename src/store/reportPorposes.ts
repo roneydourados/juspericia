@@ -1,4 +1,3 @@
-import { create } from "./../server/api/benefit-type/repository/benefitTypeRepository";
 import { defineStore } from "pinia";
 
 export const useReportPorposesStore = defineStore("reportPorposes", () => {

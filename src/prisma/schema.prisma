@@ -101,6 +101,8 @@ model Address {
 
   @@index([ownerId], map: "address_idx_owner_id")
   @@index([addressCategory], map: "address_idx_address_category")
+  @@index([addressCity], map: "address_idx_address_city")
+  @@index([addressState], map: "address_idx_address_state")
   @@map("address")
 }
 

@@ -6,7 +6,7 @@
         :headers="headers"
         :items="tempItems"
         :items-per-page="10"
-        :show-crude="false"
+        :showCrud="false"
       ></Table>
     </v-card>
   </div>
