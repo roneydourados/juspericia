@@ -87,9 +87,9 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
   reportPurpose: undefined as ReportPurposeProps | undefined,
 });
 
-onMounted(async () => {
-  await search();
-});
+// onMounted(async () => {
+//   await search();
+// });
 
 const handleChangeTable = async () => {
   switch (tab.value) {

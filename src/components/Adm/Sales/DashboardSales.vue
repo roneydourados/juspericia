@@ -9,6 +9,7 @@
       <Tabs
         v-model="tabDate"
         :tabs="tabsDate"
+        align-tabs="center"
         @update:model-value="handleDateChange"
       />
       <DashboardSalesFilters v-model:filters="modelFilters" />

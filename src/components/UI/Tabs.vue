@@ -3,6 +3,7 @@
     v-model="tab"
     color="primary"
     :grow="mobile"
+    :align-tabs="alignTabs"
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <v-tab
@@ -33,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-type DirectionProps = "horizontal" | "vertical" | undefined;
+type DirectionProps = "title" | "center" | "end" | "start" | undefined;
 
 import { TabProps } from "@/types/Tab";
 import { PropType } from "vue";
@@ -47,6 +48,10 @@ const props = defineProps({
   tabs: {
     type: Array as PropType<TabProps[]>,
     required: true,
+  },
+  alignTabs: {
+    type: String as PropType<DirectionProps>,
+    default: "start",
   },
 });
 
