@@ -11,6 +11,14 @@
 [x] - Finalidade do laudo
 [] - Para perfil de médico remover informações de valor
 [] - Pensar em um cache para componentes que seão selects
+[] - Dash horas trabalhadas médico
+[] - Solicitar antecipação, acrescentar variação de 24, 48, 72 horas, precificar conforme opção selecionada
+[] - Solicitar uma correção, aparecer um campo para digitar o motivo da solicitação
+[] - Destacar qual médico esta com mais havilações
+[] - Limite para efetuar uma solicitação de consulta é de 24hrs, caso ultrapasse, cobrar uma nova consulta
+[] - Dashboard ADM, montar grafico das solicitações por status
+[] - Médico não pode ver dados do escritório nos detalhes de solicitação
+[] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
 
 # entregue
 

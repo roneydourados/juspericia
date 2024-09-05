@@ -173,10 +173,6 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
-            :disabled="
-              !!solicitation.dateCorrection ||
-              moment(solicitation.deadline).isAfter()
-            "
             @click="showDateCorrection = true"
           >
             Solicitar correção
