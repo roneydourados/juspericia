@@ -1,6 +1,6 @@
-import { prisma } from "@/server/providers/prisma";
+import prisma from "@/lib/prisma";
 
-import { BenefitTypeProps } from "~/types/Patient";
+import { BenefitTypeProps } from "~/types/BenefitType";
 
 export const create = async ({ name }: BenefitTypeProps) => {
   try {

@@ -1,4 +1,4 @@
-import { prisma } from "@/server/providers/prisma";
+import prisma from "@/lib/prisma";
 import { addressCategoryType } from "~/server/utils/Constants";
 import { PatientProps } from "~/types/Patient";
 

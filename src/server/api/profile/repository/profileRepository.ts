@@ -1,4 +1,4 @@
-import { prisma } from "@/server/providers/prisma";
+import prisma from "@/lib/prisma";
 import { UserProfileProps } from "@/types/User";
 import { appRoutes } from "@/server/utils/Constants";
 
