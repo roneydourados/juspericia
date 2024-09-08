@@ -5,8 +5,8 @@
   "scripts": {
     "build": "prisma generate && prisma migrate deploy && nuxt build",
     "dev": "nuxt dev",
-    "rm": "nuxt dev --dotenv .env --port 3011",
-    "rm:db": "prisma migrate dev && nuxt dev --dotenv .env --port 3011",
+    "rm": "nuxt dev --dotenv .env --port 3012",
+    "rm:db": "prisma migrate dev && nuxt dev --dotenv .env --port 3012",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

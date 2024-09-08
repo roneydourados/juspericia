@@ -43,7 +43,7 @@ export const appRoutes = [
     order: 1,
   },
   {
-    title: "Home",
+    title: "Início",
     to: "/home-lawyer",
     icon: "mdi-home-outline",
     visible: true,
@@ -52,7 +52,7 @@ export const appRoutes = [
     order: 2,
   },
   {
-    title: "Home",
+    title: "Início",
     to: "/home-medic",
     icon: "mdi-home-outline",
     visible: true,
