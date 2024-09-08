@@ -131,6 +131,9 @@ async function main() {
       {
         name: "Trabalhista",
       },
+      {
+        name: "Outros",
+      },
     ],
   });
 
@@ -142,6 +145,9 @@ async function main() {
       },
       {
         name: "Judicial",
+      },
+      {
+        name: "Outros",
       },
     ],
   });

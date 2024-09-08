@@ -1,3 +1,3 @@
 <template>
-  <UserLawyerEstatisticsDashboard />
+  <LawyerEstatisticsDashboard />
 </template>

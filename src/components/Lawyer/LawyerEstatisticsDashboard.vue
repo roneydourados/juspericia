@@ -12,18 +12,18 @@
     </v-card>
     <v-row dense>
       <v-col cols="12" lg="4">
-        <UserLawyerEstatisticsDashboardServicesChart />
+        <LawyerEstatisticsDashboardServicesChart />
       </v-col>
       <v-col cols="12" lg="4">
-        <UserLawyerEstatisticsDashboardPatientsChart />
+        <LawyerEstatisticsDashboardPatientsChart />
       </v-col>
       <v-col cols="12" lg="4">
-        <UserLawyerEstatisticsDashboardInvestmentChart />
+        <LawyerEstatisticsDashboardInvestmentChart />
       </v-col>
     </v-row>
     <v-row dense>
       <v-col cols="12" lg="4">
-        <UserLawyerEstatisticsDashboardCard
+        <LawyerEstatisticsDashboardCard
           title="Consultas abertas"
           icon="mdi-file-clock-outline"
           value="40"
@@ -31,7 +31,7 @@
         />
       </v-col>
       <v-col cols="12" lg="4">
-        <UserLawyerEstatisticsDashboardCard
+        <LawyerEstatisticsDashboardCard
           title="Consultas agendadas"
           icon="mdi-file-check-outline"
           value="35"
@@ -39,7 +39,7 @@
         />
       </v-col>
       <v-col cols="12" lg="4">
-        <UserLawyerEstatisticsDashboardCard
+        <LawyerEstatisticsDashboardCard
           title="Consultas concluídas"
           icon="mdi-calendar-month-outline"
           value="25"
@@ -49,15 +49,15 @@
     </v-row>
     <v-row dense>
       <v-col cols="12" lg="6">
-        <UserLawyerEstatisticsDashboardSolicitationBenefitType />
+        <LawyerEstatisticsDashboardSolicitationBenefitType />
       </v-col>
       <v-col cols="12" lg="6">
-        <UserLawyerEstatisticsDashboardReportPropuseChart />
+        <LawyerEstatisticsDashboardReportPropuseChart />
       </v-col>
     </v-row>
     <v-row dense>
       <v-col cols="12">
-        <UserLawyerEstatisticsDashboardTop10Solicitations />
+        <LawyerEstatisticsDashboardTop10Solicitations />
       </v-col>
     </v-row>
   </div>

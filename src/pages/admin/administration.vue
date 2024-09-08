@@ -1,5 +1,5 @@
 <template>
-  <AdmMenu />
+  <AdminMenu />
 </template>
 
 <script setup lang="ts"></script>

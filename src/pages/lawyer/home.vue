@@ -1,3 +1,3 @@
 <template>
-  <UserLawyerHome />
+  <LawyerHome />
 </template>
