@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col v-for="item in 15" cols="12" lg="4" :key="item">
+    <v-col v-for="item in 5" cols="12" lg="4" :key="item">
       <v-card
         class="mx-auto"
         subtitle="Dados informativos sobre o sistema"

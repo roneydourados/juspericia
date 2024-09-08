@@ -21,6 +21,7 @@
         <v-list-item v-bind="props" :title="item.raw.name" density="compact">
           <template #append>
             <v-btn
+              v-if="$currentUser?.Profile.type === 'ADMIN'"
               icon="mdi-pencil"
               variant="text"
               color="warning"
@@ -39,7 +40,7 @@
       </template>
     </AutoCompleteInput>
 
-    <div v-if="showNewButton">
+    <div v-if="showNewButton && $currentUser?.Profile.type === 'ADMIN'">
       <v-tooltip text="Novo" content-class="tooltip-background">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -112,6 +113,7 @@ defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const benefitType = useBenefitTypeStore();
+const auth = useAuthStore();
 const selected = ref<BenefitTypeProps>();
 const showForm = ref(false);
 
@@ -119,6 +121,7 @@ const search = ref("");
 const loadingSearch = ref(false);
 
 const $all = computed(() => benefitType.$all);
+const $currentUser = computed(() => auth.$currentUser);
 
 watch(search, async () => {
   await handleSearch();

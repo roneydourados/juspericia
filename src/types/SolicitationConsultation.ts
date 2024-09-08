@@ -1,3 +1,12 @@
+export interface SolicitationConsultationList {
+  consultations: SolicitationConsultationProps[];
+  totals: ConsultationListTotals[];
+}
+
+interface ConsultationListTotals {
+  status: string;
+  total: number;
+}
 export interface SolicitationConsultationProps {
   id?: number;
   patientId?: number;

@@ -6,7 +6,7 @@ export const useSolicitationConsultationStore = defineStore(
     const { api } = useAxios();
 
     const solicitationConsultation = ref<SolicitationConsultationProps>();
-    const solicitationConsultations = ref<SolicitationConsultationProps[]>([]);
+    const solicitationConsultations = ref<SolicitationConsultationList>();
     const $single = computed(() => solicitationConsultation.value);
     const $all = computed(() => solicitationConsultations.value);
 
@@ -58,7 +58,7 @@ export const useSolicitationConsultationStore = defineStore(
         },
       };
 
-      const { data } = await api.get<SolicitationConsultationProps[]>(
+      const { data } = await api.get<SolicitationConsultationList>(
         "/solicitation-consultation",
         config
       );

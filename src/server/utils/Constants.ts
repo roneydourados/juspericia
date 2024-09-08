@@ -71,7 +71,7 @@ export const appRoutes = [
   },
   {
     title: "Advogados",
-    to: "/lawyer",
+    to: "/admin/lawyers",
     icon: "mdi-account-tie-outline",
     visible: true,
     isMenu: true,

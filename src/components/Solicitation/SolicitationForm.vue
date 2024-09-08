@@ -23,7 +23,7 @@
               :clearable="true"
             />
           </v-col>
-          <v-col
+          <!-- <v-col
             v-if="form.consultation"
             cols="12"
             lg="6"
@@ -76,7 +76,7 @@
                 </strong>
               </div>
             </v-chip>
-          </v-col>
+          </v-col> -->
         </v-row>
         <v-row dense>
           <v-col cols="12" lg="6">

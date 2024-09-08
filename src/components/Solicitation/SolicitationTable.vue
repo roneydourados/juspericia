@@ -25,25 +25,39 @@
     >
       <v-tab :value="1" class="text-none">
         <v-icon icon="mdi-file-clock-outline" size="24" start />
-        <span v-if="!mobile"> Pendentes </span>
-      </v-tab>
-      <v-tab :value="2" class="text-none">
-        <v-icon icon="mdi-clock-start" size="24" start />
-        <span v-if="!mobile"> Em andamento </span>
+        <span v-if="!mobile">
+          Pendentes
+          <span class="text-info font-weight-bold">
+            ({{ getQuantity("open") }})
+          </span>
+        </span>
       </v-tab>
       <v-tab :value="3" class="text-none">
         <v-icon icon="mdi-clock-check-outline" size="24" start />
         <span v-if="!mobile"> Agendado </span>
+        <span class="text-info font-weight-bold">
+          ({{ getQuantity("scheduled") }})
+        </span>
+      </v-tab>
+      <v-tab :value="2" class="text-none">
+        <v-icon icon="mdi-clock-start" size="24" start />
+        <span v-if="!mobile"> Em andamento </span>
+        <span class="text-info font-weight-bold">
+          ({{ getQuantity("in_progress") }})
+        </span>
       </v-tab>
       <v-tab :value="4" class="text-none">
         <v-icon icon="mdi-calendar-month-outline" size="24" start />
         <span v-if="!mobile">Finalizadas </span>
+        <span class="text-info font-weight-bold"
+          >({{ getQuantity("finished") }})</span
+        >
       </v-tab>
     </v-tabs>
     <v-divider />
     <v-card-text>
       <!-- <EmptyContent v-if="$all.length <= 0" /> -->
-      <v-row v-for="item in $all" :key="item.id" dense>
+      <v-row v-for="item in $all?.consultations" :key="item.id" dense>
         <v-col cols="12">
           <SolicitationTableItem
             :solicitation="item"
@@ -76,7 +90,6 @@ const tab = ref(1);
 
 const loading = ref(false);
 const showFilters = ref(false);
-// const selected = ref<SolicitationConsultationProps>();
 
 const modelFilters = ref<SolicitationConsultationFilterProps>({
   status: "open",
@@ -86,10 +99,6 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
   patient: undefined as PatientProps | undefined,
   reportPurpose: undefined as ReportPurposeProps | undefined,
 });
-
-// onMounted(async () => {
-//   await search();
-// });
 
 const handleChangeTable = async () => {
   switch (tab.value) {
@@ -108,6 +117,18 @@ const handleChangeTable = async () => {
   }
   //setSolicitationsFilters(modelFilters.value);
   await search();
+};
+
+const getQuantity = (status: string) => {
+  const quantity = $all.value?.totals.find((item) => {
+    return item.status === status;
+  });
+
+  if (quantity) {
+    return quantity.total;
+  }
+
+  return 0;
 };
 
 const search = async () => {

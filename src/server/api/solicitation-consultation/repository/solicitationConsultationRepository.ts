@@ -91,7 +91,23 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     },
   });
 
-  return data.map((item) => {
+  const totals = await prisma.patientConsultation.groupBy({
+    by: ["status"],
+    _count: {
+      status: true,
+    },
+    where: {
+      dateOpen: {
+        gte: new Date(initialDateSolicitation),
+        lte: new Date(finalDateSolicitation),
+      },
+      patientId: patientId ? patientId : undefined,
+      benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
+      reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+    },
+  });
+
+  const consultations = data.map((item) => {
     return {
       ...item,
       dateOpen: formatDate(item.dateOpen),
@@ -105,6 +121,16 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       deadline: moment(item.dateOpen).add(30, "days").format("YYYY-MM-DD"),
     };
   });
+
+  return {
+    consultations,
+    totals: totals.map((item) => {
+      return {
+        status: item.status,
+        total: item._count.status,
+      };
+    }),
+  };
 };
 
 export const consultationCreate = async (

@@ -6,6 +6,15 @@
     :align-tabs="alignTabs"
     @update:model-value="$emit('update:modelValue', $event)"
   >
+    <!-- <template v-slot:tab="{ item }">
+      <v-tab
+        :prepend-icon="item.icon"
+        :text="item.text"
+        :value="item.value"
+        class="text-none"
+      ></v-tab>
+    </template> -->
+
     <v-tab
       v-for="(tabitem, index) in tabs"
       :value="index + 1"
