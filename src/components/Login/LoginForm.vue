@@ -113,11 +113,11 @@ const submmitForm = async () => {
     //await route.push("/home-admin");
 
     if ($user?.value?.Profile.type === "ADMIN") {
-      return navigateTo("/home-admin");
+      return navigateTo("/admin/home");
     } else if ($user?.value?.Profile.type === "ADVOGADO") {
-      return navigateTo("/home-lawyer");
+      return navigateTo("/lawyer/home");
     } else if ($user?.value?.Profile.type === "MEDICO") {
-      return navigateTo("/home-medic");
+      return navigateTo("/medic/home");
     }
 
     if (form.value.saveCredentials) {

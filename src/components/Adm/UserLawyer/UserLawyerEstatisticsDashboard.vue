@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-const tab = ref(3);
+const tab = ref(1);
 
 const tabs = ref<TabProps[]>([
   {

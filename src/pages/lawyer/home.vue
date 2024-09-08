@@ -1,0 +1,3 @@
+<template>
+  <UserLawyerHome />
+</template>

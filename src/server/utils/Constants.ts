@@ -35,7 +35,7 @@ export const solicitationStates = [
 export const appRoutes = [
   {
     title: "Início",
-    to: "/home-admin",
+    to: "/admin/home",
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
@@ -44,7 +44,7 @@ export const appRoutes = [
   },
   {
     title: "Início",
-    to: "/home-lawyer",
+    to: "/lawyer/home",
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
@@ -53,7 +53,7 @@ export const appRoutes = [
   },
   {
     title: "Início",
-    to: "/home-medic",
+    to: "/medic/home",
     icon: "mdi-home-outline",
     visible: true,
     isMenu: true,
@@ -81,7 +81,7 @@ export const appRoutes = [
   {
     title: "Pacientes",
     to: "/patient",
-    icon: "mdi-account-multiple-outline",
+    icon: "mdi-clipboard-account-outline",
     visible: true,
     isMenu: true,
     profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
@@ -107,7 +107,7 @@ export const appRoutes = [
   },
   {
     title: "Administração",
-    to: "/adm",
+    to: "/admin/administration",
     icon: "mdi-shield-account-outline",
     visible: true,
     isMenu: true,
@@ -116,14 +116,58 @@ export const appRoutes = [
   },
   {
     title: "Dashboard de vendas",
-    to: "/adm/dashobard-sales",
+    to: "/admin/dashobard-sales",
     icon: "mdi-cart-outline",
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
     order: 10,
   },
-
+  {
+    title: "Estatísticas",
+    to: "/lawyer/estatistics",
+    icon: "mdi-view-dashboard-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO"],
+    order: 11,
+  },
+  {
+    title: "Meus Saldos",
+    to: "/lawyer/my-salts",
+    icon: "mdi-chart-line-variant",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO"],
+    order: 12,
+  },
+  {
+    title: "Indicações",
+    to: "/lawyer/my-indications",
+    icon: "mdi-account-network-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO"],
+    order: 13,
+  },
+  {
+    title: "Vídeos/Tutoriais",
+    to: "/videos",
+    icon: "mdi-folder-play-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO", "ADMIN", "MEDICO"],
+    order: 14,
+  },
+  {
+    title: "Minha conta",
+    to: "/lawyer/my-account",
+    icon: "mdi-card-account-details-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO"],
+    order: 15,
+  },
   // Rotas que não serão apresentadas no menu
   {
     title: "Nova solicitação",
@@ -145,7 +189,7 @@ export const appRoutes = [
   },
   {
     title: "Consultas",
-    to: "/adm/queries",
+    to: "/admin/queries",
     icon: "mdi-hospital-box-outline",
     visible: true,
     isMenu: false,
@@ -154,7 +198,7 @@ export const appRoutes = [
   },
   {
     title: "Relatório de vendas",
-    to: "/adm/report-sales",
+    to: "/admin/report-sales",
     icon: "mdi-file-chart-outline",
     visible: true,
     isMenu: false,
@@ -167,12 +211,12 @@ export const appRoutes = [
     icon: "mdi-account-multiple-check-outline",
     visible: true,
     isMenu: false,
-    profiles: ["ADMIN", "MEDICO", "ADVOGADO"],
+    profiles: ["ADMIN", "MEDICO"],
     order: -1,
   },
   {
     title: "Médicos parceiros",
-    to: "/adm/medics",
+    to: "/admin/medics",
     icon: "mdi-stethoscope",
     visible: true,
     isMenu: false,
@@ -181,7 +225,7 @@ export const appRoutes = [
   },
   {
     title: "Pacotes de Serviços",
-    to: "/adm/packages",
+    to: "/admin/packages",
     icon: "mdi-package-variant-closed",
     visible: true,
     isMenu: false,
@@ -190,7 +234,7 @@ export const appRoutes = [
   },
   {
     title: "Cadastro de modelo de laudo",
-    to: "/adm/report-models",
+    to: "/admin/report-models",
     icon: "mdi-account-multiple-check-outline",
     visible: true,
     isMenu: false,
@@ -199,7 +243,7 @@ export const appRoutes = [
   },
   {
     title: "Administradores do sistema",
-    to: "/adm/admins",
+    to: "/admin/admins",
     icon: "mdi-account-multiple-check-outline",
     visible: true,
     isMenu: false,

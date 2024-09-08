@@ -5,7 +5,7 @@
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/adm/medics')"
+        @click="handlClick('/admin/medics')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
@@ -22,7 +22,7 @@
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/adm/admins')"
+        @click="handlClick('/admin/admins')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
@@ -39,7 +39,7 @@
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/adm/queries')"
+        @click="handlClick('/admin/queries')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
@@ -73,7 +73,7 @@
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/adm/report-models')"
+        @click="handlClick('/admin/report-models')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
@@ -92,7 +92,7 @@
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/adm/report-sales')"
+        @click="handlClick('/admin/report-sales')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
