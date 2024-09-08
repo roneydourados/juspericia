@@ -20,6 +20,13 @@
 [] - Médico não pode ver dados do escritório nos detalhes de solicitação
 [] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
 
+# prioridades
+
+[] Acrescentar um menu de filtros em meus saldos
+[] Criar a tela de minha conta no perfil advogado
+[] Criar a tela de indicações
+[] Colocar uma lista no menu de videos
+
 # entregue
 
 [x] - Criar uma tabela responsiva, se transforme em card quando for mobile

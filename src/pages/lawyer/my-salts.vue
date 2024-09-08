@@ -1,3 +1,3 @@
 <template>
-  <div>Meus saldos</div>
+  <LawyerMySalts />
 </template>

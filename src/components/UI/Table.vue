@@ -3,9 +3,7 @@
     <v-card-title class="pa-4">
       <v-row dense>
         <v-col cols="12">
-          <span class="text-subtitle-1 font-weight-bold">
-            {{ title }}
-          </span>
+          <HeaderPage :title="title" />
         </v-col>
       </v-row>
       <v-row v-if="showCrud" dense align="center">

@@ -1,9 +1,7 @@
 <template>
   <v-card flat rounded="lg" color="transparent" class="px-6">
     <v-card-title class="mb-12 d-flex align-center justify-space-between">
-      <div class="d-flex flex-column flex-wrap">
-        <span class="font-weight-bold text-h5"> Solicitações </span>
-      </div>
+      <HeaderPage title="Solicitações" />
 
       <div class="d-flex aling-center" style="gap: 0.5rem">
         <v-btn
