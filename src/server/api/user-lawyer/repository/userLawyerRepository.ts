@@ -36,8 +36,27 @@ export const create = async (payload: UserProps) => {
         oab: payload.oab,
         oabUf: payload.oabUf,
         officeName: payload.officeName,
+        officeCnpj: payload.officeCnpj,
+        officeEmail: payload.officeEmail,
+        officePhone: payload.officePhone,
       },
     });
+
+    if (payload.Address) {
+      await prisma.address.create({
+        data: {
+          addressCity: payload.Address.addressCity,
+          addressComplement: payload.Address.addressComplement,
+          addressDistrict: payload.Address.addressDistrict,
+          addressNumber: payload.Address.addressNumber,
+          addressState: payload.Address.addressState,
+          addressStreet: payload.Address.addressStreet,
+          addressZipcode: payload.Address.addressZipcode,
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+    }
 
     return {
       id: user.id,
@@ -74,11 +93,45 @@ export const update = async (payload: UserProps) => {
         oab: payload.oab,
         oabUf: payload.oabUf,
         officeName: payload.officeName,
+        officeCnpj: payload.officeCnpj,
+        officeEmail: payload.officeEmail,
+        officePhone: payload.officePhone,
       },
       where: {
         id: payload.id,
       },
     });
+
+    if (payload.Address) {
+      const existsAddress = await prisma.address.findFirst({
+        where: {
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+
+      if (existsAddress) {
+        await prisma.address.delete({
+          where: {
+            id: existsAddress.id,
+          },
+        });
+      }
+
+      await prisma.address.create({
+        data: {
+          addressCity: payload.Address.addressCity,
+          addressComplement: payload.Address.addressComplement,
+          addressDistrict: payload.Address.addressDistrict,
+          addressNumber: payload.Address.addressNumber,
+          addressState: payload.Address.addressState,
+          addressStreet: payload.Address.addressStreet,
+          addressZipcode: payload.Address.addressZipcode,
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+    }
 
     return {
       id: user.id,
@@ -101,6 +154,13 @@ export const destroy = async (id: number) => {
     await prisma.user.delete({
       where: {
         id,
+      },
+    });
+
+    await prisma.address.deleteMany({
+      where: {
+        ownerId: id,
+        addressCategory: addressCategoryType.user,
       },
     });
   } catch (error) {
@@ -165,6 +225,9 @@ const exists = async (id: number) => {
       oab: true,
       oabUf: true,
       officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
     },
   });
 
@@ -175,7 +238,17 @@ const exists = async (id: number) => {
     });
   }
 
-  return user;
+  const Address = await prisma.address.findFirst({
+    where: {
+      ownerId: user.id,
+      addressCategory: addressCategoryType.user,
+    },
+  });
+
+  return {
+    ...user,
+    Address,
+  };
 };
 
 const validations = async (payload: UserProps) => {

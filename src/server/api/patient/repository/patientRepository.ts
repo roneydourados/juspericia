@@ -117,7 +117,6 @@ export const update = async ({
     });
 
     if (Address) {
-      console.log("🚀 ~ Address:", Address);
       const existsAddress = await prisma.address.findFirst({
         where: {
           ownerId: patient.id,

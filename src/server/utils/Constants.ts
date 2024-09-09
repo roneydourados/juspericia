@@ -3,6 +3,7 @@ export const addressCategoryType = {
   medic: "MEDIC",
   lawyer: "LAWYER",
   admin: "ADMIN",
+  user: "USER",
 };
 
 export const filesCategoryType = {

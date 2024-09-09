@@ -7,6 +7,9 @@ export interface UserProps {
   phone?: string;
   cpfCnpj?: string;
   officeName?: string;
+  officePhone?: string;
+  officeEmail?: string;
+  officeCnpj?: string;
   oab?: string;
   oabUf?: string;
   crm?: string;
@@ -15,6 +18,7 @@ export interface UserProps {
   updatedAt?: string;
   active?: boolean;
   Profile?: UserProfileProps;
+  Address?: AddressProps;
 }
 
 export interface UserProfileProps {
@@ -33,6 +37,49 @@ export interface UserRoutesProps {
   icon?: string;
   visible?: boolean;
   isMenu?: boolean;
+}
+
+export interface UserModelProps {
+  id?: number;
+  name: string;
+  email: string;
+  cpfCnpj: {
+    text: string;
+    value: string;
+  };
+  password: string;
+  confirmPassword: string;
+  phone: {
+    text: string;
+    value: string;
+  };
+  oab: string;
+  oabUf: string;
+  officeName: string;
+  active: boolean;
+  Address: {
+    addressCity: string;
+    addressComplement: string;
+    addressDistrict: string;
+    addressNumber: string;
+    addressState: string;
+    addressStreet: string;
+    addressZipcode: string;
+  };
+  CepData: {
+    CepAddress?: CepAdderssProps;
+    text: string;
+    value: string;
+  };
+  officePhone: {
+    text: string;
+    value: string;
+  };
+  officeEmail: string;
+  officeCnpj: {
+    text: string;
+    value: string;
+  };
 }
 
 const profileType = ["ADMIN", "ADVOGADO", "MEDICO"] as const;

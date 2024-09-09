@@ -1,5 +1,5 @@
 <template>
-  <div>Minha conta advogado</div>
+  <LawyerMyAccount />
 </template>
 
 <script setup lang="ts"></script>

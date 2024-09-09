@@ -52,6 +52,9 @@ model User {
   oabUf                     String?                     @map("oab_uf") @db.Char(2) // UF da OAB
   crm                       String?                     @db.VarChar(10) // CRM do médico
   crmUf                     String?                     @map("crm_uf") @db.Char(2) // UF do CRM
+  officePhone               String?                     @map("office_phone") @db.VarChar(20) // telefone do escritório
+  officeEmail               String?                     @map("office_email") @db.VarChar(1000) // email do escritório
+  officeCnpj                String?                     @map("office_cnpj") @db.VarChar(30) // CNPJ do escritório
   active                    Boolean                     @default(true) // se o usuário está ativo
   profileId                 Int                         @map("profile_id") // código do perfil do usuário
   createdAt                 DateTime                    @default(now()) @map("created_at") // data e hora da criação do registro
