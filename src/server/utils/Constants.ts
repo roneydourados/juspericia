@@ -169,6 +169,15 @@ export const appRoutes = [
     profiles: ["ADVOGADO"],
     order: 15,
   },
+  {
+    title: "Pacotes de Serviços",
+    to: "/services-packages",
+    icon: "mdi-cart-arrow-up",
+    visible: true,
+    isMenu: true,
+    profiles: ["ADVOGADO", "ADMIN", "MEDICO"],
+    order: 16,
+  },
   // Rotas que não serão apresentadas no menu
   {
     title: "Nova solicitação",

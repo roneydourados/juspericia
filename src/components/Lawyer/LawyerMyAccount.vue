@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto" flat rounded="lg" max-width="1200">
+    <v-card class="mx-auto" flat rounded="lg" max-width="1200" height="500">
       <v-card-title>
         <HeaderPage title="Minha Conta" />
       </v-card-title>
