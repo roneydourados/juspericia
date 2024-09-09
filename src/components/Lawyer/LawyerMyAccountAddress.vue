@@ -66,23 +66,14 @@
 </template>
 
 <script setup lang="ts">
-const userLawyerStore = useUserLawyerStore();
-
-const loading = ref(false);
-
+const emit = defineEmits(["update"]);
 const model = defineModel<UserModelProps>("model", {
   type: Object as PropType<UserModelProps>,
   default: () => ({}),
 });
 
-const submitForm = async () => {
-  loading.value = true;
-  try {
-    await update();
-    await userLawyerStore.show(model.value!.id!);
-  } finally {
-    loading.value = false;
-  }
+const submitForm = () => {
+  emit("update");
 };
 
 const setAddress = (address: CepAdderssProps) => {
@@ -91,29 +82,5 @@ const setAddress = (address: CepAdderssProps) => {
   model.value.Address.addressState = address.uf ?? "";
   model.value.Address.addressComplement = address.complemento ?? "";
   model.value.Address.addressStreet = address.logradouro ?? "";
-};
-
-const update = async () => {
-  await userLawyerStore.update({
-    id: model.value.id,
-    email: model.value.email,
-    name: model.value.name,
-    phone: model.value.phone.value,
-    cpfCnpj: model.value.cpfCnpj.value,
-    password: model.value.password,
-    active: model.value.active,
-    oab: model.value.oab,
-    oabUf: model.value.oabUf,
-    officeName: model.value.officeName,
-    Address: {
-      addressCity: model.value.Address.addressCity,
-      addressComplement: model.value.Address.addressComplement,
-      addressDistrict: model.value.Address.addressDistrict,
-      addressNumber: model.value.Address.addressNumber,
-      addressState: model.value.Address.addressState,
-      addressStreet: model.value.Address.addressStreet,
-      addressZipcode: model.value.CepData.value,
-    },
-  });
 };
 </script>

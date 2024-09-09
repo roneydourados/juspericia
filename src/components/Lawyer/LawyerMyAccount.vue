@@ -26,28 +26,32 @@
               </v-list-item>
             </v-list>
           </v-col>
-
           <v-col cols="12" lg="9">
             <LawyerMyAccountPersonalData
               v-model:model="model"
               v-if="selectedItem === 'Dados Pessoais'"
+              @update="handleUpdate"
             />
             <LawyerMyAccountAddress
               v-model:model="model"
               v-else-if="selectedItem === 'Endereço'"
+              @update="handleUpdate"
             />
             <LawyerMyAccountOffice
               v-model:model="model"
               v-else-if="selectedItem === 'Escritório'"
+              @update="handleUpdate"
             />
             <LawyerMyAccountAccessData
               v-model:model="model"
               v-else-if="selectedItem === 'Dados de acesso'"
+              @update="handleUpdate"
             />
           </v-col>
         </v-row>
       </v-card-text>
     </v-card>
+    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
@@ -60,6 +64,7 @@ const $currentUser = computed(() => auth.$currentUser);
 const $single = computed(() => userLawyerStore.$single);
 
 const selectedItem = ref("Dados Pessoais");
+const loading = ref(false);
 
 const itemsList = ref([
   {
@@ -176,6 +181,35 @@ const loadModel = () => {
 const handleMenuClick = (event: any) => {
   const item = event as { id: string; value: boolean };
   selectedItem.value = item.id;
+};
+
+const handleUpdate = async () => {
+  loading.value = true;
+  try {
+    await userLawyerStore.update({
+      id: model.value?.id,
+      email: model.value?.email,
+      name: model.value?.name,
+      phone: model.value?.phone?.value,
+      cpfCnpj: model.value?.cpfCnpj.value,
+      password: model.value?.password ? model.value?.password : undefined,
+      active: model.value?.active,
+      oab: model.value?.oab,
+      oabUf: model.value?.oabUf,
+      officeName: model.value?.officeName,
+      Address: {
+        addressCity: model.value.Address.addressCity,
+        addressComplement: model.value.Address.addressComplement,
+        addressDistrict: model.value.Address.addressDistrict,
+        addressNumber: model.value.Address.addressNumber,
+        addressState: model.value.Address.addressState,
+        addressStreet: model.value.Address.addressStreet,
+        addressZipcode: model.value.CepData.value,
+      },
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

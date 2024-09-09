@@ -46,43 +46,14 @@
 </template>
 
 <script setup lang="ts">
-const auth = useAuthStore();
-const userLawyerStore = useUserLawyerStore();
-
-const $currentUser = computed(() => auth.$currentUser);
-
-const loading = ref(false);
+const emit = defineEmits(["update"]);
 
 const model = defineModel<UserModelProps>("model", {
   type: Object as PropType<UserModelProps>,
   default: () => ({}),
 });
 
-const submitForm = async () => {
-  loading.value = true;
-  try {
-    await update();
-    await userLawyerStore.show($currentUser.value!.id!);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const update = async () => {
-  await userLawyerStore.update({
-    id: model.value?.id,
-    email: model.value?.email,
-    name: model.value?.name,
-    phone: model.value?.phone?.value,
-    cpfCnpj: model.value?.cpfCnpj.value,
-    //password: model.value?.password,
-    active: model.value?.active,
-    oab: model.value?.oab,
-    oabUf: model.value?.oabUf,
-    officeName: model.value?.officeName,
-    officeCnpj: model.value?.officeCnpj.value,
-    officeEmail: model.value?.officeEmail,
-    officePhone: model.value?.officePhone.value,
-  });
+const submitForm = () => {
+  emit("update");
 };
 </script>
