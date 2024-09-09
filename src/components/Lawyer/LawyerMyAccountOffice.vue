@@ -39,22 +39,6 @@
               required
             />
           </v-col>
-          <!-- <v-col cols="12" lg="3">
-            <StringInput
-              v-model="model.oab"
-              label="Nª OAB"
-              placeholder="Nª OAB"
-              required
-            />
-          </v-col>
-          <v-col cols="12" lg="3">
-            <StatesSelectSearch
-              v-model="model.oabUf"
-              label="UF OAB"
-              placeholder="UF OAB"
-              required
-            />
-          </v-col> -->
         </v-row>
       </FormCrud>
     </v-card-text>

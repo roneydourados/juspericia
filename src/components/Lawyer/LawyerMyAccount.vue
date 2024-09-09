@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto" flat rounded="lg">
+    <v-card class="mx-auto" flat rounded="lg" max-width="1200">
       <v-card-title>
         <HeaderPage title="Minha Conta" />
       </v-card-title>
@@ -8,7 +8,6 @@
         <v-row dende>
           <v-col cols="12" lg="3">
             <v-list
-              density="compact"
               selected-strategyy="single"
               @click:select="handleMenuClick($event)"
             >
