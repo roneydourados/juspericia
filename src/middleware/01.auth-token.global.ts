@@ -24,11 +24,11 @@ export default defineNuxtRouteMiddleware((to) => {
 
       if (to.path === "/") {
         if (auth.$currentUser?.Profile.type === "ADMIN") {
-          return navigateTo("/home-admin");
+          return navigateTo("/admin/home");
         } else if (auth.$currentUser?.Profile.type === "ADVOGADO") {
-          return navigateTo("/home-lawyer");
+          return navigateTo("/lawyer/home");
         } else if (auth.$currentUser?.Profile.type === "MEDICO") {
-          return navigateTo("/home-medic");
+          return navigateTo("/medic/home");
         }
       }
     } catch {
