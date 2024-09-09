@@ -7,10 +7,7 @@
       <v-card-text class="px-6">
         <v-row dende>
           <v-col cols="12" lg="3">
-            <v-list
-              selected-strategyy="single"
-              @click:select="handleMenuClick($event)"
-            >
+            <v-list @click:select="handleMenuClick($event)">
               <v-list-item
                 v-for="(item, i) in itemsList"
                 :key="i"
@@ -22,7 +19,9 @@
                   <v-icon :icon="item.icon"></v-icon>
                 </template>
 
-                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <template #subtitle>
+                  <span style="font-size: 0.9rem">{{ item.title }}</span>
+                </template>
               </v-list-item>
             </v-list>
           </v-col>
