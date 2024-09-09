@@ -1,3 +1,3 @@
 <template>
-  <div>Indicações</div>
+  <LawyerMyIndications />
 </template>
