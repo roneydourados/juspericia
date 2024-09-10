@@ -1,45 +1,41 @@
 # pendentes
 
-[] - Agenda somente fica disponível para usuários administrador
 [x] - Finalizar tela de cadastro de pacientes
 [x] - Listar as consultas de acordo com api
 [x] - Exibir uma consulta de acordo com a api
 [x] - Atualizar dados de uma consulta
 [x] - Excluir uma consulta, sera cancelada
 [x] - Verificar porque ainda não gravou numero do processo
-[] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
 [x] - Finalidade do laudo
-[] - Para perfil de médico remover informações de valor
-[] - Pensar em um cache para componentes que seão selects
-[] - Dash horas trabalhadas médico
 [x] - Solicitar antecipação, acrescentar variação de 24, 48, 72 horas, precificar conforme opção selecionada
 [x] - Solicitar uma correção, aparecer um campo para digitar o motivo da solicitação
 [x] - Limite para efetuar uma solicitação de correção consulta é de 24hrs, caso ultrapasse, cobrar uma nova consulta
 [x] - Endereço no cadastro de médico
+[x] - filtrar pacientes por escritório
+[x] - filtrar solicitações por escritório se não for admin
+[x] - correção no cadastro de advogado na tela admin
+[] - Para perfil de médico remover informações de valor
+[] - Pensar em um cache para componentes que seão selects
+[] - Dash horas trabalhadas médico
+[] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
 [] - Dashboard ADM, montar grafico das solicitações por status
 [] - Médico não pode ver dados do escritório nos detalhes de solicitação
 [] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
 [] - Destacar qual médico esta com mais havilações
-
-# prioridades
-
-[] Acrescentar um menu de filtros em meus saldos
-[x] Criar a tela de minha conta no perfil advogado
-[x] Criar a tela de indicações
-[x] Colocar uma lista no menu de videos
+[] - Acrescentar um menu de filtros em meus saldos
+[] - Agenda somente fica disponível para usuários administrador
 
 # entregue
 
+[x] Criar a tela de minha conta no perfil advogado
+[x] Criar a tela de indicações
+[x] Colocar uma lista no menu de videos
 [x] - Criar uma tabela responsiva, se transforme em card quando for mobile
-
-- Finalidade do laudo
-  [x] - Adminstrativo
-  [x] - Judicial (caso selecionar a opção judicial, então habilitar mais essas duas)
-  ---[x] - Processo a distribuir
-  ---[x] - Processo em andamento (caso escolha esta opção, informar numero de processo)
-
-# Solicitações
-
+[x] Finalidade do laudo
+[x] - Adminstrativo
+[x] - Judicial (caso selecionar a opção judicial, então habilitar mais essas duas)
+---[x] - Processo a distribuir
+---[x] - Processo em andamento (caso escolha esta opção, informar numero de processo)
 [x] Correção na tabela Solicitações por tipo de benefício no dashboard de advogado
 [x] Botão nova solicitação e comprar créditos sempre visíveis
 [x] Em relação ao campo de preenchimento de login e senha na
