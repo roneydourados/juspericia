@@ -1,4 +1,4 @@
 <template>
-  <h1>Home usuários médico</h1>
+  <MedicHome />
 </template>
 <script setup lang="ts"></script>

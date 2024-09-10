@@ -47,6 +47,7 @@ export interface SolicitationConsultationFilterProps {
   patientId?: number;
   benefitTypeId?: number; //tipo de benefício
   reportPurposeId?: number; //finalidade do laudo
+  userId?: number;
   benefitType?: BenefitTypeProps;
   patient?: PatientProps;
   reportPurpose?: ReportPurposeProps;

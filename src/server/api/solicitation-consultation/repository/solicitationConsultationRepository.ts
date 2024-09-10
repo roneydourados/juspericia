@@ -14,6 +14,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     benefitTypeId,
     patientId,
     reportPurposeId,
+    userId,
   } = filters;
 
   const data = await prisma.patientConsultation.findMany({
@@ -22,6 +23,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
         gte: new Date(initialDateSolicitation),
         lte: new Date(finalDateSolicitation),
       },
+      userId,
       status,
       patientId: patientId ? patientId : undefined,
       benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
@@ -97,6 +99,11 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       id: "desc",
     },
   });
+
+  console.log("🚀 ~ index ~ data:", data);
+  if (data.length === 0) {
+    return [];
+  }
 
   const totals = await prisma.patientConsultation.groupBy({
     by: ["status"],

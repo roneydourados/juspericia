@@ -11,6 +11,12 @@ export default defineEventHandler(async (event) => {
     reportPurposeId,
   } = getQuery<SolicitationConsultationFilterProps>(event);
 
+  const { userLogged } = useAuthUser();
+
+  const user = userLogged(event);
+
+  const userId = user.Profile.type === "ADMIN" ? undefined : user.id;
+
   setResponseStatus(event, 200);
 
   return index({
@@ -20,5 +26,6 @@ export default defineEventHandler(async (event) => {
     benefitTypeId,
     patientId,
     reportPurposeId,
+    userId,
   });
 });

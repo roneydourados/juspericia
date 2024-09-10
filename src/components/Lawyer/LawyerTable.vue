@@ -154,7 +154,7 @@
       </template>
     </Table>
   </div>
-  <UserLawyerForm
+  <LawyerForm
     width="800"
     title="Advogado"
     :show="showForm"
@@ -173,8 +173,6 @@
 </template>
 
 <script setup lang="ts">
-import { set } from "zod";
-
 const userLawyerStore = useUserLawyerStore();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => userLawyerStore.$all);
@@ -206,9 +204,9 @@ const headers = ref([
   },
 ]);
 
-// onMounted(async () => {
-//   await handleSearch("");
-// });
+onMounted(async () => {
+  await handleSearch("");
+});
 
 const handleSearch = async (search: string, isLoading: boolean = true) => {
   setTimeout(async () => {

@@ -173,7 +173,7 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  return prisma.user.findMany({
+  const data = await prisma.user.findMany({
     select: {
       id: true,
       name: true,
@@ -184,6 +184,9 @@ export const index = async (inputQuery: string) => {
       oabUf: true,
       cpfCnpj: true,
       officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
     },
     where: {
       OR: [
@@ -204,6 +207,24 @@ export const index = async (inputQuery: string) => {
       name: "asc",
     },
   });
+
+  const laywers = await Promise.all(
+    data.map(async (item) => {
+      const Address = await prisma.address.findFirst({
+        where: {
+          ownerId: item.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+
+      return {
+        ...item,
+        Address,
+      };
+    })
+  );
+
+  return laywers;
 };
 
 export const show = async (id: number) => {

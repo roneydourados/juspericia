@@ -174,7 +174,8 @@ export const destroy = async (id: number) => {
   }
 };
 
-export const index = async (inputQuery: string) => {
+export const index = async (input: { inputQuery: string; userId?: number }) => {
+  const { inputQuery, userId } = input;
   return prisma.patient.findMany({
     select: {
       id: true,
@@ -189,6 +190,7 @@ export const index = async (inputQuery: string) => {
       },
     },
     where: {
+      userId,
       OR: [
         {
           name: { contains: inputQuery, mode: "insensitive" },

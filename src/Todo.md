@@ -4,9 +4,9 @@
 [x] - Finalizar tela de cadastro de pacientes
 [x] - Listar as consultas de acordo com api
 [x] - Exibir uma consulta de acordo com a api
-[] - Atualizar dados de uma consulta
-[] - Excluir uma consulta
-[] - Verificar porque ainda não gravou numero do processo
+[x] - Atualizar dados de uma consulta
+[x] - Excluir uma consulta, sera cancelada
+[x] - Verificar porque ainda não gravou numero do processo
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
 [x] - Finalidade do laudo
 [] - Para perfil de médico remover informações de valor
@@ -24,9 +24,9 @@
 # prioridades
 
 [] Acrescentar um menu de filtros em meus saldos
-[] Criar a tela de minha conta no perfil advogado
-[] Criar a tela de indicações
-[] Colocar uma lista no menu de videos
+[x] Criar a tela de minha conta no perfil advogado
+[x] Criar a tela de indicações
+[x] Colocar uma lista no menu de videos
 
 # entregue
 

@@ -127,6 +127,8 @@ const handleChangeTable = async () => {
 };
 
 const getQuantity = (status: string) => {
+  if (!$all.value || !$all.value.totals) return 0;
+
   const quantity = $all.value?.totals.find((item) => {
     return item.status === status;
   });

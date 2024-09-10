@@ -21,7 +21,11 @@
         @click.stop="drawer = !drawer"
       />
       <template v-slot:append>
-        <div class="d-flex align-center px-4" style="gap: 0.5rem">
+        <div
+          v-if="$currentUser?.Profile.type === 'ADVOGADO'"
+          class="d-flex align-center px-4"
+          style="gap: 0.5rem"
+        >
           <v-btn
             class="text-none"
             color="success"
@@ -70,10 +74,12 @@ const { mobile } = useDisplay();
 // const screen = useScreenStore();
 const config = useRuntimeConfig();
 const router = useRouter();
+const auth = useAuthStore();
 
 const drawer = ref(true);
 
 // const $currentScreen = computed(() => screen.$currentScreen);
+const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
 
 onMounted(() => {

@@ -178,6 +178,7 @@ export const appRoutes = [
     profiles: ["ADVOGADO", "ADMIN", "MEDICO"],
     order: 16,
   },
+
   // Rotas que não serão apresentadas no menu
   {
     title: "Nova solicitação",
