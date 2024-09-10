@@ -23,60 +23,6 @@
               :clearable="true"
             />
           </v-col>
-          <!-- <v-col
-            v-if="form.consultation"
-            cols="12"
-            lg="6"
-            class="d-flex flex-wrap"
-            style="gap: 0.5rem"
-          >
-            <v-chip
-              label
-              color="success"
-              variant="outlined"
-              :style="mobile ? 'width: 100%' : ''"
-            >
-              <div class="d-flex" style="gap: 0.5rem">
-                <strong>Preço</strong>
-                <strong>
-                  {{ amountFormated(form.consultation?.value ?? 0, true) }}
-                </strong>
-              </div>
-            </v-chip>
-            <v-chip
-              label
-              color="warning"
-              variant="outlined"
-              :style="mobile ? 'width: 100%' : ''"
-            >
-              <div class="d-flex" style="gap: 0.5rem">
-                <strong>Preço no crédito</strong>
-                <strong>
-                  {{
-                    amountFormated(form.consultation?.valueCredit ?? 0, true)
-                  }}
-                </strong>
-              </div>
-            </v-chip>
-            <v-chip
-              label
-              color="info"
-              variant="outlined"
-              :style="mobile ? 'width: 100%' : ''"
-            >
-              <div class="d-flex" style="gap: 0.5rem">
-                <strong>Valor p/ atencipar</strong>
-                <strong>
-                  {{
-                    amountFormated(
-                      form.consultation?.valueAntecipation ?? 0,
-                      true
-                    )
-                  }}
-                </strong>
-              </div>
-            </v-chip>
-          </v-col> -->
         </v-row>
         <v-row dense>
           <v-col cols="12" lg="6">

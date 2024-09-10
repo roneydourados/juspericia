@@ -189,7 +189,11 @@
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
             @click="showDateCorrection = true"
-            :disabled="!solicitation.isSolicitationCorrection"
+            :disabled="
+              !solicitation.isSolicitationCorrection ||
+              solicitation.status === 'canceled' ||
+              solicitation.status === 'finished'
+            "
           >
             Solicitar correção
           </v-btn>
@@ -199,7 +203,11 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-calendar-clock-outline"
             color="info"
-            :disabled="!!solicitation.dateAntecipation"
+            :disabled="
+              !!solicitation.dateAntecipation ||
+              solicitation.status === 'canceled' ||
+              solicitation.status === 'finished'
+            "
             @click="getItemAntecipation(solicitation)"
           >
             Solicitar antecipação
@@ -221,7 +229,10 @@
             prepend-icon="mdi-cash-multiple"
             color="success"
             @click="showTipValue = true"
-            :disabled="Number(solicitation.tipValue) > 0"
+            :disabled="
+              Number(solicitation.tipValue) > 0 ||
+              solicitation.status === 'canceled'
+            "
           >
             Dar Gorjeta
           </v-btn>
@@ -233,6 +244,7 @@
             prepend-icon="mdi-star"
             color="orange-darken-1"
             @click="solicitation.rate = 1"
+            :disabled="solicitation.status === 'canceled'"
           >
             Avaliar solicitação
           </v-btn>
