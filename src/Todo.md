@@ -15,6 +15,7 @@
 [x] - Solicitar antecipação, acrescentar variação de 24, 48, 72 horas, precificar conforme opção selecionada
 [x] - Solicitar uma correção, aparecer um campo para digitar o motivo da solicitação
 [x] - Limite para efetuar uma solicitação de correção consulta é de 24hrs, caso ultrapasse, cobrar uma nova consulta
+[x] - Endereço no cadastro de médico
 [] - Dashboard ADM, montar grafico das solicitações por status
 [] - Médico não pode ver dados do escritório nos detalhes de solicitação
 [] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação

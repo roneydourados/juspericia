@@ -38,6 +38,22 @@ export const create = async (payload: UserProps) => {
       },
     });
 
+    if (payload.Address) {
+      await prisma.address.create({
+        data: {
+          addressCity: payload.Address.addressCity,
+          addressComplement: payload.Address.addressComplement,
+          addressDistrict: payload.Address.addressDistrict,
+          addressNumber: payload.Address.addressNumber,
+          addressState: payload.Address.addressState,
+          addressStreet: payload.Address.addressStreet,
+          addressZipcode: payload.Address.addressZipcode,
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+    }
+
     return {
       id: user.id,
       email: user.email,
@@ -63,7 +79,6 @@ export const update = async (payload: UserProps) => {
     : undefined;
 
   try {
-    console.log("🚀 ~ update ~ payload.active:", payload.active);
     const user = await prisma.user.update({
       data: {
         email: payload.email,
@@ -80,6 +95,29 @@ export const update = async (payload: UserProps) => {
         id: payload.id,
       },
     });
+
+    if (payload.Address) {
+      await prisma.address.deleteMany({
+        where: {
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+
+      await prisma.address.create({
+        data: {
+          addressCity: payload.Address.addressCity,
+          addressComplement: payload.Address.addressComplement,
+          addressDistrict: payload.Address.addressDistrict,
+          addressNumber: payload.Address.addressNumber,
+          addressState: payload.Address.addressState,
+          addressStreet: payload.Address.addressStreet,
+          addressZipcode: payload.Address.addressZipcode,
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+    }
 
     return {
       id: user.id,
@@ -104,6 +142,12 @@ export const destroy = async (id: number) => {
         id,
       },
     });
+    await prisma.address.deleteMany({
+      where: {
+        ownerId: id,
+        addressCategory: addressCategoryType.user,
+      },
+    });
   } catch (error) {
     console.log("🚀 ~ error remove Medic:", error);
     throw createError({
@@ -114,7 +158,7 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  return prisma.user.findMany({
+  const data = await prisma.user.findMany({
     select: {
       id: true,
       name: true,
@@ -151,6 +195,31 @@ export const index = async (inputQuery: string) => {
       name: "asc",
     },
   });
+
+  const users = await Promise.all(
+    data.map(async (user) => {
+      const address = await prisma.address.findFirst({
+        where: {
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+
+      return {
+        id: user.id,
+        name: user.name,
+        cpfCnpj: user.cpfCnpj,
+        phone: user.phone,
+        crm: user.crm,
+        active: user.active,
+        crmUf: user.crmUf,
+        email: user.email,
+        Address: address,
+      };
+    })
+  );
+
+  return users;
 };
 
 export const show = async (id: number) => {
@@ -158,7 +227,7 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const user = await prisma.user.findFirst({
+  const data = await prisma.user.findFirst({
     where: {
       id,
     },
@@ -184,12 +253,31 @@ const exists = async (id: number) => {
     },
   });
 
-  if (!user) {
+  if (!data) {
     throw createError({
       statusCode: 404,
       message: "Not found",
     });
   }
+
+  const address = await prisma.address.findFirst({
+    where: {
+      ownerId: data.id,
+      addressCategory: addressCategoryType.user,
+    },
+  });
+
+  const user = {
+    id: data.id,
+    name: data.name,
+    cpfCnpj: data.cpfCnpj,
+    phone: data.phone,
+    crm: data.crm,
+    active: data.active,
+    crmUf: data.crmUf,
+    email: data.email,
+    Address: address,
+  };
 
   return user;
 };
