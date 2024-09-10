@@ -7,8 +7,14 @@
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>
-        <v-col cols="12" lg="6">
-          <DatePicker v-model="date" label="Data" placeholder="" required />
+        <v-col cols="12">
+          <TextInput
+            v-model="motive"
+            label="Motivo correção"
+            placeholder="Descreva motivo"
+            rows="8"
+            required
+          />
         </v-col>
       </v-row>
     </FormCrud>
@@ -18,7 +24,7 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     default: "",
@@ -33,24 +39,15 @@ const { mobile } = useDisplay();
 
 const emit = defineEmits(["close"]);
 const show = defineModel<boolean>("show");
-const date = ref("");
-
-watch(
-  () => show.value,
-  () => {
-    if (show.value) {
-      date.value = "";
-    }
-  },
-  { immediate: true }
-);
+const motive = ref("");
 
 const submitForm = () => {
-  handleClose();
+  show.value = false;
+  emit("close", motive.value);
 };
 
 const handleClose = () => {
   show.value = false;
-  emit("close", date.value);
+  emit("close");
 };
 </script>

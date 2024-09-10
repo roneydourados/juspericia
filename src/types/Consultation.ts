@@ -3,7 +3,9 @@ export interface ConsultationProps {
   consultationName?: string;
   value?: number;
   valueCredit?: number;
-  valueAntecipation?: number;
+  valueAntecipation24?: number;
+  valueAntecipation48?: number;
+  valueAntecipation72?: number;
   valuePacket?: number;
   createdAt?: string;
   updatedAt?: string;

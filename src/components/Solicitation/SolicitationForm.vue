@@ -304,6 +304,7 @@ const create = async () => {
         ? form.value.judicialProcessNumber
         : undefined,
       dateOpen: moment().format("YYYY-MM-DD"),
+      consultationValue: form.value.consultation?.value ?? 0,
     });
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);
@@ -326,6 +327,7 @@ const update = async () => {
         ? form.value.judicialProcessNumber
         : undefined,
       dateOpen: moment().format("YYYY-MM-DD"),
+      consultationValue: form.value.consultation?.value ?? 0,
     });
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);

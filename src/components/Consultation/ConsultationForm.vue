@@ -40,11 +40,29 @@
             required
           />
         </v-col>
+      </v-row>
+      <v-row dense>
         <v-col cols="12" lg="3">
           <CurrencyInput
-            v-model:model-number="model.valueAntecipation.value"
-            v-model:model-value="model.valueAntecipation.text"
-            label="Valor Atencipação"
+            v-model:model-number="model.valueAntecipation24.value"
+            v-model:model-value="model.valueAntecipation24.text"
+            label="Valor Atencipação 24hrs"
+            required
+          />
+        </v-col>
+        <v-col cols="12" lg="3">
+          <CurrencyInput
+            v-model:model-number="model.valueAntecipation48.value"
+            v-model:model-value="model.valueAntecipation48.text"
+            label="Valor Atencipação 48hrs"
+            required
+          />
+        </v-col>
+        <v-col cols="12" lg="3">
+          <CurrencyInput
+            v-model:model-number="model.valueAntecipation72.value"
+            v-model:model-value="model.valueAntecipation72.text"
+            label="Valor Atencipação 72hrs"
             required
           />
         </v-col>
@@ -93,7 +111,15 @@ const model = ref({
     text: "0,00",
     value: 0,
   },
-  valueAntecipation: {
+  valueAntecipation24: {
+    text: "0,00",
+    value: 0,
+  },
+  valueAntecipation48: {
+    text: "0,00",
+    value: 0,
+  },
+  valueAntecipation72: {
     text: "0,00",
     value: 0,
   },
@@ -125,9 +151,17 @@ const loadModel = () => {
       text: amountFormated(props.data.valueCredit ?? 0, false),
       value: props.data.valueCredit ?? 0,
     },
-    valueAntecipation: {
-      text: amountFormated(props.data.valueAntecipation ?? 0, false),
-      value: props.data.valueAntecipation ?? 0,
+    valueAntecipation24: {
+      text: amountFormated(props.data.valueAntecipation24 ?? 0, false),
+      value: props.data.valueAntecipation24 ?? 0,
+    },
+    valueAntecipation48: {
+      text: amountFormated(props.data.valueAntecipation48 ?? 0, false),
+      value: props.data.valueAntecipation48 ?? 0,
+    },
+    valueAntecipation72: {
+      text: amountFormated(props.data.valueAntecipation72 ?? 0, false),
+      value: props.data.valueAntecipation72 ?? 0,
     },
     valuePacket: {
       text: amountFormated(props.data.valuePacket ?? 0, false),
@@ -148,7 +182,15 @@ const clearModel = () => {
       text: "0,00",
       value: 0,
     },
-    valueAntecipation: {
+    valueAntecipation24: {
+      text: "0,00",
+      value: 0,
+    },
+    valueAntecipation48: {
+      text: "0,00",
+      value: 0,
+    },
+    valueAntecipation72: {
       text: "0,00",
       value: 0,
     },
@@ -179,7 +221,9 @@ const create = async () => {
     consultationName: model.value.consultationName,
     value: model.value.value.value,
     valueCredit: model.value.valueCredit.value,
-    valueAntecipation: model.value.valueAntecipation.value,
+    valueAntecipation24: model.value.valueAntecipation24.value,
+    valueAntecipation48: model.value.valueAntecipation48.value,
+    valueAntecipation72: model.value.valueAntecipation72.value,
     valuePacket: model.value.valuePacket.value,
   });
 };
@@ -190,7 +234,9 @@ const update = async () => {
     consultationName: model.value.consultationName,
     value: model.value.value.value,
     valueCredit: model.value.valueCredit.value,
-    valueAntecipation: model.value.valueAntecipation.value,
+    valueAntecipation24: model.value.valueAntecipation24.value,
+    valueAntecipation48: model.value.valueAntecipation48.value,
+    valueAntecipation72: model.value.valueAntecipation72.value,
     valuePacket: model.value.valuePacket.value,
   });
 };

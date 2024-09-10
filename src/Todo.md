@@ -1,9 +1,9 @@
 # pendentes
 
 [] - Agenda somente fica disponível para usuários administrador
-[] - Finalizar tela de cadastro de pacientes
-[] - Listar as consultas de acordo com api
-[] - Exibir uma consulta de acordo com a api
+[x] - Finalizar tela de cadastro de pacientes
+[x] - Listar as consultas de acordo com api
+[x] - Exibir uma consulta de acordo com a api
 [] - Atualizar dados de uma consulta
 [] - Excluir uma consulta
 [] - Verificar porque ainda não gravou numero do processo
@@ -12,13 +12,13 @@
 [] - Para perfil de médico remover informações de valor
 [] - Pensar em um cache para componentes que seão selects
 [] - Dash horas trabalhadas médico
-[] - Solicitar antecipação, acrescentar variação de 24, 48, 72 horas, precificar conforme opção selecionada
-[] - Solicitar uma correção, aparecer um campo para digitar o motivo da solicitação
-[] - Destacar qual médico esta com mais havilações
-[] - Limite para efetuar uma solicitação de consulta é de 24hrs, caso ultrapasse, cobrar uma nova consulta
+[x] - Solicitar antecipação, acrescentar variação de 24, 48, 72 horas, precificar conforme opção selecionada
+[x] - Solicitar uma correção, aparecer um campo para digitar o motivo da solicitação
+[x] - Limite para efetuar uma solicitação de correção consulta é de 24hrs, caso ultrapasse, cobrar uma nova consulta
 [] - Dashboard ADM, montar grafico das solicitações por status
 [] - Médico não pode ver dados do escritório nos detalhes de solicitação
 [] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
+[] - Destacar qual médico esta com mais havilações
 
 # prioridades
 

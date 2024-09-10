@@ -17,24 +17,26 @@
         <InfoLabel
           title="Valor"
           font-size="1"
-          :content="amountFormated($single?.Consultation?.value ?? 0, true)"
+          :content="amountFormated($single?.consultationValue ?? 0, true)"
         />
       </v-col>
       <v-col cols="12" lg="4">
         <InfoLabel
           title="Valor antecipação"
           font-size="1"
-          :content="
-            amountFormated($single?.Consultation?.valueAntecipation ?? 0, true)
-          "
+          :content="amountFormated($single?.antecipationValue ?? 0, true)"
         />
       </v-col>
       <v-col cols="12" lg="4">
         <InfoLabel
-          title="Valor créd."
+          title="Total"
           font-size="1"
           :content="
-            amountFormated($single?.Consultation?.valueCredit ?? 0, true)
+            amountFormated(
+              Number($single?.consultationValue ?? 0) +
+                Number($single?.antecipationValue ?? 0),
+              true
+            )
           "
         />
       </v-col>

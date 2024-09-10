@@ -10,7 +10,6 @@
     density="compact"
     base-color="primary"
     color="primary"
-    :maxlength="maxlength"
     :prepend-inner-icon="icon"
     :readonly="readonly"
     :clearable="clearable"
@@ -76,10 +75,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  maxlength: {
-    type: Number,
-    default: 255,
-  },
+  // maxlength: {
+  //   type: Number,
+  //   default: 255,
+  // },
   rows: {
     type: String,
     default: "3",

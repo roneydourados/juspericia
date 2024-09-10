@@ -172,7 +172,10 @@ model Consultation {
   consultationName    String                @map("consultation_name") @db.VarChar(200) // nome da consulta
   value               Decimal               @map("value") @db.Decimal(18, 2) // preço cheio da consulta
   valueCredit         Decimal               @map("value_credit") @db.Decimal(18, 2) // preço da consulta para usar o crédito do usuário
-  valueAntecipation   Decimal               @map("value_antecipation") @db.Decimal(18, 2) // valor da antecipação
+  //valueAntecipation   Decimal               @map("value_antecipation") @db.Decimal(18, 2) // valor da antecipação
+  valueAntecipation24 Decimal               @default(0) @map("value_antecipation_24") @db.Decimal(18, 2) // valor da antecipação 24 horas
+  valueAntecipation48 Decimal               @default(0) @map("value_antecipation_48") @db.Decimal(18, 2) // valor da antecipação 48 horas
+  valueAntecipation72 Decimal               @default(0) @map("value_antecipation_72") @db.Decimal(18, 2) // valor da antecipação 72 horas
   valuePacket         Decimal               @map("value_packet") @db.Decimal(18, 2) // valor da consulta para pacote
   createdAt           DateTime              @default(now()) @map("created_at") // data e hora da criação do registro
   updatedAt           DateTime              @updatedAt @map("updated_at") // data e hora da última atualização
@@ -317,7 +320,12 @@ model PatientConsultation {
   dateClose                 DateTime?                   @map("date_close") @db.Date // data da fechamento/encerramento da consulta
   dateAntecipation          DateTime?                   @map("date_antecipation") @db.Date // data da antecipação da consulta
   dateCorrection            DateTime?                   @map("date_correction") @db.Date // data da correção do laudo
+  reasonCorrection          String?                     @map("reason_correction") @db.Text // motivo da correção do laudo
+  createdAt                 DateTime                    @default(now()) @map("created_at") // data e hora da criação do registro
+  updatedAt                 DateTime                    @default(now()) @updatedAt @map("updated_at") // data e hora da última atualização
   rate                      Int?                        @default(0) // avaliação da consulta
+  consultationValue         Decimal                     @default(0) @map("consultation_value") @db.Decimal(18, 2) // valor da consulta
+  antecipationValue         Decimal                     @default(0) @map("antecipation_value") @db.Decimal(18, 2) // valor da antecipação
   Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: NoAction, onUpdate: NoAction)

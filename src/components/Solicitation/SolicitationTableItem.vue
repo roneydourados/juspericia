@@ -13,6 +13,20 @@
 
       <div class="d-flex align-center" style="gap: 1rem">
         <v-btn
+          prepend-icon="mdi-cancel"
+          color="error"
+          size="small"
+          variant="outlined"
+          class="text-none text-white"
+          @click="getItemCancel(solicitation)"
+          :disabled="
+            solicitation.status === 'finished' ||
+            solicitation.status === 'canceled'
+          "
+        >
+          Cancelar
+        </v-btn>
+        <v-btn
           prepend-icon="mdi-pencil-outline"
           color="orange"
           size="small"
@@ -25,12 +39,12 @@
         </v-btn>
         <v-chip
           label
-          :color="solicitation.status === 'open' ? 'info' : 'success'"
+          :color="solicitationStatusColor(solicitation.status ?? 'open')"
         >
           <div class="d-flex" style="gap: 0.5rem">
-            <span>Status:</span>
+            <span>Status: </span>
             <span class="font-weight-bold">
-              {{ returnStatus(solicitation.status ?? "open") }}
+              {{ solicitationStatusName(solicitation.status ?? "open") }}
             </span>
           </div>
         </v-chip>
@@ -74,18 +88,19 @@
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor:</span>
           <span class="font-weight-bold">{{
-            amountFormated(solicitation.Consultation?.value ?? 0, true)
+            amountFormated(solicitation.consultationValue ?? 0, true)
           }}</span>
         </v-col>
-        <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
+        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor atencipação:</span>
           <span class="font-weight-bold">
-            {{
-              amountFormated(
-                solicitation.Consultation?.valueAntecipation ?? 0,
-                true
-              )
-            }}
+            {{ amountFormated(solicitation.antecipationValue ?? 0, true) }}
+          </span>
+        </v-col>
+        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
+          <span>Tipo benefício:</span>
+          <span class="font-weight-bold">
+            {{ solicitation.BenefitType?.name }}
           </span>
         </v-col>
       </v-row>
@@ -156,8 +171,8 @@
           >
             {{
               amountFormated(
-                Number(solicitation.Consultation?.value) +
-                  Number(solicitation.Consultation?.valueAntecipation),
+                Number(solicitation.consultationValue ?? 0) +
+                  Number(solicitation.antecipationValue ?? 0),
                 true
               )
             }}
@@ -174,6 +189,7 @@
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
             @click="showDateCorrection = true"
+            :disabled="!solicitation.isSolicitationCorrection"
           >
             Solicitar correção
           </v-btn>
@@ -184,7 +200,7 @@
             prepend-icon="mdi-calendar-clock-outline"
             color="info"
             :disabled="!!solicitation.dateAntecipation"
-            @click="showDateAntecipation = true"
+            @click="getItemAntecipation(solicitation)"
           >
             Solicitar antecipação
           </v-btn>
@@ -242,15 +258,16 @@
       </v-row>
     </v-card-actions>
   </v-card>
-  <SolicitationFormDate
-    title="Data para correção"
+  <SolicitationCorrectionForm
+    title="Solicitação de correção"
     v-model:show="showDateCorrection"
-    @close="handleUpdateCorrectionDate($event)"
+    @close="handleUpdateCorrection($event)"
   />
-  <SolicitationFormDate
-    title="Data para antecipação"
+  <SolicitationAntecipationForm
+    title="Solicitar antecipação"
     v-model:show="showDateAntecipation"
-    @close="handleUpdateAntecipationDate($event)"
+    :data="selected?.Consultation"
+    @close="handleUpdateAntecipation($event)"
   />
   <SolicitationTipValue
     title="Valor da gorjeta"
@@ -258,6 +275,14 @@
     @close="handleTipValue($event)"
   />
   <DialogLoading :dialog="loading" />
+  <Dialog
+    title="Cancelar consulta"
+    :dialog="showCancel"
+    @cancel="showCancel = false"
+    @confirm="cancel"
+  >
+    Tem certeza que deseja cancelar a consulta?
+  </Dialog>
   <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
@@ -275,11 +300,18 @@ const emit = defineEmits(["edit"]);
 const auth = useAuthStore();
 const storeConsultation = useSolicitationConsultationStore();
 const rounter = useRouter();
-const { amountFormated, getSolicitationsFilters } = useUtils();
+const {
+  amountFormated,
+  getSolicitationsFilters,
+  solicitationStatusName,
+  solicitationStatusColor,
+} = useUtils();
 
+const selected = ref<SolicitationConsultationProps>();
 const isRate = ref(false);
 const showDateCorrection = ref(false);
 const showDateAntecipation = ref(false);
+const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
 const filters = ref(getSolicitationsFilters());
@@ -297,33 +329,19 @@ const handleDetailsClick = async (id: number) => {
   await rounter.push(`/solicitations/${id}`);
 };
 
-const returnStatus = (status: string) => {
-  switch (status.trim().toLowerCase()) {
-    case "open":
-      return "Pendente";
-    case "in_progress":
-      return "Em andamento";
-    case "scheduled":
-      return "Agendada";
-    case "finished":
-      return "Finalizada";
-    default:
-      return "Pendente";
-  }
-};
-
 const editItem = (item: SolicitationConsultationProps) => {
   emit("edit", item);
 };
 
-const handleUpdateCorrectionDate = async (date: string) => {
+const handleUpdateCorrection = async (motive: string) => {
   showDateCorrection.value = false;
-  if (date) {
+  if (motive) {
     loading.value = true;
     try {
       await storeConsultation.update({
         id: props.solicitation.id,
-        dateCorrection: date,
+        reasonCorrection: motive,
+        dateCorrection: moment().format("YYYY-MM-DD"),
       });
 
       await getSolicitations();
@@ -333,14 +351,15 @@ const handleUpdateCorrectionDate = async (date: string) => {
   }
 };
 
-const handleUpdateAntecipationDate = async (date: string) => {
+const handleUpdateAntecipation = async (value: number) => {
   showDateAntecipation.value = false;
-  if (date) {
+  if (value) {
     loading.value = true;
     try {
       await storeConsultation.update({
         id: props.solicitation.id,
-        dateAntecipation: date,
+        dateAntecipation: moment().format("YYYY-MM-DD"),
+        antecipationValue: value,
       });
 
       await getSolicitations();
@@ -376,5 +395,33 @@ const handleUpdateRate = async (rate: number) => {
 
 const getSolicitations = async () => {
   await storeConsultation.index(filters.value);
+};
+
+const getItemCancel = (item: SolicitationConsultationProps) => {
+  selected.value = item;
+  showCancel.value = true;
+};
+
+const getItemAntecipation = (item: SolicitationConsultationProps) => {
+  selected.value = item;
+  showDateAntecipation.value = true;
+};
+
+const cancel = async () => {
+  showCancel.value = false;
+  if (!selected.value) return;
+
+  loading.value = true;
+
+  try {
+    await storeConsultation.update({
+      ...selected.value,
+      status: "canceled",
+    });
+    await getSolicitations();
+    selected.value = undefined;
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

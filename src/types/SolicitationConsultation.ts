@@ -1,3 +1,4 @@
+import { update } from "./../server/api/benefit-type/repository/benefitTypeRepository";
 export interface SolicitationConsultationList {
   consultations: SolicitationConsultationProps[];
   totals: ConsultationListTotals[];
@@ -24,6 +25,12 @@ export interface SolicitationConsultationProps {
   dateClose?: string;
   dateAntecipation?: string;
   dateCorrection?: string;
+  reasonCorrection?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  isSolicitationCorrection?: boolean;
+  consultationValue?: number;
+  antecipationValue?: number;
   deadline?: string;
   rate?: number;
   Medic?: UserProps;

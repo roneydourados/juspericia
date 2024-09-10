@@ -38,6 +38,11 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       status: true,
       processSituation: true,
       tipValue: true,
+      createdAt: true,
+      updatedAt: true,
+      reasonCorrection: true,
+      consultationValue: true,
+      antecipationValue: true,
       Medic: {
         select: {
           id: true,
@@ -70,7 +75,9 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
           consultationName: true,
           value: true,
           valueCredit: true,
-          valueAntecipation: true,
+          valueAntecipation24: true,
+          valueAntecipation48: true,
+          valueAntecipation72: true,
         },
       },
       BenefitType: {
@@ -108,8 +115,11 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
   });
 
   const consultations = data.map((item) => {
+    const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
+
     return {
       ...item,
+      isSolicitationCorrection: !item.reasonCorrection && leftTime <= 30,
       dateOpen: formatDate(item.dateOpen),
       dateClose: item.dateClose ? formatDate(item.dateClose) : null,
       dateAntecipation: item.dateAntecipation
@@ -118,7 +128,9 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       dateCorrection: item.dateCorrection
         ? formatDate(item.dateCorrection)
         : null,
-      deadline: moment(item.dateOpen).add(30, "days").format("YYYY-MM-DD"),
+      deadline: moment(formatDate(item.dateOpen))
+        .add(30, "days")
+        .format("YYYY-MM-DD"),
     };
   });
 
@@ -155,6 +167,7 @@ export const consultationCreate = async (
         userId: Number(payload.userId),
         consultationId: Number(payload.consultationId),
         dateOpen: new Date(payload.dateOpen!),
+        consultationValue: Number(payload.consultationValue ?? 0),
       },
     });
   } catch (error) {
@@ -202,6 +215,11 @@ export const consultationUpdate = async (
           ? new Date(payload.dateCorrection)
           : undefined,
         rate: payload.rate ? Number(payload.rate) : undefined,
+        reasonCorrection: payload.reasonCorrection
+          ? String(payload.reasonCorrection)
+          : undefined,
+        consultationValue: payload.consultationValue,
+        antecipationValue: payload.antecipationValue,
       },
       where: {
         id: payload.id,
@@ -248,6 +266,13 @@ const exists = async (id: number) => {
       status: true,
       processSituation: true,
       proccessNumber: true,
+      antecipationValue: true,
+      consultationValue: true,
+      dateAntecipation: true,
+      dateCorrection: true,
+      dateClose: true,
+      dateOpen: true,
+      reasonCorrection: true,
       tipValue: true,
       userId: true,
       BenefitType: {
@@ -294,7 +319,9 @@ const exists = async (id: number) => {
           consultationName: true,
           value: true,
           valueCredit: true,
-          valueAntecipation: true,
+          valueAntecipation24: true,
+          valueAntecipation48: true,
+          valueAntecipation72: true,
         },
       },
     },

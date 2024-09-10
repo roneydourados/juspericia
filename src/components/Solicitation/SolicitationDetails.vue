@@ -36,6 +36,12 @@
           </div>
           <div v-html="$single?.content"></div>
         </v-card>
+        <v-card flat rounded="lg">
+          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
+            Motivo para correção
+          </div>
+          <div v-html="$single?.reasonCorrection"></div>
+        </v-card>
       </v-col>
     </v-row>
   </v-card>

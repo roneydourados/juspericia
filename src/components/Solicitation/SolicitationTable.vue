@@ -51,10 +51,16 @@
           >({{ getQuantity("finished") }})</span
         >
       </v-tab>
+      <v-tab :value="5" class="text-none">
+        <v-icon icon="mdi-cancel" size="24" start />
+        <span v-if="!mobile">Canceladas </span>
+        <span class="text-info font-weight-bold"
+          >({{ getQuantity("canceled") }})</span
+        >
+      </v-tab>
     </v-tabs>
     <v-divider />
     <v-card-text>
-      <!-- <EmptyContent v-if="$all.length <= 0" /> -->
       <v-row v-for="item in $all?.consultations" :key="item.id" dense>
         <v-col cols="12">
           <SolicitationTableItem
@@ -112,6 +118,9 @@ const handleChangeTable = async () => {
     case 4:
       modelFilters.value.status = "finished";
       break;
+    case 5:
+      modelFilters.value.status = "canceled";
+      break;
   }
   //setSolicitationsFilters(modelFilters.value);
   await search();
@@ -145,15 +154,8 @@ const getItemEdit = async (item: SolicitationConsultationProps) => {
   try {
     await storeConsultation.show(item.id!);
     await rounter.push("/solicitations/edit");
-    //selected.value = storeConsultation.$single;
-    //showForm.value = true;
   } finally {
     loading.value = false;
   }
 };
-
-// const handleCloseForm = () => {
-//   showForm.value = false;
-//   selected.value = undefined;
-// };
 </script>

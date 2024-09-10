@@ -234,6 +234,39 @@ export const useUtils = () => {
     localStorage.setItem("solicitationsFilters", JSON.stringify(filter));
   };
 
+  const solicitationStatusName = (status: string) => {
+    switch (status.trim().toLowerCase()) {
+      case "open":
+        return "Pendente";
+      case "in_progress":
+        return "Em andamento";
+      case "scheduled":
+        return "Agendada";
+      case "finished":
+        return "Finalizada";
+      case "canceled":
+        return "Cancelada";
+      default:
+        return "Pendente";
+    }
+  };
+
+  const solicitationStatusColor = (status: string) => {
+    switch (status.trim().toLowerCase()) {
+      case "open":
+        return "#3F51B5";
+      case "in_progress":
+        return "#2196F3";
+      case "scheduled":
+        return "#00838F";
+      case "finished":
+        return "#43A047";
+      case "canceled":
+        return "#F44336";
+      default:
+        return "#9C27B0";
+    }
+  };
   return {
     amountFormated,
     cardInvoices,
@@ -253,5 +286,7 @@ export const useUtils = () => {
     generateRandomColor,
     getSolicitationsFilters,
     setSolicitationsFilters,
+    solicitationStatusName,
+    solicitationStatusColor,
   };
 };
