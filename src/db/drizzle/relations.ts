@@ -42,11 +42,11 @@ export const usersRelations = relations(users, ({one, many}) => ({
 	patients: many(patients),
 	patientsConsultationReports: many(patientsConsultationReports),
 	userLogCredits: many(userLogCredits),
-	patientConsultations: many(patientConsultations),
 	profile: one(profiles, {
 		fields: [users.profileId],
 		references: [profiles.id]
 	}),
+	patientConsultations: many(patientConsultations),
 }));
 
 export const patientsRelations = relations(patients, ({one, many}) => ({

@@ -7,11 +7,11 @@ import {
   index,
   serial,
   char,
-  numeric,
   foreignKey,
   boolean,
   uniqueIndex,
   date,
+  numeric,
   pgEnum,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
@@ -100,25 +100,6 @@ export const files = pgTable(
     };
   }
 );
-
-export const consultations = pgTable("consultations", {
-  id: serial("id").primaryKey().notNull(),
-  consultationName: varchar("consultation_name", { length: 200 }).notNull(),
-  createdAt: timestamp("created_at", { precision: 3, mode: "string" })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at", {
-    precision: 3,
-    mode: "string",
-  }).notNull(),
-  value: numeric("value", { precision: 18, scale: 2 }).notNull(),
-  valueAntecipation: numeric("value_antecipation", {
-    precision: 18,
-    scale: 2,
-  }).notNull(),
-  valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
-  valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),
-});
 
 export const reportPurposes = pgTable("report_purposes", {
   id: serial("id").primaryKey().notNull(),
@@ -332,6 +313,64 @@ export const userLogCredits = pgTable(
   }
 );
 
+export const users = pgTable(
+  "users",
+  {
+    id: serial("id").primaryKey().notNull(),
+    name: varchar("name", { length: 200 }).notNull(),
+    email: varchar("email", { length: 1000 }).notNull(),
+    password: text("password").notNull(),
+    phone: varchar("phone", { length: 20 }),
+    cpfCnpj: varchar("cpf_cnpj", { length: 30 }),
+    oab: varchar("oab", { length: 10 }),
+    oabUf: char("oab_uf", { length: 2 }),
+    crm: varchar("crm", { length: 10 }),
+    crmUf: char("crm_uf", { length: 2 }),
+    profileId: integer("profile_id").notNull(),
+    createdAt: timestamp("created_at", { precision: 3, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", {
+      precision: 3,
+      mode: "string",
+    }).notNull(),
+    officeName: varchar("office_name", { length: 200 }),
+    active: boolean("active").default(true).notNull(),
+    officeCnpj: varchar("office_cnpj", { length: 30 }),
+    officeEmail: varchar("office_email", { length: 1000 }),
+    officePhone: varchar("office_phone", { length: 20 }),
+  },
+  (table) => {
+    return {
+      emailKey: uniqueIndex("users_email_key").using(
+        "btree",
+        table.email.asc().nullsLast()
+      ),
+      idxActive: index("users_idx_active").using(
+        "btree",
+        table.active.asc().nullsLast()
+      ),
+      idxCpfCnpj: index("users_idx_cpf_cnpj").using(
+        "btree",
+        table.cpfCnpj.asc().nullsLast()
+      ),
+      idxEmail: index("users_idx_email").using(
+        "btree",
+        table.email.asc().nullsLast()
+      ),
+      idxName: index("users_idx_name").using(
+        "btree",
+        table.name.asc().nullsLast()
+      ),
+      usersProfileIdFkey: foreignKey({
+        columns: [table.profileId],
+        foreignColumns: [profiles.id],
+        name: "users_profile_id_fkey",
+      }),
+    };
+  }
+);
+
 export const patientConsultations = pgTable(
   "patient_consultations",
   {
@@ -356,6 +395,25 @@ export const patientConsultations = pgTable(
     rate: integer("rate").default(0),
     dateAntecipation: date("date_antecipation"),
     dateCorrection: date("date_correction"),
+    createdAt: timestamp("created_at", { precision: 3, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    reasonCorrection: text("reason_correction"),
+    updatedAt: timestamp("updated_at", { precision: 3, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    antecipationValue: numeric("antecipation_value", {
+      precision: 18,
+      scale: 2,
+    })
+      .default("0")
+      .notNull(),
+    consultationValue: numeric("consultation_value", {
+      precision: 18,
+      scale: 2,
+    })
+      .default("0")
+      .notNull(),
   },
   (table) => {
     return {
@@ -388,57 +446,35 @@ export const patientConsultations = pgTable(
   }
 );
 
-export const users = pgTable(
-  "users",
-  {
-    id: serial("id").primaryKey().notNull(),
-    name: varchar("name", { length: 200 }).notNull(),
-    email: varchar("email", { length: 1000 }).notNull(),
-    password: text("password").notNull(),
-    phone: varchar("phone", { length: 20 }),
-    cpfCnpj: varchar("cpf_cnpj", { length: 30 }),
-    oab: varchar("oab", { length: 10 }),
-    oabUf: char("oab_uf", { length: 2 }),
-    crm: varchar("crm", { length: 10 }),
-    crmUf: char("crm_uf", { length: 2 }),
-    profileId: integer("profile_id").notNull(),
-    createdAt: timestamp("created_at", { precision: 3, mode: "string" })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", {
-      precision: 3,
-      mode: "string",
-    }).notNull(),
-    officeName: varchar("office_name", { length: 200 }),
-    active: boolean("active").default(true).notNull(),
-  },
-  (table) => {
-    return {
-      emailKey: uniqueIndex("users_email_key").using(
-        "btree",
-        table.email.asc().nullsLast()
-      ),
-      idxActive: index("users_idx_active").using(
-        "btree",
-        table.active.asc().nullsLast()
-      ),
-      idxCpfCnpj: index("users_idx_cpf_cnpj").using(
-        "btree",
-        table.cpfCnpj.asc().nullsLast()
-      ),
-      idxEmail: index("users_idx_email").using(
-        "btree",
-        table.email.asc().nullsLast()
-      ),
-      idxName: index("users_idx_name").using(
-        "btree",
-        table.name.asc().nullsLast()
-      ),
-      usersProfileIdFkey: foreignKey({
-        columns: [table.profileId],
-        foreignColumns: [profiles.id],
-        name: "users_profile_id_fkey",
-      }),
-    };
-  }
-);
+export const consultations = pgTable("consultations", {
+  id: serial("id").primaryKey().notNull(),
+  consultationName: varchar("consultation_name", { length: 200 }).notNull(),
+  createdAt: timestamp("created_at", { precision: 3, mode: "string" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", {
+    precision: 3,
+    mode: "string",
+  }).notNull(),
+  value: numeric("value", { precision: 18, scale: 2 }).notNull(),
+  valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
+  valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),
+  valueAntecipation24: numeric("value_antecipation_24", {
+    precision: 18,
+    scale: 2,
+  })
+    .default("0")
+    .notNull(),
+  valueAntecipation48: numeric("value_antecipation_48", {
+    precision: 18,
+    scale: 2,
+  })
+    .default("0")
+    .notNull(),
+  valueAntecipation72: numeric("value_antecipation_72", {
+    precision: 18,
+    scale: 2,
+  })
+    .default("0")
+    .notNull(),
+});

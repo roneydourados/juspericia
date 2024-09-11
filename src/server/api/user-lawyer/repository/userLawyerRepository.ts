@@ -1,9 +1,6 @@
 import { UserProps } from "@/types/User";
 import { and, ilike, or, eq } from "drizzle-orm";
-import { address } from "~/drizzle/schema/address";
-import { profiles } from "~/drizzle/schema/profiles";
-import { users } from "~/drizzle/schema/users";
-
+import { address, profiles, users } from "~/db/drizzle/schema";
 import { db } from "~/server/providers/drizzle-postgres-service";
 import { useHash } from "~/server/providers/hash";
 
