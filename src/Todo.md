@@ -24,6 +24,7 @@
 [] - Destacar qual médico esta com mais havilações
 [] - Acrescentar um menu de filtros em meus saldos
 [] - Agenda somente fica disponível para usuários administrador
+[] - Tirar do advogado botão cancelar depois de pago ou andamento a solicitação
 
 # entregue
 
