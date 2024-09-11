@@ -1,6 +1,10 @@
 import { UserProps } from "@/types/User";
 import { and, ilike, or, eq } from "drizzle-orm";
-import { address, profiles, users } from "~/db/drizzle/schema";
+import { address } from "~/db/schema/address";
+
+import { profileRoutes } from "~/db/schema/profileRoutes";
+import { profiles } from "~/db/schema/profiles";
+import { users } from "~/db/schema/users";
 import { db } from "~/server/providers/drizzle-postgres-service";
 import { useHash } from "~/server/providers/hash";
 
@@ -30,8 +34,8 @@ export const create = async (payload: UserProps) => {
     const user = await db
       .insert(users)
       .values({
-        email: String(payload.email!),
-        name: String(payload.name!),
+        email: payload.email!,
+        name: payload.name!,
         password: hashedpassword,
         cpfCnpj: payload.cpfCnpj ? String(payload.cpfCnpj) : null,
         phone: payload.phone ? String(payload.phone) : null,
@@ -236,26 +240,35 @@ const exists = async (id: number) => {
   const user = await db
     .select({
       id: users.id,
+      profileId: users.profileId,
       name: users.name,
-      cpfCnpj: users.cpfCnpj,
       phone: users.phone,
       active: users.active,
       email: users.email,
       oab: users.oab,
       oabUf: users.oabUf,
+      cpfCnpj: users.cpfCnpj,
       officeName: users.officeName,
       officePhone: users.officePhone,
       officeEmail: users.officeEmail,
       officeCnpj: users.officeCnpj,
+      Profile: profiles,
     })
-    .from(users);
+    .from(users)
+    .leftJoin(profiles, eq(profiles.id, users.profileId))
+    .where(eq(users.id, id));
 
-  if (!user) {
+  if (!user[0]) {
     throw createError({
       statusCode: 404,
       message: "Not found",
     });
   }
+
+  const ProfileRoutes = await db
+    .select()
+    .from(profileRoutes)
+    .where(eq(profileRoutes.profileId, user[0].profileId));
 
   const Address = await db
     .select()
@@ -268,7 +281,8 @@ const exists = async (id: number) => {
     );
 
   return {
-    ...user,
+    ...user[0],
+    ProfileRoutes,
     Address,
   };
 };

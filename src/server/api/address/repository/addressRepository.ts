@@ -1,10 +1,13 @@
 import { AddressProps } from "@/types/Address";
-import prisma from "@/lib/prisma";
+import { db } from "~/server/providers/drizzle-postgres-service";
+import { address } from "~/db/schema/address";
+import { eq } from "drizzle-orm";
 
 export const create = async (payload: AddressProps) => {
   try {
-    return prisma.address.create({
-      data: {
+    const data = await db
+      .insert(address)
+      .values({
         addressZipcode: payload.addressZipcode,
         addressCategory: payload.addressCategory!,
         ownerId: payload.ownerId!,
@@ -14,8 +17,10 @@ export const create = async (payload: AddressProps) => {
         addressNumber: payload.addressNumber,
         addressState: payload.addressState,
         addressStreet: payload.addressStreet,
-      },
-    });
+      })
+      .returning();
+
+    return data[0];
   } catch (error) {
     console.log("🚀 ~ error create Address:", error);
     throw createError({
@@ -29,8 +34,9 @@ export const update = async (payload: AddressProps) => {
   await exists(payload.id!);
 
   try {
-    return prisma.address.update({
-      data: {
+    const data = await db
+      .update(address)
+      .set({
         addressZipcode: payload.addressZipcode,
         addressCategory: payload.addressCategory!,
         ownerId: payload.ownerId!,
@@ -40,11 +46,11 @@ export const update = async (payload: AddressProps) => {
         addressNumber: payload.addressNumber,
         addressState: payload.addressState,
         addressStreet: payload.addressStreet,
-      },
-      where: {
-        id: payload.id,
-      },
-    });
+      })
+      .where(eq(address.id, payload.id!))
+      .returning();
+
+    return data[0];
   } catch (error) {
     console.log("🚀 ~ error update Address:", error);
     throw createError({
@@ -58,11 +64,7 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    return prisma.address.delete({
-      where: {
-        id,
-      },
-    });
+    await db.delete(address).where(eq(address.id, id));
   } catch (error) {
     console.log("🚀 ~ error remove Address:", error);
     throw createError({
@@ -77,14 +79,14 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const address = await prisma.address.findFirst({ where: { id } });
+  const data = await db.select().from(address).where(eq(address.id, id));
 
-  if (!address) {
+  if (!data[0]) {
     throw createError({
       statusCode: 404,
       message: "Address not found",
     });
   }
 
-  return address;
+  return data[0];
 };
