@@ -87,22 +87,28 @@ const { value } = useField<string>(fieldName, validationRules, {
 const onReady = (editor: Editor) => {
   editorInstance.value = editor;
 
-  console.log("Editor is ready.", { editor });
+  //console.log("Editor is ready.", { editor });
 };
 
 const onFocus = (event: EventInfo, editor: Editor) => {
-  console.log("Editor focused.", { event, editor });
+  //console.log("Editor focused.", { event, editor });
 };
 
 const onBlur = (event: EventInfo, editor: Editor) => {
-  console.log("Editor blurred.", { event, editor });
+  //console.log("Editor blurred.", { event, editor });
 };
 
 const onInput = (data: string, event: EventInfo, editor: Editor) => {
-  console.log("Editor data input.", { event, editor, data });
+  //console.log("Editor data input.", { event, editor, data });
 };
 
 const onDestroy = () => {
-  console.log("Editor destroyed.");
+  //console.log("Editor destroyed.");
 };
 </script>
+
+<style>
+.ck-editor__editable_inline {
+  height: 40rem; /* Define a altura mínima para 400 pixels */
+}
+</style>

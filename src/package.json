@@ -23,6 +23,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.19.1",
     "@tinymce/tinymce-vue": "^5",
+    "@tiptap/extension-color": "^2.6.6",
     "@vee-validate/zod": "^4.13.2",
     "apexcharts": "^3.53.0",
     "axios": "^1.7.2",
@@ -46,7 +47,7 @@
   "devDependencies": {
     "@tiptap/extension-highlight": "^2.5.4",
     "@tiptap/extension-text-align": "^2.5.4",
-    "@tiptap/extension-text-style": "^2.5.4",
+    "@tiptap/extension-text-style": "^2.6.6",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/nodemailer": "^6.4.15",
