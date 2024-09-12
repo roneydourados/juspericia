@@ -1,3 +1,4 @@
+import { users } from "./../../../../db/schema/users";
 import { UserProps } from "@/types/User";
 import { and, ilike, or, eq } from "drizzle-orm";
 import { address } from "~/db/schema/address";
@@ -185,33 +186,60 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  const data = await db
-    .select({
-      id: users.id,
-      name: users.name,
-      phone: users.phone,
-      active: users.active,
-      email: users.email,
-      oab: users.oab,
-      oabUf: users.oabUf,
-      cpfCnpj: users.cpfCnpj,
-      officeName: users.officeName,
-      officePhone: users.officePhone,
-      officeEmail: users.officeEmail,
-      officeCnpj: users.officeCnpj,
-    })
-    .from(users)
-    .leftJoin(profiles, eq(profiles.id, users.profileId))
-    .where(
-      or(
-        ilike(users.email, inputQuery),
-        ilike(users.name, inputQuery),
-        and(eq(profiles.type, "ADVOGADO"))
-      )
-    );
+  const user = await db.query.users.findMany({
+    columns: {
+      id: true,
+      name: true,
+      phone: true,
+      active: true,
+      email: true,
+      oab: true,
+      oabUf: true,
+      cpfCnpj: true,
+      officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
+    },
+    with: {
+      profile: {
+        columns: {
+          profileName: true,
+          type: true,
+        },
+      },
+    },
+    where: inputQuery
+      ? (users, { ilike }) => ilike(users.name, inputQuery)
+      : undefined,
+  });
+  // const data = await db
+  //   .select({
+  //     id: users.id,
+  //     name: users.name,
+  //     phone: users.phone,
+  //     active: users.active,
+  //     email: users.email,
+  //     oab: users.oab,
+  //     oabUf: users.oabUf,
+  //     cpfCnpj: users.cpfCnpj,
+  //     officeName: users.officeName,
+  //     officePhone: users.officePhone,
+  //     officeEmail: users.officeEmail,
+  //     officeCnpj: users.officeCnpj,
+  //   })
+  //   .from(users)
+  //   .leftJoin(profiles, eq(profiles.id, users.profileId))
+  //   .where(
+  //     or(
+  //       ilike(users.email, inputQuery),
+  //       ilike(users.name, inputQuery),
+  //       and(eq(profiles.type, "ADVOGADO"))
+  //     )
+  //   );
 
   const laywers = await Promise.all(
-    data.map(async (item) => {
+    user.map(async (item) => {
       const Address = await db
         .select()
         .from(address)
@@ -224,7 +252,7 @@ export const index = async (inputQuery: string) => {
 
       return {
         ...item,
-        Address,
+        addres: Address,
       };
     })
   );
@@ -237,26 +265,55 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const u = await db.select().from(users).where(eq(users.id, id));
-  const user = await db
-    .select({
-      id: users.id,
-      profileId: users.profileId,
-      name: users.name,
-      phone: users.phone,
-      active: users.active,
-      email: users.email,
-      oab: users.oab,
-      oabUf: users.oabUf,
-      cpfCnpj: users.cpfCnpj,
-      officeName: users.officeName,
-      officePhone: users.officePhone,
-      officeEmail: users.officeEmail,
-      officeCnpj: users.officeCnpj,
-    })
-    .from(users)
-    //.leftJoin(profiles, eq(profiles.id, users.profileId))
-    .where(eq(users.id, id));
+  const user = await db.query.users.findMany({
+    columns: {
+      id: true,
+      profileId: true,
+      name: true,
+      phone: true,
+      active: true,
+      email: true,
+      oab: true,
+      oabUf: true,
+      cpfCnpj: true,
+      officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
+    },
+    with: {
+      profile: {
+        columns: {
+          profileName: true,
+          type: true,
+        },
+        with: {
+          profileRoutes: true,
+        },
+      },
+    },
+    where: (users, { eq }) => eq(users.id, id),
+  });
+
+  // const user = await db
+  //   .select({
+  //     id: users.id,
+  //     profileId: users.profileId,
+  //     name: users.name,
+  //     phone: users.phone,
+  //     active: users.active,
+  //     email: users.email,
+  //     oab: users.oab,
+  //     oabUf: users.oabUf,
+  //     cpfCnpj: users.cpfCnpj,
+  //     officeName: users.officeName,
+  //     officePhone: users.officePhone,
+  //     officeEmail: users.officeEmail,
+  //     officeCnpj: users.officeCnpj,
+  //   })
+  //   .from(users)
+  //   //.leftJoin(profiles, eq(profiles.id, users.profileId))
+  //   .where(eq(users.id, id));
 
   if (!user[0]) {
     throw createError({
@@ -265,10 +322,10 @@ const exists = async (id: number) => {
     });
   }
 
-  const ProfileRoutes = await db
-    .select()
-    .from(profileRoutes)
-    .where(eq(profileRoutes.profileId, user[0].profileId));
+  // const ProfileRoutes = await db
+  //   .select()
+  //   .from(profileRoutes)
+  //   .where(eq(profileRoutes.profileId, user[0].profileId));
 
   const Address = await db
     .select()
@@ -282,8 +339,7 @@ const exists = async (id: number) => {
 
   return {
     ...user[0],
-    ProfileRoutes,
-    Address,
+    address: Address,
   };
 };
 

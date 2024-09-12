@@ -11,5 +11,5 @@ export * from "./profileRoutes";
 export * from "./reportModels";
 export * from "./reportPurposes";
 export * from "./schedules";
-export * from "./schema";
+export * from "./databaseTypes";
 export * from "./userLogCredits";

@@ -1,6 +1,6 @@
 import { pgTable, varchar, serial } from "drizzle-orm/pg-core";
 
-import { profileType } from "./schema";
+import { profileType } from "./databaseTypes";
 import { relations } from "drizzle-orm";
 import { profileRoutes } from "./profileRoutes";
 import { users } from "./users";
