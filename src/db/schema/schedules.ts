@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { patientConsultations } from "./patientConsultations";
+import { relations } from "drizzle-orm";
 
 export const schedules = pgTable(
   "schedules",
@@ -56,3 +57,14 @@ export const schedules = pgTable(
     };
   }
 );
+
+export const schedulesRelations = relations(schedules, ({ one }) => ({
+  patientConsultation: one(patientConsultations, {
+    fields: [schedules.patientConsultationId],
+    references: [patientConsultations.id],
+  }),
+  user: one(users, {
+    fields: [schedules.userId],
+    references: [users.id],
+  }),
+}));

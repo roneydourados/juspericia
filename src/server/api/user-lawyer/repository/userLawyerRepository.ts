@@ -237,6 +237,7 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
+  const u = await db.select().from(users).where(eq(users.id, id));
   const user = await db
     .select({
       id: users.id,
@@ -252,10 +253,9 @@ const exists = async (id: number) => {
       officePhone: users.officePhone,
       officeEmail: users.officeEmail,
       officeCnpj: users.officeCnpj,
-      Profile: profiles,
     })
     .from(users)
-    .leftJoin(profiles, eq(profiles.id, users.profileId))
+    //.leftJoin(profiles, eq(profiles.id, users.profileId))
     .where(eq(users.id, id));
 
   if (!user[0]) {

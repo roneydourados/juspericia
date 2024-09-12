@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   numeric,
   pgTable,
@@ -6,6 +6,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+import { patientConsultations } from "./patientConsultations";
 
 export const consultations = pgTable("consultations", {
   id: serial("id").primaryKey().notNull(),
@@ -25,3 +26,7 @@ export const consultations = pgTable("consultations", {
   valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
   valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),
 });
+
+export const consultationsRelations = relations(consultations, ({ many }) => ({
+  patientConsultations: many(patientConsultations),
+}));

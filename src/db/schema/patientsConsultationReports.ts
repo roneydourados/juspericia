@@ -9,6 +9,7 @@ import {
 import { users } from "./users";
 import { reportModels } from "./reportModels";
 import { patientConsultations } from "./patientConsultations";
+import { relations } from "drizzle-orm";
 
 export const patientsConsultationReports = pgTable(
   "patients_consultation_reports",
@@ -39,4 +40,22 @@ export const patientsConsultationReports = pgTable(
       }),
     };
   }
+);
+
+export const patientsConsultationReportsRelations = relations(
+  patientsConsultationReports,
+  ({ one }) => ({
+    patientConsultation: one(patientConsultations, {
+      fields: [patientsConsultationReports.patientConsultationId],
+      references: [patientConsultations.id],
+    }),
+    reportModel: one(reportModels, {
+      fields: [patientsConsultationReports.reportModelId],
+      references: [reportModels.id],
+    }),
+    user: one(users, {
+      fields: [patientsConsultationReports.userId],
+      references: [users.id],
+    }),
+  })
 );

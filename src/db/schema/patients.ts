@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   char,
   foreignKey,
@@ -11,6 +11,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
+import { patientConsultations } from "./patientConsultations";
 
 export const patients = pgTable(
   "patients",
@@ -65,3 +66,11 @@ export const patients = pgTable(
     };
   }
 );
+
+export const patientsRelations = relations(patients, ({ one, many }) => ({
+  user: one(users, {
+    fields: [patients.userId],
+    references: [users.id],
+  }),
+  patientConsultations: many(patientConsultations),
+}));

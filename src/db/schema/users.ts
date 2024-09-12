@@ -12,8 +12,13 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { profiles } from "./profiles";
+import { schedules } from "./schedules";
+import { patients } from "./patients";
+import { patientsConsultationReports } from "./patientsConsultationReports";
+import { userLogCredits } from "./userLogCredits";
+import { patientConsultations } from "./patientConsultations";
 
 export const users = pgTable(
   "users",
@@ -72,3 +77,15 @@ export const users = pgTable(
     };
   }
 );
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  schedules: many(schedules),
+  patients: many(patients),
+  patientsConsultationReports: many(patientsConsultationReports),
+  userLogCredits: many(userLogCredits),
+  patientConsultations: many(patientConsultations),
+  profile: one(profiles, {
+    fields: [users.profileId],
+    references: [profiles.id],
+  }),
+}));

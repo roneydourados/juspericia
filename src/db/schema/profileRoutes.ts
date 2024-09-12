@@ -7,6 +7,7 @@ import {
   boolean,
 } from "drizzle-orm/pg-core";
 import { profiles } from "./profiles";
+import { relations } from "drizzle-orm";
 
 export const profileRoutes = pgTable(
   "profile_routes",
@@ -29,3 +30,10 @@ export const profileRoutes = pgTable(
     };
   }
 );
+
+export const profileRoutesRelations = relations(profileRoutes, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [profileRoutes.profileId],
+    references: [profiles.id],
+  }),
+}));

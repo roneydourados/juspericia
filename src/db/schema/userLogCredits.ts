@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   foreignKey,
   index,
@@ -47,3 +47,10 @@ export const userLogCredits = pgTable(
     };
   }
 );
+
+export const userLogCreditsRelations = relations(userLogCredits, ({ one }) => ({
+  user: one(users, {
+    fields: [userLogCredits.userId],
+    references: [users.id],
+  }),
+}));
