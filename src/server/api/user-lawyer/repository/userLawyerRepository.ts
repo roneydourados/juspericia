@@ -1,9 +1,7 @@
-import { users } from "./../../../../db/schema/users";
 import { UserProps } from "@/types/User";
 import { and, ilike, or, eq } from "drizzle-orm";
 import { address } from "~/db/schema/address";
 
-import { profileRoutes } from "~/db/schema/profileRoutes";
 import { profiles } from "~/db/schema/profiles";
 import { users } from "~/db/schema/users";
 import { db } from "~/server/providers/drizzle-postgres-service";
@@ -186,6 +184,8 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
+  console.log("🚀 ~ index ~ inputQuery:", inputQuery);
+
   const user = await db.query.users.findMany({
     columns: {
       id: true,
@@ -209,9 +209,17 @@ export const index = async (inputQuery: string) => {
         },
       },
     },
-    where: inputQuery
-      ? (users, { ilike }) => ilike(users.name, inputQuery)
-      : undefined,
+    where: (users, { ilike, or, and, eq }) =>
+      or(
+        ilike(users.email, `%${inputQuery}%`),
+        ilike(users.name, `%${inputQuery}%`),
+        and(eq(profiles.type, "ADVOGADO"))
+      ),
+
+    // where: or(
+    //   ilike(users.name, `%${inputQuery}%`),
+    //   ilike(users.email, `%${inputQuery}%`)
+    // ),
   });
   // const data = await db
   //   .select({
