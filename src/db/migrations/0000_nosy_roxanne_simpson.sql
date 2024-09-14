@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS "consultations" (
 	"created_at" timestamp(3) DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"updated_at" timestamp(3) NOT NULL,
 	"value" numeric(18, 2) NOT NULL,
-	"value_antecipation" numeric(18, 2) NOT NULL,
+	"value_antecipation_24" numeric(18, 2) DEFAULT '0' NOT NULL,
+	"value_antecipation_48" numeric(18, 2) DEFAULT '0' NOT NULL,
+	"value_antecipation_72" numeric(18, 2) DEFAULT '0' NOT NULL,
 	"value_credit" numeric(18, 2) NOT NULL,
 	"value_packet" numeric(18, 2) NOT NULL
 );

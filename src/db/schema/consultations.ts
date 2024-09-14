@@ -19,10 +19,24 @@ const consultations = pgTable("consultations", {
     mode: "string",
   }).notNull(),
   value: numeric("value", { precision: 18, scale: 2 }).notNull(),
-  valueAntecipation: numeric("value_antecipation", {
+  valueAntecipation24: numeric("value_antecipation_24", {
     precision: 18,
     scale: 2,
-  }).notNull(),
+  })
+    .default("0") // Convert the number to a string
+    .notNull(),
+  valueAntecipation48: numeric("value_antecipation_48", {
+    precision: 18,
+    scale: 2,
+  })
+    .default("0") // Convert the number to a string
+    .notNull(),
+  valueAntecipation72: numeric("value_antecipation_72", {
+    precision: 18,
+    scale: 2,
+  })
+    .default("0") // Convert the number to a string
+    .notNull(),
   valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
   valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),
 });

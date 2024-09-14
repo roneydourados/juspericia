@@ -1,5 +1,5 @@
 {
-  "id": "3dd127fd-2daa-4e71-9cdb-e018ed360fa0",
+  "id": "82a750b0-14ba-4f2e-93d2-ab9933eae811",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -192,11 +192,26 @@
           "primaryKey": false,
           "notNull": true
         },
-        "value_antecipation": {
-          "name": "value_antecipation",
+        "value_antecipation_24": {
+          "name": "value_antecipation_24",
           "type": "numeric(18, 2)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'0'"
+        },
+        "value_antecipation_48": {
+          "name": "value_antecipation_48",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "value_antecipation_72": {
+          "name": "value_antecipation_72",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
         },
         "value_credit": {
           "name": "value_credit",

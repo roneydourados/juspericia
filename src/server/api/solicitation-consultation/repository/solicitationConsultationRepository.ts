@@ -6,6 +6,10 @@ import {
   SolicitationConsultationProps,
 } from "~/types/SolicitationConsultation";
 
+import { eq, and, or, ilike, inArray, asc, between } from "drizzle-orm";
+import { users, profiles, patientConsultations } from "@/db/schema";
+import { db } from "@/db";
+
 export const index = async (filters: SolicitationConsultationFilterProps) => {
   const {
     initialDateSolicitation,
@@ -17,19 +21,76 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     userId,
   } = filters;
 
-  const data = await prisma.patientConsultation.findMany({
-    where: {
-      dateOpen: {
-        gte: new Date(initialDateSolicitation),
-        lte: new Date(finalDateSolicitation),
+  const data = await db.query.patientConsultations.findMany({
+    where: and(
+      between(
+        patientConsultations.dateOpen,
+        initialDateSolicitation,
+        finalDateSolicitation
+      ),
+      eq(patientConsultations.userId, userId ?? 0),
+      eq(patientConsultations.status, status),
+      patientId ? eq(patientConsultations.patientId, patientId) : undefined,
+      benefitTypeId
+        ? eq(patientConsultations.benefitTypeId, benefitTypeId)
+        : undefined,
+      reportPurposeId
+        ? eq(patientConsultations.reportPurposeId, reportPurposeId)
+        : undefined
+    ),
+    // where: {
+    //   dateOpen: {
+    //     gte: new Date(initialDateSolicitation),
+    //     lte: new Date(finalDateSolicitation),
+    //   },
+    //   userId,
+    //   status,
+    //   patientId: patientId ? patientId : undefined,
+    //   benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
+    //   reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+    // },
+    with: {
+      Medic: {
+        columns: {
+          id: true,
+          name: true,
+          crm: true,
+          crmUf: true,
+        },
       },
-      userId,
-      status,
-      patientId: patientId ? patientId : undefined,
-      benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-      reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+      Consultation: {
+        columns: {
+          id: true,
+          consultationName: true,
+          value: true,
+          valueCredit: true,
+          valueAntecipation24: true,
+          valueAntecipation48: true,
+          valueAntecipation72: true,
+        },
+      },
+      Patient: {
+        columns: {
+          id: true,
+          name: true,
+          surname: true,
+          cpf: true,
+          phone: true,
+        },
+        with: {
+          User: {
+            columns: {
+              id: true,
+              name: true,
+              oab: true,
+              oabUf: true,
+              officeName: true,
+            },
+          },
+        },
+      },
     },
-    select: {
+    columns: {
       id: true,
       dateAntecipation: true,
       dateCorrection: true,
@@ -40,63 +101,31 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       status: true,
       processSituation: true,
       tipValue: true,
-      createdAt: true,
-      updatedAt: true,
-      reasonCorrection: true,
-      consultationValue: true,
-      antecipationValue: true,
-      Medic: {
-        select: {
-          id: true,
-          name: true,
-          crm: true,
-          crmUf: true,
-        },
-      },
-      Patient: {
-        select: {
-          id: true,
-          name: true,
-          surname: true,
-          cpf: true,
-          phone: true,
-          User: {
-            select: {
-              id: true,
-              name: true,
-              oab: true,
-              oabUf: true,
-              officeName: true,
-            },
-          },
-        },
-      },
-      Consultation: {
-        select: {
-          id: true,
-          consultationName: true,
-          value: true,
-          valueCredit: true,
-          valueAntecipation24: true,
-          valueAntecipation48: true,
-          valueAntecipation72: true,
-        },
-      },
-      BenefitType: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      ReportPurpose: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-    orderBy: {
-      id: "desc",
+      content: true,
+
+      // Consultation: {
+      //   select: {
+      //     id: true,
+      //     consultationName: true,
+      //     value: true,
+      //     valueCredit: true,
+      //     valueAntecipation24: true,
+      //     valueAntecipation48: true,
+      //     valueAntecipation72: true,
+      //   },
+      // },
+      // BenefitType: {
+      //   select: {
+      //     id: true,
+      //     name: true,
+      //   },
+      // },
+      // ReportPurpose: {
+      //   select: {
+      //     id: true,
+      //     name: true,
+      //   },
+      // },
     },
   });
 
