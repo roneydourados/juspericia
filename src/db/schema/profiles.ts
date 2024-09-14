@@ -13,7 +13,7 @@ const profiles = pgTable("profiles", {
 
 export const profilesRelations = relations(profiles, ({ many }) => ({
   ProfileRoute: many(profileRoutes),
-  users: many(users),
+  User: many(users),
 }));
 
 export default profiles;

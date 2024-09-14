@@ -28,7 +28,7 @@ const consultations = pgTable("consultations", {
 });
 
 export const consultationsRelations = relations(consultations, ({ many }) => ({
-  patientConsultations: many(patientConsultations),
+  PatientConsultation: many(patientConsultations),
 }));
 
 export default consultations;

@@ -10,7 +10,7 @@ const reportPurposes = pgTable("report_purposes", {
 export const reportPurposesRelations = relations(
   reportPurposes,
   ({ many }) => ({
-    patientConsultations: many(patientConsultations),
+    PatientConsultation: many(patientConsultations),
   })
 );
 

@@ -68,11 +68,11 @@ const patients = pgTable(
 );
 
 export const patientsRelations = relations(patients, ({ one, many }) => ({
-  user: one(users, {
+  User: one(users, {
     fields: [patients.userId],
     references: [users.id],
   }),
-  patientConsultations: many(patientConsultations),
+  PatientConsultation: many(patientConsultations),
 }));
 
 export default patients;

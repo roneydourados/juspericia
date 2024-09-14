@@ -77,24 +77,24 @@ export const patientConsultationsRelations = relations(
   patientConsultations,
   ({ one, many }) => ({
     schedules: many(schedules),
-    patientsConsultationReports: many(patientsConsultationReports),
-    benefitType: one(benefitTypes, {
+    PatientsConsultationReport: many(patientsConsultationReports),
+    BenefitType: one(benefitTypes, {
       fields: [patientConsultations.benefitTypeId],
       references: [benefitTypes.id],
     }),
-    consultation: one(consultations, {
+    Consultation: one(consultations, {
       fields: [patientConsultations.consultationId],
       references: [consultations.id],
     }),
-    user: one(users, {
+    Medic: one(users, {
       fields: [patientConsultations.medicId],
       references: [users.id],
     }),
-    patient: one(patients, {
+    Patient: one(patients, {
       fields: [patientConsultations.patientId],
       references: [patients.id],
     }),
-    reportPurpose: one(reportPurposes, {
+    ReportPurpose: one(reportPurposes, {
       fields: [patientConsultations.reportPurposeId],
       references: [reportPurposes.id],
     }),

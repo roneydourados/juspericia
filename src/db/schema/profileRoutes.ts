@@ -32,7 +32,7 @@ const profileRoutes = pgTable(
 );
 
 export const profileRoutesRelations = relations(profileRoutes, ({ one }) => ({
-  profile: one(profiles, {
+  Profile: one(profiles, {
     fields: [profileRoutes.profileId],
     references: [profiles.id],
   }),

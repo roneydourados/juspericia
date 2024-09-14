@@ -49,7 +49,7 @@ const userLogCredits = pgTable(
 );
 
 export const userLogCreditsRelations = relations(userLogCredits, ({ one }) => ({
-  user: one(users, {
+  User: one(users, {
     fields: [userLogCredits.userId],
     references: [users.id],
   }),

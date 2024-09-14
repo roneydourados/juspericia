@@ -8,7 +8,7 @@ const benefitTypes = pgTable("benefit_types", {
 });
 
 export const benefitTypesRelations = relations(benefitTypes, ({ many }) => ({
-  patientConsultations: many(patientConsultations),
+  PatientConsultations: many(patientConsultations),
 }));
 
 export default benefitTypes;

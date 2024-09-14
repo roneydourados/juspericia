@@ -9,7 +9,7 @@ const reportModels = pgTable("report_models", {
 });
 
 export const reportModelsRelations = relations(reportModels, ({ many }) => ({
-  patientsConsultationReports: many(patientsConsultationReports),
+  PatientsConsultationReports: many(patientsConsultationReports),
 }));
 
 export default reportModels;

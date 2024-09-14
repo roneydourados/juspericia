@@ -45,15 +45,15 @@ const patientsConsultationReports = pgTable(
 export const patientsConsultationReportsRelations = relations(
   patientsConsultationReports,
   ({ one }) => ({
-    patientConsultation: one(patientConsultations, {
+    PatientConsultation: one(patientConsultations, {
       fields: [patientsConsultationReports.patientConsultationId],
       references: [patientConsultations.id],
     }),
-    reportModel: one(reportModels, {
+    ReportModel: one(reportModels, {
       fields: [patientsConsultationReports.reportModelId],
       references: [reportModels.id],
     }),
-    user: one(users, {
+    Medic: one(users, {
       fields: [patientsConsultationReports.userId],
       references: [users.id],
     }),
