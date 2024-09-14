@@ -1,6 +1,6 @@
 import { UserProps } from "@/types/User";
-import { and, ilike, or, eq } from "drizzle-orm";
-import { address, profiles, users } from "~/db/schema";
+import { and, ilike, or, eq, inArray, desc } from "drizzle-orm";
+import { address, profileRoutes, profiles, users } from "~/db/schema";
 import { db } from "@/db";
 import { useHash } from "~/server/providers/hash";
 
@@ -195,49 +195,46 @@ export const index = async (inputQuery: string) => {
       officeCnpj: true,
     },
     with: {
-      profile: {
+      Profile: {
         columns: {
+          id: true,
           profileName: true,
           type: true,
         },
+        with: {
+          ProfileRoute: {
+            where: eq(users.profileId, profileRoutes.profileId),
+            columns: {
+              profileId: true,
+              icon: true,
+              id: true,
+              isMenu: true,
+              title: true,
+              to: true,
+              visible: true,
+            },
+          },
+        },
       },
     },
-    where: (users, { ilike, or, and, eq }) =>
+
+    where: and(
       or(
         ilike(users.email, `%${inputQuery}%`),
-        ilike(users.name, `%${inputQuery}%`),
-        and(eq(profiles.type, "ADVOGADO"))
+        ilike(users.name, `%${inputQuery}%`)
       ),
-
-    // where: or(
-    //   ilike(users.name, `%${inputQuery}%`),
-    //   ilike(users.email, `%${inputQuery}%`)
-    // ),
+      inArray(
+        users.profileId,
+        db
+          .select({ profileId: profiles.id })
+          .from(profiles)
+          .where(
+            and(eq(profiles.id, users.profileId), eq(profiles.type, "ADVOGADO"))
+          )
+      )
+    ),
+    orderBy: [desc(users.id)],
   });
-  // const data = await db
-  //   .select({
-  //     id: users.id,
-  //     name: users.name,
-  //     phone: users.phone,
-  //     active: users.active,
-  //     email: users.email,
-  //     oab: users.oab,
-  //     oabUf: users.oabUf,
-  //     cpfCnpj: users.cpfCnpj,
-  //     officeName: users.officeName,
-  //     officePhone: users.officePhone,
-  //     officeEmail: users.officeEmail,
-  //     officeCnpj: users.officeCnpj,
-  //   })
-  //   .from(users)
-  //   .leftJoin(profiles, eq(profiles.id, users.profileId))
-  //   .where(
-  //     or(
-  //       ilike(users.email, inputQuery),
-  //       ilike(users.name, inputQuery),
-  //       and(eq(profiles.type, "ADVOGADO"))
-  //     )
-  //   );
 
   const laywers = await Promise.all(
     user.map(async (item) => {
@@ -253,7 +250,7 @@ export const index = async (inputQuery: string) => {
 
       return {
         ...item,
-        addres: Address,
+        Address: Address[0],
       };
     })
   );
@@ -283,38 +280,18 @@ const exists = async (id: number) => {
       officeCnpj: true,
     },
     with: {
-      profile: {
+      Profile: {
         columns: {
           profileName: true,
           type: true,
         },
         with: {
-          profileRoutes: true,
+          ProfileRoute: true,
         },
       },
     },
     where: (users, { eq }) => eq(users.id, id),
   });
-
-  // const user = await db
-  //   .select({
-  //     id: users.id,
-  //     profileId: users.profileId,
-  //     name: users.name,
-  //     phone: users.phone,
-  //     active: users.active,
-  //     email: users.email,
-  //     oab: users.oab,
-  //     oabUf: users.oabUf,
-  //     cpfCnpj: users.cpfCnpj,
-  //     officeName: users.officeName,
-  //     officePhone: users.officePhone,
-  //     officeEmail: users.officeEmail,
-  //     officeCnpj: users.officeCnpj,
-  //   })
-  //   .from(users)
-  //   //.leftJoin(profiles, eq(profiles.id, users.profileId))
-  //   .where(eq(users.id, id));
 
   if (!user[0]) {
     throw createError({
@@ -322,11 +299,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
-
-  // const ProfileRoutes = await db
-  //   .select()
-  //   .from(profileRoutes)
-  //   .where(eq(profileRoutes.profileId, user[0].profileId));
 
   const Address = await db
     .select()
@@ -340,7 +312,7 @@ const exists = async (id: number) => {
 
   return {
     ...user[0],
-    address: Address,
+    Address: Address[0],
   };
 };
 

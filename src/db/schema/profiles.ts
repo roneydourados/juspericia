@@ -12,7 +12,7 @@ const profiles = pgTable("profiles", {
 });
 
 export const profilesRelations = relations(profiles, ({ many }) => ({
-  profileRoutes: many(profileRoutes),
+  ProfileRoute: many(profileRoutes),
   users: many(users),
 }));
 

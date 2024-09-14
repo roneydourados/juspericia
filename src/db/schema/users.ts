@@ -19,6 +19,7 @@ import patients from "./patients";
 import patientsConsultationReports from "./patientsConsultationReports";
 import userLogCredits from "./userLogCredits";
 import patientConsultations from "./patientConsultations";
+import address from "./address";
 
 const users = pgTable(
   "users",
@@ -51,10 +52,6 @@ const users = pgTable(
   },
   (table) => {
     return {
-      // emailKey: index("users_email_key").using(
-      //   "btree",
-      //   table.email.asc().nullsLast()
-      // ),
       idxActive: index("users_idx_active").using(
         "btree",
         table.active.asc().nullsLast()
@@ -86,7 +83,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   patientsConsultationReports: many(patientsConsultationReports),
   userLogCredits: many(userLogCredits),
   patientConsultations: many(patientConsultations),
-  profile: one(profiles, {
+  Profile: one(profiles, {
     fields: [users.profileId],
     references: [profiles.id],
   }),
