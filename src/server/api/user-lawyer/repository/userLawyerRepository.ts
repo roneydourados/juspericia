@@ -1,5 +1,5 @@
 import { UserProps } from "@/types/User";
-import { and, ilike, or, eq, inArray, desc } from "drizzle-orm";
+import { and, ilike, or, eq, inArray, asc } from "drizzle-orm";
 import { address, profileRoutes, profiles, users } from "~/db/schema";
 import { db } from "@/db";
 import { useHash } from "~/server/providers/hash";
@@ -233,7 +233,7 @@ export const index = async (inputQuery: string) => {
           )
       )
     ),
-    orderBy: [desc(users.id)],
+    orderBy: [asc(users.name)],
   });
 
   const laywers = await Promise.all(
@@ -263,7 +263,7 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const user = await db.query.users.findMany({
+  const user = await db.query.users.findFirst({
     columns: {
       id: true,
       profileId: true,
@@ -293,7 +293,7 @@ const exists = async (id: number) => {
     where: (users, { eq }) => eq(users.id, id),
   });
 
-  if (!user[0]) {
+  if (!user) {
     throw createError({
       statusCode: 404,
       message: "Not found",
@@ -305,13 +305,13 @@ const exists = async (id: number) => {
     .from(address)
     .where(
       and(
-        eq(address.ownerId, user[0].id),
+        eq(address.ownerId, user.id),
         eq(address.addressCategory, addressCategoryType.user)
       )
     );
 
   return {
-    ...user[0],
+    ...user,
     Address: Address[0],
   };
 };

@@ -1,17 +1,22 @@
-import prisma from "@/lib/prisma";
+//import prisma from "@/lib/prisma";
 import { UserProps } from "@/types/User";
 import { useHash } from "~/server/providers/hash";
+import { db } from "@/db";
+import { eq, and, or, ilike, inArray, asc } from "drizzle-orm";
+import { users, profiles } from "@/db/schema";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();
 
-  const profile = await prisma.profile.findFirst({
-    where: {
-      type: "ADMIN",
-    },
-  });
+  const profile = await db
+    .select({
+      id: profiles.id,
+      type: profiles.type,
+    })
+    .from(profiles)
+    .where(eq(profiles.type, "ADMIN"));
 
-  if (!profile) {
+  if (!profile[0]) {
     throw createError({
       statusCode: 500,
       message: "Profile not found",
@@ -23,23 +28,26 @@ export const create = async (payload: UserProps) => {
 
     const hashedpassword = await hashText(payload.password!);
 
-    const user = await prisma.user.create({
-      data: {
+    const user = await db
+      .insert(users)
+      .values({
         email: payload.email!,
         name: payload.name!,
         password: hashedpassword,
         active: true,
         cpfCnpj: payload.cpfCnpj,
         phone: payload.phone,
-        profileId: profile.id,
-      },
-    });
+        profileId: profile[0].id,
+      })
+      .returning({
+        id: users.id,
+        name: users.name,
+        phone: users.phone,
+        active: users.active,
+        email: users.email,
+      });
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    };
+    return user;
   } catch (error) {
     console.log("🚀 ~ error create User Admin:", error);
     throw createError({
@@ -53,32 +61,36 @@ export const update = async (payload: UserProps) => {
   const { hashText } = useHash();
 
   await exists(payload.id!);
-  //await validations(payload);
 
   const hashedpassword = payload.password
     ? await hashText(payload.password!)
     : undefined;
 
   try {
-    const user = await prisma.user.update({
-      data: {
+    const user = await db
+      .update(users)
+      .set({
         email: payload.email,
         name: payload.name,
         password: hashedpassword,
         active: payload.active,
         cpfCnpj: payload.cpfCnpj,
         phone: payload.phone,
-      },
-      where: {
-        id: payload.id,
-      },
-    });
+        oab: payload.oab,
+        oabUf: payload.oabUf,
+        officeName: payload.officeName,
+        officeCnpj: payload.officeCnpj,
+        officeEmail: payload.officeEmail,
+        officePhone: payload.officePhone,
+      })
+      .where(eq(users.id, payload.id!))
+      .returning({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+      });
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    };
+    return user;
   } catch (error) {
     console.log("🚀 ~ error update User Admin:", error);
     throw createError({
@@ -92,11 +104,7 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    await prisma.user.delete({
-      where: {
-        id,
-      },
-    });
+    await db.delete(users).where(eq(users.id, id));
   } catch (error) {
     console.log("🚀 ~ error remove User Admin:", error);
     throw createError({
@@ -107,33 +115,41 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  return prisma.user.findMany({
-    select: {
+  const user = await db.query.users.findMany({
+    columns: {
       id: true,
       name: true,
       phone: true,
       active: true,
       email: true,
+      oab: true,
+      oabUf: true,
+      cpfCnpj: true,
+      officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
     },
-    where: {
-      OR: [
-        {
-          email: { contains: inputQuery, mode: "insensitive" },
-        },
-        {
-          name: { contains: inputQuery, mode: "insensitive" },
-        },
-      ],
-      AND: [
-        {
-          Profile: { type: "ADMIN" },
-        },
-      ],
-    },
-    orderBy: {
-      name: "asc",
-    },
+
+    where: and(
+      or(
+        ilike(users.email, `%${inputQuery}%`),
+        ilike(users.name, `%${inputQuery}%`)
+      ),
+      inArray(
+        users.profileId,
+        db
+          .select({ profileId: profiles.id })
+          .from(profiles)
+          .where(
+            and(eq(profiles.id, users.profileId), eq(profiles.type, "ADMIN"))
+          )
+      )
+    ),
+    orderBy: [asc(users.name)],
   });
+
+  return user;
 };
 
 export const show = async (id: number) => {
@@ -141,18 +157,34 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const user = await prisma.user.findFirst({
-    where: {
-      id,
-    },
-    select: {
+  const user = await db.query.users.findFirst({
+    columns: {
       id: true,
+      profileId: true,
       name: true,
-      cpfCnpj: true,
       phone: true,
       active: true,
       email: true,
+      oab: true,
+      oabUf: true,
+      cpfCnpj: true,
+      officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
     },
+    with: {
+      Profile: {
+        columns: {
+          profileName: true,
+          type: true,
+        },
+        with: {
+          ProfileRoute: true,
+        },
+      },
+    },
+    where: (users, { eq }) => eq(users.id, id),
   });
 
   if (!user) {
@@ -166,10 +198,8 @@ const exists = async (id: number) => {
 };
 
 const validations = async (payload: UserProps) => {
-  const exists = await prisma.user.findFirst({
-    where: {
-      email: payload.email,
-    },
+  const exists = await db.query.users.findFirst({
+    where: eq(users.email, payload.email!),
   });
 
   if (exists) {

@@ -1,18 +1,22 @@
-import prisma from "@/lib/prisma";
-
+//import prisma from "@/lib/prisma";
 import { UserProps } from "@/types/User";
 import { useHash } from "~/server/providers/hash";
+import { db } from "@/db";
+import { eq, and, or, ilike, inArray, asc } from "drizzle-orm";
+import { users, profiles, address, profileRoutes } from "@/db/schema";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();
 
-  const profile = await prisma.profile.findFirst({
-    where: {
-      type: "MEDICO",
-    },
-  });
+  const profile = await db
+    .select({
+      id: profiles.id,
+      type: profiles.type,
+    })
+    .from(profiles)
+    .where(eq(profiles.type, "MEDICO"));
 
-  if (!profile) {
+  if (!profile[0]) {
     throw createError({
       statusCode: 500,
       message: "Profile not found",
@@ -24,8 +28,9 @@ export const create = async (payload: UserProps) => {
 
     const hashedpassword = await hashText(payload.password!);
 
-    const user = await prisma.user.create({
-      data: {
+    const user = await db
+      .insert(users)
+      .values({
         email: payload.email!,
         name: payload.name!,
         password: hashedpassword,
@@ -34,31 +39,40 @@ export const create = async (payload: UserProps) => {
         cpfCnpj: payload.cpfCnpj,
         crmUf: payload.crmUf,
         phone: payload.phone,
-        profileId: profile.id,
-      },
-    });
+        profileId: profile[0].id,
+      })
+      .returning({
+        id: users.id,
+        name: users.name,
+        phone: users.phone,
+        active: users.active,
+        email: users.email,
+      });
 
     if (payload.Address) {
-      await prisma.address.create({
-        data: {
-          addressCity: payload.Address.addressCity,
-          addressComplement: payload.Address.addressComplement,
-          addressDistrict: payload.Address.addressDistrict,
-          addressNumber: payload.Address.addressNumber,
-          addressState: payload.Address.addressState,
-          addressStreet: payload.Address.addressStreet,
-          addressZipcode: payload.Address.addressZipcode,
-          ownerId: user.id,
-          addressCategory: addressCategoryType.user,
-        },
+      await db
+        .delete(address)
+        .where(
+          and(
+            eq(address.ownerId, user[0].id),
+            eq(address.addressCategory, addressCategoryType.user)
+          )
+        );
+
+      await db.insert(address).values({
+        addressCity: payload.Address.addressCity,
+        addressComplement: payload.Address.addressComplement,
+        addressDistrict: payload.Address.addressDistrict,
+        addressNumber: payload.Address.addressNumber,
+        addressState: payload.Address.addressState,
+        addressStreet: payload.Address.addressStreet,
+        addressZipcode: payload.Address.addressZipcode,
+        ownerId: user[0].id,
+        addressCategory: addressCategoryType.user,
       });
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    };
+    return user;
   } catch (error) {
     console.log("🚀 ~ error create Medic:", error);
     throw createError({
@@ -79,51 +93,51 @@ export const update = async (payload: UserProps) => {
     : undefined;
 
   try {
-    const user = await prisma.user.update({
-      data: {
+    const user = await db
+      .update(users)
+      .set({
         email: payload.email,
         name: payload.name,
         password: hashedpassword,
-        active: payload.active,
+        active: true,
         crm: payload.crm,
         cpfCnpj: payload.cpfCnpj,
         crmUf: payload.crmUf,
         phone: payload.phone,
-      },
-
-      where: {
-        id: payload.id,
-      },
-    });
-
-    if (payload.Address) {
-      await prisma.address.deleteMany({
-        where: {
-          ownerId: user.id,
-          addressCategory: addressCategoryType.user,
-        },
+      })
+      .where(eq(users.id, payload.id!))
+      .returning({
+        id: users.id,
+        name: users.name,
+        phone: users.phone,
+        active: users.active,
+        email: users.email,
       });
 
-      await prisma.address.create({
-        data: {
-          addressCity: payload.Address.addressCity,
-          addressComplement: payload.Address.addressComplement,
-          addressDistrict: payload.Address.addressDistrict,
-          addressNumber: payload.Address.addressNumber,
-          addressState: payload.Address.addressState,
-          addressStreet: payload.Address.addressStreet,
-          addressZipcode: payload.Address.addressZipcode,
-          ownerId: user.id,
-          addressCategory: addressCategoryType.user,
-        },
+    if (payload.Address) {
+      await db
+        .delete(address)
+        .where(
+          and(
+            eq(address.ownerId, user[0].id),
+            eq(address.addressCategory, addressCategoryType.user)
+          )
+        );
+
+      await db.insert(address).values({
+        addressCity: payload.Address.addressCity,
+        addressComplement: payload.Address.addressComplement,
+        addressDistrict: payload.Address.addressDistrict,
+        addressNumber: payload.Address.addressNumber,
+        addressState: payload.Address.addressState,
+        addressStreet: payload.Address.addressStreet,
+        addressZipcode: payload.Address.addressZipcode,
+        ownerId: user[0].id,
+        addressCategory: addressCategoryType.user,
       });
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    };
+    return user;
   } catch (error) {
     console.log("🚀 ~ error update Medic:", error);
     throw createError({
@@ -137,89 +151,82 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    await prisma.user.delete({
-      where: {
-        id,
-      },
-    });
-    await prisma.address.deleteMany({
-      where: {
-        ownerId: id,
-        addressCategory: addressCategoryType.user,
-      },
-    });
+    await db.delete(users).where(eq(users.id, id));
+
+    await db
+      .delete(address)
+      .where(
+        and(
+          eq(address.ownerId, id),
+          eq(address.addressCategory, addressCategoryType.user)
+        )
+      );
   } catch (error) {
-    console.log("🚀 ~ error remove Medic:", error);
+    console.log("🚀 ~ error remove User Lawyer:", error);
     throw createError({
       statusCode: 500,
-      message: "Error to remove Medic",
+      message: "Error to remove User Lawyer",
     });
   }
 };
 
 export const index = async (inputQuery: string) => {
-  const data = await prisma.user.findMany({
-    select: {
+  const user = await db.query.users.findMany({
+    columns: {
       id: true,
       name: true,
-      cpfCnpj: true,
       phone: true,
-      crm: true,
       active: true,
-      crmUf: true,
       email: true,
-      // Profile: {
-      //   select: {
-      //     id: true,
-      //     profileName: true,
-      //     type: true,
-      //   },
-      // },
+      oab: true,
+      oabUf: true,
+      cpfCnpj: true,
+      officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
+      crm: true,
+      crmUf: true,
     },
-    where: {
-      OR: [
-        {
-          email: { contains: inputQuery, mode: "insensitive" },
-        },
-        {
-          name: { contains: inputQuery, mode: "insensitive" },
-        },
-      ],
-      AND: [
-        {
-          Profile: { type: "MEDICO" },
-        },
-      ],
-    },
-    orderBy: {
-      name: "asc",
-    },
+
+    where: and(
+      or(
+        ilike(users.email, `%${inputQuery}%`),
+        ilike(users.name, `%${inputQuery}%`)
+      ),
+      inArray(
+        users.profileId,
+        db
+          .select({ profileId: profiles.id })
+          .from(profiles)
+          .where(
+            and(eq(profiles.id, users.profileId), eq(profiles.type, "MEDICO"))
+          )
+      )
+    ),
+    orderBy: [asc(users.name)],
   });
 
-  const users = await Promise.all(
-    data.map(async (user) => {
-      const address = await prisma.address.findFirst({
-        where: {
-          ownerId: user.id,
-          addressCategory: addressCategoryType.user,
-        },
-      });
+  const medics = await Promise.all(
+    user.map(async (item) => {
+      const Address = await db
+        .select()
+        .from(address)
+        .where(
+          and(
+            eq(address.ownerId, item.id),
+            eq(address.addressCategory, addressCategoryType.user)
+          )
+        );
 
       return {
-        id: user.id,
-        name: user.name,
-        cpfCnpj: user.cpfCnpj,
-        phone: user.phone,
-        crm: user.crm,
-        active: user.active,
-        crmUf: user.crmUf,
-        email: user.email,
-        Address: address,
+        ...item,
+        Address: Address[0],
       };
     })
   );
 
-  return users;
+  return medics;
 };
 
 export const show = async (id: number) => {
@@ -227,86 +234,85 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const data = await prisma.user.findFirst({
-    where: {
-      id,
-    },
-    select: {
+  const user = await db.query.users.findFirst({
+    columns: {
       id: true,
+      profileId: true,
       name: true,
-      cpfCnpj: true,
       phone: true,
-      crm: true,
       active: true,
-      crmUf: true,
       email: true,
       oab: true,
       oabUf: true,
+      cpfCnpj: true,
       officeName: true,
+      officePhone: true,
+      officeEmail: true,
+      officeCnpj: true,
+      crm: true,
+      crmUf: true,
+    },
+    with: {
       Profile: {
-        select: {
-          id: true,
+        columns: {
           profileName: true,
           type: true,
         },
+        with: {
+          ProfileRoute: true,
+        },
       },
     },
+    where: (users, { eq }) => eq(users.id, id),
   });
 
-  if (!data) {
+  if (!user) {
     throw createError({
       statusCode: 404,
       message: "Not found",
     });
   }
 
-  const address = await prisma.address.findFirst({
-    where: {
-      ownerId: data.id,
-      addressCategory: addressCategoryType.user,
-    },
-  });
+  const Address = await db
+    .select()
+    .from(address)
+    .where(
+      and(
+        eq(address.ownerId, user.id),
+        eq(address.addressCategory, addressCategoryType.user)
+      )
+    );
 
-  const user = {
-    id: data.id,
-    name: data.name,
-    cpfCnpj: data.cpfCnpj,
-    phone: data.phone,
-    crm: data.crm,
-    active: data.active,
-    crmUf: data.crmUf,
-    email: data.email,
-    Address: address,
+  return {
+    ...user,
+    Address: Address[0],
   };
-
-  return user;
 };
 
 const validations = async (payload: UserProps) => {
-  const exists = await prisma.user.findFirst({
-    where: {
-      email: payload.email,
-    },
-  });
+  const exists = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, String(payload.email!)));
 
-  if (exists) {
+  if (exists[0]) {
     throw createError({
       statusCode: 409,
-      message: "Medic already exists",
+      message: "User Medic already exists",
     });
   }
 
   if (!payload.email) {
     throw createError({
       statusCode: 409,
-      message: "Medic email is required",
+      message: "User Medic email is required",
     });
   }
 
   if (!payload.name) {
     throw createError({
       statusCode: 409,
-      message: "Medic name is required",
+      message: "User Medic name is required",
     });
   }
 };
