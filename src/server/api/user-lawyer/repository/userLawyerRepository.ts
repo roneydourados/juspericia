@@ -1,10 +1,7 @@
 import { UserProps } from "@/types/User";
 import { and, ilike, or, eq } from "drizzle-orm";
-import { address } from "~/db/schema/address";
-
-import { profiles } from "~/db/schema/profiles";
-import { users } from "~/db/schema/users";
-import { db } from "~/server/providers/drizzle-postgres-service";
+import { address, profiles, users } from "~/db/schema";
+import { db } from "@/db";
 import { useHash } from "~/server/providers/hash";
 
 export const create = async (payload: UserProps) => {
@@ -34,7 +31,7 @@ export const create = async (payload: UserProps) => {
       .insert(users)
       .values({
         email: payload.email!,
-        name: payload.name!,
+        name: String(payload.name!),
         password: hashedpassword,
         cpfCnpj: payload.cpfCnpj ? String(payload.cpfCnpj) : null,
         phone: payload.phone ? String(payload.phone) : null,
@@ -45,8 +42,6 @@ export const create = async (payload: UserProps) => {
         officeCnpj: payload.officeCnpj ? String(payload.officeCnpj) : null,
         officeEmail: payload.officeEmail ? String(payload.officeEmail) : null,
         officePhone: payload.officePhone ? String(payload.officePhone) : null,
-        updatedAt: new Date(), // Add the updatedAt property
-        createdAt: new Date(), // Add the createdAt property
         active: true,
         crm: null,
         crmUf: null,
@@ -184,8 +179,6 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  console.log("🚀 ~ index ~ inputQuery:", inputQuery);
-
   const user = await db.query.users.findMany({
     columns: {
       id: true,

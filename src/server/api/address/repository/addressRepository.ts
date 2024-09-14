@@ -1,6 +1,6 @@
 import { AddressProps } from "@/types/Address";
-import { db } from "~/server/providers/drizzle-postgres-service";
-import { address } from "~/db/schema/address";
+import { db } from "@/db";
+import { address } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export const create = async (payload: AddressProps) => {
