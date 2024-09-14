@@ -8,11 +8,11 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { patientConsultations } from "./patientConsultations";
+import users from "./users";
+import patientConsultations from "./patientConsultations";
 import { relations } from "drizzle-orm";
 
-export const schedules = pgTable(
+const schedules = pgTable(
   "schedules",
   {
     id: serial("id").primaryKey().notNull(),
@@ -68,3 +68,5 @@ export const schedulesRelations = relations(schedules, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export default schedules;

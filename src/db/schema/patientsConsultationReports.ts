@@ -6,12 +6,12 @@ import {
   serial,
   text,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { reportModels } from "./reportModels";
-import { patientConsultations } from "./patientConsultations";
+import users from "./users";
+import reportModels from "./reportModels";
+import patientConsultations from "./patientConsultations";
 import { relations } from "drizzle-orm";
 
-export const patientsConsultationReports = pgTable(
+const patientsConsultationReports = pgTable(
   "patients_consultation_reports",
   {
     id: serial("id").primaryKey().notNull(),
@@ -59,3 +59,5 @@ export const patientsConsultationReportsRelations = relations(
     }),
   })
 );
+
+export default patientsConsultationReports;

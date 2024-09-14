@@ -1,8 +1,8 @@
 import { relations } from "drizzle-orm";
 import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { patientConsultations } from "./patientConsultations";
+import patientConsultations from "./patientConsultations";
 
-export const reportPurposes = pgTable("report_purposes", {
+const reportPurposes = pgTable("report_purposes", {
   id: serial("id").primaryKey().notNull(),
   name: varchar("name", { length: 200 }).notNull(),
 });
@@ -13,3 +13,5 @@ export const reportPurposesRelations = relations(
     patientConsultations: many(patientConsultations),
   })
 );
+
+export default reportPurposes;

@@ -10,10 +10,10 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { patientConsultations } from "./patientConsultations";
+import users from "./users";
+import patientConsultations from "./patientConsultations";
 
-export const patients = pgTable(
+const patients = pgTable(
   "patients",
   {
     id: serial("id").primaryKey().notNull(),
@@ -74,3 +74,5 @@ export const patientsRelations = relations(patients, ({ one, many }) => ({
   }),
   patientConsultations: many(patientConsultations),
 }));
+
+export default patients;

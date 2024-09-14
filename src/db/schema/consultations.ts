@@ -6,9 +6,9 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { patientConsultations } from "./patientConsultations";
+import patientConsultations from "./patientConsultations";
 
-export const consultations = pgTable("consultations", {
+const consultations = pgTable("consultations", {
   id: serial("id").primaryKey().notNull(),
   consultationName: varchar("consultation_name", { length: 200 }).notNull(),
   createdAt: timestamp("created_at", { precision: 3, mode: "string" })
@@ -30,3 +30,5 @@ export const consultations = pgTable("consultations", {
 export const consultationsRelations = relations(consultations, ({ many }) => ({
   patientConsultations: many(patientConsultations),
 }));
+
+export default consultations;

@@ -7,9 +7,7 @@ import {
   char,
 } from "drizzle-orm/pg-core";
 
-import { sql } from "drizzle-orm";
-
-export const address = pgTable(
+const address = pgTable(
   "address",
   {
     id: serial("id").primaryKey().notNull(),
@@ -44,3 +42,5 @@ export const address = pgTable(
     };
   }
 );
+
+export default address;

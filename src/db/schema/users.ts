@@ -13,14 +13,14 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { relations, sql } from "drizzle-orm";
-import { profiles } from "./profiles";
-import { schedules } from "./schedules";
-import { patients } from "./patients";
-import { patientsConsultationReports } from "./patientsConsultationReports";
-import { userLogCredits } from "./userLogCredits";
-import { patientConsultations } from "./patientConsultations";
+import profiles from "./profiles";
+import schedules from "./schedules";
+import patients from "./patients";
+import patientsConsultationReports from "./patientsConsultationReports";
+import userLogCredits from "./userLogCredits";
+import patientConsultations from "./patientConsultations";
 
-export const users = pgTable(
+const users = pgTable(
   "users",
   {
     id: serial("id").primaryKey().notNull(),
@@ -89,3 +89,5 @@ export const usersRelations = relations(users, ({ one, many }) => ({
     references: [profiles.id],
   }),
 }));
+
+export default users;

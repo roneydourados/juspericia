@@ -9,9 +9,9 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import users from "./users";
 
-export const userLogCredits = pgTable(
+const userLogCredits = pgTable(
   "user_log_credits",
   {
     id: serial("id").primaryKey().notNull(),
@@ -54,3 +54,5 @@ export const userLogCreditsRelations = relations(userLogCredits, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export default userLogCredits;

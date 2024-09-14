@@ -9,15 +9,15 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import { patients } from "./patients";
-import { consultations } from "./consultations";
-import { reportPurposes } from "./reportPurposes";
-import { benefitTypes } from "./benefitTypes";
-import { users } from "./users";
-import { schedules } from "./schedules";
-import { patientsConsultationReports } from "./patientsConsultationReports";
+import patients from "./patients";
+import reportPurposes from "./reportPurposes";
+import users from "./users";
+import schedules from "./schedules";
+import patientsConsultationReports from "./patientsConsultationReports";
+import consultations from "./consultations";
+import benefitTypes from "./benefitTypes";
 
-export const patientConsultations = pgTable(
+const patientConsultations = pgTable(
   "patient_consultations",
   {
     id: serial("id").primaryKey().notNull(),
@@ -100,3 +100,5 @@ export const patientConsultationsRelations = relations(
     }),
   })
 );
+
+export default patientConsultations;

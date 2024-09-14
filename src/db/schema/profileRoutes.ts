@@ -6,10 +6,10 @@ import {
   foreignKey,
   boolean,
 } from "drizzle-orm/pg-core";
-import { profiles } from "./profiles";
+import profiles from "./profiles";
 import { relations } from "drizzle-orm";
 
-export const profileRoutes = pgTable(
+const profileRoutes = pgTable(
   "profile_routes",
   {
     id: serial("id").primaryKey().notNull(),
@@ -37,3 +37,5 @@ export const profileRoutesRelations = relations(profileRoutes, ({ one }) => ({
     references: [profiles.id],
   }),
 }));
+
+export default profileRoutes;

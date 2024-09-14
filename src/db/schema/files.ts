@@ -1,6 +1,6 @@
 import { pgTable, varchar, integer, index, serial } from "drizzle-orm/pg-core";
 
-export const files = pgTable(
+const files = pgTable(
   "files",
   {
     id: serial("id").primaryKey().notNull(),
@@ -21,3 +21,4 @@ export const files = pgTable(
     };
   }
 );
+export default files;
