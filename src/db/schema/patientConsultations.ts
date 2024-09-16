@@ -41,6 +41,7 @@ const patientConsultations = pgTable(
     rate: integer("rate").default(0),
     dateAntecipation: date("date_antecipation"),
     dateCorrection: date("date_correction"),
+    reasonCorrection: text("reason_correction"),
   },
   (table) => {
     return {

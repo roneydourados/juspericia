@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+//import prisma from "@/lib/prisma";
 import moment from "moment";
 import { formatDate } from "~/server/utils/functionts";
 import {
@@ -6,7 +6,17 @@ import {
   SolicitationConsultationProps,
 } from "~/types/SolicitationConsultation";
 
-import { eq, and, or, ilike, inArray, asc, between } from "drizzle-orm";
+import {
+  eq,
+  and,
+  or,
+  ilike,
+  inArray,
+  asc,
+  between,
+  sum,
+  sql,
+} from "drizzle-orm";
 import { users, profiles, patientConsultations } from "@/db/schema";
 import { db } from "@/db";
 
@@ -102,6 +112,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       processSituation: true,
       tipValue: true,
       content: true,
+      reasonCorrection: true,
 
       // Consultation: {
       //   select: {
@@ -129,29 +140,54 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     },
   });
 
-  console.log("🚀 ~ index ~ data:", data);
   if (data.length === 0) {
     return [];
   }
 
-  const totals = await prisma.patientConsultation.groupBy({
-    by: ["status"],
-    _count: {
-      status: true,
-    },
-    where: {
-      dateOpen: {
-        gte: new Date(initialDateSolicitation),
-        lte: new Date(finalDateSolicitation),
-      },
-      patientId: patientId ? patientId : undefined,
-      benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-      reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
-    },
-  });
+  const totals = await db
+    .select({
+      status: patientConsultations.status,
+      _count: sql<number>`cast(count(${patientConsultations.status}) as integer)`,
+    })
+    .from(patientConsultations)
+    .where(
+      and(
+        between(
+          patientConsultations.dateOpen,
+          initialDateSolicitation,
+          finalDateSolicitation
+        ),
+        patientId ? eq(patientConsultations.patientId, patientId) : undefined,
+        benefitTypeId
+          ? eq(patientConsultations.benefitTypeId, benefitTypeId)
+          : undefined,
+        reportPurposeId
+          ? eq(patientConsultations.reportPurposeId, reportPurposeId)
+          : undefined
+      )
+    )
+    .groupBy(patientConsultations.status);
+  // const totals = await prisma.patientConsultation.groupBy({
+  //   by: ["status"],
+  //   _count: {
+  //     status: true,
+  //   },
+  //   where: {
+  //     dateOpen: {
+  //       gte: new Date(initialDateSolicitation),
+  //       lte: new Date(finalDateSolicitation),
+  //     },
+  //     patientId: patientId ? patientId : undefined,
+  //     benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
+  //     reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+  //   },
+  // });
 
   const consultations = data.map((item) => {
-    const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
+    const leftTime = moment().diff(
+      moment(formatDate(new Date(item.dateOpen))),
+      "days"
+    );
 
     return {
       ...item,
