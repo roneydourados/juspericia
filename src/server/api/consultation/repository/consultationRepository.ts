@@ -1,20 +1,33 @@
-import prisma from "@/lib/prisma";
-
+import { db } from "@/db";
+import { eq, and, or, ilike, inArray, asc } from "drizzle-orm";
+import moment from "moment";
+import { consultations } from "~/db/schema";
 import { ConsultationProps } from "~/types/Consultation";
 
 export const create = async (payload: ConsultationProps) => {
   try {
-    return prisma.consultation.create({
-      data: {
+    return db
+      .insert(consultations)
+      .values({
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
         consultationName: payload.consultationName!,
-        value: payload.value!,
-        valueAntecipation24: payload.valueAntecipation24!,
-        valueAntecipation48: payload.valueAntecipation48!,
-        valueAntecipation72: payload.valueAntecipation72!,
-        valueCredit: payload.valueCredit!,
-        valuePacket: payload.valuePacket!,
-      },
-    });
+        value: String(payload.value!),
+        valueAntecipation24: String(payload.valueAntecipation24!),
+        valueAntecipation48: String(payload.valueAntecipation48!),
+        valueAntecipation72: String(payload.valueAntecipation72!),
+        valueCredit: String(payload.valueCredit!),
+        valuePacket: String(payload.valuePacket!),
+      })
+      .returning({
+        id: consultations.id,
+        consultationName: consultations.consultationName!,
+        value: consultations.value,
+        valueAntecipation24: consultations.valueAntecipation24!,
+        valueAntecipation48: consultations.valueAntecipation48!,
+        valueAntecipation72: consultations.valueAntecipation72!,
+        valueCredit: consultations.valueCredit!,
+        valuePacket: consultations.valuePacket!,
+      });
   } catch (error) {
     console.log("🚀 ~ error create:", error);
     throw createError({
@@ -28,20 +41,19 @@ export const update = async (payload: ConsultationProps) => {
   await exists(payload.id!);
 
   try {
-    return await prisma.consultation.update({
-      data: {
+    return await db
+      .update(consultations)
+      .set({
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
         consultationName: payload.consultationName!,
-        value: payload.value!,
-        valueAntecipation24: payload.valueAntecipation24!,
-        valueAntecipation48: payload.valueAntecipation48!,
-        valueAntecipation72: payload.valueAntecipation72!,
-        valueCredit: payload.valueCredit!,
-        valuePacket: payload.valuePacket!,
-      },
-      where: {
-        id: payload.id!,
-      },
-    });
+        value: String(payload.value!),
+        valueAntecipation24: String(payload.valueAntecipation24!),
+        valueAntecipation48: String(payload.valueAntecipation48!),
+        valueAntecipation72: String(payload.valueAntecipation72!),
+        valueCredit: String(payload.valueCredit!),
+        valuePacket: String(payload.valuePacket!),
+      })
+      .where(eq(consultations.id, payload.id!));
   } catch (error) {
     console.log("🚀 ~ error update:", error);
     throw createError({
@@ -55,11 +67,7 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    await prisma.consultation.delete({
-      where: {
-        id,
-      },
-    });
+    await db.delete(consultations).where(eq(consultations.id, id));
   } catch (error) {
     console.log("🚀 ~ error remove:", error);
     throw createError({
@@ -70,8 +78,8 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  return prisma.consultation.findMany({
-    select: {
+  return db.query.consultations.findMany({
+    columns: {
       id: true,
       consultationName: true,
       value: true,
@@ -81,12 +89,8 @@ export const index = async (inputQuery: string) => {
       valueCredit: true,
       valuePacket: true,
     },
-    where: {
-      consultationName: { contains: inputQuery, mode: "insensitive" },
-    },
-    orderBy: {
-      id: "asc",
-    },
+    where: ilike(consultations.consultationName, `%${inputQuery}%`),
+    orderBy: [asc(consultations.consultationName)],
   });
 };
 
@@ -95,11 +99,8 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const data = await prisma.consultation.findFirst({
-    where: {
-      id,
-    },
-    select: {
+  const data = await db.query.consultations.findFirst({
+    columns: {
       id: true,
       consultationName: true,
       value: true,
@@ -109,6 +110,7 @@ const exists = async (id: number) => {
       valueCredit: true,
       valuePacket: true,
     },
+    where: eq(consultations.id, id),
   });
 
   if (!data) {
@@ -117,4 +119,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
+
+  return data;
 };

@@ -1,4 +1,7 @@
-import prisma from "@/lib/prisma";
+import db from "@/db";
+import { and, asc, eq, ilike, or } from "drizzle-orm";
+import moment from "moment";
+import { address, patients } from "~/db/schema";
 import { addressCategoryType } from "~/server/utils/Constants";
 import { PatientProps } from "~/types/Patient";
 
@@ -15,17 +18,9 @@ export const create = async ({
   Address,
   sexy,
 }: PatientProps) => {
-  const exists = await prisma.patient.findFirst({
-    where: {
-      OR: [
-        {
-          cpf: cpf ? { equals: cpf } : undefined,
-        },
-        {
-          rg: rg ? { equals: rg } : undefined,
-        },
-      ],
-    },
+  let addressData = undefined;
+  const exists = await db.query.patients.findFirst({
+    where: eq(patients.cpf, cpf!),
   });
 
   if (exists) {
@@ -36,8 +31,9 @@ export const create = async ({
   }
 
   try {
-    const patient = await prisma.patient.create({
-      data: {
+    const patient = await db
+      .insert(patients)
+      .values({
         sexy: String(sexy),
         userId: Number(userId),
         birthDate: String(birthDate!),
@@ -49,12 +45,27 @@ export const create = async ({
         phone,
         motherName,
         surname: String(surname),
-      },
-    });
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+      })
+      .returning({
+        id: patients.id,
+        userId: patients.userId,
+        name: patients.name,
+        surname: patients.surname,
+        cpf: patients.cpf,
+        phone: patients.phone,
+        email: patients.email,
+        sexy: patients.sexy,
+        birthDate: patients.birthDate,
+        rg: patients.rg,
+        motherName: patients.motherName,
+        status: patients.status,
+      });
 
     if (Address) {
-      await prisma.address.create({
-        data: {
+      addressData = await db
+        .insert(address)
+        .values({
           addressCity: Address.addressCity,
           addressComplement: Address.addressComplement,
           addressDistrict: Address.addressDistrict,
@@ -62,15 +73,26 @@ export const create = async ({
           addressState: Address.addressState,
           addressStreet: Address.addressStreet,
           addressZipcode: Address.addressZipcode,
-          ownerId: patient.id,
+          ownerId: patient[0].id,
           addressCategory: addressCategoryType.patient,
-        },
-      });
+        })
+        .returning({
+          id: address.id,
+          addressCity: address.addressCity,
+          addressComplement: address.addressComplement,
+          addressDistrict: address.addressDistrict,
+          addressNumber: address.addressNumber,
+          addressState: address.addressState,
+          addressStreet: address.addressStreet,
+          addressZipcode: address.addressZipcode,
+          ownerId: address.ownerId,
+          addressCategory: address.addressCategory,
+        });
     }
 
     return {
-      ...patient,
-      Address,
+      ...patient[0],
+      Address: addressData ? addressData[0] : undefined,
     };
   } catch (error) {
     console.log("🚀 ~ error create patient:", error);
@@ -95,11 +117,13 @@ export const update = async ({
   status,
   surname,
 }: PatientProps) => {
+  let addressData = undefined;
   await exists(id!);
 
   try {
-    const patient = await prisma.patient.update({
-      data: {
+    const patient = await db
+      .update(patients)
+      .set({
         sexy,
         birthDate: String(birthDate!),
         cpf: String(cpf),
@@ -110,42 +134,63 @@ export const update = async ({
         motherName,
         status,
         surname: String(surname),
-      },
-      where: {
-        id,
-      },
-    });
-
-    if (Address) {
-      const existsAddress = await prisma.address.findFirst({
-        where: {
-          ownerId: patient.id,
-          addressCategory: addressCategoryType.patient,
-        },
+      })
+      .where(eq(patients.id, id!))
+      .returning({
+        id: patients.id,
+        userId: patients.userId,
+        name: patients.name,
+        surname: patients.surname,
+        cpf: patients.cpf,
+        phone: patients.phone,
+        email: patients.email,
+        sexy: patients.sexy,
+        birthDate: patients.birthDate,
+        rg: patients.rg,
+        motherName: patients.motherName,
+        status: patients.status,
       });
 
-      if (existsAddress) {
-        await prisma.address.update({
-          where: {
-            id: existsAddress?.id,
-          },
-          data: {
-            addressCategory: Address.addressCategoryType,
-            addressCity: Address.addressCity,
-            addressComplement: Address.addressComplement,
-            addressDistrict: Address.addressDistrict,
-            addressNumber: Address.addressNumber,
-            addressState: Address.addressState,
-            addressStreet: Address.addressStreet,
-            addressZipcode: Address.addressZipcode,
-          },
+    if (Address) {
+      await db
+        .delete(address)
+        .where(
+          and(
+            eq(address.ownerId, patient[0].id),
+            eq(address.addressCategory, addressCategoryType.patient)
+          )
+        );
+
+      addressData = await db
+        .insert(address)
+        .values({
+          addressCity: Address.addressCity,
+          addressComplement: Address.addressComplement,
+          addressDistrict: Address.addressDistrict,
+          addressNumber: Address.addressNumber,
+          addressState: Address.addressState,
+          addressStreet: Address.addressStreet,
+          addressZipcode: Address.addressZipcode,
+          ownerId: patient[0].id,
+          addressCategory: addressCategoryType.patient,
+        })
+        .returning({
+          id: address.id,
+          addressCity: address.addressCity,
+          addressComplement: address.addressComplement,
+          addressDistrict: address.addressDistrict,
+          addressNumber: address.addressNumber,
+          addressState: address.addressState,
+          addressStreet: address.addressStreet,
+          addressZipcode: address.addressZipcode,
+          ownerId: address.ownerId,
+          addressCategory: address.addressCategory,
         });
-      }
     }
 
     return {
-      ...patient,
-      Address,
+      ...patient[0],
+      Address: addressData ? addressData[0] : undefined,
     };
   } catch (error) {
     console.log("🚀 ~ error update patient:", error);
@@ -160,11 +205,7 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    await prisma.patient.delete({
-      where: {
-        id,
-      },
-    });
+    await db.delete(patients).where(eq(patients.id, id));
   } catch (error) {
     console.log("🚀 ~ error remove patient:", error);
     throw createError({
@@ -176,39 +217,29 @@ export const destroy = async (id: number) => {
 
 export const index = async (input: { inputQuery: string; userId?: number }) => {
   const { inputQuery, userId } = input;
-  return prisma.patient.findMany({
-    select: {
+  return db.query.patients.findMany({
+    columns: {
       id: true,
       name: true,
       surname: true,
       cpf: true,
       phone: true,
+    },
+    with: {
       User: {
-        select: {
+        columns: {
           name: true,
         },
       },
     },
-    where: {
-      userId,
-      OR: [
-        {
-          name: { contains: inputQuery, mode: "insensitive" },
-        },
-        {
-          surname: { contains: inputQuery, mode: "insensitive" },
-        },
-        {
-          cpf: { contains: inputQuery, mode: "insensitive" },
-        },
-        {
-          phone: { contains: inputQuery, mode: "insensitive" },
-        },
-      ],
-    },
-    orderBy: {
-      name: "asc",
-    },
+    where: and(
+      or(
+        ilike(patients.email, `%${inputQuery}%`),
+        ilike(patients.name, `%${inputQuery}%`),
+        ilike(patients.cpf, `%${inputQuery}%`)
+      )
+    ),
+    orderBy: [asc(patients.name)],
   });
 };
 
@@ -217,11 +248,9 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const patient = await prisma.patient.findFirst({
-    where: {
-      id,
-    },
-    select: {
+  const patient = await db.query.patients.findFirst({
+    where: eq(patients.id, id),
+    columns: {
       id: true,
       birthDate: true,
       cpf: true,
@@ -233,8 +262,10 @@ const exists = async (id: number) => {
       rg: true,
       sexy: true,
       userId: true,
+    },
+    with: {
       User: {
-        select: {
+        columns: {
           email: true,
           name: true,
         },
@@ -249,11 +280,11 @@ const exists = async (id: number) => {
     });
   }
 
-  const Address = await prisma.address.findFirst({
-    where: {
-      ownerId: patient?.id,
-      addressCategory: addressCategoryType.patient,
-    },
+  const Address = await db.query.address.findFirst({
+    where: and(
+      eq(address.ownerId, patient.id),
+      eq(address.addressCategory, addressCategoryType.patient)
+    ),
   });
 
   return {

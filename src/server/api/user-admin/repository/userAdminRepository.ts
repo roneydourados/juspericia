@@ -1,4 +1,3 @@
-//import prisma from "@/lib/prisma";
 import { UserProps } from "@/types/User";
 import { useHash } from "~/server/providers/hash";
 import { db } from "@/db";

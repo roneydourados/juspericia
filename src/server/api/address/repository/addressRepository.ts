@@ -18,7 +18,17 @@ export const create = async (payload: AddressProps) => {
         addressState: payload.addressState,
         addressStreet: payload.addressStreet,
       })
-      .returning();
+      .returning({
+        addressZipcode: address.addressZipcode,
+        addressCategory: address.addressCategory!,
+        ownerId: address.ownerId!,
+        addressCity: address.addressCity,
+        addressComplement: address.addressComplement,
+        addressDistrict: address.addressDistrict,
+        addressNumber: address.addressNumber,
+        addressState: address.addressState,
+        addressStreet: address.addressStreet,
+      });
 
     return data[0];
   } catch (error) {
@@ -48,7 +58,17 @@ export const update = async (payload: AddressProps) => {
         addressStreet: payload.addressStreet,
       })
       .where(eq(address.id, payload.id!))
-      .returning();
+      .returning({
+        addressZipcode: address.addressZipcode,
+        addressCategory: address.addressCategory!,
+        ownerId: address.ownerId!,
+        addressCity: address.addressCity,
+        addressComplement: address.addressComplement,
+        addressDistrict: address.addressDistrict,
+        addressNumber: address.addressNumber,
+        addressState: address.addressState,
+        addressStreet: address.addressStreet,
+      });
 
     return data[0];
   } catch (error) {
@@ -79,14 +99,16 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const data = await db.select().from(address).where(eq(address.id, id));
+  const data = await db.query.address.findFirst({
+    where: eq(address.id, id),
+  });
 
-  if (!data[0]) {
+  if (!data) {
     throw createError({
       statusCode: 404,
       message: "Address not found",
     });
   }
 
-  return data[0];
+  return data;
 };

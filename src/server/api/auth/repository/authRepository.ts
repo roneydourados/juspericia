@@ -1,9 +1,11 @@
 import { JwtPayload } from "jsonwebtoken";
-import prisma from "@/lib/prisma";
+import db from "@/db";
+import { and, asc, eq } from "drizzle-orm";
 import { useHash } from "@/server/providers/hash";
 import { useJwtToken } from "@/server/providers/jwtToken";
 import { UserProfileProps, UserProps } from "@/types/User";
 import { AuthProps } from "~/types/Auth";
+import { profileRoutes, users } from "~/db/schema";
 
 export const login = async ({ email, password }: AuthProps) => {
   const { validHash } = useHash();
@@ -22,36 +24,35 @@ export const login = async ({ email, password }: AuthProps) => {
       statusMessage: "Email is missing",
     });
   }
-  const user = await prisma.user.findFirst({
-    select: {
+  const user = await db.query.users.findFirst({
+    columns: {
       id: true,
       email: true,
       name: true,
       phone: true,
       password: true,
+    },
+    with: {
       Profile: {
-        select: {
+        columns: {
           profileName: true,
           type: true,
+        },
+        with: {
           ProfileRoute: {
-            select: {
+            columns: {
               icon: true,
               isMenu: true,
               title: true,
               to: true,
               visible: true,
             },
-            orderBy: {
-              id: "asc",
-            },
+            orderBy: [asc(profileRoutes.id)],
           },
         },
       },
     },
-    where: {
-      email,
-      active: true,
-    },
+    where: and(eq(users.email, email), eq(users.active, true)),
   });
 
   if (!user) {
@@ -109,10 +110,8 @@ export const register = async ({
 }: UserProps) => {
   const { hashText } = useHash();
 
-  const exists = await prisma.user.findFirst({
-    where: {
-      email,
-    },
+  const exists = await db.query.users.findFirst({
+    where: eq(users.email, email),
   });
 
   if (exists) {
@@ -125,14 +124,25 @@ export const register = async ({
   try {
     const hashedpassword = await hashText(password);
 
-    const user = await prisma.user.create({
-      data: { email, active, name, password: hashedpassword, profileId },
-    });
+    const user = await db
+      .insert(users)
+      .values({
+        email,
+        active,
+        name,
+        password: hashedpassword,
+        profileId,
+      })
+      .returning({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+      });
 
     return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
+      id: user[0].id,
+      email: user[0].email,
+      name: user[0].name,
     };
   } catch (error) {
     console.log("🚀 ~ register user error:", error);
@@ -146,17 +156,21 @@ export const register = async ({
 export const verifyUser = async (id: number) => {
   const { createToken, tokenData } = useJwtToken();
 
-  const user = await prisma.user.findFirst({
-    select: {
+  const user = await db.query.users.findFirst({
+    columns: {
       id: true,
       email: true,
       name: true,
+    },
+    with: {
       Profile: {
-        select: {
+        columns: {
           profileName: true,
           type: true,
+        },
+        with: {
           ProfileRoute: {
-            select: {
+            columns: {
               icon: true,
               isMenu: true,
               title: true,
@@ -167,9 +181,7 @@ export const verifyUser = async (id: number) => {
         },
       },
     },
-    where: {
-      id,
-    },
+    where: eq(users.id, id),
   });
 
   if (!user) {

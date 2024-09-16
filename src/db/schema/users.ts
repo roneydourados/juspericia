@@ -36,11 +36,11 @@ const users = pgTable(
     profileId: integer("profile_id").notNull(),
     createdAt: timestamp("created_at", { precision: 3, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
+      .defaultNow(),
     updatedAt: timestamp("updated_at", {
       precision: 3,
       mode: "string",
-    }).notNull(),
+    }).defaultNow(),
     officeName: varchar("office_name", { length: 200 }),
     active: boolean("active").default(true).notNull(),
     officeCnpj: varchar("office_cnpj", { length: 30 }),

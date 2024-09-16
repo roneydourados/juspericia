@@ -1,14 +1,14 @@
-import prisma from "@/lib/prisma";
+import db from "@/db";
+import { asc, eq, ilike } from "drizzle-orm";
+import { reportModels } from "~/db/schema";
 
 import { ReportModelProps } from "~/types/Patient";
 
 export const create = async ({ title, content }: ReportModelProps) => {
   try {
-    return prisma.reportModel.create({
-      data: {
-        title: String(title),
-        content: content ?? "",
-      },
+    return db.insert(reportModels).values({
+      title: String(title),
+      content: content ?? "",
     });
   } catch (error) {
     console.log("🚀 ~ error create:", error);
@@ -23,15 +23,13 @@ export const update = async ({ id, title, content }: ReportModelProps) => {
   await exists(id!);
 
   try {
-    return await prisma.reportModel.update({
-      data: {
+    return await db
+      .update(reportModels)
+      .set({
         title: String(title),
         content: content ?? "",
-      },
-      where: {
-        id,
-      },
-    });
+      })
+      .where(eq(reportModels.id, id!));
   } catch (error) {
     console.log("🚀 ~ error update:", error);
     throw createError({
@@ -45,11 +43,7 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    await prisma.reportModel.delete({
-      where: {
-        id,
-      },
-    });
+    await db.delete(reportModels).where(eq(reportModels.id, id));
   } catch (error) {
     console.log("🚀 ~ error remove:", error);
     throw createError({
@@ -60,17 +54,13 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  return prisma.reportModel.findMany({
-    select: {
+  return db.query.reportModels.findMany({
+    columns: {
       id: true,
       title: true,
     },
-    where: {
-      title: { contains: inputQuery, mode: "insensitive" },
-    },
-    orderBy: {
-      id: "asc",
-    },
+    where: ilike(reportModels.title, `%${inputQuery}%`),
+    orderBy: [asc(reportModels.id)],
   });
 };
 
@@ -79,11 +69,9 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const data = await prisma.reportModel.findFirst({
-    where: {
-      id,
-    },
-    select: {
+  const data = await db.query.reportModels.findFirst({
+    where: eq(reportModels.id, id),
+    columns: {
       id: true,
       title: true,
       content: true,

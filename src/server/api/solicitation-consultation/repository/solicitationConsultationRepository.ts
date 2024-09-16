@@ -77,6 +77,8 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       tipValue: true,
       content: true,
       reasonCorrection: true,
+      antecipationValue: true,
+      consultationValue: true,
     },
     where: and(
       between(
@@ -94,17 +96,6 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
         ? eq(patientConsultations.reportPurposeId, reportPurposeId)
         : undefined
     ),
-    // where: {
-    //   dateOpen: {
-    //     gte: new Date(initialDateSolicitation),
-    //     lte: new Date(finalDateSolicitation),
-    //   },
-    //   userId,
-    //   status,
-    //   patientId: patientId ? patientId : undefined,
-    //   benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-    //   reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
-    // },
   });
 
   if (data.length === 0) {
@@ -134,21 +125,6 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       )
     )
     .groupBy(patientConsultations.status);
-  // const totals = await prisma.patientConsultation.groupBy({
-  //   by: ["status"],
-  //   _count: {
-  //     status: true,
-  //   },
-  //   where: {
-  //     dateOpen: {
-  //       gte: new Date(initialDateSolicitation),
-  //       lte: new Date(finalDateSolicitation),
-  //     },
-  //     patientId: patientId ? patientId : undefined,
-  //     benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-  //     reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
-  //   },
-  // });
 
   const consultations = data.map((item) => {
     const leftTime = moment().diff(
@@ -204,6 +180,7 @@ export const consultationCreate = async (
       userId: payload.userId!,
       benefitTypeId: payload.benefitTypeId!,
       reportPurposeId: payload.reportPurposeId!,
+      consultationValue: String(payload.consultationValue),
     });
   } catch (error) {
     console.log("🚀 ~ error:", error);

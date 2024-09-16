@@ -1,13 +1,12 @@
-import prisma from "@/lib/prisma";
-
+import { db } from "@/db";
+import { eq, ilike, asc } from "drizzle-orm";
+import { benefitTypes } from "~/db/schema";
 import { BenefitTypeProps } from "~/types/BenefitType";
 
 export const create = async ({ name }: BenefitTypeProps) => {
   try {
-    return prisma.benefitType.create({
-      data: {
-        name: String(name),
-      },
+    return db.insert(benefitTypes).values({
+      name: String(name),
     });
   } catch (error) {
     console.log("🚀 ~ error create:", error);
@@ -22,14 +21,12 @@ export const update = async ({ id, name }: BenefitTypeProps) => {
   await exists(id!);
 
   try {
-    return await prisma.benefitType.update({
-      data: {
+    return db
+      .update(benefitTypes)
+      .set({
         name: String(name),
-      },
-      where: {
-        id,
-      },
-    });
+      })
+      .where(eq(benefitTypes.id, id!));
   } catch (error) {
     console.log("🚀 ~ error update:", error);
     throw createError({
@@ -43,11 +40,7 @@ export const destroy = async (id: number) => {
   await exists(id);
 
   try {
-    await prisma.benefitType.delete({
-      where: {
-        id,
-      },
-    });
+    await db.delete(benefitTypes).where(eq(benefitTypes.id, id));
   } catch (error) {
     console.log("🚀 ~ error remove:", error);
     throw createError({
@@ -58,17 +51,13 @@ export const destroy = async (id: number) => {
 };
 
 export const index = async (inputQuery: string) => {
-  return prisma.benefitType.findMany({
-    select: {
+  return db.query.benefitTypes.findMany({
+    columns: {
       id: true,
       name: true,
     },
-    where: {
-      name: { contains: inputQuery, mode: "insensitive" },
-    },
-    orderBy: {
-      id: "asc",
-    },
+    where: ilike(benefitTypes.name, `%${inputQuery}%`),
+    orderBy: [asc(benefitTypes.name)],
   });
 };
 
@@ -77,11 +66,9 @@ export const show = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const data = await prisma.benefitType.findFirst({
-    where: {
-      id,
-    },
-    select: {
+  const data = await db.query.benefitTypes.findFirst({
+    where: eq(benefitTypes.id, id),
+    columns: {
       id: true,
       name: true,
     },
@@ -93,4 +80,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
+
+  return data;
 };

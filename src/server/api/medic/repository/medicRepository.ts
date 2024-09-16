@@ -1,9 +1,9 @@
-//import prisma from "@/lib/prisma";
 import { UserProps } from "@/types/User";
 import { useHash } from "~/server/providers/hash";
 import { db } from "@/db";
 import { eq, and, or, ilike, inArray, asc } from "drizzle-orm";
-import { users, profiles, address, profileRoutes } from "@/db/schema";
+import { users, profiles, address } from "@/db/schema";
+import moment from "moment";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();
@@ -40,6 +40,7 @@ export const create = async (payload: UserProps) => {
         crmUf: payload.crmUf,
         phone: payload.phone,
         profileId: profile[0].id,
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       })
       .returning({
         id: users.id,
@@ -188,7 +189,6 @@ export const index = async (inputQuery: string) => {
       crm: true,
       crmUf: true,
     },
-
     where: and(
       or(
         ilike(users.email, `%${inputQuery}%`),
