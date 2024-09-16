@@ -44,15 +44,15 @@ const schedules = pgTable(
         "btree",
         table.userId.asc().nullsLast()
       ),
-      schedulesUserIdFkey: foreignKey({
-        columns: [table.userId],
-        foreignColumns: [users.id],
-        name: "schedules_user_id_fkey",
-      }),
       schedulesPatientConsultationIdFkey: foreignKey({
         columns: [table.patientConsultationId],
         foreignColumns: [patientConsultations.id],
         name: "schedules_patient_consultation_id_fkey",
+      }),
+      schedulesUserIdFkey: foreignKey({
+        columns: [table.userId],
+        foreignColumns: [users.id],
+        name: "schedules_user_id_fkey",
       }),
     };
   }

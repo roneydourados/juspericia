@@ -41,7 +41,6 @@ const patientsConsultationReports = pgTable(
     };
   }
 );
-
 export const patientsConsultationReportsRelations = relations(
   patientsConsultationReports,
   ({ one }) => ({

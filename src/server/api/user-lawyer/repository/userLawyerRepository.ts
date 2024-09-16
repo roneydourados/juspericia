@@ -3,6 +3,7 @@ import { and, ilike, or, eq, inArray, asc } from "drizzle-orm";
 import { address, profileRoutes, profiles, users } from "~/db/schema";
 import { db } from "@/db";
 import { useHash } from "~/server/providers/hash";
+import moment from "moment";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();
@@ -45,6 +46,7 @@ export const create = async (payload: UserProps) => {
         active: true,
         crm: null,
         crmUf: null,
+        updatedAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       })
       .returning({
         id: users.id,

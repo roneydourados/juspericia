@@ -7,6 +7,7 @@ import {
   pgTable,
   serial,
   text,
+  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 import patients from "./patients";
@@ -41,34 +42,52 @@ const patientConsultations = pgTable(
     rate: integer("rate").default(0),
     dateAntecipation: date("date_antecipation"),
     dateCorrection: date("date_correction"),
+    createdAt: timestamp("created_at", { precision: 3, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
     reasonCorrection: text("reason_correction"),
+    updatedAt: timestamp("updated_at", { precision: 3, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    antecipationValue: numeric("antecipation_value", {
+      precision: 18,
+      scale: 2,
+    })
+      .default("0")
+      .notNull(),
+    consultationValue: numeric("consultation_value", {
+      precision: 18,
+      scale: 2,
+    })
+      .default("0")
+      .notNull(),
   },
   (table) => {
     return {
-      patientConsultationsPatientIdFkey: foreignKey({
-        columns: [table.patientId],
-        foreignColumns: [patients.id],
-        name: "patient_consultations_patient_id_fkey",
+      patientConsultationsBenefitTypeIdFkey: foreignKey({
+        columns: [table.benefitTypeId],
+        foreignColumns: [benefitTypes.id],
+        name: "patient_consultations_benefit_type_id_fkey",
       }),
       patientConsultationsConsultationIdFkey: foreignKey({
         columns: [table.consultationId],
         foreignColumns: [consultations.id],
         name: "patient_consultations_consultation_id_fkey",
       }),
-      patientConsultationsReportPurposeIdFkey: foreignKey({
-        columns: [table.reportPurposeId],
-        foreignColumns: [reportPurposes.id],
-        name: "patient_consultations_report_purpose_id_fkey",
-      }),
-      patientConsultationsBenefitTypeIdFkey: foreignKey({
-        columns: [table.benefitTypeId],
-        foreignColumns: [benefitTypes.id],
-        name: "patient_consultations_benefit_type_id_fkey",
-      }),
       patientConsultationsMedicIdFkey: foreignKey({
         columns: [table.medicId],
         foreignColumns: [users.id],
         name: "patient_consultations_medic_id_fkey",
+      }),
+      patientConsultationsPatientIdFkey: foreignKey({
+        columns: [table.patientId],
+        foreignColumns: [patients.id],
+        name: "patient_consultations_patient_id_fkey",
+      }),
+      patientConsultationsReportPurposeIdFkey: foreignKey({
+        columns: [table.reportPurposeId],
+        foreignColumns: [reportPurposes.id],
+        name: "patient_consultations_report_purpose_id_fkey",
       }),
     };
   }

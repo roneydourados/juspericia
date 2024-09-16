@@ -19,7 +19,6 @@ import patients from "./patients";
 import patientsConsultationReports from "./patientsConsultationReports";
 import userLogCredits from "./userLogCredits";
 import patientConsultations from "./patientConsultations";
-import address from "./address";
 
 const users = pgTable(
   "users",
@@ -41,9 +40,7 @@ const users = pgTable(
     updatedAt: timestamp("updated_at", {
       precision: 3,
       mode: "string",
-    })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
+    }).notNull(),
     officeName: varchar("office_name", { length: 200 }),
     active: boolean("active").default(true).notNull(),
     officeCnpj: varchar("office_cnpj", { length: 30 }),
@@ -52,6 +49,10 @@ const users = pgTable(
   },
   (table) => {
     return {
+      emailKey: uniqueIndex("users_email_key").using(
+        "btree",
+        table.email.asc().nullsLast()
+      ),
       idxActive: index("users_idx_active").using(
         "btree",
         table.active.asc().nullsLast()

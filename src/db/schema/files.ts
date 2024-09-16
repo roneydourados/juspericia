@@ -21,4 +21,5 @@ const files = pgTable(
     };
   }
 );
+
 export default files;

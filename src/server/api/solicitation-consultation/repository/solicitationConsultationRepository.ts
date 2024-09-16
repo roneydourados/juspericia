@@ -1,4 +1,3 @@
-//import prisma from "@/lib/prisma";
 import moment from "moment";
 import { formatDate } from "~/server/utils/functionts";
 import {
@@ -6,18 +5,8 @@ import {
   SolicitationConsultationProps,
 } from "~/types/SolicitationConsultation";
 
-import {
-  eq,
-  and,
-  or,
-  ilike,
-  inArray,
-  asc,
-  between,
-  sum,
-  sql,
-} from "drizzle-orm";
-import { users, profiles, patientConsultations } from "@/db/schema";
+import { eq, and, between, sql } from "drizzle-orm";
+import { patientConsultations } from "@/db/schema";
 import { db } from "@/db";
 
 export const index = async (filters: SolicitationConsultationFilterProps) => {
@@ -32,33 +21,6 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
   } = filters;
 
   const data = await db.query.patientConsultations.findMany({
-    where: and(
-      between(
-        patientConsultations.dateOpen,
-        initialDateSolicitation,
-        finalDateSolicitation
-      ),
-      eq(patientConsultations.userId, userId ?? 0),
-      eq(patientConsultations.status, status),
-      patientId ? eq(patientConsultations.patientId, patientId) : undefined,
-      benefitTypeId
-        ? eq(patientConsultations.benefitTypeId, benefitTypeId)
-        : undefined,
-      reportPurposeId
-        ? eq(patientConsultations.reportPurposeId, reportPurposeId)
-        : undefined
-    ),
-    // where: {
-    //   dateOpen: {
-    //     gte: new Date(initialDateSolicitation),
-    //     lte: new Date(finalDateSolicitation),
-    //   },
-    //   userId,
-    //   status,
-    //   patientId: patientId ? patientId : undefined,
-    //   benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-    //   reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
-    // },
     with: {
       Medic: {
         columns: {
@@ -79,6 +41,8 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
           valueAntecipation72: true,
         },
       },
+      BenefitType: true,
+      ReportPurpose: true,
       Patient: {
         columns: {
           id: true,
@@ -113,31 +77,34 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       tipValue: true,
       content: true,
       reasonCorrection: true,
-
-      // Consultation: {
-      //   select: {
-      //     id: true,
-      //     consultationName: true,
-      //     value: true,
-      //     valueCredit: true,
-      //     valueAntecipation24: true,
-      //     valueAntecipation48: true,
-      //     valueAntecipation72: true,
-      //   },
-      // },
-      // BenefitType: {
-      //   select: {
-      //     id: true,
-      //     name: true,
-      //   },
-      // },
-      // ReportPurpose: {
-      //   select: {
-      //     id: true,
-      //     name: true,
-      //   },
-      // },
     },
+    where: and(
+      between(
+        patientConsultations.dateOpen,
+        initialDateSolicitation,
+        finalDateSolicitation
+      ),
+      userId ? eq(patientConsultations.userId, userId) : undefined,
+      eq(patientConsultations.status, status),
+      patientId ? eq(patientConsultations.patientId, patientId) : undefined,
+      benefitTypeId
+        ? eq(patientConsultations.benefitTypeId, benefitTypeId)
+        : undefined,
+      reportPurposeId
+        ? eq(patientConsultations.reportPurposeId, reportPurposeId)
+        : undefined
+    ),
+    // where: {
+    //   dateOpen: {
+    //     gte: new Date(initialDateSolicitation),
+    //     lte: new Date(finalDateSolicitation),
+    //   },
+    //   userId,
+    //   status,
+    //   patientId: patientId ? patientId : undefined,
+    //   benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
+    //   reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+    // },
   });
 
   if (data.length === 0) {
@@ -192,15 +159,15 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     return {
       ...item,
       isSolicitationCorrection: !item.reasonCorrection && leftTime <= 30,
-      dateOpen: formatDate(item.dateOpen),
-      dateClose: item.dateClose ? formatDate(item.dateClose) : null,
+      dateOpen: formatDate(new Date(item.dateOpen)),
+      dateClose: item.dateClose ? formatDate(new Date(item.dateClose)) : null,
       dateAntecipation: item.dateAntecipation
-        ? formatDate(item.dateAntecipation)
+        ? formatDate(new Date(item.dateAntecipation))
         : null,
       dateCorrection: item.dateCorrection
-        ? formatDate(item.dateCorrection)
+        ? formatDate(new Date(item.dateCorrection))
         : null,
-      deadline: moment(formatDate(item.dateOpen))
+      deadline: moment(formatDate(new Date(item.dateOpen)))
         .add(30, "days")
         .format("YYYY-MM-DD"),
     };
@@ -211,7 +178,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     totals: totals.map((item) => {
       return {
         status: item.status,
-        total: item._count.status,
+        total: item._count,
       };
     }),
   };
@@ -221,26 +188,22 @@ export const consultationCreate = async (
   payload: SolicitationConsultationProps
 ) => {
   try {
-    return await prisma.patientConsultation.create({
-      data: {
-        content: String(payload.content),
-        benefitTypeId: Number(payload.benefitTypeId),
-        reportPurposeId: Number(payload.reportPurposeId),
-        patientId: Number(payload.patientId),
-        medicId: payload.medicId ? Number(payload.medicId) : undefined,
-        status: "open",
-        processSituation: payload.processSituation
-          ? String(payload.processSituation)
-          : undefined,
-        proccessNumber: payload.proccessNumber
-          ? String(payload.proccessNumber)
-          : undefined,
-        tipValue: payload.tipValue ? Number(payload.tipValue) : undefined,
-        userId: Number(payload.userId),
-        consultationId: Number(payload.consultationId),
-        dateOpen: new Date(payload.dateOpen!),
-        consultationValue: Number(payload.consultationValue ?? 0),
-      },
+    return await db.insert(patientConsultations).values({
+      consultationId: payload.consultationId!,
+      content: payload.content!,
+      dateOpen: payload.dateOpen,
+      patientId: payload.patientId!,
+      proccessNumber: payload.proccessNumber
+        ? payload.proccessNumber
+        : undefined,
+      medicId: payload.medicId ? Number(payload.medicId) : undefined,
+      status: "open",
+      processSituation: payload.processSituation
+        ? String(payload.processSituation)
+        : undefined,
+      userId: payload.userId!,
+      benefitTypeId: payload.benefitTypeId!,
+      reportPurposeId: payload.reportPurposeId!,
     });
   } catch (error) {
     console.log("🚀 ~ error:", error);
@@ -256,8 +219,9 @@ export const consultationUpdate = async (
 ) => {
   await exists(payload.id!);
   try {
-    return await prisma.patientConsultation.update({
-      data: {
+    return await db
+      .update(patientConsultations)
+      .set({
         content: payload.content ? payload.content : undefined,
         benefitTypeId: payload.benefitTypeId
           ? Number(payload.benefitTypeId)
@@ -271,32 +235,27 @@ export const consultationUpdate = async (
         processSituation: payload.processSituation
           ? String(payload.processSituation)
           : undefined,
-        proccessNumber: payload.proccessNumber
-          ? String(payload.proccessNumber)
-          : undefined,
-        tipValue: payload.tipValue ? Number(payload.tipValue) : undefined,
-        userId: payload.userId ? Number(payload.userId) : undefined,
+        proccessNumber: payload.proccessNumber,
+        tipValue: String(payload.tipValue ?? 0),
+        userId: payload.userId,
         consultationId: payload.consultationId
           ? Number(payload.consultationId)
           : undefined,
-        dateClose: payload.dateClose ? new Date(payload.dateClose) : undefined,
-        dateAntecipation: payload.dateAntecipation
-          ? new Date(payload.dateAntecipation)
-          : undefined,
-        dateCorrection: payload.dateCorrection
-          ? new Date(payload.dateCorrection)
-          : undefined,
+        dateClose: payload.dateClose,
+        dateAntecipation: payload.dateAntecipation,
+        dateCorrection: payload.dateCorrection,
         rate: payload.rate ? Number(payload.rate) : undefined,
         reasonCorrection: payload.reasonCorrection
           ? String(payload.reasonCorrection)
           : undefined,
-        consultationValue: payload.consultationValue,
-        antecipationValue: payload.antecipationValue,
-      },
-      where: {
-        id: payload.id,
-      },
-    });
+        consultationValue: payload.consultationValue
+          ? String(payload.consultationValue)
+          : undefined,
+        antecipationValue: payload.antecipationValue
+          ? String(payload.antecipationValue)
+          : undefined,
+      })
+      .where(eq(patientConsultations.id, payload.id!));
   } catch (error) {
     console.log("🚀 ~ error:", error);
     throw createError({
@@ -309,11 +268,9 @@ export const consultationUpdate = async (
 export const consultationDestroy = async (id: number) => {
   await exists(id);
   try {
-    await prisma.patientConsultation.delete({
-      where: {
-        id,
-      },
-    });
+    await db
+      .delete(patientConsultations)
+      .where(eq(patientConsultations.id, id));
   } catch (error) {
     throw createError({
       statusCode: 500,
@@ -327,66 +284,18 @@ export const consultationShow = async (id: number) => {
 };
 
 const exists = async (id: number) => {
-  const data = await prisma.patientConsultation.findFirst({
-    select: {
-      id: true,
-      content: true,
-      benefitTypeId: true,
-      reportPurposeId: true,
-      patientId: true,
-      medicId: true,
-      status: true,
-      processSituation: true,
-      proccessNumber: true,
-      antecipationValue: true,
-      consultationValue: true,
-      dateAntecipation: true,
-      dateCorrection: true,
-      dateClose: true,
-      dateOpen: true,
-      reasonCorrection: true,
-      tipValue: true,
-      userId: true,
-      BenefitType: {
-        select: {
+  const data = await db.query.patientConsultations.findFirst({
+    with: {
+      Medic: {
+        columns: {
           id: true,
           name: true,
-        },
-      },
-      ReportPurpose: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      Patient: {
-        select: {
-          id: true,
-          name: true,
-          surname: true,
-          cpf: true,
-          phone: true,
-          birthDate: true,
-          email: true,
-          motherName: true,
-          rg: true,
-          sexy: true,
-          User: {
-            select: {
-              id: true,
-              name: true,
-              officeName: true,
-              oab: true,
-              oabUf: true,
-              cpfCnpj: true,
-              email: true,
-              phone: true,
-            },
-          },
+          crm: true,
+          crmUf: true,
         },
       },
       Consultation: {
-        select: {
+        columns: {
           id: true,
           consultationName: true,
           value: true,
@@ -396,10 +305,44 @@ const exists = async (id: number) => {
           valueAntecipation72: true,
         },
       },
+      BenefitType: true,
+      ReportPurpose: true,
+      Patient: {
+        columns: {
+          id: true,
+          name: true,
+          surname: true,
+          cpf: true,
+          phone: true,
+        },
+        with: {
+          User: {
+            columns: {
+              id: true,
+              name: true,
+              oab: true,
+              oabUf: true,
+              officeName: true,
+            },
+          },
+        },
+      },
     },
-    where: {
-      id,
+    columns: {
+      id: true,
+      dateAntecipation: true,
+      dateCorrection: true,
+      rate: true,
+      dateOpen: true,
+      dateClose: true,
+      proccessNumber: true,
+      status: true,
+      processSituation: true,
+      tipValue: true,
+      content: true,
+      reasonCorrection: true,
     },
+    where: eq(patientConsultations.id, id),
   });
 
   if (!exists) {

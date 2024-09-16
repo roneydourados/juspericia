@@ -19,26 +19,26 @@ const consultations = pgTable("consultations", {
     mode: "string",
   }).notNull(),
   value: numeric("value", { precision: 18, scale: 2 }).notNull(),
+  valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
+  valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),
   valueAntecipation24: numeric("value_antecipation_24", {
     precision: 18,
     scale: 2,
   })
-    .default("0") // Convert the number to a string
+    .default("0")
     .notNull(),
   valueAntecipation48: numeric("value_antecipation_48", {
     precision: 18,
     scale: 2,
   })
-    .default("0") // Convert the number to a string
+    .default("0")
     .notNull(),
   valueAntecipation72: numeric("value_antecipation_72", {
     precision: 18,
     scale: 2,
   })
-    .default("0") // Convert the number to a string
+    .default("0")
     .notNull(),
-  valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
-  valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),
 });
 
 export const consultationsRelations = relations(consultations, ({ many }) => ({
