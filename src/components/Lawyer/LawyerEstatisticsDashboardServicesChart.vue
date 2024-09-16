@@ -8,13 +8,13 @@
 </template>
 
 <script setup lang="ts">
-const randomNumbers = ref<Number[]>([]);
-
-for (let i = 0; i < 12; i++) {
-  randomNumbers.value.push(Math.floor(Math.random() * 100));
-}
-
 const chartConfig = computed(() => {
+  const randomNumbers = [] as number[];
+
+  for (let i = 0; i < 12; i++) {
+    randomNumbers.push(Math.floor(Math.random() * 100));
+  }
+
   return {
     series: [
       {
