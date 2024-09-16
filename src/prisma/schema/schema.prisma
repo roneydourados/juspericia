@@ -14,3 +14,9 @@ enum ProfileType {
   ADVOGADO
   MEDICO
 }
+
+enum PaymentType {
+  CREDIT_CARD
+  BOLETO
+  PIX
+}
