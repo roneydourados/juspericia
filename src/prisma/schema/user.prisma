@@ -1,0 +1,33 @@
+model User {
+  id                        Int                         @id @default(autoincrement())
+  name                      String                      @db.VarChar(200)
+  email                     String                      @unique @db.VarChar(1000)
+  password                  String
+  phone                     String?                     @db.VarChar(20)
+  cpfCnpj                   String?                     @map("cpf_cnpj") @db.VarChar(30)
+  oab                       String?                     @db.VarChar(10)
+  oabUf                     String?                     @map("oab_uf") @db.Char(2)
+  crm                       String?                     @db.VarChar(10)
+  crmUf                     String?                     @map("crm_uf") @db.Char(2)
+  profileId                 Int                         @map("profile_id")
+  createdAt                 DateTime                    @default(now()) @map("created_at")
+  updatedAt                 DateTime                    @updatedAt @map("updated_at")
+  officeName                String?                     @map("office_name") @db.VarChar(200)
+  active                    Boolean                     @default(true)
+  officeCnpj                String?                     @map("office_cnpj") @db.VarChar(30)
+  officeEmail               String?                     @map("office_email") @db.VarChar(1000)
+  officePhone               String?                     @map("office_phone") @db.VarChar(20)
+  Profile                   Profile                     @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Patient                   Patient[]
+  PatientConsultationReport PatientConsultationReport[]
+  Schedules                 Schedule[]
+  UserLogCredit             UserLogCredit[]
+  PatientConsultation       PatientConsultation[]
+
+  @@index([name], map: "users_idx_name")
+  @@index([email], map: "users_idx_email")
+  @@index([cpfCnpj], map: "users_idx_cpf_cnpj")
+  @@index([active], map: "users_idx_active")
+  @@index([profileId], map: "users_idx_profile_id")
+  @@map("users")
+}

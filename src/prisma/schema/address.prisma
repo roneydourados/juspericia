@@ -1,0 +1,18 @@
+model Address {
+  id                Int     @id @default(autoincrement())
+  ownerId           Int     @map("owner_id")
+  addressCategory   String  @map("address_category") @db.VarChar(30)
+  addressZipcode    String? @map("address_zipcode") @db.VarChar(20)
+  addressCity       String? @map("address_city") @db.VarChar(100)
+  addressDistrict   String? @map("address_district") @db.VarChar(100)
+  addressStreet     String? @map("address_street") @db.VarChar(100)
+  addressNumber     String? @map("address_number") @db.VarChar(10)
+  addressState      String? @map("address_state") @db.Char(2)
+  addressComplement String? @map("address_complement") @db.VarChar(100)
+
+  @@index([ownerId], map: "address_idx_owner_id")
+  @@index([addressCategory], map: "address_idx_address_category")
+  @@index([addressCity], map: "address_idx_address_city")
+  @@index([addressState], map: "address_idx_address_state")
+  @@map("address")
+}

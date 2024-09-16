@@ -1,0 +1,7 @@
+model ReportPurpose {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(200)
+  PatientConsultation PatientConsultation[]
+
+  @@map("report_purposes")
+}

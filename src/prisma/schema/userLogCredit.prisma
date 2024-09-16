@@ -1,0 +1,15 @@
+model UserLogCredit {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map("created_at")
+  userId      Int      @map("user_id")
+  history     String
+  oldValue    Decimal  @default(0) @map("old_value") @db.Decimal(18, 2)
+  inputValue  Decimal  @default(0) @map("input_value") @db.Decimal(18, 2)
+  outputValue Decimal  @default(0) @map("output_value") @db.Decimal(18, 2)
+  saltValue   Decimal  @default(0) @map("salt_value") @db.Decimal(18, 2)
+  User        User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([createdAt], map: "user_log_credits_idx_created_at")
+  @@index([userId], map: "user_log_credits_idx_user_id")
+  @@map("user_log_credits")
+}

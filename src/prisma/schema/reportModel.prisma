@@ -1,0 +1,8 @@
+model ReportModel {
+  id                        Int                         @id @default(autoincrement())
+  title                     String                      @db.VarChar(200)
+  content                   String
+  PatientConsultationReport PatientConsultationReport[]
+
+  @@map("report_models")
+}

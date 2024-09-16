@@ -1,0 +1,24 @@
+model Schedule {
+  id                    Int                  @id @default(autoincrement())
+  userId                Int                  @map("user_id")
+  patientConsultationId Int?                 @map("patient_consultation_id")
+  start                 String               @db.VarChar(30)
+  end                   String               @db.VarChar(30)
+  title                 String               @db.VarChar(200)
+  content               String
+  class                 String               @db.VarChar(30)
+  background            Boolean              @default(false)
+  split                 String               @db.VarChar(30)
+  allDay                Boolean              @default(false)
+  deletable             Boolean              @default(true)
+  resizable             Boolean              @default(true)
+  userSchedule          String               @map("user_schedule") @db.VarChar(200)
+  Medic                 User                 @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultation   PatientConsultation? @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([userId], map: "schedules_idx_user_id")
+  @@index([start], map: "schedules_idx_start")
+  @@index([end], map: "schedules_idx_end")
+  @@index([patientConsultationId], map: "schedules_idx_patient_consultation_id")
+  @@map("schedules")
+}

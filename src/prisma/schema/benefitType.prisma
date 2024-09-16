@@ -1,0 +1,7 @@
+model BenefitType {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(200)
+  PatientConsultation PatientConsultation[]
+
+  @@map("benefit_types")
+}

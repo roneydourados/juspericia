@@ -1,0 +1,38 @@
+model PatientConsultation {
+  id                        Int                         @id @default(autoincrement())
+  patientId                 Int                         @map("patient_id")
+  userId                    Int                         @map("user_id")
+  medicId                   Int?                        @map("medic_id")
+  consultationId            Int                         @map("consultation_id")
+  content                   String
+  benefitTypeId             Int                         @map("benefit_type_id")
+  proccessNumber            String?                     @map("proccess_number") @db.VarChar(30)
+  processSituation          String?                     @map("process_situation") @db.VarChar(2)
+  reportPurposeId           Int                         @map("report_purpose_id")
+  status                    String                      @default("open") @db.VarChar(30)
+  tipValue                  Decimal                     @default(0) @map("tip_value") @db.Decimal(18, 2)
+  dateClose                 DateTime?                   @map("date_close") @db.Date
+  dateOpen                  DateTime                    @default(now()) @map("date_open") @db.Date
+  rate                      Int?                        @default(0)
+  dateAntecipation          DateTime?                   @map("date_antecipation") @db.Date
+  dateCorrection            DateTime?                   @map("date_correction") @db.Date
+  createdAt                 DateTime                    @default(now()) @map("created_at")
+  reasonCorrection          String?                     @map("reason_correction")
+  updatedAt                 DateTime                    @default(now()) @updatedAt @map("updated_at")
+  antecipationValue         Decimal                     @default(0) @map("antecipation_value") @db.Decimal(18, 2)
+  consultationValue         Decimal                     @default(0) @map("consultation_value") @db.Decimal(18, 2)
+  Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  ReportPurpose             ReportPurpose               @relation(fields: [reportPurposeId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  BenefitType               BenefitType                 @relation(fields: [benefitTypeId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultationReport PatientConsultationReport[]
+  schedules                 Schedule[]
+
+  @@index([medicId], map: "patient_consultations_idx_medic_id")
+  @@index([patientId], map: "patient_consultations_idx_patient_id")
+  @@index([consultationId], map: "patient_consultations_idx_consultation_id")
+  @@index([reportPurposeId], map: "patient_consultations_idx_report_purpose_id")
+  @@index([benefitTypeId], map: "patient_consultations_idx_benefit_type_id")
+  @@map("patient_consultations")
+}
