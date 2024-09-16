@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Administrativo"
+  },
+  {
+    "id": 2,
+    "name": "Judicial"
+  },
+  {
+    "id": 3,
+    "name": "Outros"
+  }
+]

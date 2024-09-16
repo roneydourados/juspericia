@@ -1,0 +1,602 @@
+[
+  {
+    "profileId": 1,
+    "title": "Nova solicitação",
+    "to": "/solicitations/new",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Editar solicitação",
+    "to": "/solicitations/edit",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Consultas",
+    "to": "/admin/queries",
+    "icon": "mdi-hospital-box-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Relatório de vendas",
+    "to": "/admin/report-sales",
+    "icon": "mdi-file-chart-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Perfil",
+    "to": "/profile",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Médicos parceiros",
+    "to": "/admin/medics",
+    "icon": "mdi-stethoscope",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Pacotes de Serviços",
+    "to": "/admin/packages",
+    "icon": "mdi-package-variant-closed",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Cadastro de modelo de laudo",
+    "to": "/admin/report-models",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Administradores do sistema",
+    "to": "/admin/admins",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 1,
+    "title": "Início",
+    "to": "/admin/home",
+    "icon": "mdi-home-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Início",
+    "to": "/lawyer/home",
+    "icon": "mdi-home-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Início",
+    "to": "/medic/home",
+    "icon": "mdi-home-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Solicitações",
+    "to": "/solicitations",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Pacientes",
+    "to": "/patient",
+    "icon": "mdi-clipboard-account-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Agendamentos",
+    "to": "/schedules",
+    "icon": "mdi-calendar-clock-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Consultas agendadas",
+    "to": "/scheduled-queries",
+    "icon": "mdi-hospital-box-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Administração",
+    "to": "/admin/administration",
+    "icon": "mdi-shield-account-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Dashboard de vendas",
+    "to": "/admin/dashobard-sales",
+    "icon": "mdi-cart-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Estatísticas",
+    "to": "/lawyer/estatistics",
+    "icon": "mdi-view-dashboard-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Meus Saldos",
+    "to": "/lawyer/my-salts",
+    "icon": "mdi-chart-line-variant",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Indicações",
+    "to": "/lawyer/my-indications",
+    "icon": "mdi-account-network-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Vídeos/Tutoriais",
+    "to": "/videos",
+    "icon": "mdi-folder-play-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Minha conta",
+    "to": "/lawyer/my-account",
+    "icon": "mdi-card-account-details-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Nova solicitação",
+    "to": "/solicitations/new",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Editar solicitação",
+    "to": "/solicitations/edit",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Consultas",
+    "to": "/admin/queries",
+    "icon": "mdi-hospital-box-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Relatório de vendas",
+    "to": "/admin/report-sales",
+    "icon": "mdi-file-chart-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Perfil",
+    "to": "/profile",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Médicos parceiros",
+    "to": "/admin/medics",
+    "icon": "mdi-stethoscope",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Pacotes de Serviços",
+    "to": "/admin/packages",
+    "icon": "mdi-package-variant-closed",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Cadastro de modelo de laudo",
+    "to": "/admin/report-models",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Administradores do sistema",
+    "to": "/admin/admins",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 2,
+    "title": "Início",
+    "to": "/admin/home",
+    "icon": "mdi-home-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Início",
+    "to": "/lawyer/home",
+    "icon": "mdi-home-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Início",
+    "to": "/medic/home",
+    "icon": "mdi-home-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Solicitações",
+    "to": "/solicitations",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Advogados",
+    "to": "/lawyer",
+    "icon": "mdi-account-tie-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Pacientes",
+    "to": "/patient",
+    "icon": "mdi-clipboard-account-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Agendamentos",
+    "to": "/schedules",
+    "icon": "mdi-calendar-clock-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Consultas agendadas",
+    "to": "/scheduled-queries",
+    "icon": "mdi-hospital-box-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Administração",
+    "to": "/admin/administration",
+    "icon": "mdi-shield-account-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Dashboard de vendas",
+    "to": "/admin/dashobard-sales",
+    "icon": "mdi-cart-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Estatísticas",
+    "to": "/lawyer/estatistics",
+    "icon": "mdi-view-dashboard-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Meus Saldos",
+    "to": "/lawyer/my-salts",
+    "icon": "mdi-chart-line-variant",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Indicações",
+    "to": "/lawyer/my-indications",
+    "icon": "mdi-account-network-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Vídeos/Tutoriais",
+    "to": "/videos",
+    "icon": "mdi-folder-play-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Minha conta",
+    "to": "/lawyer/my-account",
+    "icon": "mdi-card-account-details-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Nova solicitação",
+    "to": "/solicitations/new",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Editar solicitação",
+    "to": "/solicitations/edit",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Consultas",
+    "to": "/admin/queries",
+    "icon": "mdi-hospital-box-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Relatório de vendas",
+    "to": "/admin/report-sales",
+    "icon": "mdi-file-chart-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Perfil",
+    "to": "/profile",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": true,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Médicos parceiros",
+    "to": "/admin/medics",
+    "icon": "mdi-stethoscope",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Pacotes de Serviços",
+    "to": "/admin/packages",
+    "icon": "mdi-package-variant-closed",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Cadastro de modelo de laudo",
+    "to": "/admin/report-models",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Administradores do sistema",
+    "to": "/admin/admins",
+    "icon": "mdi-account-multiple-check-outline",
+    "visible": false,
+    "isMenu": false
+  },
+  {
+    "profileId": 3,
+    "title": "Início",
+    "to": "/admin/home",
+    "icon": "mdi-home-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Início",
+    "to": "/lawyer/home",
+    "icon": "mdi-home-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Início",
+    "to": "/medic/home",
+    "icon": "mdi-home-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Solicitações",
+    "to": "/solicitations",
+    "icon": "mdi-file-document-edit-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Advogados",
+    "to": "/lawyer",
+    "icon": "mdi-account-tie-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Pacientes",
+    "to": "/patient",
+    "icon": "mdi-clipboard-account-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Agendamentos",
+    "to": "/schedules",
+    "icon": "mdi-calendar-clock-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Consultas agendadas",
+    "to": "/scheduled-queries",
+    "icon": "mdi-hospital-box-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Administração",
+    "to": "/admin/administration",
+    "icon": "mdi-shield-account-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Dashboard de vendas",
+    "to": "/admin/dashobard-sales",
+    "icon": "mdi-cart-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Estatísticas",
+    "to": "/lawyer/estatistics",
+    "icon": "mdi-view-dashboard-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Meus Saldos",
+    "to": "/lawyer/my-salts",
+    "icon": "mdi-chart-line-variant",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Indicações",
+    "to": "/lawyer/my-indications",
+    "icon": "mdi-account-network-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Vídeos/Tutoriais",
+    "to": "/videos",
+    "icon": "mdi-folder-play-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Minha conta",
+    "to": "/lawyer/my-account",
+    "icon": "mdi-card-account-details-outline",
+    "visible": false,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Advogados",
+    "to": "/admin/lawyers",
+    "icon": "mdi-account-tie-outline",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 1,
+    "title": "Pacotes de Serviços",
+    "to": "/services-packages",
+    "icon": "mdi-cart-arrow-up",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 2,
+    "title": "Pacotes de Serviços",
+    "to": "/services-packages",
+    "icon": "mdi-cart-arrow-up",
+    "visible": true,
+    "isMenu": true
+  },
+  {
+    "profileId": 3,
+    "title": "Pacotes de Serviços",
+    "to": "/services-packages",
+    "icon": "mdi-cart-arrow-up",
+    "visible": true,
+    "isMenu": true
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 2,
+    "owner_id": 2,
+    "addressCategory": "PATIENT",
+    "addressZipcode": "69900068",
+    "addressCity": "Rio Branco",
+    "addressDistrict": "Centro",
+    "addressStreet": "Rua Marechal Deodoro",
+    "addressNumber": "285",
+    "addressState": "AC",
+    "addressComplement": "até 302 - lado par"
+  },
+  {
+    "id": 3,
+    "owner_id": 3,
+    "addressCategory": "PATIENT",
+    "addressZipcode": "45650820",
+    "addressCity": "Ilhéus",
+    "addressDistrict": "Conquista",
+    "addressStreet": "Travessa Santa Clara",
+    "addressNumber": "563",
+    "addressState": "BA",
+    "addressComplement": ""
+  },
+  {
+    "id": 5,
+    "owner_id": 2,
+    "addressCategory": "USER",
+    "addressZipcode": "79002820",
+    "addressCity": "Campo Grande",
+    "addressDistrict": "Centro",
+    "addressStreet": "Avenida Fernando Corrêa da Costa",
+    "addressNumber": "2",
+    "addressState": "MS",
+    "addressComplement": "de 437 a 1423 - lado ímpar"
+  },
+  {
+    "id": 8,
+    "owner_id": 1,
+    "addressCategory": "PATIENT",
+    "addressZipcode": "78553495",
+    "addressCity": "Sinop",
+    "addressDistrict": "Jardim São Paulo",
+    "addressStreet": "Rua Nicolau Flessak",
+    "addressNumber": "581",
+    "addressState": "MT",
+    "addressComplement": "de 3127/3128 a 3358/3359"
+  },
+  {
+    "id": 11,
+    "owner_id": 4,
+    "addressCategory": "PATIENT",
+    "addressZipcode": "58087140",
+    "addressCity": "João Pessoa",
+    "addressDistrict": "Oitizeiro",
+    "addressStreet": "Rua Castro Alves",
+    "addressNumber": "25",
+    "addressState": "PB",
+    "addressComplement": "3256464654654"
+  }
+]

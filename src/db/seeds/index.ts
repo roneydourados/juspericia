@@ -1,0 +1,9 @@
+export { default as user } from "./user";
+export { default as adress } from "./adress";
+export { default as benefitType } from "./benefitType";
+export { default as consultation } from "./consultation";
+export { default as patient } from "./patient";
+export { default as patientConsultations } from "./patientConsultations";
+export { default as profile } from "./profile";
+export { default as profileRoutes } from "./profileRoutes";
+export { default as reportPurpose } from "./reportPurpose";

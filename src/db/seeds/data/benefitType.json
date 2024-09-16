@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Auxilio doença"
+  },
+  {
+    "id": 2,
+    "name": "Auxilio acidente"
+  },
+  {
+    "id": 3,
+    "name": "Aposentadoria"
+  },
+  {
+    "id": 4,
+    "name": "BPC LOAS"
+  },
+  {
+    "id": 5,
+    "name": "DPVAT"
+  },
+  {
+    "id": 6,
+    "name": "Trabalhista"
+  },
+  {
+    "id": 7,
+    "name": "Outros"
+  }
+]

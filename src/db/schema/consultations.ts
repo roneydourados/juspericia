@@ -17,7 +17,9 @@ const consultations = pgTable("consultations", {
   updatedAt: timestamp("updated_at", {
     precision: 3,
     mode: "string",
-  }).notNull(),
+  })
+    .defaultNow()
+    .notNull(),
   value: numeric("value", { precision: 18, scale: 2 }).notNull(),
   valueCredit: numeric("value_credit", { precision: 18, scale: 2 }).notNull(),
   valuePacket: numeric("value_packet", { precision: 18, scale: 2 }).notNull(),

@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "profileName": "Administrador",
+    "type": "ADMIN"
+  },
+  {
+    "id": 2,
+    "profileName": "Advogado",
+    "type": "ADVOGADO"
+  },
+  {
+    "id": 3,
+    "profileName": "Médico",
+    "type": "MEDICO"
+  }
+]

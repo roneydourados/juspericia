@@ -27,13 +27,13 @@ const patients = pgTable(
     status: varchar("status", { length: 1 }).default("A").notNull(),
     sexy: char("sexy", { length: 1 }).notNull(),
     createdAt: timestamp("created_at", { precision: 3, mode: "string" })
-      .default(sql`CURRENT_TIMESTAMP`)
+      .defaultNow()
       .notNull(),
     surname: varchar("surname", { length: 200 }).notNull(),
     updatedAt: timestamp("updated_at", {
       precision: 3,
       mode: "string",
-    }).notNull(),
+    }).defaultNow(),
     birthDate: varchar("birth_date", { length: 10 }).notNull(),
   },
   (table) => {

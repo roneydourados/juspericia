@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "consultationName": "Invalidez",
+    "value": 180.00,
+    "valueCredit": 170.00,
+    "valuePacket": 160.00,
+    "valueAntecipation_24": 0.00,
+    "valueAntecipation_48": 0.00,
+    "valueAntecipation_72": 0.00
+  }
+]
