@@ -41,7 +41,7 @@
             @click="editor.chain().focus().setTextAlign('justify').run()"
             :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
           />
-          <v-btn
+          <!-- <v-btn
             size="small"
             icon="mdi-format-header-1"
             @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
@@ -59,6 +59,11 @@
             @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
             :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
           />
+          <input
+            type="color"
+            @input="editor.chain().focus().setColor($event.target).run()"
+            :value="editor.getAttributes('textStyle').color"
+          /> -->
         </v-btn-toggle>
       </v-col>
     </v-row>
@@ -66,11 +71,7 @@
       <v-col cols="12">
         <v-card variant="flat" class="pa-4 border-thin">
           <div class="container">
-            <TiptapEditorContent
-              v-model="value"
-              :editor="editor"
-              style="min-height: 40rem"
-            />
+            <EditorContent :editor="editor" style="min-height: 40rem" />
           </div>
         </v-card>
       </v-col>
@@ -81,11 +82,11 @@
 <script setup lang="ts">
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Highlight } from "@tiptap/extension-highlight";
-
-import { useField } from "vee-validate";
-import { v4 as uuidv4 } from "uuid";
-import { toTypedSchema } from "@vee-validate/zod";
-import * as zod from "zod";
+import StarterKit from "@tiptap/starter-kit";
+// import Text from "@tiptap/extension-text";
+// import TextStyle from "@tiptap/extension-text-style";
+// import { Color } from "@tiptap/extension-color";
+import { Editor, EditorContent } from "@tiptap/vue-3";
 
 const props = defineProps({
   modelValue: {
@@ -94,52 +95,35 @@ const props = defineProps({
   },
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+const editor = ref();
 
-const editor = useEditor({
-  editorProps: {
-    attributes: {
-      spellcheck: "false",
+onMounted(() => {
+  editor.value = new Editor({
+    content: props.modelValue,
+    extensions: [StarterKit, Highlight, TextAlign],
+    onUpdate: () => {
+      emit("update:modelValue", editor.value.getHTML());
     },
-  },
-  extensions: [
-    TiptapStarterKit,
-    Highlight,
-    TextAlign.configure({
-      types: ["heading", "paragraph"],
-    }),
-  ],
+  });
 });
 
 onBeforeUnmount(() => {
-  //@ts-ignore
-  unref(editor).destroy();
+  editor.value.destroy();
 });
 
-const fieldName = computed<MaybeRef>(() => {
-  return uuidv4();
-});
+watch(
+  () => props.modelValue,
+  (value) => {
+    const isSame = editor.value?.getHTML() === value;
 
-const validationRules = computed<MaybeRef>(() => {
-  return toTypedSchema(zod.string().nullish().optional());
-});
+    if (isSame) {
+      return;
+    }
 
-const { value } = useField<string>(fieldName, validationRules, {
-  syncVModel: true,
-});
-
-// onMounted(() => {
-//   if (!!unref(editor) && editor.value) {
-//     console.log("🚀 ~ onMounted ~ editor:", props.modelValue);
-//     editor.value.commands.setContent(props.modelValue);
-//   }
-// });
-
-watch(editor, () => {
-  if (!!unref(editor) && editor.value) {
-    editor.value.commands.setContent(props.modelValue);
+    editor.value?.commands.setContent(value, false);
   }
-});
+);
 </script>
 
 <style lang="scss">
