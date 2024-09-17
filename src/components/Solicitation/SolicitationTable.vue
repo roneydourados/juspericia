@@ -95,7 +95,7 @@
           />
         </v-col>
       </v-row>
-      <!-- <EmptyContent v-if="$all?.consultations.length === 0" /> -->
+      <EmptyContent v-if="$all?.consultations.length === 0" />
     </v-card-text>
   </v-card>
 

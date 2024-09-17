@@ -16,6 +16,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     reportPurposeId,
     userId,
   } = filters;
+  console.log("🚀 ~ index ~ patientId:", patientId);
 
   const data = await prisma.patientConsultation.findMany({
     where: {
@@ -23,11 +24,11 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
         gte: new Date(initialDateSolicitation),
         lte: new Date(finalDateSolicitation),
       },
-      userId,
       status,
-      patientId: patientId ? patientId : undefined,
-      benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-      reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+      userId: userId ? Number(userId) : undefined,
+      patientId: patientId ? Number(patientId) : undefined,
+      benefitTypeId: benefitTypeId ? Number(benefitTypeId) : undefined,
+      reportPurposeId: reportPurposeId ? Number(reportPurposeId) : undefined,
     },
     select: {
       id: true,
@@ -122,10 +123,10 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
         gte: new Date(initialDateSolicitation),
         lte: new Date(finalDateSolicitation),
       },
-      patientId: patientId ? patientId : undefined,
-      benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
-      reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
-      userId,
+      userId: userId ? Number(userId) : undefined,
+      patientId: patientId ? Number(patientId) : undefined,
+      benefitTypeId: benefitTypeId ? Number(benefitTypeId) : undefined,
+      reportPurposeId: reportPurposeId ? Number(reportPurposeId) : undefined,
     },
   });
 
@@ -290,6 +291,18 @@ const exists = async (id: number) => {
       reasonCorrection: true,
       tipValue: true,
       userId: true,
+      Schedule: {
+        select: {
+          scheduleDate: true,
+          scheduleHour: true,
+          title: true,
+          Medic: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       BenefitType: {
         select: {
           id: true,

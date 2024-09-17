@@ -11,5 +11,6 @@ model Schedule {
 
   @@index([medicId], map: "schedules_idx_medic_id")
   @@index([patientConsultationId], map: "schedules_idx_patient_consultation_id")
+  @@index([scheduleDate], map: "schedules_idx_schedule_date")
   @@map("schedules")
 }

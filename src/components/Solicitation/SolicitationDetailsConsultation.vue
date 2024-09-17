@@ -3,6 +3,31 @@
     <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
       Dados da consulta
     </div>
+    <v-row v-if="$single?.Schedule && $single?.Schedule.length > 0" dense>
+      <v-col cols="12">
+        <div class="mb-2 font-weight-bold" style="font-size: 0.9rem">
+          Dados agendamento
+        </div>
+        <div class="d-flex align-center flex-wrap" style="gap: 0.5rem">
+          <span> Agendado: </span>
+          <strong>
+            {{
+              moment($single?.Schedule?.[0]?.scheduleDate ?? "").format(
+                "DD/MM/YYYY"
+              )
+            }}
+            as
+            {{ $single?.Schedule?.[0].scheduleHour }}
+          </strong>
+
+          Dr(a):
+          <strong>
+            {{ $single?.Schedule?.[0].Medic?.name }}
+          </strong>
+        </div>
+        <v-divider />
+      </v-col>
+    </v-row>
     <v-row dense>
       <v-col cols="12">
         <InfoLabel
@@ -61,6 +86,7 @@
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
 const { amountFormated, formatTelephoneNumber, formatCPFOrCNPJ } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 

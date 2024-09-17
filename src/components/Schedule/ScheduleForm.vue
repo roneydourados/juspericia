@@ -140,34 +140,35 @@ const clearModel = () => {
   };
 };
 
-const loadModel = () => {
-  model.value = {
-    medic: props.data.Medic,
-    scheduleDate: props.data.scheduleDate!,
-    scheduleHour: {
-      hour: moment(props.data.scheduleHour).format("HH"),
-      min: moment(props.data.scheduleHour).format("mm"),
-    },
-  };
-};
+// const loadModel = () => {
+//   model.value = {
+//     medic: props.data.Medic,
+//     scheduleDate: props.data.scheduleDate!,
+//     scheduleHour: {
+//       hour: moment(props.data.scheduleHour).format("HH"),
+//       min: moment(props.data.scheduleHour).format("mm"),
+//     },
+//   };
+// };
 
 const submitForm = async () => {
   show.value = false;
+  try {
+    const schedule = {
+      title: `Agendamento de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
+      medicId: model.value.medic?.id,
+      scheduleDate: model.value.scheduleDate,
+      scheduleHour: `${model.value.scheduleHour.hour}:${model.value.scheduleHour.min}`,
+      patientConsultationId: props.solicitation.id,
+    };
 
-  const schedule = {
-    title: `Agendametno de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
-    medicId: model.value.medic?.id,
-    scheduleDate: moment(model.value.scheduleDate).format("YYYY-MM-DD"),
-    scheduleHour: `${model.value.scheduleHour.hour}:${model.value.scheduleHour.min}`,
-    patientConsultationId: props.solicitation.id,
-  };
-
-  if (props.data.id) {
-    await scheduleStore.update({ ...schedule, id: props.data.id });
-  } else {
-    await scheduleStore.create(schedule);
+    if (props.data.id) {
+      await scheduleStore.update({ ...schedule, id: props.data.id });
+    } else {
+      await scheduleStore.create(schedule);
+    }
+  } finally {
+    emit("scheduled");
   }
-
-  emit("scheduled");
 };
 </script>
