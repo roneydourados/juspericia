@@ -53,15 +53,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
   readonly: {
     type: Boolean,
     default: false,
   },
   min: {
+    type: Number,
+    default: 0,
+  },
+  max: {
     type: Number,
     default: 0,
   },
@@ -98,6 +98,18 @@ const validationRules = computed<MaybeRef>(() => {
             message: textRequiredMin.replaceAll("$car", props.min.toString()),
           }
         )
+        .refine(
+          (val: string) => {
+            if (props.max > 0) {
+              return Number(val) <= props.max;
+            }
+
+            return true;
+          },
+          {
+            message: `Valor máximo para este campo é de ${props.max}`,
+          }
+        )
     );
   }
 
@@ -118,16 +130,24 @@ const validationRules = computed<MaybeRef>(() => {
           message: textRequiredMin.replaceAll("$car", props.min.toString()),
         }
       )
+      .refine(
+        (val: string | undefined | null) => {
+          if (props.max > 0 && val) {
+            return Number(val) <= props.max;
+          }
+
+          return true;
+        },
+        {
+          message: `Valor máximo para este campo é de ${props.max}`,
+        }
+      )
   );
 });
 
-const { value, errorMessage, handleBlur, handleChange } = useField<string>(
-  fieldName,
-  validationRules,
-  {
-    syncVModel: true,
-  }
-);
+const { value, errorMessage } = useField<string>(fieldName, validationRules, {
+  syncVModel: true,
+});
 </script>
 
 <style scoped>

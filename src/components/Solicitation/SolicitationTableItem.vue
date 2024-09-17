@@ -9,9 +9,43 @@
         <span class="text-truncate">
           Solicitação {{ solicitation.Consultation?.consultationName }}
         </span>
+        <div
+          class="d-flex align-center flex-wrap"
+          style="gap: 0.5rem"
+          v-if="solicitation.Schedule && solicitation.Schedule.length > 0"
+        >
+          <span> Agendado: </span>
+          <strong>
+            {{
+              moment(solicitation.Schedule[0].scheduleDate).format("DD/MM/YYYY")
+            }}
+            as
+            {{ solicitation.Schedule[0].scheduleHour }}
+          </strong>
+
+          Dr(a):
+          <strong>
+            {{ solicitation.Schedule[0].Medic?.name }}
+          </strong>
+        </div>
       </div>
 
       <div class="d-flex align-center" style="gap: 1rem">
+        <v-btn
+          v-if="
+            solicitation.status === 'open' &&
+            $currentUser?.Profile.type === 'ADMIN'
+          "
+          prepend-icon="mdi-calendar-clock"
+          color="success"
+          size="small"
+          variant="flat"
+          class="text-none text-white"
+          @click="handleSchedule(solicitation)"
+        >
+          Agendar
+        </v-btn>
+
         <v-btn
           prepend-icon="mdi-cancel"
           color="error"
@@ -19,10 +53,7 @@
           variant="outlined"
           class="text-none text-white"
           @click="getItemCancel(solicitation)"
-          :disabled="
-            solicitation.status === 'finished' ||
-            solicitation.status === 'canceled'
-          "
+          :disabled="solicitation.status !== 'open'"
         >
           Cancelar
         </v-btn>
@@ -104,7 +135,6 @@
           </span>
         </v-col>
       </v-row>
-      <v-row dense> </v-row>
       <v-row dense>
         <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
           <span>Paciente:</span>
@@ -286,6 +316,14 @@
     v-model:show="showTipValue"
     @close="handleTipValue($event)"
   />
+  <ScheduleForm
+    v-model="showSolicitationSchedule"
+    :solicitation="selected"
+    @update:model-value="
+      !showSolicitationSchedule ? (selected = undefined) : selected
+    "
+    @scheduled="getSolicitations()"
+  />
   <DialogLoading :dialog="loading" />
   <Dialog
     title="Cancelar consulta"
@@ -326,6 +364,7 @@ const showDateAntecipation = ref(false);
 const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
+const showSolicitationSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
 const $currentUser = computed(() => auth.$currentUser);
 
@@ -435,5 +474,10 @@ const cancel = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleSchedule = (item: SolicitationConsultationProps) => {
+  selected.value = item;
+  showSolicitationSchedule.value = true;
 };
 </script>

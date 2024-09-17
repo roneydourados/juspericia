@@ -45,6 +45,18 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       reasonCorrection: true,
       consultationValue: true,
       antecipationValue: true,
+      Schedule: {
+        select: {
+          scheduleDate: true,
+          scheduleHour: true,
+          title: true,
+          Medic: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
       Medic: {
         select: {
           id: true,
@@ -100,11 +112,6 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     },
   });
 
-  console.log("🚀 ~ index ~ data:", data);
-  if (data.length === 0) {
-    return [];
-  }
-
   const totals = await prisma.patientConsultation.groupBy({
     by: ["status"],
     _count: {
@@ -118,6 +125,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       patientId: patientId ? patientId : undefined,
       benefitTypeId: benefitTypeId ? benefitTypeId : undefined,
       reportPurposeId: reportPurposeId ? reportPurposeId : undefined,
+      userId,
     },
   });
 

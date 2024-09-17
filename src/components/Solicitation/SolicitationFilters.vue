@@ -32,24 +32,6 @@
         </v-card-title>
         <v-card-text class="py-8">
           <v-row dense>
-            <v-col cols="6">
-              <DatePicker
-                v-model="modelFilters.initialDateSolicitation"
-                label="Data inicial"
-                outlined
-                dense
-              />
-            </v-col>
-            <v-col cols="6">
-              <DatePicker
-                v-model="modelFilters.finalDateSolicitation"
-                label="Data final"
-                outlined
-                dense
-              />
-            </v-col>
-          </v-row>
-          <v-row dense>
             <v-col cols="12">
               <SelectSearchPatient v-model="modelFilters.patient" clearable />
             </v-col>

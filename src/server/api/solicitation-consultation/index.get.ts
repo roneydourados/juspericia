@@ -9,13 +9,14 @@ export default defineEventHandler(async (event) => {
     benefitTypeId,
     patientId,
     reportPurposeId,
+    userId,
   } = getQuery<SolicitationConsultationFilterProps>(event);
 
   const { userLogged } = useAuthUser();
 
   const user = userLogged(event);
 
-  const userId = user.Profile.type === "ADMIN" ? undefined : user.id;
+  const userIdGet = user.Profile.type === "ADMIN" ? userId : user.id;
 
   setResponseStatus(event, 200);
 
@@ -26,6 +27,6 @@ export default defineEventHandler(async (event) => {
     benefitTypeId,
     patientId,
     reportPurposeId,
-    userId,
+    userId: userIdGet ? Number(userIdGet) : undefined,
   });
 });

@@ -1,8 +1,35 @@
 <template>
   <v-card flat rounded="lg" color="transparent" class="px-6">
     <v-card-title class="mb-12 d-flex align-center justify-space-between">
-      <HeaderPage title="Solicitações" />
-
+      <div class="d-flex flex-column w-100">
+        <HeaderPage title="Solicitações" />
+        <v-row class="mt-4" dense>
+          <v-col v-if="$currentUser?.Profile.type === 'ADMIN'" cols="12" lg="3">
+            <SelectSearchLawyer
+              label="Escritório/Advogado"
+              v-model="modelFilters.lawyer"
+              @update:model-value="search"
+              clearable
+            />
+          </v-col>
+          <v-col cols="12" lg="2">
+            <DatePicker
+              v-model="modelFilters.initialDateSolicitation"
+              label="Data inicial"
+              outlined
+              dense
+            />
+          </v-col>
+          <v-col cols="12" lg="2">
+            <DatePicker
+              v-model="modelFilters.finalDateSolicitation"
+              label="Data final"
+              outlined
+              dense
+            />
+          </v-col>
+        </v-row>
+      </div>
       <div class="d-flex aling-center" style="gap: 0.5rem">
         <v-btn
           class="text-none"
@@ -15,7 +42,6 @@
         </v-btn>
       </div>
     </v-card-title>
-
     <v-tabs
       v-model="tab"
       :grow="mobile"
@@ -54,9 +80,9 @@
       <v-tab :value="5" class="text-none">
         <v-icon icon="mdi-cancel" size="24" start />
         <span v-if="!mobile">Canceladas </span>
-        <span class="text-info font-weight-bold"
-          >({{ getQuantity("canceled") }})</span
-        >
+        <span class="text-info font-weight-bold">
+          ({{ getQuantity("canceled") }})
+        </span>
       </v-tab>
     </v-tabs>
     <v-divider />
@@ -69,6 +95,7 @@
           />
         </v-col>
       </v-row>
+      <!-- <EmptyContent v-if="$all?.consultations.length === 0" /> -->
     </v-card-text>
   </v-card>
 
@@ -89,9 +116,10 @@ import { useDisplay } from "vuetify";
 const rounter = useRouter();
 const { mobile } = useDisplay();
 const storeConsultation = useSolicitationConsultationStore();
+const auth = useAuthStore();
 const $all = computed(() => storeConsultation.$all);
+const $currentUser = computed(() => auth.$currentUser);
 const tab = ref(1);
-
 const loading = ref(false);
 const showFilters = ref(false);
 
@@ -102,6 +130,7 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
   benefitType: undefined as BenefitTypeProps | undefined,
   patient: undefined as PatientProps | undefined,
   reportPurpose: undefined as ReportPurposeProps | undefined,
+  lawyer: undefined as UserProps | undefined,
 });
 
 const handleChangeTable = async () => {
@@ -141,14 +170,20 @@ const getQuantity = (status: string) => {
 };
 
 const search = async () => {
-  setTimeout(async () => {
-    loading.value = true;
-    try {
-      await storeConsultation.index(modelFilters.value);
-    } finally {
-      loading.value = false;
-    }
-  }, 500);
+  loading.value = true;
+  try {
+    const filter = {
+      ...modelFilters.value,
+      userId: modelFilters.value.lawyer?.id,
+      benefitTypeId: modelFilters.value.benefitType?.id,
+      patientId: modelFilters.value.patient?.id,
+      reportPurposeId: modelFilters.value.reportPurpose?.id,
+    };
+
+    await storeConsultation.index(filter);
+  } finally {
+    loading.value = false;
+  }
 };
 
 const getItemEdit = async (item: SolicitationConsultationProps) => {

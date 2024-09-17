@@ -177,6 +177,7 @@ export const destroy = async (id: number) => {
 export const index = async (input: { inputQuery: string; userId?: number }) => {
   const { inputQuery, userId } = input;
   return prisma.patient.findMany({
+    take: 50,
     select: {
       id: true,
       name: true,

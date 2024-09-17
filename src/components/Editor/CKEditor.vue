@@ -109,6 +109,6 @@ const onDestroy = () => {
 
 <style>
 .ck-editor__editable_inline {
-  height: 40rem; /* Define a altura mínima para 400 pixels */
+  height: 25rem; /* Define a altura mínima para 400 pixels */
 }
 </style>

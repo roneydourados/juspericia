@@ -46,6 +46,7 @@ export const useSolicitationConsultationStore = defineStore(
         benefitTypeId,
         patientId,
         reportPurposeId,
+        userId,
       } = filters;
       const config = {
         params: {
@@ -55,6 +56,7 @@ export const useSolicitationConsultationStore = defineStore(
           benefitTypeId,
           patientId,
           reportPurposeId,
+          userId,
         },
       };
 

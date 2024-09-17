@@ -147,8 +147,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
-const { amountFormated, getSolicitationsFilters } = useUtils();
-const { mobile } = useDisplay();
+const { /*amountFormated,*/ getSolicitationsFilters } = useUtils();
+//const { mobile } = useDisplay();
 const router = useRouter();
 
 const storeConsultation = useSolicitationConsultationStore();

@@ -17,7 +17,13 @@
         :size="mobile ? '30' : '24'"
         :start="!mobile"
       />
-      <span v-if="!mobile"> {{ tabitem.title }}</span>
+      <div class="d-flex align-center">
+        <span v-if="!mobile">
+          {{ tabitem.title }}
+        </span>
+
+        <slot name="tab-title" />
+      </div>
     </v-tab>
   </v-tabs>
 

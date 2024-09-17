@@ -10,8 +10,8 @@
     icon="mdi-magnify"
     :items="$all"
     :loading="loadingSearch"
-    @click="search = ''"
     @update:model-value="$emit('update:modelValue', $event)"
+    @click:clear="$emit('clear')"
     :clearable="clearable"
     :disabled="disabled"
   >
@@ -19,7 +19,7 @@
       <v-list-item
         v-bind="props"
         :title="item.raw.name"
-        :subtitle="item.raw.surname"
+        :subtitle="item.raw.officeName"
         density="compact"
       >
       </v-list-item>
@@ -28,7 +28,7 @@
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.name }} {{ item.raw.surname }}
+          {{ item.raw.name }}
         </span>
       </div>
     </template>
@@ -62,7 +62,7 @@ defineProps({
   },
   label: {
     type: String,
-    default: "Paciente",
+    default: "Advogado",
   },
   modelValue: {
     type: Object,
@@ -94,14 +94,14 @@ defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "clear"]);
 
-const patient = usePatientStore();
+const userLawyerStore = useUserLawyerStore();
 
 const search = ref("");
 const loadingSearch = ref(false);
 
-const $all = computed(() => patient.$all);
+const $all = computed(() => userLawyerStore.$all);
 
 watch(search, async () => {
   await handleSearch();
@@ -127,7 +127,7 @@ const handleSearch = async () => {
   setTimeout(async () => {
     loadingSearch.value = true;
     try {
-      await patient.index(search.value);
+      await userLawyerStore.index(search.value);
     } finally {
       loadingSearch.value = false;
     }
