@@ -98,7 +98,6 @@
       <EmptyContent v-if="$all?.consultations.length === 0" />
     </v-card-text>
   </v-card>
-
   <SolicitationFilters
     v-model:drawer="showFilters"
     v-model:filters="modelFilters"
@@ -189,7 +188,7 @@ const search = async () => {
 const getItemEdit = async (item: SolicitationConsultationProps) => {
   loading.value = true;
   try {
-    await storeConsultation.show(item.id!);
+    await storeConsultation.show(item.publicId!);
     await rounter.push("/solicitations/edit");
   } finally {
     loading.value = false;

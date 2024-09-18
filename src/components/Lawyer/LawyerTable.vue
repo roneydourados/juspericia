@@ -234,7 +234,7 @@ const handleDeleteItem = async () => {
   showDelete.value = false;
   loading.value = true;
   try {
-    await userLawyerStore.destroy(selected.value?.id!);
+    await userLawyerStore.destroy(selected.value?.publicId!);
     await handleSearch("", false);
   } finally {
     loading.value = false;

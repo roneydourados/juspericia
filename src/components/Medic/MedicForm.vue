@@ -324,6 +324,7 @@ const create = async () => {
 
 const update = async () => {
   await medicStore.update({
+    publicId: props.data.publicId!,
     id: model.value.id,
     crm: model.value.crm,
     crmUf: model.value.crmUf,

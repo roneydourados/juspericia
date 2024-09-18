@@ -178,7 +178,7 @@ const handleCloseForm = () => {
 const handleDeleteItem = async () => {
   loading.value = true;
   try {
-    await consutationStore.destroy(selected.value!.id!);
+    await consutationStore.destroy(selected.value!.publicId!);
     await handleSearch("", false);
     showDelete.value = false;
     selected.value = undefined;

@@ -38,7 +38,7 @@ export const useUserAdminStore = defineStore("userAdmin", () => {
     user.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/user-admin/${id}`);
   };
 

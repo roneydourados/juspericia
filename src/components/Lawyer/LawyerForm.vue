@@ -383,6 +383,7 @@ const create = async () => {
 
 const update = async () => {
   await userLawyerStore.update({
+    publicId: props.data.publicId!,
     id: model.value.id,
     email: model.value.email,
     name: model.value.name,

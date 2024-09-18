@@ -20,7 +20,7 @@ export const useMedicStore = defineStore("medic", () => {
     users.value = data;
   };
 
-  const show = async (id: number) => {
+  const show = async (id: string) => {
     const { data } = await api.get<UserProps>(`/medic/${id}`);
 
     user.value = data;
@@ -38,7 +38,7 @@ export const useMedicStore = defineStore("medic", () => {
     user.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/medic/${id}`);
   };
 

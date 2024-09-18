@@ -109,7 +109,7 @@ const getItem = (item: ReportModelProps) => {
 const editItem = async (item: ReportModelProps) => {
   loading.value = true;
   try {
-    await reportModel.show(item.id!);
+    await reportModel.show(item.publicId!);
 
     getItem($single.value!);
 
@@ -132,7 +132,7 @@ const handleCloseForm = () => {
 const handleDeleteItem = async () => {
   loading.value = true;
   try {
-    await reportModel.destroy(selected.value!.id!);
+    await reportModel.destroy(selected.value!.publicId!);
     await handleSearch("", false);
     showDelete.value = false;
     selected.value = undefined;

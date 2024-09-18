@@ -20,7 +20,7 @@ export const useBenefitTypeStore = defineStore("benefitType", () => {
     benefitTypes.value = data;
   };
 
-  const show = async (id: number) => {
+  const show = async (id: string) => {
     const { data } = await api.get<BenefitTypeProps>(`/benefit-type/${id}`);
 
     benefitType.value = data;
@@ -38,7 +38,7 @@ export const useBenefitTypeStore = defineStore("benefitType", () => {
     benefitType.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/benefit-type/${id}`);
   };
 

@@ -65,7 +65,7 @@
                         location="top center"
                         content-class="tooltip-background"
                       >
-                        Iniciar atendimento
+                        Iniciar consulta
                       </v-tooltip>
                     </v-btn>
                   </template>

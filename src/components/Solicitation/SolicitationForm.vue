@@ -260,6 +260,7 @@ const create = async () => {
 const update = async () => {
   try {
     await storeConsultation.update({
+      publicId: props.data.publicId!,
       id: form.value.id,
       consultationId: form.value.consultation?.id,
       patientId: form.value.patient?.id,

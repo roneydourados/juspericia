@@ -22,11 +22,11 @@ export const useConsultationStore = defineStore("consultation", () => {
     consultation.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/consultation/${id}`);
   };
 
-  const show = async (id: number) => {
+  const show = async (id: string) => {
     const { data } = await api.get<ConsultationProps>(`/consultation/${id}`);
 
     consultation.value = data;

@@ -29,6 +29,7 @@ export const login = async ({ email, password }: AuthProps) => {
       name: true,
       phone: true,
       password: true,
+      publicId: true,
       Profile: {
         select: {
           profileName: true,
@@ -76,6 +77,7 @@ export const login = async ({ email, password }: AuthProps) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      publicId: user.publicId!,
       Profile: user.Profile as UserProfileProps,
     };
 

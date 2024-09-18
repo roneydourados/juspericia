@@ -128,7 +128,7 @@ const model = ref<UserModelProps>({
 });
 
 onMounted(async () => {
-  await userLawyerStore.show($currentUser.value!.id!);
+  await userLawyerStore.show($currentUser.value!.publicId!);
   loadModel();
 });
 
@@ -186,6 +186,7 @@ const handleUpdate = async () => {
   loading.value = true;
   try {
     await userLawyerStore.update({
+      publicId: $single.value?.publicId,
       id: model.value?.id,
       email: model.value?.email,
       name: model.value?.name,

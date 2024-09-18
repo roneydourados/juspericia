@@ -5,6 +5,7 @@ export interface JWTDecodedProps {
     id?: number;
     email?: string;
     name?: string;
+    publicId?: string;
     Profile: UserProfileProps;
   };
 }

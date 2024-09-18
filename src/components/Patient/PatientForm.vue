@@ -383,6 +383,7 @@ const create = async () => {
 
 const update = async () => {
   await itemStore.update({
+    publicId: props.data.publicId!,
     id: model.value.id,
     name: model.value.name,
     surname: model.value.surname,

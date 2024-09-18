@@ -40,11 +40,11 @@ export const useReportModelStore = defineStore("reportModel", () => {
     reportModel.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/report-models/${id}`);
   };
 
-  const show = async (id: number) => {
+  const show = async (id: string) => {
     const { data } = await api.get<ReportModelProps>(`/report-models/${id}`);
 
     reportModel.value = data;

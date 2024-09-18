@@ -237,7 +237,7 @@ const handleDeleteItem = async () => {
   showDelete.value = false;
   loading.value = true;
   try {
-    await medicStore.destroy(selected.value?.id!);
+    await medicStore.destroy(selected.value?.publicId!);
     await handleSearch("", false);
   } finally {
     loading.value = false;

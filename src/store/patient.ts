@@ -38,7 +38,7 @@ export const usePatientStore = defineStore("patient", () => {
     patient.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/patient/${id}`);
   };
 
