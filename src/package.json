@@ -39,7 +39,7 @@
     "nuxt-tiptap-editor": "^1.1.2",
     "pdfmake": "^0.2.10",
     "prisma-import": "^1.0.5",
-    "uuid": "^10.0.0",
+    "uuidv7": "^1.0.2",
     "vee-validate": "^4.13.2",
     "vue": "latest",
     "vue3-apexcharts": "^1.6.0",

@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { v4 as uuidv4 } from "uuid";
+import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 
 import { toTypedSchema } from "@vee-validate/zod";
@@ -76,7 +76,7 @@ const props = defineProps({
 });
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv4();
+  return uuidv7();
 });
 
 const validationRules = computed<MaybeRef>(() => {

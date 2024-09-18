@@ -32,19 +32,44 @@
               <v-list density="compact">
                 <v-list-subheader>Consultas</v-list-subheader>
                 <v-list-item
-                  v-for="(item, index) in $shedules"
+                  v-for="item in $shedules"
                   :key="item.id"
-                  :value="item"
+                  :value="item.id"
                 >
                   <template v-slot:prepend>
                     <v-avatar variant="flat" color="primary">
-                      <span>{{
-                        getInitials(
-                          `${item.PatientConsultation?.Patient?.name} ${item.PatientConsultation?.Patient?.surname}`
-                        )
-                      }}</span>
+                      <span>
+                        {{
+                          getInitials(
+                            `${item.PatientConsultation?.Patient?.name} ${item.PatientConsultation?.Patient?.surname}`
+                          )
+                        }}
+                      </span>
                     </v-avatar>
                   </template>
+                  <template v-slot:append>
+                    <v-btn
+                      color="purple-darken-2"
+                      icon
+                      variant="text"
+                      @click="serviceDetails = true"
+                    >
+                      <v-icon
+                        icon="mdi-stethoscope"
+                        size="25"
+                        color="purple-darken-2"
+                      />
+                      <!-- <AdminMenuStethoscopeSVG height="25" color="#7B1FA2" /> -->
+                      <v-tooltip
+                        activator="parent"
+                        location="top center"
+                        content-class="tooltip-background"
+                      >
+                        Iniciar atendimento
+                      </v-tooltip>
+                    </v-btn>
+                  </template>
+
                   <v-list-item-title>
                     <span>{{ item.title }}</span>
                   </v-list-item-title>
@@ -56,7 +81,8 @@
                         {{ item.PatientConsultation?.Patient?.surname }}
                       </span>
                       <span style="font-size: 0.8rem">
-                        ás {{ item.scheduleHour }}
+                        {{ moment(item.scheduleDate).format("DD/MM/YYYY") }} ás
+                        {{ item.scheduleHour }}
                       </span>
                     </div>
                     <div class="d-flex w-100" style="gap: 0.5rem">
@@ -103,6 +129,7 @@
     </v-row>
     <!-- <pre>{{ $shedules }}</pre> -->
     <DialogLoading :dialog="loading" />
+    <ScheduleServiceDetails v-model="serviceDetails" />
   </div>
 </template>
 
@@ -113,6 +140,7 @@ const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
 const { getInitials } = useUtils();
 
+const serviceDetails = ref(false);
 const model = reactive({
   date: new Date(),
   medic: undefined as UserProps | undefined,

@@ -16,11 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { v4 as uuidv4 } from "uuid";
+import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { textRequired, textRequiredMin } from "../utils";
+import { textRequired } from "../utils";
 
 const props = defineProps({
   modelValue: {
@@ -72,7 +72,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv4();
+  return uuidv7();
 });
 
 const validationRules = computed<MaybeRef>(() => {

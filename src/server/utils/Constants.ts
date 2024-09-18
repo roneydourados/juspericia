@@ -94,18 +94,18 @@ export const appRoutes = [
     icon: "mdi-calendar-clock-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADMIN"],
+    profiles: ["ADMIN", "MEDICO"],
     order: 7,
   },
-  {
-    title: "Consultas agendadas",
-    to: "/scheduled-queries",
-    icon: "mdi-hospital-box-outline",
-    visible: true,
-    isMenu: true,
-    profiles: ["MEDICO"],
-    order: 8,
-  },
+  // {
+  //   title: "Consultas agendadas",
+  //   to: "/scheduled-queries",
+  //   icon: "mdi-hospital-box-outline",
+  //   visible: true,
+  //   isMenu: true,
+  //   profiles: ["MEDICO"],
+  //   order: 8,
+  // },
   {
     title: "Administração",
     to: "/admin/administration",
@@ -113,7 +113,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
-    order: 9,
+    order: 8,
   },
   {
     title: "Dashboard de vendas",
@@ -122,7 +122,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
-    order: 10,
+    order: 9,
   },
   {
     title: "Estatísticas",
@@ -131,7 +131,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
-    order: 11,
+    order: 10,
   },
   {
     title: "Meus Saldos",
@@ -140,7 +140,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
-    order: 12,
+    order: 11,
   },
   {
     title: "Indicações",
@@ -149,7 +149,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
-    order: 13,
+    order: 12,
   },
   {
     title: "Vídeos/Tutoriais",
@@ -158,7 +158,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO", "ADMIN", "MEDICO"],
-    order: 14,
+    order: 13,
   },
   {
     title: "Minha conta",
@@ -167,7 +167,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO"],
-    order: 15,
+    order: 14,
   },
   {
     title: "Pacotes de Serviços",
@@ -176,7 +176,7 @@ export const appRoutes = [
     visible: true,
     isMenu: true,
     profiles: ["ADVOGADO", "ADMIN"],
-    order: 16,
+    order: 15,
   },
 
   // Rotas que não serão apresentadas no menu

@@ -17,10 +17,7 @@ interface HourProps {
   hour: string;
   min: string;
 }
-// import { v4 as uuidv4 } from "uuid";
-// import { useField } from "vee-validate";
-// import { toTypedSchema } from "@vee-validate/zod";
-// import * as zod from "zod";
+
 import moment from "moment";
 
 const model = defineModel<HourProps>({

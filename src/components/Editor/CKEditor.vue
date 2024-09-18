@@ -30,7 +30,7 @@ import coreTranslations from "ckeditor5/translations/pt.js";
 import "ckeditor5/ckeditor5.css";
 
 import { useField } from "vee-validate";
-import { v4 as uuidv4 } from "uuid";
+import { uuidv7 } from "uuidv7";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
@@ -73,7 +73,7 @@ const config = reactive({
 });
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv4();
+  return uuidv7();
 });
 
 const validationRules = computed<MaybeRef>(() => {

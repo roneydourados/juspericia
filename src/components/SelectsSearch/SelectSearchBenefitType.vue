@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { useField } from "vee-validate";
-import { v4 as uuidv4 } from "uuid";
+import { uuidv7 } from "uuidv7";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { BenefitTypeProps } from "@/types/BenefitType";
@@ -132,7 +132,7 @@ onMounted(async () => {
 });
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv4();
+  return uuidv7();
 });
 
 const validationRules = computed<MaybeRef>(() => {
