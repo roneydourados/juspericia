@@ -85,7 +85,7 @@ export const appRoutes = [
     icon: "mdi-clipboard-account-outline",
     visible: true,
     isMenu: true,
-    profiles: ["ADMIN", "ADVOGADO", "MEDICO"],
+    profiles: ["ADMIN", "ADVOGADO"],
     order: 6,
   },
   {
@@ -175,7 +175,7 @@ export const appRoutes = [
     icon: "mdi-cart-arrow-up",
     visible: true,
     isMenu: true,
-    profiles: ["ADVOGADO", "ADMIN", "MEDICO"],
+    profiles: ["ADVOGADO", "ADMIN"],
     order: 16,
   },
 

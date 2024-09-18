@@ -2,11 +2,17 @@ import prisma from "@/lib/prisma";
 import { ScheduleProps } from "~/types/Schedule";
 
 export const index = async (filters: ScheduleProps) => {
-  const { medicId, scheduleDate } = filters;
+  const { medicId, scheduleDate, patientId } = filters;
+
   const schedules = await prisma.schedule.findMany({
     where: {
       medicId,
       scheduleDate,
+      PatientConsultation: patientId
+        ? {
+            patientId,
+          }
+        : undefined,
     },
     select: {
       id: true,
@@ -16,8 +22,38 @@ export const index = async (filters: ScheduleProps) => {
       scheduleHour: true,
       title: true,
       userSchedule: true,
-      Medic: true,
-      PatientConsultation: true,
+      Medic: {
+        select: {
+          name: true,
+        },
+      },
+      PatientConsultation: {
+        select: {
+          id: true,
+          status: true,
+          BenefitType: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          ReportPurpose: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          Patient: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+              cpf: true,
+              sexy: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -115,6 +151,47 @@ export const show = async (id: number) => {
 
 const exists = async (id: number) => {
   const existsData = await prisma.schedule.findFirst({
+    select: {
+      id: true,
+      medicId: true,
+      patientConsultationId: true,
+      scheduleDate: true,
+      scheduleHour: true,
+      title: true,
+      userSchedule: true,
+      Medic: {
+        select: {
+          name: true,
+        },
+      },
+      PatientConsultation: {
+        select: {
+          id: true,
+          status: true,
+          BenefitType: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          ReportPurpose: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          Patient: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+              cpf: true,
+              sexy: true,
+            },
+          },
+        },
+      },
+    },
     where: {
       id,
     },

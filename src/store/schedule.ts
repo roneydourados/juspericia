@@ -28,10 +28,11 @@ export const useScheduleStore = defineStore("schedule", () => {
   };
 
   const index = async (filters: ScheduleProps) => {
-    const { medicId, scheduleDate } = filters;
+    const { medicId, scheduleDate, patientId } = filters;
     const config = {
       params: {
         medicId,
+        patientId,
         scheduleDate,
       },
     };

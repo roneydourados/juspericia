@@ -1,6 +1,7 @@
 export interface ScheduleProps {
   id?: number;
   medicId?: number;
+  patientId?: number;
   patientConsultationId?: number;
   scheduleDate?: string;
   scheduleHour?: string;

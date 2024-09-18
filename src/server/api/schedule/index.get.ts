@@ -1,18 +1,24 @@
 import { index } from "./repository/scheduleRepository";
 
 export default defineEventHandler(async (event) => {
-  const { medicId, scheduleDate } = getQuery(event);
+  let userId = undefined;
+  const { medicId, scheduleDate, patientId } = getQuery(event);
 
   const { userLogged } = useAuthUser();
 
   const user = userLogged(event);
 
-  const userId = user.Profile.type === "ADMIN" ? undefined : user.id;
+  if (user.Profile.type === "ADMIN") {
+    userId = medicId;
+  } else {
+    userId = user.id;
+  }
 
   setResponseStatus(event, 200);
 
   return index({
-    medicId: medicId ? Number(medicId) : undefined,
+    medicId: userId ? Number(userId) : undefined,
+    patientId: patientId ? Number(patientId) : undefined,
     scheduleDate: scheduleDate ? String(scheduleDate) : undefined,
   });
 });

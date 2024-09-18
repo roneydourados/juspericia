@@ -7,7 +7,10 @@ export default defineEventHandler(async (event) => {
 
   const user = userLogged(event);
 
-  const userId = user.Profile.type === "ADMIN" ? undefined : user.id;
+  const userId =
+    user.Profile.type === "ADMIN" || user.Profile.type === "MEDICO"
+      ? undefined
+      : user.id;
 
   setResponseStatus(event, 200);
 
