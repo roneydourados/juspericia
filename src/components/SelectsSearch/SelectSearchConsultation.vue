@@ -19,7 +19,6 @@
       <v-list-item
         v-bind="props"
         :title="item.raw.consultationName"
-        :subtitle="amountFormated(item.raw.value ?? 0, true)"
         density="compact"
       >
       </v-list-item>
@@ -94,7 +93,7 @@ defineProps({
   },
 });
 
-const { amountFormated } = useUtils();
+//const { amountFormated } = useUtils();
 
 const emit = defineEmits(["update:modelValue"]);
 

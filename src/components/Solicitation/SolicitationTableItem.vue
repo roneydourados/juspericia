@@ -10,7 +10,7 @@
           Solicitação {{ solicitation.Consultation?.consultationName }}
         </span>
         <div
-          class="d-flex align-center flex-wrap"
+          class="d-flex align-center flex-wrap text-deep-purple"
           style="gap: 0.5rem"
           v-if="solicitation.Schedule && solicitation.Schedule.length > 0"
         >

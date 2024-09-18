@@ -101,16 +101,21 @@ const $user = computed(() => auth.$currentUser);
 
 const submmitForm = async () => {
   try {
-    //sempre resetar o token para evitar de enviar um token expirado
-    //turnstile.value?.reset();
-
     await auth.login({
       email: form.value.email,
       password: form.value.password,
       tokenCapcha: cloudFlareToken.value,
     });
 
-    //await route.push("/home-admin");
+    if (form.value.saveCredentials) {
+      localStorage.setItem("email", form.value.email);
+      localStorage.setItem("password", form.value.password);
+      localStorage.setItem("saveCredentials", "true");
+    } else {
+      localStorage.setItem("email", "");
+      localStorage.setItem("password", "");
+      localStorage.setItem("saveCredentials", "false");
+    }
 
     if ($user?.value?.Profile.type === "ADMIN") {
       return navigateTo("/admin/home");
@@ -118,19 +123,6 @@ const submmitForm = async () => {
       return navigateTo("/lawyer/home");
     } else if ($user?.value?.Profile.type === "MEDICO") {
       return navigateTo("/medic/home");
-    }
-
-    if (form.value.saveCredentials) {
-      localStorage.setItem("email", form.value.email);
-      localStorage.setItem("password", form.value.password);
-      localStorage.setItem(
-        "saveCredentials",
-        form.value.saveCredentials ? "true" : "false"
-      );
-    } else {
-      localStorage.setItem("email", "");
-      localStorage.setItem("password", "");
-      localStorage.setItem("saveCredentials", "false");
     }
   } catch (error) {
     console.log("🚀 ~ file: FormLogin.vue:82 ~ onSubmit ~ error:", error);

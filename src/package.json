@@ -59,6 +59,6 @@
     "sass": "^1.77.6",
     "tsx": "^4.16.2",
     "vite-plugin-vuetify": "^2.0.3",
-    "vuetify": "^3.7.1"
+    "vuetify": "^3.7.2"
   }
 }
