@@ -13,6 +13,7 @@ model Patient {
   surname             String                @db.VarChar(200)
   updatedAt           DateTime              @updatedAt @map("updated_at")
   birthDate           String                @map("birth_date") @db.VarChar(10)
+  publicId            String?               @unique @map("public_id") @db.VarChar(40)
   User                User                  @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   PatientConsultation PatientConsultation[]
 

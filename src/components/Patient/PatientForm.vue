@@ -163,6 +163,15 @@
           />
         </v-col>
       </v-row>
+      <v-row v-if="$currentUser?.Profile.type === 'ADMIN'" dense>
+        <v-col cols="12">
+          <SelectSearchLawyer
+            v-model="model.lawyer"
+            clearable
+            :required="$currentUser?.Profile.type === 'ADMIN'"
+          />
+        </v-col>
+      </v-row>
     </FormCrud>
   </DialogForm>
 </template>
@@ -192,6 +201,7 @@ const props = defineProps({
 
 const { mobile } = useDisplay();
 const itemStore = usePatientStore();
+const auth = useAuthStore();
 const { formatTelephoneNumber } = useUtils();
 
 const emit = defineEmits(["close"]);
@@ -234,7 +244,10 @@ const model = ref({
     text: "",
     value: "",
   },
+  lawyer: undefined as UserProps | undefined,
 });
+
+const $currentUser = computed(() => auth.$currentUser);
 
 watchEffect(() => {
   if (props.data.id && props.show) {
@@ -302,6 +315,7 @@ const clearModel = () => {
       text: "",
       value: "",
     },
+    lawyer: undefined,
   };
 };
 
@@ -338,6 +352,7 @@ const loadModel = () => {
       text: formatCEP(props.data.Address.addressZipcode ?? ""),
       value: props.data.Address.addressZipcode ?? "",
     },
+    lawyer: props.data.User,
   };
 };
 
@@ -353,6 +368,7 @@ const create = async () => {
     rg: model.value.rg,
     sexy: model.value.sexy,
     status: model.value.status,
+    userId: model.value.lawyer?.id,
     Address: {
       addressCity: model.value.Address.addressCity,
       addressComplement: model.value.Address.addressComplement,
@@ -378,6 +394,7 @@ const update = async () => {
     rg: model.value.rg,
     sexy: model.value.sexy,
     status: model.value.status,
+    userId: model.value.lawyer?.id,
     Address: {
       addressCity: model.value.Address.addressCity,
       addressComplement: model.value.Address.addressComplement,

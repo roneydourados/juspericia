@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 const patientStore = usePatientStore();
-const rounter = useRouter();
+//const rounter = useRouter();
 const itemSelected = ref<PatientProps>();
 const tab = ref(1);
 const showForm = ref(false);
@@ -60,10 +60,10 @@ const tabs = ref<TabProps[]>([
 
 const $single = computed(() => patientStore.$single);
 
-onMounted(async () => {
-  const id = rounter.currentRoute.value.params.id;
-  await patientStore.show(Number(id));
-});
+// onMounted(async () => {
+//   const id = rounter.currentRoute.value.params.id;
+//   await patientStore.show(Number(id));
+// });
 
 const handleCloseForm = () => {
   itemSelected.value = undefined;

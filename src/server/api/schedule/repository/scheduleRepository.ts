@@ -168,6 +168,8 @@ const exists = async (id: number) => {
         select: {
           id: true,
           status: true,
+          content: true,
+          reasonCorrection: true,
           BenefitType: {
             select: {
               id: true,

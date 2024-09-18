@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { addressCategoryType } from "~/server/utils/Constants";
 import { PatientProps } from "~/types/Patient";
+import { uuidv7 } from "uuidv7";
 
 export const create = async ({
   birthDate,
@@ -49,6 +50,7 @@ export const create = async ({
         phone,
         motherName,
         surname: String(surname),
+        publicId: uuidv7(),
       },
     });
 
@@ -94,8 +96,11 @@ export const update = async ({
   id,
   status,
   surname,
+  publicId,
+  userId,
 }: PatientProps) => {
-  await exists(id!);
+  console.log("🚀 ~ userId:", userId);
+  await exists(publicId!);
 
   try {
     const patient = await prisma.patient.update({
@@ -110,6 +115,7 @@ export const update = async ({
         motherName,
         status,
         surname: String(surname),
+        userId,
       },
       where: {
         id,
@@ -156,13 +162,13 @@ export const update = async ({
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     await prisma.patient.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -180,6 +186,7 @@ export const index = async (input: { inputQuery: string; userId?: number }) => {
     take: 50,
     select: {
       id: true,
+      publicId: true,
       name: true,
       surname: true,
       cpf: true,
@@ -213,14 +220,14 @@ export const index = async (input: { inputQuery: string; userId?: number }) => {
   });
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const patient = await prisma.patient.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
@@ -234,6 +241,7 @@ const exists = async (id: number) => {
       rg: true,
       sexy: true,
       userId: true,
+      publicId: true,
       User: {
         select: {
           email: true,

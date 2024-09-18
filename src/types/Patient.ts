@@ -11,6 +11,7 @@ export interface PatientProps {
   status?: string;
   birthDate?: string;
   sexy?: string;
+  publicId?: string;
   proccessNumber?: string;
   benefitTypeId?: number;
   reportPurposeId?: number;

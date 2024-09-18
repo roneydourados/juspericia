@@ -20,7 +20,7 @@
               color-icon="info"
               :content="`${item.name} ${item.surname}`"
               :show-divider="true"
-              @click="handlePatientInfo(item.id)"
+              @click="handlePatientInfo(item.publicId)"
             />
           </v-col>
         </v-row>
@@ -90,7 +90,7 @@
         <span
           style="cursor: pointer"
           class="d-flex align-center text-info"
-          @click="handlePatientInfo(item.id)"
+          @click="handlePatientInfo(item.publicId)"
         >
           <v-icon icon="mdi-account-outline" size="24" start />
           <span>{{ item.name }}</span>
@@ -187,10 +187,6 @@ const { formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
 const rounter = useRouter();
 
-onMounted(async () => {
-  await handleSearch("");
-});
-
 const itemSelected = ref<PatientProps>();
 const showForm = ref(false);
 const showDelete = ref(false);
@@ -218,7 +214,7 @@ const handleSearch = async (search: string, isLoading: boolean = true) => {
 const handleEdit = async (item: PatientProps) => {
   loading.value = true;
   try {
-    await itemStore.show(item.id!);
+    await itemStore.show(item.publicId!);
     itemSelected.value = $single.value;
     showForm.value = true;
   } finally {
@@ -247,7 +243,7 @@ const handleCloseForm = () => {
   itemSelected.value = undefined;
 };
 
-const handlePatientInfo = async (id: number) => {
+const handlePatientInfo = async (id: string) => {
   await rounter.push(`/patient/${id}`);
 };
 </script>

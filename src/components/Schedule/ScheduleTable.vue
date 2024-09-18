@@ -52,7 +52,7 @@
                       color="purple-darken-2"
                       icon
                       variant="text"
-                      @click="serviceDetails = true"
+                      @click="handleServiceDetails(item)"
                     >
                       <v-icon
                         icon="mdi-stethoscope"
@@ -127,7 +127,7 @@
         </v-locale-provider>
       </v-col>
     </v-row>
-    <!-- <pre>{{ $shedules }}</pre> -->
+    <!-- <pre>{{ $shedules[0] }}</pre> -->
     <DialogLoading :dialog="loading" />
     <ScheduleServiceDetails v-model="serviceDetails" />
   </div>
@@ -223,5 +223,10 @@ const getSchedules = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleServiceDetails = async (item: ScheduleProps) => {
+  await scheduleStore.show(item.id!);
+  serviceDetails.value = true;
 };
 </script>

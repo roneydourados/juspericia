@@ -20,9 +20,19 @@ export default defineNuxtRouteMiddleware((to) => {
 
     try {
       //se esta tudo ok com token então verificar se a rota acessada é liberada para o usário
+
       const userRoute = auth.$currentUser.Profile.ProfileRoute?.find(
         (route) => {
-          let pathUrl = to.path.replace(/\/\d+$/, "");
+          let pathUrl = "";
+          if (Object.keys(to.params).length > 0) {
+            pathUrl = to.path.replace(/\/[^\/]*$/, "");
+          } else {
+            pathUrl = to.path.replace(/\/\d+$/, "");
+          }
+
+          //const \pathUrl = to.path.replace(/\/[^\/]*$/, "");
+
+          console.log("🚀 ~ pathUrl:", pathUrl);
           if (route.to === pathUrl && route.visible) {
             return route;
           }
