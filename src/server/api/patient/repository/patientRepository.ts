@@ -66,6 +66,7 @@ export const create = async ({
           addressZipcode: Address.addressZipcode,
           ownerId: patient.id,
           addressCategory: addressCategoryType.patient,
+          publicId: uuidv7(),
         },
       });
     }
@@ -123,30 +124,27 @@ export const update = async ({
     });
 
     if (Address) {
-      const existsAddress = await prisma.address.findFirst({
+      await prisma.address.deleteMany({
         where: {
           ownerId: patient.id,
           addressCategory: addressCategoryType.patient,
         },
       });
 
-      if (existsAddress) {
-        await prisma.address.update({
-          where: {
-            id: existsAddress?.id,
-          },
-          data: {
-            addressCategory: Address.addressCategoryType,
-            addressCity: Address.addressCity,
-            addressComplement: Address.addressComplement,
-            addressDistrict: Address.addressDistrict,
-            addressNumber: Address.addressNumber,
-            addressState: Address.addressState,
-            addressStreet: Address.addressStreet,
-            addressZipcode: Address.addressZipcode,
-          },
-        });
-      }
+      await prisma.address.create({
+        data: {
+          addressCity: Address.addressCity,
+          addressComplement: Address.addressComplement,
+          addressDistrict: Address.addressDistrict,
+          addressNumber: Address.addressNumber,
+          addressState: Address.addressState,
+          addressStreet: Address.addressStreet,
+          addressZipcode: Address.addressZipcode,
+          ownerId: patient.id,
+          addressCategory: addressCategoryType.patient,
+          publicId: uuidv7(),
+        },
+      });
     }
 
     return {

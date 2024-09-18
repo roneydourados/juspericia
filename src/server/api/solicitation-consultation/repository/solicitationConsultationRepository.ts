@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import moment from "moment";
+import { uuidv7 } from "uuidv7";
 import { formatDate } from "~/server/utils/functionts";
 import {
   SolicitationConsultationFilterProps,
@@ -46,6 +47,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       reasonCorrection: true,
       consultationValue: true,
       antecipationValue: true,
+      publicId: true,
       Schedule: {
         select: {
           scheduleDate: true,
@@ -184,6 +186,7 @@ export const consultationCreate = async (
         consultationId: Number(payload.consultationId),
         dateOpen: new Date(payload.dateOpen!),
         consultationValue: Number(payload.consultationValue ?? 0),
+        publicId: uuidv7(),
       },
     });
   } catch (error) {
@@ -198,7 +201,7 @@ export const consultationCreate = async (
 export const consultationUpdate = async (
   payload: SolicitationConsultationProps
 ) => {
-  await exists(payload.id!);
+  await exists(payload.publicId!);
   try {
     return await prisma.patientConsultation.update({
       data: {
@@ -238,7 +241,7 @@ export const consultationUpdate = async (
         antecipationValue: payload.antecipationValue,
       },
       where: {
-        id: payload.id,
+        publicId: payload.publicId,
       },
     });
   } catch (error) {
@@ -250,12 +253,12 @@ export const consultationUpdate = async (
   }
 };
 
-export const consultationDestroy = async (id: number) => {
+export const consultationDestroy = async (id: string) => {
   await exists(id);
   try {
     await prisma.patientConsultation.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -266,11 +269,11 @@ export const consultationDestroy = async (id: number) => {
   }
 };
 
-export const consultationShow = async (id: number) => {
+export const consultationShow = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const data = await prisma.patientConsultation.findFirst({
     select: {
       id: true,
@@ -291,6 +294,7 @@ const exists = async (id: number) => {
       reasonCorrection: true,
       tipValue: true,
       userId: true,
+      publicId: true,
       Schedule: {
         select: {
           scheduleDate: true,
@@ -354,7 +358,7 @@ const exists = async (id: number) => {
       },
     },
     where: {
-      id,
+      publicId: id,
     },
   });
 

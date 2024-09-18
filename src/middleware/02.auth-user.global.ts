@@ -30,9 +30,6 @@ export default defineNuxtRouteMiddleware((to) => {
             pathUrl = to.path.replace(/\/\d+$/, "");
           }
 
-          //const \pathUrl = to.path.replace(/\/[^\/]*$/, "");
-
-          console.log("🚀 ~ pathUrl:", pathUrl);
           if (route.to === pathUrl && route.visible) {
             return route;
           }

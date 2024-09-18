@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { uuidv7 } from "uuidv7";
 
 import { ReportModelProps } from "~/types/Patient";
 
@@ -8,6 +9,7 @@ export const create = async ({ title, content }: ReportModelProps) => {
       data: {
         title: String(title),
         content: content ?? "",
+        publicId: uuidv7(),
       },
     });
   } catch (error) {
@@ -19,8 +21,13 @@ export const create = async ({ title, content }: ReportModelProps) => {
   }
 };
 
-export const update = async ({ id, title, content }: ReportModelProps) => {
-  await exists(id!);
+export const update = async ({
+  id,
+  title,
+  content,
+  publicId,
+}: ReportModelProps) => {
+  await exists(publicId!);
 
   try {
     return await prisma.reportModel.update({
@@ -29,7 +36,7 @@ export const update = async ({ id, title, content }: ReportModelProps) => {
         content: content ?? "",
       },
       where: {
-        id,
+        publicId,
       },
     });
   } catch (error) {
@@ -41,13 +48,13 @@ export const update = async ({ id, title, content }: ReportModelProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     await prisma.reportModel.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -64,6 +71,7 @@ export const index = async (inputQuery: string) => {
     select: {
       id: true,
       title: true,
+      publicId: true,
     },
     where: {
       title: { contains: inputQuery, mode: "insensitive" },
@@ -74,19 +82,20 @@ export const index = async (inputQuery: string) => {
   });
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const data = await prisma.reportModel.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
       title: true,
       content: true,
+      publicId: true,
     },
   });
 

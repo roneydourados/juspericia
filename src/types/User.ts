@@ -19,6 +19,7 @@ export interface UserProps {
   active?: boolean;
   Profile?: UserProfileProps;
   Address?: AddressProps;
+  publicId?: string;
 }
 
 export interface UserProfileProps {
@@ -27,6 +28,7 @@ export interface UserProfileProps {
   type?: ProfileType;
   ProfileRoute?: UserRoutesProps[];
   isAdmin?: boolean;
+  publicId?: string;
 }
 
 export interface UserRoutesProps {

@@ -39,6 +39,7 @@ export interface SolicitationConsultationProps {
   ReportPurpose?: ReportPurposeProps;
   BenefitType?: BenefitTypeProps;
   Schedule?: ScheduleProps[];
+  publicId?: string;
 }
 
 export interface SolicitationConsultationFilterProps {
@@ -53,4 +54,5 @@ export interface SolicitationConsultationFilterProps {
   patient?: PatientProps;
   reportPurpose?: ReportPurposeProps;
   lawyer?: UserProps;
+  publicId?: string;
 }

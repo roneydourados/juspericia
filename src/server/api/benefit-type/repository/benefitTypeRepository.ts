@@ -1,3 +1,4 @@
+import { uuidv7 } from "uuidv7";
 import prisma from "@/lib/prisma";
 
 import { BenefitTypeProps } from "~/types/BenefitType";
@@ -7,6 +8,7 @@ export const create = async ({ name }: BenefitTypeProps) => {
     return prisma.benefitType.create({
       data: {
         name: String(name),
+        publicId: uuidv7(),
       },
     });
   } catch (error) {
@@ -18,8 +20,8 @@ export const create = async ({ name }: BenefitTypeProps) => {
   }
 };
 
-export const update = async ({ id, name }: BenefitTypeProps) => {
-  await exists(id!);
+export const update = async ({ name, publicId }: BenefitTypeProps) => {
+  await exists(publicId!);
 
   try {
     return await prisma.benefitType.update({
@@ -27,7 +29,7 @@ export const update = async ({ id, name }: BenefitTypeProps) => {
         name: String(name),
       },
       where: {
-        id,
+        publicId,
       },
     });
   } catch (error) {
@@ -39,13 +41,13 @@ export const update = async ({ id, name }: BenefitTypeProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     await prisma.benefitType.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -62,6 +64,7 @@ export const index = async (inputQuery: string) => {
     select: {
       id: true,
       name: true,
+      publicId: true,
     },
     where: {
       name: { contains: inputQuery, mode: "insensitive" },
@@ -72,18 +75,19 @@ export const index = async (inputQuery: string) => {
   });
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const data = await prisma.benefitType.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
       name: true,
+      publicId: true,
     },
   });
 
@@ -93,4 +97,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
+
+  return data;
 };

@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 
 import { UserProps } from "@/types/User";
+import { uuidv7 } from "uuidv7";
 import { useHash } from "~/server/providers/hash";
 
 export const create = async (payload: UserProps) => {
@@ -33,6 +34,7 @@ export const create = async (payload: UserProps) => {
         cpfCnpj: payload.cpfCnpj,
         phone: payload.phone,
         profileId: profile.id,
+        publicId: uuidv7(),
       },
     });
 
@@ -40,6 +42,7 @@ export const create = async (payload: UserProps) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      publicId: user.publicId,
     };
   } catch (error) {
     console.log("🚀 ~ error create User Admin:", error);
@@ -53,7 +56,7 @@ export const create = async (payload: UserProps) => {
 export const update = async (payload: UserProps) => {
   const { hashText } = useHash();
 
-  await exists(payload.id!);
+  await exists(payload.publicId!);
   //await validations(payload);
 
   const hashedpassword = payload.password
@@ -79,6 +82,7 @@ export const update = async (payload: UserProps) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      publicId: user.publicId,
     };
   } catch (error) {
     console.log("🚀 ~ error update User Admin:", error);
@@ -89,13 +93,13 @@ export const update = async (payload: UserProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     await prisma.user.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -115,6 +119,7 @@ export const index = async (inputQuery: string) => {
       phone: true,
       active: true,
       email: true,
+      publicId: true,
     },
     where: {
       OR: [
@@ -137,14 +142,14 @@ export const index = async (inputQuery: string) => {
   });
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const user = await prisma.user.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
@@ -153,6 +158,7 @@ const exists = async (id: number) => {
       phone: true,
       active: true,
       email: true,
+      publicId: true,
     },
   });
 

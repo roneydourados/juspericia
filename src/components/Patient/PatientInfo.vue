@@ -60,11 +60,6 @@ const tabs = ref<TabProps[]>([
 
 const $single = computed(() => patientStore.$single);
 
-// onMounted(async () => {
-//   const id = rounter.currentRoute.value.params.id;
-//   await patientStore.show(Number(id));
-// });
-
 const handleCloseForm = () => {
   itemSelected.value = undefined;
   showForm.value = false;

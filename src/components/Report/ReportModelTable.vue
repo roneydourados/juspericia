@@ -92,9 +92,6 @@
 <script setup lang="ts">
 const reportModel = useReportModelStore();
 const router = useRouter();
-onMounted(async () => {
-  await handleSearch("");
-});
 
 const $all = computed(() => reportModel.$all);
 const $single = computed(() => reportModel.$single);

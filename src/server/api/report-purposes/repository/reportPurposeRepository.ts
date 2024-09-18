@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { uuidv7 } from "uuidv7";
 import { ReportPurposeProps } from "~/types/ReportPurpose";
 
 export const create = async ({ name }: ReportPurposeProps) => {
@@ -6,6 +7,7 @@ export const create = async ({ name }: ReportPurposeProps) => {
     return prisma.reportPurpose.create({
       data: {
         name: String(name),
+        publicId: uuidv7(),
       },
     });
   } catch (error) {
@@ -17,8 +19,8 @@ export const create = async ({ name }: ReportPurposeProps) => {
   }
 };
 
-export const update = async ({ id, name }: ReportPurposeProps) => {
-  await exists(id!);
+export const update = async ({ id, name, publicId }: ReportPurposeProps) => {
+  await exists(publicId!);
 
   try {
     return await prisma.reportPurpose.update({
@@ -26,7 +28,7 @@ export const update = async ({ id, name }: ReportPurposeProps) => {
         name: String(name),
       },
       where: {
-        id,
+        publicId,
       },
     });
   } catch (error) {
@@ -38,13 +40,13 @@ export const update = async ({ id, name }: ReportPurposeProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     await prisma.reportPurpose.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -61,6 +63,7 @@ export const index = async (inputQuery: string) => {
     select: {
       id: true,
       name: true,
+      publicId: true,
     },
     where: {
       name: { contains: inputQuery, mode: "insensitive" },
@@ -71,18 +74,19 @@ export const index = async (inputQuery: string) => {
   });
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const data = await prisma.reportPurpose.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
       name: true,
+      publicId: true,
     },
   });
 
@@ -92,4 +96,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
+
+  return data;
 };

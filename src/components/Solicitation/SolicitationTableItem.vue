@@ -5,8 +5,8 @@
       style="gap: 1rem; font-size: 1rem"
     >
       <div class="d-flex align-center" style="gap: 1rem">
-        <span class="text-blue font-weight-bold">#{{ solicitation.id }}</span>
-        <span class="text-truncate">
+        <!-- <span class="text-blue font-weight-bold">#{{ solicitation.id }}</span> -->
+        <span class="text-truncate font-weight-bold">
           Solicitação {{ solicitation.Consultation?.consultationName }}
         </span>
         <div

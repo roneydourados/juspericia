@@ -17,6 +17,7 @@ model User {
   officeCnpj                String?                     @map("office_cnpj") @db.VarChar(30)
   officeEmail               String?                     @map("office_email") @db.VarChar(1000)
   officePhone               String?                     @map("office_phone") @db.VarChar(20)
+  publicId                  String?                     @unique @map("public_id") @db.VarChar(40)
   Profile                   Profile                     @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Patient                   Patient[]
   PatientConsultationReport PatientConsultationReport[]

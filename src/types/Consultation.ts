@@ -9,4 +9,5 @@ export interface ConsultationProps {
   valuePacket?: number;
   createdAt?: string;
   updatedAt?: string;
+  publicId?: string;
 }

@@ -21,7 +21,6 @@ export const usePatientStore = defineStore("patient", () => {
   };
 
   const show = async (id: string) => {
-    console.log("🚀 ~ show ~ id:", id);
     const { data } = await api.get<PatientProps>(`/patient/${id}`);
 
     patient.value = data;

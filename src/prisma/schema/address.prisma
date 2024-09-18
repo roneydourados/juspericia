@@ -9,6 +9,7 @@ model Address {
   addressNumber     String? @map("address_number") @db.VarChar(10)
   addressState      String? @map("address_state") @db.Char(2)
   addressComplement String? @map("address_complement") @db.VarChar(100)
+  publicId          String? @unique @map("public_id") @db.VarChar(40)
 
   @@index([ownerId], map: "address_idx_owner_id")
   @@index([addressCategory], map: "address_idx_address_category")

@@ -16,7 +16,7 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
   reportPurpose: undefined as ReportPurposeProps | undefined,
 });
 
-useAsyncData(async () => {
+await useAsyncData(async () => {
   await storeConsultation.index(modelFilters.value);
 });
 </script>

@@ -146,10 +146,6 @@ const consutationStore = useConsultationStore();
 const { amountFormated } = useUtils();
 const router = useRouter();
 
-onMounted(async () => {
-  await handleSearch("");
-});
-
 const $all = computed(() => consutationStore.$all);
 //const $single = computed(() => consutationStore.$single);
 

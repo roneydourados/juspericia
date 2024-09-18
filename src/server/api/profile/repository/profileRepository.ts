@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { UserProfileProps } from "@/types/User";
 import { appRoutes } from "@/server/utils/Constants";
+import { uuidv7 } from "uuidv7";
 
 export const create = async ({ profileName, type }: UserProfileProps) => {
   try {
@@ -8,6 +9,7 @@ export const create = async ({ profileName, type }: UserProfileProps) => {
       data: {
         profileName: profileName!,
         type: type!,
+        publicId: uuidv7(),
         ProfileRoute: {
           createMany: {
             data: appRoutes.map((route) => {

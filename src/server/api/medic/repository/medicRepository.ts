@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 
 import { UserProps } from "@/types/User";
+import { uuidv7 } from "uuidv7";
 import { useHash } from "~/server/providers/hash";
 
 export const create = async (payload: UserProps) => {
@@ -35,6 +36,7 @@ export const create = async (payload: UserProps) => {
         crmUf: payload.crmUf,
         phone: payload.phone,
         profileId: profile.id,
+        publicId: uuidv7(),
       },
     });
 
@@ -50,6 +52,7 @@ export const create = async (payload: UserProps) => {
           addressZipcode: payload.Address.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
+          publicId: uuidv7(),
         },
       });
     }
@@ -71,7 +74,7 @@ export const create = async (payload: UserProps) => {
 export const update = async (payload: UserProps) => {
   const { hashText } = useHash();
 
-  await exists(payload.id!);
+  await exists(payload.publicId!);
   //await validations(payload);
 
   const hashedpassword = payload.password
@@ -92,7 +95,7 @@ export const update = async (payload: UserProps) => {
       },
 
       where: {
-        id: payload.id,
+        publicId: payload.publicId!,
       },
     });
 
@@ -115,6 +118,7 @@ export const update = async (payload: UserProps) => {
           addressZipcode: payload.Address.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
+          publicId: uuidv7(),
         },
       });
     }
@@ -123,6 +127,7 @@ export const update = async (payload: UserProps) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      publicId: user.publicId,
     };
   } catch (error) {
     console.log("🚀 ~ error update Medic:", error);
@@ -133,18 +138,18 @@ export const update = async (payload: UserProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
-  await exists(id);
+export const destroy = async (id: string) => {
+  const user = await exists(id);
 
   try {
     await prisma.user.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
     await prisma.address.deleteMany({
       where: {
-        ownerId: id,
+        ownerId: user.id,
         addressCategory: addressCategoryType.user,
       },
     });
@@ -168,6 +173,7 @@ export const index = async (inputQuery: string) => {
       active: true,
       crmUf: true,
       email: true,
+      publicId: true,
       // Profile: {
       //   select: {
       //     id: true,
@@ -215,6 +221,7 @@ export const index = async (inputQuery: string) => {
         crmUf: user.crmUf,
         email: user.email,
         Address: address,
+        publicId: user.publicId,
       };
     })
   );
@@ -222,14 +229,14 @@ export const index = async (inputQuery: string) => {
   return users;
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const data = await prisma.user.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
@@ -243,6 +250,7 @@ const exists = async (id: number) => {
       oab: true,
       oabUf: true,
       officeName: true,
+      publicId: true,
       Profile: {
         select: {
           id: true,
@@ -277,6 +285,7 @@ const exists = async (id: number) => {
     crmUf: data.crmUf,
     email: data.email,
     Address: address,
+    publicId: data.publicId,
   };
 
   return user;

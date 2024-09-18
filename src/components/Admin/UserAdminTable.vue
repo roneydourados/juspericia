@@ -204,10 +204,6 @@ const headers = ref([
   },
 ]);
 
-// onMounted(async () => {
-//   await handleSearch("");
-// });
-
 const handleSearch = async (search: string, isLoading: boolean = true) => {
   setTimeout(async () => {
     loading.value = isLoading;

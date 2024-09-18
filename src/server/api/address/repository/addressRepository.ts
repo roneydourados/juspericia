@@ -1,5 +1,6 @@
 import { AddressProps } from "@/types/Address";
 import prisma from "@/lib/prisma";
+import { uuidv7 } from "uuidv7";
 
 export const create = async (payload: AddressProps) => {
   try {
@@ -14,6 +15,7 @@ export const create = async (payload: AddressProps) => {
         addressNumber: payload.addressNumber,
         addressState: payload.addressState,
         addressStreet: payload.addressStreet,
+        publicId: uuidv7(),
       },
     });
   } catch (error) {
@@ -26,7 +28,7 @@ export const create = async (payload: AddressProps) => {
 };
 
 export const update = async (payload: AddressProps) => {
-  await exists(payload.id!);
+  await exists(payload.publicId!);
 
   try {
     return prisma.address.update({
@@ -42,7 +44,7 @@ export const update = async (payload: AddressProps) => {
         addressStreet: payload.addressStreet,
       },
       where: {
-        id: payload.id,
+        publicId: payload.publicId,
       },
     });
   } catch (error) {
@@ -54,13 +56,13 @@ export const update = async (payload: AddressProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     return prisma.address.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -72,12 +74,12 @@ export const destroy = async (id: number) => {
   }
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
-  const address = await prisma.address.findFirst({ where: { id } });
+const exists = async (id: string) => {
+  const address = await prisma.address.findFirst({ where: { publicId: id } });
 
   if (!address) {
     throw createError({

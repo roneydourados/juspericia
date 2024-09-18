@@ -6,6 +6,7 @@ model Schedule {
   scheduleHour          String               @db.VarChar(5)
   title                 String               @db.VarChar(200)
   userSchedule          String               @map("user_schedule") @db.VarChar(200)
+  publicId              String?              @unique @map("public_id") @db.VarChar(40)
   Medic                 User?                @relation(fields: [medicId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   PatientConsultation   PatientConsultation? @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 

@@ -2,6 +2,7 @@
   <ConsultationTable />
 </template>
 
-<script setup lang="ts"></script>
-
-<style scoped></style>
+<script setup lang="ts">
+const consutationStore = useConsultationStore();
+await useAsyncData(async () => await consutationStore.index(""));
+</script>

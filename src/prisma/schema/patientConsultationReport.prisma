@@ -5,6 +5,7 @@ model PatientConsultationReport {
   reportModelId         Int?                @map("report_model_id")
   content               String
   dateLimitCorrection   DateTime            @map("date_limit_correction") @db.Date
+  publicId              String?             @unique @map("public_id") @db.VarChar(40)
   PatientConsultation   PatientConsultation @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   ReportModel           ReportModel?        @relation(fields: [reportModelId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Medic                 User                @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)

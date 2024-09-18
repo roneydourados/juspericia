@@ -9,6 +9,7 @@ export interface AddressProps {
   addressNumber?: string;
   addressState?: string;
   addressComplement?: string;
+  publicId?: string;
 }
 
 export const ADDRESS_USER = "USER";

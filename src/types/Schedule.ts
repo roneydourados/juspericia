@@ -9,4 +9,5 @@ export interface ScheduleProps {
   userSchedule?: string;
   Medic?: UserProps;
   PatientConsultation?: SolicitationConsultationProps;
+  publicId?: string;
 }

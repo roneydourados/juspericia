@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { uuidv7 } from "uuidv7";
 
 import { ConsultationProps } from "~/types/Consultation";
 
@@ -13,6 +14,7 @@ export const create = async (payload: ConsultationProps) => {
         valueAntecipation72: payload.valueAntecipation72!,
         valueCredit: payload.valueCredit!,
         valuePacket: payload.valuePacket!,
+        publicId: uuidv7(),
       },
     });
   } catch (error) {
@@ -25,7 +27,7 @@ export const create = async (payload: ConsultationProps) => {
 };
 
 export const update = async (payload: ConsultationProps) => {
-  await exists(payload.id!);
+  await exists(payload.publicId!);
 
   try {
     return await prisma.consultation.update({
@@ -39,7 +41,7 @@ export const update = async (payload: ConsultationProps) => {
         valuePacket: payload.valuePacket!,
       },
       where: {
-        id: payload.id!,
+        publicId: payload.publicId!,
       },
     });
   } catch (error) {
@@ -51,13 +53,13 @@ export const update = async (payload: ConsultationProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   await exists(id);
 
   try {
     await prisma.consultation.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
   } catch (error) {
@@ -80,6 +82,7 @@ export const index = async (inputQuery: string) => {
       valueAntecipation72: true,
       valueCredit: true,
       valuePacket: true,
+      publicId: true,
     },
     where: {
       consultationName: { contains: inputQuery, mode: "insensitive" },
@@ -90,14 +93,14 @@ export const index = async (inputQuery: string) => {
   });
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const data = await prisma.consultation.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
@@ -108,6 +111,7 @@ const exists = async (id: number) => {
       valueAntecipation72: true,
       valueCredit: true,
       valuePacket: true,
+      publicId: true,
     },
   });
 
@@ -117,4 +121,6 @@ const exists = async (id: number) => {
       message: "Not found",
     });
   }
+
+  return data;
 };

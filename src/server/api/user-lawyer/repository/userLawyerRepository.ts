@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 
 import { UserProps } from "@/types/User";
+import { uuidv7 } from "uuidv7";
 import { useHash } from "~/server/providers/hash";
 
 export const create = async (payload: UserProps) => {
@@ -39,6 +40,7 @@ export const create = async (payload: UserProps) => {
         officeCnpj: payload.officeCnpj,
         officeEmail: payload.officeEmail,
         officePhone: payload.officePhone,
+        publicId: uuidv7(),
       },
     });
 
@@ -54,6 +56,7 @@ export const create = async (payload: UserProps) => {
           addressZipcode: payload.Address.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
+          publicId: uuidv7(),
         },
       });
     }
@@ -62,6 +65,7 @@ export const create = async (payload: UserProps) => {
       id: user.id,
       email: user.email,
       name: user.name,
+      publicId: user.publicId,
     };
   } catch (error) {
     console.log("🚀 ~ error create User Lawyer:", error);
@@ -75,7 +79,7 @@ export const create = async (payload: UserProps) => {
 export const update = async (payload: UserProps) => {
   const { hashText } = useHash();
 
-  await exists(payload.id!);
+  await exists(payload.publicId!);
 
   const hashedpassword = payload.password
     ? await hashText(payload.password!)
@@ -98,25 +102,17 @@ export const update = async (payload: UserProps) => {
         officePhone: payload.officePhone,
       },
       where: {
-        id: payload.id,
+        publicId: payload.publicId,
       },
     });
 
     if (payload.Address) {
-      const existsAddress = await prisma.address.findFirst({
+      await prisma.address.deleteMany({
         where: {
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
         },
       });
-
-      if (existsAddress) {
-        await prisma.address.delete({
-          where: {
-            id: existsAddress.id,
-          },
-        });
-      }
 
       await prisma.address.create({
         data: {
@@ -129,6 +125,7 @@ export const update = async (payload: UserProps) => {
           addressZipcode: payload.Address.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
+          publicId: uuidv7(),
         },
       });
     }
@@ -147,19 +144,19 @@ export const update = async (payload: UserProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
-  await exists(id);
+export const destroy = async (id: string) => {
+  const user = await exists(id);
 
   try {
     await prisma.user.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
 
     await prisma.address.deleteMany({
       where: {
-        ownerId: id,
+        ownerId: user.id,
         addressCategory: addressCategoryType.user,
       },
     });
@@ -187,6 +184,7 @@ export const index = async (inputQuery: string) => {
       officePhone: true,
       officeEmail: true,
       officeCnpj: true,
+      publicId: true,
     },
     where: {
       OR: [
@@ -227,14 +225,14 @@ export const index = async (inputQuery: string) => {
   return laywers;
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const user = await prisma.user.findFirst({
     where: {
-      id,
+      publicId: id,
     },
     select: {
       id: true,
@@ -249,6 +247,7 @@ const exists = async (id: number) => {
       officePhone: true,
       officeEmail: true,
       officeCnpj: true,
+      publicId: true,
     },
   });
 

@@ -9,6 +9,7 @@ model Consultation {
   valueAntecipation24 Decimal               @default(0) @map("value_antecipation_24") @db.Decimal(18, 2)
   valueAntecipation48 Decimal               @default(0) @map("value_antecipation_48") @db.Decimal(18, 2)
   valueAntecipation72 Decimal               @default(0) @map("value_antecipation_72") @db.Decimal(18, 2)
+  publicId            String?               @unique @map("public_id") @db.VarChar(40)
   PatientConsultation PatientConsultation[]
 
   @@map("consultations")
