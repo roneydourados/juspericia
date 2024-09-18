@@ -147,42 +147,6 @@ const model = reactive({
   patient: undefined as PatientProps | undefined,
 });
 
-const items = ref([
-  {
-    prependAvatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-    title: "Paciente: Roger Campos",
-    subtitle: "Detalhes do agendamento do médico será descrito aqui",
-    date: `Agendando para ${moment().format("DD/MM/YYYY HH:mm")}`,
-  },
-
-  {
-    prependAvatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-    title: "Paciente: Samuel Medeiros",
-    subtitle: "Detalhes do agendamento do médico será descrito aqui",
-    date: `Agendando para ${moment().format("DD/MM/YYYY HH:mm")}`,
-  },
-
-  {
-    prependAvatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-    title: "Paciente: Jessica Firmino",
-    subtitle: "Detalhes do agendamento do médico será descrito aqui",
-    date: `Agendando para ${moment().add(4, "day").format("DD/MM/YYYY HH:mm")}`,
-  },
-
-  {
-    prependAvatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-    title: "Paciente: Editi Oliveira",
-    subtitle: "Detalhes do agendamento do médico será descrito aqui",
-    date: `Agendando para ${moment().add(1, "day").format("DD/MM/YYYY HH:mm")}`,
-  },
-
-  {
-    prependAvatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-    title: "Paciente: Alice Katrine",
-    subtitle: "Detalhes do agendamento do médico será descrito aqui",
-    date: `Agendando para ${moment().add(2, "day").format("DD/MM/YYYY HH:mm")}`,
-  },
-]);
 const loading = ref(false);
 
 const $currentUser = computed(() => auth.$currentUser);
