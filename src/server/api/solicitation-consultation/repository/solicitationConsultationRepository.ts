@@ -17,8 +17,6 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     reportPurposeId,
     userId,
   } = filters;
-  console.log("🚀 ~ index ~ patientId:", patientId);
-
   const data = await prisma.patientConsultation.findMany({
     where: {
       dateOpen: {

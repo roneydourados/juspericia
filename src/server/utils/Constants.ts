@@ -14,6 +14,25 @@ export const filesCategoryType = {
   query: "QUERY",
 };
 
+export const userCategoryType = {
+  query20: {
+    type: "QUERY20",
+    description: "Pacote completo de serviços com 20 consultas",
+  },
+  query30: {
+    type: "QUERY30",
+    description: "Pacote completo de serviços com 30 consultas",
+  },
+  query40: {
+    type: "QUERY40",
+    description: "Pacote completo de serviços com 40 consultas",
+  },
+  query50: {
+    type: "QUERY50",
+    description: "Pacote completo de serviços com 50 consultas",
+  },
+};
+
 export const solicitationStates = [
   {
     name: "Pendente",

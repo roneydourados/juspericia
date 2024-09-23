@@ -30,21 +30,38 @@
             class="text-none"
             color="success"
             size="small"
-            variant="flat"
-            prepend-icon="mdi-cart-plus"
+            :variant="mobile ? 'text' : 'flat'"
+            prepend-icon="mdi-cash-plus"
+            @click="router.push('/services-packages')"
           >
-            Comprar créditos
+            <span v-if="!mobile"> Comprar créditos </span>
+            <v-tooltip
+              v-if="mobile"
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Comprar créditos
+            </v-tooltip>
           </v-btn>
 
           <v-btn
             class="text-none"
             color="info"
             size="small"
-            variant="flat"
+            :variant="mobile ? 'text' : 'flat'"
             prepend-icon="mdi-cart-plus"
             @click="handleNewSolicitation"
           >
-            Nova solicitação
+            <span v-if="!mobile"> Nova solicitação </span>
+            <v-tooltip
+              v-if="mobile"
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Nova solicitação
+            </v-tooltip>
           </v-btn>
         </div>
       </template>

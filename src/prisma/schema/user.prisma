@@ -22,8 +22,9 @@ model User {
   Patient                   Patient[]
   PatientConsultationReport PatientConsultationReport[]
   Schedules                 Schedule[]
-  UserLogCredit             UserLogCredit[]
+  UserLogCredit             UserCreditLog[]
   PatientConsultation       PatientConsultation[]
+  UserCreditSalt            UserCreditSalt[]
 
   @@index([name], map: "users_idx_name")
   @@index([email], map: "users_idx_email")

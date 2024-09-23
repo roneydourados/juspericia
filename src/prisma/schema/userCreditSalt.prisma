@@ -1,0 +1,20 @@
+model UserCreditSalt {
+  id                Int                 @id @default(autoincrement())
+  userId            Int                 @map("user_id")
+  salt              Decimal             @default(0)
+  saltCategory      String              @map("salt_category") @db.VarChar(30)
+  expiredAt         DateTime            @map("expired_at") @db.Date()
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @default(now()) @updatedAt @map("updated_at")
+  description       String?             @db.Text
+  publicId          String?             @unique @map("public_id") @db.VarChar(50)
+  status            String              @default("active") @db.VarChar(30)
+  User              User                @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  UserLogCredit     UserCreditLog[]
+  UserCreditPayment UserCreditPayment[]
+
+  @@index([userId], map: "user_credit_salt_idx_user_id")
+  @@index([saltCategory], map: "user_credit_salt_idx_salt_category")
+  @@index([expiredAt], map: "user_credit_salt_idx_expired_at")
+  @@map("user_credit_salt")
+}

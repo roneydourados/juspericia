@@ -1,0 +1,15 @@
+model UserCreditPayment {
+  id               Int            @id @default(autoincrement())
+  userCreditSaltId Int            @map("user_credit_salt_id")
+  paymentForm      String         @map("payment_form") @db.VarChar(30)
+  value            Decimal        @default(0)
+  chargeId         String?        @map("charge_id") @db.VarChar(50)
+  status           String         @default("pending") @db.VarChar(30)
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @default(now()) @updatedAt @map("updated_at")
+  UserCreditSalt   UserCreditSalt @relation(fields: [userCreditSaltId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([userCreditSaltId], map: "user_credit_payment_idx_user_credit_salt_id")
+  @@index([status], map: "user_credit_payment_idx_status")
+  @@map("user_credit_payment")
+}
