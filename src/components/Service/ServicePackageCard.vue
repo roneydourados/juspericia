@@ -72,16 +72,36 @@
         text="Comprar"
         block
         variant="flat"
-      ></v-btn>
+        @click="showSale = true"
+      />
     </v-card-actions>
   </v-card>
+  <Dialog
+    title="CONFIRME"
+    :dialog="showSale"
+    @cancel="showSale = false"
+    @confirm="handleSaleItem"
+    show-cancel
+  >
+    <div class="d-flex flex-column">
+      <span>confirma a compra de {{ title }} ? </span>
+      Valor: <strong>{{ amountFormated(value, false) }}</strong>
+    </div>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
-defineProps({
+import { uuidv7 } from "uuidv7";
+import moment from "moment";
+
+const props = defineProps({
   title: {
     type: String,
     default: "Pacote de serviços",
+  },
+  category: {
+    type: String,
+    default: "",
   },
   value: {
     type: Number,
@@ -89,6 +109,37 @@ defineProps({
   },
 });
 
+const saltCredit = useUserCreditSaltStore();
 const { amountFormated } = useUtils();
 const loading = ref(false);
+const showSale = ref(false);
+
+const handleSaleItem = async (item: any) => {
+  showSale.value = false;
+  loading.value = true;
+  try {
+    const payload = {
+      salt: props.value,
+      saltCategory: props.category,
+      expiredAt: moment().add(1, "month").format("YYYY-MM-DD"),
+      UserCreditPayment: [
+        {
+          paymentForm: "PIX",
+          value: props.value,
+          chargeId: uuidv7(),
+          status: "paid",
+        },
+      ],
+    };
+
+    await saltCredit.create(payload);
+
+    push.success("Compra realizada com sucesso");
+  } catch (error) {
+    console.log("🚀 ~ handleSaleItem ~ error:", error);
+    push.error("Erro ao realizar a compra");
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

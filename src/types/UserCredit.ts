@@ -11,8 +11,8 @@ export interface UserCreditSalt {
   publicId?: string;
   status?: string;
   User?: UserProps;
-  UserCreditLogs?: UserCreditLog[];
-  UserCreditPayments?: UserCreditPayment[];
+  UserLogCredit?: UserCreditLog[];
+  UserCreditPayment?: UserCreditPayment[];
 }
 
 export interface UserCreditLog {

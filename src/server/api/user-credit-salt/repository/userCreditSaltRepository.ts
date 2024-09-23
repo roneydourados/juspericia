@@ -4,8 +4,12 @@ import { UserCreditSalt } from "~/types/UserCredit";
 import { userCategoryType } from "@/server/utils/Constants";
 import { uuidv7 } from "uuidv7";
 
-export const index = async (input: { userId: number; isExpired?: boolean }) => {
-  const { userId, isExpired = false } = input;
+export const index = async (input: {
+  userId: number;
+  isExpired?: boolean;
+  status?: string;
+}) => {
+  const { userId, isExpired = false, status } = input;
   let where = undefined;
 
   if (isExpired) {
@@ -13,12 +17,7 @@ export const index = async (input: { userId: number; isExpired?: boolean }) => {
       userId,
       AND: [
         {
-          expiredAt: {
-            lte: new Date(),
-          },
-        },
-        {
-          status: "active",
+          status,
         },
       ],
     };
@@ -27,12 +26,7 @@ export const index = async (input: { userId: number; isExpired?: boolean }) => {
       userId,
       AND: [
         {
-          expiredAt: {
-            gte: new Date(),
-          },
-        },
-        {
-          status: "active",
+          status,
         },
       ],
     };
@@ -50,6 +44,7 @@ export const index = async (input: { userId: number; isExpired?: boolean }) => {
       saltCategory: true,
       salt: true,
       publicId: true,
+      status: true,
     },
   });
 };
@@ -90,7 +85,7 @@ export const create = async (payload: UserCreditSalt) => {
         },
         UserCreditPayment: {
           createMany: {
-            data: payload.UserCreditPayments!.map((payment) => ({
+            data: payload.UserCreditPayment!.map((payment) => ({
               paymentForm: payment.paymentForm!,
               value: payment.value!,
               chargeId: payment.chargeId,
@@ -170,6 +165,9 @@ export const show = async (id: string) => {
           outputValue: true,
           saltValue: true,
           userId: true,
+        },
+        orderBy: {
+          id: "desc",
         },
       },
     },

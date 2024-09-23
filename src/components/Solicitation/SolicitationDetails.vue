@@ -50,14 +50,6 @@
 
 <script setup lang="ts">
 const router = useRouter();
-
-const id = parseInt(router.currentRoute.value.params.id[0] ?? "0");
-
 const storeConsultation = useSolicitationConsultationStore();
-
-onMounted(async () => {
-  await storeConsultation.show(id);
-});
-
 const $single = computed(() => storeConsultation.$single);
 </script>

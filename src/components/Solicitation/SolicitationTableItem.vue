@@ -248,7 +248,7 @@
             class="text-none font-weight-bold"
             prepend-icon="mdi-dots-vertical"
             color="pink"
-            @click="handleDetailsClick(solicitation.id!)"
+            @click="handleDetailsClick(solicitation.publicId!)"
           >
             Visualizar detalhes
           </v-btn>
@@ -376,7 +376,7 @@ watch(
   { immediate: true }
 );
 
-const handleDetailsClick = async (id: number) => {
+const handleDetailsClick = async (id: string) => {
   await rounter.push(`/solicitations/${id}`);
 };
 
