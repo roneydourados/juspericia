@@ -2,16 +2,16 @@ model PatientConsultationReport {
   id                    Int                 @id @default(autoincrement())
   userId                Int                 @map("user_id")
   patientConsultationId Int                 @map("patient_consultation_id")
-  reportModelId         Int?                @map("report_model_id")
-  content               String
-  dateLimitCorrection   DateTime            @map("date_limit_correction") @db.Date
+  content               String              @db.Text
   publicId              String?             @unique @map("public_id") @db.VarChar(40)
+  status                String              @default("active") @db.VarChar(20)
+  deletedAt             DateTime?           @map("deleted_at") @db.Timestamptz()
+  userDeleted           String?             @map("user_deleted") @db.VarChar(255)
   PatientConsultation   PatientConsultation @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-  ReportModel           ReportModel?        @relation(fields: [reportModelId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Medic                 User                @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
   @@index([patientConsultationId], map: "patients_consultation_reports_idx_patient_consultation_id")
-  @@index([reportModelId], map: "patients_consultation_reports_idx_report_model_id")
   @@index([userId], map: "patients_consultation_reports_idx_user_id")
+  @@index([status], map: "patients_consultation_reports_idx_status")
   @@map("patients_consultation_reports")
 }
