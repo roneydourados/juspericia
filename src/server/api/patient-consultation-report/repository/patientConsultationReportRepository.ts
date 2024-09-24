@@ -3,34 +3,34 @@ import { PatientConsultationReportProps } from "@/types/PatientConsultationRepor
 import { uuidv7 } from "uuidv7";
 
 export const create = async (payload: PatientConsultationReportProps) => {
-  if (payload.publicId) {
-    const exists = await prisma.patientConsultationReport.findFirst({
+  // verificar se já existe um laudo, se sim então descartar criar outro
+  const exists = await prisma.patientConsultationReport.findFirst({
+    where: {
+      patientConsultationId: payload.patientConsultationId!,
+      status: "active",
+    },
+  });
+
+  if (exists) {
+    await prisma.patientConsultationReport.update({
       where: {
-        publicId: payload.publicId,
+        publicId: exists.publicId!,
+      },
+      data: {
+        status: "deleted",
+        userDeleted: payload.userDeleted,
+        deletedAt: new Date(),
       },
     });
-
-    if (exists) {
-      await prisma.patientConsultationReport.update({
-        where: {
-          publicId: payload.publicId,
-        },
-        data: {
-          status: "deleted",
-          userDeleted: payload.userDeleted,
-          deletedAt: new Date(),
-        },
-      });
-    }
   }
 
   const data = await prisma.patientConsultationReport.create({
     data: {
       content: payload.content!,
-      status: "active",
-      userId: payload.userId!,
-      publicId: uuidv7(),
       patientConsultationId: payload.patientConsultationId!,
+      userId: payload.userId!,
+      status: "active",
+      publicId: uuidv7(),
     },
   });
 

@@ -6,56 +6,53 @@
     <v-card flat rounded="lg">
       <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
         <v-card flat rounded="lg">
-          <v-card-title>
-            <v-row dense class="pa-4">
-              <v-col cols="12" lg="7">
-                <SelectSearchReportModel
-                  v-model="model.reportModel"
-                  label="Carregar Modelo"
-                  @update:model-value="handleReportModel"
-                />
-              </v-col>
-              <v-col cols="12" lg="2" />
-              <v-col
-                cols="12"
-                lg="3"
-                class="d-flex align-center justify-end"
-                style="gap: 0.5rem"
+          <v-row dense class="pa-4">
+            <v-col cols="12" lg="7">
+              <SelectSearchReportModel
+                v-model="model.reportModel"
+                label="Carregar Modelo"
+                @update:model-value="handleReportModel"
+              />
+            </v-col>
+            <v-col cols="12" lg="2" />
+            <v-col
+              cols="12"
+              lg="3"
+              class="d-flex justify-end"
+              style="gap: 0.5rem"
+            >
+              <v-btn
+                variant="flat"
+                color="info"
+                prepend-icon="mdi-arrow-left"
+                class="text-none"
+                size="small"
+                @click="emit('close')"
               >
-                <v-btn
-                  variant="flat"
-                  color="info"
-                  prepend-icon="mdi-arrow-left"
-                  class="text-none"
-                  size="small"
-                  @click="emit('close')"
-                >
-                  Voltar
-                </v-btn>
-
-                <v-btn
-                  color="info"
-                  prepend-icon="mdi-printer"
-                  size="small"
-                  variant="flat"
-                  class="text-none"
-                  @click="handlePDF"
-                >
-                  Imprimir
-                </v-btn>
-                <v-btn
-                  color="primary"
-                  prepend-icon="mdi-check"
-                  type="submit"
-                  size="small"
-                  class="text-none"
-                  variant="flat"
-                >
-                  Salvar
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-title>
+                Voltar
+              </v-btn>
+              <v-btn
+                color="info"
+                prepend-icon="mdi-printer"
+                size="small"
+                variant="flat"
+                class="text-none"
+                @click="handlePDF"
+              >
+                Imprimir
+              </v-btn>
+              <v-btn
+                color="primary"
+                prepend-icon="mdi-check"
+                type="submit"
+                size="small"
+                class="text-none"
+                variant="flat"
+              >
+                Salvar
+              </v-btn>
+            </v-col>
+          </v-row>
           <v-card-text>
             <CKEditor v-model="model.content" />
           </v-card-text>
@@ -79,6 +76,8 @@
 const emit = defineEmits(["close"]);
 const { stringToHandlePDF } = useUtils();
 const reportModelStore = useReportModelStore();
+const scheduleStore = useScheduleStore();
+const patientConsultationReport = usePatientConsultationReportStore();
 
 const model = ref({
   id: 0,
@@ -89,13 +88,17 @@ const model = ref({
 const showalAlterContent = ref(false);
 
 const $reportModel = computed(() => reportModelStore.$single);
+const $sheduleConsultation = computed(() => scheduleStore.$single);
 
 const handlePDF = () => {
   stringToHandlePDF(model.value.content);
 };
 
 const handleSubmit = async () => {
-  //await reportModel.save(model.value);
+  await patientConsultationReport.create({
+    content: model.value.content,
+    patientConsultationId: $sheduleConsultation.value?.patientConsultationId,
+  });
   emit("close");
 };
 

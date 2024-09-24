@@ -1,10 +1,11 @@
 model PatientConsultationReport {
   id                    Int                 @id @default(autoincrement())
+  publicId              String?             @unique @map("public_id") @db.VarChar(40)
   userId                Int                 @map("user_id")
   patientConsultationId Int                 @map("patient_consultation_id")
   content               String              @db.Text
-  publicId              String?             @unique @map("public_id") @db.VarChar(40)
   status                String              @default("active") @db.VarChar(20)
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz()
   deletedAt             DateTime?           @map("deleted_at") @db.Timestamptz()
   userDeleted           String?             @map("user_deleted") @db.VarChar(255)
   PatientConsultation   PatientConsultation @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
