@@ -1,4 +1,4 @@
-import { ReportModelProps } from "~/types/Patient";
+import { ReportModelProps } from "@/types/Patient";
 import { create } from "./repository/reportModelRepository";
 
 export default defineEventHandler(async (event) => {

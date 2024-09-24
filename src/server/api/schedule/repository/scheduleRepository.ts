@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ScheduleProps } from "~/types/Schedule";
+import { ScheduleProps } from "@/types/Schedule";
 
 export const index = async (filters: ScheduleProps) => {
   const { medicId, scheduleDate, patientId } = filters;

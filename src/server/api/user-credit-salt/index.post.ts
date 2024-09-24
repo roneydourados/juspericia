@@ -1,4 +1,4 @@
-import { UserCreditSalt } from "~/types/UserCredit";
+import { UserCreditSalt } from "@/types/UserCredit";
 import { create } from "./repository/userCreditSaltRepository";
 
 export default defineEventHandler(async (event) => {

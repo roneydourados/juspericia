@@ -1,11 +1,11 @@
 import prisma from "@/lib/prisma";
 import moment from "moment";
 import { uuidv7 } from "uuidv7";
-import { formatDate } from "~/server/utils/functionts";
+import { formatDate } from "@/server/utils/functionts";
 import {
   SolicitationConsultationFilterProps,
   SolicitationConsultationProps,
-} from "~/types/SolicitationConsultation";
+} from "@/types/SolicitationConsultation";
 
 export const index = async (filters: SolicitationConsultationFilterProps) => {
   const {

@@ -1,4 +1,4 @@
-import { SolicitationConsultationFilterProps } from "~/types/SolicitationConsultation";
+import { SolicitationConsultationFilterProps } from "@/types/SolicitationConsultation";
 import { index } from "./repository/solicitationConsultationRepository";
 
 export default defineEventHandler(async (event) => {

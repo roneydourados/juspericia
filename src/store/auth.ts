@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
-import { JWTDecodedProps } from "~/types/JWTDecoded";
+import { JWTDecodedProps } from "@/types/JWTDecoded";
 import { AuthProps } from "@/types/Auth";
 
 export const useAuthStore = defineStore("auth", () => {

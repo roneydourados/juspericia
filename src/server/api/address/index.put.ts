@@ -1,4 +1,4 @@
-import { AddressProps } from "~/types/Address";
+import { AddressProps } from "@/types/Address";
 import { update } from "./repository/addressRepository";
 
 export default defineEventHandler(async (event) => {

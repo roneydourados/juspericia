@@ -1,4 +1,4 @@
-import { UserProps } from "~/types/User";
+import { UserProps } from "@/types/User";
 import { update } from "./repository/userLawyerRepository";
 
 export default defineEventHandler(async (event) => {

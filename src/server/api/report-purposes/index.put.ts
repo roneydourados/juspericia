@@ -1,4 +1,4 @@
-import { ReportPurposeProps } from "~/types/ReportPurpose";
+import { ReportPurposeProps } from "@/types/ReportPurpose";
 import { update } from "./repository/reportPurposeRepository";
 
 export default defineEventHandler(async (event) => {

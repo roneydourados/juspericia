@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { uuidv7 } from "uuidv7";
 
-import { ConsultationProps } from "~/types/Consultation";
+import { ConsultationProps } from "@/types/Consultation";
 
 export const create = async (payload: ConsultationProps) => {
   try {

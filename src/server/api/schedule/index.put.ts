@@ -1,4 +1,4 @@
-import { ScheduleProps } from "~/types/Schedule";
+import { ScheduleProps } from "@/types/Schedule";
 import { update } from "./repository/scheduleRepository";
 
 export default defineEventHandler(async (event) => {

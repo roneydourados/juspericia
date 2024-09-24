@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import moment from "moment";
-import { UserCreditSalt } from "~/types/UserCredit";
+import { UserCreditSalt } from "@/types/UserCredit";
 import { userCategoryType } from "@/server/utils/Constants";
 import { uuidv7 } from "uuidv7";
 

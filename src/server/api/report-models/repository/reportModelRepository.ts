@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { uuidv7 } from "uuidv7";
 
-import { ReportModelProps } from "~/types/Patient";
+import { ReportModelProps } from "@/types/Patient";
 
 export const create = async ({ title, content }: ReportModelProps) => {
   try {

@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { useHash } from "@/server/providers/hash";
 import { useJwtToken } from "@/server/providers/jwtToken";
 import { UserProfileProps, UserProps } from "@/types/User";
-import { AuthProps } from "~/types/Auth";
+import { AuthProps } from "@/types/Auth";
 
 export const login = async ({ email, password }: AuthProps) => {
   const { validHash } = useHash();

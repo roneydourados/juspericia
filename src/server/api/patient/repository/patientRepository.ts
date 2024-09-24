@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
-import { addressCategoryType } from "~/server/utils/Constants";
-import { PatientProps } from "~/types/Patient";
+import { addressCategoryType } from "@/server/utils/Constants";
+import { PatientProps } from "@/types/Patient";
 import { uuidv7 } from "uuidv7";
 
 export const create = async ({

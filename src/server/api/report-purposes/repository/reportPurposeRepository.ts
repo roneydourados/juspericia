@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { uuidv7 } from "uuidv7";
-import { ReportPurposeProps } from "~/types/ReportPurpose";
+import { ReportPurposeProps } from "@/types/ReportPurpose";
 
 export const create = async ({ name }: ReportPurposeProps) => {
   try {

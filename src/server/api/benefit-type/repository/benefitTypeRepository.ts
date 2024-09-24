@@ -1,7 +1,7 @@
 import { uuidv7 } from "uuidv7";
 import prisma from "@/lib/prisma";
 
-import { BenefitTypeProps } from "~/types/BenefitType";
+import { BenefitTypeProps } from "@/types/BenefitType";
 
 export const create = async ({ name }: BenefitTypeProps) => {
   try {
