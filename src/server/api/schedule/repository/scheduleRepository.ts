@@ -22,6 +22,7 @@ export const index = async (filters: ScheduleProps) => {
       scheduleHour: true,
       title: true,
       userSchedule: true,
+      publicId: true,
       Medic: {
         select: {
           name: true,
@@ -31,6 +32,7 @@ export const index = async (filters: ScheduleProps) => {
         select: {
           id: true,
           status: true,
+          publicId: true,
           BenefitType: {
             select: {
               id: true,
@@ -93,7 +95,7 @@ export const create = async (payload: ScheduleProps) => {
 };
 
 export const update = async (payload: ScheduleProps) => {
-  await exists(payload.id!);
+  await exists(payload.publicId!);
   try {
     await prisma.schedule.update({
       data: {
@@ -117,13 +119,13 @@ export const update = async (payload: ScheduleProps) => {
   }
 };
 
-export const destroy = async (id: number) => {
+export const destroy = async (id: string) => {
   const data = await exists(id);
 
   try {
     await prisma.schedule.delete({
       where: {
-        id,
+        publicId: id,
       },
     });
     if (data.patientConsultationId) {
@@ -145,11 +147,11 @@ export const destroy = async (id: number) => {
   }
 };
 
-export const show = async (id: number) => {
+export const show = async (id: string) => {
   return exists(id);
 };
 
-const exists = async (id: number) => {
+const exists = async (id: string) => {
   const existsData = await prisma.schedule.findFirst({
     select: {
       id: true,
@@ -170,6 +172,7 @@ const exists = async (id: number) => {
           status: true,
           content: true,
           reasonCorrection: true,
+          publicId: true,
           BenefitType: {
             select: {
               id: true,
@@ -195,7 +198,7 @@ const exists = async (id: number) => {
       },
     },
     where: {
-      id,
+      publicId: id,
     },
   });
 

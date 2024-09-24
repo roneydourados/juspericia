@@ -200,6 +200,7 @@ export const consultationUpdate = async (
   payload: SolicitationConsultationProps
 ) => {
   await exists(payload.publicId!);
+
   try {
     return await prisma.patientConsultation.update({
       data: {

@@ -15,7 +15,7 @@
             <v-btn class="text-none" @click="dialog = false">
               <strong class="text-error">Cancelar</strong>
             </v-btn>
-            <v-btn class="text-none" @click="dialog = false">
+            <v-btn class="text-none" @click="handleQueryStart">
               <strong class="text-info">Iniciar consulta</strong>
             </v-btn>
           </v-toolbar-items>
@@ -82,9 +82,7 @@
                 >
                   Motivo para correção
                 </div>
-                <div
-                  v-html="$single?.PatientConsultation?.reasonCorrection"
-                ></div>
+                <div v-html="$single?.PatientConsultation?.reasonCorrection" />
               </v-card>
             </v-col>
           </v-row>
@@ -97,6 +95,15 @@
 <script setup lang="ts">
 const { formatCPFOrCNPJ } = useUtils();
 const scheduleStore = useScheduleStore();
+const solicitationStore = useSolicitationConsultationStore();
 const $single = computed(() => scheduleStore.$single);
 const dialog = defineModel({ default: false });
+
+const handleQueryStart = async () => {
+  dialog.value = false;
+  await solicitationStore.update({
+    publicId: $single.value?.PatientConsultation?.publicId,
+    status: "in_progress",
+  });
+};
 </script>

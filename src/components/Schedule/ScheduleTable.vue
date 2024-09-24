@@ -52,24 +52,38 @@
                       color="purple-darken-2"
                       icon
                       variant="text"
-                      @click="handleServiceDetails(item)"
+                      @click="
+                        item.PatientConsultation?.status === 'scheduled'
+                          ? handleServiceDetails(item)
+                          : handleShowMedicalReportForm(item)
+                      "
                     >
                       <v-icon
-                        icon="mdi-stethoscope"
+                        :icon="
+                          item.PatientConsultation?.status === 'scheduled'
+                            ? 'mdi-stethoscope'
+                            : 'mdi-file-document-edit-outline'
+                        "
                         size="25"
-                        color="purple-darken-2"
+                        :color="
+                          item.PatientConsultation?.status === 'scheduled'
+                            ? 'purple-darken-2'
+                            : 'info'
+                        "
                       />
-                      <!-- <AdminMenuStethoscopeSVG height="25" color="#7B1FA2" /> -->
                       <v-tooltip
                         activator="parent"
                         location="top center"
                         content-class="tooltip-background"
                       >
-                        Iniciar consulta
+                        {{
+                          item.PatientConsultation?.status === "scheduled"
+                            ? "Iniciar consulta"
+                            : "Redigir laudo"
+                        }}
                       </v-tooltip>
                     </v-btn>
                   </template>
-
                   <v-list-item-title>
                     <span>{{ item.title }}</span>
                   </v-list-item-title>
@@ -127,9 +141,9 @@
         </v-locale-provider>
       </v-col>
     </v-row>
-    <!-- <pre>{{ $shedules[0] }}</pre> -->
     <DialogLoading :dialog="loading" />
     <ScheduleServiceDetails v-model="serviceDetails" />
+    <MedicalReport v-model="showMedicalReportForm" />
   </div>
 </template>
 
@@ -138,9 +152,11 @@ import moment from "moment";
 
 const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
+const solicitationStore = useSolicitationConsultationStore();
 const { getInitials } = useUtils();
 
 const serviceDetails = ref(false);
+const showMedicalReportForm = ref(false);
 const model = reactive({
   date: new Date(),
   medic: undefined as UserProps | undefined,
@@ -190,7 +206,13 @@ const getSchedules = async () => {
 };
 
 const handleServiceDetails = async (item: ScheduleProps) => {
-  await scheduleStore.show(item.id!);
+  await scheduleStore.show(item.publicId!);
   serviceDetails.value = true;
+};
+
+const handleShowMedicalReportForm = async (item: ScheduleProps) => {
+  await scheduleStore.show(item.publicId!);
+  await solicitationStore.show(item.PatientConsultation?.publicId!);
+  showMedicalReportForm.value = true;
 };
 </script>

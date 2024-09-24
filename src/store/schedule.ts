@@ -18,11 +18,11 @@ export const useScheduleStore = defineStore("schedule", () => {
     schedule.value = data;
   };
 
-  const destroy = async (id: number) => {
+  const destroy = async (id: string) => {
     await api.delete(`/schedule/${id}`);
   };
 
-  const show = async (id: number) => {
+  const show = async (id: string) => {
     const { data } = await api.get<ScheduleProps>(`/schedule/${id}`);
     schedule.value = data;
   };
