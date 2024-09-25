@@ -1,5 +1,34 @@
 # pendentes
 
+[] - Para perfil de médico remover informações de valor
+[] - Pensar em um cache para componentes que seão selects
+[] - Dash horas trabalhadas médico
+[] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
+[] - Dashboard ADM, montar grafico das solicitações por status
+[] - Médico não pode ver dados do escritório nos detalhes de solicitação
+[] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
+[] - Destacar qual médico esta com mais havilações
+[] - Acrescentar um menu de filtros em meus saldos
+[] - Agenda somente fica disponível para usuários administrador
+[] - Tirar do advogado botão cancelar depois de pago ou andamento a solicitação
+[] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
+
+# entregue
+
+[x] - Agendar uma solicitação de consulta
+[x] - Mostrar agenda separada por médico
+[x] - Mostrar todas as agendas de todos médicos para usuário ADMIN
+[x] - Iniciar uma consulta através do usuário médico
+[x] - Meus saldos com dados enviados para servidor
+[x] - Simulação de compra de um pacote para acumular o mesmo em meus saldos
+[x] - Tela de minha conta no usuário médico
+[x] - Tela para listagem dos laudos gerados
+[x] - Possibilidade de gerar PDF de um laudo listado
+[x] - Controle de saldo expirado
+[x] - Tela para detalhar o uso do saldo
+[x] - Possibilidade de descrever laudo médico para uma solicitação de consulta
+[x] - Possibilidade de, buscar um modelo pronto de laudo ao iniciar a presquição
+
 [x] - Finalizar tela de cadastro de pacientes
 [x] - Listar as consultas de acordo com api
 [x] - Exibir uma consulta de acordo com a api
@@ -13,22 +42,7 @@
 [x] - Endereço no cadastro de médico
 [x] - filtrar pacientes por escritório
 [x] - filtrar solicitações por escritório se não for admin
-[x] - correção no cadastro de advogado na tela admin
-[] - Para perfil de médico remover informações de valor
-[] - Pensar em um cache para componentes que seão selects
-[] - Dash horas trabalhadas médico
-[] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
-[] - Dashboard ADM, montar grafico das solicitações por status
-[] - Médico não pode ver dados do escritório nos detalhes de solicitação
-[] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
-[] - Destacar qual médico esta com mais havilações
-[] - Acrescentar um menu de filtros em meus saldos
-[] - Agenda somente fica disponível para usuários administrador
-[] - Tirar do advogado botão cancelar depois de pago ou andamento a solicitação
-
-# entregue
-
-[x] Criar a tela de minha conta no perfil advogado
+[x] - correção no cadastro de advogado na tela admin[x] Criar a tela de minha conta no perfil advogado
 [x] Criar a tela de indicações
 [x] Colocar uma lista no menu de videos
 [x] - Criar uma tabela responsiva, se transforme em card quando for mobile

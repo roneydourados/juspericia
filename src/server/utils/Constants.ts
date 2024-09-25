@@ -201,6 +201,15 @@ export const appRoutes = [
     profiles: ["MEDICO", "ADMIN", "ADVOGADO"],
     order: 16,
   },
+  {
+    title: "Minha Conta",
+    to: "/medic/my-account",
+    icon: "mdi-card-account-details-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["MEDICO"],
+    order: 17,
+  },
 
   // Rotas que não serão apresentadas no menu
   {

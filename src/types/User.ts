@@ -84,6 +84,35 @@ export interface UserModelProps {
   };
 }
 
+export interface UserMedicModelProps {
+  id?: number;
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phone: {
+    text: string;
+    value: string;
+  };
+  crm: string;
+  crmUf: string;
+  active: boolean;
+  Address: {
+    addressCity: string;
+    addressComplement: string;
+    addressDistrict: string;
+    addressNumber: string;
+    addressState: string;
+    addressStreet: string;
+    addressZipcode: string;
+  };
+  CepData: {
+    CepAddress?: CepAdderssProps;
+    text: string;
+    value: string;
+  };
+}
+
 const profileType = ["ADMIN", "ADVOGADO", "MEDICO"] as const;
 
 export type ProfileType = (typeof profileType)[number];
