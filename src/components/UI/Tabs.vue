@@ -46,11 +46,7 @@ import { TabProps } from "@/types/Tab";
 import { PropType } from "vue";
 import { useDisplay } from "vuetify";
 
-const props = defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
+defineProps({
   tabs: {
     type: Array as PropType<TabProps[]>,
     required: true,
@@ -65,5 +61,5 @@ defineEmits(["update:modelValue"]);
 
 const { mobile } = useDisplay();
 
-const tab = ref(props.modelValue);
+const tab = defineModel<Number>();
 </script>

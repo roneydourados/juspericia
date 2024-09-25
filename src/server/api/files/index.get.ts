@@ -1,16 +1,15 @@
-// import { list } from "./repository/fileRepository";
+import { index } from "./repository/fileRepository";
 
-// export default defineEventHandler(async (event) => {
-//   const { ownerId, fileCategory } = getQuery(event);
+export default defineEventHandler(async (event) => {
+  const { ownerId, fileCategory } = getQuery(event);
 
-//   const { userLogged } = useAuthUser();
-//   const user = userLogged(event);
+  // const { userLogged } = useAuthUser();
+  // const user = userLogged(event);
 
-//   setResponseStatus(event, 200);
+  setResponseStatus(event, 200);
 
-//   return list({
-//     ownerId: Number(ownerId),
-//     fileCategory: String(fileCategory),
-//     companyId: Number(user.companyId),
-//   });
-// });
+  return index({
+    ownerId: Number(ownerId),
+    fileCategory: String(fileCategory),
+  });
+});

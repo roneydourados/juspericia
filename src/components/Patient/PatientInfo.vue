@@ -20,7 +20,7 @@
       </v-btn>
     </v-toolbar>
 
-    <Tabs v-model="tab" :tabs="tabs">
+    <Tabs v-model="tab" :tabs="tabs" @update:model-value="handleTab">
       <template #content>
         <PatientInfoData v-if="tab === 1" />
         <PatientQueriesServices v-if="tab === 2" />
@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 const patientStore = usePatientStore();
+const fileStore = useFileStore();
 //const rounter = useRouter();
 const itemSelected = ref<PatientProps>();
 const tab = ref(1);
@@ -68,5 +69,22 @@ const handleCloseForm = () => {
 const handleGetEditItem = () => {
   itemSelected.value = $single.value;
   showForm.value = true;
+};
+
+const handleTab = async () => {
+  switch (tab.value) {
+    case 1:
+      //await patientStore.getSingle();
+      break;
+    case 2:
+      //await patientStore.getQueriesServices();
+      break;
+    case 3:
+      await fileStore.index({
+        fileCategory: "patient",
+        ownerId: $single.value?.id!,
+      });
+      break;
+  }
 };
 </script>

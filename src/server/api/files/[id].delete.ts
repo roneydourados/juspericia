@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 204);
 
-  await remove(id);
+  return remove(id);
 });

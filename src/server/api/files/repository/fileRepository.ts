@@ -120,12 +120,12 @@ export const remove = async (publicId: string) => {
 
   try {
     // remover do bucket
-    await removeMinionFile(payload.fileServerName!);
+    await removeMinionFile(payload.fileServerName);
 
     // remover do banco de dados
     await prisma.file.delete({
       where: {
-        publicId: payload.publicId!,
+        publicId: payload.publicId,
       },
     });
   } catch (error) {
