@@ -1,6 +1,6 @@
 import { Client } from "minio";
 
-const config = useRuntimeConfig();
+//const config = useRuntimeConfig();
 
 // minio
 export const s3MinioClient = new Client({

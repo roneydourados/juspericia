@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody<PatientProps>(event);
 
-  if (user.Profile.type === "ADMIN") {
+  if (user.Profile!.type === "ADMIN") {
     userId = body.userId;
   } else {
     userId = user.id;
