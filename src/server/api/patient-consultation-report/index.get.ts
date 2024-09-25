@@ -1,24 +1,37 @@
-import { PatientConsultationReportProps } from "@/types/PatientConsultationReport";
 import { index } from "./repository/patientConsultationReportRepository";
 
 export default defineEventHandler(async (event) => {
-  let userId = undefined;
+  const { initialDate, finalDate, userId, medicId } = getQuery(event);
+
+  let userIdApi = undefined;
+  let medicIdApi = undefined;
 
   const { userLogged } = useAuthUser();
 
   const user = userLogged(event);
 
-  if (user.Profile!.type !== "ADMIN" && user.Profile!.type !== "MEDICO") {
-    userId = Number(user.id);
+  // OS ADVOGADOS PODEM VER TODOS OS LAUDOS DE TODOS OS MÉDICOS, POREM SOMENTE DAS SUAS PRÓPRIAS CONSULTAS
+  if (user.Profile!.type === "ADVOGADO") {
+    userIdApi = Number(user.id);
   }
 
-  const { initialDate, finalDate } = getQuery(event);
+  // OS MÉDICOS SÓ PODEM VER SEUS PRÓPRIOS LAUDOS
+  if (user.Profile!.type === "MEDICO") {
+    medicIdApi = Number(user.id);
+  }
+
+  // SE FOR UM USUÁRIO ADMINISTRADOR VAI PODER PASSAR QUAL ID DE USUÁRIO E MEDICO DESEJA CONSULTAR
+  if (user.Profile!.type === "ADMIN") {
+    userIdApi = userId ? Number(userId) : undefined;
+    medicIdApi = medicId ? Number(medicId) : undefined;
+  }
 
   setResponseStatus(event, 200);
 
   return index({
     initialDate: String(initialDate),
     finalDate: String(finalDate),
-    userId,
+    userId: userIdApi,
+    medicId: medicIdApi,
   });
 });

@@ -6,11 +6,12 @@ export const index = async (input: {
   initialDate: string;
   finalDate: string;
   userId?: number;
+  medicId?: number;
 }) => {
-  const { finalDate, initialDate, userId } = input;
+  const { finalDate, initialDate, userId, medicId } = input;
 
   try {
-    return prisma.patientConsultationReport.findMany({
+    const data = await prisma.patientConsultationReport.findMany({
       select: {
         publicId: true,
         id: true,
@@ -41,6 +42,7 @@ export const index = async (input: {
         },
       },
       where: {
+        userId: medicId,
         reportDate: {
           gte: new Date(initialDate),
           lte: new Date(finalDate),
@@ -54,6 +56,20 @@ export const index = async (input: {
           },
         ],
       },
+    });
+
+    return data.map((item) => {
+      return {
+        ...item,
+        reportDate: formatDate(item.reportDate),
+        PatientConsultation: {
+          ...item.PatientConsultation,
+          dateOpen: formatDate(item.PatientConsultation.dateOpen),
+          dateClose: item.PatientConsultation.dateClose
+            ? formatDate(item.PatientConsultation.dateClose)
+            : null,
+        },
+      };
     });
   } catch (error) {
     console.log("🚀 ~ error:", error);
