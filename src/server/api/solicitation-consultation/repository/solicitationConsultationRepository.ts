@@ -294,6 +294,17 @@ const exists = async (id: string) => {
       tipValue: true,
       userId: true,
       publicId: true,
+      PatientConsultationReport: {
+        take: 1,
+        select: {
+          id: true,
+          content: true,
+          publicId: true,
+        },
+        where: {
+          status: "active",
+        },
+      },
       Schedule: {
         select: {
           scheduleDate: true,
@@ -361,12 +372,15 @@ const exists = async (id: string) => {
     },
   });
 
-  if (!exists) {
+  if (!data) {
     throw createError({
       statusCode: 404,
       message: "Not found",
     });
   }
 
-  return data;
+  return {
+    ...data,
+    PatientConsultationReport: data.PatientConsultationReport[0],
+  };
 };

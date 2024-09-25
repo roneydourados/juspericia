@@ -1,6 +1,7 @@
 import { H3Event } from "h3";
 import { useJwtToken } from "../providers/jwtToken";
 import { JwtPayload } from "jsonwebtoken";
+import { UserProps } from "~/types/User";
 
 export const useAuthUser = () => {
   const { tokenData, verifyToken } = useJwtToken();
@@ -30,7 +31,7 @@ export const useAuthUser = () => {
         headers.authorization.split(" ")[1]
       ) as JwtPayload;
 
-      return token.data;
+      return token.data as UserProps;
     } catch (error) {
       throw createError({
         statusCode: 403,

@@ -7,4 +7,7 @@ export interface PatientConsultationReportProps {
   status?: string;
   deletedAt?: string;
   userDeleted?: string;
+  reportDate?: string;
+  Medic?: UserProps;
+  PatientConsultation?: SolicitationConsultationProps;
 }

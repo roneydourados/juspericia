@@ -50,6 +50,10 @@ export const solicitationStates = [
     name: "Cancelada",
     value: "canceled",
   },
+  {
+    name: "Em andamento",
+    value: "in_progress",
+  },
 ];
 
 export const appRoutes = [
@@ -116,15 +120,6 @@ export const appRoutes = [
     profiles: ["ADMIN", "MEDICO"],
     order: 7,
   },
-  // {
-  //   title: "Consultas agendadas",
-  //   to: "/scheduled-queries",
-  //   icon: "mdi-hospital-box-outline",
-  //   visible: true,
-  //   isMenu: true,
-  //   profiles: ["MEDICO"],
-  //   order: 8,
-  // },
   {
     title: "Administração",
     to: "/admin/administration",
@@ -196,6 +191,15 @@ export const appRoutes = [
     isMenu: true,
     profiles: ["ADVOGADO", "ADMIN"],
     order: 15,
+  },
+  {
+    title: "Laudos  Médicos",
+    to: "/medical-report",
+    icon: "mdi-hospital-box-outline",
+    visible: true,
+    isMenu: true,
+    profiles: ["MEDICO", "ADMIN", "ADVOGADO"],
+    order: 16,
   },
 
   // Rotas que não serão apresentadas no menu

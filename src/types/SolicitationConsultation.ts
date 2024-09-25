@@ -40,6 +40,7 @@ export interface SolicitationConsultationProps {
   BenefitType?: BenefitTypeProps;
   Schedule?: ScheduleProps[];
   publicId?: string;
+  PatientConsultationReport?: PatientConsultationReportProps;
 }
 
 export interface SolicitationConsultationFilterProps {

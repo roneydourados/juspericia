@@ -231,7 +231,7 @@ const handleDeleteItem = async () => {
   loading.value = true;
   showDelete.value = false;
   try {
-    await itemStore.destroy(itemSelected.value!.id!);
+    await itemStore.destroy(itemSelected.value!.publicId!);
     await handleSearch("", false);
   } finally {
     loading.value = false;

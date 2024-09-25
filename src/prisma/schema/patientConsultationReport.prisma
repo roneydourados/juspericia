@@ -5,6 +5,7 @@ model PatientConsultationReport {
   patientConsultationId Int                 @map("patient_consultation_id")
   content               String              @db.Text
   status                String              @default("active") @db.VarChar(20)
+  reportDate            DateTime            @default(now()) @map("report_date") @db.Date()
   createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz()
   deletedAt             DateTime?           @map("deleted_at") @db.Timestamptz()
   userDeleted           String?             @map("user_deleted") @db.VarChar(255)
@@ -14,5 +15,6 @@ model PatientConsultationReport {
   @@index([patientConsultationId], map: "patients_consultation_reports_idx_patient_consultation_id")
   @@index([userId], map: "patients_consultation_reports_idx_user_id")
   @@index([status], map: "patients_consultation_reports_idx_status")
+  @@index([reportDate], map: "patients_consultation_reports_idx_report_date")
   @@map("patients_consultation_reports")
 }

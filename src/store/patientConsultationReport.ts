@@ -6,7 +6,30 @@ export const usePatientConsultationReportStore = defineStore(
     const { api } = useAxios();
 
     const patientConsultationReport = ref<PatientConsultationReportProps>();
+    const patientConsultationReports = ref<PatientConsultationReportProps[]>(
+      []
+    );
     const $single = computed(() => patientConsultationReport.value);
+    const $all = computed(() => patientConsultationReports.value);
+
+    const index = async (input: {
+      initialDate: string;
+      finalDate: string;
+      /*userId?: number;*/
+    }) => {
+      const { finalDate, initialDate } = input;
+      const { data } = await api.get<PatientConsultationReportProps[]>(
+        "/patient-consultation-report",
+        {
+          params: {
+            initialDate,
+            finalDate,
+          },
+        }
+      );
+
+      patientConsultationReports.value = data;
+    };
 
     const create = async (payload: PatientConsultationReportProps) => {
       const { data } = await api.post<PatientConsultationReportProps>(
@@ -25,6 +48,6 @@ export const usePatientConsultationReportStore = defineStore(
       patientConsultationReport.value = data;
     };
 
-    return { $single, create, show };
+    return { $single, $all, create, show, index };
   }
 );

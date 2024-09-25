@@ -61,9 +61,9 @@
     </v-card>
     <Dialog
       title="Alterar conteúdo"
-      :dialog="showalAlterContent"
+      :dialog="showAlterContent"
       show-cancel
-      @cancel="showalAlterContent = false"
+      @cancel="showAlterContent = false"
       @confirm="getReportModelContent"
     >
       Já existe um conteúdo informado neste laudo, tem certeza que deseja
@@ -78,6 +78,7 @@ const { stringToHandlePDF } = useUtils();
 const reportModelStore = useReportModelStore();
 const scheduleStore = useScheduleStore();
 const patientConsultationReport = usePatientConsultationReportStore();
+const solicitationStore = useSolicitationConsultationStore();
 
 const model = ref({
   id: 0,
@@ -85,10 +86,18 @@ const model = ref({
   content: "",
   reportModel: undefined as ReportModelProps | undefined,
 });
-const showalAlterContent = ref(false);
+const showAlterContent = ref(false);
 
 const $reportModel = computed(() => reportModelStore.$single);
 const $sheduleConsultation = computed(() => scheduleStore.$single);
+const $consultationSolicitation = computed(() => solicitationStore.$single);
+
+onMounted(() => {
+  if ($consultationSolicitation.value?.PatientConsultationReport?.content) {
+    model.value.content =
+      $consultationSolicitation.value?.PatientConsultationReport?.content;
+  }
+});
 
 const handlePDF = () => {
   stringToHandlePDF(model.value.content);
@@ -112,12 +121,12 @@ const handleReportModel = async () => {
     getReportModelContent();
   } else {
     // caso contrário perguntar se o usuário deseja alterar o conteúdo
-    showalAlterContent.value = true;
+    showAlterContent.value = true;
   }
 };
 
 const getReportModelContent = () => {
   model.value.content = $reportModel.value?.content || "";
-  showalAlterContent.value = false;
+  showAlterContent.value = false;
 };
 </script>

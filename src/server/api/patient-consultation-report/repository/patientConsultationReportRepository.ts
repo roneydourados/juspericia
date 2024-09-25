@@ -2,6 +2,68 @@ import prisma from "@/lib/prisma";
 import { PatientConsultationReportProps } from "@/types/PatientConsultationReport";
 import { uuidv7 } from "uuidv7";
 
+export const index = async (input: {
+  initialDate: string;
+  finalDate: string;
+  userId?: number;
+}) => {
+  const { finalDate, initialDate, userId } = input;
+
+  try {
+    return prisma.patientConsultationReport.findMany({
+      select: {
+        publicId: true,
+        id: true,
+        status: true,
+        reportDate: true,
+        Medic: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            crm: true,
+            crmUf: true,
+          },
+        },
+        PatientConsultation: {
+          select: {
+            publicId: true,
+            dateOpen: true,
+            dateClose: true,
+            Patient: {
+              select: {
+                name: true,
+                surname: true,
+                cpf: true,
+              },
+            },
+          },
+        },
+      },
+      where: {
+        reportDate: {
+          gte: new Date(initialDate),
+          lte: new Date(finalDate),
+        },
+
+        AND: [
+          {
+            PatientConsultation: {
+              userId,
+            },
+          },
+        ],
+      },
+    });
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+    throw createError({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+};
+
 export const create = async (payload: PatientConsultationReportProps) => {
   // verificar se já existe um laudo, se sim então descartar criar outro
   const exists = await prisma.patientConsultationReport.findFirst({
