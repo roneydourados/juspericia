@@ -28,6 +28,7 @@
 [x] - Tela para detalhar o uso do saldo
 [x] - Possibilidade de descrever laudo médico para uma solicitação de consulta
 [x] - Possibilidade de, buscar um modelo pronto de laudo ao iniciar a presquição
+[x] - upload de arquivos, no cadastro de pacientes
 
 [x] - Finalizar tela de cadastro de pacientes
 [x] - Listar as consultas de acordo com api
