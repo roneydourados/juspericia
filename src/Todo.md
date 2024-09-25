@@ -5,13 +5,14 @@
 [] - Dash horas trabalhadas médico
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
 [] - Dashboard ADM, montar grafico das solicitações por status
-[] - Médico não pode ver dados do escritório nos detalhes de solicitação
-[] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
 [] - Destacar qual médico esta com mais havilações
 [] - Acrescentar um menu de filtros em meus saldos
 [] - Agenda somente fica disponível para usuários administrador
 [] - Tirar do advogado botão cancelar depois de pago ou andamento a solicitação
 [] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
+[] - Integração com api de pagamentos
+[] - Integração com api para envio de mensagem automática via whatsapp
+[] - Integração com api de telemedicina
 
 # entregue
 
@@ -30,6 +31,8 @@
 [x] - Possibilidade de, buscar um modelo pronto de laudo ao iniciar a presquição
 [x] - upload de arquivos, no cadastro de pacientes
 
+[x] - Médico não pode ver dados do escritório nos detalhes de solicitação
+[x] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
 [x] - Finalizar tela de cadastro de pacientes
 [x] - Listar as consultas de acordo com api
 [x] - Exibir uma consulta de acordo com a api
