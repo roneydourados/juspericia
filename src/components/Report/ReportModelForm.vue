@@ -106,10 +106,12 @@ const clearModel = () => {
 const handleSubmit = async () => {
   try {
     if (model.value.id <= 0) {
-      console.log("🚀 ~ handleSubmit ~ model.value:", model.value);
       await reportModel.create(model.value);
     } else {
-      await reportModel.update(model.value);
+      await reportModel.update({
+        ...model.value,
+        publicId: props.data?.publicId!,
+      });
     }
 
     await reportModel.index("");

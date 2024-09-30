@@ -90,7 +90,7 @@ export default defineNuxtConfig({
     position: "top-right",
     notifications: {
       global: {
-        duration: 10000,
+        duration: 3000,
       },
       info: {
         title: "Informação!",

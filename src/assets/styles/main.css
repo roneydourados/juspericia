@@ -11,7 +11,11 @@ body {
 }
 
 .v-toolbar {
-  z-index: 500 !important; /* Valor padrão */
+  z-index: 500 !important;
+  /* colocar esta classe assim o v-app
+   Não fica por cima das notificações do 
+   notivue
+   */
 }
 
 /* .v-text-field .v-label {
