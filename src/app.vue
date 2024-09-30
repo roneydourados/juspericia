@@ -2,6 +2,7 @@
   <Notivue v-slot="item">
     <Notification :item="item" />
   </Notivue>
+
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -17,3 +18,13 @@ nuxtApp.hook("page:finish", () => {
   loading.value = false;
 });
 </script>
+
+<style>
+.Notivue__notification {
+  z-index: 3000 !important; /* ou qualquer valor maior que o z-index do app-bar */
+}
+
+.notivue-notification {
+  z-index: 2000; /* Ajuste conforme necessário */
+}
+</style>

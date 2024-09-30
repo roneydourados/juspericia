@@ -13,6 +13,8 @@
 [] - Integração com api de pagamentos
 [] - Integração com api para envio de mensagem automática via whatsapp
 [] - Integração com api de telemedicina
+[] - Enviar email de confirmação de cadastro
+[] - Enviar email para resetar senha
 
 # entregue
 

@@ -87,10 +87,10 @@ export default defineNuxtConfig({
     limit: 4,
     enqueue: true,
     avoidDuplicates: true,
-    position: "bottom-center",
+    position: "top-right",
     notifications: {
       global: {
-        duration: 3000,
+        duration: 10000,
       },
       info: {
         title: "Informação!",
