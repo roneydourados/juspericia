@@ -18,7 +18,7 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
 });
 
 await useAsyncData(async () => {
-  localStorage.removeItem("solicitationsFilters"); //remover os filtros anteriormente salvos deixar os padrões ao entrar na página
+  //atualizar filtros para padrão
   setSolicitationsFilters(modelFilters.value);
   await storeConsultation.index(modelFilters.value);
 });
