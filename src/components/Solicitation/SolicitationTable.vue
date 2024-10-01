@@ -5,10 +5,10 @@
         <HeaderPage title="Solicitações" />
         <v-row class="mt-4" dense>
           <v-col v-if="$currentUser?.Profile.type === 'ADMIN'" cols="12" lg="3">
-            <SelectSearchLawyer
+            <SelectgetConsultationsLawyer
               label="Escritório/Advogado"
               v-model="modelFilters.lawyer"
-              @update:model-value="search"
+              @update:model-value="getConsultations"
               clearable
             />
           </v-col>
@@ -27,6 +27,24 @@
               outlined
               dense
             />
+          </v-col>
+          <v-col cols="1">
+            <v-btn
+              icon
+              color="info"
+              size="small"
+              variant="flat"
+              @click="getConsultations"
+            >
+              <v-icon icon="mdi-reload" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Atualizar dados
+              </v-tooltip>
+            </v-btn>
           </v-col>
         </v-row>
       </div>
@@ -101,7 +119,7 @@
   <SolicitationFilters
     v-model:drawer="showFilters"
     v-model:filters="modelFilters"
-    @update:model-value="search"
+    @update:model-value="getConsultations"
   />
   <DialogLoading :dialog="loading" />
   <!-- <pre>{{ modelFilters }}</pre> -->
@@ -163,7 +181,7 @@ const handleChangeTable = async () => {
       break;
   }
   setSolicitationsFilters(modelFilters.value);
-  await search();
+  await getConsultations();
 };
 
 const getQuantity = (status: string) => {
@@ -180,7 +198,7 @@ const getQuantity = (status: string) => {
   return 0;
 };
 
-const search = async () => {
+const getConsultations = async () => {
   loading.value = true;
   try {
     const filter = {
