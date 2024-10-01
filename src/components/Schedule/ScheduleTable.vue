@@ -142,7 +142,10 @@
       </v-col>
     </v-row>
     <DialogLoading :dialog="loading" />
-    <ScheduleServiceDetails v-model="serviceDetails" />
+    <ScheduleServiceDetails
+      v-model="serviceDetails"
+      @start-query="getSchedules"
+    />
     <MedicalReport v-model="showMedicalReportForm" />
   </div>
 </template>

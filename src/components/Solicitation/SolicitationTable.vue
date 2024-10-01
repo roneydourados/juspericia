@@ -111,7 +111,7 @@
 import moment from "moment";
 import { useDisplay } from "vuetify";
 
-//const { getSolicitationsFilters, setSolicitationsFilters } = useUtils();
+const { getSolicitationsFilters, setSolicitationsFilters } = useUtils();
 const rounter = useRouter();
 const { mobile } = useDisplay();
 const storeConsultation = useSolicitationConsultationStore();
@@ -124,12 +124,24 @@ const showFilters = ref(false);
 
 const modelFilters = ref<SolicitationConsultationFilterProps>({
   status: "open",
-  initialDateSolicitation: moment().startOf("month").format("YYYY-MM-DD"),
-  finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
+  initialDateSolicitation: moment().startOf("year").format("YYYY-MM-DD"),
+  finalDateSolicitation: moment().endOf("year").format("YYYY-MM-DD"),
   benefitType: undefined as BenefitTypeProps | undefined,
   patient: undefined as PatientProps | undefined,
   reportPurpose: undefined as ReportPurposeProps | undefined,
   lawyer: undefined as UserProps | undefined,
+});
+
+onMounted(async () => {
+  const filters = getSolicitationsFilters();
+  if (filters) {
+    modelFilters.value = {
+      ...filters,
+      status: "open",
+    };
+
+    setSolicitationsFilters(modelFilters.value);
+  }
 });
 
 const handleChangeTable = async () => {
@@ -150,7 +162,7 @@ const handleChangeTable = async () => {
       modelFilters.value.status = "canceled";
       break;
   }
-  //setSolicitationsFilters(modelFilters.value);
+  setSolicitationsFilters(modelFilters.value);
   await search();
 };
 

@@ -94,6 +94,7 @@
 
 <script setup lang="ts">
 const { formatCPFOrCNPJ } = useUtils();
+const emit = defineEmits(["start-query"]);
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
 const $single = computed(() => scheduleStore.$single);
@@ -105,5 +106,6 @@ const handleQueryStart = async () => {
     publicId: $single.value?.PatientConsultation?.publicId,
     status: "in_progress",
   });
+  emit("start-query");
 };
 </script>

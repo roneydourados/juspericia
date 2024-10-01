@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ScheduleProps } from "@/types/Schedule";
+import { uuidv7 } from "uuidv7";
 
 export const index = async (filters: ScheduleProps) => {
   const { medicId, scheduleDate, patientId } = filters;
@@ -8,6 +9,7 @@ export const index = async (filters: ScheduleProps) => {
     where: {
       medicId,
       scheduleDate,
+      status: "active",
       PatientConsultation: patientId
         ? {
             patientId,
@@ -64,6 +66,18 @@ export const index = async (filters: ScheduleProps) => {
 
 export const create = async (payload: ScheduleProps) => {
   try {
+    // primeiro cancelar qualquer agendamento aberto desta consulta
+    await prisma.schedule.updateMany({
+      where: {
+        patientConsultationId: payload.patientConsultationId!,
+        status: "active",
+      },
+      data: {
+        status: "canceled",
+      },
+    });
+
+    //depois inserir novo agendamento
     await prisma.schedule.create({
       data: {
         medicId: payload.medicId!,
@@ -72,6 +86,7 @@ export const create = async (payload: ScheduleProps) => {
         scheduleHour: payload.scheduleHour!,
         title: payload.title!,
         userSchedule: payload.userSchedule!,
+        publicId: uuidv7(),
       },
     });
 

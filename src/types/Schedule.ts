@@ -10,4 +10,5 @@ export interface ScheduleProps {
   Medic?: UserProps;
   PatientConsultation?: SolicitationConsultationProps;
   publicId?: string;
+  status?: string;
 }

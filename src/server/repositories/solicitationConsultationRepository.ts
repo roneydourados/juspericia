@@ -17,18 +17,20 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     reportPurposeId,
     userId,
   } = filters;
-  const data = await prisma.patientConsultation.findMany({
-    where: {
-      dateOpen: {
-        gte: new Date(initialDateSolicitation),
-        lte: new Date(finalDateSolicitation),
-      },
-      status,
-      userId: userId ? Number(userId) : undefined,
-      patientId: patientId ? Number(patientId) : undefined,
-      benefitTypeId: benefitTypeId ? Number(benefitTypeId) : undefined,
-      reportPurposeId: reportPurposeId ? Number(reportPurposeId) : undefined,
+  const where = {
+    dateOpen: {
+      gte: new Date(initialDateSolicitation),
+      lte: new Date(finalDateSolicitation),
     },
+    status,
+    userId: userId ? Number(userId) : undefined,
+    patientId: patientId ? Number(patientId) : undefined,
+    benefitTypeId: benefitTypeId ? Number(benefitTypeId) : undefined,
+    reportPurposeId: reportPurposeId ? Number(reportPurposeId) : undefined,
+  };
+
+  const data = await prisma.patientConsultation.findMany({
+    where,
     select: {
       id: true,
       dateAntecipation: true,
@@ -56,6 +58,9 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
               name: true,
             },
           },
+        },
+        where: {
+          status: "active",
         },
       },
       Medic: {
@@ -202,7 +207,7 @@ export const consultationUpdate = async (
   await exists(payload.publicId!);
 
   try {
-    return await prisma.patientConsultation.update({
+    const dataConsultation = await prisma.patientConsultation.update({
       data: {
         content: payload.content ? payload.content : undefined,
         benefitTypeId: payload.benefitTypeId
@@ -243,6 +248,19 @@ export const consultationUpdate = async (
         publicId: payload.publicId,
       },
     });
+
+    //atualizar o agendamento para concluído
+    await prisma.schedule.updateMany({
+      where: {
+        patientConsultationId: dataConsultation.id,
+        status: "active",
+      },
+      data: {
+        status: "scheduled",
+      },
+    });
+
+    return dataConsultation;
   } catch (error) {
     console.log("🚀 ~ error:", error);
     throw createError({
@@ -315,6 +333,9 @@ const exists = async (id: string) => {
               name: true,
             },
           },
+        },
+        where: {
+          status: "active",
         },
       },
       BenefitType: {

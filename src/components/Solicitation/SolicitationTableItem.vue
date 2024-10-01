@@ -32,18 +32,17 @@
 
       <div class="d-flex align-center" style="gap: 1rem">
         <v-btn
-          v-if="
-            solicitation.status === 'open' &&
-            $currentUser?.Profile.type === 'ADMIN'
-          "
-          prepend-icon="mdi-calendar-clock"
-          color="success"
+          v-if="$currentUser?.Profile.type === 'ADMIN'"
+          :color="solicitation.status === 'open' ? 'success' : 'warning'"
           size="small"
           variant="flat"
           class="text-none text-white"
           @click="handleSchedule(solicitation)"
         >
-          Agendar
+          <v-icon icon="mdi-calendar-clock" start color="white"></v-icon>
+          <span class="text-white">
+            {{ solicitation.status === "open" ? "Agendar" : "Reagendar" }}
+          </span>
         </v-btn>
 
         <v-btn
