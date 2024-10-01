@@ -1,5 +1,5 @@
 import { SolicitationConsultationFilterProps } from "@/types/SolicitationConsultation";
-import { index } from "./repository/solicitationConsultationRepository";
+import { index } from "@/server/repositories/solicitationConsultationRepository";
 
 export default defineEventHandler(async (event) => {
   const {
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   const user = userLogged(event);
 
-  const userIdGet = user.Profile.type === "ADMIN" ? userId : user.id;
+  const userIdGet = user.Profile?.type === "ADMIN" ? userId : user.id;
 
   setResponseStatus(event, 200);
 

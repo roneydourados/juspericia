@@ -1,5 +1,5 @@
 import { AuthProps } from "@/types/Auth";
-import { login } from "./repository/authRepository";
+import { login } from "@/server/repositories/authRepository";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<AuthProps>(event);

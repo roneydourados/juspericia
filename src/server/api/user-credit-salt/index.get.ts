@@ -1,4 +1,4 @@
-import { index } from "./repository/userCreditSaltRepository";
+import { index } from "@/server/repositories/userCreditSaltRepository";
 
 export default defineEventHandler(async (event) => {
   const { isExpired, status } = getQuery(event);
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   setResponseStatus(event, 200);
 
   return index({
-    userId: user.id,
+    userId: user.id!,
     isExpired: isExpired ? Boolean(isExpired) : undefined,
     status: status ? String(status) : undefined,
   });

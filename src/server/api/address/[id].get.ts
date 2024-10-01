@@ -1,4 +1,4 @@
-import { show } from "./repository/addressRepository";
+import { show } from "@/server/repositories/addressRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

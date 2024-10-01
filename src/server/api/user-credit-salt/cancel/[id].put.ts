@@ -1,4 +1,4 @@
-import { cancel } from "../repository/userCreditSaltRepository";
+import { cancel } from "@/server/repositories/userCreditSaltRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

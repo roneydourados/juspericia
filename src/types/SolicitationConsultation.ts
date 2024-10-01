@@ -1,4 +1,4 @@
-import { update } from "./../server/api/benefit-type/repository/benefitTypeRepository";
+import { update } from "../server/repositories/benefitTypeRepository";
 export interface SolicitationConsultationList {
   consultations: SolicitationConsultationProps[];
   totals: ConsultationListTotals[];

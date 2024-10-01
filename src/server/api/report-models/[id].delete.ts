@@ -1,4 +1,4 @@
-import { destroy } from "./repository/reportModelRepository";
+import { destroy } from "@/server/repositories/reportModelRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

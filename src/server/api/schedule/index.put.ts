@@ -1,5 +1,5 @@
 import { ScheduleProps } from "@/types/Schedule";
-import { update } from "./repository/scheduleRepository";
+import { update } from "@/server/repositories/scheduleRepository";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<ScheduleProps>(event);

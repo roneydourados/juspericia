@@ -1,4 +1,4 @@
-import { verifyUser } from "./repository/authRepository";
+import { verifyUser } from "@/server/repositories/authRepository";
 
 export default defineEventHandler(async (event) => {
   const id = parseInt(event.context.params!.id) as number;

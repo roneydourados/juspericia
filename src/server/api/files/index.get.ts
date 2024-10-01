@@ -1,4 +1,4 @@
-import { index } from "./repository/fileRepository";
+import { index } from "@/server/repositories/fileRepository";
 
 export default defineEventHandler(async (event) => {
   const { ownerId, fileCategory } = getQuery(event);

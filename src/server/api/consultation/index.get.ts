@@ -1,4 +1,4 @@
-import { index } from "./repository/consultationRepository";
+import { index } from "@/server/repositories/consultationRepository";
 
 export default defineEventHandler(async (event) => {
   const { inputQuery } = getQuery(event);

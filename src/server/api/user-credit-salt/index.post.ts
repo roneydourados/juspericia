@@ -1,5 +1,5 @@
 import { UserCreditSalt } from "@/types/UserCredit";
-import { create } from "./repository/userCreditSaltRepository";
+import { create } from "@/server/repositories/userCreditSaltRepository";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();

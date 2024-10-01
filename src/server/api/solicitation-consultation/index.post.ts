@@ -1,5 +1,5 @@
 import { SolicitationConsultationProps } from "@/types/SolicitationConsultation";
-import { consultationCreate } from "./repository/solicitationConsultationRepository";
+import { consultationCreate } from "@/server/repositories/solicitationConsultationRepository";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();

@@ -1,4 +1,4 @@
-import { create } from "./repository/consultationRepository";
+import { create } from "@/server/repositories/consultationRepository";
 import { ConsultationProps } from "@/types/Consultation";
 
 export default defineEventHandler(async (event) => {

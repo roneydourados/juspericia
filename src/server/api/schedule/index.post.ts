@@ -1,5 +1,5 @@
 import { ScheduleProps } from "@/types/Schedule";
-import { create } from "./repository/scheduleRepository";
+import { create } from "@/server/repositories/scheduleRepository";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();

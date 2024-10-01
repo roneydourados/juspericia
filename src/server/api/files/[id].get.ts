@@ -1,6 +1,6 @@
 import { readFile } from "fs/promises";
 import fs from "fs";
-import { download } from "./repository/fileRepository";
+import { download } from "@/server/repositories/fileRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

@@ -1,4 +1,4 @@
-import { destroy } from "./repository/medicRepository";
+import { destroy } from "@/server/repositories/medicRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

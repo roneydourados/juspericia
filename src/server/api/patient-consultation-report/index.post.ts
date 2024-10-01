@@ -1,5 +1,5 @@
 import { PatientConsultationReportProps } from "@/types/PatientConsultationReport";
-import { create } from "./repository/patientConsultationReportRepository";
+import { create } from "@/server/repositories/patientConsultationReportRepository";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();

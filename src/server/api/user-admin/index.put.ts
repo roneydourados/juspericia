@@ -1,5 +1,5 @@
 import { UserProps } from "@/types/User";
-import { update } from "./repository/userAdminRepository";
+import { update } from "@/server/repositories/userAdminRepository";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<UserProps>(event);

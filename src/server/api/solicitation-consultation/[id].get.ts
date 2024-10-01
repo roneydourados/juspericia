@@ -1,4 +1,4 @@
-import { consultationShow } from "./repository/solicitationConsultationRepository";
+import { consultationShow } from "@/server/repositories/solicitationConsultationRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

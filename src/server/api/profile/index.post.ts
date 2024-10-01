@@ -1,4 +1,4 @@
-import { create } from "./repository/profileRepository";
+import { create } from "@/server/repositories/profileRepository";
 import { UserProfileProps } from "@/types/User";
 
 export default defineEventHandler(async (event) => {

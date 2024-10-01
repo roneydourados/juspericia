@@ -1,4 +1,4 @@
-import { index } from "./repository/scheduleRepository";
+import { index } from "@/server/repositories/scheduleRepository";
 
 export default defineEventHandler(async (event) => {
   let userId = undefined;
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const user = userLogged(event);
 
-  if (user.Profile.type === "ADMIN") {
+  if (user.Profile?.type === "ADMIN") {
     userId = medicId;
   } else {
     userId = user.id;

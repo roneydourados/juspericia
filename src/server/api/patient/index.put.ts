@@ -1,4 +1,4 @@
-import { update } from "./repository/patientRepository";
+import { update } from "@/server/repositories/patientRepository";
 import { PatientProps } from "@/types/Patient";
 
 export default defineEventHandler(async (event) => {
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 200);
 
-  if (user.Profile.type === "ADMIN") {
+  if (user.Profile?.type === "ADMIN") {
     userId = body.userId;
   } else {
     userId = user.id;

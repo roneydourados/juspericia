@@ -1,4 +1,4 @@
-import { index } from "./repository/benefitTypeRepository";
+import { index } from "@/server/repositories/benefitTypeRepository";
 
 export default defineEventHandler(async (event) => {
   const { inputQuery } = getQuery(event);

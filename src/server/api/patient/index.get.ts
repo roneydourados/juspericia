@@ -1,4 +1,4 @@
-import { index } from "./repository/patientRepository";
+import { index } from "@/server/repositories/patientRepository";
 
 export default defineEventHandler(async (event) => {
   const { inputQuery } = getQuery(event);
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const user = userLogged(event);
 
   const userId =
-    user.Profile.type === "ADMIN" || user.Profile.type === "MEDICO"
+    user.Profile?.type === "ADMIN" || user.Profile?.type === "MEDICO"
       ? undefined
       : user.id;
 

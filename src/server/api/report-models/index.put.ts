@@ -1,4 +1,4 @@
-import { update } from "./repository/reportModelRepository";
+import { update } from "@/server/repositories/reportModelRepository";
 import { ReportModelProps } from "@/types/Patient";
 
 export default defineEventHandler(async (event) => {

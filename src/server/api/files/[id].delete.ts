@@ -1,4 +1,4 @@
-import { remove } from "./repository/fileRepository";
+import { remove } from "@/server/repositories/fileRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

@@ -1,5 +1,5 @@
-import { update } from "./repository/benefitTypeRepository";
-import { BenefitTypeProps } from "@/types/Patient";
+import { update } from "@/server/repositories/benefitTypeRepository";
+import { BenefitTypeProps } from "@/types/BenefitType";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<BenefitTypeProps>(event);

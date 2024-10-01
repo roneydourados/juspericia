@@ -1,4 +1,4 @@
-import { index } from "./repository/reportModelRepository";
+import { index } from "@/server/repositories/reportModelRepository";
 
 export default defineEventHandler(async (event) => {
   const { inputQuery } = getQuery(event);

@@ -1,4 +1,4 @@
-import { update } from "./repository/consultationRepository";
+import { update } from "@/server/repositories/consultationRepository";
 import { ConsultationProps } from "@/types/Consultation";
 
 export default defineEventHandler(async (event) => {

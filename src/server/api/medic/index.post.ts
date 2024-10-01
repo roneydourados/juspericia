@@ -1,4 +1,4 @@
-import { create } from "./repository/medicRepository";
+import { create } from "@/server/repositories/medicRepository";
 import { UserProps } from "@/types/User";
 
 export default defineEventHandler(async (event) => {

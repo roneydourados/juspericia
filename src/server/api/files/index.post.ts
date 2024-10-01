@@ -1,4 +1,4 @@
-import { upload } from "./repository/fileRepository";
+import { upload } from "@/server/repositories/fileRepository";
 
 export default defineEventHandler(async (event) => {
   const body = await readFormData(event);
