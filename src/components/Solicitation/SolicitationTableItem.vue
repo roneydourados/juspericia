@@ -32,7 +32,11 @@
 
       <div class="d-flex align-center" style="gap: 1rem">
         <v-btn
-          v-if="$currentUser?.Profile.type === 'ADMIN'"
+          v-if="
+            $currentUser?.Profile.type === 'ADMIN' &&
+            (solicitation.status === 'open' ||
+              solicitation.status === 'scheduled')
+          "
           :color="solicitation.status === 'open' ? 'success' : 'warning'"
           size="small"
           variant="flat"

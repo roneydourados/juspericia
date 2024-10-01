@@ -5,7 +5,7 @@
         <HeaderPage title="Solicitações" />
         <v-row class="mt-4" dense>
           <v-col v-if="$currentUser?.Profile.type === 'ADMIN'" cols="12" lg="3">
-            <SelectgetConsultationsLawyer
+            <SelectSearchLawyer
               label="Escritório/Advogado"
               v-model="modelFilters.lawyer"
               @update:model-value="getConsultations"
