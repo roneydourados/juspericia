@@ -23,8 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { uuidv7 } from "uuidv7";
-import { CepAdderssProps } from "@/types/CepAddress";
+import { CepAdderssProps } from "@/interfaces/CepAddress";
 import { formatCEP, isValidCEP } from "@brazilian-utils/brazilian-utils";
 import { useField } from "vee-validate";
 
@@ -94,7 +93,7 @@ const emit = defineEmits([
 const loading = ref(false);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv7();
+  return props.label;
 });
 
 const validationRules = computed<MaybeRef>(() => {

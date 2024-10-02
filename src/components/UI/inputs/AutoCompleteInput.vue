@@ -10,8 +10,8 @@
     density="compact"
     :prepend-inner-icon="icon"
     hide-no-data
-    base-color="inputColor"
-    color="inputColor"
+    base-color="primary"
+    color="primary"
     :chips="chips"
     :return-object="returnObject"
     :clearable="clearable"
@@ -34,7 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 
 import { toTypedSchema } from "@vee-validate/zod";
@@ -111,7 +110,7 @@ const autocomplete = ref();
 const nextField = ref<HTMLDivElement | null>(null);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv7();
+  return props.label;
 });
 
 const validationRules = computed<MaybeRef>(() => {

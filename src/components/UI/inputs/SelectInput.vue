@@ -39,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -104,7 +103,7 @@ const props = defineProps({
 defineEmits(["update:modelValue"]);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv7();
+  return props.label;
 });
 
 const validationRules = computed<MaybeRef>(() => {

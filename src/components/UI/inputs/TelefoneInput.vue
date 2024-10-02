@@ -79,7 +79,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv7();
+  return props.label;
 });
 
 const validationRules = computed<MaybeRef>(() => {

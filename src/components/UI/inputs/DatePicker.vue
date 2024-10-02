@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import moment from "moment";
-import { uuidv7 } from "uuidv7";
+
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
@@ -91,7 +91,7 @@ const date = ref();
 const menu = ref(false);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv7();
+  return props.label;
 });
 
 const validationRules = computed<MaybeRef>(() => {

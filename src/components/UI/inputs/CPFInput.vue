@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { uuidv7 } from "uuidv7";
 import { formatCPF, isValidCPF } from "@brazilian-utils/brazilian-utils";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -79,7 +78,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
 
 const fieldName = computed<MaybeRef>(() => {
-  return uuidv7();
+  return props.label;
 });
 
 const validationRules = computed<MaybeRef>(() => {
