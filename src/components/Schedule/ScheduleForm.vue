@@ -123,22 +123,16 @@ const { mobile } = useDisplay();
 const model = ref({
   medic: undefined as UserProps | undefined,
   scheduleDate: moment().format("YYYY-MM-DD"),
-  scheduleHour: {
-    hour: moment().format("HH"),
-    min: moment().format("mm"),
-  },
+  scheduleHour: "",
 });
 
-const clearModel = () => {
-  model.value = {
-    medic: undefined,
-    scheduleDate: moment().format("YYYY-MM-DD"),
-    scheduleHour: {
-      hour: moment().format("HH"),
-      min: moment().format("mm"),
-    },
-  };
-};
+// const clearModel = () => {
+//   model.value = {
+//     medic: undefined,
+//     scheduleDate: moment().format("YYYY-MM-DD"),
+//     scheduleHour: "",
+//   };
+// };
 
 // const loadModel = () => {
 //   model.value = {
@@ -158,7 +152,7 @@ const submitForm = async () => {
       title: `Agendamento de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
       medicId: model.value.medic?.id,
       scheduleDate: model.value.scheduleDate,
-      scheduleHour: `${model.value.scheduleHour.hour}:${model.value.scheduleHour.min}`,
+      scheduleHour: model.value.scheduleHour,
       patientConsultationId: props.solicitation.id,
     };
 

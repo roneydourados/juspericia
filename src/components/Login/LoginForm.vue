@@ -55,6 +55,7 @@
               <span>Salvar credenciais neste dispotivo</span>
             </template>
           </v-checkbox>
+          <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
         </v-col>
       </v-row>
       <v-row dense justify="center">
@@ -71,7 +72,6 @@
           </v-btn>
         </v-col>
       </v-row>
-      <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
     </FormCrud>
   </v-card>
 </template>

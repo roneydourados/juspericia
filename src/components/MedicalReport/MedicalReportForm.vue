@@ -58,6 +58,7 @@
           </v-card-text>
         </v-card>
       </FormCrud>
+      <pre>{{ $sheduleConsultation }}</pre>
     </v-card>
     <Dialog
       title="Alterar conteúdo"
@@ -108,6 +109,12 @@ const handleSubmit = async () => {
     content: model.value.content,
     patientConsultationId: $sheduleConsultation.value?.patientConsultationId,
   });
+
+  await scheduleStore.update({
+    publicId: $sheduleConsultation.value?.publicId,
+    status: "completed",
+  });
+
   emit("close");
 };
 

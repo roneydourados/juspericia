@@ -7,8 +7,9 @@ export const index = async (input: {
   finalDate: string;
   userId?: number;
   medicId?: number;
+  patientId?: number;
 }) => {
-  const { finalDate, initialDate, userId, medicId } = input;
+  const { finalDate, initialDate, userId, medicId, patientId } = input;
 
   try {
     const data = await prisma.patientConsultationReport.findMany({
@@ -43,15 +44,21 @@ export const index = async (input: {
       },
       where: {
         userId: medicId,
+        // PatientConsultation: {
+        //   patientId,
+        // },
         reportDate: {
           gte: new Date(initialDate),
           lte: new Date(finalDate),
         },
-
+        NOT: {
+          status: "deleted",
+        },
         AND: [
           {
             PatientConsultation: {
               userId,
+              patientId,
             },
           },
         ],
@@ -81,38 +88,56 @@ export const index = async (input: {
 };
 
 export const create = async (payload: PatientConsultationReportProps) => {
-  // verificar se já existe um laudo, se sim então descartar criar outro
-  const exists = await prisma.patientConsultationReport.findFirst({
-    where: {
-      patientConsultationId: payload.patientConsultationId!,
-      status: "active",
-    },
-  });
-
-  if (exists) {
-    await prisma.patientConsultationReport.update({
+  try {
+    // verificar se já existe um laudo, se sim então descartar criar outro
+    const exists = await prisma.patientConsultationReport.findFirst({
       where: {
-        publicId: exists.publicId!,
-      },
-      data: {
-        status: "deleted",
-        userDeleted: payload.userDeleted,
-        deletedAt: new Date(),
+        patientConsultationId: payload.patientConsultationId!,
+        status: "active",
       },
     });
+
+    if (exists) {
+      await prisma.patientConsultationReport.update({
+        where: {
+          publicId: exists.publicId!,
+        },
+        data: {
+          status: "deleted",
+          userDeleted: payload.userDeleted,
+          deletedAt: new Date(),
+        },
+      });
+    }
+
+    const data = await prisma.patientConsultationReport.create({
+      data: {
+        content: payload.content!,
+        patientConsultationId: payload.patientConsultationId!,
+        userId: payload.userId!,
+        status: "active",
+        publicId: uuidv7(),
+      },
+    });
+
+    //atualizar status da consulta
+    await prisma.patientConsultation.update({
+      data: {
+        status: "finished",
+      },
+      where: {
+        id: payload.patientConsultationId!,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.log("🚀 ~ create ~ error:", error);
+    throw createError({
+      statusCode: 500,
+      message: "Error create report",
+    });
   }
-
-  const data = await prisma.patientConsultationReport.create({
-    data: {
-      content: payload.content!,
-      patientConsultationId: payload.patientConsultationId!,
-      userId: payload.userId!,
-      status: "active",
-      publicId: uuidv7(),
-    },
-  });
-
-  return data;
 };
 
 export const show = async (publicId: string) => {

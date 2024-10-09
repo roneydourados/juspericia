@@ -1,6 +1,69 @@
 <template>
   <div>
     <!-- <pre>{{ $consultationReports }}</pre> -->
+    <div class="d-flex flex-column w-100">
+      <HeaderPage title="Solicitações" />
+      <v-row class="mt-4" dense>
+        <v-col cols="12" lg="4">
+          <SelectSearchPatient
+            label="Paciente"
+            v-model="filters.patient"
+            @update:model-value="getReports"
+            clearable
+          />
+        </v-col>
+        <v-col
+          v-if="
+            $currentUser?.Profile.type === 'ADMIN' ||
+            $currentUser?.Profile.type === 'ADVOGADO'
+          "
+          cols="12"
+          lg="3"
+        >
+          <SelectSearchMedic
+            label="Médico"
+            v-model="filters.medic"
+            @update:model-value="getReports"
+            clearable
+          />
+        </v-col>
+
+        <v-col cols="12" lg="2">
+          <DatePicker
+            v-model="filters.initialDate"
+            label="Data inicial"
+            outlined
+            dense
+          />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <DatePicker
+            v-model="filters.finalDate"
+            label="Data final"
+            outlined
+            dense
+          />
+        </v-col>
+        <v-col cols="1">
+          <v-btn
+            icon
+            color="info"
+            size="small"
+            variant="flat"
+            @click="getReports"
+          >
+            <v-icon icon="mdi-reload" />
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Atualizar dados
+            </v-tooltip>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
     <Table
       title="Laudos Médicos"
       :show-crud="false"
@@ -83,12 +146,19 @@
 import moment from "moment";
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
+
 const { formatCPFOrCNPJ, stringToHandlePDF } = useUtils();
 const $consultationReports = computed(() => consultationReport.$all);
 const $single = computed(() => consultationReport.$single);
 const $currentUser = computed(() => auth.$currentUser);
 
 const loading = ref(false);
+const filters = ref({
+  initialDate: moment().startOf("month").format("YYYY-MM-DD"),
+  finalDate: moment().endOf("month").format("YYYY-MM-DD"),
+  patient: undefined as PatientProps | undefined,
+  medic: undefined as UserProps | undefined,
+});
 const headers = ref([
   { title: "Data Laudo", key: "reportDate" },
   { title: "Médico", key: "Medic" },
@@ -104,6 +174,20 @@ const handleGeneratePDF = async (pulicId: string) => {
     if (!$single.value?.content) return;
 
     stringToHandlePDF($single.value.content);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getReports = async () => {
+  loading.value = true;
+  try {
+    await consultationReport.index({
+      initialDate: filters.value.initialDate,
+      finalDate: filters.value.finalDate,
+      patientId: filters.value.patient?.id,
+      medicId: filters.value.medic?.id,
+    });
   } finally {
     loading.value = false;
   }

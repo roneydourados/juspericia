@@ -318,6 +318,16 @@ const exists = async (id: string) => {
           id: true,
           content: true,
           publicId: true,
+          reportDate: true,
+          Medic: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              crm: true,
+              crmUf: true,
+            },
+          },
         },
         where: {
           status: "active",

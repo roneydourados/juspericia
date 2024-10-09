@@ -14,16 +14,6 @@
               required
             />
           </v-col>
-          <v-col cols="12" lg="6">
-            <StringInput
-              v-model="model.email"
-              label="E-mail"
-              placeholder="E-mail"
-              required
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
           <v-col cols="12" lg="3">
             <TelefoneInput
               v-model:model-number="model.phone.value"
@@ -32,6 +22,16 @@
               placeholder="Telefone"
             />
           </v-col>
+          <!-- <v-col cols="12" lg="6">
+            <StringInput
+              v-model="model.email"
+              label="E-mail"
+              placeholder="E-mail"
+              required
+            />
+          </v-col> -->
+        </v-row>
+        <v-row dense>
           <v-col cols="12" lg="3">
             <CPFInput
               v-model:model-value="model.cpfCnpj.text"

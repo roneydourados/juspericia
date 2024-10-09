@@ -46,6 +46,9 @@ export const index = async (input: {
       publicId: true,
       status: true,
     },
+    orderBy: {
+      id: "desc",
+    },
   });
 };
 

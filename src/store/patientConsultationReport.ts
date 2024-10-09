@@ -15,15 +15,19 @@ export const usePatientConsultationReportStore = defineStore(
     const index = async (input: {
       initialDate: string;
       finalDate: string;
+      patientId?: number;
+      medicId?: number;
       /*userId?: number;*/
     }) => {
-      const { finalDate, initialDate } = input;
+      const { finalDate, initialDate, patientId, medicId } = input;
       const { data } = await api.get<PatientConsultationReportProps[]>(
         "/patient-consultation-report",
         {
           params: {
             initialDate,
             finalDate,
+            patientId,
+            medicId,
           },
         }
       );

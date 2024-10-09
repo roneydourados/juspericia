@@ -3,13 +3,13 @@ import { ScheduleProps } from "@/types/Schedule";
 import { uuidv7 } from "uuidv7";
 
 export const index = async (filters: ScheduleProps) => {
-  const { medicId, scheduleDate, patientId } = filters;
+  const { medicId, scheduleDate, patientId, status } = filters;
 
   const schedules = await prisma.schedule.findMany({
     where: {
       medicId,
       scheduleDate,
-      status: "active",
+      //status: "active",
       PatientConsultation: patientId
         ? {
             patientId,
@@ -25,6 +25,7 @@ export const index = async (filters: ScheduleProps) => {
       title: true,
       userSchedule: true,
       publicId: true,
+      status: true,
       Medic: {
         select: {
           name: true,
@@ -110,19 +111,23 @@ export const create = async (payload: ScheduleProps) => {
 };
 
 export const update = async (payload: ScheduleProps) => {
-  await exists(payload.publicId!);
+  const data = await exists(payload.publicId!);
+
+  if (!data) return;
+
   try {
     await prisma.schedule.update({
       data: {
-        medicId: payload.medicId!,
+        medicId: payload.medicId,
         patientConsultationId: payload.patientConsultationId,
-        scheduleDate: payload.scheduleDate!,
-        scheduleHour: payload.scheduleHour!,
-        title: payload.title!,
-        userSchedule: payload.userSchedule!,
+        scheduleDate: payload.scheduleDate,
+        scheduleHour: payload.scheduleHour,
+        title: payload.title,
+        userSchedule: payload.userSchedule,
+        status: payload.status,
       },
       where: {
-        id: payload.id!,
+        id: data.id,
       },
     });
   } catch (error) {
@@ -176,6 +181,7 @@ const exists = async (id: string) => {
       scheduleHour: true,
       title: true,
       userSchedule: true,
+      publicId: true,
       Medic: {
         select: {
           name: true,

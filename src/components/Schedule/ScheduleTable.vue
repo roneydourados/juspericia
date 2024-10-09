@@ -214,6 +214,13 @@ const handleServiceDetails = async (item: ScheduleProps) => {
 };
 
 const handleShowMedicalReportForm = async (item: ScheduleProps) => {
+  if (item.status === "completed") {
+    push.warning(
+      "Consulta já finalizada, con laudo médico informado, acesse módulo de laudos para mais detalhes"
+    );
+    return;
+  }
+
   await scheduleStore.show(item.publicId!);
   await solicitationStore.show(item.PatientConsultation?.publicId!);
   showMedicalReportForm.value = true;

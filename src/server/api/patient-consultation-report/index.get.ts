@@ -1,7 +1,8 @@
 import { index } from "@/server/repositories/patientConsultationReportRepository";
 
 export default defineEventHandler(async (event) => {
-  const { initialDate, finalDate, userId, medicId } = getQuery(event);
+  const { initialDate, finalDate, userId, medicId, patientId } =
+    getQuery(event);
 
   let userIdApi = undefined;
   let medicIdApi = undefined;
@@ -33,5 +34,6 @@ export default defineEventHandler(async (event) => {
     finalDate: String(finalDate),
     userId: userIdApi,
     medicId: medicIdApi,
+    patientId: patientId ? Number(patientId) : undefined,
   });
 });

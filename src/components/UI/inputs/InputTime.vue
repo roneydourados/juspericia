@@ -1,29 +1,132 @@
 <template>
-  <v-row dense no-gutters>
-    <v-col cols="4">
-      <IntegerInput v-model="model.hour" label="" :max="23" required />
-    </v-col>
-    <v-col cols="1" class="d-flex justify-center">
-      <strong class="mt-2"> : </strong>
-    </v-col>
-    <v-col cols="4">
-      <IntegerInput v-model="model.min" label="" :max="59" required />
-    </v-col>
-  </v-row>
+  <v-text-field
+    v-model="value"
+    :label="label"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    type="time"
+    :error-messages="errorMessage"
+    variant="outlined"
+    density="compact"
+    base-color="primary"
+    color="primary"
+    :maxlength="maxlength"
+    :prepend-inner-icon="icon"
+    :readonly="readonly"
+    :clearable="clearable"
+    @blur="handleBlur"
+    @input="handleChange"
+  />
 </template>
 
 <script setup lang="ts">
-interface HourProps {
-  hour: string;
-  min: string;
-}
-
+import { useField } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import * as zod from "zod";
+import { textRequired } from "../utils";
 import moment from "moment";
 
-const model = defineModel<HourProps>({
-  default: {
-    hour: moment().format("HH"),
-    min: moment().format("mm"),
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: "",
+  },
+  icon: {
+    type: String,
+    default: "",
+  },
+  label: {
+    type: String,
+    default: "",
+  },
+  placeholder: {
+    type: String,
+    default: "",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  type: {
+    type: String,
+    default: "text",
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
+  min: {
+    type: Number,
+    default: 0,
+  },
+  clearable: {
+    type: Boolean,
+    default: false,
+  },
+  maxlength: {
+    type: Number,
+    default: 255,
   },
 });
+
+const fieldName = computed<MaybeRef>(() => {
+  return props.label;
+});
+
+const validationRules = computed<MaybeRef>(() => {
+  if (props.required) {
+    return toTypedSchema(
+      zod
+        .string({
+          invalid_type_error: textRequired,
+          required_error: textRequired,
+        })
+        .min(1, textRequired)
+        .refine(
+          (val: string) => {
+            if (props.min > 0) {
+              return moment(val, "HH:mm", true).isValid();
+            }
+
+            return true;
+          },
+          {
+            message: "Hora inválida!",
+          }
+        )
+    );
+  }
+
+  return toTypedSchema(
+    zod
+      .string()
+      .nullish()
+      .optional()
+      .refine(
+        (val: string | undefined | null) => {
+          if (props.min > 0 && val) {
+            return moment(val, "HH:mm", true).isValid();
+          }
+
+          return true;
+        },
+        {
+          message: "Hora inválida!",
+        }
+      )
+  );
+});
+
+const { value, errorMessage, handleBlur, handleChange } = useField<string>(
+  fieldName,
+  validationRules,
+  {
+    syncVModel: true,
+    initialValue: props.modelValue,
+  }
+);
 </script>

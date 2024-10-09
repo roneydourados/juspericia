@@ -44,11 +44,37 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row v-if="$single?.PatientConsultationReport" dense class="px-4 mt-9">
+      <v-col cols="12">
+        <v-card flat rounded="lg">
+          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
+            Laudo médico
+          </div>
+          <div
+            class="font-weight-bold mb-4 mt-4 text-info"
+            style="font-size: 1rem"
+          >
+            Dr(a): {{ $single?.PatientConsultationReport?.Medic?.name }} CRM:
+            {{ $single?.PatientConsultationReport?.Medic?.crm }}
+            Data:
+            {{
+              moment($single?.PatientConsultationReport?.reportDate).format(
+                "DD/MM/YYYY"
+              )
+            }}
+          </div>
+          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
+            Descrição de laudo médico
+          </div>
+          <div v-html="$single?.PatientConsultationReport?.content"></div>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-card>
-  <!-- <pre>{{ $single }}</pre> -->
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
 const $single = computed(() => storeConsultation.$single);

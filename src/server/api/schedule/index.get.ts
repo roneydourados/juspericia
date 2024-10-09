@@ -2,7 +2,7 @@ import { index } from "@/server/repositories/scheduleRepository";
 
 export default defineEventHandler(async (event) => {
   let userId = undefined;
-  const { medicId, scheduleDate, patientId } = getQuery(event);
+  const { medicId, scheduleDate, patientId, status } = getQuery(event);
 
   const { userLogged } = useAuthUser();
 
@@ -20,5 +20,6 @@ export default defineEventHandler(async (event) => {
     medicId: userId ? Number(userId) : undefined,
     patientId: patientId ? Number(patientId) : undefined,
     scheduleDate: scheduleDate ? String(scheduleDate) : undefined,
+    status: status ? String(status) : undefined,
   });
 });
