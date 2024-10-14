@@ -15,6 +15,19 @@
 [] - Integração com api de telemedicina
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
+[] - Médico que mais teve revisão de laudo
+[] - Agendamento eftuar um cadastro de horários para os médicos
+[] - Mostrar idade e data de nascimento do paciente nos detalhes de consulta
+[] - Botão para abrir chatgpt
+[] - Remover imprimir na digitação do laudo
+[] - Criar modelo de layout no cadatro de modelo de laudo, tambem obrigar a informar um modelo de laudo na digitação do mesmo.
+[] - Financeiro do médico, pagamento por laudo
+[] - Anexar documentos por solicitação e disponibilizar os anexos para médico
+[] - Remover o nome do médico da solicitação na tela do advogado
+[] - Paginação de dados
+[] - Habilitar botão de correção depois do atendimento de laudo
+[] - Na agenda mostar count de consultas
+[] - Na digitação do laudo ter possibilidade de colocar anexo
 
 # entregue
 
@@ -32,7 +45,6 @@
 [x] - Possibilidade de descrever laudo médico para uma solicitação de consulta
 [x] - Possibilidade de, buscar um modelo pronto de laudo ao iniciar a presquição
 [x] - upload de arquivos, no cadastro de pacientes
-
 [x] - Médico não pode ver dados do escritório nos detalhes de solicitação
 [x] - Médico não pode ver telefone, email de cliente nos detalhes de solicitação
 [x] - Finalizar tela de cadastro de pacientes
