@@ -16,6 +16,8 @@
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
 
+[] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOS
+
 # entregue
 
 [x] - Agendar uma solicitação de consulta
