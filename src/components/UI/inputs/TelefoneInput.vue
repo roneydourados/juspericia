@@ -1,85 +1,71 @@
 <template>
   <v-text-field
-    v-model="value"
-    :label="label"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :type="type"
+    ref="textField"
+    v-model="inputValue"
+    :label="dynamicLabel"
     :error-messages="errorMessage"
+    :disabled="disabled"
+    :readonly="readonly"
+    :clearable="cleareable"
+    @input="inputFormated($event.target.value)"
+    @blur="blur"
+    autocomplete="section-blue one-time-code"
     variant="outlined"
     density="compact"
     base-color="primary"
     color="primary"
-    :prepend-inner-icon="icon"
-    :readonly="readonly"
-    :clearable="clearable"
-    @blur="handleBlur"
-    @input="handleChange"
-    @update:model-value="sendValue"
-    @focus="handleFocus"
-    @click:clear="clearValue"
   />
 </template>
 
-<script setup lang="ts">
-import { uuidv7 } from "uuidv7";
-import { useField } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
+<script lang="ts" setup>
 import * as zod from "zod";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useField } from "vee-validate";
 import { isValidPhone } from "@brazilian-utils/brazilian-utils";
-import { textRequired, textRequiredMin } from "../utils";
+import { textRequired } from "../utils";
+
+const textField = ref(null);
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
-  icon: {
-    type: String,
-    default: "",
-  },
   label: {
     type: String,
-    default: "",
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  type: {
-    type: String,
-    default: "text",
+    required: true,
   },
   required: {
     type: Boolean,
     default: false,
   },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
+  min: {
+    type: Number,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
   readonly: {
     type: Boolean,
     default: false,
   },
-  min: {
-    type: Number,
-    default: 0,
-  },
-  clearable: {
+  cleareable: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 
-const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
+const emit = defineEmits(["update:modelValue"]);
 
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
+
+const inputValue = ref();
+const previousValue = ref("");
+const modelValue = defineModel({
+  default: "",
+});
+
+const fieldName = computed(() => {
+  return props.label || "phone";
 });
 
 const validationRules = computed<MaybeRef>(() => {
@@ -91,18 +77,6 @@ const validationRules = computed<MaybeRef>(() => {
           required_error: textRequired,
         })
         .min(1, textRequired)
-        .refine(
-          (val: string) => {
-            if (props.min > 0) {
-              return val.length >= props.min;
-            }
-
-            return true;
-          },
-          {
-            message: textRequiredMin.replaceAll("$car", props.min.toString()),
-          }
-        )
         .refine(
           (val: string) => {
             return isValidPhone(val);
@@ -134,50 +108,87 @@ const validationRules = computed<MaybeRef>(() => {
   );
 });
 
-const { value, errorMessage, handleChange } = useField<string>(
-  fieldName,
-  validationRules,
-  {
-    syncVModel: true,
+const formatPhone = (phoneNumber: string) => {
+  let cleanedValue = phoneNumber.replace(/\D/g, "");
+
+  if (cleanedValue.length > 11) {
+    cleanedValue = cleanedValue.substring(0, 11);
+  }
+
+  if (cleanedValue.length <= 10) {
+    if (cleanedValue.length > 2) {
+      cleanedValue = `(${cleanedValue.substring(
+        0,
+        2
+      )}) ${cleanedValue.substring(2)}`;
+    }
+    if (cleanedValue.length > 6) {
+      cleanedValue = `${cleanedValue.substring(0, 9)}-${cleanedValue.substring(
+        9
+      )}`;
+    }
+  } else {
+    cleanedValue = `(${cleanedValue.substring(0, 2)}) ${cleanedValue.substring(
+      2,
+      7
+    )}-${cleanedValue.substring(7)}`;
+  }
+
+  return cleanedValue;
+};
+
+const { value, errorMessage } = useField<string>(fieldName, validationRules, {
+  syncVModel: true,
+  initialValue: formatPhone(modelValue.value),
+});
+
+// Sincronizar valor inicial do model com o input formatado
+onMounted(() => {
+  if (modelValue.value) {
+    inputValue.value = formatPhone(modelValue.value);
+    value.value = inputValue.value.replace(/\D/g, "");
+    emit("update:modelValue", value.value);
+  }
+});
+
+watch(
+  () => modelValue.value,
+  (newValue) => {
+    if (!newValue) {
+      inputValue.value = "";
+      value.value = "";
+    } else {
+      // Atualiza o campo somente se houver um novo valor
+      inputValue.value = formatPhone(newValue);
+      value.value = inputValue.value.replace(/\D/g, "");
+    }
+    emit("update:modelValue", value.value);
+    // if (newValue) {
+    //   inputValue.value = formatPhone(newValue);
+    //   value.value = inputValue.value.replace(/\D/g, "");
+    //   emit("update:modelValue", value.value);
+    // }
   }
 );
 
-const sendValue = () => {
-  if (!value.value) return;
+const inputFormated = (event: string) => {
+  const newValue = event.replace(/\D/g, ""); // Remover todos os não numéricos
 
-  const asValue = value.value
-    .replaceAll("-", "")
-    .replaceAll("(", "")
-    .replaceAll(")", "")
-    .replaceAll(" ", "");
-
-  emit("update:modelNumber", asValue);
-  emit("update:modelValue", asValue);
-};
-
-const handleBlur = () => {
-  if (value.value) {
-    const { formatTelephoneNumber } = useUtils();
-    const inputLabel = formatTelephoneNumber(value.value);
-
-    emit("update:modelValue", inputLabel);
+  // Verifica se o campo está sendo apagado (backspace ou delete)
+  if (newValue.length < previousValue.value.length) {
+    value.value = newValue;
+    inputValue.value = event;
+  } else {
+    inputValue.value = formatPhone(event);
+    value.value = inputValue.value.replace(/\D/g, "");
   }
+
+  emit("update:modelValue", value.value);
+
+  previousValue.value = event;
 };
 
-const handleFocus = () => {
-  if (value.value) {
-    const asValue = value.value
-      .replaceAll("-", "")
-      .replaceAll("(", "")
-      .replaceAll(")", "")
-      .replaceAll(" ", "");
-
-    emit("update:modelValue", asValue);
-  }
-};
-
-const clearValue = () => {
-  emit("update:modelValue", "");
-  emit("update:modelNumber", "");
+const blur = () => {
+  previousValue.value = "";
 };
 </script>

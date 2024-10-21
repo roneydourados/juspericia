@@ -1,7 +1,7 @@
 <template>
   <v-text-field
     v-model="value"
-    :label="label"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :disabled="disabled"
     type="time"
@@ -73,8 +73,12 @@ const props = defineProps({
   },
 });
 
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
+
 const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+  return props.label || "input-time";
 });
 
 const validationRules = computed<MaybeRef>(() => {

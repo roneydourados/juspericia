@@ -1,84 +1,75 @@
 <template>
   <v-text-field
-    v-model="value"
-    :label="label"
-    :placeholder="placeholder"
+    ref="textField"
+    v-model="inputValue"
+    :label="dynamicLabel"
     :error-messages="errorMessage"
     :disabled="disabled"
-    :clearable="clearable"
-    type="text"
+    :readonly="readonly"
+    :clearable="cleareable"
+    @keypress="onKeyPress"
+    @input="inputFormated($event.target.value)"
+    autocomplete="section-blue one-time-code"
     variant="outlined"
     density="compact"
     base-color="primary"
     color="primary"
-    maxlength="14"
-    :prepend-inner-icon="icon"
-    @update:model-value="sendValue"
-    @blur="handleBlur"
-    @focus="handleFocus"
-    @input="handleChange"
-    @click:clear="clearValue"
   />
 </template>
 
-<script setup lang="ts">
-import { formatCPF, isValidCPF } from "@brazilian-utils/brazilian-utils";
-import { useField } from "vee-validate";
-import { toTypedSchema } from "@vee-validate/zod";
+<script lang="ts" setup>
 import * as zod from "zod";
-import { textRequired, textRequiredMin } from "../utils";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useField } from "vee-validate";
+import { formatCPF, isValidCPF } from "@brazilian-utils/brazilian-utils";
+
+const textField = ref(null);
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
-  icon: {
-    type: String,
-    default: "",
-  },
   label: {
     type: String,
-    default: "",
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  type: {
-    type: String,
-    default: "text",
+    required: true,
   },
   required: {
     type: Boolean,
     default: false,
   },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
+  min: {
+    type: Number,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
   readonly: {
     type: Boolean,
     default: false,
   },
-  clearable: {
+  cleareable: {
     type: Boolean,
-    default: false,
-  },
-  min: {
-    type: Number,
-    default: 0,
+    default: true,
   },
 });
 
-const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
+const emit = defineEmits(["update:modelValue"]);
 
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
+
+const inputValue = ref();
+const modelValue = defineModel({
+  default: "",
+});
+
+const onKeyPress = (event: any) => {
+  if (event.key < "0" || event.key > "9") {
+    event.preventDefault();
+  }
+};
+
+const fieldName = computed(() => {
+  return props.label.toLowerCase() || "cpf";
 });
 
 const validationRules = computed<MaybeRef>(() => {
@@ -86,22 +77,10 @@ const validationRules = computed<MaybeRef>(() => {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: textRequired,
-          required_error: textRequired,
+          invalid_type_error: "O CPF deve ser válido!",
+          required_error: "O CPF deve ser válido!",
         })
-        .min(1, textRequired)
-        .refine(
-          (val: string) => {
-            if (props.min > 0) {
-              return val.length >= props.min;
-            }
-
-            return true;
-          },
-          {
-            message: textRequiredMin.replaceAll("$car", props.min.toString()),
-          }
-        )
+        .min(1, "Campo não pode ser vazio!")
         .refine(
           (val: string) => {
             return isValidCPF(val);
@@ -115,7 +94,9 @@ const validationRules = computed<MaybeRef>(() => {
 
   return toTypedSchema(
     zod
-      .string()
+      .string({
+        invalid_type_error: "O CPF deve ser válido!",
+      })
       .nullish()
       .optional()
       .refine(
@@ -133,52 +114,34 @@ const validationRules = computed<MaybeRef>(() => {
   );
 });
 
-const { value, errorMessage, handleChange } = useField<string>(
-  fieldName,
-  validationRules,
-  {
-    syncVModel: true,
+const { value, errorMessage } = useField<string>(fieldName, validationRules, {
+  syncVModel: true,
+  initialValue: formatCPF(modelValue.value),
+});
+
+// Sincronizar valor inicial do model com o input formatado
+onMounted(() => {
+  if (modelValue.value) {
+    inputValue.value = formatCPF(modelValue.value);
+    value.value = inputValue.value.replace(/\D/g, "");
+    emit("update:modelValue", value.value);
+  }
+});
+
+watch(
+  () => modelValue.value,
+  (newValue) => {
+    if (newValue) {
+      inputValue.value = formatCPF(newValue);
+      value.value = inputValue.value.replace(/\D/g, "");
+      emit("update:modelValue", value.value);
+    }
   }
 );
 
-const sendValue = () => {
-  if (!value.value) return;
-
-  const asValue = value.value
-    .replaceAll(".", "")
-    .replaceAll("/", "")
-    .replaceAll("-", "");
-
-  if (asValue.length > 11) {
-    emit("update:modelValue", "");
-
-    return;
-  }
-
-  emit("update:modelNumber", asValue);
-  emit("update:modelValue", asValue);
-};
-
-const handleBlur = () => {
-  if (value.value && value.value.length === 11) {
-    const inputLabel = formatCPF(value.value, { pad: true });
-
-    emit("update:modelValue", inputLabel);
-  }
-};
-
-const handleFocus = () => {
-  if (value.value) {
-    const asValue = value.value
-      .replaceAll(".", "")
-      .replaceAll("/", "")
-      .replaceAll("-", "");
-
-    emit("update:modelValue", asValue);
-  }
-};
-
-const clearValue = () => {
-  emit("update:modelValue", "");
+const inputFormated = (event: string) => {
+  inputValue.value = formatCPF(event);
+  value.value = inputValue.value.replace(/\D/g, "");
+  emit("update:modelValue", value.value);
 };
 </script>

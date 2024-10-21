@@ -1,99 +1,96 @@
 <template>
   <v-text-field
-    v-model="value"
-    :label="label"
-    :placeholder="placeholder"
+    ref="textField"
+    v-model="inputValue"
+    :label="dynamicLabel"
     :error-messages="errorMessage"
     :disabled="disabled"
-    :loading="loading"
-    :clearable="clearable"
-    type="text"
+    :readonly="readonly"
+    :clearable="cleareable"
+    :prepend-inner-icon="icon"
+    @keypress="onKeyPress"
+    @input="inputFormated($event.target.value)"
+    @blur="getData"
+    autocomplete="section-blue one-time-code"
     variant="outlined"
     density="compact"
     base-color="primary"
     color="primary"
-    maxlength="14"
-    :prepend-inner-icon="icon"
-    @update:model-value="sendValue"
-    @blur="handleBlur"
-    @focus="handleFocus"
-    @input="handleChange"
-    @click:clear="clearValue"
   />
 </template>
 
-<script setup lang="ts">
-import { CepAdderssProps } from "@/interfaces/CepAddress";
-import { formatCEP, isValidCEP } from "@brazilian-utils/brazilian-utils";
-import { useField } from "vee-validate";
+<script lang="ts" setup>
+type CepAdderssProps = {
+  cep: string;
+  logradouro: string;
+  complemento: string;
+  bairro: string;
+  localidade: string;
+  numero: string;
+  uf: string;
+  ibge?: string;
+  gia?: string;
+  ddd?: string;
+  siafi?: string;
+};
 
-import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useField } from "vee-validate";
+import { formatCEP, isValidCEP } from "@brazilian-utils/brazilian-utils";
 
-import axios from "axios";
-import { textRequired, textRequiredMin } from "../utils";
-
-const $cepApi = axios.create({
-  baseURL: "https://viacep.com.br/ws/",
-});
+const textField = ref(null);
 
 const props = defineProps({
-  modelValue: {
+  label: {
     type: String,
-    default: "",
+    required: true,
   },
   icon: {
     type: String,
-    default: "",
-  },
-  label: {
-    type: String,
-    default: "",
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  type: {
-    type: String,
-    default: "text",
+    default: "mdi-map-marker-radius-outline",
   },
   required: {
     type: Boolean,
     default: false,
   },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
+  min: {
+    type: Number,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
   readonly: {
     type: Boolean,
     default: false,
   },
-  clearable: {
+  cleareable: {
     type: Boolean,
-    default: false,
-  },
-  min: {
-    type: Number,
-    default: 0,
+    default: true,
   },
 });
 
-const emit = defineEmits([
-  "update:modelValue",
-  "update:modelNumber",
-  "update:modelAddress",
-]);
+const emit = defineEmits(["update:modelValue", "update:modelAddress"]);
 
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
+
+const inputValue = ref();
 const loading = ref(false);
+const modelValue = defineModel({
+  default: "",
+});
 
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+const onKeyPress = (event: any) => {
+  if (event.key < "0" || event.key > "9") {
+    event.preventDefault();
+  }
+};
+
+const fieldName = computed(() => {
+  return props.label.toLowerCase() || "cep";
 });
 
 const validationRules = computed<MaybeRef>(() => {
@@ -101,22 +98,10 @@ const validationRules = computed<MaybeRef>(() => {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: textRequired,
-          required_error: textRequired,
+          invalid_type_error: "O CEP deve ser válido!",
+          required_error: "O CEP deve ser válido!",
         })
-        .min(1, textRequired)
-        .refine(
-          (val: string) => {
-            if (props.min > 0) {
-              return val.length >= props.min;
-            }
-
-            return true;
-          },
-          {
-            message: textRequiredMin.replaceAll("$car", props.min.toString()),
-          }
-        )
+        .min(1, "Campo não pode ser vazio!")
         .refine(
           (val: string) => {
             return isValidCEP(val);
@@ -130,7 +115,9 @@ const validationRules = computed<MaybeRef>(() => {
 
   return toTypedSchema(
     zod
-      .string()
+      .string({
+        invalid_type_error: "O CEP deve ser válido!",
+      })
       .nullish()
       .optional()
       .refine(
@@ -148,64 +135,54 @@ const validationRules = computed<MaybeRef>(() => {
   );
 });
 
-const { value, errorMessage, handleChange } = useField<string>(
-  fieldName,
-  validationRules,
-  {
-    syncVModel: true,
+const { value, errorMessage } = useField<string>(fieldName, validationRules, {
+  syncVModel: true,
+  initialValue: formatCEP(modelValue.value),
+});
+
+// Sincronizar valor inicial do model com o input formatado
+onMounted(() => {
+  if (modelValue.value) {
+    inputValue.value = formatCEP(modelValue.value);
+    value.value = inputValue.value.replace(/\D/g, "");
+    emit("update:modelValue", value.value);
+  }
+});
+
+watch(
+  () => modelValue.value,
+  (newValue) => {
+    if (newValue) {
+      inputValue.value = formatCEP(newValue);
+      value.value = inputValue.value.replace(/\D/g, "");
+      emit("update:modelValue", value.value);
+    }
   }
 );
 
-const sendValue = () => {
-  if (!value.value) return;
-
-  const asValue = value.value
-    .replaceAll(".", "")
-    .replaceAll("/", "")
-    .replaceAll("-", "");
-
-  emit("update:modelNumber", asValue);
+const inputFormated = (event: string) => {
+  inputValue.value = formatCEP(event);
+  value.value = inputValue.value.replace(/\D/g, "");
   emit("update:modelValue", value.value);
 };
 
-const handleBlur = async () => {
-  if (value.value) {
-    const inputLabel = formatCEP(value.value);
-
-    emit("update:modelValue", inputLabel);
-
-    if (isValidCEP(value.value)) {
-      loading.value = true;
+const getData = async () => {
+  if (isValidCEP(value.value)) {
+    loading.value = true;
+    try {
       try {
-        try {
-          const address = await $cepApi.get<CepAdderssProps>(
-            `${value.value}/json/`
-          );
+        const { data } = await useFetch<CepAdderssProps>(
+          "https://viacep.com.br/ws/" + value.value + "/json/"
+        );
 
-          emit("update:modelAddress", address.data);
-          sendValue();
-        } catch (error) {
-          emit("update:modelAddress", {});
-        }
-      } finally {
-        loading.value = false;
+        emit("update:modelAddress", data.value);
+      } catch (error) {
+        console.log("🚀 ~ CEP DATA ~ error:", error);
+        emit("update:modelAddress", {});
       }
+    } finally {
+      loading.value = false;
     }
   }
-};
-
-const handleFocus = () => {
-  if (value.value) {
-    const asValue = value.value
-      .replaceAll(".", "")
-      .replaceAll("/", "")
-      .replaceAll("-", "");
-
-    emit("update:modelValue", asValue);
-  }
-};
-
-const clearValue = () => {
-  emit("update:modelValue", "");
 };
 </script>

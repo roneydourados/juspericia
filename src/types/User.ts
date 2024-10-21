@@ -45,43 +45,18 @@ export interface UserModelProps {
   id?: number;
   name: string;
   email: string;
-  cpfCnpj: {
-    text: string;
-    value: string;
-  };
+  cpfCnpj: string;
   password: string;
   confirmPassword: string;
-  phone: {
-    text: string;
-    value: string;
-  };
+  phone: string;
   oab: string;
   oabUf: string;
   officeName: string;
   active: boolean;
-  Address: {
-    addressCity: string;
-    addressComplement: string;
-    addressDistrict: string;
-    addressNumber: string;
-    addressState: string;
-    addressStreet: string;
-    addressZipcode: string;
-  };
-  CepData: {
-    CepAddress?: CepAdderssProps;
-    text: string;
-    value: string;
-  };
-  officePhone: {
-    text: string;
-    value: string;
-  };
+  cepAddress: CepAdderssProps;
+  officePhone: string;
   officeEmail: string;
-  officeCnpj: {
-    text: string;
-    value: string;
-  };
+  officeCnpj: string;
 }
 
 export interface UserMedicModelProps {
@@ -90,27 +65,12 @@ export interface UserMedicModelProps {
   email: string;
   password: string;
   confirmPassword: string;
-  phone: {
-    text: string;
-    value: string;
-  };
+  phone: string;
   crm: string;
   crmUf: string;
   active: boolean;
-  Address: {
-    addressCity: string;
-    addressComplement: string;
-    addressDistrict: string;
-    addressNumber: string;
-    addressState: string;
-    addressStreet: string;
-    addressZipcode: string;
-  };
-  CepData: {
-    CepAddress?: CepAdderssProps;
-    text: string;
-    value: string;
-  };
+  cep: string;
+  cepAddress: CepAdderssProps;
 }
 
 const profileType = ["ADMIN", "ADVOGADO", "MEDICO"] as const;

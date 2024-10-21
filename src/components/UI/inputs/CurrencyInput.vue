@@ -1,49 +1,30 @@
 <template>
   <v-text-field
-    v-model="value"
-    :label="label"
+    v-model="inputValue"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :disabled="disabled"
     :type="type"
     :error-messages="errorMessage"
-    :variant="variant"
-    :density="destiny"
+    variant="outlined"
+    density="compact"
     base-color="primary"
     color="primary"
     :prepend-inner-icon="icon"
     :readonly="readonly"
     :clearable="clearable"
-    @update:model-value="sendValue"
+    @input="inputFormated($event.target.value)"
     @click:clear="clearValue"
   />
 </template>
 
 <script setup lang="ts">
-type NumperPlaces = 2 | 3 | 4;
-
 import { useField } from "vee-validate";
-
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { textRequired } from "../utils";
 
-type InputType =
-  | "underlined"
-  | "filled"
-  | "outlined"
-  | "plain"
-  | "solo"
-  | "solo-inverted"
-  | "solo-filled"
-  | undefined;
-
-type InputDestinyProps = "comfortable" | "compact" | "default";
-
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: undefined,
-  },
   icon: {
     type: String,
     default: "",
@@ -80,24 +61,22 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  numberPlaces: {
-    type: Number as PropType<NumperPlaces>,
-    default: 2,
-  },
-  variant: {
-    type: String as PropType<InputType>,
-    default: "outlined",
-  },
-  destiny: {
-    type: String as PropType<InputDestinyProps>,
-    default: "compact",
-  },
 });
 
-const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
+const emit = defineEmits(["update:modelValue"]);
 
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
+
+const modelValue = defineModel<string | undefined>({
+  default: undefined,
+});
+
+const numeralValue = ref(0);
+const inputValue = ref();
 const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+  return props.label.toLowerCase() || "currency";
 });
 
 const validationRules = computed<MaybeRef>(() => {
@@ -129,7 +108,6 @@ const validationRules = computed<MaybeRef>(() => {
 
             if (!valid) {
               value.value = "";
-              sendValue();
             }
 
             return valid;
@@ -143,7 +121,9 @@ const validationRules = computed<MaybeRef>(() => {
 
   return toTypedSchema(
     zod
-      .string()
+      .string({
+        invalid_type_error: textRequired,
+      })
       .nullish()
       .optional()
       .refine(
@@ -166,7 +146,6 @@ const validationRules = computed<MaybeRef>(() => {
 
           if (!valid) {
             value.value = "";
-            sendValue();
           }
 
           return valid;
@@ -183,53 +162,88 @@ const { value, errorMessage } = useField<string | undefined>(
   validationRules,
   {
     syncVModel: true,
+    initialValue: modelValue.value?.replaceAll(".", "").replaceAll(",", "."),
   }
 );
 
-value.value = props.modelValue;
+// Sincronizar valor inicial do model com o input formatado
+onMounted(() => {
+  if (modelValue.value) {
+    const aValue = modelValue.value?.replaceAll(".", "").replaceAll(",", ".");
 
-const sendValue = () => {
-  if (!value.value) return;
+    if (isNaN(Number(aValue))) {
+      inputValue.value = "";
+      numeralValue.value = 0;
+      value.value = "";
+      emit("update:modelValue", value.value);
+      return;
+    }
 
-  const { amountFormated } = useUtils();
+    const aValueNumber = Number(aValue) / 100;
 
-  const asValue = value.value
+    inputValue.value = amountFormated(aValueNumber);
+    value.value = aValueNumber.toFixed(2);
+  }
+});
+
+watch(
+  () => modelValue.value,
+  (newValue) => {
+    if (newValue) {
+      const aValue = newValue.replaceAll(".", "").replaceAll(",", ".");
+      if (isNaN(Number(aValue))) {
+        inputValue.value = "";
+        numeralValue.value = 0;
+        value.value = "";
+        emit("update:modelValue", value.value);
+        return;
+      }
+      inputFormated(newValue);
+    }
+  }
+);
+
+const inputFormated = (event: string) => {
+  const digitedValue = event;
+  const asValue = digitedValue
     .replaceAll(".", "")
     .replaceAll(",", "")
     .replaceAll("R$", "");
 
-  // tratar para o valor máximo ser 1 quatrilhão, já é mais que suficente
   if (asValue.length >= 21) {
+    inputValue.value = "";
+    numeralValue.value = 0;
+    value.value = "";
+    emit("update:modelValue", numeralValue.value);
+
     return;
   }
 
-  // tratamento para se, digitar qualquer coisa diferente de um número, retornar vazio
-  if (isNaN(Number(asValue))) {
-    emit("update:modelValue", "");
-    emit("update:modelNumber", 0);
+  numeralValue.value = Number(asValue) / 100;
+
+  if (numeralValue.value < 0) {
+    inputValue.value = "";
+    numeralValue.value = 0;
+    value.value = "";
+    emit("update:modelValue", value.value);
     return;
   }
 
-  // faz a divizão por 100 para já calcular o valor para usuário
-  const numeralValue = Number(asValue) / 100;
-
-  // se for um valor zerado, então retornar vazio
-  if (numeralValue <= 0) {
-    emit("update:modelValue", "");
-    emit("update:modelNumber", 0);
-    return;
+  if (numeralValue.value > 0) {
+    emit("update:modelValue", numeralValue.value.toFixed(2));
+    inputValue.value = amountFormated(numeralValue.value);
+    value.value = numeralValue.value.toFixed(2);
   }
-
-  // formatar o valor para um valor numeral, ou de modeda
-  value.value = amountFormated(numeralValue, false).trim();
-
-  //retornar valor formadato para input onde quer que ele seja usado
-  emit("update:modelValue", value.value);
-  emit("update:modelNumber", numeralValue);
 };
 
 const clearValue = () => {
   emit("update:modelValue", "");
-  emit("update:modelNumber", 0);
+};
+
+const amountFormated = (valueCurrency: number) => {
+  return new Intl.NumberFormat("pt-BR", {
+    currency: "BRL",
+    minimumFractionDigits: 2,
+  }).format(valueCurrency);
 };
 </script>

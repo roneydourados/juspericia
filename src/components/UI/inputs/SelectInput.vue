@@ -1,7 +1,7 @@
 <template>
   <v-select
     v-model="value"
-    :label="label"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :disabled="disabled"
     :error-messages="errorMessage"
@@ -20,20 +20,9 @@
     @input="handleChange"
     @update:modelValue="$emit('update:modelValue')"
   >
-    <template v-slot:item="{ props, item }">
-      <slot name="items" :props="props" :item="item" />
-    </template>
-
-    <template v-slot:prepend-item>
-      <slot name="prepend-item" />
-    </template>
-
-    <template v-slot:append-item>
-      <slot name="append-item" />
-    </template>
-
-    <template v-slot:selection="{ item }">
-      <slot name="item-selection" :props="props" :item="item" />
+    <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+      <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+      <slot v-else :name="name" v-bind="slotProps" />
     </template>
   </v-select>
 </template>
@@ -101,6 +90,10 @@ const props = defineProps({
 });
 
 defineEmits(["update:modelValue"]);
+
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
 
 const fieldName = computed<MaybeRef>(() => {
   return props.label;

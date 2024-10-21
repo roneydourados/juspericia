@@ -3,7 +3,7 @@
   <span style="display: none">{{ showPassword }}</span>
   <v-text-field
     v-model="value"
-    :label="label"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :disabled="disabled"
     :type="showPassword ? 'text' : 'password'"
@@ -73,6 +73,10 @@ const props = defineProps({
     default: 255,
   },
 });
+
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
 
 const showPassword = ref(false);
 
