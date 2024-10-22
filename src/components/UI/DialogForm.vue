@@ -6,7 +6,7 @@
     :width="mobile ? '' : width"
   >
     <v-card rounded="lg">
-      <v-toolbar density="default" color="grey-lighten-4">
+      <v-toolbar density="default" color="background">
         <v-toolbar-title>
           <span
             class="d-flex align-center text-subtitle-2 text-md-body-2 text-lg-h6 font-weight-bold"

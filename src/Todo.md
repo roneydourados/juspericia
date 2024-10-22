@@ -1,7 +1,7 @@
 # pendentes
 
 [] - Para perfil de médico remover informações de valor
-[] - Pensar em um cache para componentes que seão selects
+[] - Pensar em um cache para componentes que serão selects
 [] - Dash horas trabalhadas médico
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
 [] - Dashboard ADM, montar grafico das solicitações por status
@@ -16,7 +16,7 @@
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
 [] - Médico que mais teve revisão de laudo
-[] - Agendamento eftuar um cadastro de horários para os médicos
+[x] - Agendamento eftuar um cadastro de horários para os médicos
 [] - Mostrar idade e data de nascimento do paciente nos detalhes de consulta
 [] - Botão para abrir chatgpt
 [] - Remover imprimir na digitação do laudo
@@ -29,7 +29,17 @@
 [] - Na agenda mostar count de consultas
 [] - Na digitação do laudo ter possibilidade de colocar anexo
 
-[] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOS
+# correções
+
+[x] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOS
+
+# horários do médico
+
+[] - Ao clicar em agendar uma consulta, aparecer os horários
+[] - Definir parametro que horas começar até que horas termina
+[] - Ao selecionar os médico, retornar os horários disponíveis e já agendado
+[] - Deixar apenas clicar em horas não agendada, sendo de seleção única, ou seja, não permitir clicar em vários ao mesmo tempo
+[] - Ao selecionar a data, recarregar todos os horários
 
 # entregue
 

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-card flat :disabled="disabled">
     <v-row dense>
       <v-col
         cols="1"
@@ -11,12 +11,16 @@
         {{ slot }}
       </v-col>
     </v-row>
-  </v-container>
+  </v-card>
 </template>
 
 <script setup lang="ts">
-// Definindo a data de hoje e o horário inicial e final
-const today = new Date().toISOString().split("T")[0];
+defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
 const startTime = ref("08:00");
 const endTime = ref("22:00");
 
@@ -66,11 +70,11 @@ const isBooked = (slot: string) => {
 }
 
 .time-slot:hover {
-  background-color: #f0f0f0;
+  background-color: rgb(var(--v-theme-background)) !important;
 }
 
 .booked {
-  background-color: #42a5f5;
+  background-color: rgb(var(--v-theme-primary)) !important;
   color: white;
   font-weight: bold;
 }
