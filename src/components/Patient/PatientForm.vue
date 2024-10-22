@@ -112,7 +112,7 @@
             label="Cep"
             icon="mdi-map-marker-radius-outline"
             :clearable="true"
-            v-model="model.cep"
+            v-model="model.cepAddress.cep"
             v-model:model-address="model.cepAddress"
           />
         </v-col>
@@ -198,7 +198,7 @@ const props = defineProps({
 const { mobile } = useDisplay();
 const itemStore = usePatientStore();
 const auth = useAuthStore();
-const { formatTelephoneNumber } = useUtils();
+//const { formatTelephoneNumber } = useUtils();
 
 const emit = defineEmits(["close"]);
 
@@ -218,7 +218,6 @@ const model = ref({
   email: "",
   motherName: "",
   phone: "",
-  cep: "",
   cepAddress: {
     cep: "",
     logradouro: "",
@@ -279,7 +278,6 @@ const clearModel = () => {
     email: "",
     motherName: "",
     phone: "",
-    cep: "",
     sexy: undefined,
     status: "A",
     cepAddress: {
@@ -302,7 +300,6 @@ const loadModel = () => {
     surname: props.data.surname ?? "",
     birthDate: props.data.birthDate ?? "",
     cpf: props.data.cpf ?? "",
-    cep: props.data.Address.addressZipcode ?? "",
     rg: props.data.rg ?? "",
     email: props.data.email ?? "",
     motherName: props.data.motherName ?? "",
@@ -342,7 +339,7 @@ const create = async () => {
       addressNumber: model.value.cepAddress?.numero ?? "",
       addressState: model.value.cepAddress?.uf ?? "",
       addressStreet: model.value.cepAddress?.logradouro ?? "",
-      addressZipcode: model.value.cep ?? "",
+      addressZipcode: model.value.cepAddress?.cep ?? "",
     },
   });
 };
@@ -369,7 +366,7 @@ const update = async () => {
       addressNumber: model.value.cepAddress?.numero ?? "",
       addressState: model.value.cepAddress?.uf ?? "",
       addressStreet: model.value.cepAddress?.logradouro ?? "",
-      addressZipcode: model.value.cep ?? "",
+      addressZipcode: model.value.cepAddress?.cep ?? "",
     },
   });
 };

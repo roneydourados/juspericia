@@ -11,7 +11,7 @@
               label="Cep"
               icon="mdi-map-marker-radius-outline"
               :clearable="true"
-              v-model="model.cep"
+              v-model="model.cepAddress.cep"
               v-model:model-address="model.cepAddress"
             />
           </v-col>

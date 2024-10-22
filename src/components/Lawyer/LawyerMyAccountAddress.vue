@@ -66,15 +66,7 @@
 <script setup lang="ts">
 const emit = defineEmits(["update"]);
 const model = defineModel<UserModelProps>("model", {
-  default: () => ({
-    cep: "",
-    logradouro: "",
-    complemento: "",
-    bairro: "",
-    localidade: "",
-    uf: "",
-    numero: "",
-  }),
+  default: () => ({}),
 });
 
 const submitForm = () => {

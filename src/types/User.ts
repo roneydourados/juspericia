@@ -69,7 +69,6 @@ export interface UserMedicModelProps {
   crm: string;
   crmUf: string;
   active: boolean;
-  cep: string;
   cepAddress: CepAdderssProps;
 }
 

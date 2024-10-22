@@ -153,11 +153,13 @@ const validationRules = computed<MaybeRef>(() => {
   return toTypedSchema(zod.string().nullish().optional().or(zod.number()));
 });
 
-const { value, errorMessage, handleBlur, handleChange } = useField<
-  string | object | number
->(fieldName, validationRules, {
-  syncVModel: true,
-});
+const { value, errorMessage } = useField<string | object | number>(
+  fieldName,
+  validationRules,
+  {
+    syncVModel: true,
+  }
+);
 
 const handleComplet = () => {
   emit("update:modelValue", value.value);
