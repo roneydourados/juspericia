@@ -16,7 +16,9 @@
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
 
-[] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOS
+# Correções
+
+[x] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOSrm
 
 # entregue
 
