@@ -1,7 +1,7 @@
 <template>
   <v-text-field
-    v-model="value"
-    :label="label"
+    v-model="inputValue"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :disabled="disabled"
     :type="type"
@@ -14,27 +14,18 @@
     :prepend-inner-icon="icon"
     :readonly="readonly"
     :clearable="clearable"
-    @blur="handleBlur"
-    @input="handleChange"
-    @update:model-value="sendValue"
+    @input="inputFormated($event.target.value)"
     @click:clear="clearValue"
   />
 </template>
 
 <script setup lang="ts">
-type NumperPlaces = 2 | 3 | 4;
-
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-
-import { textRequired, textRequiredMin } from "../utils";
+import { textRequired } from "../utils";
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: undefined,
-  },
   icon: {
     type: String,
     default: "",
@@ -59,10 +50,6 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
   readonly: {
     type: Boolean,
     default: false,
@@ -75,16 +62,22 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  numberPlaces: {
-    type: Number as PropType<NumperPlaces>,
-    default: 2,
-  },
 });
 
-const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
+const emit = defineEmits(["update:modelValue"]);
 
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
+
+const modelValue = defineModel<string | undefined>({
+  default: undefined,
+});
+
+const numeralValue = ref(0);
+const inputValue = ref();
 const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+  return props.label.toLowerCase() || "currency-input";
 });
 
 const validationRules = computed<MaybeRef>(() => {
@@ -104,7 +97,7 @@ const validationRules = computed<MaybeRef>(() => {
               valid = val.length >= props.min;
             }
 
-            if (valid && val) {
+            if (valid) {
               if (val.includes(" ")) {
                 valid = false;
               } else {
@@ -116,7 +109,6 @@ const validationRules = computed<MaybeRef>(() => {
 
             if (!valid) {
               value.value = "";
-              sendValue();
             }
 
             return valid;
@@ -130,7 +122,9 @@ const validationRules = computed<MaybeRef>(() => {
 
   return toTypedSchema(
     zod
-      .string()
+      .string({
+        invalid_type_error: textRequired,
+      })
       .nullish()
       .optional()
       .refine(
@@ -153,7 +147,6 @@ const validationRules = computed<MaybeRef>(() => {
 
           if (!valid) {
             value.value = "";
-            sendValue();
           }
 
           return valid;
@@ -165,64 +158,93 @@ const validationRules = computed<MaybeRef>(() => {
   );
 });
 
-const { value, errorMessage, handleBlur, handleChange } = useField<
-  string | undefined
->(fieldName, validationRules, {
-  syncVModel: true,
+const { value, errorMessage } = useField<string | undefined>(
+  fieldName,
+  validationRules,
+  {
+    syncVModel: true,
+    initialValue: modelValue.value?.replaceAll(".", "").replaceAll(",", "."),
+  }
+);
+
+// Sincronizar valor inicial do model com o input formatado
+onMounted(() => {
+  if (modelValue.value) {
+    const aValue = modelValue.value?.replaceAll(".", "").replaceAll(",", ".");
+
+    if (isNaN(Number(aValue))) {
+      inputValue.value = "";
+      numeralValue.value = 0;
+      value.value = "";
+      emit("update:modelValue", value.value);
+      return;
+    }
+
+    const aValueNumber = Number(aValue) / 100;
+
+    inputValue.value = amountFormated(aValueNumber);
+    value.value = aValueNumber.toFixed(2);
+  }
 });
 
-value.value = props.modelValue;
+watch(
+  () => modelValue.value,
+  (newValue) => {
+    if (newValue) {
+      const aValue = newValue.replaceAll(".", "").replaceAll(",", ".");
+      if (isNaN(Number(aValue))) {
+        inputValue.value = "";
+        numeralValue.value = 0;
+        value.value = "";
+        emit("update:modelValue", value.value);
+        return;
+      }
+      inputFormated(newValue);
+    }
+  }
+);
 
-const sendValue = () => {
-  if (!value.value) return;
-
-  const { decimalFormated } = useUtils();
-
-  const asValue = value.value
+const inputFormated = (event: string) => {
+  const digitedValue = event;
+  const asValue = digitedValue
     .replaceAll(".", "")
     .replaceAll(",", "")
-    .replaceAll("%", "");
+    .replaceAll("R$", "");
 
-  // tratar para o valor máximo ser 1 quatrilhão, já é mais que suficente
   if (asValue.length >= 21) {
+    inputValue.value = "";
+    numeralValue.value = 0;
+    value.value = "";
+    emit("update:modelValue", numeralValue.value);
+
     return;
   }
 
-  // tratamento para se, digitar qualquer coisa diferente de um número, retornar vazio
-  if (isNaN(Number(asValue))) {
-    emit("update:modelValue", "");
-    emit("update:modelNumber", 0);
+  numeralValue.value = Number(asValue) / 100;
+
+  if (numeralValue.value < 0) {
+    inputValue.value = "";
+    numeralValue.value = 0;
+    value.value = "";
+    emit("update:modelValue", value.value);
     return;
   }
 
-  // faz a divizão por 100 para já calcular o valor para usuário
-  let numeralValue = 0;
-
-  if (props.numberPlaces === 2) {
-    numeralValue = Number(asValue) / 100;
-  } else if (props.numberPlaces === 3) {
-    numeralValue = Number(asValue) / 1000;
-  } else if (props.numberPlaces === 4) {
-    numeralValue = Number(asValue) / 10000;
+  if (numeralValue.value > 0) {
+    emit("update:modelValue", numeralValue.value.toFixed(2));
+    inputValue.value = amountFormated(numeralValue.value);
+    value.value = numeralValue.value.toFixed(2);
   }
-
-  // se for um valor zerado, então retornar vazio
-  if (numeralValue <= 0) {
-    emit("update:modelValue", "");
-    emit("update:modelNumber", 0);
-    return;
-  }
-
-  // formatar o valor para um valor numeral
-  value.value = `${decimalFormated(numeralValue, 2)}`;
-
-  //retornar valor formadato para input onde quer que ele seja usado
-  emit("update:modelValue", value.value);
-  emit("update:modelNumber", numeralValue);
 };
 
 const clearValue = () => {
   emit("update:modelValue", "");
-  emit("update:modelNumber", 0);
+};
+
+const amountFormated = (valueCurrency: number) => {
+  return new Intl.NumberFormat("pt-BR", {
+    currency: "BRL",
+    minimumFractionDigits: 2,
+  }).format(valueCurrency);
 };
 </script>

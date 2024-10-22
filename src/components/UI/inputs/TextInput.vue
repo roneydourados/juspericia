@@ -1,7 +1,7 @@
 <template>
   <v-textarea
     v-model="value"
-    :label="label"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :disabled="disabled"
     :type="type"
@@ -27,7 +27,7 @@ import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
-import { textRequired, textRequiredMin } from "../utils";
+import { textRequired } from "../utils";
 
 const props = defineProps({
   modelValue: {
@@ -87,6 +87,10 @@ const props = defineProps({
     default: true,
   },
 });
+
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
 
 const fieldName = computed<MaybeRef>(() => {
   return props.label;

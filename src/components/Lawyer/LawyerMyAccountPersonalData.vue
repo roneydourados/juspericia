@@ -16,8 +16,7 @@
           </v-col>
           <v-col cols="12" lg="3">
             <TelefoneInput
-              v-model:model-number="model.phone.value"
-              v-model:model-value="model.phone.text"
+              v-model:model-number="model.phone"
               label="Telefone"
               placeholder="Telefone"
             />
@@ -34,8 +33,7 @@
         <v-row dense>
           <v-col cols="12" lg="3">
             <CPFInput
-              v-model:model-value="model.cpfCnpj.text"
-              v-model:model-number="model.cpfCnpj.value"
+              v-model="model.cpfCnpj"
               label="CPF"
               placeholder="CPF"
               required

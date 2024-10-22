@@ -1,7 +1,7 @@
 <template>
   <v-text-field
     v-model="value"
-    :label="label"
+    :label="dynamicLabel"
     :placeholder="placeholder"
     :error-messages="errorMessage"
     :disabled="disabled"
@@ -69,6 +69,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "update:modelNumber"]);
+
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
 
 const fieldName = computed<MaybeRef>(() => {
   return props.label;

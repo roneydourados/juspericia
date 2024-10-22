@@ -27,16 +27,14 @@
       <v-row dense>
         <v-col cols="12" lg="4">
           <TelefoneInput
-            v-model:model-number="model.phone.value"
-            v-model:model-value="model.phone.text"
+            v-model="model.phone"
             label="Telefone"
             placeholder="Telefone"
           />
         </v-col>
         <v-col cols="12" lg="4">
           <CPFInput
-            v-model:model-value="model.cpfCnpj.text"
-            v-model:model-number="model.cpfCnpj.value"
+            v-model="model.cpfCnpj"
             label="CPF"
             placeholder="CPF"
             required
@@ -100,15 +98,9 @@ const model = ref({
   id: 0,
   name: "",
   email: "",
-  cpfCnpj: {
-    text: "",
-    value: "",
-  },
+  cpfCnpj: "",
   password: "",
-  phone: {
-    text: "",
-    value: "",
-  },
+  phone: "",
   active: true,
 });
 
@@ -116,14 +108,8 @@ const clearModel = () => {
   model.value = {
     id: 0,
     name: "",
-    phone: {
-      text: "",
-      value: "",
-    },
-    cpfCnpj: {
-      text: "",
-      value: "",
-    },
+    phone: "",
+    cpfCnpj: "",
     password: "",
     email: "",
     active: true,
@@ -142,14 +128,8 @@ const loadModel = () => {
   model.value = {
     id: props.data.id ?? 0,
     name: props.data.name ?? "",
-    phone: {
-      text: formatTelephoneNumber(props.data.phone ?? ""),
-      value: props.data.phone ?? "",
-    },
-    cpfCnpj: {
-      text: formatCPFOrCNPJ(props.data.cpfCnpj ?? ""),
-      value: props.data.cpfCnpj ?? "",
-    },
+    phone: props.data.phone ?? "",
+    cpfCnpj: props.data.cpfCnpj ?? "",
     password: "",
     email: props.data.email ?? "",
     active: props.data.active ?? false,
@@ -176,8 +156,8 @@ const create = async () => {
   await userAdminStore.create({
     email: model.value.email,
     name: model.value.name,
-    phone: model.value.phone.value,
-    cpfCnpj: model.value.cpfCnpj.value,
+    phone: model.value.phone,
+    cpfCnpj: model.value.cpfCnpj,
     password: model.value.password,
   });
 };
@@ -188,8 +168,8 @@ const update = async () => {
     id: model.value.id,
     email: model.value.email,
     name: model.value.name,
-    phone: model.value.phone.value,
-    cpfCnpj: model.value.cpfCnpj.value,
+    phone: model.value.phone,
+    cpfCnpj: model.value.cpfCnpj,
     password: model.value.password,
     active: model.value.active,
   });

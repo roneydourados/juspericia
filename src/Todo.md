@@ -29,6 +29,8 @@
 [] - Na agenda mostar count de consultas
 [] - Na digitação do laudo ter possibilidade de colocar anexo
 
+[] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOS
+
 # entregue
 
 [x] - Agendar uma solicitação de consulta

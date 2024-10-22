@@ -27,8 +27,7 @@
       <v-row dense>
         <v-col cols="12" lg="4">
           <CPFInput
-            v-model:model-value="model.cpf.text"
-            v-model:model-number="model.cpf.value"
+            v-model="model.cpf"
             label="CPF"
             placeholder="CPF"
             required
@@ -62,8 +61,7 @@
         </v-col>
         <v-col cols="12" lg="4">
           <TelefoneInput
-            v-model:model-number="model.phone.value"
-            v-model:model-value="model.phone.text"
+            v-model="model.phone"
             label="Whatsapp"
             placeholder="Whatsapp"
             required
@@ -114,24 +112,22 @@
             label="Cep"
             icon="mdi-map-marker-radius-outline"
             :clearable="true"
-            v-model:model-value="model.CepData.text"
-            v-model:model-number="model.CepData.value"
-            v-model:model-address="model.CepData.CepAddress"
-            @update:model-address="setAddress($event)"
+            v-model="model.cep"
+            v-model:model-address="model.cepAddress"
           />
         </v-col>
         <v-col cols="12" lg="7">
           <StringInput
             label="Rua"
             :clearable="true"
-            v-model:model-value="model.Address.addressStreet"
+            v-model:model-value="model.cepAddress.logradouro"
           />
         </v-col>
         <v-col cols="12" lg="2">
           <StringInput
             label="Nº"
             :clearable="true"
-            v-model:model-value="model.Address.addressNumber"
+            v-model:model-value="model.cepAddress.numero"
           />
         </v-col>
       </v-row>
@@ -140,18 +136,18 @@
           <StringInput
             label="Bairro"
             :clearable="true"
-            v-model:model-value="model.Address.addressDistrict"
+            v-model:model-value="model.cepAddress.bairro"
           />
         </v-col>
         <v-col cols="12" lg="5">
           <StringInput
             label="Cidade"
             :clearable="true"
-            v-model:model-value="model.Address.addressCity"
+            v-model:model-value="model.cepAddress.localidade"
           />
         </v-col>
         <v-col cols="12" md="2">
-          <StatesSelectSearch v-model="model.Address.addressState" />
+          <StatesSelectSearch v-model="model.cepAddress.uf" />
         </v-col>
       </v-row>
       <v-row dense>
@@ -159,7 +155,7 @@
           <StringInput
             label="Complemento"
             :clearable="true"
-            v-model:model-value="model.Address.addressComplement"
+            v-model:model-value="model.cepAddress.complemento"
           />
         </v-col>
       </v-row>
@@ -178,7 +174,7 @@
 
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
-import { formatCPF, formatCEP } from "@brazilian-utils/brazilian-utils";
+///import { formatCPF, formatCEP } from "@brazilian-utils/brazilian-utils";
 
 const props = defineProps({
   show: {
@@ -217,33 +213,23 @@ const model = ref({
   name: "",
   surname: "",
   birthDate: "",
-  cpf: {
-    text: "",
-    value: "",
-  },
+  cpf: "",
   rg: "",
   email: "",
   motherName: "",
-  phone: {
-    text: "",
-    value: "",
-  },
+  phone: "",
+  cep: "",
+  cepAddress: {
+    cep: "",
+    logradouro: "",
+    complemento: "",
+    bairro: "",
+    localidade: "",
+    uf: "",
+    numero: "",
+  } as CepAdderssProps,
   sexy: undefined as string | undefined,
   status: "A",
-  Address: {
-    addressCity: "",
-    addressComplement: "",
-    addressDistrict: "",
-    addressNumber: "",
-    addressState: "",
-    addressStreet: "",
-    addressZipcode: "",
-  },
-  CepData: {
-    CepAddress: undefined as CepAdderssProps | undefined,
-    text: "",
-    value: "",
-  },
   lawyer: undefined as UserProps | undefined,
 });
 
@@ -274,13 +260,13 @@ const submitForm = async (data: any) => {
   }
 };
 
-const setAddress = (address: CepAdderssProps) => {
-  model.value.Address.addressCity = address.localidade ?? "";
-  model.value.Address.addressDistrict = address.bairro ?? "";
-  model.value.Address.addressState = address.uf ?? "";
-  model.value.Address.addressComplement = address.complemento ?? "";
-  model.value.Address.addressStreet = address.logradouro ?? "";
-};
+// const setAddress = (address: CepAdderssProps) => {
+//   model.value.Address.addressCity = address.localidade ?? "";
+//   model.value.Address.addressDistrict = address.bairro ?? "";
+//   model.value.Address.addressState = address.uf ?? "";
+//   model.value.Address.addressComplement = address.complemento ?? "";
+//   model.value.Address.addressStreet = address.logradouro ?? "";
+// };
 
 const clearModel = () => {
   model.value = {
@@ -288,32 +274,22 @@ const clearModel = () => {
     name: "",
     surname: "",
     birthDate: "",
-    cpf: {
-      text: "",
-      value: "",
-    },
+    cpf: "",
     rg: "",
     email: "",
     motherName: "",
-    phone: {
-      text: "",
-      value: "",
-    },
+    phone: "",
+    cep: "",
     sexy: undefined,
     status: "A",
-    Address: {
-      addressCity: "",
-      addressComplement: "",
-      addressDistrict: "",
-      addressNumber: "",
-      addressState: "",
-      addressStreet: "",
-      addressZipcode: "",
-    },
-    CepData: {
-      CepAddress: undefined,
-      text: "",
-      value: "",
+    cepAddress: {
+      cep: "",
+      logradouro: "",
+      complemento: "",
+      bairro: "",
+      localidade: "",
+      uf: "",
+      numero: "",
     },
     lawyer: undefined,
   };
@@ -325,32 +301,22 @@ const loadModel = () => {
     name: props.data.name ?? "",
     surname: props.data.surname ?? "",
     birthDate: props.data.birthDate ?? "",
-    cpf: {
-      text: formatCPF(props.data.cpf ?? ""),
-      value: props.data.cpf ?? "",
-    },
+    cpf: props.data.cpf ?? "",
+    cep: props.data.Address.addressZipcode ?? "",
     rg: props.data.rg ?? "",
     email: props.data.email ?? "",
     motherName: props.data.motherName ?? "",
-    phone: {
-      text: formatTelephoneNumber(props.data.phone ?? ""),
-      value: props.data.phone ?? "",
-    },
+    phone: props.data.phone ?? "",
     sexy: props.data.sexy,
     status: props.data.status ?? "A",
-    Address: {
-      addressCity: props.data.Address.addressCity ?? "",
-      addressComplement: props.data.Address.addressComplement ?? "",
-      addressDistrict: props.data.Address.addressDistrict ?? "",
-      addressNumber: props.data.Address.addressNumber ?? "",
-      addressState: props.data.Address.addressState ?? "",
-      addressStreet: props.data.Address.addressStreet ?? "",
-      addressZipcode: props.data.Address.addressZipcode ?? "",
-    },
-    CepData: {
-      CepAddress: undefined,
-      text: formatCEP(props.data.Address.addressZipcode ?? ""),
-      value: props.data.Address.addressZipcode ?? "",
+    cepAddress: {
+      bairro: props.data.Address.addressDistrict ?? "",
+      complemento: props.data.Address.addressComplement ?? "",
+      localidade: props.data.Address.addressCity ?? "",
+      uf: props.data.Address.addressState ?? "",
+      numero: props.data.Address.addressNumber ?? "",
+      logradouro: props.data.Address.addressStreet ?? "",
+      cep: props.data.Address.addressZipcode ?? "",
     },
     lawyer: props.data.User,
   };
@@ -361,22 +327,22 @@ const create = async () => {
     name: model.value.name,
     surname: model.value.surname,
     birthDate: model.value.birthDate,
-    cpf: model.value.cpf.value,
+    cpf: model.value.cpf,
     email: model.value.email,
     motherName: model.value.motherName,
-    phone: model.value.phone.value,
+    phone: model.value.phone,
     rg: model.value.rg,
     sexy: model.value.sexy,
     status: model.value.status,
     userId: model.value.lawyer?.id,
     Address: {
-      addressCity: model.value.Address.addressCity,
-      addressComplement: model.value.Address.addressComplement,
-      addressDistrict: model.value.Address.addressDistrict,
-      addressNumber: model.value.Address.addressNumber,
-      addressState: model.value.Address.addressState,
-      addressStreet: model.value.Address.addressStreet,
-      addressZipcode: model.value.CepData.value,
+      addressCity: model.value.cepAddress?.localidade ?? "",
+      addressComplement: model.value.cepAddress?.complemento ?? "",
+      addressDistrict: model.value.cepAddress?.bairro ?? "",
+      addressNumber: model.value.cepAddress?.numero ?? "",
+      addressState: model.value.cepAddress?.uf ?? "",
+      addressStreet: model.value.cepAddress?.logradouro ?? "",
+      addressZipcode: model.value.cep ?? "",
     },
   });
 };
@@ -388,22 +354,22 @@ const update = async () => {
     name: model.value.name,
     surname: model.value.surname,
     birthDate: model.value.birthDate,
-    cpf: model.value.cpf.value,
+    cpf: model.value.cpf,
     email: model.value.email,
     motherName: model.value.motherName,
-    phone: model.value.phone.value,
+    phone: model.value.phone,
     rg: model.value.rg,
     sexy: model.value.sexy,
     status: model.value.status,
     userId: model.value.lawyer?.id,
     Address: {
-      addressCity: model.value.Address.addressCity,
-      addressComplement: model.value.Address.addressComplement,
-      addressDistrict: model.value.Address.addressDistrict,
-      addressNumber: model.value.Address.addressNumber,
-      addressState: model.value.Address.addressState,
-      addressStreet: model.value.Address.addressStreet,
-      addressZipcode: model.value.CepData.value,
+      addressCity: model.value.cepAddress?.localidade ?? "",
+      addressComplement: model.value.cepAddress?.complemento ?? "",
+      addressDistrict: model.value.cepAddress?.bairro ?? "",
+      addressNumber: model.value.cepAddress?.numero ?? "",
+      addressState: model.value.cepAddress?.uf ?? "",
+      addressStreet: model.value.cepAddress?.logradouro ?? "",
+      addressZipcode: model.value.cep ?? "",
     },
   });
 };

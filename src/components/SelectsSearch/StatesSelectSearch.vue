@@ -32,7 +32,7 @@ import { getStates } from "@brazilian-utils/brazilian-utils";
 const props = defineProps({
   modelValue: {
     type: String,
-    required: true,
+    default: undefined,
   },
   label: {
     type: String,

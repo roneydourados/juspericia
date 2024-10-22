@@ -24,16 +24,14 @@
         <v-row dense>
           <v-col cols="12" lg="3">
             <TelefoneInput
-              v-model:model-number="model.officePhone.value"
-              v-model:model-value="model.officePhone.text"
+              v-model="model.officePhone"
               label="Telefone"
               placeholder="Telefone"
             />
           </v-col>
           <v-col cols="12" lg="3">
             <CNPJInput
-              v-model:model-value="model.officeCnpj.text"
-              v-model:model-number="model.officeCnpj.value"
+              v-model="model.officeCnpj"
               label="CNPJ"
               placeholder="CNPJ"
               required

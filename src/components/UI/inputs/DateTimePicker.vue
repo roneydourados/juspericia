@@ -7,7 +7,7 @@
       base-color="primary"
       color="primary"
       type="datetime-local"
-      :label="label"
+      :label="dynamicLabel"
       :error-messages="errorMessage"
       :clearable="clearable"
       :disabled="disabled"
@@ -109,6 +109,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
 
 const date = ref();
 const menu = ref(false);

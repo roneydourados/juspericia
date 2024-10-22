@@ -4,7 +4,7 @@
     v-model:model-value="value"
     :item-title="itemTitle"
     :item-value="itemValue"
-    :label="label"
+    :label="dynamicLabel"
     :items="items"
     variant="outlined"
     density="compact"
@@ -105,6 +105,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+
+const dynamicLabel = computed(() =>
+  props.required ? props.label + "*" : props.label
+);
 
 const autocomplete = ref();
 const nextField = ref<HTMLDivElement | null>(null);

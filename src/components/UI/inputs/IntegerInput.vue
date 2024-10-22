@@ -1,112 +1,99 @@
 <template>
   <v-text-field
-    class="inputPrice"
+    ref="textField"
     v-model="value"
-    :label="label"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    type="number"
+    :label="dynamicLabel"
     :error-messages="errorMessage"
+    :disabled="disabled"
+    :readonly="readonly"
+    :required="required"
+    autocomplete="section-blue one-time-code"
     variant="outlined"
     density="compact"
     base-color="primary"
     color="primary"
-    :prepend-inner-icon="icon"
-    :readonly="readonly"
-    :clearable="clearable"
-    @keyup.up="$event.preventDefault()"
-    @keydown.up="$event.preventDefault()"
-    @keyup.down="$event.preventDefault()"
-    @keydown.down="$event.preventDefault()"
+    @keypress="onKeyPress"
   />
 </template>
 
-<script setup lang="ts">
-import { useField } from "vee-validate";
+<script lang="ts" setup>
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { textRequired, textRequiredMin } from "../utils";
+import { useField } from "vee-validate";
+
+const textField = ref(null);
+
+const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
-  icon: {
-    type: String,
-    default: "",
-  },
   label: {
     type: String,
-    default: "",
+    required: true,
   },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
+  modelValue: {
+    type: String, // Alterado para String para manter os zeros à esquerda
+    required: true,
   },
   required: {
     type: Boolean,
     default: false,
   },
+  min: {
+    type: Number,
+  },
   readonly: {
     type: Boolean,
     default: false,
   },
-  min: {
-    type: Number,
-    default: 0,
-  },
-  max: {
-    type: Number,
-    default: 0,
-  },
-  clearable: {
+  disabled: {
     type: Boolean,
     default: false,
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
-
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
+const fieldName = computed(() => {
+  return props.label || "integer-input";
 });
 
-const validationRules = computed<MaybeRef>(() => {
+const onKeyPress = (event: any) => {
+  const isNumber = /^[0-9]$/;
+  if (!isNumber.test(event.key)) {
+    event.preventDefault();
+  }
+};
+
+// Converter valor para número apenas na validação
+const validationRules = computed(() => {
   if (props.required) {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: textRequired,
-          required_error: textRequired,
+          invalid_type_error: "Valor inválido",
+          required_error: "Campo não pode ser vazio!",
         })
-        .min(1, textRequired)
+        .min(1, "Campo não pode ser vazio!")
         .refine(
           (val: string) => {
-            if (props.min > 0) {
-              return val.length >= props.min;
+            let valid = true;
+
+            if (valid) {
+              if (val.includes(" ")) {
+                valid = false;
+              } else {
+                valid = !isNaN(
+                  Number(val.trim().replaceAll(".", "").replaceAll(",", ""))
+                );
+              }
             }
 
-            return true;
-          },
-          {
-            message: textRequiredMin.replaceAll("$car", props.min.toString()),
-          }
-        )
-        .refine(
-          (val: string) => {
-            if (props.max > 0) {
-              return Number(val) <= props.max;
+            if (!valid) {
+              value.value = "";
             }
 
-            return true;
+            return valid;
           },
           {
-            message: `Valor máximo para este campo é de ${props.max}`,
+            message: "Valor inválido!!",
           }
         )
     );
@@ -114,51 +101,46 @@ const validationRules = computed<MaybeRef>(() => {
 
   return toTypedSchema(
     zod
-      .string()
+      .string({
+        invalid_type_error: "Valor inválido",
+      })
       .nullish()
       .optional()
       .refine(
         (val: string | undefined | null) => {
-          if (props.min > 0 && val) {
-            return val.length >= props.min;
+          let valid = true;
+
+          if (valid && val) {
+            if (val.includes(" ")) {
+              valid = false;
+            } else {
+              valid = !isNaN(
+                Number(val.trim().replaceAll(".", "").replaceAll(",", ""))
+              );
+            }
           }
 
-          return true;
-        },
-        {
-          message: textRequiredMin.replaceAll("$car", props.min.toString()),
-        }
-      )
-      .refine(
-        (val: string | undefined | null) => {
-          if (props.max > 0 && val) {
-            return Number(val) <= props.max;
+          if (!valid) {
+            value.value = "";
           }
 
-          return true;
+          return valid;
         },
         {
-          message: `Valor máximo para este campo é de ${props.max}`,
+          message: "Valor inválido!!",
         }
       )
   );
 });
 
-const { value, errorMessage } = useField<string>(fieldName, validationRules, {
+const { value, errorMessage } = useField(fieldName, validationRules, {
   syncVModel: true,
 });
+
+const dynamicLabel = props.required ? `${props.label}*` : props.label;
+
+// Emitir o valor como número ao invés de string
+watch(value, (newValue) => {
+  emit("update:modelValue", newValue === "" ? null : newValue); // Mantém string e zeros à esquerda
+});
 </script>
-
-<style scoped>
-.inputPrice :deep(input[type="number"]) {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-.inputPrice :deep(input::-webkit-outer-spin-button),
-.inputPrice :deep(input::-webkit-inner-spin-button) {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-}
-</style>
