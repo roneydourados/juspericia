@@ -93,7 +93,7 @@
         <slot />
       </div>
     </v-main>
-    <v-footer app name="footer" color="blue-grey-lighten-5" height="30">
+    <v-footer app name="footer" height="30">
       <span class="text-caption">
         &copy; Yenor Code - {{ new Date().getFullYear() }}
       </span>

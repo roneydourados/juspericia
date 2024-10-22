@@ -7,7 +7,7 @@
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>
-        <v-col cols="12" lg="6">
+        <v-col cols="12" lg="9">
           <SelectSearchMedic v-model="model.medic" label="Médico" required />
         </v-col>
         <v-col cols="12" lg="3">
@@ -17,77 +17,107 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="3">
-          <InputTime v-model="model.scheduleHour" label="Horário" required />
-        </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12">
-          <strong>Dados da solicitação de consulta</strong>
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Solicitado:</span>
-          <span class="font-weight-bold">
-            {{ moment(solicitation.dateOpen).format("DD/MM/YYYY") }}
-          </span>
-        </v-col>
-        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Tipo benefício:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.BenefitType?.name }}
-          </span>
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Finalidade:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.ReportPurpose?.name }}
-            {{
-              solicitation.processSituation
-                ? solicitation.processSituation === "PD"
-                  ? "Processo distribuido"
-                  : "Processo andamento"
-                : ""
-            }}
-          </span>
-        </v-col>
+        <v-col cols="4">
+          <v-row dense>
+            <v-col cols="12">
+              <strong>Dados da solicitação de consulta</strong>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col
+              cols="12"
+              lg="6"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <span>Solicitado:</span>
+              <span class="font-weight-bold">
+                {{ moment(solicitation.dateOpen).format("DD/MM/YYYY") }}
+              </span>
+            </v-col>
+            <v-col
+              cols="12"
+              lg="4"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <span>Tipo benefício:</span>
+              <span class="font-weight-bold">
+                {{ solicitation.BenefitType?.name }}
+              </span>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col
+              cols="12"
+              lg="4"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <span>Finalidade:</span>
+              <span class="font-weight-bold">
+                {{ solicitation.ReportPurpose?.name }}
+                {{
+                  solicitation.processSituation
+                    ? solicitation.processSituation === "PD"
+                      ? "Processo distribuido"
+                      : "Processo andamento"
+                    : ""
+                }}
+              </span>
+            </v-col>
 
-        <v-col
-          v-if="solicitation.proccessNumber"
-          cols="12"
-          lg="4"
-          class="d-flex align-center"
-          style="gap: 0.5rem"
-        >
-          <span>Nº Processo:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.proccessNumber }}
-          </span>
+            <v-col
+              v-if="solicitation.proccessNumber"
+              cols="12"
+              lg="4"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <span>Nº Processo:</span>
+              <span class="font-weight-bold">
+                {{ solicitation.proccessNumber }}
+              </span>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col
+              cols="12"
+              lg="6"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <span>Solicitante:</span>
+              <span class="font-weight-bold">
+                {{ solicitation.Patient?.User?.name }}
+              </span>
+            </v-col>
+            <v-col
+              cols="12"
+              lg="6"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <span>Escritório:</span>
+              <strong>
+                {{ solicitation.Patient?.User?.officeName }}
+              </strong>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col cols="12" class="d-flex align-center" style="gap: 0.5rem">
+              <span>Paciente:</span>
+              <span class="font-weight-bold">
+                {{ solicitation.Patient?.name }}
+                {{ solicitation.Patient?.surname }}
+              </span>
+            </v-col>
+          </v-row>
         </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Solicitante:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.Patient?.User?.name }}
-          </span>
-        </v-col>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Escritório:</span>
-          <strong>
-            {{ solicitation.Patient?.User?.officeName }}
-          </strong>
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Paciente:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.Patient?.name }} {{ solicitation.Patient?.surname }}
-          </span>
+        <v-col cols="8">
+          <MedicHours />
         </v-col>
       </v-row>
     </FormCrud>
