@@ -64,14 +64,32 @@
             </v-tooltip>
           </v-btn>
         </div>
+        <v-btn
+          :icon="
+            $currentTheme === MAIN_THEME
+              ? 'mdi-weather-sunny'
+              : 'mdi-weather-night'
+          "
+          variant="tonal"
+          size="small"
+          class="mr-4"
+          @click="toggleTheme"
+        >
+        </v-btn>
       </template>
     </v-app-bar>
 
-    <v-main
-      class="container d-flex justify-center"
-      style="background-color: #f7f9fc"
-    >
-      <div class="w-100 px-8 py-8">
+    <v-main class="container d-flex justify-center">
+      <!-- <div class="w-100 px-8 py-8">
+        <slot />
+      </div> -->
+      <div
+        class="w-100 pa-4"
+        style="
+          background-color: rgb(var(--v-theme-background)) !important;
+          height: 100dvh;
+        "
+      >
         <slot />
       </div>
     </v-main>
@@ -85,7 +103,12 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
+import { useThemeStore } from "@/store/theme";
+import { MAIN_THEME_DARK, MAIN_THEME } from "@/utils/vuetifyTheme";
+import { useDisplay, useTheme } from "vuetify";
+
+const storeTheme = useThemeStore();
+const globalTheme = useTheme();
 
 const { mobile } = useDisplay();
 // const screen = useScreenStore();
@@ -98,6 +121,7 @@ const drawer = ref(true);
 // const $currentScreen = computed(() => screen.$currentScreen);
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
+const $currentTheme = computed(() => storeTheme.$theme);
 
 onMounted(() => {
   closeDrawer();
@@ -111,5 +135,16 @@ const closeDrawer = () => {
 
 const handleNewSolicitation = async () => {
   await router.push("/solicitations/new");
+};
+
+const toggleTheme = () => {
+  storeTheme.storeTheme(
+    globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME
+  );
+
+  globalTheme.global.name.value =
+    globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME;
+
+  storeTheme.getTheme();
 };
 </script>

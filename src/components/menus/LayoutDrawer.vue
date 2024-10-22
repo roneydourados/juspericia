@@ -1,7 +1,6 @@
 <template>
   <v-navigation-drawer
     v-model="changeDrawer"
-    color="#fff"
     @update:model-value="$emit('update:drawer', changeDrawer)"
   >
     <template v-slot:prepend>
@@ -119,7 +118,7 @@ const logout = () => {
 
 <style scoped>
 .item-menu {
-  background-color: rgb(var(--v-theme-backMenu)) !important;
+  background-color: rgb(var(--v-theme-primary)) !important;
   color: rgb(var(--v-theme-itemMenu)) !important;
 }
 </style>

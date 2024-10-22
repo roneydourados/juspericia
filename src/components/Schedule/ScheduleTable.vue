@@ -136,6 +136,7 @@
             hide-header
             elevation="8"
             rounded="lg"
+            color="primary"
             @update:model-value="getSchedules"
           />
         </v-locale-provider>
