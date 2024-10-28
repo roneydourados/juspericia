@@ -9,6 +9,7 @@
         :class="['time-slot', { booked: isSelectedHour(slot) }]"
       >
         {{ slot.scheduleHour }}
+        {{ slot.patientConsultationId }}
       </v-col>
     </v-row>
   </v-card>
@@ -91,7 +92,7 @@ const isSelectedHour = (hour: HourProps) => {
 }
 
 .time-slot:hover {
-  background-color: #bdbdbd; /*rgb(var(--v-theme-primary)) !important;*/
+  background-color: #bdbdbd;
 }
 
 .booked {

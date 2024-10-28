@@ -107,11 +107,11 @@
             v-model="hours"
             v-model:hour="hour"
           />
-          <pre>{{ hour }}</pre>
+          <!-- <pre>{{ hour }}</pre> -->
         </v-col>
       </v-row>
     </FormCrud>
-    <!-- <pre>{{ model }}</pre> -->
+    <pre>{{ $schedules }}</pre>
   </DialogForm>
 </template>
 
@@ -138,7 +138,6 @@ const startTime = ref("08:00");
 const endTime = ref("22:00");
 
 const emit = defineEmits(["scheduled"]);
-const disablebHours = ref(true);
 const show = defineModel<boolean>({ default: false });
 const scheduleStore = useScheduleStore();
 const { mobile } = useDisplay();
@@ -153,9 +152,14 @@ const model = ref({
 
 const $schedules = computed(() => scheduleStore.$all);
 
-onMounted(async () => {
-  await timeSlots();
-});
+watch(
+  () => show.value,
+  async (value) => {
+    if (value) {
+      await timeSlots();
+    }
+  }
+);
 
 // Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
 const timeSlots = async () => {
@@ -172,20 +176,33 @@ const timeSlots = async () => {
       (s) =>
         s.medicId === model.value.medic?.id &&
         s.scheduleDate === model.value.scheduleDate &&
-        s.patientConsultationId === props.solicitation.id &&
         s.scheduleHour ===
           start.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })
     );
+
+    const filter = $schedules.value.find(
+      (s) =>
+        s.medicId === model.value.medic?.id &&
+        s.scheduleDate === model.value.scheduleDate &&
+        s.scheduleHour ===
+          start.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+    );
+
+    const solicitationId = isSelected ? filter?.id : props.solicitation.id;
+
     hours.value.push({
       scheduleHour: start.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
       medicId: model.value.medic?.id,
-      patientConsultationId: props.solicitation.id,
+      patientConsultationId: solicitationId,
       scheduleDate: model.value.scheduleDate,
       isSelected,
     });
@@ -225,7 +242,8 @@ const handleEnabledDisabledHours = async () => {
 
 const handleDialog = () => {
   show.value = false;
-  disablebHours.value = true;
+  //hour.value = {};
+  //disablebHours.value = true;
 };
 
 const getSchedules = async () => {
