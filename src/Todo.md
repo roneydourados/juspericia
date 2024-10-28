@@ -1,14 +1,11 @@
 # pendentes
 
-[] - Para perfil de médico remover informações de valor
 [] - Pensar em um cache para componentes que serão selects
 [] - Dash horas trabalhadas médico
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
 [] - Dashboard ADM, montar grafico das solicitações por status
 [] - Destacar qual médico esta com mais havilações
 [] - Acrescentar um menu de filtros em meus saldos
-[] - Agenda somente fica disponível para usuários administrador
-[] - Tirar do advogado botão cancelar depois de pago ou andamento a solicitação
 [] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
 [] - Integração com api de pagamentos
 [] - Integração com api para envio de mensagem automática via whatsapp
@@ -16,32 +13,36 @@
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
 [] - Médico que mais teve revisão de laudo
-[x] - Agendamento eftuar um cadastro de horários para os médicos
-[] - Mostrar idade e data de nascimento do paciente nos detalhes de consulta
-[] - Botão para abrir chatgpt
-[] - Remover imprimir na digitação do laudo
-[] - Criar modelo de layout no cadatro de modelo de laudo, tambem obrigar a informar um modelo de laudo na digitação do mesmo.
 [] - Financeiro do médico, pagamento por laudo
 [] - Anexar documentos por solicitação e disponibilizar os anexos para médico
-[] - Remover o nome do médico da solicitação na tela do advogado
 [] - Paginação de dados
 [] - Habilitar botão de correção depois do atendimento de laudo
-[] - Na agenda mostar count de consultas
 [] - Na digitação do laudo ter possibilidade de colocar anexo
 
 # correções
 
-[x] - CORRIGIR COMPONENTES DE ENDEREÇO SEPARADO EM OUTROS ARQUIVOS
-
 # horários do médico
 
-[] - Ao clicar em agendar uma consulta, aparecer os horários
 [] - Definir parametro que horas começar até que horas termina
-[] - Ao selecionar os médico, retornar os horários disponíveis e já agendado
-[] - Deixar apenas clicar em horas não agendada, sendo de seleção única, ou seja, não permitir clicar em vários ao mesmo tempo
-[] - Ao selecionar a data, recarregar todos os horários
 
 # entregue
+
+# ### 28/10/2024
+
+[x] - Na agenda mostar count de consultas
+[x] - Remover o nome do médico da solicitação na tela do advogado
+[x] - Criar modelo de layout no cadatro de modelo de laudo, tambem obrigar a informar um modelo de laudo na digitação do mesmo.
+[x] - Mostrar idade e data de nascimento do paciente nos detalhes de consulta
+[x] - Botão para abrir e interagir com chatgpt
+[x] - Tirar do advogado botão cancelar depois de pago ou andamento a solicitação
+[x] - Agendamento eftuar um cadastro de horários para os médicos
+[x] - Ao selecionar os médico, retornar os horários disponíveis e já agendado
+[x] - Deixar apenas clicar em horas não agendada, sendo de seleção única, ou seja, não permitir clicar em vários ao mesmo tempo
+[x] - Ao selecionar a data, recarregar todos os horários
+[x] - Ao clicar em agendar uma consulta, aparecer os horários
+[x] - Para perfil de médico remover informações de valor
+[x] - Agenda somente fica disponível para usuários administrador
+[x] - Remover imprimir na digitação do laudo
 
 [x] - Agendar uma solicitação de consulta
 [x] - Mostrar agenda separada por médico

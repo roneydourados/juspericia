@@ -3,7 +3,7 @@
     <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
       Dados da consulta
     </div>
-    <v-row v-if="$single?.Schedule && $single?.Schedule.length > 0" dense>
+    <!-- <v-row v-if="$single?.Schedule && $single?.Schedule.length > 0" dense>
       <v-col cols="12">
         <div class="mb-2 font-weight-bold" style="font-size: 0.9rem">
           Dados agendamento
@@ -27,7 +27,7 @@
         </div>
         <v-divider />
       </v-col>
-    </v-row>
+    </v-row> -->
     <v-row dense>
       <v-col cols="12">
         <InfoLabel

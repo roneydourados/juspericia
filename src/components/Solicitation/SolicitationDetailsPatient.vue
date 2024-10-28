@@ -38,7 +38,11 @@
         <InfoLabel
           title="Nascimento"
           font-size="1"
-          :content="moment($single?.Patient?.birthDate).format('DD/MM/YYYY')"
+          :content="`${moment($single?.Patient?.birthDate).format(
+            'DD/MM/YYYY'
+          )} - ${
+            $single?.Patient?.birthDate ? age($single?.Patient?.birthDate) : ''
+          }`"
         />
       </v-col>
     </v-row>
@@ -64,7 +68,7 @@
 <script setup lang="ts">
 import moment from "moment";
 
-const { formatTelephoneNumber, formatCPFOrCNPJ } = useUtils();
+const { formatTelephoneNumber, formatCPFOrCNPJ, age } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 
 const $single = computed(() => storeConsultation.$single);

@@ -50,7 +50,7 @@
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Laudo médico
           </div>
-          <div
+          <!-- <div
             class="font-weight-bold mb-4 mt-4 text-info"
             style="font-size: 1rem"
           >
@@ -62,7 +62,7 @@
                 "DD/MM/YYYY"
               )
             }}
-          </div>
+          </div> -->
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Descrição de laudo médico
           </div>

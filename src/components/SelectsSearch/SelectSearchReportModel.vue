@@ -1,36 +1,34 @@
 <template>
-  <div class="d-flex" style="gap: 0.5rem">
-    <AutoCompleteInput
-      v-model="value"
-      v-model:search="search"
-      :label="label"
-      placeholder="Digite algo para pesquisar..."
-      item-title="name"
-      item-value="id"
-      return-object
-      :required="required"
-      icon="mdi-magnify"
-      :items="$all"
-      :loading="loadingSearch"
-      @click="search = ''"
-      @update:model-value="$emit('update:modelValue', $event)"
-      :clearable="clearable"
-      :disabled="disabled"
-    >
-      <template #items="{ item, props }">
-        <v-list-item v-bind="props" :title="item.raw.title" density="compact">
-        </v-list-item>
-      </template>
+  <AutoCompleteInput
+    v-model="value"
+    v-model:search="search"
+    :label="label"
+    placeholder="Digite algo para pesquisar..."
+    item-title="name"
+    item-value="id"
+    return-object
+    :required="required"
+    icon="mdi-magnify"
+    :items="$all"
+    :loading="loadingSearch"
+    @click="search = ''"
+    @update:model-value="$emit('update:modelValue', $event)"
+    :clearable="clearable"
+    :disabled="disabled"
+  >
+    <template #items="{ item, props }">
+      <v-list-item v-bind="props" :title="item.raw.title" density="compact">
+      </v-list-item>
+    </template>
 
-      <template #selection="{ item }">
-        <div class="d-flex align-center">
-          <span class="ml-2 d-inline-block text-truncate">
-            {{ item.raw.title }}
-          </span>
-        </div>
-      </template>
-    </AutoCompleteInput>
-  </div>
+    <template #selection="{ item }">
+      <div class="d-flex align-center">
+        <span class="ml-2 d-inline-block text-truncate">
+          {{ item.raw.title }}
+        </span>
+      </div>
+    </template>
+  </AutoCompleteInput>
 </template>
 
 <script setup lang="ts">

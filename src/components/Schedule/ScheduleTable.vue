@@ -27,6 +27,12 @@
               </v-col>
             </v-row>
           </v-card-title>
+          <v-card-subtitle>
+            <span>
+              Encontrado um total de
+              {{ $shedules.length }} agendamento(s)
+            </span>
+          </v-card-subtitle>
           <v-cad-text>
             <div class="w-100 px-4">
               <v-list density="compact">

@@ -7,20 +7,36 @@
       <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
         <v-card flat rounded="lg">
           <v-row dense class="pa-4">
-            <v-col cols="12" lg="7">
+            <v-col cols="12" lg="8">
               <SelectSearchReportModel
                 v-model="model.reportModel"
                 label="Carregar Modelo"
                 @update:model-value="handleReportModel"
               />
             </v-col>
-            <v-col cols="12" lg="2" />
+
             <v-col
               cols="12"
-              lg="3"
-              class="d-flex justify-end"
+              lg="4"
+              class="d-flex align-center mt-n5"
               style="gap: 0.5rem"
             >
+              <v-btn
+                icon
+                variant="text"
+                class="text-none"
+                size="small"
+                @click="handleChatGpt"
+              >
+                <ChatGptIcon height="38" />
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Perguntar para o ChatGPT
+                </v-tooltip>
+              </v-btn>
               <v-btn
                 variant="flat"
                 color="info"
@@ -30,16 +46,6 @@
                 @click="emit('close')"
               >
                 Voltar
-              </v-btn>
-              <v-btn
-                color="info"
-                prepend-icon="mdi-printer"
-                size="small"
-                variant="flat"
-                class="text-none"
-                @click="handlePDF"
-              >
-                Imprimir
               </v-btn>
               <v-btn
                 color="primary"
@@ -58,7 +64,7 @@
           </v-card-text>
         </v-card>
       </FormCrud>
-      <pre>{{ $sheduleConsultation }}</pre>
+      <!-- <pre>{{ $sheduleConsultation }}</pre> -->
     </v-card>
     <Dialog
       title="Alterar conteúdo"
@@ -135,5 +141,9 @@ const handleReportModel = async () => {
 const getReportModelContent = () => {
   model.value.content = $reportModel.value?.content || "";
   showAlterContent.value = false;
+};
+
+const handleChatGpt = () => {
+  window.open("https://chatgpt.com", "_blank");
 };
 </script>
