@@ -23,11 +23,7 @@ export const useAxios = () => {
       return config;
     },
     function (error) {
-      if (
-        error.response.status === 401 ||
-        error.response.status === 403
-        //error.response.status === 404
-      ) {
+      if (error.response.status === 401 || error.response.status === 403) {
         const auth = useAuthStore();
 
         auth.logout();
@@ -108,11 +104,7 @@ export const useAxios = () => {
           break;
       }
 
-      if (
-        error.response.status === 401 ||
-        error.response.status === 403
-        //error.response.status === 404
-      ) {
+      if (error.response.status === 401 || error.response.status === 403) {
         const auth = useAuthStore();
 
         auth.logout();

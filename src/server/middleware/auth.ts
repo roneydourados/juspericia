@@ -6,13 +6,12 @@ export default defineEventHandler((event) => {
   const { verifyToken } = useJwtToken();
   // se não contem /api significa que é roda do lado client, então deixar passar!
   const clientSideRoutes = !event.path.includes("/api");
-  // if (clientSideRoutes) {
-  //   return;
-  // }
+
   // se for um endpoint liberado então passar
   if (openEndpoints.includes(event.path) || clientSideRoutes) {
     return;
   }
+
   // caso contrário verificar se existe autorização
   const headers = getHeaders(event);
   if (!headers.authorization) {

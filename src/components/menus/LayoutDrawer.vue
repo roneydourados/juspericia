@@ -32,8 +32,10 @@
         active-class="item-menu"
         @click="handleClick"
       >
-        <template #subtitle>
-          <span style="font-size: 0.8rem">{{ item.title }}</span>
+        <template #title>
+          <span style="font-size: 0.8rem; font-weight: 400">
+            {{ item.title }}
+          </span>
         </template>
       </v-list-item>
     </v-list>

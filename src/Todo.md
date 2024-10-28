@@ -1,3 +1,12 @@
+# dúvidas
+
+O horário inicial/Final de atendimentos para configurar na agenda,
+será global para todos os médicos ou cada médico terá o seu ?
+R:.
+
+O valor a ser pago por laudo para os médicos, será informado no cadastro do laudo ?
+R:.
+
 # pendentes
 
 [] - Pensar em um cache para componentes que serão selects
@@ -21,14 +30,11 @@
 
 # correções
 
-# horários do médico
-
-[] - Definir parametro que horas começar até que horas termina
-
 # entregue
 
 # ### 28/10/2024
 
+[x] - Segurança, proteger rotas acessiveis pelo usário admin na api
 [x] - Na agenda mostar count de consultas
 [x] - Remover o nome do médico da solicitação na tela do advogado
 [x] - Criar modelo de layout no cadatro de modelo de laudo, tambem obrigar a informar um modelo de laudo na digitação do mesmo.
@@ -43,6 +49,8 @@
 [x] - Para perfil de médico remover informações de valor
 [x] - Agenda somente fica disponível para usuários administrador
 [x] - Remover imprimir na digitação do laudo
+
+# ### outras datas
 
 [x] - Agendar uma solicitação de consulta
 [x] - Mostrar agenda separada por médico
