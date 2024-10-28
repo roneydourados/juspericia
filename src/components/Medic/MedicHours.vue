@@ -8,6 +8,7 @@
         @click="
           (slot.patientConsultationId === props.solicitation.id ||
             !slot.isSelected) &&
+            !isPastHour(slot) &&
             setBlockHour(slot)
         "
         :class="[
@@ -15,8 +16,9 @@
           {
             booked: isSelectedHour(slot),
             'disabled-slot':
-              slot.isSelected &&
-              slot.patientConsultationId !== props.solicitation.id,
+              (slot.isSelected &&
+                slot.patientConsultationId !== props.solicitation.id) ||
+              isPastHour(slot),
           },
         ]"
       >
@@ -27,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
+
 const props = defineProps({
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
@@ -42,14 +46,27 @@ const hoursSelected = defineModel<HourProps[]>({
   default: [],
 });
 
-// Variável para armazenar o horário selecionado
 const hour = defineModel<HourProps>("hour", {
   default: {} as HourProps,
 });
 
+// Função para verificar se o horário é no passado para o dia atual
+const isPastHour = (slot: HourProps) => {
+  // pegar a data e hora atual
+  const now = moment();
+  const nowHour = now.format("HH:mm");
+  const nowDate = now.format("YYYY-MM-DD");
+
+  // verificar se a data do slot é igual a data atual
+  if (moment(slot.scheduleDate).format("YYYY-MM-DD") !== nowDate) {
+    return false;
+  }
+
+  return moment(slot.scheduleHour, "HH:mm").isBefore(moment(nowHour, "HH:mm"));
+};
+
 // Função para selecionar apenas um horário, desmarcando os demais do mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
 const setBlockHour = (selectedHour: HourProps) => {
-  // Desmarcar todos os horários que têm o mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
   hoursSelected.value.forEach((h) => {
     if (
       h.medicId === selectedHour.medicId &&
@@ -60,7 +77,6 @@ const setBlockHour = (selectedHour: HourProps) => {
     }
   });
 
-  // Marcar o horário atual como selecionado e atribuí-lo à variável `hour`
   const index = hoursSelected.value.findIndex(
     (h) =>
       h.scheduleHour === selectedHour.scheduleHour &&
@@ -74,11 +90,10 @@ const setBlockHour = (selectedHour: HourProps) => {
     hoursSelected.value[index].patientConsultationId === props.solicitation.id
   ) {
     hoursSelected.value[index].isSelected = true;
-    hour.value = hoursSelected.value[index]; // Atribuir o horário selecionado a `hour`
+    hour.value = hoursSelected.value[index];
   }
 };
 
-// Verifica se o horário já está selecionado para aplicar a classe `booked`
 const isSelectedHour = (hour: HourProps) => {
   return hoursSelected.value.some(
     (h) =>
@@ -111,7 +126,6 @@ const isSelectedHour = (hour: HourProps) => {
   font-weight: bold;
 }
 
-/* Novo estilo para horários desabilitados */
 .disabled-slot {
   background-color: lightgray !important;
   color: darkgray;

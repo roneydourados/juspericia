@@ -155,7 +155,6 @@ watch(
   () => show.value,
   (value) => {
     if (value) {
-      //await getSchedules();
       timeSlots();
     }
   }
