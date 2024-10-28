@@ -30,8 +30,20 @@ const hoursSelected = defineModel<HourProps[]>({
   default: [],
 });
 
-// Função para marcar ou desmarcar um horário visualmente
+// Função para selecionar apenas um horário, desmarcando os demais do mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
 const setBlockHour = (hour: HourProps) => {
+  // Desmarcar todos os horários que têm o mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
+  hoursSelected.value.forEach((h) => {
+    if (
+      h.medicId === hour.medicId &&
+      h.patientConsultationId === hour.patientConsultationId &&
+      h.scheduleDate === hour.scheduleDate
+    ) {
+      h.isSelected = false;
+    }
+  });
+
+  // Marcar o horário atual como selecionado
   const index = hoursSelected.value.findIndex(
     (h) =>
       h.scheduleHour === hour.scheduleHour &&
@@ -41,11 +53,8 @@ const setBlockHour = (hour: HourProps) => {
   );
 
   if (index !== -1) {
-    // Alterna o valor `isSelected` se o horário já estiver na lista
-    hoursSelected.value[index].isSelected =
-      !hoursSelected.value[index].isSelected;
+    hoursSelected.value[index].isSelected = true;
   } else {
-    // Adiciona o horário à lista com `isSelected` como true
     hoursSelected.value.push({ ...hour, isSelected: true });
   }
 };
