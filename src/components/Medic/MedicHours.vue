@@ -5,11 +5,22 @@
         cols="1"
         v-for="(slot, index) in hoursSelected"
         :key="index"
-        @click="setBlockHour(slot)"
-        :class="['time-slot', { booked: isSelectedHour(slot) }]"
+        @click="
+          (slot.patientConsultationId === props.solicitation.id ||
+            !slot.isSelected) &&
+            setBlockHour(slot)
+        "
+        :class="[
+          'time-slot',
+          {
+            booked: isSelectedHour(slot),
+            'disabled-slot':
+              slot.isSelected &&
+              slot.patientConsultationId !== props.solicitation.id,
+          },
+        ]"
       >
         {{ slot.scheduleHour }}
-        {{ slot.patientConsultationId }}
       </v-col>
     </v-row>
   </v-card>
@@ -98,5 +109,12 @@ const isSelectedHour = (hour: HourProps) => {
   background-color: rgb(var(--v-theme-primary)) !important;
   color: white;
   font-weight: bold;
+}
+
+/* Novo estilo para horários desabilitados */
+.disabled-slot {
+  background-color: lightgray !important;
+  color: darkgray;
+  cursor: not-allowed;
 }
 </style>

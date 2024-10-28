@@ -21,7 +21,7 @@
             v-model="model.scheduleDate"
             label="Agendar para o dia"
             required
-            @update:model-value="timeSlots"
+            @update:model-value="handleDate"
           />
         </v-col>
       </v-row>
@@ -110,7 +110,7 @@
         </v-col>
       </v-row>
     </FormCrud>
-    <pre>{{ hour }}</pre>
+    <!-- <pre>{{ $schedules }}</pre> -->
   </DialogForm>
 </template>
 
@@ -153,17 +153,16 @@ const $schedules = computed(() => scheduleStore.$all);
 
 watch(
   () => show.value,
-  async (value) => {
+  (value) => {
     if (value) {
-      await timeSlots();
+      //await getSchedules();
+      timeSlots();
     }
   }
 );
 
 // Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
 const timeSlots = async () => {
-  await getSchedules();
-
   hours.value = [];
   hour.value = {};
 
@@ -209,6 +208,11 @@ const timeSlots = async () => {
   }
 };
 
+const handleDate = async () => {
+  await getSchedules();
+  timeSlots();
+};
+
 const submitForm = async () => {
   if (!hour.value.medicId) {
     push.warning("Selecione um horário para agendar a consulta");
@@ -236,13 +240,18 @@ const submitForm = async () => {
 };
 
 const handleEnabledDisabledHours = async () => {
-  await timeSlots();
+  await getSchedules();
+  timeSlots();
 };
 
 const handleDialog = () => {
   show.value = false;
-  //hour.value = {};
-  //disablebHours.value = true;
+  model.value = {
+    medic: undefined,
+    scheduleDate: moment().format("YYYY-MM-DD"),
+    scheduleHour: "",
+  };
+  scheduleStore.clear();
 };
 
 const getSchedules = async () => {

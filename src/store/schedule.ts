@@ -40,5 +40,10 @@ export const useScheduleStore = defineStore("schedule", () => {
     schedules.value = data;
   };
 
-  return { $all, $single, create, update, destroy, show, index };
+  const clear = () => {
+    schedules.value = [];
+    schedule.value = {};
+  };
+
+  return { $all, $single, create, update, destroy, show, index, clear };
 });
