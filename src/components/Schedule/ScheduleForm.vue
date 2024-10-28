@@ -104,6 +104,7 @@
             :solicitation="solicitation"
             :medic-id="model.medic?.id"
             v-model="hours"
+            v-model:hour="hour"
           />
         </v-col>
       </v-row>
@@ -140,6 +141,7 @@ const show = defineModel<boolean>({ default: false });
 const scheduleStore = useScheduleStore();
 const { mobile } = useDisplay();
 const hours = ref<HourProps[]>([]);
+const hour = ref<HourProps>({});
 
 const model = ref({
   medic: undefined as UserProps | undefined,

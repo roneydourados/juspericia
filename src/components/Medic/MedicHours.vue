@@ -30,6 +30,10 @@ const hoursSelected = defineModel<HourProps[]>({
   default: [],
 });
 
+const hour = defineModel<HourProps>("hour", {
+  default: {},
+});
+
 // Função para selecionar apenas um horário, desmarcando os demais do mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
 const setBlockHour = (hour: HourProps) => {
   // Desmarcar todos os horários que têm o mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
