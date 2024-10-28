@@ -27,7 +27,7 @@
       <v-row dense>
         <v-col cols="12" lg="4">
           <TelefoneInput
-            v-model:model-number="model.phone"
+            v-model="model.phone"
             label="Telefone"
             placeholder="Telefone"
           />

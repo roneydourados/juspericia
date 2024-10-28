@@ -12,6 +12,8 @@ export const MainThemeColors = {
   surface: "#FFFFFF",
   itemMenu: "#ffffff",
   itemInternalMenu: "#000",
+  tooltipColor: "#E3F2FD",
+  tooltipTextColor: "#424242",
 };
 
 const MainDarkThemeColors = {
@@ -26,6 +28,8 @@ const MainDarkThemeColors = {
   surface: "#1E223B",
   itemMenu: "#FFFFFF",
   itemInternalMenu: "#ffffff",
+  tooltipColor: "#E3F2FD",
+  tooltipTextColor: "#424242",
 };
 
 export const MAIN_THEME = "mainTheme";

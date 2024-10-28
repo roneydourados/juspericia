@@ -9,7 +9,11 @@
       :loading="loading"
     >
       <template v-slot:item.name="{ item }">
-        <span style="cursor: pointer" class="d-flex align-center text-info">
+        <span
+          style="cursor: pointer"
+          class="d-flex align-center text-info"
+          @click="getItemEdit(item)"
+        >
           <v-icon icon="mdi-account-outline" size="24" start />
           <span>{{ item.name }}</span>
         </span>
