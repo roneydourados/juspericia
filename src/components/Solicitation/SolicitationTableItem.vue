@@ -326,7 +326,7 @@
       !showSolicitationSchedule ? (selected = undefined) : selected
     "
     @scheduled="getSolicitations()"
-    width="40%"
+    width="50%"
   />
   <DialogLoading :dialog="loading" />
   <Dialog

@@ -12,3 +12,11 @@ export interface ScheduleProps {
   publicId?: string;
   status?: string;
 }
+
+export interface HourProps {
+  medicId?: number;
+  patientConsultationId?: number;
+  scheduleDate?: string;
+  scheduleHour?: string;
+  isSelected?: boolean;
+}

@@ -100,7 +100,11 @@
           <strong>Horários disponíveis</strong>
         </v-col>
         <v-col cols="12">
-          <MedicHours :disabled="disablebHours" />
+          <MedicHours
+            :solicitation="solicitation"
+            :medic-id="model.medic?.id"
+            v-model="hours"
+          />
         </v-col>
       </v-row>
     </FormCrud>
@@ -115,7 +119,7 @@ import { useDisplay } from "vuetify";
 const props = defineProps({
   width: {
     type: String,
-    default: "700",
+    default: "750",
   },
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
@@ -127,17 +131,49 @@ const props = defineProps({
   },
 });
 
+const startTime = ref("08:00");
+const endTime = ref("22:00");
+
 const emit = defineEmits(["scheduled"]);
 const disablebHours = ref(true);
 const show = defineModel<boolean>({ default: false });
 const scheduleStore = useScheduleStore();
 const { mobile } = useDisplay();
+const hours = ref<HourProps[]>([]);
 
 const model = ref({
   medic: undefined as UserProps | undefined,
   scheduleDate: moment().format("YYYY-MM-DD"),
   scheduleHour: "",
 });
+
+const $schedules = computed(() => scheduleStore.$all);
+
+onMounted(async () => {
+  await timeSlots();
+});
+
+// Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
+const timeSlots = async () => {
+  await getSchedules();
+  hours.value = [];
+  const start = new Date(`1970-01-01T${startTime.value}`);
+  const end = new Date(`1970-01-01T${endTime.value}`);
+
+  while (start <= end) {
+    hours.value.push({
+      scheduleHour: start.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      medicId: model.value.medic?.id,
+      patientConsultationId: props.solicitation.id,
+      scheduleDate: model.value.scheduleDate,
+      isSelected: false,
+    });
+    start.setMinutes(start.getMinutes() + 15);
+  }
+};
 
 const submitForm = async () => {
   try {
@@ -160,12 +196,19 @@ const submitForm = async () => {
   }
 };
 
-const handleEnabledDisabledHours = () => {
-  disablebHours.value = !model.value.medic;
+const handleEnabledDisabledHours = async () => {
+  await timeSlots();
 };
 
 const handleDialog = () => {
   show.value = false;
   disablebHours.value = true;
+};
+
+const getSchedules = async () => {
+  await scheduleStore.index({
+    medicId: model.value.medic?.id,
+    scheduleDate: model.value.scheduleDate,
+  });
 };
 </script>

@@ -1,60 +1,65 @@
 <template>
-  <v-card flat :disabled="disabled">
+  <v-card flat :disabled="medicId === 0">
     <v-row dense>
       <v-col
         cols="1"
-        v-for="(slot, index) in timeSlots"
+        v-for="(slot, index) in hoursSelected"
         :key="index"
-        @click="bookSlot(slot)"
-        :class="['time-slot', { booked: isBooked(slot) }]"
+        @click="setBlockHour(slot)"
+        :class="['time-slot', { booked: isSelectedHour(slot) }]"
       >
-        {{ slot }}
+        {{ slot.scheduleHour }}
       </v-col>
     </v-row>
   </v-card>
 </template>
 
 <script setup lang="ts">
-defineProps({
-  disabled: {
-    type: Boolean,
-    default: false,
+const props = defineProps({
+  solicitation: {
+    type: Object as PropType<SolicitationConsultationProps>,
+    default: () => ({}),
+  },
+  medicId: {
+    type: Number,
+    default: 0,
   },
 });
-const startTime = ref("08:00");
-const endTime = ref("22:00");
 
-// Lista de horários agendados
-const bookedSlots = ref<string[]>([]);
-
-// Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
-const timeSlots = computed(() => {
-  const start = new Date(`1970-01-01T${startTime.value}`);
-  const end = new Date(`1970-01-01T${endTime.value}`);
-  const slots: string[] = [];
-  while (start <= end) {
-    slots.push(
-      start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    );
-    start.setMinutes(start.getMinutes() + 15);
-  }
-  return slots;
+const hoursSelected = defineModel<HourProps[]>({
+  default: [],
 });
 
-// Função para agendar ou remover um horário
-const bookSlot = (slot: string) => {
-  if (isBooked(slot)) {
-    // Se o horário já estiver agendado, removê-lo
-    bookedSlots.value = bookedSlots.value.filter((s) => s !== slot);
+// Função para marcar ou desmarcar um horário visualmente
+const setBlockHour = (hour: HourProps) => {
+  const index = hoursSelected.value.findIndex(
+    (h) =>
+      h.scheduleHour === hour.scheduleHour &&
+      h.medicId === hour.medicId &&
+      h.patientConsultationId === hour.patientConsultationId &&
+      h.scheduleDate === hour.scheduleDate
+  );
+
+  if (index !== -1) {
+    // Alterna o valor `isSelected` se o horário já estiver na lista
+    hoursSelected.value[index].isSelected =
+      !hoursSelected.value[index].isSelected;
   } else {
-    // Caso contrário, adicionar à lista de agendados
-    bookedSlots.value.push(slot);
+    // Adiciona o horário à lista com `isSelected` como true
+    hoursSelected.value.push({ ...hour, isSelected: true });
   }
 };
 
-// Verifica se o horário já está agendado
-const isBooked = (slot: string) => {
-  return bookedSlots.value.includes(slot);
+// Verifica se o horário já está selecionado para aplicar a classe `booked`
+const isSelectedHour = (hour: HourProps) => {
+  return hoursSelected.value.some(
+    (h) =>
+      h.scheduleHour === hour.scheduleHour &&
+      h.medicId === hour.medicId &&
+      h.patientConsultationId === hour.patientConsultationId &&
+      h.scheduleDate === hour.scheduleDate &&
+      h.isSelected
+  );
 };
 </script>
 
@@ -66,11 +71,10 @@ const isBooked = (slot: string) => {
   border-radius: 4px;
   text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .time-slot:hover {
-  background-color: rgb(var(--v-theme-background)) !important;
+  background-color: #bdbdbd; /*rgb(var(--v-theme-primary)) !important;*/
 }
 
 .booked {
