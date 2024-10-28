@@ -160,6 +160,7 @@ onMounted(async () => {
 // Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
 const timeSlots = async () => {
   await getSchedules();
+
   hours.value = [];
   hour.value = {};
 
@@ -167,6 +168,17 @@ const timeSlots = async () => {
   const end = new Date(`1970-01-01T${endTime.value}`);
 
   while (start <= end) {
+    const isSelected = $schedules.value.some(
+      (s) =>
+        s.medicId === model.value.medic?.id &&
+        s.scheduleDate === model.value.scheduleDate &&
+        s.patientConsultationId === props.solicitation.id &&
+        s.scheduleHour ===
+          start.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+    );
     hours.value.push({
       scheduleHour: start.toLocaleTimeString([], {
         hour: "2-digit",
@@ -175,20 +187,25 @@ const timeSlots = async () => {
       medicId: model.value.medic?.id,
       patientConsultationId: props.solicitation.id,
       scheduleDate: model.value.scheduleDate,
-      isSelected: false,
+      isSelected,
     });
     start.setMinutes(start.getMinutes() + 15);
   }
 };
 
 const submitForm = async () => {
+  if (!hour.value.medicId) {
+    push.warning("Selecione um horário para agendar a consulta");
+    return;
+  }
+
   try {
     const schedule = {
       title: `Agendamento de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
-      medicId: model.value.medic?.id,
-      scheduleDate: model.value.scheduleDate,
-      scheduleHour: model.value.scheduleHour,
-      patientConsultationId: props.solicitation.id,
+      medicId: hour.value.medicId,
+      scheduleDate: hour.value.scheduleDate,
+      scheduleHour: hour.value.scheduleHour,
+      patientConsultationId: hour.value.patientConsultationId,
     };
 
     if (props.data.id) {
