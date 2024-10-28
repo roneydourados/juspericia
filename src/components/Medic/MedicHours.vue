@@ -58,13 +58,12 @@ const setBlockHour = (selectedHour: HourProps) => {
       h.scheduleDate === selectedHour.scheduleDate
   );
 
-  if (index !== -1) {
+  if (
+    index !== -1 &&
+    hoursSelected.value[index].patientConsultationId === props.solicitation.id
+  ) {
     hoursSelected.value[index].isSelected = true;
     hour.value = hoursSelected.value[index]; // Atribuir o horário selecionado a `hour`
-  } else {
-    const newHour = { ...selectedHour, isSelected: true };
-    hoursSelected.value.push(newHour);
-    hour.value = newHour; // Atribuir o novo horário selecionado a `hour`
   }
 };
 

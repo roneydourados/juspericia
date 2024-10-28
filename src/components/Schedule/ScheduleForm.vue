@@ -107,11 +107,10 @@
             v-model="hours"
             v-model:hour="hour"
           />
-          <!-- <pre>{{ hour }}</pre> -->
         </v-col>
       </v-row>
     </FormCrud>
-    <pre>{{ $schedules }}</pre>
+    <pre>{{ hour }}</pre>
   </DialogForm>
 </template>
 
