@@ -21,6 +21,7 @@
             v-model="model.scheduleDate"
             label="Agendar para o dia"
             required
+            @update:model-value="timeSlots"
           />
         </v-col>
       </v-row>
@@ -106,6 +107,7 @@
             v-model="hours"
             v-model:hour="hour"
           />
+          <pre>{{ hour }}</pre>
         </v-col>
       </v-row>
     </FormCrud>
@@ -159,6 +161,8 @@ onMounted(async () => {
 const timeSlots = async () => {
   await getSchedules();
   hours.value = [];
+  hour.value = {};
+
   const start = new Date(`1970-01-01T${startTime.value}`);
   const end = new Date(`1970-01-01T${endTime.value}`);
 

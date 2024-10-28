@@ -30,36 +30,40 @@ const hoursSelected = defineModel<HourProps[]>({
   default: [],
 });
 
+// Variável para armazenar o horário selecionado
 const hour = defineModel<HourProps>("hour", {
-  default: {},
+  default: {} as HourProps,
 });
 
 // Função para selecionar apenas um horário, desmarcando os demais do mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
-const setBlockHour = (hour: HourProps) => {
+const setBlockHour = (selectedHour: HourProps) => {
   // Desmarcar todos os horários que têm o mesmo `medicId`, `patientConsultationId`, e `scheduleDate`
   hoursSelected.value.forEach((h) => {
     if (
-      h.medicId === hour.medicId &&
-      h.patientConsultationId === hour.patientConsultationId &&
-      h.scheduleDate === hour.scheduleDate
+      h.medicId === selectedHour.medicId &&
+      h.patientConsultationId === selectedHour.patientConsultationId &&
+      h.scheduleDate === selectedHour.scheduleDate
     ) {
       h.isSelected = false;
     }
   });
 
-  // Marcar o horário atual como selecionado
+  // Marcar o horário atual como selecionado e atribuí-lo à variável `hour`
   const index = hoursSelected.value.findIndex(
     (h) =>
-      h.scheduleHour === hour.scheduleHour &&
-      h.medicId === hour.medicId &&
-      h.patientConsultationId === hour.patientConsultationId &&
-      h.scheduleDate === hour.scheduleDate
+      h.scheduleHour === selectedHour.scheduleHour &&
+      h.medicId === selectedHour.medicId &&
+      h.patientConsultationId === selectedHour.patientConsultationId &&
+      h.scheduleDate === selectedHour.scheduleDate
   );
 
   if (index !== -1) {
     hoursSelected.value[index].isSelected = true;
+    hour.value = hoursSelected.value[index]; // Atribuir o horário selecionado a `hour`
   } else {
-    hoursSelected.value.push({ ...hour, isSelected: true });
+    const newHour = { ...selectedHour, isSelected: true };
+    hoursSelected.value.push(newHour);
+    hour.value = newHour; // Atribuir o novo horário selecionado a `hour`
   }
 };
 
