@@ -1,4 +1,3 @@
-import { readFile } from "fs/promises";
 import fs from "fs";
 import path from "path";
 
@@ -133,6 +132,50 @@ export const remove = async (publicId: string) => {
     throw createError({
       statusCode: 500,
       statusMessage: "File Could not be removed",
+    });
+  }
+};
+
+export const uploadMany = async (payload: FileProps[]) => {
+  try {
+    const uploadResults = await Promise.all(
+      payload.map(async (filePayload) => {
+        if (!filePayload.fileData) return;
+
+        const fileExtension = filePayload.fileName?.split(".").pop();
+        const publicId = uuidv7();
+        const fileServerName = `${publicId}.${fileExtension}`;
+
+        const url = await saveFileFromMinion({
+          file: filePayload.fileData!,
+          fileServerName,
+        });
+
+        if (!url) {
+          throw createError({
+            statusCode: 500,
+            statusMessage: `File ${filePayload.fileName} could not be created, url not found`,
+          });
+        }
+
+        return prisma.file.create({
+          data: {
+            fileCategory: filePayload.fileCategory!,
+            fileName: filePayload.fileName!,
+            ownerId: filePayload.ownerId!,
+            fileServerName,
+            publicId,
+          },
+        });
+      })
+    );
+
+    return uploadResults; // Retorna a lista de resultados do upload de arquivos
+  } catch (error) {
+    console.log("🚀 ~ error: create", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Files could not be created",
     });
   }
 };

@@ -24,7 +24,7 @@
               <v-btn
                 icon
                 variant="text"
-                class="text-none"
+                class="text-none ml-3"
                 size="small"
                 @click="handleChatGpt"
               >
@@ -60,11 +60,58 @@
             </v-col>
           </v-row>
           <v-card-text>
-            <CKEditor v-model="model.content" />
+            <CKEditorReport v-model="model.content" />
+            <v-card flat class="mt-4">
+              <v-card-title class="mb-4">
+                <input
+                  type="file"
+                  @change="handleFileUpload"
+                  style="display: none"
+                  ref="fileInput"
+                />
+                <div class="d-flex justify-space-between flex-wrap w-100 px-2">
+                  <span> Anexos: </span>
+                  <v-btn
+                    color="primary"
+                    flat
+                    class="text-none"
+                    size="small"
+                    prepend-icon="mdi-paperclip"
+                    @click="($refs.fileInput as HTMLInputElement).click()"
+                  >
+                    Novo anexo
+                  </v-btn>
+                </div>
+              </v-card-title>
+              <v-card-text>
+                <v-row dense v-for="item in attachments">
+                  <v-col cols="12">
+                    <v-card
+                      rounded="lg"
+                      prepend-icon="mdi-file-document-outline"
+                      rel="noopener"
+                      subtitle="Documento em anxo referente ao laudo"
+                      target="_blank"
+                    >
+                      <template #title>
+                        <span class="text-info">{{ item.fileName }}</span>
+                      </template>
+                      <template #append>
+                        <v-btn
+                          icon="mdi-delete-outline"
+                          color="error"
+                          variant="text"
+                          @click="handleDeleteAttachment(item)"
+                        />
+                      </template>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
           </v-card-text>
         </v-card>
       </FormCrud>
-      <!-- <pre>{{ $sheduleConsultation }}</pre> -->
     </v-card>
     <Dialog
       title="Alterar conteúdo"
@@ -81,23 +128,26 @@
 
 <script setup lang="ts">
 const emit = defineEmits(["close"]);
-const { stringToHandlePDF } = useUtils();
+//const { stringToHandlePDF } = useUtils();
 const reportModelStore = useReportModelStore();
 const scheduleStore = useScheduleStore();
+const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
 
+const showAlterContent = ref(false);
 const model = ref({
   id: 0,
   title: "",
   content: "",
   reportModel: undefined as ReportModelProps | undefined,
 });
-const showAlterContent = ref(false);
+const attachments = ref<FileProps[]>([]);
 
 const $reportModel = computed(() => reportModelStore.$single);
 const $sheduleConsultation = computed(() => scheduleStore.$single);
 const $consultationSolicitation = computed(() => solicitationStore.$single);
+const $consultationReport = computed(() => patientConsultationReport.$single);
 
 onMounted(() => {
   if ($consultationSolicitation.value?.PatientConsultationReport?.content) {
@@ -106,22 +156,37 @@ onMounted(() => {
   }
 });
 
-const handlePDF = () => {
-  stringToHandlePDF(model.value.content);
-};
+// const handlePDF = () => {
+//   stringToHandlePDF(model.value.content);
+// };
 
 const handleSubmit = async () => {
-  await patientConsultationReport.create({
-    content: model.value.content,
-    patientConsultationId: $sheduleConsultation.value?.patientConsultationId,
-  });
+  try {
+    await patientConsultationReport.create({
+      content: model.value.content,
+      patientConsultationId: $sheduleConsultation.value?.patientConsultationId,
+      attachments: attachments.value,
+    });
 
-  await scheduleStore.update({
-    publicId: $sheduleConsultation.value?.publicId,
-    status: "completed",
-  });
+    aqui ainda esta com problemas ver poque la na api não está indo o ownerId
+    if ($consultationReport.value?.id && attachments.value.length > 0) {
+      const payload = attachments.value.map((attachment) => ({
+        ...attachment,
+        ownerId: $consultationReport.value?.id,
+      }));
 
-  emit("close");
+      await fileStore.uploadMany(payload);
+    }
+
+    await scheduleStore.update({
+      publicId: $sheduleConsultation.value?.publicId,
+      status: "completed",
+    });
+  } catch (error) {
+    console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
+  } finally {
+    //emit("close");
+  }
 };
 
 const handleReportModel = async () => {
@@ -145,5 +210,26 @@ const getReportModelContent = () => {
 
 const handleChatGpt = () => {
   window.open("https://chatgpt.com", "_blank");
+};
+
+const handleFileUpload = (event: Event) => {
+  const files = (event.target as HTMLInputElement).files;
+  if (!files) return;
+
+  try {
+    attachments.value.push({
+      fileCategory: "medical-report",
+      fileData: files[0],
+      fileName: files[0].name,
+    });
+  } catch (error) {
+    console.log("🚀 ~ handleFileUpload ~ error:", error);
+  }
+};
+
+const handleDeleteAttachment = (item: FileProps) => {
+  attachments.value = attachments.value.filter(
+    (attachment) => attachment !== item
+  );
 };
 </script>

@@ -136,7 +136,6 @@
         <v-locale-provider locale="pt">
           <v-date-picker
             v-model="model.date"
-            :allowed-dates="allowedDates"
             hide-actions
             hide-title
             hide-header
@@ -189,16 +188,16 @@ const formattedDate = computed(() => {
   return `${diaSemana}, ${dia} de ${mes} de ${ano}`;
 });
 
-const allowedDates = (val: any) => {
-  const today = moment().add(-1, "days");
-  const date = moment(val as Date);
+// const allowedDates = (val: any) => {
+//   const today = moment().add(-1, "days");
+//   const date = moment(val as Date);
 
-  if (moment(date).isBefore(today)) {
-    return false;
-  }
+//   if (moment(date).isBefore(today)) {
+//     return false;
+//   }
 
-  return true;
-};
+//   return true;
+// };
 
 const getSchedules = async () => {
   if (!model.date) return;

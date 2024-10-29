@@ -10,4 +10,5 @@ export interface PatientConsultationReportProps {
   reportDate?: string;
   Medic?: UserProps;
   PatientConsultation?: SolicitationConsultationProps;
+  attachments?: FileProps[];
 }

@@ -61,5 +61,18 @@ export const useFileStore = defineStore("file", () => {
     await api.post("files", formData);
   };
 
-  return { $files, index, remove, download, upload };
+  const uploadMany = async (payload: FileProps[]) => {
+    const formData = new FormData();
+
+    payload.map((file) => {
+      formData.append("file", file.fileData!);
+      formData.append("fileCategory", file.fileCategory!);
+      formData.append("fileName", file.fileName!);
+      formData.append("ownerId", String(file.ownerId));
+    });
+
+    await api.post("files/upload-many", formData);
+  };
+
+  return { $files, index, remove, download, upload, uploadMany };
 });
