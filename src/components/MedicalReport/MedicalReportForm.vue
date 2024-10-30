@@ -168,7 +168,6 @@ const handleSubmit = async () => {
       attachments: attachments.value,
     });
 
-    aqui ainda esta com problemas ver poque la na api não está indo o ownerId
     if ($consultationReport.value?.id && attachments.value.length > 0) {
       const payload = attachments.value.map((attachment) => ({
         ...attachment,
@@ -185,7 +184,7 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {
-    //emit("close");
+    emit("close");
   }
 };
 

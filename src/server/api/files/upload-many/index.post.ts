@@ -10,42 +10,62 @@ export default defineEventHandler(async (event: H3Event) => {
 
   // Itera sobre o formData e agrupa arquivos e seus campos
   body.forEach((value, key) => {
-    // Adiciona um contador para garantir que cada arquivo tenha uma chave exclusiva
-    const [fileKeyBase, field] = key.split(".");
-    const fileKey = `${fileKeyBase}_${fileCounter}`; // fileKey com contador para evitar repetição
+    // Extrai o nome base da chave do arquivo, sem o índice (fileKeyBase) para manter associação com os campos
+    const fileKeyBase = key.split(".")[0];
+    const fileKey = `${fileKeyBase}_${fileCounter}`;
 
+    // Inicializa a entrada no map apenas se não existir para o fileKey atual
     if (!fileDataMap[fileKey]) {
-      fileDataMap[fileKey] = {}; // Cria um novo objeto parcial para cada arquivo
-      fileCounter++; // Incrementa o contador para o próximo arquivo
+      fileDataMap[fileKey] = {};
     }
 
     if (value instanceof File) {
       fileDataMap[fileKey].fileData = value;
       fileDataMap[fileKey].fileName = value.name;
+      fileCounter++; // Incrementa o contador para o próximo arquivo após preencher o fileData
     } else {
-      switch (field) {
+      // Associa os campos correspondentes ao mesmo fileKey
+      switch (fileKeyBase) {
         case "fileCategory":
           fileDataMap[fileKey].fileCategory = value as string;
           break;
         case "ownerId":
           fileDataMap[fileKey].ownerId = parseInt(value as string);
           break;
-        case "fileName":
-          fileDataMap[fileKey].fileName = value as string;
-          break;
       }
     }
   });
 
+  let payload = {} as FileProps;
+
   // Constrói o array final de objetos FileProps para cada arquivo e seus campos
   for (const fileKey in fileDataMap) {
     const data = fileDataMap[fileKey] as FileProps;
-    if (data.fileName) {
-      arrayPayload.push(data);
+
+    // verificar cada um dos campos para garantir que todos os campos necessários estão presentes
+    if (data.fileData && !payload.fileData) {
+      payload.fileData = data.fileData;
+    }
+    if (data.ownerId && !payload.ownerId) {
+      payload.ownerId = data.ownerId;
+    }
+    if (data.fileCategory && !payload.fileCategory) {
+      payload.fileCategory = data.fileCategory;
+    }
+    if (data.fileName && !payload.fileName) {
+      payload.fileName = data.fileName;
+    }
+
+    if (
+      payload.fileData &&
+      payload.ownerId &&
+      payload.fileCategory &&
+      payload.fileName
+    ) {
+      arrayPayload.push(payload);
+      payload = {} as FileProps;
     }
   }
-
-  console.log("🚀 ~ arrayPayload:", arrayPayload);
 
   setResponseStatus(event, 200);
 

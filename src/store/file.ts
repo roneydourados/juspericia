@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import fs from "fs";
 
 export const useFileStore = defineStore("file", () => {
   const { api } = useAxios();
