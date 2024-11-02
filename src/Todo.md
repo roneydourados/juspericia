@@ -11,7 +11,6 @@ R:.
 
 [] - Pensar em um cache para componentes que serão selects
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
-
 [] - Acrescentar um menu de filtros em meus saldos
 [] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
 [] - Integração com api de pagamentos
@@ -21,19 +20,20 @@ R:.
 [] - Enviar email para resetar senha
 [] - Paginação de dados
 [] - Habilitar botão de correção depois do atendimento de laudo
-[] - Na digitação do laudo ter possibilidade de colocar anexo
 [] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
+
+# correções
+
+# entregue
+
+# ### 02/11/2024
 
 [x] - Médico que mais teve revisão de laudo
 [x] - Dash horas trabalhadas médico
 [x] - Destacar qual médico esta com mais havilações
 [x] - Dashboard ADM, montar grafico das solicitações por status
-
-[] - Anexar documentos por solicitação e disponibilizar os anexos para médico
-
-# correções
-
-# entregue
+[x] - Na digitação do laudo ter possibilidade de colocar anexo
+[x] - Anexar documentos por solicitação e disponibilizar os anexos para médico
 
 # ### 28/10/2024
 

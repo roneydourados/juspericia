@@ -24,11 +24,11 @@
               <v-btn
                 icon
                 variant="text"
-                class="text-none ml-3"
+                class="text-none"
                 size="small"
                 @click="handleChatGpt"
               >
-                <ChatGptIcon height="38" />
+                <ChatGptIcon height="28" />
                 <v-tooltip
                   activator="parent"
                   location="top center"
@@ -37,6 +37,7 @@
                   Perguntar para o ChatGPT
                 </v-tooltip>
               </v-btn>
+
               <v-btn
                 variant="flat"
                 color="info"
@@ -86,25 +87,10 @@
               <v-card-text>
                 <v-row dense v-for="item in attachments">
                   <v-col cols="12">
-                    <v-card
-                      rounded="lg"
-                      prepend-icon="mdi-file-document-outline"
-                      rel="noopener"
-                      subtitle="Documento em anxo referente ao laudo"
-                      target="_blank"
-                    >
-                      <template #title>
-                        <span class="text-info">{{ item.fileName }}</span>
-                      </template>
-                      <template #append>
-                        <v-btn
-                          icon="mdi-delete-outline"
-                          color="error"
-                          variant="text"
-                          @click="handleDeleteAttachment(item)"
-                        />
-                      </template>
-                    </v-card>
+                    <AttachementCard
+                      :file-name="item.fileName!"
+                      @delete="handleDeleteAttachment(item)"
+                    />
                   </v-col>
                 </v-row>
               </v-card-text>

@@ -135,10 +135,31 @@
               Efetuar correção
             </v-tooltip>
           </v-btn>
+          <v-btn
+            v-if="
+              $currentUser?.Profile.type === 'ADMIN' ||
+              $currentUser?.Profile.type === 'MEDICO'
+            "
+            icon
+            color="purple"
+            variant="text"
+            size="small"
+            @click="handleReportDetails(item)"
+          >
+            <v-icon icon="mdi-dots-vertical-circle-outline" size="20"></v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Detalhes do laudo
+            </v-tooltip>
+          </v-btn>
         </div>
       </template>
     </Table>
     <DialogLoading :dialog="loading" />
+    <MedicalReportDetails v-model="showReportDetails" :data="selectedReport" />
   </div>
 </template>
 
@@ -153,6 +174,9 @@ const $single = computed(() => consultationReport.$single);
 const $currentUser = computed(() => auth.$currentUser);
 
 const loading = ref(false);
+const showReportDetails = ref(false);
+const selectedReport = ref<PatientConsultationReportProps>();
+
 const filters = ref({
   initialDate: moment().startOf("month").format("YYYY-MM-DD"),
   finalDate: moment().endOf("month").format("YYYY-MM-DD"),
@@ -191,5 +215,10 @@ const getReports = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleReportDetails = (item: PatientConsultationReportProps) => {
+  selectedReport.value = item;
+  showReportDetails.value = true;
 };
 </script>

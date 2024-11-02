@@ -65,19 +65,40 @@ export const index = async (input: {
       },
     });
 
-    return data.map((item) => {
-      return {
-        ...item,
-        reportDate: formatDate(item.reportDate),
-        PatientConsultation: {
-          ...item.PatientConsultation,
-          dateOpen: formatDate(item.PatientConsultation.dateOpen),
-          dateClose: item.PatientConsultation.dateClose
-            ? formatDate(item.PatientConsultation.dateClose)
-            : null,
-        },
-      };
-    });
+    const reports = await Promise.all(
+      data.map(async (item) => {
+        //retornar os anexos
+        const attachments = await prisma.file.findMany({
+          select: {
+            id: true,
+            fileName: true,
+            publicId: true,
+            fileCategory: true,
+            ownerId: true,
+            fileServerName: true,
+          },
+          where: {
+            ownerId: item.id,
+            fileCategory: "medical-report",
+          },
+        });
+
+        return {
+          ...item,
+          reportDate: formatDate(item.reportDate),
+          PatientConsultation: {
+            ...item.PatientConsultation,
+            dateOpen: formatDate(item.PatientConsultation.dateOpen),
+            dateClose: item.PatientConsultation.dateClose
+              ? formatDate(item.PatientConsultation.dateClose)
+              : null,
+          },
+          attachments,
+        };
+      })
+    );
+
+    return reports;
   } catch (error) {
     console.log("🚀 ~ error:", error);
     throw createError({
