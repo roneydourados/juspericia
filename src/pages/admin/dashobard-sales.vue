@@ -1,4 +1,4 @@
 <template>
-  <DashboardSales />
+  <DashboardAdmin />
 </template>
 <script setup lang="ts"></script>

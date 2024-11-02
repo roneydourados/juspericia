@@ -1,12 +1,17 @@
 <template>
-  <v-card flat rounded="lg" class="pa-4">
-    <Chart
-      type="donut"
-      height="380"
-      :chart-options="chartData.chartOptions"
-      :series="chartData.series"
-    />
-  </v-card>
+  <Card class="pa-4">
+    <template #title>
+      <span> Faturamento por forma de pagamento </span>
+    </template>
+    <template #content>
+      <Chart
+        type="donut"
+        height="380"
+        :chart-options="chartData.chartOptions"
+        :series="chartData.series"
+      />
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
@@ -17,6 +22,9 @@ const chartData = computed(() => {
       chart: {
         width: 380,
         type: "donut",
+      },
+      theme: {
+        palette: "palette2",
       },
       stroke: {
         show: false,
@@ -30,19 +38,11 @@ const chartData = computed(() => {
         },
       },
       dataLabels: {
-        //enabled: false,
+        enabled: true,
         formatter(val: any, opts: any) {
           const name = opts.w.globals.labels[opts.seriesIndex];
           return [name, val.toFixed(1) + "%"];
         },
-      },
-      title: {
-        text: "Faturamento por forma de pagamento",
-        align: "left",
-        margin: 10,
-        offsetX: 0,
-        offsetY: 0,
-        floating: false,
       },
     },
   };

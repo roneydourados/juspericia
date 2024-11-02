@@ -12,21 +12,37 @@
         align-tabs="center"
         @update:model-value="handleDateChange"
       />
-      <DashboardSalesFilters v-model:filters="modelFilters" />
+      <DashboardAdminFilters v-model:filters="modelFilters" />
       <v-divider></v-divider>
     </v-card-title>
     <v-card-text>
       <v-row dense>
-        <v-col cols="12" lg="6">
-          <DahsboardSalesYearbBillingChart />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <DashboardSalesHomeAdminYearbBillingPaymentFormChart />
+        <v-col cols="12">
+          <DashboardAdminCards />
         </v-col>
       </v-row>
-      <div class="py-8">
-        <DashboardSalesCards />
-      </div>
+      <v-row dense no-gutters>
+        <v-col cols="12" lg="4">
+          <DahsboardAdminYearbBillingChart />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <DashboardAdminPaymentFormChart />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <DashboardAdminSolicitationStatus />
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col cols="12" lg="4">
+          <DashboardAdminMedicHours />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <DashboardAdminMedicRateRange />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <DashboardAdminMedicReportRevision />
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
@@ -36,6 +52,7 @@ import { TabProps } from "@/types/Tab";
 import moment from "moment";
 const tabRegion = ref(1);
 const tabDate = ref(1);
+const medicStore = useMedicStore();
 const tabsDate = ref<TabProps[]>([
   {
     title: "Hoje",
@@ -77,6 +94,10 @@ const tabsRegion = ref<TabProps[]>([
     icon: "mdi-chart-multiline",
   },
 ]);
+
+onMounted(async () => {
+  await medicStore.index("");
+});
 
 const modelFilters = ref<DashboardSalesFilterProps>({
   initialDate: moment().format("YYYY-MM-DD"),

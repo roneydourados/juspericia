@@ -10,10 +10,8 @@ R:.
 # pendentes
 
 [] - Pensar em um cache para componentes que serão selects
-[] - Dash horas trabalhadas médico
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
-[] - Dashboard ADM, montar grafico das solicitações por status
-[] - Destacar qual médico esta com mais havilações
+
 [] - Acrescentar um menu de filtros em meus saldos
 [] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
 [] - Integração com api de pagamentos
@@ -21,12 +19,17 @@ R:.
 [] - Integração com api de telemedicina
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
-[] - Médico que mais teve revisão de laudo
-[] - Financeiro do médico, pagamento por laudo
-[] - Anexar documentos por solicitação e disponibilizar os anexos para médico
 [] - Paginação de dados
 [] - Habilitar botão de correção depois do atendimento de laudo
 [] - Na digitação do laudo ter possibilidade de colocar anexo
+[] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
+
+[x] - Médico que mais teve revisão de laudo
+[x] - Dash horas trabalhadas médico
+[x] - Destacar qual médico esta com mais havilações
+[x] - Dashboard ADM, montar grafico das solicitações por status
+
+[] - Anexar documentos por solicitação e disponibilizar os anexos para médico
 
 # correções
 

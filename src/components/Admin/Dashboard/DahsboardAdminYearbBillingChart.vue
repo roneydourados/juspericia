@@ -1,18 +1,25 @@
 <template>
-  <v-card flat rounded="lg" class="pa-4">
-    <Chart
-      type="bar"
-      height="380"
-      :chart-options="chartData.chartOptions"
-      :series="chartData.series"
-    />
-  </v-card>
+  <Card flat rounded="lg" class="pa-4">
+    <template #title>
+      <span> Faturamento mensal - {{ currentYear }} </span>
+    </template>
+    <template #content>
+      <Chart
+        type="bar"
+        height="380"
+        :chart-options="chartData.chartOptions"
+        :series="chartData.series"
+      />
+    </template>
+  </Card>
 </template>
 
 <script setup lang="ts">
 import moment from "moment";
 
 const { amountFormated } = useUtils();
+
+const currentYear = computed(() => moment().year());
 
 const chartData = computed(() => {
   return {
@@ -32,14 +39,14 @@ const chartData = computed(() => {
       },
       plotOptions: {
         bar: {
-          borderRadius: 10,
+          borderRadius: 2,
           dataLabels: {
             position: "top", // top, center, bottom
           },
         },
       },
       dataLabels: {
-        enabled: true,
+        enabled: false,
         formatter: function (val: number) {
           return val + "%";
         },
@@ -83,26 +90,26 @@ const chartData = computed(() => {
           show: false,
         },
         labels: {
-          show: false,
+          show: true,
           formatter: function (val: number) {
             return val + "%";
           },
         },
       },
 
-      title: {
-        text: "Faturamento",
-        align: "left",
-        margin: 10,
-        offsetX: 0,
-        offsetY: 0,
-        floating: false,
-        style: {
-          fontSize: "18px",
-          fontWeight: "bold",
-          color: "#000",
-        },
-      },
+      // title: {
+      //   text: "Faturamento",
+      //   align: "left",
+      //   margin: 10,
+      //   offsetX: 0,
+      //   offsetY: 0,
+      //   floating: false,
+      //   style: {
+      //     fontSize: "18px",
+      //     fontWeight: "bold",
+      //     color: "#000",
+      //   },
+      // },
       tooltip: {
         show: false,
         theme: "dark",

@@ -80,15 +80,9 @@
     </v-app-bar>
 
     <v-main class="container d-flex justify-center">
-      <!-- <div class="w-100 px-8 py-8">
-        <slot />
-      </div> -->
       <div
         class="w-100 pa-4"
-        style="
-          background-color: rgb(var(--v-theme-background)) !important;
-          height: 100dvh;
-        "
+        style="background-color: rgb(var(--v-theme-background)) !important"
       >
         <slot />
       </div>

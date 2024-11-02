@@ -23,7 +23,7 @@
     </v-row>
     <v-row dense>
       <v-col cols="12" lg="4">
-        <LawyerEstatisticsDashboardCard
+        <DashboardCard
           title="Consultas abertas"
           icon="mdi-file-clock-outline"
           value="40"
@@ -31,7 +31,7 @@
         />
       </v-col>
       <v-col cols="12" lg="4">
-        <LawyerEstatisticsDashboardCard
+        <DashboardCard
           title="Consultas agendadas"
           icon="mdi-file-check-outline"
           value="35"
@@ -39,7 +39,7 @@
         />
       </v-col>
       <v-col cols="12" lg="4">
-        <LawyerEstatisticsDashboardCard
+        <DashboardCard
           title="Consultas concluídas"
           icon="mdi-calendar-month-outline"
           value="25"
