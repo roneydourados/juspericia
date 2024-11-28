@@ -21,6 +21,8 @@ R:.
 [] - Paginação de dados
 [] - Habilitar botão de correção depois do atendimento de laudo
 [] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
+[] - Cadastro de horários intervalo por médico
+[] - Liberação dos horários por médico levar consideração do dia da semana que pode atender
 
 # correções
 
