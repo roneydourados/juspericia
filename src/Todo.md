@@ -26,6 +26,24 @@ R:.
 
 # entregue
 
+# Reunião 27/11/2024
+
+[] - Clinica nas nuvens plataforma de telemedicina
+[] - Médico é pago quando faz a consulta valor da consulta 179,90 Colocar % para calcular o valor da consulta, será como comissão ?
+[] - Valor da consulta, é por médico e um valor fixo, porém fica no cadastro do médico
+[] - Gatware de pagamento pegar 3 opções
+[] - Dashboard quantidade de consulta por médico
+[] - Remover o H de avaliações
+[] - No Dashboard onde esta venda pendente clicar abrir a lista
+[] - CRM dados de funil [lead, Prospecção, Reunião agendada, Aguardando fechamento, fechamento] -> Criar um cadastro
+[] - Dashboard, mostrar pacotes próximos a vencer no dashboard do admin
+[] - Dashboard admin Usuários com 40 dias ou mas da última solicitação de consulta
+[] - Deixar Whatsapp ou chat para atendimento ao cliente
+[] - Analisar integração com youtube
+[] - Dashboard identificar a carteira, que é o valor total que os clientes compraram - saldo total da carteira
+[] - API mensagem whatsapp, identificar qual usar
+[] - Ao abrir o laudo, para fechar ou efetuar download será necessário avaliar, se não avaliou exigir o mesmo
+
 # ### 02/11/2024
 
 [x] - Médico que mais teve revisão de laudo
