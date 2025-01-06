@@ -1,5 +1,5 @@
 <template>
-  <MedicTable />
+  <MedicAbas />
 </template>
 
 <script setup lang="ts">

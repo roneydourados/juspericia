@@ -1,12 +1,13 @@
 <template>
   <div>
     <Table
-      title="Médicos parceiros"
+      title="Gestão de comissão consulta médica"
       :items="$all"
       :headers="headers"
       @search="handleSearch($event)"
       @add="showForm = true"
       :loading="loading"
+      :show-crud="false"
     >
       <template v-slot:item.name="{ item }">
         <span
@@ -36,6 +37,15 @@
           </span>
         </span>
       </template>
+      <template v-slot:item.medicConsultationValue="{ item }">
+        <div class="mt-6">
+          <CurrencyInput
+            v-model="item.medicConsultationValue"
+            label="Valor comissão"
+          />
+        </div>
+      </template>
+
       <template v-slot:item.active="{ item }">
         <span class="d-flex align-center">
           <v-icon
@@ -48,113 +58,15 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn
-          icon
-          color="orange"
+          color="info"
           variant="text"
           size="small"
-          @click="getItemEdit(item)"
+          class="text-none"
+          @click="handleUpdateComissrionValue(item)"
         >
-          <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Editar
-          </v-tooltip>
+          <v-icon icon="mdi-reload" size="20" start></v-icon>
+          Atualizar valor
         </v-btn>
-        <v-btn
-          icon
-          color="error"
-          variant="text"
-          size="small"
-          @click="getItemDelete(item)"
-        >
-          <v-icon icon="mdi-delete-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Apagar
-          </v-tooltip>
-        </v-btn>
-      </template>
-      <template #mobileActions="{ item }">
-        <v-btn
-          color="orange"
-          variant="flat"
-          size="small"
-          prepend-icon="mdi-pencil-outline"
-          @click="getItemEdit(item as UserProps)"
-          class="text-none text-white"
-        >
-          Editar
-        </v-btn>
-        <v-btn
-          color="error"
-          variant="flat"
-          size="small"
-          class="text-none text-white"
-          prepend-icon="mdi-delete-outline"
-          @click="getItemDelete(item as UserProps)"
-        >
-          Apagar
-        </v-btn>
-      </template>
-      <template #mobileContent="{ item }: any">
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="Nome"
-              icon="mdi-account-outline"
-              color-icon="info"
-              :content="`${item.name} ${item.name}`"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="Whatsapp"
-              icon="mdi-whatsapp"
-              color-icon="green"
-              :content="formatTelephoneNumber(item.phone ?? '')"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="E-mail"
-              icon="mdi-email-outline"
-              color-icon="warning"
-              :content="item.email"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="Status"
-              :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
-              :color-icon="item.active ? 'green' : 'error'"
-              :content="item.active ? 'Ativo' : 'Inativo'"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
       </template>
     </Table>
   </div>
@@ -204,6 +116,11 @@ const headers = ref([
     key: "active",
   },
   {
+    title: "Comissão consulta",
+    key: "medicConsultationValue",
+  },
+
+  {
     title: "Ações",
     key: "actions",
   },
@@ -240,6 +157,16 @@ const handleDeleteItem = async () => {
   loading.value = true;
   try {
     await medicStore.destroy(selected.value?.publicId!);
+    await handleSearch("", false);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleUpdateComissrionValue = async (item: UserProps) => {
+  loading.value = true;
+  try {
+    await medicStore.update(item);
     await handleSearch("", false);
   } finally {
     loading.value = false;

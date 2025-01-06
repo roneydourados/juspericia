@@ -20,6 +20,7 @@ export interface UserProps {
   Profile?: UserProfileProps;
   Address?: AddressProps;
   publicId?: string;
+  medicConsultationValue?: number;
 }
 
 export interface UserProfileProps {

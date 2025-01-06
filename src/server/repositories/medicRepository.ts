@@ -1,8 +1,8 @@
 import prisma from "@/lib/prisma";
-
 import { UserProps } from "@/types/User";
 import { uuidv7 } from "uuidv7";
 import { useHash } from "@/server/providers/hash";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();
@@ -92,6 +92,7 @@ export const update = async (payload: UserProps) => {
         cpfCnpj: payload.cpfCnpj,
         crmUf: payload.crmUf,
         phone: payload.phone,
+        medicConsultationValue: payload.medicConsultationValue,
       },
 
       where: {
@@ -174,13 +175,7 @@ export const index = async (inputQuery: string) => {
       crmUf: true,
       email: true,
       publicId: true,
-      // Profile: {
-      //   select: {
-      //     id: true,
-      //     profileName: true,
-      //     type: true,
-      //   },
-      // },
+      medicConsultationValue: true,
     },
     where: {
       OR: [
@@ -222,6 +217,9 @@ export const index = async (inputQuery: string) => {
         email: user.email,
         Address: address,
         publicId: user.publicId,
+        medicConsultationValue: user.medicConsultationValue
+          ? new Decimal(user.medicConsultationValue).mul(100)
+          : 0,
       };
     })
   );

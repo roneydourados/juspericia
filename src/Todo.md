@@ -31,8 +31,9 @@ R:.
 # Reunião 27/11/2024
 
 [] - Clinica nas nuvens plataforma de telemedicina
-[] - Médico é pago quando faz a consulta valor da consulta 179,90 Colocar % para calcular o valor da consulta, será como comissão ?
-[] - Valor da consulta, é por médico e um valor fixo, porém fica no cadastro do médico
+[x] - Valor da consulta, é por médico e um valor fixo, porém fica no cadastro do médico
+[x] - Criar tela para cadastrar os valores que serão pagos para consulta
+[] - Criar controle de comissionamento por consulta
 [] - Gatware de pagamento pegar 3 opções
 [] - Dashboard quantidade de consulta por médico
 [] - Remover o H de avaliações
