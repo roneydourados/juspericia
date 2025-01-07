@@ -1,7 +1,7 @@
 <template>
   <Card elevation="4">
     <template #title>
-      <span> Haviliações dos médicos </span>
+      <span> Aviliações dos médicos </span>
     </template>
     <template #content>
       <Table title="" :headers="headers" :items="$medics" :showCrud="false">
@@ -51,7 +51,7 @@ const headers = [
     key: "name",
   },
   {
-    title: "Haviliações",
+    title: "Aviliações",
     key: "value",
   },
 ];
