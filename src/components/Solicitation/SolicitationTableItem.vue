@@ -273,12 +273,11 @@
         </v-col>
         <v-col cols="12" lg="3" class="d-flex align-center px-4">
           <v-btn
-            v-if="solicitation.rate === 0"
+            v-if="solicitation.rate === 0 && solicitation.status === 'finished'"
             class="text-none font-weight-bold"
             prepend-icon="mdi-star"
             color="orange-darken-1"
             @click="solicitation.rate = 1"
-            :disabled="solicitation.status === 'canceled'"
           >
             Avaliar solicitação
           </v-btn>
@@ -443,7 +442,7 @@ const handleTipValue = async (value: number) => {
 
 const handleUpdateRate = async (rate: number) => {
   await storeConsultation.update({
-    id: props.solicitation.id,
+    publicId: props.solicitation.publicId,
     rate,
   });
   isRate.value = false;

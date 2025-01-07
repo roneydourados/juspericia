@@ -105,14 +105,6 @@
     </v-tabs>
     <v-divider />
     <v-card-text>
-      <!-- <v-row v-for="item in $all?.consultations" :key="item.id" dense>
-        <v-col cols="12">
-          <SolicitationTableItem
-            :solicitation="item"
-            @edit="getItemEdit($event)"
-          />
-        </v-col>
-      </v-row> -->
       <div v-if="$all?.consultations && $all?.consultations.length > 0">
         <Table
           title=""
