@@ -105,15 +105,34 @@
     </v-tabs>
     <v-divider />
     <v-card-text>
-      <v-row v-for="item in $all?.consultations" :key="item.id" dense>
+      <!-- <v-row v-for="item in $all?.consultations" :key="item.id" dense>
         <v-col cols="12">
           <SolicitationTableItem
             :solicitation="item"
             @edit="getItemEdit($event)"
           />
         </v-col>
-      </v-row>
-      <EmptyContent v-if="$all?.consultations.length === 0" />
+      </v-row> -->
+      <div v-if="$all?.consultations && $all?.consultations.length > 0">
+        <Table
+          title=""
+          :items="$all?.consultations"
+          hide-dfault-header
+          :headers="headers"
+          :showCrud="false"
+          :items-per-page="10"
+        >
+          <template v-slot:item.status="{ item }">
+            <div class="py-8">
+              <SolicitationTableItem
+                :solicitation="item"
+                @edit="getItemEdit($event)"
+              />
+            </div>
+          </template>
+        </Table>
+      </div>
+      <EmptyContent v-else />
     </v-card-text>
   </v-card>
   <SolicitationFilters
@@ -139,6 +158,13 @@ const $currentUser = computed(() => auth.$currentUser);
 const tab = ref(1);
 const loading = ref(false);
 const showFilters = ref(false);
+
+const headers = ref([
+  {
+    title: "",
+    key: "status",
+  },
+]);
 
 const modelFilters = ref<SolicitationConsultationFilterProps>({
   status: "open",

@@ -1,5 +1,5 @@
 <template>
-  <v-card flat elevation="8" rounded="lg">
+  <v-card flat elevation="2" rounded="lg">
     <v-card-title
       class="d-flex align-center justify-space-between pa-6"
       style="gap: 1rem; font-size: 1rem"

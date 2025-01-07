@@ -15,7 +15,7 @@ R:.
 [] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
-[] - Paginação de dados
+[x] - Paginação de dados
 [] - Habilitar botão de correção depois do atendimento de laudo
 [] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
 [] - Cadastro de horários intervalo por médico
