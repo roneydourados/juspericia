@@ -56,7 +56,6 @@ export const login = async ({ email, password }: AuthProps) => {
   });
 
   if (!user) {
-    console.log("🚀 ~ login ~ user:", user);
     throw createError({
       statusCode: 403,
       statusMessage: "User is missing password, user!",

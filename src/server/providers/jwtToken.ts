@@ -16,7 +16,7 @@ export const useJwtToken = () => {
       secret,
       {
         expiresIn: "1 days",
-        subject: payload.id!.toString(),
+        subject: payload.publicId,
         issuer,
         audience,
       }

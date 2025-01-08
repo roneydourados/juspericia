@@ -198,7 +198,7 @@ export const appRoutes = [
     icon: "mdi-hospital-box-outline",
     visible: true,
     isMenu: true,
-    profiles: ["MEDICO", "ADMIN", "ADVOGADO"],
+    profiles: ["MEDICO", "ADMIN"],
     order: 16,
   },
   {
