@@ -217,17 +217,13 @@
     </v-card-text>
     <v-card-actions v-if="$currentUser?.Profile.type !== 'MEDICO'" class="px-8">
       <v-row dense align="center">
-        <v-col cols="12" lg="2">
+        <v-col v-if="solicitation.status === 'finished'" cols="12" lg="2">
           <v-btn
             class="text-none font-weight-bold"
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
             @click="showDateCorrection = true"
-            :disabled="
-              !solicitation.isSolicitationCorrection ||
-              solicitation.status === 'canceled' ||
-              solicitation.status === 'finished'
-            "
+            :disabled="!solicitation.isSolicitationCorrection"
           >
             Solicitar correção
           </v-btn>
@@ -257,18 +253,24 @@
             Visualizar detalhes
           </v-btn>
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3">
           <v-btn
+            v-if="solicitation.status === 'finished'"
             class="text-none font-weight-bold"
             prepend-icon="mdi-cash-multiple"
             color="success"
             @click="showTipValue = true"
-            :disabled="
-              Number(solicitation.tipValue) > 0 ||
-              solicitation.status === 'canceled'
-            "
+            :disabled="Number(solicitation.tipValue) > 0"
           >
             Dar Gorjeta
+          </v-btn>
+          <v-btn
+            v-if="solicitation.status === 'finished' && solicitation.rate! > 0"
+            class="text-none font-weight-bold"
+            prepend-icon="mdi-file-document-edit"
+            color="info"
+          >
+            Laudo
           </v-btn>
         </v-col>
         <v-col cols="12" lg="3" class="d-flex align-center px-4">
@@ -287,6 +289,7 @@
               active-color="orange-darken-1"
               color="orange-lighten-1"
               :readonly="!isRate"
+              :size="24"
             />
             <v-btn
               v-if="isRate"
