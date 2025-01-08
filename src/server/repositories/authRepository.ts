@@ -22,6 +22,7 @@ export const login = async ({ email, password }: AuthProps) => {
       statusMessage: "Email is missing",
     });
   }
+
   const user = await prisma.user.findFirst({
     select: {
       id: true,

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { appRoutes } from "../server/utils/Constants";
 import { useHash } from "../server/providers/hash";
+import { uuidv7 } from "uuidv7";
 
 const prisma = new PrismaClient();
 
@@ -16,11 +17,13 @@ async function main() {
     where: { email: "admin@juspericia.com" },
     update: {},
     create: {
+      publicId: uuidv7(),
       email: "admin@juspericia.com",
       name: "Admin",
       password,
       Profile: {
         create: {
+          publicId: uuidv7(),
           profileName: "Administrador", // Add a profileName property
           type: "ADMIN", // Add a type property
           ProfileRoute: {
@@ -49,11 +52,13 @@ async function main() {
     where: { email: "advogado@juspericia.com" },
     update: {},
     create: {
+      publicId: uuidv7(),
       email: "advogado@juspericia.com",
       name: "Advogado",
       password: passwordAdvogado,
       Profile: {
         create: {
+          publicId: uuidv7(),
           profileName: "Advogado", // Add a profileName property
           type: "ADVOGADO", // Add a type property
           ProfileRoute: {
@@ -82,11 +87,13 @@ async function main() {
     where: { email: "medico@juspericia.com" },
     update: {},
     create: {
+      publicId: uuidv7(),
       email: "medico@juspericia.com",
       name: "Médico",
       password: passwordMedico,
       Profile: {
         create: {
+          publicId: uuidv7(),
           profileName: "Médico", // Add a profileName property
           type: "MEDICO", // Add a type property
           ProfileRoute: {
