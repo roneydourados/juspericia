@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { months } from "~/utils/FrontConstants";
 
 export interface UserLawyerEstatisticsFilterProps {
   userId: number;
@@ -204,14 +205,37 @@ export const index = async ({
       `;
 
     const estatistics = {
-      laywerSolicitations,
-      laywerPatientsRegistered,
-      laywerInvestment,
+      laywerSolicitations: months.map((month) => {
+        const item = laywerSolicitations.find((item) => item.month === month);
+
+        return {
+          quantity: item ? item.quantity : 0,
+          month,
+        };
+      }),
+      laywerPatientsRegistered: months.map((month) => {
+        const item = laywerPatientsRegistered.find(
+          (item) => item.month === month
+        );
+
+        return {
+          quantity: item ? item.quantity : 0,
+          month,
+        };
+      }),
+      laywerInvestment: months.map((month) => {
+        const item = laywerInvestment.find((item) => item.month === month);
+
+        return {
+          quantity: item ? item.quantity : 0,
+          month,
+        };
+      }),
       laywerSolicitationsStatus,
       laywerSolicitationsBenefitType: laywerSolicitationsBenefitType.map(
         (item) => {
           return {
-            ...item,
+            quantity: item.quantity,
             benefitType: item.benefit_type,
           };
         }
@@ -219,7 +243,7 @@ export const index = async ({
       laywerSolicitationsReportPropurse: laywerSolicitationsReportPropurse.map(
         (item) => {
           return {
-            ...item,
+            quantity: item.quantity,
             reportPurpose: item.report_purpose,
           };
         }
@@ -227,7 +251,6 @@ export const index = async ({
       laywerSolicitationsTop10Finished: laywerSolicitationsTop10Finished.map(
         (item) => {
           return {
-            ...item,
             patient: item.patient,
             dateOpen: item.date_open,
             dateClose: item.date_close,

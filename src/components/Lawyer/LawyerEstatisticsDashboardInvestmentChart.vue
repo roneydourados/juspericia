@@ -8,18 +8,17 @@
 </template>
 
 <script setup lang="ts">
+const userLawyer = useUserLawyerStore();
+const $estatistics = computed(() => userLawyer.$estatistics);
+
 const chartConfig = computed(() => {
-  const randomNumbers = [] as number[];
-
-  for (let i = 0; i < 12; i++) {
-    randomNumbers.push(Math.floor(Math.random() * 100));
-  }
-
   return {
     series: [
       {
         name: "Total investido",
-        data: randomNumbers,
+        data: $estatistics.value?.laywerInvestment.map(
+          (investment) => investment.quantity
+        ),
       },
     ],
     chartOptions: {
@@ -45,7 +44,9 @@ const chartConfig = computed(() => {
         align: "left",
       },
 
-      labels: months,
+      labels: $estatistics.value?.laywerInvestment.map(
+        (investment) => investment.month
+      ),
       xaxis: {
         type: "",
       },

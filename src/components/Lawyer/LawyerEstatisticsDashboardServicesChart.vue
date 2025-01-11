@@ -8,6 +8,9 @@
 </template>
 
 <script setup lang="ts">
+const userLawyer = useUserLawyerStore();
+const $estatistics = computed(() => userLawyer.$estatistics);
+
 const chartConfig = computed(() => {
   const randomNumbers = [] as number[];
 
@@ -19,7 +22,9 @@ const chartConfig = computed(() => {
     series: [
       {
         name: "Solicitações enviadas",
-        data: randomNumbers,
+        data: $estatistics.value?.laywerSolicitations.map(
+          (solicitation) => solicitation.quantity
+        ),
       },
     ],
     chartOptions: {
@@ -45,7 +50,9 @@ const chartConfig = computed(() => {
         align: "left",
       },
 
-      labels: months,
+      labels: $estatistics.value?.laywerSolicitations.map(
+        (solicitation) => solicitation.month
+      ),
       xaxis: {
         type: "",
       },

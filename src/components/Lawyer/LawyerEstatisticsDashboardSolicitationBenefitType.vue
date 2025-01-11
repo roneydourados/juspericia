@@ -28,17 +28,15 @@
 </template>
 
 <script setup lang="ts">
-const bentifTypeStore = useBenefitTypeStore();
+const userLawyer = useUserLawyerStore();
+const $estatistics = computed(() => userLawyer.$estatistics);
 const { generateRandomColor } = useUtils();
-onMounted(async () => {
-  await bentifTypeStore.index("");
-});
 
 const $temTeste = computed(() => {
-  return bentifTypeStore.$all.map((item) => {
+  return $estatistics.value?.laywerSolicitationsBenefitType.map((item) => {
     return {
-      name: item.name,
-      value: Math.floor(Math.random() * 100),
+      name: item.benefitType,
+      value: item.quantity,
       color: generateRandomColor(),
     };
   });

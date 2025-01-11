@@ -9,15 +9,14 @@
 </template>
 
 <script setup lang="ts">
-const randomNumbers = ref<Number[]>([]);
-
-for (let i = 0; i < 12; i++) {
-  randomNumbers.value.push(Math.floor(Math.random() * 100));
-}
+const userLawyer = useUserLawyerStore();
+const $estatistics = computed(() => userLawyer.$estatistics);
 
 const chartConfig = computed(() => {
   return {
-    series: [25, 48],
+    series: $estatistics.value?.laywerSolicitationsReportPropurse.map(
+      (propurse) => propurse.quantity
+    ),
     chartOptions: {
       chart: {
         type: "donut",
@@ -26,7 +25,9 @@ const chartConfig = computed(() => {
       theme: {
         palette: "palette1",
       },
-      labels: ["Administrativo", "Judicial"],
+      labels: $estatistics.value?.laywerSolicitationsReportPropurse.map(
+        (propurse) => propurse.reportPurpose
+      ),
       dataLabels: {
         enabled: false,
       },

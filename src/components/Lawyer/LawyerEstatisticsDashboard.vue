@@ -1,6 +1,5 @@
 <template>
   <div>
-    <pre>{{ $estatistics }}</pre>
     <v-card flat class="mb-2 pa-2" rounded="lg">
       <v-card-title class="d-flex flex-column">
         <HeaderPage title="Estatísticas" />
@@ -27,7 +26,7 @@
         <DashboardCard
           title="Consultas abertas"
           icon="mdi-file-clock-outline"
-          value="40"
+          :value="$solicitationOpen.toString()"
           icon-color="success"
         />
       </v-col>
@@ -35,7 +34,7 @@
         <DashboardCard
           title="Consultas agendadas"
           icon="mdi-file-check-outline"
-          value="35"
+          :value="$solicitationScheduled.toString()"
           icon-color="info"
         />
       </v-col>
@@ -43,7 +42,7 @@
         <DashboardCard
           title="Consultas concluídas"
           icon="mdi-calendar-month-outline"
-          value="25"
+          :value="$solicitationClose.toString()"
           icon-color="orange"
         />
       </v-col>
@@ -66,8 +65,43 @@
 
 <script setup lang="ts">
 const userLawyer = useUserLawyerStore();
-
 const $estatistics = computed(() => userLawyer.$estatistics);
+
+const $solicitationOpen = computed(() => {
+  const data = $estatistics.value?.laywerSolicitationsStatus.find(
+    (solicitation) => solicitation.status === "Abertas"
+  );
+
+  if (data) {
+    return data.quantity;
+  }
+
+  return 0;
+});
+
+const $solicitationClose = computed(() => {
+  const data = $estatistics.value?.laywerSolicitationsStatus.find(
+    (solicitation) => solicitation.status === "Concluídas"
+  );
+
+  if (data) {
+    return data.quantity;
+  }
+
+  return 0;
+});
+
+const $solicitationScheduled = computed(() => {
+  const data = $estatistics.value?.laywerSolicitationsStatus.find(
+    (solicitation) => solicitation.status === "Agendadas"
+  );
+
+  if (data) {
+    return data.quantity;
+  }
+
+  return 0;
+});
 
 const tab = ref(1);
 
