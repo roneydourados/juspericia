@@ -1,5 +1,6 @@
 <template>
   <div>
+    <pre>{{ $estatistics }}</pre>
     <v-card flat class="mb-2 pa-2" rounded="lg">
       <v-card-title class="d-flex flex-column">
         <HeaderPage title="Estatísticas" />
@@ -64,6 +65,10 @@
 </template>
 
 <script setup lang="ts">
+const userLawyer = useUserLawyerStore();
+
+const $estatistics = computed(() => userLawyer.$estatistics);
+
 const tab = ref(1);
 
 const tabs = ref<TabProps[]>([

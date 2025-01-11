@@ -5,8 +5,10 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
 
   const user = ref<UserProps>();
   const users = ref<UserProps[]>([]);
+  const estatistics = ref<UserLawyerEstatisticsProps>();
   const $single = computed(() => user.value);
   const $all = computed(() => users.value);
+  const $estatistics = computed(() => estatistics.value);
 
   const index = async (inputQuery: string) => {
     const config = {
@@ -42,5 +44,34 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     await api.delete(`/user-lawyer/${id}`);
   };
 
-  return { $single, $all, index, create, update, destroy, show };
+  const getEstatistics = async ({
+    initialDate,
+    finalDate,
+  }: UserLawyerEstatisticsFilterProps) => {
+    const config = {
+      params: {
+        initialDate,
+        finalDate,
+      },
+    };
+
+    const { data } = await api.get<UserLawyerEstatisticsProps>(
+      `/user-lawyer/estatistics`,
+      config
+    );
+
+    estatistics.value = data;
+  };
+
+  return {
+    $single,
+    $all,
+    $estatistics,
+    index,
+    create,
+    update,
+    destroy,
+    show,
+    getEstatistics,
+  };
 });

@@ -35,5 +35,7 @@ model PatientConsultation {
   @@index([consultationId], map: "patient_consultations_idx_consultation_id")
   @@index([reportPurposeId], map: "patient_consultations_idx_report_purpose_id")
   @@index([benefitTypeId], map: "patient_consultations_idx_benefit_type_id")
+  @@index([publicId], map: "patient_consultations_idx_public_id")
+  @@index([status], map: "patient_consultations_idx_status")
   @@map("patient_consultations")
 }
