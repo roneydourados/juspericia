@@ -11,15 +11,21 @@ R:.
 
 [] - Pensar em um cache para componentes que serão selects
 [] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
-[] - Acrescentar um menu de filtros em meus saldos
 [] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
-[] - Enviar email de confirmação de cadastro
-[] - Enviar email para resetar senha
 [x] - Paginação de dados
 [] - Habilitar botão de correção depois do atendimento de laudo
 [] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
 [] - Cadastro de horários intervalo por médico
 [] - Liberação dos horários por médico levar consideração do dia da semana que pode atender
+
+# pendente tela advogado (termiar aqui primeiro 11/01/2025)
+
+[] - interar com api as indicações
+[] - integração com asaas para pagamento de pacotes
+[] - integrar videos com youtube
+[] - acrescentar filtros na tela de meus saldos
+[] - Enviar email de confirmação de cadastro
+[] - Enviar email para resetar senha
 
 # correções
 
