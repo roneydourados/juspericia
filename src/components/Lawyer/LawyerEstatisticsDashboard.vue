@@ -1,14 +1,22 @@
 <template>
   <div>
     <v-card flat class="mb-2 pa-2" rounded="lg">
-      <v-card-title class="d-flex flex-column">
-        <HeaderPage title="Estatísticas" />
+      <v-card-title>
+        <v-row dense align="center">
+          <v-col cols="12" lg="10" class="d-flex align-center">
+            <v-icon icon="mdi-view-dashboard-outline" start />
+            <HeaderPage title="Estatísticas" />
+          </v-col>
+          <v-col cols="12" lg="2">
+            <Years @year="handleYear($event)" />
+          </v-col>
+        </v-row>
       </v-card-title>
-      <v-row dense>
+      <!-- <v-row dense>
         <v-col cols="12">
-          <Tabs v-model="tab" :tabs="tabs" />
+          <Tabs v-model="tab" :tabs="tabs" @update:model-value="handleTab" />
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-card>
     <v-row dense>
       <v-col cols="12" lg="4">
@@ -60,10 +68,23 @@
         <LawyerEstatisticsDashboardTop10Solicitations />
       </v-col>
     </v-row>
+    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
+
+//import moment from "moment";
+
+/**
+ * Deixe aqui por enquanto para pegar as estadísticas do ano inteiro
+ * referente ao advogado logado
+ * também na api vai chumbar o ano corrente, porém lá ainda permite
+ * passar os parametros de data e tem um get
+ * caso o cliente deseje mudar
+ */
+
 const userLawyer = useUserLawyerStore();
 const $estatistics = computed(() => userLawyer.$estatistics);
 
@@ -103,24 +124,86 @@ const $solicitationScheduled = computed(() => {
   return 0;
 });
 
-const tab = ref(1);
+const filterEstatistics = ref({
+  initialDate: moment().startOf("year").format("YYYY-MM-DD"),
+  finalDate: moment().endOf("year").format("YYYY-MM-DD"),
+});
 
-const tabs = ref<TabProps[]>([
-  {
-    title: "Hoje",
-    icon: "mdi-check-decagram-outline",
-  },
-  {
-    title: "Semana",
-    icon: "mdi-chart-line-variant",
-  },
-  {
-    title: "Mês",
-    icon: "mdi-calendar-month-outline",
-  },
-  {
-    title: "Ano",
-    icon: "mdi-chart-bell-curve-cumulative",
-  },
-]);
+const loading = ref(false);
+
+const handleYear = async (year: number) => {
+  loading.value = true;
+  try {
+    const initialDate = moment()
+      .year(year)
+      .startOf("year")
+      .format("YYYY-MM-DD");
+    const finalDate = moment().year(year).endOf("year").format("YYYY-MM-DD");
+
+    filterEstatistics.value = {
+      initialDate,
+      finalDate,
+    };
+
+    await userLawyer.getEstatistics(filterEstatistics.value);
+  } finally {
+    loading.value = false;
+  }
+};
+
+//const tab = ref(1);
+// const tabs = ref<TabProps[]>([
+//   {
+//     title: "Hoje",
+//     icon: "mdi-check-decagram-outline",
+//   },
+//   {
+//     title: "Semana",
+//     icon: "mdi-chart-line-variant",
+//   },
+//   {
+//     title: "Mês",
+//     icon: "mdi-calendar-month-outline",
+//   },
+//   {
+//     title: "Ano",
+//     icon: "mdi-chart-bell-curve-cumulative",
+//   },
+// ]);
+
+// const handleTab = async () => {
+//   loading.value = true;
+//   try {
+//     switch (tab.value) {
+//       case 1:
+//         filterEstatistics.value = {
+//           initialDate: moment().format("YYYY-MM-DD"),
+//           finalDate: moment().format("YYYY-MM-DD"),
+//         };
+//         break;
+//       case 2:
+//         filterEstatistics.value = {
+//           initialDate: moment().startOf("week").format("YYYY-MM-DD"),
+//           finalDate: moment().endOf("week").format("YYYY-MM-DD"),
+//         };
+//         break;
+//       case 3:
+//         filterEstatistics.value = {
+//           initialDate: moment().startOf("month").format("YYYY-MM-DD"),
+//           finalDate: moment().endOf("month").format("YYYY-MM-DD"),
+//         };
+//         break;
+//       case 4:
+//         filterEstatistics.value = {
+//           initialDate: moment().startOf("year").format("YYYY-MM-DD"),
+//           finalDate: moment().endOf("year").format("YYYY-MM-DD"),
+//         };
+//         break;
+//     }
+
+//     await userLawyer.getEstatistics(filterEstatistics.value);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 </script>
