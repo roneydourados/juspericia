@@ -20,6 +20,8 @@
 </template>
 
 <script setup lang="ts">
+
+
 const items = ref([
   {
     title: "Pacote completo de serviços com 20 consultas",
@@ -37,4 +39,6 @@ const items = ref([
     value: 4500,
   },
 ]);
+
+
 </script>

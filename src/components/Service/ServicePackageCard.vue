@@ -110,6 +110,8 @@ const props = defineProps({
 });
 
 const saltCredit = useUserCreditSaltStore();
+const asaas = useAsaasStore();
+
 const { amountFormated } = useUtils();
 const loading = ref(false);
 const showSale = ref(false);
@@ -118,21 +120,27 @@ const handleSaleItem = async (item: any) => {
   showSale.value = false;
   loading.value = true;
   try {
-    const payload = {
-      salt: props.value,
-      saltCategory: props.category,
-      expiredAt: moment().add(1, "month").format("YYYY-MM-DD"),
-      UserCreditPayment: [
-        {
-          paymentForm: "PIX",
-          value: props.value,
-          chargeId: uuidv7(),
-          status: "paid",
-        },
-      ],
-    };
+    // const payload = {
+    //   salt: props.value,
+    //   saltCategory: props.category,
+    //   expiredAt: moment().add(1, "month").format("YYYY-MM-DD"),
+    //   UserCreditPayment: [
+    //     {
+    //       paymentForm: "PIX",
+    //       value: props.value,
+    //       chargeId: uuidv7(),
+    //       status: "paid",
+    //     },
+    //   ],
+    // };
 
-    await saltCredit.create(payload);
+    await asaas.createCustomer({
+      name: "Roney de Lima Melo",
+      email: "roneydourados@gmail.com",
+      cpfCnpj: "59228952000100",
+    });
+
+    //await saltCredit.create(payload);
 
     push.success("Compra realizada com sucesso");
   } catch (error) {

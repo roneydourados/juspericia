@@ -31,6 +31,7 @@ export const login = async ({ email, password }: AuthProps) => {
       phone: true,
       password: true,
       publicId: true,
+      customerId: true,
       Profile: {
         select: {
           profileName: true,
@@ -75,6 +76,7 @@ export const login = async ({ email, password }: AuthProps) => {
   try {
     const payloadToken: UserProps = {
       id: user.id,
+      customerId: user.customerId || "",
       email: user.email,
       name: user.name,
       publicId: user.publicId!,
@@ -153,6 +155,7 @@ export const verifyUser = async (id: number) => {
       id: true,
       email: true,
       name: true,
+      customerId: true,
       Profile: {
         select: {
           profileName: true,
@@ -184,6 +187,7 @@ export const verifyUser = async (id: number) => {
   try {
     const payloadToken: UserProps = {
       id: user.id,
+      customerId: user.customerId || "",
       email: user.email,
       name: user.name,
       Profile: user.Profile as UserProfileProps,

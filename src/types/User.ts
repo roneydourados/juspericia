@@ -21,6 +21,7 @@ export interface UserProps {
   Address?: AddressProps;
   publicId?: string;
   medicConsultationValue?: number;
+  customerId?: string;
 }
 
 export interface UserProfileProps {

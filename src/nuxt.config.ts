@@ -136,6 +136,8 @@ export default defineNuxtConfig({
     public: {
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       version: process.env.VERSION ?? "",
+      asaasApikey: process.env.ASAAS_API_KEY ?? "",
+      asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
       turnstile: {
         // This can be overridden at runtime via the NUXT_TURNSTILE_SECRET_KEY
         // environment variable.
