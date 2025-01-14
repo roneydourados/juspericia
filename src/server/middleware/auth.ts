@@ -1,6 +1,11 @@
 import { useJwtToken } from "../providers/jwtToken";
 
-const openEndpoints = ["/api/auth", "/api/auth/register", "/api/profile"];
+const openEndpoints = [
+  "/api/auth",
+  "/api/auth/register",
+  "/api/profile",
+  "/api/asaas/webhook/payment",
+];
 
 export default defineEventHandler((event) => {
   const { verifyToken } = useJwtToken();

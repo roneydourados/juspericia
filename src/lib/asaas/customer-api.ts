@@ -20,8 +20,16 @@ export const useCustomerAsaas = () => {
     },
   });
 
-  const createCustomer = async (customerData: CustomerProps) => {
+  const createCustomer = async (
+    customerData: CustomerProps
+  ): Promise<CustomerResponseCreataedProps> => {
     try {
+      const exists = await getCustomer(customerData.cpfCnpj!);
+
+      if (exists.length > 0) {
+        return exists[0];
+      }
+
       const response = await asaasApi.post<CustomerResponseCreataedProps>(
         "/customers",
         customerData
@@ -30,15 +38,15 @@ export const useCustomerAsaas = () => {
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log("Axios error:", error.response?.data);
+        console.log("Axios error:", error);
 
         throw createError({
-          statusCode: error.response?.status || 500,
+          statusCode: 500,
           message: error.response?.data.message || "Error to create client",
         });
       }
 
-      console.log("Unexpected error:", error);
+      console.log("Unexpected create customer asaas error:", error);
 
       throw createError({
         statusCode: 500,
@@ -63,15 +71,15 @@ export const useCustomerAsaas = () => {
       return response.data.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log("Axios error:", error.response?.data);
+        console.log("Axios error:", error);
 
         throw createError({
-          statusCode: error.response?.status || 500,
+          statusCode: 500,
           message: error.response?.data.message || "Error to get customer",
         });
       }
 
-      console.log("Unexpected error:", error);
+      console.log("Unexpected get customer asaas error:", error);
 
       throw createError({
         statusCode: 500,

@@ -113,8 +113,12 @@ const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
 
 const { amountFormated } = useUtils();
+const auth = useAuthStore();
 const loading = ref(false);
 const showSale = ref(false);
+
+const $currentUser = computed(() => auth.$currentUser);
+const $paymentResponse = computed(() => asaas.$paymentReponse);
 
 const handleSaleItem = async (item: any) => {
   showSale.value = false;
@@ -134,15 +138,18 @@ const handleSaleItem = async (item: any) => {
     //   ],
     // };
 
-    await asaas.createCustomer({
-      name: "Roney de Lima Melo",
-      email: "roneydourados@gmail.com",
-      cpfCnpj: "59228952000100",
+    await asaas.createPayment({
+      dueDate: moment().format("YYYY-MM-DD"),
+      value: props.value,
+      description: props.title,
     });
 
-    //await saltCredit.create(payload);
+    if ($paymentResponse.value?.data?.invoiceUrl) {
+      window.open($paymentResponse.value?.data?.invoiceUrl);
+    }
 
-    push.success("Compra realizada com sucesso");
+    //await saltCredit.create(payload);
+    //push.success("Compra realizada com sucesso");
   } catch (error) {
     console.log("🚀 ~ handleSaleItem ~ error:", error);
     push.error("Erro ao realizar a compra");

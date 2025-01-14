@@ -11,8 +11,10 @@ export default defineEventHandler(async (event) => {
   setResponseStatus(event, 200);
 
   if (user) {
-    console.log("🚀 ~ defineEventHandler ~ body:", body);
-    return createCustomer(body, user);
+    return createCustomer({
+      ...body,
+      userId: user.id,
+    });
   }
 
   return {};

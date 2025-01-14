@@ -32,6 +32,7 @@ export const login = async ({ email, password }: AuthProps) => {
       password: true,
       publicId: true,
       customerId: true,
+      cpfCnpj: true,
       Profile: {
         select: {
           profileName: true,
@@ -80,6 +81,7 @@ export const login = async ({ email, password }: AuthProps) => {
       email: user.email,
       name: user.name,
       publicId: user.publicId!,
+      cpfCnpj: user.cpfCnpj || "",
       Profile: user.Profile as UserProfileProps,
     };
 
@@ -156,6 +158,8 @@ export const verifyUser = async (id: number) => {
       email: true,
       name: true,
       customerId: true,
+      cpfCnpj: true,
+      publicId: true,
       Profile: {
         select: {
           profileName: true,
@@ -190,6 +194,8 @@ export const verifyUser = async (id: number) => {
       customerId: user.customerId || "",
       email: user.email,
       name: user.name,
+      cpfCnpj: user.cpfCnpj || "",
+      publicId: user.publicId!,
       Profile: user.Profile as UserProfileProps,
     };
 

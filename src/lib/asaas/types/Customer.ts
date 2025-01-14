@@ -18,6 +18,7 @@ export interface CustomerProps {
   groupName?: string | null;
   company?: string | null;
   foreignCustomer?: boolean;
+  userId?: number;
 }
 
 export interface CustomerResponseCreataedProps {

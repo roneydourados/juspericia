@@ -60,7 +60,10 @@ export const create = async (payload: UserCreditSalt) => {
     );
 
     if (!saltCategory) {
-      throw new Error("Invalid salt category type");
+      throw createError({
+        status: 500,
+        message: "Invalid salt category type",
+      });
     }
 
     return prisma.userCreditSalt.create({
