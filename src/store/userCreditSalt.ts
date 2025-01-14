@@ -1,55 +1,63 @@
+import { SaleFilterProps } from "@/types/Sale";
 import { defineStore } from "pinia";
 
 export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
   const { api } = useAxios();
 
-  const userCreditSalts = ref<UserCreditSalt[]>([]);
-  const userCreditSalt = ref<UserCreditSalt>();
+  const userCreditSalts = ref<SaleProps[]>([]);
+  const userCreditLog = ref<UserCreditLog[]>([]);
 
   const $all = computed(() => userCreditSalts.value);
-  const $single = computed(() => userCreditSalt.value);
+  const $userCreditLog = computed(() => userCreditLog.value);
 
-  const index = async (input: { isExpired?: boolean; status?: string }) => {
-    const { isExpired, status } = input;
+  const index = async (input: SaleFilterProps) => {
+    const { status, initialDate, finalDate } = input;
     const config = {
       params: {
-        isExpired,
+        initialDate,
+        finalDate,
         status,
       },
     };
-    const { data } = await api.get<UserCreditSalt[]>(
-      "/user-credit-salt",
-      config
-    );
+    const { data } = await api.get<SaleProps[]>("/user-credit-salt", config);
 
     userCreditSalts.value = data;
   };
 
-  const create = async (payload: UserCreditSalt) => {
-    const { data } = await api.post<UserCreditSalt>(
-      "/user-credit-salt",
-      payload
+  const getUserCreditLog = async (publicId: string) => {
+    const { data } = await api.get<UserCreditLog[]>(
+      `/user-credit-salt/${publicId}`
     );
 
-    userCreditSalt.value = data;
+    userCreditLog.value = data;
   };
 
-  const cancel = async (id: string) => {
-    await api.put(`/user-credit-salt/cancel/${id}`);
-  };
+  // const create = async (payload: UserCreditSalt) => {
+  //   const { data } = await api.post<UserCreditSalt>(
+  //     "/user-credit-salt",
+  //     payload
+  //   );
 
-  const show = async (id: string) => {
-    const { data } = await api.get<UserCreditSalt>(`/user-credit-salt/${id}`);
+  //   userCreditSalt.value = data;
+  // };
 
-    userCreditSalt.value = data;
-  };
+  // const cancel = async (id: string) => {
+  //   await api.put(`/user-credit-salt/cancel/${id}`);
+  // };
+
+  // const show = async (id: string) => {
+  //   const { data } = await api.get<UserCreditSalt>(`/user-credit-salt/${id}`);
+
+  //   userCreditSalt.value = data;
+  // };
 
   return {
     index,
-    create,
-    cancel,
-    show,
+    // create,
+    // cancel,
+    // show,
+    getUserCreditLog,
     $all,
-    $single,
+    $userCreditLog,
   };
 });

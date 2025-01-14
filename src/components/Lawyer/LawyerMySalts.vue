@@ -42,33 +42,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="3">
-            <v-card flat elevation="2" rounded="lg">
-              <v-card-title class="text-subtitle-2">
-                Saldo em pacotes
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <v-icon
-                  icon="mdi-chart-box-multiple-outline"
-                  size="25"
-                  color="info"
-                />
-                <div class="d-flex">
-                  <span class="text-grey-darken-1" style="font-size: 1.2rem">
-                    R$
-                  </span>
-                  <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{
-                      amountFormated(
-                        $totals.totalExpired + $totals.total,
-                        false
-                      )
-                    }}
-                  </span>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col>
         </v-row>
         <div class="py-4">
           <Table
@@ -90,6 +63,17 @@
                 />
                 {{ getStatusName(item).text }}
               </span>
+            </template>
+            <template #item.dateCreated="{ item }">
+              <strong>{{
+                moment(item.dateCreated).format("DD/MM/YYYY")
+              }}</strong>
+            </template>
+            <template #item.dueDate="{ item }">
+              <strong>{{ moment(item.dueDate).format("DD/MM/YYYY") }}</strong>
+            </template>
+            <template #item.value="{ item }">
+              <strong>{{ amountFormated(item.value, true) }}</strong>
             </template>
             <template #item.salt="{ item }">
               <strong>{{ amountFormated(item.salt, true) }}</strong>
@@ -116,8 +100,41 @@
                   Detalhes
                 </v-tooltip>
               </v-btn>
+              <v-btn
+                v-if="item.status === 'PENDING'"
+                variant="text"
+                color="success"
+                icon
+                @click="handlePaid(item)"
+              >
+                <v-icon icon="mdi-cash-multiple"></v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Efetuar pagamento
+                </v-tooltip>
+              </v-btn>
+              <v-btn
+                v-if="item.status === 'CONFIRMED'"
+                variant="text"
+                color="info"
+                icon
+                @click="handleReceipt(item)"
+              >
+                <v-icon icon="mdi-file-multiple"></v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Comprovante de pagamento
+                </v-tooltip>
+              </v-btn>
             </template>
           </Table>
+          <!-- <pre>{{ $salts }}</pre> -->
         </div>
       </v-card-text>
     </v-card>
@@ -153,6 +170,7 @@ const $totals = computed(() => {
 });
 
 const showDetails = ref(false);
+
 const headers = ref([
   { title: "Descrição", key: "description" },
   {
@@ -161,8 +179,10 @@ const headers = ref([
     sortable: false,
     key: "status",
   },
-  { title: "Data da compra", key: "createdAt" },
+  { title: "Data da compra", key: "dateCreated" },
+  { title: "Prazo pgto", key: "dueDate" },
   { title: "Data de expiração", key: "expiredAt" },
+  { title: "Valor", key: "value" },
   { title: "Saldo", key: "salt" },
   { title: "Ações", key: "actions" },
 ]);
@@ -171,7 +191,7 @@ const getStatusName = (item: UserCreditSalt) => {
   const currentDate = moment();
 
   switch (item.status) {
-    case "active":
+    case "CONFIRMED":
       // se estiver ativo, então verificar se não expirou
       return {
         text: moment(item.expiredAt).isBefore(currentDate)
@@ -181,12 +201,12 @@ const getStatusName = (item: UserCreditSalt) => {
           ? "warning"
           : "success",
       };
-    case "pending":
+    case "PENDING":
       return {
         text: "Pendente",
         color: "warning",
       };
-    case "canceled":
+    case "REFUNDED":
       return {
         text: "Cancelado",
         color: "error",
@@ -200,7 +220,37 @@ const getStatusName = (item: UserCreditSalt) => {
 };
 
 const handleDetails = async (item: UserCreditSalt) => {
-  await saltCredit.show(item.publicId!);
+  await saltCredit.getUserCreditLog(item.publicId!);
   showDetails.value = true;
+};
+
+const handlePaid = (item: SaleProps) => {
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const popupWidth = Math.round(screenWidth * 0.95);
+  const popupHeight = Math.round(screenHeight * 0.95);
+  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+  const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+  window.open(
+    item.invoiceUrl,
+    "_blank",
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+  );
+};
+
+const handleReceipt = (item: SaleProps) => {
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const popupWidth = Math.round(screenWidth * 0.7);
+  const popupHeight = Math.round(screenHeight * 0.7);
+  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+  const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+  window.open(
+    item.transactionReceiptUrl,
+    "_blank",
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+  );
 };
 </script>
