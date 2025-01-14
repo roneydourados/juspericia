@@ -1,3 +1,4 @@
+1
 <template>
   <v-card
     :disabled="loading"
@@ -91,7 +92,6 @@
 </template>
 
 <script setup lang="ts">
-import { uuidv7 } from "uuidv7";
 import moment from "moment";
 
 const props = defineProps({
@@ -109,35 +109,20 @@ const props = defineProps({
   },
 });
 
-const saltCredit = useUserCreditSaltStore();
-const asaas = useAsaasStore();
-
 const { amountFormated } = useUtils();
+const asaas = useAsaasStore();
 const auth = useAuthStore();
+
 const loading = ref(false);
 const showSale = ref(false);
 
-const $currentUser = computed(() => auth.$currentUser);
+//const $currentUser = computed(() => auth.$currentUser);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 
-const handleSaleItem = async (item: any) => {
+const handleSaleItem = async () => {
   showSale.value = false;
   loading.value = true;
   try {
-    // const payload = {
-    //   salt: props.value,
-    //   saltCategory: props.category,
-    //   expiredAt: moment().add(1, "month").format("YYYY-MM-DD"),
-    //   UserCreditPayment: [
-    //     {
-    //       paymentForm: "PIX",
-    //       value: props.value,
-    //       chargeId: uuidv7(),
-    //       status: "paid",
-    //     },
-    //   ],
-    // };
-
     await asaas.createPayment({
       dueDate: moment().format("YYYY-MM-DD"),
       value: props.value,
@@ -145,11 +130,21 @@ const handleSaleItem = async (item: any) => {
     });
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      window.open($paymentResponse.value?.data?.invoiceUrl);
-    }
+      //window.open($paymentResponse.value?.data?.invoiceUrl);
 
-    //await saltCredit.create(payload);
-    //push.success("Compra realizada com sucesso");
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+      const popupWidth = Math.round(screenWidth * 0.95);
+      const popupHeight = Math.round(screenHeight * 0.95);
+      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+      const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+      window.open(
+        $paymentResponse.value?.data?.invoiceUrl,
+        "_blank",
+        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+      );
+    }
   } catch (error) {
     console.log("🚀 ~ handleSaleItem ~ error:", error);
     push.error("Erro ao realizar a compra");

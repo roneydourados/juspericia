@@ -1,18 +1,14 @@
 model UserCreditLog {
-  id           Int             @id @default(autoincrement())
-  createdAt    DateTime        @default(now()) @map("created_at")
-  userId       Int             @map("user_id")
-  creditSaltId Int?            @map("credit_salt_id")
-  history      String          @db.Text
-  oldValue     Decimal         @default(0) @map("old_value") @db.Decimal(18, 2)
-  inputValue   Decimal         @default(0) @map("input_value") @db.Decimal(18, 2)
-  outputValue  Decimal         @default(0) @map("output_value") @db.Decimal(18, 2)
-  saltValue    Decimal         @default(0) @map("salt_value") @db.Decimal(18, 2)
-  User         User            @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-  CreditSalt   UserCreditSalt? @relation(fields: [creditSaltId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id        Int      @id @default(autoincrement())
+  saleId    Int?     @map("sale_id")
+  userId    Int      @map("user_id")
+  history   String   @db.Text
+  type      String   @default("D") @db.Char(1)
+  value     Decimal  @default(0) @map("value") @db.Decimal(18, 2)
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@index([createdAt], map: "user_log_credits_idx_created_at")
   @@index([userId], map: "user_log_credits_idx_user_id")
-  @@index([creditSaltId], map: "user_log_credits_idx_credit_salt_id")
+  @@index([saleId], map: "user_log_credits_idx_sale_id")
   @@map("user_credit_log")
 }

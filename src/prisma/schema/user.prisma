@@ -24,9 +24,7 @@ model User {
   Patient                   Patient[]
   PatientConsultationReport PatientConsultationReport[]
   Schedules                 Schedule[]
-  UserLogCredit             UserCreditLog[]
   PatientConsultation       PatientConsultation[]
-  UserCreditSalt            UserCreditSalt[]
   UserSales                 Sales[]
 
   @@index([name], map: "users_idx_name")

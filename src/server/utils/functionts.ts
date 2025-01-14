@@ -73,53 +73,53 @@ export const getItemMinionFile = async (fileServerName: string) => {
   return await s3MinioClient.getObject("juspericia", fileServerName);
 };
 
-export const createUserCredit = async (payload: UserCreditSalt) => {
-  try {
-    await prisma.userCreditSalt.create({
-      data: {
-        userId: payload.userId!,
-        saleId: payload.saleId,
-        salt: Number(payload.salt!),
-        saltCategory: payload.saltCategory!,
-        expiredAt: new Date(payload.expiredAt!),
-        description: payload.description,
-        publicId: uuidv7(),
-        status: "active",
-        UserLogCredit: {
-          create: {
-            userId: payload.userId!,
-            history: `Inclusão de crédito referemte a ${
-              payload.description
-            } data de expiração ${moment(payload.expiredAt!).format(
-              "DD/MM/YYYY"
-            )}`,
-            oldValue: 0, // saldo anterior
-            inputValue: payload.salt!, // entrada
-            outputValue: 0, // saída
-            saltValue: payload.salt!, // saldo atual
-          },
-        },
-        UserCreditPayment: {
-          createMany: {
-            data: payload.UserCreditPayment!.map((payment) => ({
-              paymentForm: payment.paymentForm!,
-              value: payment.value!,
-              chargeId: payment.chargeId,
-              status: payment.status!,
-            })),
-          },
-        },
-      },
-    });
-  } catch (error) {
-    console.log("🚀 ~ setUserCredit ~ error:", error);
+// export const createUserCredit = async (payload: UserCreditSalt) => {
+//   try {
+//     await prisma.userCreditSalt.create({
+//       data: {
+//         userId: payload.userId!,
+//         saleId: payload.saleId,
+//         salt: Number(payload.salt!),
+//         saltCategory: payload.saltCategory!,
+//         expiredAt: new Date(payload.expiredAt!),
+//         description: payload.description,
+//         publicId: uuidv7(),
+//         status: "active",
+//         UserLogCredit: {
+//           create: {
+//             userId: payload.userId!,
+//             history: `Inclusão de crédito referemte a ${
+//               payload.description
+//             } data de expiração ${moment(payload.expiredAt!).format(
+//               "DD/MM/YYYY"
+//             )}`,
+//             oldValue: 0, // saldo anterior
+//             inputValue: payload.salt!, // entrada
+//             outputValue: 0, // saída
+//             saltValue: payload.salt!, // saldo atual
+//           },
+//         },
+//         UserCreditPayment: {
+//           createMany: {
+//             data: payload.UserCreditPayment!.map((payment) => ({
+//               paymentForm: payment.paymentForm!,
+//               value: payment.value!,
+//               chargeId: payment.chargeId,
+//               status: payment.status!,
+//             })),
+//           },
+//         },
+//       },
+//     });
+//   } catch (error) {
+//     console.log("🚀 ~ setUserCredit ~ error:", error);
 
-    throw createError({
-      statusCode: 500,
-      message: "Error set user credit",
-    });
-  }
-};
+//     throw createError({
+//       statusCode: 500,
+//       message: "Error set user credit",
+//     });
+//   }
+// };
 
 const checkUploadsDirectory = () => {
   const uploadPath = path.join(process.cwd(), "./uploads");

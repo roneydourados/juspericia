@@ -19,15 +19,12 @@ export interface UserCreditSalt {
 
 export interface UserCreditLog {
   id?: number;
-  creditSaltId?: number;
+  saleId?: number;
   userId?: number;
-  createdAt?: string;
   history?: string;
-  oldValue?: number;
-  inputValue?: number;
-  outputValue?: number;
-  saltValue?: number;
-  User?: UserProps;
+  type?: string;
+  value?: number;
+  createdAt?: string;
 }
 
 export interface UserCreditPayment {

@@ -18,6 +18,8 @@ model Sales {
   createdAt             DateTime  @default(now()) @map("created_at")
   updatedAt             DateTime  @updatedAt @map("updated_at")
   localStatus           String    @default("pending") @map("local_status")
+  expiredAt             DateTime  @map("expired_at") @db.Date()
+  salt                  Decimal   @default(0) @map("salt") @db.Decimal(18, 2)
   User                  User      @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
   @@index([userId], map: "sales_idx_id")
