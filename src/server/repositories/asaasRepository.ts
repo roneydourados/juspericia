@@ -8,6 +8,7 @@ import { PaymentAsaasProps } from "~/lib/asaas/types/Payment";
 import { WebHookPaymentResponseProps } from "~/lib/asaas/types/WebhookPayment";
 import { UserProps } from "~/types/User";
 import { UserCreditSalt } from "~/types/UserCredit";
+import { createUserCredit } from "../utils/functionts";
 
 export const createCustomer = async (customer: CustomerProps) => {
   const { createCustomer } = useCustomerAsaas();
@@ -153,9 +154,11 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
             .add(1, "month")
             .format("YYYY-MM-DD");
 
-          await setUserCredit({
+          await createUserCredit({
             userId: user.id!,
+            saleId: sale.id,
             salt: payload.payment.value,
+            saltCategory: "sale",
             expiredAt,
             description: payload.payment.description,
             UserCreditPayment: [
@@ -178,6 +181,48 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
         });
         break;
       case "PAYMENT_REFUNDED":
+        const saleRefunded = await prisma.sales.findFirst({
+          where: {
+            saleId: payload.payment.id,
+          },
+        });
+
+        //caso seja estornada a venda então também cancelar o saldo em créditos
+        if (saleRefunded) {
+          const salt = await prisma.userCreditSalt.findFirst({
+            where: {
+              saleId: saleRefunded?.id,
+            },
+          });
+
+          if (salt) {
+            await prisma.userCreditSalt.update({
+              data: {
+                status: "canceled",
+                UserLogCredit: {
+                  create: {
+                    userId: salt.userId,
+                    history: `Estorno de crédito referente ao cancelamento da venda: ${
+                      salt.description
+                    } no valor: ${saleRefunded.value.toFixed(
+                      2
+                    )} data de expiração ${moment(salt.expiredAt).format(
+                      "DD/MM/YYYY"
+                    )}`,
+                    oldValue: salt.salt, // saldo anterior
+                    inputValue: 0, // entrada
+                    outputValue: salt.salt, // saída
+                    saltValue: 0, // saldo atual
+                  },
+                },
+              },
+              where: {
+                id: salt.id,
+              },
+            });
+          }
+        }
+
         //caso seja estornado atualizar a venda
         await prisma.sales.updateMany({
           data: {
@@ -198,53 +243,6 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
     throw createError({
       statusCode: 500,
       message: "Error webhook asaas",
-    });
-  }
-};
-
-const setUserCredit = async (payload: UserCreditSalt) => {
-  try {
-    await prisma.userCreditSalt.create({
-      data: {
-        userId: payload.userId!,
-        salt: Number(payload.salt!),
-        saltCategory: "sale",
-        expiredAt: new Date(payload.expiredAt!),
-        description: payload.description,
-        publicId: uuidv7(),
-        status: "active",
-        UserLogCredit: {
-          create: {
-            userId: payload.userId!,
-            history: `Inclusão de crédito referemte a ${
-              payload.description
-            } data de expiração ${moment(payload.expiredAt!).format(
-              "DD/MM/YYYY"
-            )}`,
-            oldValue: 0, // saldo anterior
-            inputValue: payload.salt!, // entrada
-            outputValue: 0, // saída
-            saltValue: payload.salt!, // saldo atual
-          },
-        },
-        UserCreditPayment: {
-          createMany: {
-            data: payload.UserCreditPayment!.map((payment) => ({
-              paymentForm: payment.paymentForm!,
-              value: payment.value!,
-              chargeId: payment.chargeId,
-              status: payment.status!,
-            })),
-          },
-        },
-      },
-    });
-  } catch (error) {
-    console.log("🚀 ~ setUserCredit ~ error:", error);
-
-    throw createError({
-      statusCode: 500,
-      message: "Error set user credit",
     });
   }
 };

@@ -8,6 +8,7 @@ model UserCreditSalt {
   updatedAt         DateTime            @default(now()) @updatedAt @map("updated_at")
   description       String?             @db.Text
   publicId          String?             @unique @map("public_id") @db.VarChar(50)
+  saleId            Int?                @map("sale_id")
   status            String              @default("active") @db.VarChar(30)
   User              User                @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   UserLogCredit     UserCreditLog[]

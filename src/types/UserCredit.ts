@@ -3,6 +3,7 @@ export interface UserCreditSalt {
   id?: number;
   userId?: number;
   salt?: number;
+  saleId?: number;
   saltCategory?: string;
   expiredAt?: string;
   createdAt?: string;
@@ -10,6 +11,7 @@ export interface UserCreditSalt {
   description?: string;
   publicId?: string;
   status?: string;
+  type?: string;
   User?: UserProps;
   UserLogCredit?: UserCreditLog[];
   UserCreditPayment?: UserCreditPayment[];
