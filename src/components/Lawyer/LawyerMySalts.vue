@@ -157,7 +157,6 @@
               </v-btn>
             </template>
           </Table>
-          <!-- <pre>{{ $salts }}</pre> -->
         </div>
       </v-card-text>
     </v-card>
