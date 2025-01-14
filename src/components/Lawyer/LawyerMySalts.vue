@@ -27,6 +27,24 @@
           <v-col cols="12" lg="3">
             <v-card flat elevation="2" rounded="lg">
               <v-card-title class="text-subtitle-2">
+                Total pendente
+              </v-card-title>
+              <v-card-text class="d-flex align-center justify-space-between">
+                <v-icon icon="mdi-currency-usd" size="25" color="info" />
+                <div class="d-flex">
+                  <span class="text-grey-darken-1" style="font-size: 1.2rem">
+                    R$
+                  </span>
+                  <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
+                    {{ amountFormated($totals.totalPending, false) }}
+                  </span>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" lg="3">
+            <v-card flat elevation="2" rounded="lg">
+              <v-card-title class="text-subtitle-2">
                 Total expirado
               </v-card-title>
               <v-card-text class="d-flex align-center justify-space-between">
@@ -41,6 +59,11 @@
                 </div>
               </v-card-text>
             </v-card>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12">
+            <LawyerMySaltsFilters />
           </v-col>
         </v-row>
         <div class="py-4">
@@ -164,6 +187,11 @@ const $totals = computed(() => {
         moment(item.expiredAt).isBefore(currentDate)
           ? acc + Number(item.salt ?? 0)
           : acc,
+      0
+    ),
+    totalPending: $salts.value.reduce(
+      (acc, item) =>
+        item.status === "PENDING" ? acc + Number(item.value) : acc,
       0
     ),
   };
