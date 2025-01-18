@@ -48,30 +48,37 @@ export const createPayment = async (
       },
     });
 
-    if (!user!.officeCnpj) {
+    if (!user) {
+      throw createError({
+        statusCode: 400,
+        message: "User not found!",
+      });
+    }
+
+    if (user.officeCnpj) {
       throw createError({
         statusCode: 400,
         message: "CPF/CNPJ Office not found!",
       });
     }
 
-    if (!user!.customerId) {
+    if (!user.customerId) {
       const address = await prisma.address.findFirst({
         where: {
-          ownerId: user!.id,
+          ownerId: user.id,
           addressCategory: "USER",
         },
       });
 
       //verificar o cliente se existe
       const customer = await createCustomer({
-        cpfCnpj: user!.officeCnpj!,
-        name: user!.officeName!,
-        email: user!.officeEmail ? user!.officeEmail : "",
-        userId: user!.id,
-        phone: user!.officePhone ? user!.officePhone : undefined,
-        mobilePhone: user!.whatsapp ? user!.whatsapp : undefined,
-        company: user!.officeName ? user!.officeName : undefined,
+        cpfCnpj: user.officeCnpj!,
+        name: user.officeName!,
+        email: user.officeEmail ? user.officeEmail : "",
+        userId: user.id,
+        phone: user.officePhone ? user.officePhone : undefined,
+        mobilePhone: user.whatsapp ? user.whatsapp : undefined,
+        company: user.officeName ? user.officeName : undefined,
         address: address?.addressStreet ? address.addressStreet : undefined,
         addressNumber: address?.addressNumber
           ? address.addressNumber
@@ -94,13 +101,13 @@ export const createPayment = async (
         });
       }
 
-      user!.customerId = customer.id;
+      user.customerId = customer.id;
     }
 
     const resp = await createPayment({
       ...payload,
       externalReference: uuidv7(),
-      customer: user!.customerId,
+      customer: user.customerId,
     });
 
     return resp;

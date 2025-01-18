@@ -12,6 +12,9 @@ export const useCustomerAsaas = () => {
 
   const baseUrl = (useRuntimeConfig().public.asaasBaseUrl as string) || "";
 
+  console.log("🚀 ~ useCustomerAsaas ~ baseUrl:", baseUrl);
+  console.log("🚀 ~ useCustomerAsaas ~ apiKey:", apiKey);
+
   const asaasApi = axios.create({
     baseURL: baseUrl,
     headers: {
