@@ -55,8 +55,7 @@ export const createPayment = async (
       });
     }
 
-    if (user.officeCnpj) {
-      console.log("🚀 ~ user:", user);
+    if (!user.officeCnpj) {
       throw createError({
         statusCode: 400,
         message: "CPF/CNPJ Office not found!",
