@@ -17,6 +17,7 @@ R:.
 [] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
 [] - Cadastro de horários intervalo por médico
 [] - Liberação dos horários por médico levar consideração do dia da semana que pode atender
+[x] - Cadastro de pacotes de serviço
 
 # pendente tela advogado (termiar aqui primeiro 11/01/2025)
 
@@ -26,6 +27,8 @@ R:.
 [] - acrescentar filtros na tela de meus saldos
 [] - Enviar email de confirmação de cadastro
 [] - Enviar email para resetar senha
+[] - Integrar pagamento de solicitações com asaas
+[] - Ter opção de pagar uma solicitação com saldo de crédito
 
 # correções
 

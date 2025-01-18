@@ -107,7 +107,7 @@ export const index = async ({
 
     const laywerInvestment = await prisma.$queryRaw<LawyerQuantityProps[]>`
       select 
-        cast(sum(us.salt) as numeric(18,2)) as quantity,
+        cast(sum(us.value) as numeric(18,2)) as quantity,
         case extract(month from us.created_at)
           when 1 then 'Jan'
           when 2 then 'Fev'
@@ -122,7 +122,7 @@ export const index = async ({
           when 11 then 'Nov'
           when 12 then 'Dez'
         end as month
-      from user_credit_salt us
+      from user_credit_log us
       where us.user_id = ${userId}
         and cast(us.created_at as date) between ${new Date(
           initialDate
