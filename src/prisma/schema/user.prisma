@@ -17,6 +17,7 @@ model User {
   officeCnpj                String?                     @map("office_cnpj") @db.VarChar(30)
   officeEmail               String?                     @map("office_email") @db.VarChar(1000)
   officePhone               String?                     @map("office_phone") @db.VarChar(20)
+  whatsapp                  String?                     @map("whatsapp") @db.VarChar(20)
   publicId                  String?                     @unique @map("public_id") @db.VarChar(40)
   customerId                String?                     @map("customer_id") @db.VarChar(40)
   medicConsultationValue    Decimal?                    @default(0) @map("medic_consultation_value") @db.Decimal(18, 2) //definir o valor que será pago ao médico por consulta

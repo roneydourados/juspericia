@@ -37,18 +37,54 @@ export const getCustomer = async (cpfCnpj: string) => {
 
 export const createPayment = async (
   payload: PaymentAsaasProps,
-  user: UserProps
+  userId: number
 ) => {
   try {
     const { createPayment } = useAsaasPayment();
 
-    if (!user.customerId) {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user!.officeCnpj) {
+      throw createError({
+        statusCode: 400,
+        message: "CPF/CNPJ Office not found!",
+      });
+    }
+
+    if (!user!.customerId) {
+      const address = await prisma.address.findFirst({
+        where: {
+          ownerId: user!.id,
+          addressCategory: "USER",
+        },
+      });
+
       //verificar o cliente se existe
       const customer = await createCustomer({
-        cpfCnpj: user.cpfCnpj!,
-        name: user.name!,
-        email: user.email ? user.email : "",
-        userId: user.id,
+        cpfCnpj: user!.officeCnpj!,
+        name: user!.officeName!,
+        email: user!.officeEmail ? user!.officeEmail : "",
+        userId: user!.id,
+        phone: user!.officePhone ? user!.officePhone : undefined,
+        mobilePhone: user!.whatsapp ? user!.whatsapp : undefined,
+        company: user!.officeName ? user!.officeName : undefined,
+        address: address?.addressStreet ? address.addressStreet : undefined,
+        addressNumber: address?.addressNumber
+          ? address.addressNumber
+          : undefined,
+        complement: address?.addressComplement
+          ? address.addressComplement
+          : undefined,
+        province: address?.addressDistrict
+          ? address.addressDistrict
+          : undefined,
+        postalCode: address?.addressZipcode
+          ? address.addressZipcode
+          : undefined,
       });
 
       if (!customer?.id) {
@@ -58,13 +94,13 @@ export const createPayment = async (
         });
       }
 
-      user.customerId = customer.id;
+      user!.customerId = customer.id;
     }
 
     const resp = await createPayment({
       ...payload,
       externalReference: uuidv7(),
-      customer: user.customerId,
+      customer: user!.customerId,
     });
 
     return resp;
@@ -90,9 +126,7 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
 
     switch (payload.event) {
       case "PAYMENT_CREATED":
-        const expiredAt = moment(payload.payment.dueDate)
-          .add(1, "month")
-          .format("YYYY-MM-DD");
+        const expiredAt = moment().add(1, "month").format("YYYY-MM-DD");
 
         await prisma.sales.create({
           data: {

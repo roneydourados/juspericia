@@ -124,7 +124,7 @@ const handleSaleItem = async () => {
   loading.value = true;
   try {
     await asaas.createPayment({
-      dueDate: moment().format("YYYY-MM-DD"),
+      dueDate: moment().add(3, "days").format("YYYY-MM-DD"),
       value: props.value,
       description: props.title,
     });
@@ -147,7 +147,6 @@ const handleSaleItem = async () => {
     }
   } catch (error) {
     console.log("🚀 ~ handleSaleItem ~ error:", error);
-    push.error("Erro ao realizar a compra");
   } finally {
     loading.value = false;
   }

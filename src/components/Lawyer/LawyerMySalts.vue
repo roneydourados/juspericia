@@ -88,12 +88,20 @@
               </span>
             </template>
             <template #item.dateCreated="{ item }">
-              <strong>{{
-                moment(item.dateCreated).format("DD/MM/YYYY")
-              }}</strong>
+              <strong>
+                {{ moment(item.dateCreated).format("DD/MM/YYYY") }}
+              </strong>
             </template>
             <template #item.dueDate="{ item }">
-              <strong>{{ moment(item.dueDate).format("DD/MM/YYYY") }}</strong>
+              <v-chip
+                label
+                :color="item.status === 'PENDING' ? 'info' : 'success'"
+              >
+                <strong v-if="item.status === 'PENDING'">
+                  {{ moment(item.dueDate).format("DD/MM/YYYY") }}
+                </strong>
+                <strong v-else> Pago </strong>
+              </v-chip>
             </template>
             <template #item.value="{ item }">
               <strong>{{ amountFormated(item.value, true) }}</strong>
@@ -102,7 +110,11 @@
               <strong>{{ amountFormated(item.salt, true) }}</strong>
             </template>
             <template #item.expiredAt="{ item }">
-              <strong>{{ moment(item.expiredAt).format("DD/MM/YYYY") }}</strong>
+              <v-chip label :color="getStatusName(item).color">
+                <strong>
+                  {{ moment(item.expiredAt).format("DD/MM/YYYY") }}
+                </strong>
+              </v-chip>
             </template>
             <template #item.createdAt="{ item }">
               <strong>{{ moment(item.createdAt).format("DD/MM/YYYY") }}</strong>

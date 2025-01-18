@@ -11,7 +11,7 @@ export const getSaleUser = async ({
     const gte = new Date(initialDate || "");
     const lte = new Date(finalDate || "");
 
-    return prisma.sales.findMany({
+    const sales = await prisma.sales.findMany({
       select: {
         publicId: true,
         description: true,
@@ -35,7 +35,16 @@ export const getSaleUser = async ({
         },
         status,
       },
+      orderBy: {
+        id: "desc",
+      },
     });
+    return sales.map((sale) => ({
+      ...sale,
+      dateCreated: formatDate(sale.dateCreated),
+      dueDate: formatDate(sale.dueDate),
+      expiredAt: formatDate(sale.expiredAt),
+    }));
   } catch (error) {
     console.log("🚀 ~ error:", error);
 

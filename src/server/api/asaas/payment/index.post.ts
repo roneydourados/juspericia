@@ -10,5 +10,5 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 200);
 
-  return createPayment(body, user);
+  return createPayment(body, user.id!);
 });
