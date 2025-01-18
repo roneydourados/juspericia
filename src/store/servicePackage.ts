@@ -10,8 +10,16 @@ export const useServicePackageStore = defineStore("servicePackage", () => {
   const $single = computed(() => servicePackage.value);
   const $history = computed(() => packageHistory.value);
 
-  const index = async () => {
-    const { data } = await api.get<ServicePackagesProps[]>("/service-package");
+  const index = async (status: string) => {
+    const config = {
+      params: {
+        status,
+      },
+    };
+    const { data } = await api.get<ServicePackagesProps[]>(
+      "/service-package",
+      config
+    );
 
     servicePackages.value = data;
   };

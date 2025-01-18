@@ -50,24 +50,24 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <!-- <v-col cols="12" lg="3">
+    <v-col cols="12" lg="3">
       <v-card
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/adm/packages')"
+        @click="handlClick('/admin/packages')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
           <AdminMenuServicePackageSVG height="50" color="#FB8C00" />
         </v-card-title>
         <v-card-text class="text-center">
-          Cadastro de pacote de consultas. Gestão de pacoetes de consultas, ao
-          cadastrar um pacote de consulta, possibilita a venda de consultas em
-          lote e com preço mais acessível ao escritório
+          Cadastro de pacote de consultas. Gestão de pacotes de consultas
+          possibilita a venda de consultas em lote e com preço mais acessível ao
+          escritório.
         </v-card-text>
       </v-card>
-    </v-col> -->
+    </v-col>
     <v-col cols="12" lg="3">
       <v-card
         flat
@@ -85,8 +85,6 @@
         </v-card-text>
       </v-card>
     </v-col>
-  </v-row>
-  <v-row dense>
     <v-col cols="12" lg="3">
       <v-card
         flat

@@ -1,7 +1,9 @@
 import { getServicePackages } from "~/server/repositories/servicePackageRepository";
 
 export default defineEventHandler(async (event) => {
+  const { status } = getQuery(event);
+
   setResponseStatus(event, 200);
 
-  await getServicePackages();
+  return getServicePackages(String(status));
 });

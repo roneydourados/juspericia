@@ -10,5 +10,5 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 200);
 
-  await update(body, user);
+  return update(body, user);
 });

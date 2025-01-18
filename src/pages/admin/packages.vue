@@ -1,5 +1,8 @@
 <template>
-  <div>pacotes de serviços</div>
+  <PackagesTable />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const consutationPackage = useServicePackageStore();
+await useAsyncData(async () => await consutationPackage.index("active"));
+</script>

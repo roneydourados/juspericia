@@ -3,12 +3,14 @@ import { ServicePackagesProps } from "~/types/ServicePackages";
 import { uuidv7 } from "uuidv7";
 import { UserProps } from "~/types/User";
 
-export const getServicePackages = async () => {
-  return prisma.servicePackage.findMany({
+export const getServicePackages = async (status: string) => {
+  const servicePackages = await prisma.servicePackage.findMany({
     where: {
-      status: "active",
+      status,
     },
   });
+
+  return servicePackages;
 };
 
 export const create = async (
@@ -20,9 +22,7 @@ export const create = async (
       data: {
         name: payload.name!,
         value: payload.value!,
-        description: `Pacote de serviço foi criado pelo usuário: ${
-          user.name
-        }, com valor de ${payload.value?.toFixed(2)}`,
+        description: payload.description!,
         urlImage: payload.urlImage!,
         publicId: uuidv7(),
       },
@@ -32,7 +32,9 @@ export const create = async (
       data: {
         publicId: uuidv7(),
         packageId: packageData.id,
-        description: payload.description!,
+        description: `Pacote de serviço foi criado pelo usuário: ${
+          user.name
+        }, com valor de ${payload.value?.toFixed(2)}`,
         action: "create",
         userId: user.id!,
       },
@@ -84,7 +86,11 @@ export const update = async (
           user.name
         }, estava com valor de ${exists.value?.toFixed(
           2
-        )} e foi alterado para ${payload.value?.toFixed(2)}`,
+        )} e foi alterado para ${payload.value?.toFixed(2)}, Nome de: ${
+          exists.name
+        } para: ${payload.name}, descrição de: ${exists.description} para: ${
+          payload.description
+        }`,
         action: "update",
         userId: user.id!,
       },
@@ -152,8 +158,22 @@ export const getHistory = async (publicId: string) => {
 
     if (exists) {
       return prisma.servicePackageHistory.findMany({
+        select: {
+          publicId: true,
+          description: true,
+          action: true,
+          createdAt: true,
+          User: {
+            select: {
+              name: true,
+            },
+          },
+        },
         where: {
           packageId: exists.id,
+        },
+        orderBy: {
+          id: "desc",
         },
       });
     }
