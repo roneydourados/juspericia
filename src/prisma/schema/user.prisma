@@ -27,6 +27,7 @@ model User {
   Schedules                 Schedule[]
   PatientConsultation       PatientConsultation[]
   UserSales                 Sales[]
+  ServicePackageHistory     ServicePackageHistory[]
 
   @@index([name], map: "users_idx_name")
   @@index([email], map: "users_idx_email")

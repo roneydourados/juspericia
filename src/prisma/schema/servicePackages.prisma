@@ -1,0 +1,14 @@
+model ServicePackage {
+  id          Int      @id @default(autoincrement())
+  publicId    String?  @map("public_id")
+  name        String
+  description String   @db.Text
+  urlImage    String   @map("url_image") @db.Text
+  value       Decimal  @default(0) @db.Decimal(18, 2)
+  status      String   @default("active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([status], name: "service_packages_status_index")
+  @@map("service_packages")
+}
