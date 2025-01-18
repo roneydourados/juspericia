@@ -75,6 +75,7 @@ export const update = async (
         value: payload.value!,
         description: payload.description!,
         urlImage: payload.urlImage!,
+        status: payload.status,
       },
     });
 

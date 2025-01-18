@@ -24,34 +24,16 @@
     ></v-img>
 
     <v-card-item>
-      <v-card-title>{{ title }}</v-card-title>
-
-      <v-card-subtitle>
-        <span class="me-1">Mais simples</span>
-
+      <v-card-title>
         <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
-      </v-card-subtitle>
+
+        {{ item.name }}
+      </v-card-title>
     </v-card-item>
 
     <v-card-text>
-      <v-row align="center" class="mx-0">
-        <v-rating
-          :model-value="4.5"
-          color="amber"
-          density="compact"
-          size="small"
-          half-increments
-          readonly
-        ></v-rating>
-
-        <div class="text-grey ms-4">4.5 (413)</div>
-      </v-row>
-
-      <div class="my-4 text-subtitle-1">• Pacote de consultas</div>
-
       <div>
-        Pacote de consultas oferecidas pela plataforma, de uma forma que
-        comprando por aqui fica muito mais barata
+        {{ item.description }}
       </div>
     </v-card-text>
 
@@ -62,7 +44,7 @@
     <div class="px-4 mb-2">
       <v-chip color="deep-purple-lighten-2" label>
         <strong style="font-size: 1rem">
-          R$ {{ amountFormated(value, false) }}
+          R$ {{ amountFormated(item.value ?? 0, false) }}
         </strong>
       </v-chip>
     </div>
@@ -85,8 +67,8 @@
     show-cancel
   >
     <div class="d-flex flex-column">
-      <span>confirma a compra de {{ title }} ? </span>
-      Valor: <strong>{{ amountFormated(value, false) }}</strong>
+      <span>confirma a compra de {{ item.name }} ? </span>
+      Valor: <strong>{{ amountFormated(item.value ?? 0, false) }}</strong>
     </div>
   </Dialog>
 </template>
@@ -95,38 +77,32 @@
 import moment from "moment";
 
 const props = defineProps({
-  title: {
-    type: String,
-    default: "Pacote de serviços",
-  },
-  category: {
-    type: String,
-    default: "",
-  },
-  value: {
-    type: Number,
-    default: 0,
+  item: {
+    type: Object as PropType<ServicePackagesProps>,
+    required: true,
   },
 });
 
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
-const auth = useAuthStore();
 
 const loading = ref(false);
 const showSale = ref(false);
 
-//const $currentUser = computed(() => auth.$currentUser);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 
 const handleSaleItem = async () => {
   showSale.value = false;
   loading.value = true;
   try {
+    if (!props.item) {
+      push.warning("Selecione um item para comprar");
+    }
+
     await asaas.createPayment({
       dueDate: moment().add(3, "days").format("YYYY-MM-DD"),
-      value: props.value,
-      description: props.title,
+      value: props.item.value!,
+      description: props.item.name!,
     });
 
     if ($paymentResponse.value?.data?.invoiceUrl) {

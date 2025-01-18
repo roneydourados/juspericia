@@ -54,7 +54,10 @@
       </v-chip>
     </div>
 
-    <v-card-actions class="d-flex flex-wrap justify-end">
+    <v-card-actions
+      v-if="item.status === 'active'"
+      class="d-flex flex-wrap justify-end"
+    >
       <v-btn
         color="info"
         class="text-none"
@@ -80,6 +83,16 @@
         Apagar
       </v-btn>
     </v-card-actions>
+    <v-card-actions v-else class="d-flex flex-wrap justify-end">
+      <v-btn
+        color="info"
+        class="text-none"
+        prepend-icon="mdi-reload-alert"
+        @click="showRecover = true"
+      >
+        Recuperar
+      </v-btn>
+    </v-card-actions>
   </v-card>
   <Dialog
     title="CONFIRME"
@@ -89,7 +102,7 @@
     show-cancel
   >
     <div class="d-flex flex-column">
-      <span>confirma a compra de {{ item.name }} ? </span>
+      <span>confirma a exclusão de {{ item.name }} ? </span>
       Valor: <strong>{{ amountFormated(item.value ?? 0, false) }}</strong>
     </div>
   </Dialog>
@@ -102,6 +115,18 @@
     width="600"
   />
   <PackageHistory v-model="showHistory" />
+  <Dialog
+    title="CONFIRME"
+    :dialog="showRecover"
+    @cancel="showRecover = false"
+    @confirm="handleRecoverItem"
+    show-cancel
+  >
+    <div class="d-flex flex-column">
+      <span>Confirma recuperar o pacote: {{ item.name }} ? </span>
+      Valor: <strong>{{ amountFormated(item.value ?? 0, false) }}</strong>
+    </div>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -112,17 +137,21 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["update-status"]);
+
 const consutationPackage = useServicePackageStore();
 const { amountFormated } = useUtils();
 
 const showForm = ref(false);
 const showHistory = ref(false);
 const showDelete = ref(false);
+const showRecover = ref(false);
 const loading = ref(false);
 
 const handleDeleteItem = async () => {
   loading.value = true;
   try {
+    emit("update-status");
     if (props.item.publicId) {
       await consutationPackage.destroy(props.item.publicId);
     }
@@ -139,6 +168,7 @@ const handleCloseForm = async () => {
   showForm.value = false;
   loading.value = true;
   try {
+    emit("update-status");
     await consutationPackage.index("active");
   } finally {
     loading.value = false;
@@ -156,6 +186,25 @@ const handleShowHistory = async () => {
     console.log("🚀 ~ handleDeleteItem ~ error", error);
   } finally {
     loading.value = false;
+  }
+};
+
+const handleRecoverItem = async () => {
+  loading.value = true;
+  try {
+    emit("update-status");
+    if (props.item.publicId) {
+      await consutationPackage.update({
+        publicId: props.item.publicId,
+        status: "active",
+      });
+    }
+    await consutationPackage.index("active");
+  } catch (error) {
+    console.log("🚀 ~ handleRecoverItem ~ error", error);
+  } finally {
+    loading.value = false;
+    showRecover.value = false;
   }
 };
 </script>
