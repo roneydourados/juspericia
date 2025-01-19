@@ -7,6 +7,7 @@
     :disabled="disabled"
     :readonly="readonly"
     :clearable="cleareable"
+    :prepend-inner-icon="icon"
     @input="inputFormated($event.target.value)"
     @blur="blur"
     autocomplete="section-blue one-time-code"
@@ -49,6 +50,10 @@ const props = defineProps({
   cleareable: {
     type: Boolean,
     default: true,
+  },
+  icon: {
+    type: String,
+    default: "",
   },
 });
 

@@ -40,6 +40,7 @@ export const create = async (payload: UserProps) => {
         officeCnpj: payload.officeCnpj,
         officeEmail: payload.officeEmail,
         officePhone: payload.officePhone,
+        whatsapp: payload.whatsapp,
         publicId: uuidv7(),
       },
     });
@@ -100,6 +101,7 @@ export const update = async (payload: UserProps) => {
         officeCnpj: payload.officeCnpj,
         officeEmail: payload.officeEmail,
         officePhone: payload.officePhone,
+        whatsapp: payload.whatsapp,
       },
       where: {
         publicId: payload.publicId,
@@ -184,6 +186,7 @@ export const index = async (inputQuery: string) => {
       officePhone: true,
       officeEmail: true,
       officeCnpj: true,
+      whatsapp: true,
       publicId: true,
     },
     where: {
@@ -247,6 +250,7 @@ const exists = async (id: string) => {
       officePhone: true,
       officeEmail: true,
       officeCnpj: true,
+      whatsapp: true,
       publicId: true,
     },
   });

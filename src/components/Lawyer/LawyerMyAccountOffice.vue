@@ -11,6 +11,7 @@
               v-model="model.officeName"
               label="Escritório"
               placeholder="Nome do escritório"
+              icon="mdi-office-building"
             />
           </v-col>
           <v-col cols="12" lg="6">
@@ -18,6 +19,7 @@
               v-model="model.officeEmail"
               label="E-mail"
               placeholder="E-mail"
+              icon="mdi-email-outline"
             />
           </v-col>
         </v-row>
@@ -27,14 +29,15 @@
               v-model="model.officePhone"
               label="Telefone"
               placeholder="Telefone"
+              icon="mdi-phone-outline"
             />
           </v-col>
-          <v-col cols="12" lg="3">
+          <v-col cols="12" lg="4">
             <CNPJInput
               v-model="model.officeCnpj"
               label="CNPJ"
               placeholder="CNPJ"
-              required
+              icon="mdi-card-account-details-outline"
             />
           </v-col>
         </v-row>

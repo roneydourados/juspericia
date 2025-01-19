@@ -6,29 +6,35 @@
     <v-card-text>
       <FormCrud :on-submit="submitForm">
         <v-row dense>
-          <v-col cols="12" lg="6">
+          <v-col cols="12">
             <StringInput
               v-model="model.name"
               label="Nome"
               placeholder="Nome"
               required
+              icon="mdi-account-outline"
             />
           </v-col>
-          <v-col cols="12" lg="3">
+        </v-row>
+        <v-row dense>
+          <v-col cols="12" lg="6">
             <TelefoneInput
-              v-model:model-number="model.phone"
+              v-model="model.phone"
               label="Telefone"
               placeholder="Telefone"
-            />
-          </v-col>
-          <!-- <v-col cols="12" lg="6">
-            <StringInput
-              v-model="model.email"
-              label="E-mail"
-              placeholder="E-mail"
+              icon="mdi-phone-outline"
               required
             />
-          </v-col> -->
+          </v-col>
+          <v-col cols="12" lg="6">
+            <TelefoneInput
+              v-model="model.whatsapp"
+              label="whatsapp"
+              placeholder="whatsapp"
+              icon="mdi-whatsapp"
+              required
+            />
+          </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="12" lg="3">
@@ -37,6 +43,7 @@
               label="CPF"
               placeholder="CPF"
               required
+              icon="mdi-card-account-details-outline"
             />
           </v-col>
           <v-col cols="12" lg="3">
@@ -45,6 +52,7 @@
               label="Nª OAB"
               placeholder="Nª OAB"
               required
+              icon="mdi-file-document-outline"
             />
           </v-col>
           <v-col cols="12" lg="3">
@@ -53,6 +61,7 @@
               label="UF OAB"
               placeholder="UF OAB"
               required
+              icon="mdi-map-marker-outline"
             />
           </v-col>
         </v-row>

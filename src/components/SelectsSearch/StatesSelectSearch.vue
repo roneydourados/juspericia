@@ -5,6 +5,7 @@
     :readonly="readonly"
     :required="required"
     :items="states"
+    :icon="icon"
     item-title="code"
     item-value="code"
     :clearable="true"
@@ -49,6 +50,10 @@ const props = defineProps({
   required: {
     type: Boolean,
     default: false,
+  },
+  icon: {
+    type: String,
+    default: "",
   },
 });
 

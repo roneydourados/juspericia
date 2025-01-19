@@ -55,10 +55,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatCEP } from "@brazilian-utils/brazilian-utils";
 const auth = useAuthStore();
 const userLawyerStore = useUserLawyerStore();
-const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
 const $currentUser = computed(() => auth.$currentUser);
 const $single = computed(() => userLawyerStore.$single);
 
@@ -92,6 +90,7 @@ const model = ref<UserModelProps>({
   password: "",
   confirmPassword: "",
   phone: "",
+  whatsapp: "",
   oab: "",
   oabUf: "",
   officeName: "",
@@ -124,6 +123,7 @@ const loadModel = () => {
     password: "",
     confirmPassword: "",
     phone: $single.value?.phone ?? "",
+    whatsapp: $single.value?.whatsapp ?? "",
     oab: $single.value?.oab ?? "",
     oabUf: $single.value?.oabUf ?? "",
     officeName: $single.value?.officeName ?? "",
@@ -157,6 +157,7 @@ const handleUpdate = async () => {
       email: model.value?.email,
       name: model.value?.name,
       phone: model.value?.phone,
+      whatsapp: model.value?.whatsapp,
       cpfCnpj: model.value?.cpfCnpj,
       password: model.value?.password ? model.value?.password : undefined,
       active: model.value?.active,

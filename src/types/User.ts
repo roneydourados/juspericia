@@ -52,6 +52,7 @@ export interface UserModelProps {
   password: string;
   confirmPassword: string;
   phone: string;
+  whatsapp: string;
   oab: string;
   oabUf: string;
   officeName: string;

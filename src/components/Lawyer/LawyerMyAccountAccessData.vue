@@ -12,6 +12,7 @@
               label="E-mail"
               placeholder="E-mail"
               disabled
+              icon="mdi-email-outline"
             />
           </v-col>
         </v-row>
@@ -21,6 +22,7 @@
               v-model="model.password"
               label="Nova senha"
               placeholder="informe nova senha"
+              icon="mdi-lock-outline"
             />
           </v-col>
           <v-col cols="12" lg="4">
@@ -28,6 +30,7 @@
               v-model="model.confirmPassword"
               label="Confirme a senha"
               placeholder="confirme a senha"
+              icon="mdi-lock-outline"
             />
           </v-col>
         </v-row>
