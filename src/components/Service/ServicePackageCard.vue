@@ -100,7 +100,7 @@ const handleSaleItem = async () => {
     }
 
     await asaas.createPayment({
-      dueDate: moment().add(3, "days").format("YYYY-MM-DD"),
+      dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
       value: props.item.value!,
       description: props.item.name!,
     });
