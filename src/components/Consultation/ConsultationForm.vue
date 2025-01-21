@@ -17,25 +17,18 @@
       </v-row>
       <v-row dense>
         <v-col cols="12" lg="3">
-          <CurrencyInput
-            v-model:model-number="model.value.value"
-            v-model:model-value="model.value.text"
-            label="Preço"
-            required
-          />
+          <CurrencyInput v-model="model.value" label="Preço" required />
         </v-col>
         <v-col cols="12" lg="3">
           <CurrencyInput
-            v-model:model-number="model.valueCredit.value"
-            v-model:model-value="model.valueCredit.text"
+            v-model="model.valueCredit"
             label="Preço Crédito"
             required
           />
         </v-col>
         <v-col cols="12" lg="3">
           <CurrencyInput
-            v-model:model-number="model.valuePacket.value"
-            v-model:model-value="model.valuePacket.text"
+            v-model="model.valuePacket"
             label="Preço Pacote"
             required
           />
@@ -44,24 +37,21 @@
       <v-row dense>
         <v-col cols="12" lg="3">
           <CurrencyInput
-            v-model:model-number="model.valueAntecipation24.value"
-            v-model:model-value="model.valueAntecipation24.text"
+            v-model="model.valueAntecipation24"
             label="Valor Atencipação 24hrs"
             required
           />
         </v-col>
         <v-col cols="12" lg="3">
           <CurrencyInput
-            v-model:model-number="model.valueAntecipation48.value"
-            v-model:model-value="model.valueAntecipation48.text"
+            v-model="model.valueAntecipation48"
             label="Valor Atencipação 48hrs"
             required
           />
         </v-col>
         <v-col cols="12" lg="3">
           <CurrencyInput
-            v-model:model-number="model.valueAntecipation72.value"
-            v-model:model-value="model.valueAntecipation72.text"
+            v-model="model.valueAntecipation72"
             label="Valor Atencipação 72hrs"
             required
           />
@@ -103,30 +93,12 @@ const { amountFormated } = useUtils();
 const model = ref({
   id: 0,
   consultationName: "",
-  value: {
-    text: "0,00",
-    value: 0,
-  },
-  valueCredit: {
-    text: "0,00",
-    value: 0,
-  },
-  valueAntecipation24: {
-    text: "0,00",
-    value: 0,
-  },
-  valueAntecipation48: {
-    text: "0,00",
-    value: 0,
-  },
-  valueAntecipation72: {
-    text: "0,00",
-    value: 0,
-  },
-  valuePacket: {
-    text: "0,00",
-    value: 0,
-  },
+  value: "",
+  valueCredit: "",
+  valueAntecipation24: "",
+  valueAntecipation48: "",
+  valueAntecipation72: "",
+  valuePacket: "",
 });
 
 watchPostEffect(() => {
@@ -143,30 +115,21 @@ const loadModel = () => {
   model.value = {
     id: props.data.id!,
     consultationName: props.data.consultationName ?? "",
-    value: {
-      text: amountFormated(props.data.value ?? 0, false),
-      value: props.data.value ?? 0,
-    },
-    valueCredit: {
-      text: amountFormated(props.data.valueCredit ?? 0, false),
-      value: props.data.valueCredit ?? 0,
-    },
-    valueAntecipation24: {
-      text: amountFormated(props.data.valueAntecipation24 ?? 0, false),
-      value: props.data.valueAntecipation24 ?? 0,
-    },
-    valueAntecipation48: {
-      text: amountFormated(props.data.valueAntecipation48 ?? 0, false),
-      value: props.data.valueAntecipation48 ?? 0,
-    },
-    valueAntecipation72: {
-      text: amountFormated(props.data.valueAntecipation72 ?? 0, false),
-      value: props.data.valueAntecipation72 ?? 0,
-    },
-    valuePacket: {
-      text: amountFormated(props.data.valuePacket ?? 0, false),
-      value: props.data.valuePacket ?? 0,
-    },
+    value: amountFormated(props.data.value ?? 0, false),
+    valueCredit: amountFormated(props.data.valueCredit ?? 0, false),
+    valueAntecipation24: amountFormated(
+      props.data.valueAntecipation24 ?? 0,
+      false
+    ),
+    valueAntecipation48: amountFormated(
+      props.data.valueAntecipation48 ?? 0,
+      false
+    ),
+    valueAntecipation72: amountFormated(
+      props.data.valueAntecipation72 ?? 0,
+      false
+    ),
+    valuePacket: amountFormated(props.data.valuePacket ?? 0, false),
   };
 };
 
@@ -174,30 +137,12 @@ const clearModel = () => {
   model.value = {
     id: 0,
     consultationName: "",
-    value: {
-      text: "0,00",
-      value: 0,
-    },
-    valueCredit: {
-      text: "0,00",
-      value: 0,
-    },
-    valueAntecipation24: {
-      text: "0,00",
-      value: 0,
-    },
-    valueAntecipation48: {
-      text: "0,00",
-      value: 0,
-    },
-    valueAntecipation72: {
-      text: "0,00",
-      value: 0,
-    },
-    valuePacket: {
-      text: "0,00",
-      value: 0,
-    },
+    value: "",
+    valueCredit: "",
+    valueAntecipation24: "",
+    valueAntecipation48: "",
+    valueAntecipation72: "",
+    valuePacket: "",
   };
 };
 
@@ -219,12 +164,12 @@ const handleSubmit = async () => {
 const create = async () => {
   await consultationStore.create({
     consultationName: model.value.consultationName,
-    value: model.value.value.value,
-    valueCredit: model.value.valueCredit.value,
-    valueAntecipation24: model.value.valueAntecipation24.value,
-    valueAntecipation48: model.value.valueAntecipation48.value,
-    valueAntecipation72: model.value.valueAntecipation72.value,
-    valuePacket: model.value.valuePacket.value,
+    value: Number(model.value.value ?? "0"),
+    valueCredit: Number(model.value.valueCredit ?? "0"),
+    valueAntecipation24: Number(model.value.valueAntecipation24 ?? "0"),
+    valueAntecipation48: Number(model.value.valueAntecipation48 ?? "0"),
+    valueAntecipation72: Number(model.value.valueAntecipation72 ?? "0"),
+    valuePacket: Number(model.value.valuePacket ?? "0"),
   });
 };
 
@@ -233,12 +178,12 @@ const update = async () => {
     publicId: props.data.publicId!,
     id: model.value.id,
     consultationName: model.value.consultationName,
-    value: model.value.value.value,
-    valueCredit: model.value.valueCredit.value,
-    valueAntecipation24: model.value.valueAntecipation24.value,
-    valueAntecipation48: model.value.valueAntecipation48.value,
-    valueAntecipation72: model.value.valueAntecipation72.value,
-    valuePacket: model.value.valuePacket.value,
+    value: Number(model.value.value ?? "0"),
+    valueCredit: Number(model.value.valueCredit ?? "0"),
+    valueAntecipation24: Number(model.value.valueAntecipation24 ?? "0"),
+    valueAntecipation48: Number(model.value.valueAntecipation48 ?? "0"),
+    valueAntecipation72: Number(model.value.valueAntecipation72 ?? "0"),
+    valuePacket: Number(model.value.valuePacket ?? "0"),
   });
 };
 

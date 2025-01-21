@@ -9,8 +9,7 @@
       <v-row dense>
         <v-col cols="12" lg="6">
           <CurrencyInput
-            v-model:model-number="value.value"
-            v-model:model-value="value.text"
+            v-model="value"
             label="Valor gorjeta"
             placeholder=""
             required
@@ -40,19 +39,13 @@ const { mobile } = useDisplay();
 
 const emit = defineEmits(["close"]);
 const show = defineModel<boolean>("show");
-const value = ref({
-  text: "0,00",
-  value: 0,
-});
+const value = ref("");
 
 watch(
   () => show.value,
   () => {
     if (show.value) {
-      value.value = {
-        text: "0,00",
-        value: 0,
-      };
+      value.value = "";
     }
   },
   { immediate: true }
@@ -64,6 +57,6 @@ const submitForm = () => {
 
 const handleClose = () => {
   show.value = false;
-  emit("close", value.value.value);
+  emit("close", value.value);
 };
 </script>
