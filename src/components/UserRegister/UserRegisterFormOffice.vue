@@ -39,11 +39,28 @@
         />
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="12" class="d-flex justify-space-between">
+        <v-btn
+          color="primary"
+          variant="tonal"
+          class="text-none"
+          @click="emit('prev')"
+        >
+          <v-icon icon="mdi-chevron-left" start />
+          Anterior
+        </v-btn>
+        <v-btn type="submit" color="primary" variant="tonal" class="text-none">
+          Próximo
+          <v-icon icon="mdi-chevron-right" end />
+        </v-btn>
+      </v-col>
+    </v-row>
   </FormCrud>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(["update"]);
+const emit = defineEmits(["next", "prev"]);
 
 const model = defineModel<UserModelProps>({
   type: Object as PropType<UserModelProps>,
@@ -51,6 +68,6 @@ const model = defineModel<UserModelProps>({
 });
 
 const submitForm = () => {
-  emit("update");
+  emit("next");
 };
 </script>

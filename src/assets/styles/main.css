@@ -11,7 +11,7 @@ body {
 }
 
 .v-toolbar {
-  z-index: 500 !important;
+  z-index: 100 !important;
   /* colocar esta classe assim o v-app
    Não fica por cima das notificações do 
    notivue

@@ -9,6 +9,10 @@ export default defineNuxtRouteMiddleware((to) => {
     return;
   }
 
+  if (to.path === "/terms") {
+    return;
+  }
+
   if (!stoken && to.path !== "/") {
     return navigateTo("/");
   }

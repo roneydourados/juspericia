@@ -8,55 +8,44 @@
         Criar conta
       </div>
     </v-card-title>
-    <v-card-text>
-      <v-stepper v-model="step" :items="items" elevation="0" hide-actions>
-        <template v-slot:item.1>
-          <v-card class="pa-2">
-            <UserRegisterFormPersonalData v-model="model" />
-          </v-card>
-        </template>
 
-        <template v-slot:item.2>
-          <v-card class="pa-2">
-            <UserRegisterFormAddress v-model="model" />
-          </v-card>
-        </template>
+    <v-stepper v-model="step" :items="items" elevation="0" hide-actions>
+      <template v-slot:item.1>
+        <v-card class="pa-2">
+          <UserRegisterFormPersonalData v-model="model" @next="step = 2" />
+        </v-card>
+      </template>
 
-        <template v-slot:item.3>
-          <v-card class="pa-2">
-            <UserRegisterFormOffice v-model="model" />
-          </v-card>
-        </template>
+      <template v-slot:item.2>
+        <v-card class="pa-2">
+          <UserRegisterFormAddress
+            v-model="model"
+            @next="step = 3"
+            @prev="step = 1"
+          />
+        </v-card>
+      </template>
 
-        <template v-slot:item.4>
-          <v-card class="pa-2">
-            <UserRegisterFormAccessData v-model="model" />
-          </v-card>
-        </template>
-        <template v-slot="{ next, prev }">
-          <div class="d-flex justify-space-between px-4">
-            <v-btn
-              color="primary"
-              @click="handlePrev(prev)"
-              variant="tonal"
-              class="text-none"
-            >
-              <v-icon icon="mdi-chevron-left" start />
-              {{ labelPrev }}
-            </v-btn>
-            <v-btn
-              color="primary"
-              @click="handleNext(next)"
-              variant="tonal"
-              class="text-none"
-            >
-              {{ labelNext }}
-              <v-icon icon="mdi-chevron-right" end />
-            </v-btn>
-          </div>
-        </template>
-      </v-stepper>
-    </v-card-text>
+      <template v-slot:item.3>
+        <v-card class="pa-2">
+          <UserRegisterFormOffice
+            v-model="model"
+            @next="step = 4"
+            @prev="step = 2"
+          />
+        </v-card>
+      </template>
+
+      <template v-slot:item.4>
+        <v-card class="pa-2">
+          <UserRegisterFormAccessData
+            v-model="model"
+            @prev="step = 3"
+            @register="handleSubmitRegister"
+          />
+        </v-card>
+      </template>
+    </v-stepper>
   </v-card>
   <Dialog
     title="Confirme cadastro na plataforma"
@@ -83,8 +72,6 @@ const items = ["Dados pessoais", "Endereço", "Escritório", "Acesso"];
 const loading = ref(false);
 const confirmRegister = ref(false);
 const step = ref(1);
-const labelPrev = ref("Voltar login");
-const labelNext = ref("Próximo");
 const model = ref<UserModelProps>({
   id: 0,
   name: "",
@@ -149,42 +136,6 @@ const handleSubmitRegister = async () => {
 
 const goLogin = () => {
   rounter.push("/");
-};
-
-const handlePrev = (prev: Function) => {
-  if (labelNext.value !== "Próximo") {
-    labelNext.value = "Próximo";
-  }
-
-  if (step.value === 1 && labelPrev.value === "Voltar login") {
-    goLogin();
-  } else if (
-    (step.value === 1 || step.value === 2) &&
-    labelPrev.value === "Anterior"
-  ) {
-    labelPrev.value = "Voltar login";
-    prev();
-  } else {
-    prev();
-  }
-};
-
-const handleNext = async (next: Function) => {
-  if (step.value === 1 && labelPrev.value !== "Anterior") {
-    labelPrev.value = "Anterior";
-  }
-
-  if (step.value !== 4) {
-    next();
-  }
-
-  if (step.value === 4 && labelNext.value === "Registrar") {
-    confirmRegister.value = true;
-  }
-
-  if (step.value === 4) {
-    labelNext.value = "Registrar";
-  }
 };
 </script>
 
