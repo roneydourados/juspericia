@@ -21,6 +21,9 @@ export interface SaleProps {
   localStatus?: string;
   expiredAt?: string;
   salt?: number;
+  category?: string;
+  packageId?: number;
+  solicitationId?: number;
 }
 
 export interface SaleFilterProps {

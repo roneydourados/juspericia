@@ -21,11 +21,18 @@ model Sales {
   expiredAt             DateTime  @map("expired_at") @db.Date()
   salt                  Decimal   @default(0) @map("salt") @db.Decimal(18, 2)
   publicId              String?   @unique @map("public_id") @db.VarChar(40)
+  category              String?   @db.VarChar(40)
+  packageId             Int?      @map("package_id")
+  solicitationId        Int?      @map("solicitation_id")
   User                  User      @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
   @@index([userId], map: "sales_idx_id")
   @@index([saleId], map: "sales_idx_sale_id")
   @@index([dateCreated], map: "sales_idx_date_created")
   @@index([localStatus], map: "sales_idx_local_status")
+  @@index([publicId], map: "sales_idx_public_id")
+  @@index([category], map: "sales_idx_category")
+  @@index([packageId], map: "sales_idx_package_id")
+  @@index([solicitationId], map: "sales_idx_solicitation_id")
   @@map("sales")
 }

@@ -70,6 +70,11 @@ export interface PaymentAsaasProps {
     //com um botão para retornar ao site. O padrão é true, caso queira desativar informar false
     autoRedirect?: boolean;
   };
+
+  // aqui são campos opcionais de controle somente do sistema
+  category?: string;
+  packageId?: number;
+  solicitationId?: number;
 }
 
 interface PaymentAsaasSplitProps {

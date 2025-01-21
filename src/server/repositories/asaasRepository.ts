@@ -104,11 +104,43 @@ export const createPayment = async (
       user.customerId = customer.id;
     }
 
+    // cria a cobrança lá no asaas
     const resp = await createPayment({
       ...payload,
       externalReference: uuidv7(),
       customer: user.customerId,
     });
+
+    // pega a resposta e cria a venda localmente no banco de dados
+    if (resp) {
+      const expiredAt = moment().add(1, "month").format("YYYY-MM-DD");
+
+      await prisma.sales.create({
+        data: {
+          publicId: resp.externalReference,
+          saleId: resp.id,
+          billingType: resp.billingType,
+          dueDate: new Date(resp.dueDate),
+          dateCreated: new Date(resp.dateCreated),
+          description: resp.description,
+          invoiceUrl: resp.invoiceUrl,
+          status: resp.status,
+          userId: user.id!,
+          value: resp.value,
+          netValue: resp.netValue,
+          nossoNumero: resp.nossoNumero,
+          originalDueDate: resp.originalDueDate
+            ? new Date(resp.originalDueDate)
+            : undefined,
+          expiredAt: new Date(expiredAt),
+          category: payload.category,
+          packageId: payload.packageId ? payload.packageId : undefined,
+          solicitationId: payload.solicitationId
+            ? payload.solicitationId
+            : undefined,
+        },
+      });
+    }
 
     return resp;
   } catch (error) {
@@ -133,32 +165,7 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
 
     switch (payload.event) {
       case "PAYMENT_CREATED":
-        const expiredAt = moment().add(1, "month").format("YYYY-MM-DD");
-
-        await prisma.sales.create({
-          data: {
-            publicId: payload.payment.externalReference,
-            saleId: payload.payment.id,
-            billingType: payload.payment.billingType,
-            dueDate: new Date(payload.payment.dueDate),
-            dateCreated: new Date(payload.payment.dateCreated),
-            description: payload.payment.description,
-            invoiceUrl: payload.payment.invoiceUrl,
-            transactionReceiptUrl: payload.payment.transactionReceiptUrl,
-            status: payload.payment.status,
-            userId: user.id!,
-            value: payload.payment.value,
-            confirmedDate: payload.payment.confirmedDate
-              ? new Date(payload.payment.confirmedDate)
-              : undefined,
-            netValue: payload.payment.netValue,
-            nossoNumero: payload.payment.nossoNumero,
-            originalDueDate: payload.payment.originalDueDate
-              ? new Date(payload.payment.originalDueDate)
-              : undefined,
-            expiredAt: new Date(expiredAt),
-          },
-        });
+        console.log("🚀 ~ paymentWebhook ~ payload.event:", payload.event);
 
         break;
 
@@ -184,6 +191,9 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
               value: payload.payment.value,
               salt: payload.payment.value, // ai sim colocar um saldo
               confirmedDate: payload.payment.confirmedDate
+                ? new Date(payload.payment.confirmedDate)
+                : undefined,
+              paymentDate: payload.payment.confirmedDate
                 ? new Date(payload.payment.confirmedDate)
                 : undefined,
               netValue: payload.payment.netValue,

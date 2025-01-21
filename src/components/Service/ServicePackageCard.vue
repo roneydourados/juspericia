@@ -103,6 +103,8 @@ const handleSaleItem = async () => {
       dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
       value: props.item.value!,
       description: props.item.name!,
+      category: "package",
+      packageId: props.item.id,
     });
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
