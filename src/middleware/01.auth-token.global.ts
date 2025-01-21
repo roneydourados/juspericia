@@ -5,8 +5,11 @@ export default defineNuxtRouteMiddleware((to) => {
   const auth = useAuthStore();
 
   // se não tem um token e não esta no login então expulsa para o login
+  if (to.path === "/register") {
+    return;
+  }
+
   if (!stoken && to.path !== "/") {
-    console.log(to.path);
     return navigateTo("/");
   }
 

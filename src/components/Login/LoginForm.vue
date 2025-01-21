@@ -1,12 +1,5 @@
 <template>
-  <v-card
-    class="mx-auto"
-    color="#fff"
-    variant="flat"
-    max-width="600"
-    rounded="lg"
-    elevation="12"
-  >
+  <v-card class="mx-auto" color="#fff" rounded="lg" flat max-width="600">
     <v-card-title>
       <v-row dense class="pa-8" justify="center">
         <v-col>
@@ -72,16 +65,29 @@
           </v-btn>
         </v-col>
       </v-row>
+      <div>
+        <p class="text-center text-caption">
+          <span class="text-subtitle-1">
+            Não possui uma conta ?
+            <span
+              @click="rounter.push('/register')"
+              class="font-weight-bold text-blue"
+              style="cursor: pointer"
+            >
+              Cadastrar
+            </span>
+          </span>
+        </p>
+      </div>
     </FormCrud>
   </v-card>
 </template>
 
 <script setup lang="ts">
 const auth = useAuthStore();
-//const route = useRouter();
-
 const cloudFlareToken = ref("");
 const turnstile = ref();
+const rounter = useRouter();
 
 const form = ref({
   email: "",

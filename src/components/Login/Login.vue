@@ -1,5 +1,4 @@
 <template>
-  <!-- teste -->
   <LoginForm />
 </template>
 
