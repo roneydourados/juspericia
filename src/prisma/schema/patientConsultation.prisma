@@ -29,6 +29,7 @@ model PatientConsultation {
   BenefitType               BenefitType                 @relation(fields: [benefitTypeId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   PatientConsultationReport PatientConsultationReport[]
   Schedule                  Schedule[]
+  Sales                     Sales[]
 
   @@index([medicId], map: "patient_consultations_idx_medic_id")
   @@index([patientId], map: "patient_consultations_idx_patient_id")

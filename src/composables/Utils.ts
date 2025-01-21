@@ -246,6 +246,10 @@ export const useUtils = () => {
         return "Finalizada";
       case "canceled":
         return "Cancelada";
+      case "paid":
+        return "Pago";
+      case "payment_pending":
+        return "Pagamento pendente";
       default:
         return "Pendente";
     }
@@ -263,6 +267,12 @@ export const useUtils = () => {
         return "#43A047";
       case "canceled":
         return "#F44336";
+      case "canceled":
+        return "#F44336";
+      case "paid":
+        return "#26A69A";
+      case "payment_pending":
+        return "#EF6C00";
       default:
         return "#9C27B0";
     }

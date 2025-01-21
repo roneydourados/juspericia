@@ -65,37 +65,55 @@
       :grow="mobile"
       @update:model-value="handleChangeTable"
     >
-      <v-tab :value="1" class="text-none">
+      <v-tab value="open" class="text-none">
         <v-icon icon="mdi-file-clock-outline" size="24" start />
         <span v-if="!mobile">
-          Pendentes
+          Abertas
           <span class="text-info font-weight-bold">
             ({{ getQuantity("open") }})
           </span>
         </span>
       </v-tab>
-      <v-tab :value="3" class="text-none">
+      <v-tab value="payment_pending" class="text-none">
+        <v-icon icon="mdi-cash-clock" size="24" start />
+        <span v-if="!mobile">
+          Pendente de pagamento
+          <span class="text-info font-weight-bold">
+            ({{ getQuantity("payment_pending") }})
+          </span>
+        </span>
+      </v-tab>
+      <v-tab value="paid" class="text-none">
+        <v-icon icon="mdi-cash-check" size="24" start />
+        <span v-if="!mobile">
+          Paga
+          <span class="text-info font-weight-bold">
+            ({{ getQuantity("paid") }})
+          </span>
+        </span>
+      </v-tab>
+      <v-tab value="scheduled" class="text-none">
         <v-icon icon="mdi-clock-check-outline" size="24" start />
         <span v-if="!mobile"> Agendado </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("scheduled") }})
         </span>
       </v-tab>
-      <v-tab :value="2" class="text-none">
+      <v-tab value="in_progress" class="text-none">
         <v-icon icon="mdi-clock-start" size="24" start />
         <span v-if="!mobile"> Em andamento </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("in_progress") }})
         </span>
       </v-tab>
-      <v-tab :value="4" class="text-none">
+      <v-tab value="finished" class="text-none">
         <v-icon icon="mdi-calendar-month-outline" size="24" start />
         <span v-if="!mobile">Finalizadas </span>
         <span class="text-info font-weight-bold"
           >({{ getQuantity("finished") }})</span
         >
       </v-tab>
-      <v-tab :value="5" class="text-none">
+      <v-tab value="canceled" class="text-none">
         <v-icon icon="mdi-cancel" size="24" start />
         <span v-if="!mobile">Canceladas </span>
         <span class="text-info font-weight-bold">
@@ -147,7 +165,7 @@ const storeConsultation = useSolicitationConsultationStore();
 const auth = useAuthStore();
 const $all = computed(() => storeConsultation.$all);
 const $currentUser = computed(() => auth.$currentUser);
-const tab = ref(1);
+const tab = ref("open");
 const loading = ref(false);
 const showFilters = ref(false);
 
@@ -181,23 +199,7 @@ onMounted(async () => {
 });
 
 const handleChangeTable = async () => {
-  switch (tab.value) {
-    case 1:
-      modelFilters.value.status = "open";
-      break;
-    case 2:
-      modelFilters.value.status = "in_progress";
-      break;
-    case 3:
-      modelFilters.value.status = "scheduled";
-      break;
-    case 4:
-      modelFilters.value.status = "finished";
-      break;
-    case 5:
-      modelFilters.value.status = "canceled";
-      break;
-  }
+  modelFilters.value.status = tab.value;
   setSolicitationsFilters(modelFilters.value);
   await getConsultations();
 };

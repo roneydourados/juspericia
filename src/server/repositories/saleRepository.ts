@@ -34,6 +34,7 @@ export const getSaleUser = async ({
           lte,
         },
         status,
+        category: "package",
       },
       orderBy: {
         id: "desc",

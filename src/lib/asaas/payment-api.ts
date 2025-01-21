@@ -37,7 +37,19 @@ export const useAsaasPayment = () => {
     }
   };
 
+  const deletePayment = async (id: string) => {
+    try {
+      await asaasApi.delete(`/payments/${id}`);
+    } catch (error) {
+      console.log("🚀 ~ deletePayment ~ error:", error);
+      throw createError({
+        statusCode: 500,
+        message: "Erro on delete payment!",
+      });
+    }
+  };
   return {
     createPayment,
+    deletePayment,
   };
 };

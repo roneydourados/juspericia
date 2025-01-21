@@ -63,7 +63,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            <LawyerMySaltsFilters />
+            <LawyerMySaltsFilters v-model="reloadFilters" />
           </v-col>
         </v-row>
         <div class="py-4">
@@ -180,9 +180,11 @@
 import moment from "moment";
 
 const saltCredit = useUserCreditSaltStore();
+const asaas = useAsaasStore();
 const { amountFormated } = useUtils();
 
 const $salts = computed(() => saltCredit.$all);
+const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $totals = computed(() => {
   const currentDate = moment();
   return {
@@ -209,6 +211,7 @@ const $totals = computed(() => {
 });
 
 const showDetails = ref(false);
+const reloadFilters = ref(false);
 
 const headers = ref([
   { title: "Descrição", key: "description" },
@@ -263,7 +266,49 @@ const handleDetails = async (item: UserCreditSalt) => {
   showDetails.value = true;
 };
 
-const handlePaid = (item: SaleProps) => {
+const handlePaid = async (item: SaleProps) => {
+  // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
+  if (moment().isAfter(moment(item.dueDate))) {
+    await asaas.deletePayment(item.saleId!);
+
+    await asaas.createPayment({
+      dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
+      value: item.value!,
+      description: item.description,
+      category: "package",
+      packageId: item.id,
+    });
+
+    reloadFilters.value = true;
+
+    if ($paymentResponse.value?.data?.invoiceUrl) {
+      //window.open($paymentResponse.value?.data?.invoiceUrl);
+
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+      const popupWidth = Math.round(screenWidth * 0.95);
+      const popupHeight = Math.round(screenHeight * 0.95);
+      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+      const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+      const popup = window.open(
+        $paymentResponse.value?.data?.invoiceUrl,
+        "_blank",
+        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+      );
+
+      // verificar se o popup foi fechado
+      const popupChecker = setInterval(() => {
+        if (popup && popup.closed) {
+          clearInterval(popupChecker);
+          reloadFilters.value = true;
+        }
+      }, 700);
+    }
+
+    return;
+  }
+
   const screenWidth = window.screen.width;
   const screenHeight = window.screen.height;
   const popupWidth = Math.round(screenWidth * 0.95);
@@ -271,11 +316,19 @@ const handlePaid = (item: SaleProps) => {
   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-  window.open(
+  const popup = window.open(
     item.invoiceUrl,
     "_blank",
     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
   );
+
+  // verificar se o popup foi fechado
+  const popupChecker = setInterval(() => {
+    if (popup && popup.closed) {
+      clearInterval(popupChecker);
+      reloadFilters.value = true;
+    }
+  }, 700);
 };
 
 const handleReceipt = (item: SaleProps) => {
@@ -286,10 +339,18 @@ const handleReceipt = (item: SaleProps) => {
   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-  window.open(
+  const popup = window.open(
     item.transactionReceiptUrl,
     "_blank",
     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
   );
+
+  // verificar se o popup foi fechado
+  const popupChecker = setInterval(async () => {
+    if (popup && popup.closed) {
+      clearInterval(popupChecker);
+      reloadFilters.value = true;
+    }
+  }, 700);
 };
 </script>

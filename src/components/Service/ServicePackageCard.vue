@@ -124,6 +124,7 @@ const handleSaleItem = async () => {
       );
     }
   } catch (error) {
+    push.error("Erro ao finalizar pagamento");
     console.log("🚀 ~ handleSaleItem ~ error:", error);
   } finally {
     loading.value = false;

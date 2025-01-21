@@ -126,6 +126,7 @@ const submmitForm = async () => {
     }
   } catch (error) {
     console.log("🚀 ~ file: FormLogin.vue:82 ~ onSubmit ~ error:", error);
+    push.error("Ocorreu um erro ao realizar login, tente novamente.");
     turnstile.value?.reset();
   }
 };

@@ -1,6 +1,5 @@
 import { CustomerProps } from "@/lib/asaas/types/Customer";
 import { PaymentAsaasProps } from "@/lib/asaas/types/Payment";
-import { PaymentAsaasResponseProps } from "@/lib/asaas/types/PaymentResponse";
 import { defineStore } from "pinia";
 
 export const useAsaasStore = defineStore("asaas", () => {
@@ -17,5 +16,9 @@ export const useAsaasStore = defineStore("asaas", () => {
     paymentReponse.value = await api.post("/asaas/payment", payload);
   };
 
-  return { createCustomer, createPayment, $paymentReponse };
+  const deletePayment = async (id: string) => {
+    await api.delete(`/asaas/payment/${id}`);
+  };
+
+  return { createCustomer, createPayment, deletePayment, $paymentReponse };
 });

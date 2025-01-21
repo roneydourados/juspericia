@@ -1,4 +1,3 @@
-import { update } from "../server/repositories/benefitTypeRepository";
 export interface SolicitationConsultationList {
   consultations: SolicitationConsultationProps[];
   totals: ConsultationListTotals[];
@@ -41,6 +40,7 @@ export interface SolicitationConsultationProps {
   Schedule?: ScheduleProps[];
   publicId?: string;
   PatientConsultationReport?: PatientConsultationReportProps;
+  Sales?: SaleProps[];
 }
 
 export interface SolicitationConsultationFilterProps {

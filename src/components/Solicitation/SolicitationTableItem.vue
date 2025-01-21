@@ -32,8 +32,60 @@
       </div>
 
       <div class="d-flex align-center" style="gap: 1rem">
+        <div
+          v-if="solicitation.status === 'open'"
+          class="d-flex align-center"
+          style="gap: 0.5rem"
+        >
+          <v-btn
+            class="text-none text-white"
+            color="info"
+            variant="outlined"
+            size="small"
+            @click="showSale = true"
+          >
+            <v-icon icon="mdi-credit-card-outline" size="24" start />
+            Pagar
+          </v-btn>
+          <v-btn
+            class="text-none text-white"
+            color="success"
+            variant="outlined"
+            size="small"
+          >
+            <v-icon icon="mdi-cash-multiple" size="24" start />
+            Utilzar Saldo
+          </v-btn>
+        </div>
         <v-btn
-          v-if="
+          v-else-if="solicitation.status === 'paid'"
+          class="text-none text-white"
+          color="success"
+          variant="outlined"
+          size="small"
+          @click="handleReceipt(solicitation)"
+        >
+          <v-icon icon="mdi-file-document-outline" size="24" start />
+          Recebido
+        </v-btn>
+        <v-btn
+          v-else-if="
+            solicitation.Sales &&
+            solicitation.Sales.length > 0 &&
+            solicitation.status === 'payment_pending'
+          "
+          class="text-none text-white"
+          color="info"
+          variant="outlined"
+          size="small"
+          @click="handleReloadPayment(solicitation)"
+        >
+          <v-icon icon="mdi-credit-card-outline" size="24" start />
+          Pagar
+        </v-btn>
+
+        <v-btn
+          v-else-if="
             $currentUser?.Profile.type === 'ADMIN' &&
             (solicitation.status === 'open' ||
               solicitation.status === 'scheduled')
@@ -57,7 +109,10 @@
           variant="outlined"
           class="text-none text-white"
           @click="getItemCancel(solicitation)"
-          :disabled="solicitation.status !== 'open'"
+          :disabled="
+            solicitation.status !== 'open' &&
+            solicitation.status !== 'payment_pending'
+          "
         >
           Cancelar
         </v-btn>
@@ -195,22 +250,17 @@
           v-if="$currentUser?.Profile.type !== 'MEDICO'"
           cols="12"
           lg="2"
-          class="d-flex align-center justify-end"
-          style="gap: 0.5rem"
+          class="d-flex flex-column"
         >
-          <span class="text-grey-darken-1">Total:</span>
-          <span
-            class="font-weight-bold text-blue-darken-3"
-            style="font-size: 1.3rem"
-          >
-            {{
-              amountFormated(
-                Number(solicitation.consultationValue ?? 0) +
-                  Number(solicitation.antecipationValue ?? 0),
-                true
-              )
-            }}
-          </span>
+          <div class="d-flex align-center justify-end" style="gap: 0.5rem">
+            <span class="text-grey-darken-1">Total:</span>
+            <span
+              class="font-weight-bold text-blue-darken-3"
+              style="font-size: 1.3rem"
+            >
+              {{ amountFormated($solicitationTotal, true) }}
+            </span>
+          </div>
         </v-col>
       </v-row>
       <v-divider class="mt-2" />
@@ -340,6 +390,20 @@
   >
     Tem certeza que deseja cancelar a consulta?
   </Dialog>
+  <Dialog
+    title="Pagamento de solicitação"
+    :dialog="showSale"
+    @cancel="showSale = false"
+    @confirm="handleSaleItemForAsaas"
+    show-cancel
+  >
+    <div class="d-flex flex-column">
+      <span>Confirma pagamento da solicitação de consulta ? </span>
+      <div class="d-flex" style="gap: 0.5rem">
+        Total: <strong>{{ amountFormated($solicitationTotal, false) }}</strong>
+      </div>
+    </div>
+  </Dialog>
   <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
@@ -355,6 +419,7 @@ const props = defineProps({
 
 const emit = defineEmits(["edit"]);
 const auth = useAuthStore();
+const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const rounter = useRouter();
 const {
@@ -371,9 +436,17 @@ const showDateAntecipation = ref(false);
 const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
+const showSale = ref(false);
 const showSolicitationSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
 const $currentUser = computed(() => auth.$currentUser);
+const $solicitationTotal = computed(() => {
+  return (
+    Number(props.solicitation.consultationValue ?? 0) +
+    Number(props.solicitation.antecipationValue ?? 0)
+  );
+});
+const $paymentResponse = computed(() => asaas.$paymentReponse);
 
 watch(
   () => props.solicitation.id,
@@ -452,7 +525,12 @@ const handleUpdateRate = async (rate: number) => {
 };
 
 const getSolicitations = async () => {
-  await storeConsultation.index(filters.value);
+  loading.value = true;
+  try {
+    await storeConsultation.index(filters.value);
+  } finally {
+    loading.value = false;
+  }
 };
 
 const getItemCancel = (item: SolicitationConsultationProps) => {
@@ -476,6 +554,12 @@ const cancel = async () => {
       ...selected.value,
       status: "canceled",
     });
+
+    // apagar a cobrança do asaas e a venda pendente
+    if (selected.value.Sales && selected.value.Sales.length > 0) {
+      await asaas.deletePayment(selected.value.Sales[0].saleId!);
+    }
+
     await getSolicitations();
     selected.value = undefined;
   } finally {
@@ -486,5 +570,134 @@ const cancel = async () => {
 const handleSchedule = (item: SolicitationConsultationProps) => {
   selected.value = item;
   showSolicitationSchedule.value = true;
+};
+
+const handleSaleItemForAsaas = async () => {
+  showSale.value = false;
+  loading.value = true;
+  try {
+    if (!props.solicitation) {
+      push.warning("Solicitação não encontrada!");
+    }
+
+    await asaas.createPayment({
+      dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
+      value: $solicitationTotal.value,
+      description: `Solicitação de consulta Nº ${props.solicitation.id} do paciente ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
+      category: "solicitation",
+      solicitationId: props.solicitation.id,
+    });
+
+    await getSolicitations();
+
+    if ($paymentResponse.value?.data?.invoiceUrl) {
+      //window.open($paymentResponse.value?.data?.invoiceUrl);
+
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+      const popupWidth = Math.round(screenWidth * 0.95);
+      const popupHeight = Math.round(screenHeight * 0.95);
+      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+      const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+      // window.open(
+      //   $paymentResponse.value?.data?.invoiceUrl,
+      //   "_blank",
+      //   `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+      // );
+
+      const popup = window.open(
+        $paymentResponse.value?.data?.invoiceUrl,
+        "_blank",
+        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+      );
+
+      // verificar se o popup foi fechado
+      const popupChecker = setInterval(async () => {
+        if (popup && popup.closed) {
+          clearInterval(popupChecker);
+          console.log("🚀 ~ handleSaleItemForAsaas ~ popup.closed");
+          await getSolicitations();
+        }
+      }, 700);
+    }
+  } catch (error) {
+    push.error("Erro ao finalizar pagamento");
+    console.log("🚀 ~ handleSaleItem ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleReloadPayment = async (item: SolicitationConsultationProps) => {
+  if (!item.Sales || item.Sales.length === 0) {
+    push.warning("Pagamento não encontrado");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
+    if (moment().isAfter(moment(item.Sales[0].dueDate))) {
+      await asaas.deletePayment(item.Sales[0].saleId!);
+      await getSolicitations();
+      await handleSaleItemForAsaas();
+      return;
+    }
+
+    //caso contrário, apenas abrir a fatura
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+    const popupWidth = Math.round(screenWidth * 0.95);
+    const popupHeight = Math.round(screenHeight * 0.95);
+    const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+    const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+    const popup = window.open(
+      item.Sales[0].invoiceUrl,
+      "_blank",
+      `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    );
+
+    // verificar se o popup foi fechado
+    const popupChecker = setInterval(async () => {
+      if (popup && popup.closed) {
+        clearInterval(popupChecker);
+        await getSolicitations();
+      }
+    }, 700);
+  } catch (error) {
+    console.log("🚀 ~ handleReloadPayment ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleReceipt = (item: SolicitationConsultationProps) => {
+  if (!item.Sales || item.Sales.length === 0) {
+    push.warning("Pagamento não encontrado");
+    return;
+  }
+
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const popupWidth = Math.round(screenWidth * 0.7);
+  const popupHeight = Math.round(screenHeight * 0.7);
+  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+  const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+  const popup = window.open(
+    item.Sales[0].transactionReceiptUrl,
+    "_blank",
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+  );
+
+  // verificar se o popup foi fechado
+  const popupChecker = setInterval(async () => {
+    if (popup && popup.closed) {
+      clearInterval(popupChecker);
+      await getSolicitations();
+    }
+  }, 700);
 };
 </script>

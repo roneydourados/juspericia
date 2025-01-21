@@ -112,6 +112,20 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
           name: true,
         },
       },
+      Sales: {
+        select: {
+          id: true,
+          publicId: true,
+          dueDate: true,
+          saleId: true,
+          billingType: true,
+          value: true,
+          netValue: true,
+          status: true,
+          invoiceUrl: true,
+          transactionReceiptUrl: true,
+        },
+      },
     },
     orderBy: {
       id: "desc",

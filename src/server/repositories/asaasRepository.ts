@@ -6,7 +6,6 @@ import { useAsaasPayment } from "~/lib/asaas/payment-api";
 import { CustomerProps } from "~/lib/asaas/types/Customer";
 import { PaymentAsaasProps } from "~/lib/asaas/types/Payment";
 import { WebHookPaymentResponseProps } from "~/lib/asaas/types/WebhookPayment";
-import { UserProps } from "~/types/User";
 
 export const createCustomer = async (customer: CustomerProps) => {
   const { createCustomer } = useCustomerAsaas();
@@ -140,11 +139,27 @@ export const createPayment = async (
             : undefined,
         },
       });
+
+      // se for pagamento de uma solicitação então atualizar o status da solicitação para pagamento pendente
+      if (payload.solicitationId) {
+        await prisma.patientConsultation.update({
+          where: {
+            id: payload.solicitationId,
+          },
+          data: {
+            status: "payment_pending",
+          },
+        });
+      }
     }
 
     return resp;
   } catch (error) {
     console.log("🚀 ~ error:", error);
+    throw createError({
+      statusCode: 500,
+      message: "Error create payment asaas!",
+    });
   }
 };
 
@@ -189,7 +204,7 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
               transactionReceiptUrl: payload.payment.transactionReceiptUrl,
               status: payload.payment.status,
               value: payload.payment.value,
-              salt: payload.payment.value, // ai sim colocar um saldo
+              salt: sale.solicitationId ? 0 : payload.payment.value, // saldo é calculado somente quando não for uma solicitação
               confirmedDate: payload.payment.confirmedDate
                 ? new Date(payload.payment.confirmedDate)
                 : undefined,
@@ -208,17 +223,32 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
             },
           });
 
-          await prisma.userCreditLog.create({
-            data: {
-              history: `Entrada de crédito ref. a compra de ${
-                payload.payment.description
-              } no valor de R$ ${payload.payment.value.toFixed(2)}`.trim(),
-              userId: user.id!,
-              saleId: updatedSale.id,
-              type: "C",
-              value: payload.payment.value,
-            },
-          });
+          // somente gerar crédito para o cliente se não for uma solicitação de consulta
+          if (!sale.solicitationId) {
+            await prisma.userCreditLog.create({
+              data: {
+                history: `Entrada de crédito ref. a compra de ${
+                  payload.payment.description
+                } no valor de R$ ${payload.payment.value.toFixed(2)}`.trim(),
+                userId: user.id!,
+                saleId: updatedSale.id,
+                type: "C",
+                value: payload.payment.value,
+              },
+            });
+          }
+
+          // verificar se a venda é referente a uma solicitação de consulta se for então mudar o status
+          if (sale.solicitationId) {
+            await prisma.patientConsultation.update({
+              where: {
+                id: sale.solicitationId,
+              },
+              data: {
+                status: "paid",
+              },
+            });
+          }
         }
         break;
 
@@ -273,6 +303,34 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
     throw createError({
       statusCode: 500,
       message: "Error webhook asaas",
+    });
+  }
+};
+
+export const deletePayment = async (id: string) => {
+  const { deletePayment } = useAsaasPayment();
+
+  try {
+    const saleDeleted = await prisma.sales.findFirst({
+      where: {
+        saleId: id,
+      },
+    });
+
+    if (saleDeleted) {
+      await prisma.sales.delete({
+        where: {
+          id: saleDeleted.id,
+        },
+      });
+
+      await deletePayment(id);
+    }
+  } catch (error) {
+    console.log("🚀 ~ deletePayment ~ error:", error);
+    throw createError({
+      statusCode: 500,
+      message: "Erro on delete payment!",
     });
   }
 };
