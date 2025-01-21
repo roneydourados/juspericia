@@ -1,6 +1,6 @@
 <template>
   <FormCrud :on-submit="submitForm" :show-submit-button="false">
-    <v-row dense>
+    <v-row>
       <v-col cols="12">
         <StringInput
           v-model="model.officeName"
@@ -20,7 +20,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row>
       <v-col cols="12" lg="6">
         <TelefoneInput
           v-model="model.officePhone"

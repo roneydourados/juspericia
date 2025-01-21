@@ -27,7 +27,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row>
       <v-col cols="12" lg="5">
         <StringInput
           label="Bairro"
@@ -51,7 +51,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row>
       <v-col cols="12">
         <StringInput
           label="Complemento"

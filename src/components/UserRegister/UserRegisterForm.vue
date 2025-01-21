@@ -9,22 +9,29 @@
       </div>
     </v-card-title>
     <v-card-text>
-      <pre>step: {{ step }}</pre>
       <v-stepper v-model="step" :items="items" elevation="0" hide-actions>
         <template v-slot:item.1>
-          <UserRegisterFormPersonalData v-model="model" />
+          <v-card class="pa-2">
+            <UserRegisterFormPersonalData v-model="model" />
+          </v-card>
         </template>
 
         <template v-slot:item.2>
-          <UserRegisterFormAddress v-model="model" />
+          <v-card class="pa-2">
+            <UserRegisterFormAddress v-model="model" />
+          </v-card>
         </template>
 
         <template v-slot:item.3>
-          <UserRegisterFormOffice v-model="model" />
+          <v-card class="pa-2">
+            <UserRegisterFormOffice v-model="model" />
+          </v-card>
         </template>
 
         <template v-slot:item.4>
-          <UserRegisterFormAccessData v-model="model" />
+          <v-card class="pa-2">
+            <UserRegisterFormAccessData v-model="model" />
+          </v-card>
         </template>
         <template v-slot="{ next, prev }">
           <div class="d-flex justify-space-between px-4">
