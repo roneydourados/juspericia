@@ -8,6 +8,7 @@
     :readonly="readonly"
     :clearable="cleareable"
     :prepend-inner-icon="icon"
+    :loading="loading"
     @keypress="onKeyPress"
     @input="inputFormated($event.target.value)"
     @blur="getData"
