@@ -33,9 +33,9 @@ export const sendEmail = async ({
 
     const mailOptions = {
       from: '"Jusperícia" <atendimento@juspericia.com.br>', // sender address
-      template, //"email", // the name of the template file, i.e., email.handlebars
+      template, // the name of the template file, i.e., email.handlebars
       to: email,
-      subject: `Olá, ${name}`,
+      subject: "Jusperícia",
       context: {
         name: name,
         company: office,
