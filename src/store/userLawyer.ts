@@ -80,6 +80,14 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     await api.post(`/user-lawyer/register/forgot-activate-link/${token}`);
   };
 
+  const forgotPasswordLink = async (email: string) => {
+    await api.post("/user-lawyer/forgot-password", { email });
+  };
+
+  const resetPassword = async (token: string, payload: UserProps) => {
+    await api.post(`/user-lawyer/renew-password/${token}`, payload);
+  };
+
   return {
     $single,
     $all,
@@ -93,5 +101,7 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     register,
     activeAccount,
     forgotActiveLink,
+    forgotPasswordLink,
+    resetPassword,
   };
 });

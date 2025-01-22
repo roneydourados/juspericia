@@ -9,6 +9,9 @@ export default defineNuxtRouteMiddleware((to) => {
     to.path.includes("/activate-account/success") ||
     to.path.includes("/activate-account/error") ||
     to.path.includes("/activate-account/error/") ||
+    to.path.includes("/forgot-password") ||
+    to.path.includes("/forgot-password/renew") ||
+    to.path.includes("/forgot-password/renew/") ||
     to.path.includes("/terms") ||
     to.path.includes("/register");
 

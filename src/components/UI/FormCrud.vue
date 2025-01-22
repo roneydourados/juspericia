@@ -9,6 +9,7 @@
         size="small"
         type="submit"
         :disabled="loading"
+        class="text-none"
       >
         <div v-if="!loading" class="d-flex align-center">
           <v-icon icon="mdi-check" />

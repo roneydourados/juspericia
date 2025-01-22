@@ -2,12 +2,21 @@ import { emailProvider } from "@/server/providers/email";
 import hbs from "nodemailer-express-handlebars";
 import path from "path";
 
-export const sendEmail = async (
-  email: string,
-  name: string,
-  office: string,
-  token: string
-) => {
+interface SendEmailProps {
+  email: string;
+  name: string;
+  office: string;
+  template: string;
+  linkConfirmation: string;
+}
+
+export const sendEmail = async ({
+  email,
+  name,
+  office,
+  template,
+  linkConfirmation,
+}: SendEmailProps) => {
   const config = useRuntimeConfig();
 
   try {
@@ -24,13 +33,13 @@ export const sendEmail = async (
 
     const mailOptions = {
       from: '"Jusperícia" <atendimento@juspericia.com.br>', // sender address
-      template: "email", // the name of the template file, i.e., email.handlebars
+      template, //"email", // the name of the template file, i.e., email.handlebars
       to: email,
-      subject: `Seja muito bem vindo, ${name}`,
+      subject: `Olá, ${name}`,
       context: {
         name: name,
         company: office,
-        linkConfirmation: `${config.public.appUrl}/activate-account/${token}`,
+        linkConfirmation,
       },
     };
 

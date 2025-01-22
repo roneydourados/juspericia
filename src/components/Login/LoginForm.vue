@@ -65,14 +65,27 @@
           </v-btn>
         </v-col>
       </v-row>
-      <div>
+      <div class="mb-4">
         <p class="text-center text-caption">
           <span class="text-subtitle-1">
+            <span
+              @click="rounter.push('/forgot-password')"
+              class="font-weight-bold text-blue"
+              style="cursor: pointer; font-size: 1rem"
+            >
+              Esqueci minha senha
+            </span>
+          </span>
+        </p>
+      </div>
+      <div>
+        <p class="text-center">
+          <span style="font-size: 1rem">
             Não possui uma conta ?
             <span
               @click="rounter.push('/register')"
               class="font-weight-bold text-blue"
-              style="cursor: pointer"
+              style="cursor: pointer; font-size: 1rem"
             >
               Cadastrar
             </span>

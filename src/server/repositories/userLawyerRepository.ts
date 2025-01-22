@@ -307,6 +307,7 @@ const validations = async (payload: UserProps) => {
 
 export const register = async (payload: UserProps) => {
   const { hashText } = useHash();
+  const config = useRuntimeConfig();
 
   const profile = await prisma.profile.findFirst({
     where: {
@@ -361,12 +362,13 @@ export const register = async (payload: UserProps) => {
       });
 
       //se existe e não está ativo, reenviar o email
-      await sendEmail(
-        payload.email!,
-        payload.name!,
-        payload.officeName!,
-        userToken.token
-      );
+      await sendEmail({
+        email: payload.email!,
+        name: payload.name!,
+        office: payload.officeName!,
+        template: "email",
+        linkConfirmation: `${config.public.appUrl}/activate-account/${userToken.token}`,
+      });
 
       return;
     }
@@ -423,12 +425,13 @@ export const register = async (payload: UserProps) => {
     });
 
     //se existe e não está ativo, reenviar o email
-    await sendEmail(
-      payload.email!,
-      payload.name!,
-      payload.officeName!,
-      userToken.token
-    );
+    await sendEmail({
+      email: payload.email!,
+      name: payload.name!,
+      office: payload.officeName!,
+      template: "email",
+      linkConfirmation: `${config.public.appUrl}/activate-account/${userToken.token}`,
+    });
 
     return {
       id: user.id,
@@ -499,6 +502,8 @@ export const activeAccount = async (token: string) => {
 };
 
 export const forgotActivateLink = async (token: string) => {
+  const config = useRuntimeConfig();
+
   const tokenExists = await prisma.userTokens.findFirst({
     where: {
       token,
@@ -545,7 +550,13 @@ export const forgotActivateLink = async (token: string) => {
     });
 
     //se existe e não está ativo, reenviar o email
-    await sendEmail(user.email!, user.name!, user.officeName!, userToken.token);
+    await sendEmail({
+      email: user.email!,
+      name: user.name!,
+      office: user.officeName!,
+      template: "email",
+      linkConfirmation: `${config.public.appUrl}/activate-account/${userToken.token}`,
+    });
 
     return {
       name: user.name,
@@ -557,6 +568,137 @@ export const forgotActivateLink = async (token: string) => {
     throw createError({
       statusCode: 500,
       statusMessage: "Error to  forgot activate link",
+    });
+  }
+};
+
+export const forgotPassword = async (email: string) => {
+  const config = useRuntimeConfig();
+
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "User note found",
+      });
+    }
+
+    // apagar os tokens antigos
+    await prisma.userTokens.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    //expirar token em 3 minutos
+    const expiresAt = moment().add(3, "minutes").toDate();
+
+    // primeiro criar o token
+    const userToken = await prisma.userTokens.create({
+      data: {
+        token: uuidv7(),
+        userId: user.id,
+        expiresAt,
+      },
+    });
+
+    //enviar email para redefinir a senha
+    await sendEmail({
+      email: user.email!,
+      name: user.name!,
+      office: user.officeName!,
+      template: "passwrod",
+      linkConfirmation: `${config.public.appUrl}/forgot-password/renew/${userToken.token}`,
+    });
+  } catch (error) {
+    console.log("🚀 ~ error forgot password:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error to forgot password",
+    });
+  }
+};
+
+export const renewPassword = async ({ password }: UserProps, token: string) => {
+  const { hashText } = useHash();
+
+  if (!password) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "New password is required",
+    });
+  }
+
+  if (!token) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "New password token is required",
+    });
+  }
+
+  //pegar o token que foi enviado no email
+  const tokenExists = await prisma.userTokens.findFirst({
+    where: {
+      token,
+    },
+  });
+
+  // se não existir ja parar por aqui
+  if (!tokenExists) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "New password token is required",
+    });
+  }
+
+  //se existir verificar se ainda é válido
+  const expired = moment().isAfter(tokenExists.expiresAt);
+
+  // se estiver expirado parar por aqui
+  if (expired) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Token as expired!",
+    });
+  }
+
+  try {
+    // encriptar a senha
+    const hashedpassword = await hashText(password);
+
+    //atualizar nova senha
+    const user = await prisma.user.update({
+      data: {
+        password: hashedpassword,
+      },
+      where: {
+        id: tokenExists.userId,
+      },
+    });
+
+    // apagar os tokens antigos
+    await prisma.userTokens.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    };
+  } catch (error) {
+    console.log("🚀 ~ error renew password:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error to renew password",
     });
   }
 };
