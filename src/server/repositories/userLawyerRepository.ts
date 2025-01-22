@@ -2,6 +2,8 @@ import prisma from "@/lib/prisma";
 import { UserProps } from "@/types/User";
 import { uuidv7 } from "uuidv7";
 import { useHash } from "@/server/providers/hash";
+import moment from "moment";
+import { sendEmail } from "../services/emailService";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();
@@ -320,7 +322,54 @@ export const register = async (payload: UserProps) => {
   }
 
   try {
-    await validations(payload);
+    const exists = await prisma.user.findFirst({
+      select: {
+        id: true,
+        name: true,
+        active: true,
+      },
+      where: {
+        email: payload.email,
+      },
+    });
+
+    if (exists && exists.active) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "User is exists",
+      });
+    }
+
+    if (exists && !exists.active) {
+      //apagar o tokens antigo
+      await prisma.userTokens.deleteMany({
+        where: {
+          userId: exists.id,
+        },
+      });
+
+      //expirar token em 3 minutos
+      const expiresAt = moment().add(3, "minutes").toDate();
+
+      // primeiro criar o token
+      const userToken = await prisma.userTokens.create({
+        data: {
+          token: uuidv7(),
+          userId: exists.id,
+          expiresAt,
+        },
+      });
+
+      //se existe e não está ativo, reenviar o email
+      await sendEmail(
+        payload.email!,
+        payload.name!,
+        payload.officeName!,
+        userToken.token
+      );
+
+      return;
+    }
 
     const hashedpassword = await hashText(payload.password!);
 
@@ -361,6 +410,26 @@ export const register = async (payload: UserProps) => {
       });
     }
 
+    //expirar token em 3 minutos
+    const expiresAt = moment().add(3, "minutes").toDate();
+
+    // primeiro criar o token
+    const userToken = await prisma.userTokens.create({
+      data: {
+        token: uuidv7(),
+        userId: user.id,
+        expiresAt,
+      },
+    });
+
+    //se existe e não está ativo, reenviar o email
+    await sendEmail(
+      payload.email!,
+      payload.name!,
+      payload.officeName!,
+      userToken.token
+    );
+
     return {
       id: user.id,
       email: user.email,
@@ -372,6 +441,58 @@ export const register = async (payload: UserProps) => {
     throw createError({
       statusCode: 500,
       message: "Error to register User Lawyer",
+    });
+  }
+};
+
+export const activeAccount = async (token: string) => {
+  const tokenExists = await prisma.userTokens.findFirst({
+    where: {
+      token,
+    },
+  });
+
+  if (!tokenExists) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Token not found",
+    });
+  }
+  const expired = moment().isAfter(tokenExists?.expiresAt);
+
+  if (expired) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Token as expired!",
+    });
+  }
+
+  try {
+    const user = await prisma.user.update({
+      data: {
+        active: true,
+      },
+      where: {
+        id: tokenExists.userId,
+      },
+    });
+
+    await prisma.userTokens.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    return {
+      name: user.name,
+      email: user.email,
+      active: user.active,
+    };
+  } catch (error) {
+    console.log("🚀 ~ error active account:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error to active account",
     });
   }
 };

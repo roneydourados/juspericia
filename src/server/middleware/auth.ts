@@ -1,20 +1,28 @@
 import { useJwtToken } from "../providers/jwtToken";
 
-const openEndpoints = [
-  "/api/auth",
-  "/api/auth/register",
-  "/api/user-lawyer/register",
-  "/api/profile",
-  "/api/asaas/webhook/payment",
-];
+// const openEndpoints = [
+//   "/api/auth",
+//   "/api/auth/register",
+//   "/api/user-lawyer/register",
+//   "/api/profile",
+//   "/api/asaas/webhook/payment",
+// ];
 
 export default defineEventHandler((event) => {
   const { verifyToken } = useJwtToken();
   // se não contem /api significa que é roda do lado client, então deixar passar!
   const clientSideRoutes = !event.path.includes("/api");
 
+  const existsFreeRoute =
+    event.path.includes("/api/auth") ||
+    event.path.includes("/api/auth/register") ||
+    event.path.includes("/api/user-lawyer/register") ||
+    event.path.includes("/api/user-lawyer/register/") ||
+    event.path.includes("/api/profile") ||
+    event.path.includes("/api/asaas/webhook/payment");
+
   // se for um endpoint liberado então passar
-  if (openEndpoints.includes(event.path) || clientSideRoutes) {
+  if (existsFreeRoute || clientSideRoutes) {
     return;
   }
 

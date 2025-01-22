@@ -132,9 +132,16 @@ export default defineNuxtConfig({
     addValidateEndpoint: true,
   },
   runtimeConfig: {
+    emailProvider: {
+      host: process.env.MAIL_HOST ?? "",
+      port: process.env.MAIL_PORT ?? "",
+      user: process.env.MAIL_USER ?? "",
+      pass: process.env.MAIL_PASS ?? "",
+    },
     tokenSecret: process.env.JWT_SECRET ?? "",
     public: {
       apiBaseUrl: process.env.API_BASE_URL ?? "",
+      appUrl: process.env.APP_URL,
       version: process.env.VERSION ?? "",
       asaasApikey: process.env.ASAAS_API_KEY ?? "",
       asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",

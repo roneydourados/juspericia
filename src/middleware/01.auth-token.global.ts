@@ -4,12 +4,13 @@ export default defineNuxtRouteMiddleware((to) => {
   const stoken = localStorage.getItem("token");
   const auth = useAuthStore();
 
-  // se não tem um token e não esta no login então expulsa para o login
-  if (to.path === "/register") {
-    return;
-  }
+  const existsFreeRoute =
+    to.path.includes("/activate-account/") ||
+    to.path.includes("/activate-account/success") ||
+    to.path.includes("/terms") ||
+    to.path.includes("/register");
 
-  if (to.path === "/terms") {
+  if (existsFreeRoute) {
     return;
   }
 

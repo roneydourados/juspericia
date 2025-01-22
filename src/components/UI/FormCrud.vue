@@ -19,7 +19,7 @@
       </v-btn>
       <slot name="button" />
     </div>
-    <DialogLoading :dialog="loading" />
+    <!-- <DialogLoading :dialog="loading" /> -->
   </form>
 </template>
 

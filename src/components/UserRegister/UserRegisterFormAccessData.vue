@@ -119,6 +119,8 @@ const submitForm = () => {
     emit("register");
   } catch (error) {
     turnstile.value?.reset();
+    push.warning("Oops deu um problema tente novamente!");
+    console.log("🚀 ~ submitForm ~ error:", error);
   }
 };
 

@@ -267,8 +267,6 @@ export const useUtils = () => {
         return "#43A047";
       case "canceled":
         return "#F44336";
-      case "canceled":
-        return "#F44336";
       case "paid":
         return "#26A69A";
       case "payment_pending":

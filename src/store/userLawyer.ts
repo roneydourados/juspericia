@@ -72,6 +72,10 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     user.value = data;
   };
 
+  const activeAccount = async (token: string) => {
+    await api.put(`/user-lawyer/register/${token}`);
+  };
+
   return {
     $single,
     $all,
@@ -83,5 +87,6 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     show,
     getEstatistics,
     register,
+    activeAccount,
   };
 });
