@@ -7,6 +7,8 @@ export default defineNuxtRouteMiddleware((to) => {
   const existsFreeRoute =
     to.path.includes("/activate-account/") ||
     to.path.includes("/activate-account/success") ||
+    to.path.includes("/activate-account/error") ||
+    to.path.includes("/activate-account/error/") ||
     to.path.includes("/terms") ||
     to.path.includes("/register");
 

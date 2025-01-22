@@ -24,11 +24,13 @@ const rounter = useRouter();
 try {
   const id = route.params.id as string;
 
-  await useAsyncData("activateAccount", () => auth.activeAccount(id));
+  //await useAsyncData("activateAccount", () => auth.activeAccount(id));
+  await auth.activeAccount(id);
 
   rounter.push("/activate-account/success");
 } catch (error) {
-  rounter.push("/");
+  rounter.push(`/activate-account/error/${route.params.id}`);
   console.error(error);
+  alert("Erro ao ativar conta");
 }
 </script>

@@ -76,6 +76,10 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     await api.put(`/user-lawyer/register/${token}`);
   };
 
+  const forgotActiveLink = async (token: string) => {
+    await api.post(`/user-lawyer/register/forgot-activate-link/${token}`);
+  };
+
   return {
     $single,
     $all,
@@ -88,5 +92,6 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     getEstatistics,
     register,
     activeAccount,
+    forgotActiveLink,
   };
 });

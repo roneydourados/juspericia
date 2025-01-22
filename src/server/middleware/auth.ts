@@ -19,7 +19,9 @@ export default defineEventHandler((event) => {
     event.path.includes("/api/user-lawyer/register") ||
     event.path.includes("/api/user-lawyer/register/") ||
     event.path.includes("/api/profile") ||
-    event.path.includes("/api/asaas/webhook/payment");
+    event.path.includes("/api/asaas/webhook/payment") ||
+    event.path.includes("/api/user-lawyer/register/forgot-activate-link") ||
+    event.path.includes("/api/user-lawyer/register/forgot-activate-link/");
 
   // se for um endpoint liberado então passar
   if (existsFreeRoute || clientSideRoutes) {

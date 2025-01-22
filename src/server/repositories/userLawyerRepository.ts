@@ -458,6 +458,7 @@ export const activeAccount = async (token: string) => {
       statusMessage: "Token not found",
     });
   }
+
   const expired = moment().isAfter(tokenExists?.expiresAt);
 
   if (expired) {
@@ -493,6 +494,69 @@ export const activeAccount = async (token: string) => {
     throw createError({
       statusCode: 500,
       statusMessage: "Error to active account",
+    });
+  }
+};
+
+export const forgotActivateLink = async (token: string) => {
+  const tokenExists = await prisma.userTokens.findFirst({
+    where: {
+      token,
+    },
+  });
+
+  if (!tokenExists) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Token not found",
+    });
+  }
+
+  const user = await prisma.user.findFirst({
+    where: {
+      id: tokenExists.userId,
+    },
+  });
+
+  if (!user) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "User not found",
+    });
+  }
+
+  try {
+    await prisma.userTokens.deleteMany({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    //expirar token em 3 minutos
+    const expiresAt = moment().add(3, "minutes").toDate();
+
+    // primeiro criar o token
+    const userToken = await prisma.userTokens.create({
+      data: {
+        token: uuidv7(),
+        userId: user.id,
+        expiresAt,
+      },
+    });
+
+    //se existe e não está ativo, reenviar o email
+    await sendEmail(user.email!, user.name!, user.officeName!, userToken.token);
+
+    return {
+      name: user.name,
+      email: user.email,
+      active: user.active,
+    };
+  } catch (error) {
+    console.log("🚀 ~ error forgot activate link:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error to  forgot activate link",
     });
   }
 };
