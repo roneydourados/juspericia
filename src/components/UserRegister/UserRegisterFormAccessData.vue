@@ -103,11 +103,23 @@ const $invalidPasword = computed(() => {
 });
 
 const submitForm = () => {
-  if ($invalidPasword.value) {
-    return;
-  }
+  try {
+    if ($invalidPasword.value) {
+      return;
+    }
 
-  emit("register");
+    if (!cloudFlareToken.value) {
+      turnstile.value?.reset();
+      push.warning("Erro no captcha, tente novamente");
+      return;
+    }
+
+    model.value.tokenCapcha = cloudFlareToken.value;
+
+    emit("register");
+  } catch (error) {
+    turnstile.value?.reset();
+  }
 };
 
 const handleOpenTerms = () => {

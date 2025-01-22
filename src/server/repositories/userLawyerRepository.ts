@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-
 import { UserProps } from "@/types/User";
 import { uuidv7 } from "uuidv7";
 import { useHash } from "@/server/providers/hash";
@@ -300,6 +299,79 @@ const validations = async (payload: UserProps) => {
     throw createError({
       statusCode: 409,
       message: "User Lawyer name is required",
+    });
+  }
+};
+
+export const register = async (payload: UserProps) => {
+  const { hashText } = useHash();
+
+  const profile = await prisma.profile.findFirst({
+    where: {
+      type: "ADVOGADO",
+    },
+  });
+
+  if (!profile) {
+    throw createError({
+      statusCode: 500,
+      message: "Profile not found",
+    });
+  }
+
+  try {
+    await validations(payload);
+
+    const hashedpassword = await hashText(payload.password!);
+
+    const user = await prisma.user.create({
+      data: {
+        publicId: uuidv7(),
+        email: payload.email!,
+        name: payload.name!,
+        password: hashedpassword,
+        cpfCnpj: payload.cpfCnpj,
+        phone: payload.phone,
+        profileId: profile.id,
+        oab: payload.oab,
+        oabUf: payload.oabUf,
+        officeName: payload.officeName,
+        officeCnpj: payload.officeCnpj,
+        officeEmail: payload.officeEmail,
+        officePhone: payload.officePhone,
+        whatsapp: payload.whatsapp,
+        active: false,
+      },
+    });
+
+    if (payload.Address) {
+      await prisma.address.create({
+        data: {
+          publicId: uuidv7(),
+          addressCity: payload.Address.addressCity,
+          addressComplement: payload.Address.addressComplement,
+          addressDistrict: payload.Address.addressDistrict,
+          addressNumber: payload.Address.addressNumber,
+          addressState: payload.Address.addressState,
+          addressStreet: payload.Address.addressStreet,
+          addressZipcode: payload.Address.addressZipcode,
+          ownerId: user.id,
+          addressCategory: addressCategoryType.user,
+        },
+      });
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      publicId: user.publicId,
+    };
+  } catch (error) {
+    console.log("🚀 ~ error register User Lawyer:", error);
+    throw createError({
+      statusCode: 500,
+      message: "Error to register User Lawyer",
     });
   }
 };

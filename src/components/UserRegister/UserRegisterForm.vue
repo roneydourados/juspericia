@@ -2,13 +2,12 @@
   <v-card class="mx-auto py-8" flat :width="mobile ? '100%' : '900'">
     <v-card-title>
       <div
-        class="d-flex align-center justify-center text-h5 font-weight-bold pa-6"
+        class="d-flex align-center justify-center text-h4 font-weight-bold pa-6"
       >
-        <v-icon icon="mdi-account-outline" start color="primary" />
+        <v-icon icon="mdi-account" start color="primary" size="50" />
         Criar conta
       </div>
     </v-card-title>
-
     <v-stepper v-model="step" :items="items" elevation="0" hide-actions>
       <template v-slot:item.1>
         <v-card class="pa-2">
@@ -97,45 +96,46 @@ const model = ref<UserModelProps>({
     numero: "",
     uf: "",
   },
+  tokenCapcha: "",
 });
 
 const handleSubmitRegister = async () => {
   loading.value = true;
   confirmRegister.value = false;
   try {
-    goLogin();
-    // await userLawyerStore.update({
-    //   id: model.value?.id,
-    //   email: model.value?.email,
-    //   name: model.value?.name,
-    //   phone: model.value?.phone,
-    //   whatsapp: model.value?.whatsapp,
-    //   cpfCnpj: model.value?.cpfCnpj,
-    //   password: model.value?.password ? model.value?.password : undefined,
-    //   active: model.value?.active,
-    //   oab: model.value?.oab,
-    //   oabUf: model.value?.oabUf,
-    //   officeName: model.value?.officeName,
-    //   Address: {
-    //     addressCity: model.value.cepAddress.localidade,
-    //     addressComplement: model.value.cepAddress.complemento,
-    //     addressDistrict: model.value.cepAddress.bairro,
-    //     addressNumber: model.value.cepAddress.numero,
-    //     addressState: model.value.cepAddress.uf,
-    //     addressStreet: model.value.cepAddress.logradouro,
-    //     addressZipcode: model.value.cepAddress.cep,
-    //   },
-    // });
+    await userLawyerStore.register({
+      email: model.value?.email,
+      name: model.value?.name,
+      phone: model.value?.phone,
+      whatsapp: model.value?.whatsapp,
+      cpfCnpj: model.value?.cpfCnpj,
+      password: model.value?.password ? model.value?.password : undefined,
+      active: model.value?.active,
+      oab: model.value?.oab,
+      oabUf: model.value?.oabUf,
+      officeName: model.value?.officeName,
+      officePhone: model.value?.officePhone,
+      officeCnpj: model.value?.officeCnpj,
+      officeEmail: model.value?.officeEmail,
+      Address: {
+        addressCity: model.value.cepAddress.localidade,
+        addressComplement: model.value.cepAddress.complemento,
+        addressDistrict: model.value.cepAddress.bairro,
+        addressNumber: model.value.cepAddress.numero,
+        addressState: model.value.cepAddress.uf,
+        addressStreet: model.value.cepAddress.logradouro,
+        addressZipcode: model.value.cepAddress.cep,
+      },
+      tokenCapcha: model.value.tokenCapcha,
+    });
+
+    rounter.push("/");
   } catch (error) {
     console.error(error);
     push.error("Erro ao registrar, tente novamente!");
   } finally {
     loading.value = false;
   }
-};
-
-const goLogin = () => {
-  rounter.push("/");
 };
 </script>
 

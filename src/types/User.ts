@@ -23,6 +23,7 @@ export interface UserProps {
   medicConsultationValue?: number;
   customerId?: string;
   whatsapp?: string;
+  tokenCapcha?: string;
 }
 
 export interface UserProfileProps {
@@ -61,6 +62,7 @@ export interface UserModelProps {
   officePhone: string;
   officeEmail: string;
   officeCnpj: string;
+  tokenCapcha: string;
 }
 
 export interface UserMedicModelProps {

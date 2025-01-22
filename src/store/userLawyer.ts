@@ -63,6 +63,15 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     estatistics.value = data;
   };
 
+  const register = async (payload: UserProps) => {
+    const { data } = await api.post<UserProps>(
+      "/user-lawyer/register",
+      payload
+    );
+
+    user.value = data;
+  };
+
   return {
     $single,
     $all,
@@ -73,5 +82,6 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     destroy,
     show,
     getEstatistics,
+    register,
   };
 });

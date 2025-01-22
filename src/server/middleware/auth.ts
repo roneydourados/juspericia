@@ -3,6 +3,7 @@ import { useJwtToken } from "../providers/jwtToken";
 const openEndpoints = [
   "/api/auth",
   "/api/auth/register",
+  "/api/user-lawyer/register",
   "/api/profile",
   "/api/asaas/webhook/payment",
 ];
