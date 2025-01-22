@@ -1,4 +1,4 @@
-import { forgotActivateLink } from "@/server/repositories/userLawyerRepository";
+import { forgotActivateLink } from "@/server/repositories/authRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

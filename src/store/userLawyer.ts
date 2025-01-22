@@ -63,30 +63,30 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     estatistics.value = data;
   };
 
-  const register = async (payload: UserProps) => {
-    const { data } = await api.post<UserProps>(
-      "/user-lawyer/register",
-      payload
-    );
+  // const register = async (payload: UserProps) => {
+  //   const { data } = await api.post<UserProps>(
+  //     "/user-lawyer/register",
+  //     payload
+  //   );
 
-    user.value = data;
-  };
+  //   user.value = data;
+  // };
 
-  const activeAccount = async (token: string) => {
-    await api.put(`/user-lawyer/register/${token}`);
-  };
+  // const activeAccount = async (token: string) => {
+  //   await api.put(`/user-lawyer/register/${token}`);
+  // };
 
-  const forgotActiveLink = async (token: string) => {
-    await api.post(`/user-lawyer/register/forgot-activate-link/${token}`);
-  };
+  // const forgotActiveLink = async (token: string) => {
+  //   await api.post(`/user-lawyer/register/forgot-activate-link/${token}`);
+  // };
 
-  const forgotPasswordLink = async (email: string) => {
-    await api.post("/user-lawyer/forgot-password", { email });
-  };
+  // const forgotPasswordLink = async (email: string) => {
+  //   await api.post("/user-lawyer/forgot-password", { email });
+  // };
 
-  const resetPassword = async (token: string, payload: UserProps) => {
-    await api.post(`/user-lawyer/renew-password/${token}`, payload);
-  };
+  // const resetPassword = async (token: string, payload: UserProps) => {
+  //   await api.post(`/user-lawyer/renew-password/${token}`, payload);
+  // };
 
   return {
     $single,
@@ -98,10 +98,10 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     destroy,
     show,
     getEstatistics,
-    register,
-    activeAccount,
-    forgotActiveLink,
-    forgotPasswordLink,
-    resetPassword,
+    // register,
+    // activeAccount,
+    // forgotActiveLink,
+    // forgotPasswordLink,
+    // resetPassword,
   };
 });

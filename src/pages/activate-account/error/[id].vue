@@ -30,7 +30,7 @@ definePageMeta({
 
 const router = useRouter();
 const route = useRoute();
-const register = useUserLawyerStore();
+const register = useAuthStore();
 
 const countdown = ref(15);
 

@@ -17,7 +17,7 @@ definePageMeta({
   middleware: undefined,
 });
 
-const auth = useUserLawyerStore();
+const auth = useAuthStore();
 const route = useRoute();
 const rounter = useRouter();
 

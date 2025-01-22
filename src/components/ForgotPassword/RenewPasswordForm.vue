@@ -62,7 +62,7 @@ import { useDisplay } from "vuetify";
 const { mobile } = useDisplay();
 const router = useRouter();
 const route = useRoute();
-const user = useUserLawyerStore();
+const user = useAuthStore();
 
 const form = ref({
   password: "",

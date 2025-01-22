@@ -1,4 +1,4 @@
-import { activeAccount } from "@/server/repositories/userLawyerRepository";
+import { activeAccount } from "@/server/repositories/authRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;

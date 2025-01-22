@@ -1,4 +1,4 @@
-import { forgotPassword } from "@/server/repositories/userLawyerRepository";
+import { forgotPassword } from "@/server/repositories/authRepository";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

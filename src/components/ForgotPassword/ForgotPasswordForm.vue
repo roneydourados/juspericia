@@ -43,7 +43,7 @@
 import { useDisplay } from "vuetify";
 
 const { mobile } = useDisplay();
-const user = useUserLawyerStore();
+const user = useAuthStore();
 const router = useRouter();
 
 const email = ref("");

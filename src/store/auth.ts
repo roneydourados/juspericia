@@ -53,5 +53,40 @@ export const useAuthStore = defineStore("auth", () => {
     localStorage.removeItem("token");
   };
 
-  return { login, verifyUser, logout, $currentUser };
+  //efetuar cadastro/registro de um novo usuário
+  const register = async (payload: UserProps) => {
+    await api.post<UserProps>("/auth/register", payload);
+  };
+
+  //ativar a conta com o token válido
+  const activeAccount = async (token: string) => {
+    await api.put(`/auth/register/${token}`);
+  };
+
+  // caso o token tenha expirado, reenviar um novo email para ativação
+  const forgotActiveLink = async (token: string) => {
+    await api.post(`/auth/register/forgot-activate-link/${token}`);
+  };
+
+  // enviar um email para redefinir a senha
+  const forgotPasswordLink = async (email: string) => {
+    await api.post("/auth/forgot-password", { email });
+  };
+
+  //redefinir a senha
+  const resetPassword = async (token: string, payload: UserProps) => {
+    await api.post(`/auth/renew-password/${token}`, payload);
+  };
+
+  return {
+    $currentUser,
+    login,
+    verifyUser,
+    logout,
+    register,
+    activeAccount,
+    forgotActiveLink,
+    forgotPasswordLink,
+    resetPassword,
+  };
 });

@@ -64,8 +64,7 @@ const emit = defineEmits(["login"]);
 const { mobile } = useDisplay();
 
 const rounter = useRouter();
-const auth = useAuthStore();
-const userLawyerStore = useUserLawyerStore();
+const user = useAuthStore();
 
 const items = ["Dados pessoais", "Endereço", "Escritório", "Acesso"];
 const loading = ref(false);
@@ -103,7 +102,7 @@ const handleSubmitRegister = async () => {
   loading.value = true;
   confirmRegister.value = false;
   try {
-    await userLawyerStore.register({
+    await user.register({
       email: model.value?.email,
       name: model.value?.name,
       phone: model.value?.phone,

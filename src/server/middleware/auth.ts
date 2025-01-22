@@ -16,15 +16,15 @@ export default defineEventHandler((event) => {
   const existsFreeRoute =
     event.path.includes("/api/auth") ||
     event.path.includes("/api/auth/register") ||
-    event.path.includes("/api/user-lawyer/register") ||
-    event.path.includes("/api/user-lawyer/renew-password") ||
-    event.path.includes("/api/user-lawyer/renew-password/") ||
-    event.path.includes("/api/user-lawyer/forgot-password") ||
-    event.path.includes("/api/user-lawyer/register/") ||
+    event.path.includes("/api/auth/register") ||
+    event.path.includes("/api/auth/renew-password") ||
+    event.path.includes("/api/auth/renew-password/") ||
+    event.path.includes("/api/auth/forgot-password") ||
+    event.path.includes("/api/auth/register/") ||
     event.path.includes("/api/profile") ||
     event.path.includes("/api/asaas/webhook/payment") ||
-    event.path.includes("/api/user-lawyer/register/forgot-activate-link") ||
-    event.path.includes("/api/user-lawyer/register/forgot-activate-link/");
+    event.path.includes("/api/auth/register/forgot-activate-link") ||
+    event.path.includes("/api/auth/register/forgot-activate-link/");
 
   // se for um endpoint liberado então passar
   if (existsFreeRoute || clientSideRoutes) {

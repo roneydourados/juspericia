@@ -1,4 +1,4 @@
-import { register } from "@/server/repositories/userLawyerRepository";
+import { register } from "@/server/repositories/authRepository";
 import { UserProps } from "@/types/User";
 
 export default defineEventHandler(async (event) => {
