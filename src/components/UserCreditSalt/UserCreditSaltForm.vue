@@ -60,8 +60,9 @@
         style="gap: 0.5rem"
       >
         <v-btn
-          color="success"
-          variant="elevated"
+          prepend-icon="mdi-cash"
+          color="primary"
+          variant="flat"
           class="text-none"
           @click="confirm = true"
         >
