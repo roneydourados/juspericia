@@ -1,12 +1,14 @@
 <template>
   <v-card class="mx-auto py-8" flat :width="mobile ? '100%' : '900'">
     <v-card-title>
-      <div
-        class="d-flex align-center justify-center text-h4 font-weight-bold pa-6"
-      >
-        <v-icon icon="mdi-account" start color="primary" size="50" />
-        Criar conta
-      </div>
+      <v-row class="px-4">
+        <v-col cols="12" lg="6" class="d-flex flex-column">
+          <Logo height="60" color="#6A6CF0" />
+          <span class="text-grey-darken-1 mt-2">
+            Crie sua conta para começar a desfrutar de nossos serviços
+          </span>
+        </v-col>
+      </v-row>
     </v-card-title>
     <v-stepper v-model="step" :items="items" elevation="0" hide-actions>
       <template v-slot:item.1>

@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar>
+    <!-- <v-app-bar>
       <template #title>
         <Logo height="30" />
       </template>
       <v-spacer></v-spacer>
-    </v-app-bar>
+    </v-app-bar> -->
 
     <v-main>
       <slot />

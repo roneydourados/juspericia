@@ -2,6 +2,12 @@
   <v-card class="mx-auto" color="#fff" rounded="lg" flat max-width="600">
     <v-card-title>
       <v-row dense class="pa-8" justify="center">
+        <v-col cols="12" class="d-flex flex-column align-center mb-8">
+          <Logo height="60" color="#6A6CF0" />
+          <span class="text-grey-darken-1"
+            >Acesse sua conta para continuar</span
+          >
+        </v-col>
         <v-col>
           <v-icon
             icon="mdi-account-key-outline"

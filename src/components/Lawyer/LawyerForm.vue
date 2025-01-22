@@ -164,7 +164,6 @@
 </template>
 
 <script setup lang="ts">
-import { formatCEP } from "@brazilian-utils/brazilian-utils";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({

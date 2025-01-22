@@ -52,6 +52,7 @@
             color="success"
             variant="outlined"
             size="small"
+            @click="showSaltCredit = true"
           >
             <v-icon icon="mdi-cash-multiple" size="24" start />
             Utilzar Saldo
@@ -404,6 +405,10 @@
       </div>
     </div>
   </Dialog>
+  <UserCreditSaltForm
+    v-model="showSaltCredit"
+    :total-sale="$solicitationTotal"
+  />
   <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
@@ -430,6 +435,7 @@ const {
 } = useUtils();
 
 const selected = ref<SolicitationConsultationProps>();
+const showSaltCredit = ref(false);
 const isRate = ref(false);
 const showDateCorrection = ref(false);
 const showDateAntecipation = ref(false);
