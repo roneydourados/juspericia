@@ -31,6 +31,5 @@ try {
 } catch (error) {
   rounter.push(`/activate-account/error/${route.params.id}`);
   console.error(error);
-  alert("Erro ao ativar conta");
 }
 </script>

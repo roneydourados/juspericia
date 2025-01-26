@@ -7,6 +7,13 @@ R:.
 O valor a ser pago por laudo para os médicos, será informado no cadastro do laudo ?
 R:.
 
+# Correções
+
+[] - Tela de estatísticas do advogado esta somando vendas canceladas como investimento
+[] - Na tela de meus saldos, campo data de pagamento estra mostrando pago para uma venda cancelada
+[] - Habilitar a tela pagar com créditos na tela de solicitações, quando a solicitação estiver com pendência de pagamento
+[] - No envio do e-mail de confirmação de cadastro, acrescentar o email cadastrado
+
 # pendentes
 
 [] - Pensar em um cache para componentes que serão selects
