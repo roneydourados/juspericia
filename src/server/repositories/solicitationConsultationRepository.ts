@@ -41,6 +41,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       proccessNumber: true,
       status: true,
       processSituation: true,
+      valueCredit: true,
       tipValue: true,
       createdAt: true,
       updatedAt: true,
@@ -314,6 +315,7 @@ const exists = async (id: string) => {
       patientId: true,
       medicId: true,
       status: true,
+      valueCredit: true,
       processSituation: true,
       proccessNumber: true,
       antecipationValue: true,
@@ -428,4 +430,116 @@ const exists = async (id: string) => {
     ...data,
     PatientConsultationReport: data.PatientConsultationReport[0],
   };
+};
+
+export const paidConsultationSalt = async (
+  solicitation: SolicitationConsultationProps
+) => {
+  try {
+    const salts = await prisma.sales.findMany({
+      select: {
+        publicId: true,
+        description: true,
+        billingType: true,
+        confirmedDate: true,
+        dateCreated: true,
+        dueDate: true,
+        expiredAt: true,
+        saleId: true,
+        status: true,
+        invoiceUrl: true,
+        transactionReceiptUrl: true,
+        value: true,
+        salt: true,
+      },
+      where: {
+        userId: solicitation.userId,
+        status: "CONFIRMED",
+        expiredAt: {
+          lte: new Date(), // data de expiração menor ou igual a data atual
+        },
+        category: "package",
+        salt: {
+          gt: 0, // saldo maior que zero
+        },
+      },
+      orderBy: {
+        id: "desc",
+      },
+    });
+
+    let totalCheck =
+      Number(solicitation.consultationValue ?? 0) +
+      Number(solicitation.antecipationValue ?? 0);
+
+    const updateSalts = salts.map(async (saltItem) => {
+      console.log("🚀 ~ salts:", saltItem);
+
+      // se o saldo disponível do item for maior ou igual ao total
+      if (Number(saltItem.salt) >= totalCheck && totalCheck > 0) {
+        await prisma.sales.update({
+          data: {
+            salt: Number(saltItem.salt) - totalCheck,
+          },
+          where: {
+            publicId: saltItem.publicId!,
+          },
+        });
+
+        await prisma.userCreditLog.create({
+          data: {
+            history:
+              `Saída de crédito ref. a compra de  solicitação de consulta Nª ${
+                solicitation.id
+              } no valor de R$ ${Number(saltItem.salt).toFixed(
+                2
+              )}, saldo a descontar: ${Number(saltItem.salt).toFixed(
+                2
+              )}`.trim(),
+            userId: solicitation.userId!,
+            type: "D",
+            value: Number(totalCheck - Number(saltItem.salt)),
+          },
+        });
+
+        totalCheck = 0;
+      } else if (Number(saltItem.salt) < totalCheck && totalCheck > 0) {
+        await prisma.sales.update({
+          data: {
+            salt: 0, // se for menor então utilizar o total do saldo e zear o mesmo
+          },
+          where: {
+            publicId: saltItem.publicId!,
+          },
+        });
+
+        await prisma.userCreditLog.create({
+          data: {
+            history:
+              `Saída de crédito ref. a compra de  solicitação de consulta Nª ${
+                solicitation.id
+              } no valor de R$ ${Number(saltItem.salt).toFixed(
+                2
+              )}, saldo restante a descontar: ${Number(
+                totalCheck - Number(saltItem.salt)
+              ).toFixed(2)}`.trim(),
+            userId: solicitation.userId!,
+            type: "D",
+            value: Number(totalCheck - Number(saltItem.salt)),
+          },
+        });
+
+        // atualizar total check para debitar o restante de outro pacote disponível
+        totalCheck = totalCheck - Number(saltItem.salt);
+      }
+    });
+
+    await Promise.all(updateSalts);
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+    throw createError({
+      statusCode: 500,
+      message: "Error paid consultation salt",
+    });
+  }
 };

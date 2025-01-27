@@ -30,6 +30,7 @@ export interface SolicitationConsultationProps {
   isSolicitationCorrection?: boolean;
   consultationValue?: number;
   antecipationValue?: number;
+  valueCredit?: number;
   deadline?: string;
   rate?: number;
   Medic?: UserProps;

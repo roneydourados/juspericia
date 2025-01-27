@@ -405,10 +405,7 @@
       </div>
     </div>
   </Dialog>
-  <UserCreditSaltForm
-    v-model="showSaltCredit"
-    :total-sale="$solicitationTotal"
-  />
+  <UserCreditSaltForm v-model="showSaltCredit" :solicitation="solicitation" />
   <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
@@ -452,6 +449,7 @@ const $solicitationTotal = computed(() => {
     Number(props.solicitation.antecipationValue ?? 0)
   );
 });
+
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 
 watch(

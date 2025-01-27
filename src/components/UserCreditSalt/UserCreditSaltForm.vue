@@ -32,7 +32,12 @@
                 R$
               </span>
               <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                {{ amountFormated($totals.total - totalSale, false) }}
+                {{
+                  amountFormated(
+                    $totals.total - $solicitationTotalPaidSalt,
+                    false
+                  )
+                }}
               </span>
             </div>
           </v-card-text>
@@ -43,13 +48,42 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12">
-        <div class="d-flex align-center" style="gap: 0.5rem">
-          <span class="text-h6">Total utilizar: </span>
-          <span class="text-h6 font-weight-bold">
-            {{ amountFormated(totalSale, false) }}
-          </span>
-        </div>
+      <v-col cols="12" lg="4">
+        <InfoLabel
+          icon="mdi-plus"
+          font-size="1"
+          color-icon="info"
+          title="Valor original"
+          :content="`${amountFormated(
+            solicitation.consultationValue ?? 0,
+            true
+          )}`"
+          color="error"
+        />
+      </v-col>
+      <v-col cols="12" lg="4">
+        <InfoLabel
+          icon="mdi-minus"
+          color-icon="success"
+          title="Desconto"
+          font-size="1"
+          :content="`${amountFormated(
+            Number(solicitation.consultationValue ?? 0) -
+              Number(solicitation.valueCredit ?? 0),
+            true
+          )}`"
+          color="success"
+        />
+      </v-col>
+      <v-col cols="12" lg="4">
+        <InfoLabel
+          icon="mdi-equal"
+          color-icon="info"
+          title="Valor a debitar do saldo"
+          font-size="1"
+          :content="`${amountFormated($solicitationTotalPaidSalt, true)}`"
+          color="success"
+        />
       </v-col>
     </v-row>
 
@@ -64,7 +98,7 @@
           color="primary"
           variant="flat"
           class="text-none"
-          @click="confirm = true"
+          @click="handleUseSalt"
         >
           Usar saldo em créditos
         </v-btn>
@@ -82,7 +116,9 @@
         <span>
           confirma o pagamento de solicitação de consulta no valor de:
         </span>
-        <strong>{{ amountFormated(totalSale, true) }} ?</strong>
+        <strong>
+          {{ amountFormated($solicitationTotalPaidSalt, true) }} ?
+        </strong>
       </div>
     </Dialog>
   </DialogForm>
@@ -93,10 +129,6 @@ import moment from "moment";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
-  totalSale: {
-    type: Number,
-    default: 0,
-  },
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
     default: () => {},
@@ -112,6 +144,13 @@ const show = defineModel({
   default: false,
 });
 
+const $solicitationTotalPaidSalt = computed(() => {
+  return (
+    Number(props.solicitation.valueCredit ?? 0) +
+    Number(props.solicitation.antecipationValue ?? 0)
+  );
+});
+
 const $totals = computed(() => {
   const currentDate = moment();
   return {
@@ -122,18 +161,18 @@ const $totals = computed(() => {
           : acc,
       0
     ),
-    totalExpired: saltCredit.$all.reduce(
-      (acc, item) =>
-        moment(item.expiredAt).isBefore(currentDate)
-          ? acc + Number(item.salt ?? 0)
-          : acc,
-      0
-    ),
-    totalPending: saltCredit.$all.reduce(
-      (acc, item) =>
-        item.status === "PENDING" ? acc + Number(item.value) : acc,
-      0
-    ),
+    // totalExpired: saltCredit.$all.reduce(
+    //   (acc, item) =>
+    //     moment(item.expiredAt).isBefore(currentDate)
+    //       ? acc + Number(item.salt ?? 0)
+    //       : acc,
+    //   0
+    // ),
+    // totalPending: saltCredit.$all.reduce(
+    //   (acc, item) =>
+    //     item.status === "PENDING" ? acc + Number(item.value) : acc,
+    //   0
+    // ),
   };
 });
 
@@ -152,5 +191,12 @@ watch(
 const handleSubmit = async () => {
   show.value = false;
   confirm.value = false;
+};
+
+const handleUseSalt = () => {
+  if ($solicitationTotalPaidSalt.value > $totals.value.total) {
+    return push.error("Saldo insuficiente para pagamento");
+  }
+  confirm.value = true;
 };
 </script>

@@ -21,6 +21,7 @@ model PatientConsultation {
   updatedAt                 DateTime                    @default(now()) @updatedAt @map("updated_at")
   antecipationValue         Decimal                     @default(0) @map("antecipation_value") @db.Decimal(18, 2)
   consultationValue         Decimal                     @default(0) @map("consultation_value") @db.Decimal(18, 2)
+  valueCredit               Decimal                     @default(0) @map("value_credit") @db.Decimal(18, 2)
   publicId                  String?                     @unique @map("public_id") @db.VarChar(40)
   Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: Restrict, onUpdate: Restrict)
