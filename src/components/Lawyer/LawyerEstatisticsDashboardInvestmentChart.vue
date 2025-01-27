@@ -87,7 +87,7 @@ const chartConfig = computed(() => {
       },
       tooltip: {
         show: true,
-        theme: "dark", //$currentTheme.value === MAIN_THEME_DARK ? "dark" : "light",
+        theme: $currentTheme.value === MAIN_THEME_DARK ? "dark" : "light",
         style: {
           fontSize: "16px",
         },
