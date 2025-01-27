@@ -119,7 +119,7 @@ export const createPayment = async (
         expiredAt = moment().add(payload.dueDays, "days").format("YYYY-MM-DD");
       }
 
-      await prisma.sales.create({
+      const sale = await prisma.sales.create({
         data: {
           publicId: resp.externalReference,
           saleId: resp.id,
@@ -144,6 +144,25 @@ export const createPayment = async (
             : undefined,
         },
       });
+
+      // se for venda de pacote então gerar saldo inicial de crédito, aqui vai aguardar
+      // o webhook com a confirmação de pagamento para totalizar saldo
+      if (payload.category === "package") {
+        await prisma.userCredit.create({
+          data: {
+            userId: user.id!,
+            value: resp.value,
+            salt: 0,
+            category: "package",
+            ownerId: sale.id,
+            publicId: uuidv7(),
+            creditDate: new Date(),
+            status: resp.status,
+            expireDate: sale.expiredAt!,
+            invoiceUrl: resp.invoiceUrl,
+          },
+        });
+      }
 
       // se for pagamento de uma solicitação então atualizar o status da solicitação para pagamento pendente
       if (payload.solicitationId) {
@@ -198,7 +217,7 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
 
         if (sale) {
           // atualizar a venda para staus atual
-          const updatedSale = await prisma.sales.update({
+          await prisma.sales.update({
             data: {
               saleId: payload.payment.id,
               billingType: payload.payment.billingType,
@@ -229,25 +248,37 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
 
           // somente gerar crédito para o cliente se não for uma solicitação de consulta
           if (!sale.solicitationId && sale.category === "package") {
-            //Criar o saldo de crédito para o cliente
-            const userCredit = await prisma.userCredit.create({
-              data: {
+            const userCreditExists = await prisma.userCredit.findFirst({
+              where: {
                 userId: user.id!,
-                value: payload.payment.value,
-                salt: payload.payment.value,
                 category: "package",
-                ownerId: updatedSale.id,
-                publicId: uuidv7(),
-                creditDate: new Date(),
+                ownerId: sale.id,
+              },
+            });
+
+            if (!userCreditExists) {
+              throw createError({
+                statusCode: 500,
+                message: "User credit not found!",
+              });
+            }
+
+            //Atualizar o saldo de crédito para o cliente
+            await prisma.userCredit.update({
+              where: {
+                id: userCreditExists.id!,
+              },
+              data: {
+                salt: payload.payment.value,
                 status: payload.payment.status,
-                expireDate: updatedSale.expiredAt!,
+                transactionReceiptUrl: payload.payment.transactionReceiptUrl,
               },
             });
 
             // criar o log inicial do saldo
             await prisma.userCreditLog.create({
               data: {
-                userCreditId: userCredit.id,
+                userCreditId: userCreditExists.id,
                 history: `Entrada de crédito ref. a compra de ${
                   payload.payment.description
                 } no valor de R$ ${payload.payment.value.toFixed(2)}`.trim(),
@@ -272,10 +303,27 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
         break;
 
       case "PAYMENT_DELETED":
+        const saleDeleted = await prisma.sales.findFirst({
+          where: {
+            publicId: payload.payment.externalReference,
+          },
+        });
+
+        if (!saleDeleted) return;
+
         //caso seja deletado deletar a venda
         await prisma.sales.delete({
           where: {
             publicId: payload.payment.externalReference,
+          },
+        });
+
+        //apagar qualquer crédito gerado
+        await prisma.userCredit.deleteMany({
+          where: {
+            ownerId: saleDeleted.id,
+            category: "package",
+            userId: user.id!,
           },
         });
         break;
@@ -297,6 +345,13 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
           });
 
           if (userCredit) {
+            if (Number(userCredit.salt) !== Number(userCredit.value)) {
+              throw createError({
+                statusCode: 500,
+                message: "Salt credit diferente value!",
+              });
+            }
+
             //remover o saldo de crédito gerado pela venda
             await prisma.userCredit.update({
               where: {
@@ -305,6 +360,7 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
               data: {
                 salt: 0,
                 category: "package",
+                status: payload.payment.status,
               },
             });
 

@@ -9,6 +9,8 @@ export interface UserCreditSalt {
   salt?: string;
   category?: string;
   status?: string;
+  transactionReceiptUrl?: string;
+  invoiceUrl?: string;
   createdAt?: string;
 }
 

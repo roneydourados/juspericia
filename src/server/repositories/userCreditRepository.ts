@@ -20,6 +20,8 @@ export const index = async (input: {
         status: true,
         creditDate: true,
         expireDate: true,
+        invoiceUrl: true,
+        transactionReceiptUrl: true,
       },
       where: {
         userId,
@@ -34,12 +36,14 @@ export const index = async (input: {
       },
     });
 
-    return credits.map((credit) => ({
-      ...credit,
-      dateCreated: credit.creditDate.toISOString(),
-      dateUpdated: credit.creditDate.toISOString(),
-      expireDate: formatDate(credit.expireDate),
-    }));
+    return credits.map((credit) => {
+      return {
+        ...credit,
+        dateCreated: credit.creditDate.toISOString(),
+        dateUpdated: credit.creditDate.toISOString(),
+        expireDate: formatDate(credit.expireDate),
+      };
+    });
   } catch (error) {
     console.log("🚀 ~ error:", error);
 

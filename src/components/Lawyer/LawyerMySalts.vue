@@ -67,7 +67,6 @@
           </v-col>
         </v-row>
         <div class="py-4">
-          <pre>{{ $salts }}</pre>
           <Table
             title="Compras"
             :headers="headers"
@@ -75,11 +74,7 @@
             :show-crud="false"
           >
             <template #item.status="{ item }">
-              <v-chip
-                label
-                :color="getStatusName(item).color"
-                class="d-flex align-center"
-              >
+              <v-chip label :color="getStatusName(item).color">
                 <v-icon
                   :color="getStatusName(item).color"
                   icon="mdi-circle"
@@ -94,16 +89,14 @@
                 {{ moment(item.dateCreated).format("DD/MM/YYYY") }}
               </strong>
             </template>
-            <template #item.dueDate="{ item }">
-              <!-- <v-chip label :color="getStatusName(item).color" class="w-100"> -->
+            <!-- <template #item.dueDate="{ item }">
               <strong
                 v-if="item.status === 'PENDING' || item.status === 'REFUNDED'"
               >
                 {{ moment(item.dueDate).format("DD/MM/YYYY") }}
               </strong>
               <strong v-else-if="item.status === 'CONFIRMED'"> Pago </strong>
-              <!-- </v-chip> -->
-            </template>
+            </template> -->
             <template #item.value="{ item }">
               <strong>{{ amountFormated(item.value, true) }}</strong>
             </template>
@@ -222,7 +215,7 @@ const headers = ref([
     key: "status",
   },
   { title: "Data da compra", key: "dateCreated" },
-  { title: "Prazo pgto", key: "dueDate" },
+  // { title: "Prazo pgto", key: "dueDate" },
   { title: "Data de expiração", key: "expireDate" },
   { title: "Valor", key: "value" },
   { title: "Saldo", key: "salt" },
