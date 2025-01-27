@@ -16,6 +16,14 @@
         <v-col cols="12" lg="3">
           <CurrencyInput v-model="model.value" label="Preço" required />
         </v-col>
+        <v-col cols="12" lg="3" class="d-flex flex-column">
+          <IntegerInput v-model="model.dueDays" label="Expira em" required />
+        </v-col>
+        <v-col v-if="model.dueDays" cols="12" lg="4" class="d-flex flex-column">
+          <span>
+            Pacote configurado para expirar em {{ model.dueDays }} dias.
+          </span>
+        </v-col>
       </v-row>
     </FormCrud>
   </DialogForm>
@@ -61,6 +69,7 @@ const model = ref({
   description: "",
   value: "",
   status: "",
+  dueDays: "30",
 });
 
 watchPostEffect(() => {
@@ -77,6 +86,7 @@ const loadModel = () => {
     description: props.data.description ?? "",
     value: amountFormated(props.data.value ?? 0, false),
     status: props.data.status ?? "",
+    dueDays: props.data.dueDays?.toString() ?? "",
   };
 };
 
@@ -90,6 +100,7 @@ const handleSubmit = async () => {
         name: model.value.name,
         value: Number(model.value.value),
         urlImage: model.value.urlImage,
+        dueDays: Number(model.value.dueDays),
       });
     } else {
       await consultationPackageStore.create({
@@ -97,6 +108,7 @@ const handleSubmit = async () => {
         name: model.value.name,
         value: Number(model.value.value),
         urlImage: model.value.urlImage,
+        dueDays: Number(model.value.dueDays),
       });
     }
 
@@ -124,6 +136,7 @@ const clearModel = () => {
     description: "",
     value: "",
     status: "",
+    dueDays: "30",
   };
 };
 </script>

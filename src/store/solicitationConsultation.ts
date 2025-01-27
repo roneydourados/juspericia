@@ -68,6 +68,13 @@ export const useSolicitationConsultationStore = defineStore(
       solicitationConsultations.value = data;
     };
 
+    const paidUseSalt = async (payload: SolicitationConsultationProps) => {
+      await api.post<SolicitationConsultationProps>(
+        "/solicitation-consultation/paid-use-salt",
+        payload
+      );
+    };
+
     return {
       $single,
       $all,
@@ -76,6 +83,7 @@ export const useSolicitationConsultationStore = defineStore(
       destroy,
       index,
       show,
+      paidUseSalt,
     };
   }
 );

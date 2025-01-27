@@ -19,13 +19,12 @@ export const getSaleUser = async ({
         confirmedDate: true,
         dateCreated: true,
         dueDate: true,
-        expiredAt: true,
+        //expiredAt: true,
         saleId: true,
         status: true,
         invoiceUrl: true,
         transactionReceiptUrl: true,
         value: true,
-        salt: true,
       },
       where: {
         userId,
@@ -44,41 +43,8 @@ export const getSaleUser = async ({
       ...sale,
       dateCreated: formatDate(sale.dateCreated),
       dueDate: formatDate(sale.dueDate),
-      expiredAt: formatDate(sale.expiredAt),
+      //expiredAt: sale.expiredAt ? formatDate(sale.expiredAt) : "",
     }));
-  } catch (error) {
-    console.log("🚀 ~ error:", error);
-
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Sale Could not be list",
-    });
-  }
-};
-
-export const saleUserLogCredit = async (publicId: string) => {
-  try {
-    const sale = await prisma.sales.findFirst({
-      where: {
-        publicId,
-      },
-    });
-
-    if (sale) {
-      return prisma.userCreditLog.findMany({
-        select: {
-          createdAt: true,
-          history: true,
-          type: true,
-          value: true,
-        },
-        where: {
-          saleId: sale.id,
-        },
-      });
-    }
-
-    return [];
   } catch (error) {
     console.log("🚀 ~ error:", error);
 

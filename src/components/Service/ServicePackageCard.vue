@@ -29,6 +29,9 @@
 
         {{ item.name }}
       </v-card-title>
+      <strong>
+        Expira em {{ item.dueDays }} dias a contar da data da compra
+      </strong>
     </v-card-item>
 
     <v-card-text>
@@ -105,11 +108,10 @@ const handleSaleItem = async () => {
       description: props.item.name!,
       category: "package",
       packageId: props.item.id,
+      dueDays: props.item.dueDays,
     });
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      //window.open($paymentResponse.value?.data?.invoiceUrl);
-
       const screenWidth = window.screen.width;
       const screenHeight = window.screen.height;
       const popupWidth = Math.round(screenWidth * 0.95);

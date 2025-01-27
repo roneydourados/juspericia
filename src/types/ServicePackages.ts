@@ -6,6 +6,7 @@ export interface ServicePackagesProps {
   description?: string;
   value?: number;
   status?: string;
+  dueDays?: number;
   createdAt?: string;
   updatedAt?: string;
 }

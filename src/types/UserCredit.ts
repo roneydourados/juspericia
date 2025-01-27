@@ -1,39 +1,22 @@
-import { UserProps } from "@/types/User";
 export interface UserCreditSalt {
   id?: number;
-  userId?: number;
-  salt?: number;
-  saleId?: number;
-  saltCategory?: string;
-  expiredAt?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  description?: string;
   publicId?: string;
+  ownerId?: number;
+  userId?: number;
+  creditDate?: string;
+  expireDate?: string;
+  value?: string;
+  salt?: string;
+  category?: string;
   status?: string;
-  type?: string;
-  User?: UserProps;
-  UserLogCredit?: UserCreditLog[];
-  UserCreditPayment?: UserCreditPayment[];
+  createdAt?: string;
 }
 
 export interface UserCreditLog {
   id?: number;
-  saleId?: number;
-  userId?: number;
+  userCreditId?: number;
   history?: string;
   type?: string;
   value?: number;
   createdAt?: string;
-}
-
-export interface UserCreditPayment {
-  id?: number;
-  creditSaltId?: number;
-  paymentForm?: string;
-  value?: number;
-  chargeId?: string;
-  status?: string;
-  createdAt?: string;
-  updatedAt?: string;
 }

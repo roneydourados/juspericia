@@ -67,6 +67,7 @@
           </v-col>
         </v-row>
         <div class="py-4">
+          <pre>{{ $salts }}</pre>
           <Table
             title="Compras"
             :headers="headers"
@@ -94,14 +95,14 @@
               </strong>
             </template>
             <template #item.dueDate="{ item }">
-              <v-chip label :color="getStatusName(item).color" class="w-100">
-                <strong
-                  v-if="item.status === 'PENDING' || item.status === 'REFUNDED'"
-                >
-                  {{ moment(item.dueDate).format("DD/MM/YYYY") }}
-                </strong>
-                <strong v-else-if="item.status === 'CONFIRMED'"> Pago </strong>
-              </v-chip>
+              <!-- <v-chip label :color="getStatusName(item).color" class="w-100"> -->
+              <strong
+                v-if="item.status === 'PENDING' || item.status === 'REFUNDED'"
+              >
+                {{ moment(item.dueDate).format("DD/MM/YYYY") }}
+              </strong>
+              <strong v-else-if="item.status === 'CONFIRMED'"> Pago </strong>
+              <!-- </v-chip> -->
             </template>
             <template #item.value="{ item }">
               <strong>{{ amountFormated(item.value, true) }}</strong>
@@ -109,12 +110,12 @@
             <template #item.salt="{ item }">
               <strong>{{ amountFormated(item.salt, true) }}</strong>
             </template>
-            <template #item.expiredAt="{ item }">
-              <v-chip label :color="getStatusName(item).color">
-                <strong>
-                  {{ moment(item.expiredAt).format("DD/MM/YYYY") }}
-                </strong>
-              </v-chip>
+            <template #item.expireDate="{ item }">
+              <!-- <v-chip label :color="getStatusName(item).color"> -->
+              <strong>
+                {{ moment(item.expireDate).format("DD/MM/YYYY") }}
+              </strong>
+              <!-- </v-chip> -->
             </template>
             <template #item.createdAt="{ item }">
               <strong>{{ moment(item.createdAt).format("DD/MM/YYYY") }}</strong>
@@ -214,7 +215,6 @@ const showDetails = ref(false);
 const reloadFilters = ref(false);
 
 const headers = ref([
-  { title: "Descrição", key: "description" },
   {
     title: "Status",
     align: "start",
@@ -223,7 +223,7 @@ const headers = ref([
   },
   { title: "Data da compra", key: "dateCreated" },
   { title: "Prazo pgto", key: "dueDate" },
-  { title: "Data de expiração", key: "expiredAt" },
+  { title: "Data de expiração", key: "expireDate" },
   { title: "Valor", key: "value" },
   { title: "Saldo", key: "salt" },
   { title: "Ações", key: "actions" },
@@ -236,10 +236,10 @@ const getStatusName = (item: UserCreditSalt) => {
     case "CONFIRMED":
       // se estiver ativo, então verificar se não expirou
       return {
-        text: moment(item.expiredAt).isBefore(currentDate)
+        text: moment(item.expireDate).isBefore(currentDate)
           ? "Expirado"
           : "Disponível",
-        color: moment(item.expiredAt).isBefore(currentDate)
+        color: moment(item.expireDate).isBefore(currentDate)
           ? "warning"
           : "success",
       };

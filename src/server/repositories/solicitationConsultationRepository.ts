@@ -438,6 +438,7 @@ export const paidConsultationSalt = async (
   try {
     const salts = await prisma.sales.findMany({
       select: {
+        id: true,
         publicId: true,
         description: true,
         billingType: true,
@@ -455,9 +456,9 @@ export const paidConsultationSalt = async (
       where: {
         userId: solicitation.userId,
         status: "CONFIRMED",
-        expiredAt: {
-          lte: new Date(), // data de expiração menor ou igual a data atual
-        },
+        // expiredAt: {
+        //   lte: new Date(), // data de expiração menor ou igual a data atual
+        // },
         category: "package",
         salt: {
           gt: 0, // saldo maior que zero
@@ -473,68 +474,84 @@ export const paidConsultationSalt = async (
       Number(solicitation.antecipationValue ?? 0);
 
     const updateSalts = salts.map(async (saltItem) => {
-      console.log("🚀 ~ salts:", saltItem);
+      const currentDate = moment();
 
-      // se o saldo disponível do item for maior ou igual ao total
-      if (Number(saltItem.salt) >= totalCheck && totalCheck > 0) {
-        await prisma.sales.update({
-          data: {
-            salt: Number(saltItem.salt) - totalCheck,
-          },
-          where: {
-            publicId: saltItem.publicId!,
-          },
-        });
+      //verificar se a data de expiração do saldo não foi expirada
+      if (!moment(saltItem.expiredAt).isBefore(currentDate)) {
+        if (Number(saltItem.salt) >= totalCheck && totalCheck > 0) {
+          // se o saldo disponível do item for maior ou igual ao total
+          await prisma.sales.update({
+            data: {
+              salt: Number(saltItem.salt) - totalCheck,
+            },
+            where: {
+              publicId: saltItem.publicId!,
+            },
+          });
 
-        await prisma.userCreditLog.create({
-          data: {
-            history:
-              `Saída de crédito ref. a compra de  solicitação de consulta Nª ${
-                solicitation.id
-              } no valor de R$ ${Number(saltItem.salt).toFixed(
-                2
-              )}, saldo a descontar: ${Number(saltItem.salt).toFixed(
-                2
-              )}`.trim(),
-            userId: solicitation.userId!,
-            type: "D",
-            value: Number(totalCheck - Number(saltItem.salt)),
-          },
-        });
+          await prisma.userCreditLog.create({
+            data: {
+              saleId: saltItem.id!,
+              history:
+                `Saída de crédito ref. a compra de  solicitação de consulta Nª ${
+                  solicitation.id
+                } no valor de R$ ${totalCheck.toFixed(
+                  2
+                )}, saldo a descontar: ${totalCheck.toFixed(2)}`.trim(),
+              userId: solicitation.userId!,
+              type: "D",
+              value: totalCheck,
+            },
+          });
 
-        totalCheck = 0;
-      } else if (Number(saltItem.salt) < totalCheck && totalCheck > 0) {
-        await prisma.sales.update({
-          data: {
-            salt: 0, // se for menor então utilizar o total do saldo e zear o mesmo
-          },
-          where: {
-            publicId: saltItem.publicId!,
-          },
-        });
+          totalCheck = 0;
+        } else if (Number(saltItem.salt) < totalCheck && totalCheck > 0) {
+          await prisma.sales.update({
+            data: {
+              salt: 0, // se for menor então utilizar o total do saldo e zear o mesmo
+            },
+            where: {
+              publicId: saltItem.publicId!,
+            },
+          });
 
-        await prisma.userCreditLog.create({
-          data: {
-            history:
-              `Saída de crédito ref. a compra de  solicitação de consulta Nª ${
-                solicitation.id
-              } no valor de R$ ${Number(saltItem.salt).toFixed(
-                2
-              )}, saldo restante a descontar: ${Number(
-                totalCheck - Number(saltItem.salt)
-              ).toFixed(2)}`.trim(),
-            userId: solicitation.userId!,
-            type: "D",
-            value: Number(totalCheck - Number(saltItem.salt)),
-          },
-        });
+          await prisma.userCreditLog.create({
+            data: {
+              saleId: saltItem.id!,
+              history:
+                `Saída de crédito ref. a compra de  solicitação de consulta Nª ${
+                  solicitation.id
+                } no valor de R$ ${totalCheck.toFixed(
+                  2
+                )}, saldo restante a descontar: ${Number(saltItem.salt).toFixed(
+                  2
+                )}`.trim(),
+              userId: solicitation.userId!,
+              type: "D",
+              value: Number(totalCheck - Number(saltItem.salt)),
+            },
+          });
 
-        // atualizar total check para debitar o restante de outro pacote disponível
-        totalCheck = totalCheck - Number(saltItem.salt);
+          // atualizar total check para debitar o restante de outro pacote disponível
+          totalCheck = totalCheck - Number(saltItem.salt);
+        }
       }
     });
 
-    await Promise.all(updateSalts);
+    if (updateSalts.length > 0) {
+      //atualizar os saldos dos pacotes
+      await Promise.all(updateSalts);
+
+      //atualizar a solicitação para paga
+      await prisma.patientConsultation.update({
+        data: {
+          status: "paid",
+        },
+        where: {
+          publicId: solicitation.publicId!,
+        },
+      }); // atualizar status da solicitação
+    }
   } catch (error) {
     console.log("🚀 ~ error:", error);
     throw createError({

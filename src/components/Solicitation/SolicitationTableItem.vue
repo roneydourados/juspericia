@@ -406,6 +406,11 @@
     </div>
   </Dialog>
   <UserCreditSaltForm v-model="showSaltCredit" :solicitation="solicitation" />
+  <SolicitationPaymentReciptSalt
+    v-model="showRecipt"
+    :solicitation="solicitation"
+  />
+  <pre>{{ showRecipt }}</pre>
   <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
@@ -440,6 +445,7 @@ const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
 const showSale = ref(false);
+const showRecipt = ref(false);
 const showSolicitationSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
 const $currentUser = computed(() => auth.$currentUser);
@@ -634,13 +640,13 @@ const handleSaleItemForAsaas = async () => {
 };
 
 const handleReloadPayment = async (item: SolicitationConsultationProps) => {
-  if (!item.Sales || item.Sales.length === 0) {
-    push.warning("Pagamento não encontrado");
-    return;
-  }
-
   loading.value = true;
   try {
+    if (!item.Sales || item.Sales.length === 0) {
+      push.warning("Pagamento não encontrado");
+      return;
+    }
+
     // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
     if (moment().isAfter(moment(item.Sales[0].dueDate))) {
       await asaas.deletePayment(item.Sales[0].saleId!);
@@ -678,6 +684,17 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
 };
 
 const handleReceipt = (item: SolicitationConsultationProps) => {
+  // se cair aqiu é porque foi pago com saldo em créditos
+  if ((!item.Sales || item.Sales.length === 0) && item.status === "paid") {
+    showRecipt.value = true;
+    return;
+  }
+
+  //se não tem venda então não fazer nada no asaas
+  if (!item.Sales || item.Sales.length === 0) {
+    return;
+  }
+
   if (!item.Sales || item.Sales.length === 0) {
     push.warning("Pagamento não encontrado");
     return;

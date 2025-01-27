@@ -1,9 +1,9 @@
-import { saleUserLogCredit } from "@/server/repositories/saleRepository";
+import { userLogCredit } from "@/server/repositories/userCreditRepository";
 
 export default defineEventHandler(async (event) => {
   const id = event.context.params!.id;
 
   setResponseStatus(event, 200);
 
-  return saleUserLogCredit(id);
+  return userLogCredit(id);
 });

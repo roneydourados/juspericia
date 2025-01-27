@@ -121,6 +121,7 @@
         </strong>
       </div>
     </Dialog>
+    <DialogLoading :dialog="loading" />
   </DialogForm>
 </template>
 
@@ -138,8 +139,10 @@ const props = defineProps({
 const { mobile } = useDisplay();
 const { amountFormated } = useUtils();
 const saltCredit = useUserCreditSaltStore();
+const solicitationStore = useSolicitationConsultationStore();
 
 const confirm = ref(false);
+const loading = ref(false);
 const show = defineModel({
   default: false,
 });
@@ -191,6 +194,24 @@ watch(
 const handleSubmit = async () => {
   show.value = false;
   confirm.value = false;
+  loading.value = true;
+  try {
+    const filters = {
+      status: "open",
+      initialDateSolicitation: moment().startOf("year").format("YYYY-MM-DD"),
+      finalDateSolicitation: moment().endOf("year").format("YYYY-MM-DD"),
+      benefitType: undefined as BenefitTypeProps | undefined,
+      patient: undefined as PatientProps | undefined,
+      reportPurpose: undefined as ReportPurposeProps | undefined,
+    } as SolicitationConsultationFilterProps;
+
+    await solicitationStore.paidUseSalt(props.solicitation);
+    await solicitationStore.index(filters);
+  } catch (error) {
+    push.error("Erro ao realizar pagamento");
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleUseSalt = () => {

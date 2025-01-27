@@ -1,14 +1,13 @@
 model UserCreditLog {
-  id        Int      @id @default(autoincrement())
-  saleId    Int?     @map("sale_id")
-  userId    Int      @map("user_id")
-  history   String   @db.Text
-  type      String   @default("D") @db.Char(1)
-  value     Decimal  @default(0) @map("value") @db.Decimal(18, 2)
-  createdAt DateTime @default(now()) @map("created_at")
+  id           Int        @id @default(autoincrement())
+  userCreditId Int        @map("user_credit_id")
+  history      String     @db.Text
+  type         String     @default("D") @db.Char(1)
+  value        Decimal    @default(0) @map("value") @db.Decimal(18, 2)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  UserCredit   UserCredit @relation(fields: [userCreditId], references: [id], onDelete: Cascade, onUpdate: Restrict)
 
   @@index([createdAt], map: "user_log_credits_idx_created_at")
-  @@index([userId], map: "user_log_credits_idx_user_id")
-  @@index([saleId], map: "user_log_credits_idx_sale_id")
+  @@index([userCreditId], map: "user_log_credits_idx_user_credit_id")
   @@map("user_credit_log")
 }

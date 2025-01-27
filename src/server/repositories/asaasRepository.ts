@@ -112,7 +112,12 @@ export const createPayment = async (
 
     // pega a resposta e cria a venda localmente no banco de dados
     if (resp) {
-      const expiredAt = moment().add(1, "month").format("YYYY-MM-DD");
+      // aqui é para lançar data de expiração de pacote quando for o caso
+      let expiredAt = null;
+
+      if (payload.category === "package") {
+        expiredAt = moment().add(payload.dueDays, "days").format("YYYY-MM-DD");
+      }
 
       await prisma.sales.create({
         data: {
@@ -131,7 +136,7 @@ export const createPayment = async (
           originalDueDate: resp.originalDueDate
             ? new Date(resp.originalDueDate)
             : undefined,
-          expiredAt: new Date(expiredAt),
+          expiredAt: expiredAt ? new Date(expiredAt) : undefined,
           category: payload.category,
           packageId: payload.packageId ? payload.packageId : undefined,
           solicitationId: payload.solicitationId
@@ -204,7 +209,6 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
               transactionReceiptUrl: payload.payment.transactionReceiptUrl,
               status: payload.payment.status,
               value: payload.payment.value,
-              salt: sale.solicitationId ? 0 : payload.payment.value, // saldo é calculado somente quando não for uma solicitação
               confirmedDate: payload.payment.confirmedDate
                 ? new Date(payload.payment.confirmedDate)
                 : undefined,
@@ -224,14 +228,29 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
           });
 
           // somente gerar crédito para o cliente se não for uma solicitação de consulta
-          if (!sale.solicitationId) {
+          if (!sale.solicitationId && sale.category === "package") {
+            //Criar o saldo de crédito para o cliente
+            const userCredit = await prisma.userCredit.create({
+              data: {
+                userId: user.id!,
+                value: payload.payment.value,
+                salt: payload.payment.value,
+                category: "package",
+                ownerId: updatedSale.id,
+                publicId: uuidv7(),
+                creditDate: new Date(),
+                status: payload.payment.status,
+                expireDate: updatedSale.expiredAt!,
+              },
+            });
+
+            // criar o log inicial do saldo
             await prisma.userCreditLog.create({
               data: {
+                userCreditId: userCredit.id,
                 history: `Entrada de crédito ref. a compra de ${
                   payload.payment.description
                 } no valor de R$ ${payload.payment.value.toFixed(2)}`.trim(),
-                userId: user.id!,
-                saleId: updatedSale.id,
                 type: "C",
                 value: payload.payment.value,
               },
@@ -268,27 +287,48 @@ export const paymentWebhook = async (payload: WebHookPaymentResponseProps) => {
         });
 
         if (saleRefunded) {
+          // estornar saldo de crédito do cliente
+          const userCredit = await prisma.userCredit.findFirst({
+            where: {
+              userId: user.id!,
+              category: "package",
+              ownerId: saleRefunded.id,
+            },
+          });
+
+          if (userCredit) {
+            //remover o saldo de crédito gerado pela venda
+            await prisma.userCredit.update({
+              where: {
+                id: userCredit.id!,
+              },
+              data: {
+                salt: 0,
+                category: "package",
+              },
+            });
+
+            //gerar o log do estorno
+            await prisma.userCreditLog.create({
+              data: {
+                history: `Saída de crédito ref. a estorno de compra de ${
+                  payload.payment.description
+                } no valor de R$ ${payload.payment.value.toFixed(2)}`.trim(),
+                userCreditId: userCredit.id,
+                type: "D",
+                value: payload.payment.value,
+              },
+            });
+          }
+
           //caso seja estornado atualizar a venda
           await prisma.sales.update({
             data: {
               status: payload.payment.status,
               localStatus: "refunded",
-              salt: 0,
             },
             where: {
               id: saleRefunded.id,
-            },
-          });
-
-          await prisma.userCreditLog.create({
-            data: {
-              history: `Saída de crédito ref. a estorno de compra de ${
-                payload.payment.description
-              } no valor de R$ ${payload.payment.value.toFixed(2)}`.trim(),
-              userId: user.id!,
-              saleId: saleRefunded.id,
-              type: "D",
-              value: payload.payment.value,
             },
           });
         }

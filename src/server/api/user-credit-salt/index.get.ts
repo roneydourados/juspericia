@@ -1,4 +1,5 @@
-import { getSaleUser } from "@/server/repositories/saleRepository";
+import { index } from "@/server/repositories/userCreditRepository";
+import moment from "moment";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();
@@ -9,10 +10,14 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 200);
 
-  return getSaleUser({
-    userId: user.id,
-    initialDate: initialDate ? String(initialDate) : undefined,
-    finalDate: finalDate ? String(finalDate) : undefined,
+  return index({
+    userId: user.id!,
+    initialDate: initialDate
+      ? String(initialDate)
+      : moment().startOf("year").format("YYYY-MM-DD"),
+    finalDate: finalDate
+      ? String(finalDate)
+      : moment().endOf("year").format("YYYY-MM-DD"),
     status: status ? String(status) : undefined,
   });
 });

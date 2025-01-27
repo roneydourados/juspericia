@@ -25,6 +25,7 @@ export const create = async (
         description: payload.description!,
         urlImage: payload.urlImage!,
         publicId: uuidv7(),
+        dueDays: payload.dueDays!,
       },
     });
 
@@ -71,11 +72,12 @@ export const update = async (
         id: exists.id,
       },
       data: {
-        name: payload.name!,
-        value: payload.value!,
-        description: payload.description!,
-        urlImage: payload.urlImage!,
+        name: payload.name,
+        value: payload.value,
+        description: payload.description,
+        urlImage: payload.urlImage,
         status: payload.status,
+        dueDays: payload.dueDays,
       },
     });
 

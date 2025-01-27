@@ -6,6 +6,7 @@ model ServicePackage {
   urlImage    String   @map("url_image") @db.Text
   value       Decimal  @default(0) @db.Decimal(18, 2)
   status      String   @default("active")
+  dueDays     Int?     @map("due_days")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

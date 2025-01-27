@@ -27,6 +27,7 @@
           <v-icon color="error" icon="mdi-fire-circle" size="small" start />
           {{ item.name }}
         </span>
+        <div>Expira em {{ item.dueDays }} dias a contar da data da compra</div>
       </v-card-title>
 
       <!-- <v-card-subtitle>
