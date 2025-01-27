@@ -93,7 +93,10 @@
           @click="handlePatientInfo(item.publicId)"
         >
           <v-icon icon="mdi-account-outline" size="24" start />
-          <span>{{ item.name }}</span>
+          <div class="d-flex align-center" style="gap: 0.3rem">
+            <span>{{ item.name }}</span>
+            <span>{{ item.surname }}</span>
+          </div>
         </span>
       </template>
       <template v-slot:item.User.name="{ item }">
@@ -180,8 +183,27 @@ import { useDisplay } from "vuetify";
 import { formatCPF } from "@brazilian-utils/brazilian-utils";
 
 const itemStore = usePatientStore();
+const auth = useAuthStore();
 const $all = computed(() => itemStore.$all);
 const $single = computed(() => itemStore.$single);
+const headers = computed(() => {
+  if (auth.$currentUser?.Profile.type === "ADVOGADO") {
+    return [
+      { title: "Nome", key: "name" },
+      { title: "CPF", key: "cpf" },
+      { title: "Whatsapp", key: "phone" },
+      { title: "Ações", key: "actions" },
+    ];
+  }
+
+  return [
+    { title: "Nome", key: "name" },
+    { title: "CPF", key: "cpf" },
+    { title: "Whatsapp", key: "phone" },
+    { title: "Advogado", key: "User.name" },
+    { title: "Ações", key: "actions" },
+  ];
+});
 
 const { formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
@@ -191,14 +213,6 @@ const itemSelected = ref<PatientProps>();
 const showForm = ref(false);
 const showDelete = ref(false);
 const loading = ref(false);
-
-const headers = [
-  { title: "Nome", key: "name" },
-  { title: "CPF", key: "cpf" },
-  { title: "Whatsapp", key: "phone" },
-  { title: "Advogado", key: "User.name" },
-  { title: "Ações", key: "actions" },
-];
 
 const handleSearch = async (search: string, isLoading: boolean = true) => {
   setTimeout(async () => {
