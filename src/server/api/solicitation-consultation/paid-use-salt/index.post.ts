@@ -1,5 +1,5 @@
 import { SolicitationConsultationProps } from "@/types/SolicitationConsultation";
-import { paidConsultationSalt } from "@/server/repositories/solicitationConsultationRepository";
+import { paidConsultationCreditSalt } from "@/server/repositories/solicitationConsultationRepository";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();
@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
   setResponseStatus(event, 200);
 
-  return paidConsultationSalt({
+  return paidConsultationCreditSalt({
     ...body,
     userId: user.id,
   });

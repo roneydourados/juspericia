@@ -433,7 +433,7 @@ const exists = async (id: string) => {
   };
 };
 
-export const paidConsultationSalt = async (
+export const paidConsultationCreditSalt = async (
   solicitation: SolicitationConsultationProps
 ) => {
   try {
@@ -465,7 +465,7 @@ export const paidConsultationSalt = async (
     });
 
     let totalCheck =
-      Number(solicitation.consultationValue ?? 0) +
+      Number(solicitation.valueCredit ?? 0) +
       Number(solicitation.antecipationValue ?? 0);
 
     const updateSalts = salts.map(async (userCreditItem) => {
