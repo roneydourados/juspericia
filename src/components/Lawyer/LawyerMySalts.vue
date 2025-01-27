@@ -74,9 +74,10 @@
             :show-crud="false"
           >
             <template #item.status="{ item }">
-              <span
+              <v-chip
+                label
+                :color="getStatusName(item).color"
                 class="d-flex align-center"
-                :class="`text-${getStatusName(item).color}`"
               >
                 <v-icon
                   :color="getStatusName(item).color"
@@ -85,7 +86,7 @@
                   class="mr-1"
                 />
                 {{ getStatusName(item).text }}
-              </span>
+              </v-chip>
             </template>
             <template #item.dateCreated="{ item }">
               <strong>
@@ -93,14 +94,13 @@
               </strong>
             </template>
             <template #item.dueDate="{ item }">
-              <v-chip
-                label
-                :color="item.status === 'PENDING' ? 'info' : 'success'"
-              >
-                <strong v-if="item.status === 'PENDING'">
+              <v-chip label :color="getStatusName(item).color" class="w-100">
+                <strong
+                  v-if="item.status === 'PENDING' || item.status === 'REFUNDED'"
+                >
                   {{ moment(item.dueDate).format("DD/MM/YYYY") }}
                 </strong>
-                <strong v-else> Pago </strong>
+                <strong v-else-if="item.status === 'CONFIRMED'"> Pago </strong>
               </v-chip>
             </template>
             <template #item.value="{ item }">

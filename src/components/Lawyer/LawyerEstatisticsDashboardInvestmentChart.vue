@@ -9,7 +9,14 @@
 
 <script setup lang="ts">
 const userLawyer = useUserLawyerStore();
+const storeTheme = useThemeStore();
+const { amountFormated } = useUtils();
+
 const $estatistics = computed(() => userLawyer.$estatistics);
+
+const $currentTheme = computed(() => {
+  return storeTheme.$theme;
+});
 
 const chartConfig = computed(() => {
   return {
@@ -36,12 +43,15 @@ const chartConfig = computed(() => {
         enabled: false,
       },
       stroke: {
-        curve: "straight",
+        curve: "smooth",
       },
 
       title: {
         text: "Investimento",
         align: "left",
+        style: {
+          color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
+        },
       },
 
       labels: $estatistics.value?.laywerInvestment.map(
@@ -49,12 +59,38 @@ const chartConfig = computed(() => {
       ),
       xaxis: {
         type: "",
+        labels: {
+          show: true,
+          style: {
+            colors: $estatistics.value?.laywerInvestment.map(() => {
+              return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+            }),
+          },
+        },
       },
       yaxis: {
         opposite: true,
+        labels: {
+          show: true,
+          formatter: function (val: number) {
+            return amountFormated(val, true);
+          },
+          style: {
+            colors: $estatistics.value?.laywerInvestment.map(() => {
+              return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+            }),
+          },
+        },
       },
       legend: {
         horizontalAlign: "left",
+      },
+      tooltip: {
+        show: true,
+        theme: "dark", //$currentTheme.value === MAIN_THEME_DARK ? "dark" : "light",
+        style: {
+          fontSize: "16px",
+        },
       },
     },
   };

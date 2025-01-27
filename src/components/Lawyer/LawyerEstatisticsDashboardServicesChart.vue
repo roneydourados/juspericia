@@ -9,7 +9,13 @@
 
 <script setup lang="ts">
 const userLawyer = useUserLawyerStore();
+const storeTheme = useThemeStore();
+
 const $estatistics = computed(() => userLawyer.$estatistics);
+
+const $currentTheme = computed(() => {
+  return storeTheme.$theme;
+});
 
 const chartConfig = computed(() => {
   const randomNumbers = [] as number[];
@@ -42,12 +48,15 @@ const chartConfig = computed(() => {
         enabled: false,
       },
       stroke: {
-        curve: "straight",
+        curve: "smooth",
       },
 
       title: {
         text: "Solicitações",
         align: "left",
+        style: {
+          color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
+        },
       },
 
       labels: $estatistics.value?.laywerSolicitations.map(
@@ -55,12 +64,38 @@ const chartConfig = computed(() => {
       ),
       xaxis: {
         type: "",
+        labels: {
+          show: true,
+          style: {
+            colors: $estatistics.value?.laywerSolicitations.map(() => {
+              return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+            }),
+          },
+        },
       },
       yaxis: {
         opposite: true,
+        labels: {
+          show: true,
+          style: {
+            colors: $estatistics.value?.laywerSolicitations.map(() => {
+              return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+            }),
+          },
+          formatter: function (val: number) {
+            return Math.floor(val).toString();
+          },
+        },
       },
       legend: {
         horizontalAlign: "left",
+      },
+      tooltip: {
+        show: true,
+        theme: $currentTheme.value === MAIN_THEME_DARK ? "dark" : "light",
+        style: {
+          fontSize: "16px",
+        },
       },
     },
   };

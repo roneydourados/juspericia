@@ -9,11 +9,10 @@ R:.
 
 # Correções
 
-[] - Tela de estatísticas do advogado esta somando vendas canceladas como investimento
-[] - Na tela de meus saldos, campo data de pagamento estra mostrando pago para uma venda cancelada
-[] - Habilitar a tela pagar com créditos na tela de solicitações, quando a solicitação estiver com pendência de pagamento
-[] - No envio do e-mail de confirmação de cadastro, acrescentar o email cadastrado
-[] - Quanto a conta já estiver ativa e mostrar o erro, retornar para tela de login em 15s
+[x] - Tela de estatísticas do advogado esta somando vendas canceladas como investimento
+[x] - Na tela de meus saldos, campo data de pagamento estra mostrando pago para uma venda cancelada
+[x] - No envio do e-mail de confirmação de cadastro, acrescentar o email cadastrado
+[x] - Quanto a conta já estiver ativa e mostrar o erro, retornar para tela de login em 15s
 
 # pendentes
 

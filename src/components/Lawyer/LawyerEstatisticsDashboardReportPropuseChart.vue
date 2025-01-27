@@ -10,7 +10,13 @@
 
 <script setup lang="ts">
 const userLawyer = useUserLawyerStore();
+const storeTheme = useThemeStore();
+
 const $estatistics = computed(() => userLawyer.$estatistics);
+
+const $currentTheme = computed(() => {
+  return storeTheme.$theme;
+});
 
 const chartConfig = computed(() => {
   return {
@@ -34,6 +40,19 @@ const chartConfig = computed(() => {
       title: {
         text: "Solicitações por finalidade",
         align: "left",
+        style: {
+          color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
+        },
+      },
+      legend: {
+        labels: {
+          colors: $estatistics.value?.laywerSolicitationsReportPropurse.map(
+            () => {
+              return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+            }
+          ),
+        },
+        show: true,
       },
     },
   };
