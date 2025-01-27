@@ -251,6 +251,7 @@ const create = async () => {
         : undefined,
       dateOpen: moment().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
+      valueCredit: form.value.consultation?.valueCredit ?? 0,
     });
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);

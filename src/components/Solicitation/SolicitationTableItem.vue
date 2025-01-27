@@ -410,8 +410,8 @@
     v-model="showRecipt"
     :solicitation="solicitation"
   />
-  <pre>{{ showRecipt }}</pre>
-  <!-- <pre>{{ solicitation }}</pre> -->
+
+  <pre>{{ solicitation }}</pre>
 </template>
 
 <script setup lang="ts">

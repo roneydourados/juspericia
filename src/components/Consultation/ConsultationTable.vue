@@ -85,7 +85,7 @@
                     :show-divider="true"
                   />
                 </v-col>
-                <v-col cols="12" lg="4">
+                <!-- <v-col cols="12" lg="4">
                   <InfoLabel
                     font-size="0.9"
                     font-size-content="1"
@@ -97,7 +97,7 @@
                     "
                     :show-divider="true"
                   />
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-card-title>
             <v-card-actions class="d-flex justify-end">

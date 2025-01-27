@@ -26,13 +26,13 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="3">
+        <!-- <v-col cols="12" lg="3">
           <CurrencyInput
             v-model="model.valuePacket"
             label="Preço Pacote"
             required
           />
-        </v-col>
+        </v-col> -->
       </v-row>
       <v-row dense>
         <v-col cols="12" lg="3">
@@ -98,7 +98,7 @@ const model = ref({
   valueAntecipation24: "",
   valueAntecipation48: "",
   valueAntecipation72: "",
-  valuePacket: "",
+  valuePacket: "0",
 });
 
 watchPostEffect(() => {
@@ -142,7 +142,7 @@ const clearModel = () => {
     valueAntecipation24: "",
     valueAntecipation48: "",
     valueAntecipation72: "",
-    valuePacket: "",
+    valuePacket: "0",
   };
 };
 
