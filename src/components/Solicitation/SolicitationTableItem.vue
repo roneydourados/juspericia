@@ -411,7 +411,7 @@
     :solicitation="solicitation"
   />
 
-  <pre>{{ solicitation }}</pre>
+  <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
 <script setup lang="ts">
