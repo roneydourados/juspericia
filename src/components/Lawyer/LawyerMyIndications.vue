@@ -97,6 +97,8 @@
 </template>
 
 <script setup lang="ts">
+const indicationStore = useUserIndicationStore();
+
 const fakeItemsTable = ref([
   {
     name: "João da Silva",
