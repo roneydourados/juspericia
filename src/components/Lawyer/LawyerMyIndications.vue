@@ -10,9 +10,6 @@
       </v-card-title>
       <v-card-text>
         <v-card flat rounded="lg">
-          <v-card-title>
-            <HeaderPage title="Indicações realizadas" />
-          </v-card-title>
           <v-card-text>
             <v-row>
               <v-col cols="12" lg="4">
@@ -26,48 +23,74 @@
                   Indicar cliente
                 </v-btn>
               </v-col>
-              <v-col cols="12" lg="8">
-                <v-row dense justify="end">
-                  <v-col cols="12" lg="3">
-                    <v-card rounded="lg" flat elevation="4" height="100">
-                      <v-card-title class="d-flex align-center">
-                        <v-icon
-                          icon="mdi-arrange-send-backward"
-                          start
-                          size="25"
-                          color="info"
-                        />
-                        <span class="text-grey text-subtitle-1">
-                          Indicações
-                        </span>
-                      </v-card-title>
-                      <v-card-text class="d-flex align-center justify-center">
-                        <!-- <span class="text-h5 font-weight-bold">4</span> -->
-                        <v-chip label color="info" variant="flat">
-                          <span class="text-h6 font-weight-bold">4</span>
-                        </v-chip>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="12" lg="3">
-                    <v-card rounded="lg" flat elevation="4" height="100">
-                      <v-card-title class="d-flex align-center">
-                        <v-icon
-                          icon="mdi-arrange-send-to-back"
-                          start
-                          size="25"
-                          color="success"
-                        />
-                        <span class="text-grey text-subtitle-1"> Pontos </span>
-                      </v-card-title>
-                      <v-card-text class="d-flex align-center justify-center">
-                        <v-chip label color="success" variant="flat">
-                          <span class="text-h6 font-weight-bold">123</span>
-                        </v-chip>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
+            </v-row>
+            <v-row dense class="mt-4">
+              <v-col cols="12" lg="3">
+                <v-card rounded="lg" height="100%" flat elevation="4">
+                  <v-card-title class="d-flex align-center">
+                    <v-icon icon="mdi-calendar" start size="25" color="info" />
+                    <span class="text-grey text-subtitle-1"> Mês </span>
+                  </v-card-title>
+                  <v-card-text class="pa-4">
+                    <Months @month="handleChangeMonth($event)" />
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+              <v-col
+                cols="12"
+                lg="9"
+                class="d-flex align-center justify-end"
+                style="gap: 1rem"
+              >
+                <v-card
+                  rounded="lg"
+                  flat
+                  elevation="4"
+                  height="100%"
+                  width="30%"
+                >
+                  <v-card-title class="d-flex align-center">
+                    <v-icon
+                      icon="mdi-arrange-send-backward"
+                      start
+                      size="25"
+                      color="info"
+                    />
+                    <span class="text-grey text-subtitle-1"> Indicações </span>
+                  </v-card-title>
+                  <v-card-text class="d-flex align-center justify-center">
+                    <v-chip label color="info" variant="flat">
+                      <span class="text-h6 font-weight-bold">
+                        {{ $totals.totalIndications }}
+                      </span>
+                    </v-chip>
+                  </v-card-text>
+                </v-card>
+                <v-card
+                  rounded="lg"
+                  flat
+                  elevation="4"
+                  height="100%"
+                  width="30%"
+                >
+                  <v-card-title class="d-flex align-center">
+                    <v-icon
+                      icon="mdi-arrange-send-to-back"
+                      start
+                      size="25"
+                      color="success"
+                    />
+                    <span class="text-grey text-subtitle-1"> Pontos </span>
+                  </v-card-title>
+                  <v-card-text class="d-flex align-center justify-center">
+                    <v-chip label color="success" variant="flat">
+                      <span class="text-h6 font-weight-bold">
+                        {{ $totals.totalPoints }}
+                      </span>
+                    </v-chip>
+                  </v-card-text>
+                </v-card>
               </v-col>
             </v-row>
           </v-card-text>
@@ -83,13 +106,31 @@
             <template #item.status="{ item }">
               <span class="d-flex align-center">
                 <v-icon
-                  :color="item.status === 'Concluído' ? 'success' : 'warning'"
-                  icon="mdi-circle"
-                  size="12"
-                  class="mr-1"
+                  :color="getStatusData(item.status).color"
+                  :icon="getStatusData(item.status).icon"
+                  start
                 />
-                {{ item.status }}
+                {{ getStatusData(item.status).name }}
               </span>
+            </template>
+            <template #item.createdAt="{ item }">
+              {{ moment(item.createdAt).format("DD/MM/YYYY") }}
+            </template>
+            <template #item.expiredAt="{ item }">
+              <strong>
+                {{
+                  item.status === "PENDING"
+                    ? moment(item.expiredAt).format("DD/MM/YYYY")
+                    : ""
+                }}
+              </strong>
+            </template>
+            <template #item.points="{ item }">
+              <v-chip color="success" variant="flat" rounded="xl">
+                <strong>
+                  {{ item.points }}
+                </strong>
+              </v-chip>
             </template>
             <template v-slot:item.actions="{ item }">
               <v-btn
@@ -98,6 +139,7 @@
                 variant="text"
                 size="small"
                 @click="getItemEdit(item)"
+                :disabled="item.status !== 'PENDING'"
               >
                 <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
                 <v-tooltip
@@ -153,6 +195,16 @@ import moment from "moment";
 const indicationStore = useUserIndicationStore();
 
 const $all = computed(() => indicationStore.$all);
+const $totals = computed(() => {
+  const totalPoints = indicationStore.$all.reduce(
+    (acc, item) => acc + item.points!,
+    0
+  );
+  return {
+    totalIndications: indicationStore.$all.length,
+    totalPoints,
+  };
+});
 const selected = ref<UserIndicationProps>();
 const showForm = ref(false);
 const showDelete = ref(false);
@@ -172,10 +224,36 @@ const headers = ref([
     key: "email",
   },
   { title: "Data", key: "createdAt" },
+  { title: "Expira em", key: "expiredAt" },
+
   { title: "Status", key: "status" },
   { title: "Pontos", key: "points" },
   { title: "Ações", key: "actions" },
 ]);
+
+const getStatusData = (status: string) => {
+  switch (status) {
+    case "PENDING":
+      return {
+        color: "warning",
+        icon: "mdi-circle-outline",
+        name: "Pendente",
+      };
+    case "CONCLUDED":
+      return {
+        color: "info",
+        icon: "mdi-circle",
+        name: "Concluído",
+      };
+
+    default:
+      return {
+        color: "warning",
+        icon: "mdi-circle-outline",
+        name: "Pendente",
+      };
+  }
+};
 
 const newItem = () => {
   selected.value = undefined;
@@ -209,6 +287,29 @@ const handleDeleteIitem = async () => {
       loading.value = false;
       selected.value = undefined;
     }
+  }
+};
+
+const handleChangeMonth = async (monthIndex: number) => {
+  loading.value = true;
+  try {
+    // Pega o ano atual
+    const currentYear = new Date().getFullYear();
+
+    // Cria a data inicial do mês (primeiro dia do mês)
+    const initialDate = moment(new Date(currentYear, monthIndex, 1)).format(
+      "YYYY-MM-DD"
+    );
+
+    // Cria a data final do mês (último dia do mês)
+    const finalDate = moment(new Date(currentYear, monthIndex + 1, 0)).format(
+      "YYYY-MM-DD"
+    );
+
+    // Chame a função de índice com as datas formatadas
+    await indicationStore.index({ initialDate, finalDate });
+  } finally {
+    loading.value = false;
   }
 };
 </script>

@@ -10,7 +10,7 @@ export const index = async (input: {
 }) => {
   const { initialDate, finalDate, status, userId } = input;
   try {
-    return prisma.userIndication.findMany({
+    const data = await prisma.userIndication.findMany({
       where: {
         userId: userId,
         status: status,
@@ -19,6 +19,14 @@ export const index = async (input: {
           lte: new Date(finalDate),
         },
       },
+    });
+
+    return data.map((item) => {
+      return {
+        ...item,
+        expiredAt: formatDate(item.expiredAt),
+        createdAt: formatDate(item.createdAt),
+      };
     });
   } catch (error) {
     console.log("🚀 ~ error index Address:", error);
