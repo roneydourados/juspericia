@@ -13,6 +13,7 @@
             label="Nome"
             placeholder="informe nome"
             icon="mdi-account-outline"
+            required
           />
         </v-col>
         <v-col cols="12" lg="6">
@@ -21,6 +22,7 @@
             label="E-mail"
             placeholder="informe seu e-mail"
             icon="mdi-email-outline"
+            type="email"
             required
           />
         </v-col>
@@ -79,17 +81,21 @@ watch(
 );
 
 const loadModel = () => {
-  form.value.name = props.data.name ?? "";
-  form.value.email = props.data.email ?? "";
-  form.value.whatsapp = props.data.whatsapp ?? "";
-  form.value.status = props.data.status ?? "PENDING";
+  form.value = {
+    name: props.data.name ?? "",
+    email: props.data.email ?? "",
+    whatsapp: props.data.whatsapp ?? "",
+    status: props.data.status ?? "PENDING",
+  };
 };
 
 const clearModel = () => {
-  form.value.name = "";
-  form.value.email = "";
-  form.value.whatsapp = "";
-  form.value.status = "PENDING";
+  form.value = {
+    name: "",
+    email: "",
+    whatsapp: "",
+    status: "PENDING",
+  };
 };
 
 const handleSubmit = async () => {
