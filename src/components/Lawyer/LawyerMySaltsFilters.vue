@@ -5,31 +5,27 @@
     </v-card-title>
     <v-card-text>
       <v-row>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3">
           <DatePicker
             v-model="filters.initialDate"
             label="Data inicial"
             clearable
           />
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3">
           <DatePicker
             v-model="filters.finalDate"
             label="Data final"
             clearable
           />
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="4" class="d-flex flex-wrap" style="gap: 0.5rem">
           <SelectInput
             v-model="filters.status"
             label="Status"
             item-title="name"
             item-value="type"
             :items="[
-              {
-                name: 'Todos',
-                type: '',
-              },
               {
                 name: 'Disponível',
                 type: 'CONFIRMED',
@@ -38,10 +34,17 @@
                 name: 'Pendente',
                 type: 'PENDING',
               },
+              {
+                name: 'Cancelado',
+                type: 'REFUNDED',
+              },
+              {
+                name: 'Todos',
+                type: '',
+              },
             ]"
+            @update:model-value="handleFilter"
           />
-        </v-col>
-        <v-col cols="12" lg="1">
           <v-btn
             variant="flat"
             color="primary"
@@ -69,7 +72,7 @@ const loading = ref(false);
 const filters = ref({
   initialDate: moment().startOf("month").format("YYYY-MM-DD"),
   finalDate: moment().endOf("month").format("YYYY-MM-DD"),
-  status: "",
+  status: "CONFIRMED",
 });
 
 watch(

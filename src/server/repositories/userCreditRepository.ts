@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import moment from "moment";
 
 export const index = async (input: {
   status?: string;
@@ -29,21 +30,55 @@ export const index = async (input: {
           gte,
           lte,
         },
-        status,
       },
       orderBy: {
         id: "desc",
       },
     });
 
-    return credits.map((credit) => {
-      return {
-        ...credit,
-        dateCreated: credit.creditDate.toISOString(),
-        dateUpdated: credit.creditDate.toISOString(),
-        expireDate: formatDate(credit.expireDate),
-      };
-    });
+    //pegar a data atual
+    const currentDate = moment();
+
+    //totalizar os creditos independente do status, somente o periodo
+    const totals = {
+      total: credits.reduce(
+        (acc, item) =>
+          !moment(item.expireDate).isBefore(currentDate)
+            ? acc + Number(item.salt ?? 0)
+            : acc,
+        0
+      ),
+      totalExpired: credits.reduce(
+        (acc, item) =>
+          moment(item.expireDate).isBefore(currentDate)
+            ? acc + Number(item.salt ?? 0)
+            : acc,
+        0
+      ),
+      totalPending: credits.reduce(
+        (acc, item) =>
+          item.status === "PENDING" ? acc + Number(item.value) : acc,
+        0
+      ),
+    };
+
+    const creditsReturn = credits
+      .map((credit) => {
+        return {
+          ...credit,
+          dateCreated: formatDate(credit.creditDate),
+          expireDate: formatDate(credit.expireDate),
+        };
+      })
+      .filter((credit) => {
+        // aqui filtrar o status quando usuário informar
+        return status ? credit.status === status : true;
+      });
+
+    return {
+      totals,
+      credits: creditsReturn,
+    };
   } catch (error) {
     console.log("🚀 ~ error:", error);
 

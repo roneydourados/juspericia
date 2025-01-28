@@ -4,10 +4,10 @@ import { defineStore } from "pinia";
 export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
   const { api } = useAxios();
 
-  const userCreditSalts = ref<SaleProps[]>([]);
+  const userCreditSalts = ref<UserCreditSaltResponseProps>();
   const userCreditLog = ref<UserCreditLog[]>([]);
 
-  const $all = computed(() => userCreditSalts.value);
+  const $credits = computed(() => userCreditSalts.value);
   const $userCreditLog = computed(() => userCreditLog.value);
 
   const index = async (input: SaleFilterProps) => {
@@ -19,7 +19,10 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
         status,
       },
     };
-    const { data } = await api.get<SaleProps[]>("/user-credit-salt", config);
+    const { data } = await api.get<UserCreditSaltResponseProps>(
+      "/user-credit-salt",
+      config
+    );
 
     userCreditSalts.value = data;
   };
@@ -57,7 +60,7 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     // cancel,
     // show,
     getUserCreditLog,
-    $all,
+    $credits,
     $userCreditLog,
   };
 });

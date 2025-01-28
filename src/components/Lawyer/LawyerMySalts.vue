@@ -18,7 +18,7 @@
                     R$
                   </span>
                   <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($totals.total, false) }}
+                    {{ amountFormated($salts!.totals.total, false) }}
                   </span>
                 </div>
               </v-card-text>
@@ -36,7 +36,7 @@
                     R$
                   </span>
                   <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($totals.totalPending, false) }}
+                    {{ amountFormated($salts!.totals.totalPending, false) }}
                   </span>
                 </div>
               </v-card-text>
@@ -54,7 +54,7 @@
                     R$
                   </span>
                   <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($totals.totalExpired, false) }}
+                    {{ amountFormated($salts!.totals.totalExpired, false) }}
                   </span>
                 </div>
               </v-card-text>
@@ -70,7 +70,7 @@
           <Table
             title="Compras"
             :headers="headers"
-            :items="$salts"
+            :items="$salts!.credits"
             :show-crud="false"
           >
             <template #item.status="{ item }">
@@ -89,14 +89,6 @@
                 {{ moment(item.dateCreated).format("DD/MM/YYYY") }}
               </strong>
             </template>
-            <!-- <template #item.dueDate="{ item }">
-              <strong
-                v-if="item.status === 'PENDING' || item.status === 'REFUNDED'"
-              >
-                {{ moment(item.dueDate).format("DD/MM/YYYY") }}
-              </strong>
-              <strong v-else-if="item.status === 'CONFIRMED'"> Pago </strong>
-            </template> -->
             <template #item.value="{ item }">
               <strong>{{ amountFormated(item.value, true) }}</strong>
             </template>
@@ -104,11 +96,9 @@
               <strong>{{ amountFormated(item.salt, true) }}</strong>
             </template>
             <template #item.expireDate="{ item }">
-              <!-- <v-chip label :color="getStatusName(item).color"> -->
               <strong>
                 {{ moment(item.expireDate).format("DD/MM/YYYY") }}
               </strong>
-              <!-- </v-chip> -->
             </template>
             <template #item.createdAt="{ item }">
               <strong>{{ moment(item.createdAt).format("DD/MM/YYYY") }}</strong>
@@ -177,32 +167,8 @@ const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
 const { amountFormated } = useUtils();
 
-const $salts = computed(() => saltCredit.$all);
+const $salts = computed(() => saltCredit.$credits);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
-const $totals = computed(() => {
-  const currentDate = moment();
-  return {
-    total: $salts.value.reduce(
-      (acc, item) =>
-        !moment(item.expiredAt).isBefore(currentDate)
-          ? acc + Number(item.salt ?? 0)
-          : acc,
-      0
-    ),
-    totalExpired: $salts.value.reduce(
-      (acc, item) =>
-        moment(item.expiredAt).isBefore(currentDate)
-          ? acc + Number(item.salt ?? 0)
-          : acc,
-      0
-    ),
-    totalPending: $salts.value.reduce(
-      (acc, item) =>
-        item.status === "PENDING" ? acc + Number(item.value) : acc,
-      0
-    ),
-  };
-});
 
 const showDetails = ref(false);
 const reloadFilters = ref(false);

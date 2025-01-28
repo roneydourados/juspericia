@@ -22,3 +22,12 @@ export interface UserCreditLog {
   value?: number;
   createdAt?: string;
 }
+
+export interface UserCreditSaltResponseProps {
+  totals: {
+    total: number;
+    totalExpired: number;
+    totalPending: number;
+  };
+  credits: UserCreditSalt[];
+}
