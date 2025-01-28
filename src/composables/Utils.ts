@@ -275,6 +275,41 @@ export const useUtils = () => {
         return "#9C27B0";
     }
   };
+
+  const formatDateExtenso = (date: Date) => {
+    const diasDaSemana = [
+      "Domingo",
+      "Segunda-Feira",
+      "Terça-Feira",
+      "Quarta-Feira",
+      "Quinta-Feira",
+      "Sexta-Feira",
+      "Sábado",
+    ];
+
+    const mesesDoAno = [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+    ];
+
+    const diaDaSemana = diasDaSemana[date.getDay()];
+    const dia = date.getDate();
+    const mes = mesesDoAno[date.getMonth()];
+    const ano = date.getFullYear();
+
+    return `${diaDaSemana}, ${dia} de ${mes} de ${ano}`;
+  };
+
   return {
     amountFormated,
     cardInvoices,
@@ -296,5 +331,6 @@ export const useUtils = () => {
     setSolicitationsFilters,
     solicitationStatusName,
     solicitationStatusColor,
+    formatDateExtenso,
   };
 };
