@@ -26,6 +26,9 @@
   <v-card variant="flat" class="mx-auto" color="transparent">
     <v-card class="ma-4" rounded="lg" variant="flat" color="transparent">
       <v-card-item>
+        <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem">
+          Início
+        </div>
         <v-card-title class="text-body-2 d-flex align-center">
           <v-icon color="primary" icon="mdi-calendar" start />
 
