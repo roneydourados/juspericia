@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { uuidv7 } from "uuidv7";
 import { UserIndicationProps } from "~/types/UserIndication";
+import { sendEmail } from "../services/emailService";
 
 export const index = async (input: {
   initialDate: string;
@@ -38,8 +39,10 @@ export const index = async (input: {
 };
 
 export const create = async (payload: UserIndicationProps) => {
+  const config = useRuntimeConfig();
+
   try {
-    return prisma.userIndication.create({
+    const data = await prisma.userIndication.create({
       data: {
         name: payload.name!,
         email: payload.email!,
@@ -51,6 +54,16 @@ export const create = async (payload: UserIndicationProps) => {
         expiredAt: new Date(payload.expiredAt!),
       },
     });
+
+    await sendEmail({
+      email: data.email,
+      name: data.name,
+      office: "",
+      template: "indication",
+      linkConfirmation: `${config.public.appUrl}/register`,
+    });
+
+    return data;
   } catch (error) {
     console.log("🚀 ~ error create Address:", error);
     throw createError({
@@ -61,6 +74,8 @@ export const create = async (payload: UserIndicationProps) => {
 };
 
 export const update = async (payload: UserIndicationProps) => {
+  const config = useRuntimeConfig();
+
   try {
     const exists = await prisma.userIndication.findFirst({
       where: {
@@ -75,7 +90,7 @@ export const update = async (payload: UserIndicationProps) => {
       });
     }
 
-    return prisma.userIndication.update({
+    const data = await prisma.userIndication.update({
       where: {
         id: exists.id,
       },
@@ -87,6 +102,16 @@ export const update = async (payload: UserIndicationProps) => {
         points: payload.points,
       },
     });
+
+    await sendEmail({
+      email: data.email,
+      name: data.name,
+      office: "",
+      template: "indication",
+      linkConfirmation: `${config.public.appUrl}/register`,
+    });
+
+    return data;
   } catch (error) {
     console.log("🚀 ~ Error to update user indication:", error);
     throw createError({
