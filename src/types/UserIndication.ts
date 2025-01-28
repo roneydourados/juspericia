@@ -9,4 +9,5 @@ export interface UserIndicationProps {
   points?: number;
   createdAt?: string;
   updatedAt?: string;
+  expiredAt?: string;
 }

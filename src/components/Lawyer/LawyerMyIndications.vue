@@ -20,6 +20,8 @@
                   color="info"
                   prepend-icon="mdi-account-network-outline"
                   variant="flat"
+                  class="text-none"
+                  @click="newItem"
                 >
                   Indicar cliente
                 </v-btn>
@@ -73,7 +75,7 @@
         <div class="py-4">
           <Table
             title="Lista de indicações"
-            :items="fakeItemsTable"
+            :items="$all"
             :headers="headers"
             :items-per-page="5"
             :show-crud="false"
@@ -89,68 +91,72 @@
                 {{ item.status }}
               </span>
             </template>
+            <template v-slot:item.actions="{ item }">
+              <v-btn
+                icon
+                color="orange"
+                variant="text"
+                size="small"
+                @click="getItemEdit(item)"
+              >
+                <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Editar
+                </v-tooltip>
+              </v-btn>
+              <v-btn
+                icon
+                color="error"
+                variant="text"
+                size="small"
+                @click="getItemDelete(item)"
+                :disabled="item.status !== 'PENDING'"
+              >
+                <v-icon icon="mdi-delete-outline" size="20"></v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Apagar
+                </v-tooltip>
+              </v-btn>
+            </template>
           </Table>
         </div>
       </v-card-text>
     </v-card>
+    <LawyerMyIndicationsForm v-model="showForm" :data="selected" />
+    <DialogLoading :dialog="loading" />
+    <Dialog
+      title="Confirme"
+      :dialog="showDelete"
+      @cancel="showDelete = false"
+      @confirm="handleDeleteIitem"
+      show-cancel
+    >
+      <span>
+        Apagar indicação de
+        <strong>{{ selected?.name }}</strong> ?
+      </span>
+    </Dialog>
   </div>
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
+
 const indicationStore = useUserIndicationStore();
 
-const fakeItemsTable = ref([
-  {
-    name: "João da Silva",
-    date: "19/06/2024",
-    status: "Aguardando",
-  },
-  {
-    name: "Maria Souza",
-    date: "25/07/2024",
-    status: "Concluído",
-  },
-  {
-    name: "Pedro Santos",
-    date: "12/08/2024",
-    status: "Aguardando",
-  },
-  {
-    name: "Ana Oliveira",
-    date: "03/09/2024",
-    status: "Em andamento",
-  },
-  {
-    name: "Lucas Pereira",
-    date: "18/09/2024",
-    status: "Concluído",
-  },
-  {
-    name: "Juliana Costa",
-    date: "05/10/2024",
-    status: "Aguardando",
-  },
-  {
-    name: "Rafaela Almeida",
-    date: "22/10/2024",
-    status: "Em andamento",
-  },
-  {
-    name: "Gustavo Rodrigues",
-    date: "09/11/2024",
-    status: "Concluído",
-  },
-  {
-    name: "Fernanda Carvalho",
-    date: "26/11/2024",
-    status: "Aguardando",
-  },
-  {
-    name: "Carlos Mendes",
-    date: "13/12/2024",
-    status: "Em andamento",
-  },
-]);
+const $all = computed(() => indicationStore.$all);
+const selected = ref<UserIndicationProps>();
+const showForm = ref(false);
+const showDelete = ref(false);
+const loading = ref(false);
 
 const headers = ref([
   {
@@ -159,7 +165,50 @@ const headers = ref([
     sortable: false,
     key: "name",
   },
-  { title: "Data", key: "date" },
+  {
+    title: "Email",
+    align: "start",
+    sortable: false,
+    key: "email",
+  },
+  { title: "Data", key: "createdAt" },
   { title: "Status", key: "status" },
+  { title: "Pontos", key: "points" },
+  { title: "Ações", key: "actions" },
 ]);
+
+const newItem = () => {
+  selected.value = undefined;
+  showForm.value = true;
+};
+
+const getItemEdit = (item: UserIndicationProps) => {
+  selected.value = item;
+  showForm.value = true;
+};
+
+const getItemDelete = (item: UserIndicationProps) => {
+  selected.value = item;
+  showDelete.value = true;
+};
+
+const handleDeleteIitem = async () => {
+  showDelete.value = false;
+  if (selected.value) {
+    loading.value = true;
+    try {
+      await indicationStore.destroy(selected.value.publicId!);
+
+      const initialDate = moment().startOf("month").format("YYYY-MM-DD");
+      const finalDate = moment().endOf("month").format("YYYY-MM-DD");
+
+      await indicationStore.index({ initialDate, finalDate });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+      selected.value = undefined;
+    }
+  }
+};
 </script>

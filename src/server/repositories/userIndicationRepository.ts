@@ -40,6 +40,7 @@ export const create = async (payload: UserIndicationProps) => {
         points: payload.points!,
         userId: payload.userId!,
         publicId: uuidv7(),
+        expiredAt: new Date(payload.expiredAt!),
       },
     });
   } catch (error) {

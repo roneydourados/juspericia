@@ -43,7 +43,7 @@ export const useUserIndicationStore = defineStore("userIndication", () => {
     userIndication.value = data;
   };
 
-  const remove = async (publicId: string) => {
+  const destroy = async (publicId: string) => {
     await api.delete(`/user-indication/${publicId}`);
   };
 
@@ -59,7 +59,7 @@ export const useUserIndicationStore = defineStore("userIndication", () => {
     index,
     create,
     update,
-    remove,
+    destroy,
     show,
   };
 });
