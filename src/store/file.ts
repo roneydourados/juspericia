@@ -26,22 +26,52 @@ export const useFileStore = defineStore("file", () => {
 
   const download = async (publicId: string) => {
     const resp = await api.get(`/files/${publicId}`, {
-      responseType: "stream",
+      responseType: "arraybuffer",
     });
 
     const contentDisposition = resp.headers["content-disposition"];
 
-    let fileName = "downloaded-file.txt";
+    let fileName = "";
+    let fileType = "application/octet-stream"; // Tipo padrão
 
     if (contentDisposition) {
       const match = contentDisposition.match(/filename="(.+)"/);
       if (match && match[1]) {
         fileName = match[1];
+        const fileExtension = fileName.split(".").pop()?.toLowerCase();
+
+        // Mapeamento de tipos MIME
+        const mimeTypes: { [key: string]: string } = {
+          pdf: "application/pdf",
+          jpg: "image/jpeg",
+          jpeg: "image/jpeg",
+          png: "image/png",
+          gif: "image/gif",
+          txt: "text/plain",
+          html: "text/html",
+          doc: "application/msword",
+          docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          xls: "application/vnd.ms-excel",
+          xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          ppt: "application/vnd.ms-powerpoint",
+          pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          csv: "text/csv",
+          json: "application/json",
+          xml: "application/xml",
+          zip: "application/zip",
+          rar: "application/x-rar-compressed",
+          tar: "application/x-tar",
+          gz: "application/gzip",
+          mp3: "audio/mpeg",
+          mp4: "video/mp4",
+        };
+
+        fileType = mimeTypes[fileExtension!] || fileType; // Use o tipo MIME correspondente à extensão do arquivo
       }
     }
 
     const file = new Blob([resp.data], {
-      type: "application/octet-stream",
+      type: fileType,
     });
 
     return {

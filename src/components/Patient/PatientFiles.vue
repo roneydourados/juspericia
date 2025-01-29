@@ -95,15 +95,23 @@ const handleFileUpload = async (event: Event) => {
 const handleDownloadFile = async (publicId: string) => {
   loading.value = true;
   try {
-    const data = await fileStore.download(publicId);
-    console.log("🚀 ~ handleDownloadFile ~ data:", data);
+    const { file, fileName } = await fileStore.download(publicId);
 
-    const url = window.URL.createObjectURL(data.file);
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
+
+    // Cria um link temporário
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", data.fileName); // You can set the file name here
+
+    // Define o nome do arquivo
+    link.download = fileName;
+
+    // Adiciona e clica no link
     document.body.appendChild(link);
     link.click();
+
+    // Remove o link temporário
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   } catch (error) {
