@@ -1,10 +1,6 @@
 <template>
   <div class="mx-auto pa-12">
-    <v-empty-state
-      headline="Sem dados!"
-      title="Oops"
-      text="Por enquanto não há nada para mostrar"
-    >
+    <v-empty-state :headline="headLine" :title="title" :text="text">
       <template #media>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -120,5 +116,19 @@
   </div>
 </template>
 <script setup lang="ts">
+defineProps({
+  headLine: {
+    type: String,
+    default: "Sem dados!",
+  },
+  title: {
+    type: String,
+    default: "Oops",
+  },
+  text: {
+    type: String,
+    default: "Por enquanto não há nada para mostrar",
+  },
+});
 const color = ref("rgb(var(--v-theme-primary)) !important");
 </script>

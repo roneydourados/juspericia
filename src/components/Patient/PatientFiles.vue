@@ -46,12 +46,40 @@
                 Baixar arquivo
               </v-tooltip>
             </v-btn>
+
+            <v-btn
+              icon
+              color="error"
+              variant="text"
+              size="small"
+              @click="getFileDelete(item)"
+            >
+              <v-icon icon="mdi-delete-outline" size="20"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Apagar arquivo
+              </v-tooltip>
+            </v-btn>
           </div>
         </template>
       </Table>
     </v-card-text>
-    <!-- <pre>{{ $files }}</pre> -->
   </v-card>
+  <Dialog
+    title="Confirmação"
+    :dialog="showDelete"
+    @cancel="showDelete = false"
+    @confirm="handleDeleteFile"
+    show-cancel
+  >
+    <span>
+      Apagar arquivo
+      <strong>{{ itemSelected?.fileName }}</strong> ?
+    </span>
+  </Dialog>
   <DialogLoading :dialog="loading" />
 </template>
 
@@ -60,6 +88,8 @@ const fileStore = useFileStore();
 const patientStore = usePatientStore();
 
 const loading = ref(false);
+const showDelete = ref(false);
+const itemSelected = ref<FileProps>();
 const headers = ref([
   { title: "Arquivo", key: "fileName" },
   { title: "Ações", key: "actions", sortable: false },
@@ -118,6 +148,31 @@ const handleDownloadFile = async (publicId: string) => {
     console.log("🚀 ~ handleDownloadFile ~ error:", error);
   } finally {
     loading.value = false;
+  }
+};
+
+const getFileDelete = (item: FileProps) => {
+  itemSelected.value = item;
+  showDelete.value = true;
+};
+
+const handleDeleteFile = async () => {
+  if (!itemSelected.value) return;
+
+  loading.value = true;
+  try {
+    await fileStore.remove(itemSelected.value.publicId!);
+
+    await fileStore.index({
+      fileCategory: "patient",
+      ownerId: $patient.value?.id!,
+    });
+  } catch (error) {
+    console.log("🚀 ~ handleDeleteFile ~ error:", error);
+  } finally {
+    loading.value = false;
+    itemSelected.value = undefined;
+    showDelete.value = false;
   }
 };
 </script>

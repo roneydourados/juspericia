@@ -142,7 +142,7 @@
           </template>
         </Table>
       </div>
-      <EmptyContent v-else />
+      <EmptyContent head-line="Sem solicitações" v-else />
     </v-card-text>
   </v-card>
   <SolicitationFilters
