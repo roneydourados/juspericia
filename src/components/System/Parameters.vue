@@ -1,24 +1,42 @@
 <template>
   <v-card flat>
-    <div class="d-flex align-center justify-space-between pa-4 w-100">
-      <div class="d-flex align-center">
-        <v-icon icon="mdi-cog-outline" color="#3F51B5" size="30" start />
-        <span class="text-h6"> Parametrizações </span>
-      </div>
-      <v-btn
-        variant="flat"
-        color="info"
-        class="text-none"
-        size="small"
-        @click="router.back()"
-      >
-        <v-icon icon="mdi-arrow-left"> </v-icon>
-        Voltar
-      </v-btn>
-    </div>
-
     <v-card-text class="pa-4">
       <FormCrud :show-submit-button="false" :on-submit="handleSubmit">
+        <div
+          class="d-flex flex-wrap align-center justify-space-between pa-4 w-100"
+        >
+          <div class="d-flex flex-wrap align-center">
+            <v-icon icon="mdi-cog-outline" color="#3F51B5" size="30" start />
+            <span class="text-h6"> Parametrizações </span>
+          </div>
+          <div class="d-flex flex-wrap align-center" style="gap: 1rem">
+            <v-btn
+              variant="flat"
+              color="info"
+              class="text-none"
+              size="small"
+              @click="router.back()"
+            >
+              <v-icon icon="mdi-arrow-left"> </v-icon>
+              Voltar
+            </v-btn>
+
+            <v-btn
+              color="primary"
+              variant="flat"
+              size="small"
+              type="submit"
+              :disabled="loading"
+              class="text-none"
+            >
+              <div v-if="!loading" class="d-flex align-center">
+                <v-icon icon="mdi-check" />
+                <span style="font-size: 0.9rem" class="ml-2"> Salvar </span>
+              </div>
+            </v-btn>
+          </div>
+        </div>
+
         <v-row>
           <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
@@ -73,7 +91,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="3">
+          <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
               <v-card-title>
                 <div class="font-weight-bold">Valor comissão médica padrão</div>
@@ -98,7 +116,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="3">
+          <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
               <v-card-title>
                 <div class="font-weight-bold">
@@ -118,23 +136,6 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-btn
-              color="primary"
-              variant="flat"
-              size="small"
-              type="submit"
-              :disabled="loading"
-              class="text-none"
-            >
-              <div v-if="!loading" class="d-flex align-center">
-                <v-icon icon="mdi-check" />
-                <span style="font-size: 0.9rem" class="ml-2"> Salvar </span>
-              </div>
-            </v-btn>
           </v-col>
         </v-row>
       </FormCrud>
