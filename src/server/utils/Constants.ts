@@ -293,4 +293,13 @@ export const appRoutes = [
     profiles: ["ADMIN"],
     order: -1,
   },
+  {
+    title: "Parametrizações",
+    to: "/admin/parameters",
+    icon: "mdi-cog-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN"],
+    order: -1,
+  },
 ];

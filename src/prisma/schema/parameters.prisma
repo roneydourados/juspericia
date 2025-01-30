@@ -1,0 +1,12 @@
+model SystemParameters {
+  id                  Int     @id @default(autoincrement())
+  publicId            String  @map("public_id") @db.VarChar(40)
+  pointsPerIndication Int     @map("points_per_indication") @db.Integer
+  pointsExchange      Int     @map("points_exchange") @db.Integer
+  pointsExchangeValue Decimal @map("points_exchange_value") @db.Decimal(18, 2)
+  daysPointsExpire    Int     @map("days_points_expire") @db.Integer
+  comission           Decimal @map("comission_value") @db.Decimal(18, 2)
+  daysCreditExpire    Int     @map("days_credit_expire") @db.Integer
+
+  @@map("system_parameters")
+}

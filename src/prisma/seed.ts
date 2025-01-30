@@ -12,6 +12,19 @@ async function main() {
   const passwordAdvogado = await hashText("advogado@#$2024");
   const passwordMedico = await hashText("medico@#$2024");
 
+  //parametros do sistema
+  await prisma.systemParameters.create({
+    data: {
+      comission: 0,
+      daysCreditExpire: 0,
+      daysPointsExpire: 0,
+      pointsExchange: 0,
+      pointsExchangeValue: 0,
+      pointsPerIndication: 0,
+      publicId: uuidv7(),
+    },
+  });
+
   // admin
   await prisma.user.upsert({
     where: { email: "admin@juspericia.com" },
