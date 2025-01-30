@@ -178,6 +178,7 @@ onMounted(() => {
 });
 
 const handleSubmit = async () => {
+  loading.value = true;
   try {
     await systemParametersStore.update({
       ...form.value,
