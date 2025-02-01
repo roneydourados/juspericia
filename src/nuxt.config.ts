@@ -136,7 +136,7 @@ export default defineNuxtConfig({
       host: process.env.MAIL_HOST ?? "",
       port: process.env.MAIL_PORT ?? "",
       user: process.env.MAIL_USER ?? "",
-      pass: process.env.MAL_PASSWORD ?? "",
+      pass: process.env.MAIL_PASS ?? "",
     },
     tokenSecret: process.env.JWT_SECRET ?? "",
     public: {

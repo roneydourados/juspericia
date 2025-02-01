@@ -5,7 +5,7 @@ const config = useRuntimeConfig();
 export const emailProvider = nodemailer.createTransport({
   host: config.emailProvider.host,
   port: Number(config.emailProvider.port),
-  secure: false, // Us/e `true` for port 465, `false` for all other ports
+  secure: Number(config.emailProvider.port) === 465, // Us/e `true` for port 465, `false` for all other ports
 
   // tls: {
   //   maxVersion: "TLSv1.3",

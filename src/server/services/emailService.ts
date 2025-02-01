@@ -32,7 +32,7 @@ export const sendEmail = async ({
     emailProvider.use("compile", hbs(handlebarOptions));
 
     const mailOptions = {
-      from: '"Jusperícia" <atendimento@juspericia.com.br>', // sender address
+      from: `"Jusperícia" <${config.emailProvider.user}>`, // sender address
       template, // the name of the template file, i.e., email.handlebars
       to: email,
       subject: "Jusperícia",
