@@ -8,7 +8,7 @@
 
     <v-app-bar color="primary" elevation="0">
       <template #title>
-        <Logo height="30" />
+        <LogoTransparente height="80" />
       </template>
 
       <!-- <span v-if="!mobile" class="text-h6">{{ $currentScreen }}</span> -->
