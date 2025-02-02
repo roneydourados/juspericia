@@ -1,36 +1,35 @@
 <template>
   <v-card v-if="editor">
-    <div v-if="editor">
-      <bubble-menu
-        class="d-flex align-center"
-        style="gap: 0.5rem"
-        :tippy-options="{ duration: 100 }"
-        :editor="editor"
-      >
-        <v-card flat rounded="lg">
-          <v-btn-toggle variant="outlined" divided>
-            <v-btn
-              size="small"
-              icon="mdi-format-bold"
-              @click="editor.chain().focus().toggleBold().run()"
-              :disabled="!editor.can().chain().focus().toggleBold().run()"
-            />
-            <v-btn
-              size="small"
-              icon="mdi-format-italic"
-              @click="editor.chain().focus().toggleItalic().run()"
-              :disabled="!editor.can().chain().focus().toggleItalic().run()"
-            />
-            <v-btn
-              size="small"
-              icon="mdi-format-strikethrough"
-              @click="editor.chain().focus().toggleStrike().run()"
-              :disabled="!editor.can().chain().focus().toggleStrike().run()"
-            />
-          </v-btn-toggle>
-        </v-card>
-      </bubble-menu>
-    </div>
+    <bubble-menu
+      class="d-flex align-center"
+      style="gap: 0.5rem"
+      :tippy-options="{ duration: 100 }"
+      :editor="editor"
+    >
+      <v-card flat rounded="lg">
+        <v-btn-toggle variant="outlined" divided>
+          <v-btn
+            size="small"
+            icon="mdi-format-bold"
+            @click="editor.chain().focus().toggleBold().run()"
+            :disabled="!editor.can().chain().focus().toggleBold().run()"
+          />
+          <v-btn
+            size="small"
+            icon="mdi-format-italic"
+            @click="editor.chain().focus().toggleItalic().run()"
+            :disabled="!editor.can().chain().focus().toggleItalic().run()"
+          />
+          <v-btn
+            size="small"
+            icon="mdi-format-strikethrough"
+            @click="editor.chain().focus().toggleStrike().run()"
+            :disabled="!editor.can().chain().focus().toggleStrike().run()"
+          />
+        </v-btn-toggle>
+      </v-card>
+    </bubble-menu>
+
     <v-row dense class="pa-2" no-gutters>
       <v-col cols="12" lg="3">
         <v-btn-toggle variant="outlined" divided>
@@ -72,29 +71,6 @@
             @click="editor.chain().focus().setTextAlign('justify').run()"
             :class="{ 'is-active': editor.isActive({ textAlign: 'justify' }) }"
           />
-          <!-- <v-btn
-            size="small"
-            icon="mdi-format-header-1"
-            @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-            :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-          />
-          <v-btn
-            size="small"
-            icon="mdi-format-header-2"
-            @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-            :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-          />
-          <v-btn
-            size="small"
-            icon="mdi-format-header-3"
-            @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-            :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-          />
-          <input
-            type="color"
-            @input="editor.chain().focus().setColor($event.target).run()"
-            :value="editor.getAttributes('textStyle').color"
-          /> -->
         </v-btn-toggle>
       </v-col>
     </v-row>
