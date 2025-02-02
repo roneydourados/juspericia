@@ -93,7 +93,9 @@
             <span class="text-h6 font-weight-bold">
               Descrição da realidade dos fatos
             </span>
-            <CKEditor v-model="form.content" />
+            <Editor v-model="form.content" />
+
+            <!-- <CKEditor v-model="form.content" /> -->
           </v-col>
         </v-row>
         <v-row dense>

@@ -47,14 +47,14 @@
       </v-col>
     </v-row>
     <v-row dense>
-      <v-col cols="12" lg="6">
+      <v-col cols="12">
         <InfoLabel
           title="Nome da mãe"
           font-size="1"
           :content="$single?.Patient?.motherName ?? 'Não informado'"
         />
       </v-col>
-      <v-col cols="12" lg="6">
+      <v-col cols="12">
         <InfoLabel
           title="Email"
           font-size="1"

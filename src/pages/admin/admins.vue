@@ -5,7 +5,11 @@
 <script setup lang="ts">
 const userAdminStore = useUserAdminStore();
 
-await useAsyncData(async () => {
+onMounted(async () => {
   await userAdminStore.index("");
 });
+
+// await useAsyncData(async () => {
+//   await userAdminStore.index("");
+// });
 </script>

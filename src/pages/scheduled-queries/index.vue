@@ -15,10 +15,16 @@ const medicId =
     ? $currentUser.value?.id
     : undefined;
 
-await useAsyncData(async () => {
+onMounted(async () => {
   await scheduleStore.index({
     scheduleDate: moment().format("YYYY-MM-DD"),
     medicId,
   });
 });
+// await useAsyncData(async () => {
+//   await scheduleStore.index({
+//     scheduleDate: moment().format("YYYY-MM-DD"),
+//     medicId,
+//   });
+// });
 </script>

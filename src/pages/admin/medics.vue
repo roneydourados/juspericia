@@ -4,5 +4,9 @@
 
 <script setup lang="ts">
 const medicStore = useMedicStore();
-await useAsyncData(async () => await medicStore.index(""));
+
+onMounted(async () => {
+  await medicStore.index("");
+});
+//await useAsyncData(async () => await medicStore.index(""));
 </script>

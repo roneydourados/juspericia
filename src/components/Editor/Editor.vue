@@ -1,5 +1,36 @@
 <template>
   <v-card v-if="editor">
+    <div v-if="editor">
+      <bubble-menu
+        class="d-flex align-center"
+        style="gap: 0.5rem"
+        :tippy-options="{ duration: 100 }"
+        :editor="editor"
+      >
+        <v-card flat rounded="lg">
+          <v-btn-toggle variant="outlined" divided>
+            <v-btn
+              size="small"
+              icon="mdi-format-bold"
+              @click="editor.chain().focus().toggleBold().run()"
+              :disabled="!editor.can().chain().focus().toggleBold().run()"
+            />
+            <v-btn
+              size="small"
+              icon="mdi-format-italic"
+              @click="editor.chain().focus().toggleItalic().run()"
+              :disabled="!editor.can().chain().focus().toggleItalic().run()"
+            />
+            <v-btn
+              size="small"
+              icon="mdi-format-strikethrough"
+              @click="editor.chain().focus().toggleStrike().run()"
+              :disabled="!editor.can().chain().focus().toggleStrike().run()"
+            />
+          </v-btn-toggle>
+        </v-card>
+      </bubble-menu>
+    </div>
     <v-row dense class="pa-2" no-gutters>
       <v-col cols="12" lg="3">
         <v-btn-toggle variant="outlined" divided>
@@ -83,10 +114,10 @@
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Highlight } from "@tiptap/extension-highlight";
 import StarterKit from "@tiptap/starter-kit";
-// import Text from "@tiptap/extension-text";
-// import TextStyle from "@tiptap/extension-text-style";
-// import { Color } from "@tiptap/extension-color";
-import { Editor, EditorContent } from "@tiptap/vue-3";
+import { Editor, EditorContent, BubbleMenu } from "@tiptap/vue-3";
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
 
 const props = defineProps({
   modelValue: {
@@ -101,7 +132,17 @@ const editor = ref();
 onMounted(() => {
   editor.value = new Editor({
     content: props.modelValue,
-    extensions: [StarterKit, Highlight, TextAlign],
+    extensions: [
+      Document,
+      Paragraph,
+      Text,
+      StarterKit,
+      Highlight,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right", "justify"],
+      }),
+    ],
     onUpdate: () => {
       emit("update:modelValue", editor.value.getHTML());
     },
@@ -128,7 +169,7 @@ watch(
 
 <style lang="scss">
 .container {
-  height: 36rem;
+  height: 20rem;
   overflow-y: scroll;
 }
 .tiptap {
@@ -231,5 +272,29 @@ watch(
 }
 .tiptap:focus {
   outline: none;
+}
+.bubble-menu {
+  background-color: rgb(var(--v-theme-white)) !important;
+  border: 1px solid rgb(var(--v-theme-grey-lighten-1)) !important;
+  border-radius: 0.7rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  padding: 0.2rem;
+
+  button {
+    background-color: unset;
+
+    &:hover {
+      background-color: var(--gray-3);
+    }
+
+    &.is-active {
+      background-color: var(--purple);
+
+      &:hover {
+        background-color: var(--purple-contrast);
+      }
+    }
+  }
 }
 </style>

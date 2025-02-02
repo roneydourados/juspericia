@@ -34,6 +34,10 @@ const register = useAuthStore();
 
 const countdown = ref(15);
 
+onMounted(async () => {
+  await startCountdown();
+});
+
 const startCountdown = async () => {
   const id = route.params.id as string;
 

@@ -4,14 +4,14 @@
       Dados do escritório
     </div>
     <v-row dense>
-      <v-col cols="12" lg="4">
+      <v-col cols="12">
         <InfoLabel
           title="Email"
           font-size="1"
           :content="$single?.Patient?.User?.email ?? 'Não informado'"
         />
       </v-col>
-      <v-col cols="12" lg="4">
+      <v-col cols="12" lg="8">
         <InfoLabel
           title="Nome do advogado"
           font-size="1"
@@ -29,7 +29,7 @@
         <InfoLabel
           title="OAB/UF"
           font-size="1"
-          :content="$single?.Patient?.User?.oab ?? 'NN'"
+          :content="$single?.Patient?.User?.oabUf ?? 'NN'"
         />
       </v-col>
     </v-row>

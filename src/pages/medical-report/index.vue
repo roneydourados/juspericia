@@ -10,7 +10,11 @@ const consultationReport = usePatientConsultationReportStore();
 const initialDate = moment().startOf("month").format("YYYY-MM-DD");
 const finalDate = moment().endOf("month").format("YYYY-MM-DD");
 
-await useAsyncData(async () => {
+onMounted(async () => {
   await consultationReport.index({ initialDate, finalDate });
 });
+
+// await useAsyncData(async () => {
+//   await consultationReport.index({ initialDate, finalDate });
+//});
 </script>

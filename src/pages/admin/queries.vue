@@ -3,6 +3,12 @@
 </template>
 
 <script setup lang="ts">
+import { on } from "nodemailer/lib/ses-transport";
+
 const consutationStore = useConsultationStore();
-await useAsyncData(async () => await consutationStore.index(""));
+
+onMounted(async () => {
+  await consutationStore.index("");
+});
+//await useAsyncData(async () => await consutationStore.index(""));
 </script>

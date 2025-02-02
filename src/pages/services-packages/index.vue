@@ -4,5 +4,8 @@
 
 <script setup lang="ts">
 const consutationPackage = useServicePackageStore();
-await useAsyncData(async () => await consutationPackage.index("active"));
+onMounted(async () => {
+  await consutationPackage.index("active");
+});
+//await useAsyncData(async () => await consutationPackage.index("active"));
 </script>

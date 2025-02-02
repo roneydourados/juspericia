@@ -18,7 +18,7 @@
                     R$
                   </span>
                   <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($salts!.totals.total, false) }}
+                    {{ amountFormated($salts?.totals?.total ?? 0, false) }}
                   </span>
                 </div>
               </v-card-text>
@@ -36,7 +36,9 @@
                     R$
                   </span>
                   <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($salts!.totals.totalPending, false) }}
+                    {{
+                      amountFormated($salts?.totals?.totalPending ?? 0, false)
+                    }}
                   </span>
                 </div>
               </v-card-text>
@@ -54,7 +56,9 @@
                     R$
                   </span>
                   <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($salts!.totals.totalExpired, false) }}
+                    {{
+                      amountFormated($salts?.totals?.totalExpired ?? 0, false)
+                    }}
                   </span>
                 </div>
               </v-card-text>
@@ -70,7 +74,7 @@
           <Table
             title="Compras"
             :headers="headers"
-            :items="$salts!.credits"
+            :items="$salts?.credits"
             :show-crud="false"
           >
             <template #item.status="{ item }">

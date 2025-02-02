@@ -4,5 +4,9 @@
 
 <script setup lang="ts">
 const systemParametersStore = useSystemParametersStore();
-await useAsyncData(async () => await systemParametersStore.index());
+
+onMounted(async () => {
+  await systemParametersStore.index();
+});
+//await useAsyncData(async () => await systemParametersStore.index());
 </script>

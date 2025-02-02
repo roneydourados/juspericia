@@ -6,9 +6,14 @@ import moment from "moment";
 
 const scheduleStore = useScheduleStore();
 
-await useAsyncData(async () => {
+onMounted(async () => {
   await scheduleStore.index({
     scheduleDate: moment().format("YYYY-MM-DD"),
   });
 });
+// await useAsyncData(async () => {
+//   await scheduleStore.index({
+//     scheduleDate: moment().format("YYYY-MM-DD"),
+//   });
+// });
 </script>

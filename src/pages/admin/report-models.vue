@@ -4,5 +4,9 @@
 
 <script setup lang="ts">
 const reportModel = useReportModelStore();
-await useAsyncData(async () => await reportModel.index(""));
+
+onMounted(async () => {
+  await reportModel.index("");
+});
+//await useAsyncData(async () => await reportModel.index(""));
 </script>

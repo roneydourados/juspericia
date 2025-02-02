@@ -10,6 +10,8 @@
 </template>
 
 <script setup lang="ts">
+import { on } from "nodemailer/lib/xoauth2";
+
 definePageMeta({
   title: "Login",
   description: "Login page",
@@ -21,15 +23,29 @@ const auth = useAuthStore();
 const route = useRoute();
 const rounter = useRouter();
 
-try {
-  const id = route.params.id as string;
+onMounted(async () => {
+  try {
+    const id = route.params.id as string;
 
-  //await useAsyncData("activateAccount", () => auth.activeAccount(id));
-  await auth.activeAccount(id);
+    //await useAsyncData("activateAccount", () => auth.activeAccount(id));
+    await auth.activeAccount(id);
 
-  rounter.push("/activate-account/success");
-} catch (error) {
-  rounter.push(`/activate-account/error/${route.params.id}`);
-  console.error(error);
-}
+    rounter.push("/activate-account/success");
+  } catch (error) {
+    rounter.push(`/activate-account/error/${route.params.id}`);
+    console.error(error);
+  }
+});
+
+// try {
+//   const id = route.params.id as string;
+
+//   //await useAsyncData("activateAccount", () => auth.activeAccount(id));
+//   await auth.activeAccount(id);
+
+//   rounter.push("/activate-account/success");
+// } catch (error) {
+//   rounter.push(`/activate-account/error/${route.params.id}`);
+//   console.error(error);
+// }
 </script>

@@ -17,9 +17,14 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
   reportPurpose: undefined as ReportPurposeProps | undefined,
 });
 
-await useAsyncData(async () => {
-  //atualizar filtros para padrão
+onMounted(async () => {
   setSolicitationsFilters(modelFilters.value);
   await storeConsultation.index(modelFilters.value);
 });
+
+// await useAsyncData(async () => {
+//   //atualizar filtros para padrão
+//   setSolicitationsFilters(modelFilters.value);
+//   await storeConsultation.index(modelFilters.value);
+// });
 </script>

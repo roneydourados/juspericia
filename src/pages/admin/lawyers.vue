@@ -4,5 +4,9 @@
 
 <script setup lang="ts">
 const userLawyerStore = useUserLawyerStore();
-await useAsyncData(async () => await userLawyerStore.index(""));
+
+onMounted(async () => {
+  await userLawyerStore.index("");
+});
+//await useAsyncData(async () => await userLawyerStore.index(""));
 </script>
