@@ -249,28 +249,4 @@ watch(
 .tiptap:focus {
   outline: none;
 }
-.bubble-menu {
-  background-color: rgb(var(--v-theme-white)) !important;
-  border: 1px solid rgb(var(--v-theme-grey-lighten-1)) !important;
-  border-radius: 0.7rem;
-  box-shadow: var(--shadow);
-  display: flex;
-  padding: 0.2rem;
-
-  button {
-    background-color: unset;
-
-    &:hover {
-      background-color: var(--gray-3);
-    }
-
-    &.is-active {
-      background-color: var(--purple);
-
-      &:hover {
-        background-color: var(--purple-contrast);
-      }
-    }
-  }
-}
 </style>
