@@ -4,7 +4,7 @@
     @update:model-value="$emit('update:drawer', changeDrawer)"
   >
     <template v-slot:prepend>
-      <v-list-item lines="two">
+      <!-- <v-list-item lines="two">
         <template #prepend>
           <v-avatar color="primary">
             <span class="text-h6">{{ $user?.initials }}</span>
@@ -18,7 +18,10 @@
             {{ $user?.Profile?.profileName }}
           </span>
         </template>
-      </v-list-item>
+      </v-list-item> -->
+      <div class="d-flex justify-center py-4 w-100">
+        <LogoTransparente height="80" color="#03A9F4" />
+      </div>
     </template>
 
     <v-divider />

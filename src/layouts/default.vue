@@ -8,7 +8,17 @@
 
     <v-app-bar color="primary" elevation="0">
       <template #title>
-        <LogoTransparente height="80" />
+        <!-- <LogoTransparente height="80" /> -->
+
+        <!-- <v-avatar variant="elevated" color="secondary" size="40">
+          <span class="text-h6 text-white">{{ $user?.initials }}</span>
+        </v-avatar> -->
+        <v-icon icon="mdi-account" start size="30"></v-icon>
+        <span>{{ $user?.name }}</span>
+
+        <!-- <span style="font-size: 0.8rem">
+          {{ $user?.Profile?.profileName }}
+        </span> -->
       </template>
 
       <!-- <span v-if="!mobile" class="text-h6">{{ $currentScreen }}</span> -->
@@ -109,6 +119,7 @@ const { mobile } = useDisplay();
 const config = useRuntimeConfig();
 const router = useRouter();
 const auth = useAuthStore();
+const { getInitials } = useUtils();
 
 const drawer = ref(true);
 
@@ -116,6 +127,14 @@ const drawer = ref(true);
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
 const $currentTheme = computed(() => storeTheme.$theme);
+
+const $user = computed(() => {
+  const initials = getInitials(auth.$currentUser?.name!);
+  return {
+    ...auth.$currentUser,
+    initials,
+  };
+});
 
 onMounted(() => {
   closeDrawer();
