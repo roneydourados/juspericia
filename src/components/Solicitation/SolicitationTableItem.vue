@@ -30,7 +30,6 @@
           </div>
         </div>
       </div>
-
       <div class="d-flex align-center" style="gap: 1rem">
         <div
           v-if="solicitation.status === 'open'"
@@ -84,7 +83,6 @@
           <v-icon icon="mdi-credit-card-outline" size="24" start />
           Pagar
         </v-btn>
-
         <v-btn
           v-if="
             solicitation.status === 'paid' ||
@@ -409,8 +407,6 @@
     v-model="showRecipt"
     :solicitation="solicitation"
   />
-
-  <!-- <pre>{{ solicitation }}</pre> -->
 </template>
 
 <script setup lang="ts">
@@ -601,20 +597,12 @@ const handleSaleItemForAsaas = async () => {
     await getSolicitations();
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      //window.open($paymentResponse.value?.data?.invoiceUrl);
-
       const screenWidth = window.screen.width;
       const screenHeight = window.screen.height;
       const popupWidth = Math.round(screenWidth * 0.95);
       const popupHeight = Math.round(screenHeight * 0.95);
       const popupLeft = Math.round((screenWidth - popupWidth) / 2);
       const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-      // window.open(
-      //   $paymentResponse.value?.data?.invoiceUrl,
-      //   "_blank",
-      //   `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-      // );
 
       const popup = window.open(
         $paymentResponse.value?.data?.invoiceUrl,
