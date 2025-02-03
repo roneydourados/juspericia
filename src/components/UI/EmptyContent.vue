@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto pa-12">
     <v-empty-state :headline="headLine" :title="title" :text="text">
-      <template #media>
+      <!-- <template #media>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="70"
@@ -111,7 +111,7 @@
             />
           </rect>
         </svg>
-      </template>
+      </template> -->
     </v-empty-state>
   </div>
 </template>
@@ -130,5 +130,5 @@ defineProps({
     default: "Por enquanto não há nada para mostrar",
   },
 });
-const color = ref("rgb(var(--v-theme-primary)) !important");
+//const color = ref("rgb(var(--v-theme-primary)) !important");
 </script>
