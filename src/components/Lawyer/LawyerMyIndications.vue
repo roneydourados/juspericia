@@ -26,15 +26,22 @@
             </v-row>
             <v-row dense class="mt-4">
               <v-col cols="12" lg="3">
-                <v-card rounded="lg" height="100%" flat elevation="4">
-                  <v-card-title class="d-flex align-center">
-                    <v-icon icon="mdi-calendar" start size="25" color="info" />
-                    <span class="text-grey text-subtitle-1"> Mês </span>
-                  </v-card-title>
-                  <v-card-text class="pa-4">
-                    <Months @month="handleChangeMonth($event)" />
-                  </v-card-text>
-                </v-card>
+                <v-sheet border="md opacity-12" class="text-body-2 mx-auto">
+                  <v-card rounded="lg" height="100%" flat>
+                    <v-card-title class="d-flex align-center">
+                      <v-icon
+                        icon="mdi-calendar"
+                        start
+                        size="25"
+                        color="info"
+                      />
+                      <span class="text-grey text-subtitle-1"> Mês </span>
+                    </v-card-title>
+                    <v-card-text class="pa-4">
+                      <Months @month="handleChangeMonth($event)" />
+                    </v-card-text>
+                  </v-card>
+                </v-sheet>
               </v-col>
 
               <v-col
@@ -46,9 +53,9 @@
                 <v-card
                   rounded="lg"
                   flat
-                  elevation="4"
                   height="100%"
                   width="30%"
+                  variant="outlined"
                 >
                   <v-card-title class="d-flex align-center">
                     <v-icon
@@ -70,7 +77,7 @@
                 <v-card
                   rounded="lg"
                   flat
-                  elevation="4"
+                  variant="outlined"
                   height="100%"
                   width="30%"
                 >
@@ -242,7 +249,7 @@ const getStatusData = (status: string) => {
     case "CONCLUDED":
       return {
         color: "info",
-        icon: "mdi-circle",
+        icon: "mdi-check-circle",
         name: "Concluído",
       };
 

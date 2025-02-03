@@ -86,12 +86,11 @@
         </v-btn>
 
         <v-btn
-          v-else-if="
-            $currentUser?.Profile.type === 'ADMIN' &&
-            (solicitation.status === 'open' ||
-              solicitation.status === 'scheduled')
+          v-if="
+            solicitation.status === 'paid' ||
+            solicitation.status === 'scheduled'
           "
-          :color="solicitation.status === 'open' ? 'success' : 'warning'"
+          :color="solicitation.status === 'paid' ? 'success' : 'warning'"
           size="small"
           variant="flat"
           class="text-none text-white"
@@ -99,7 +98,7 @@
         >
           <v-icon icon="mdi-calendar-clock" start color="white"></v-icon>
           <span class="text-white">
-            {{ solicitation.status === "open" ? "Agendar" : "Reagendar" }}
+            {{ solicitation.status === "paid" ? "Agendar" : "Reagendar" }}
           </span>
         </v-btn>
 

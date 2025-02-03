@@ -7,7 +7,7 @@ export default defineEventHandler((event) => {
   }
 
   //verificar rotas protegidas
-  const protectedRoutes = ["/api/medic", "/api/user-admin"];
+  const protectedRoutes = [/*"/api/medic",*/ "/api/user-admin"];
 
   const isProtected = protectedRoutes.some((route) =>
     event.path.includes(route)

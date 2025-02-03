@@ -67,29 +67,23 @@
     >
       <v-tab value="open" class="text-none">
         <v-icon icon="mdi-file-clock-outline" size="24" start />
-        <span v-if="!mobile">
-          Abertas
-          <span class="text-info font-weight-bold">
-            ({{ getQuantity("open") }})
-          </span>
+        <span v-if="!mobile"> Abertas </span>
+        <span class="text-info font-weight-bold">
+          ({{ getQuantity("open") }})
         </span>
       </v-tab>
       <v-tab value="payment_pending" class="text-none">
         <v-icon icon="mdi-cash-clock" size="24" start />
-        <span v-if="!mobile">
-          Pendente de pagamento
-          <span class="text-info font-weight-bold">
-            ({{ getQuantity("payment_pending") }})
-          </span>
+        <span v-if="!mobile"> Pendente de pagamento </span>
+        <span class="text-info font-weight-bold">
+          ({{ getQuantity("payment_pending") }})
         </span>
       </v-tab>
       <v-tab value="paid" class="text-none">
         <v-icon icon="mdi-cash-check" size="24" start />
-        <span v-if="!mobile">
-          Paga
-          <span class="text-info font-weight-bold">
-            ({{ getQuantity("paid") }})
-          </span>
+        <span v-if="!mobile"> Paga </span>
+        <span class="text-info font-weight-bold">
+          ({{ getQuantity("paid") }})
         </span>
       </v-tab>
       <v-tab value="scheduled" class="text-none">
