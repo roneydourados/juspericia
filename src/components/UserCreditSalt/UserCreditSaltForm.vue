@@ -16,7 +16,7 @@
                 R$
               </span>
               <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                {{ amountFormated($totals.total, false) }}
+                {{ amountFormated($totals?.total ?? 0, false) }}
               </span>
             </div>
           </v-card-text>
@@ -34,7 +34,7 @@
               <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
                 {{
                   amountFormated(
-                    $totals.total - $solicitationTotalPaidSalt,
+                    Number($totals?.total ?? 0) - $solicitationTotalPaidSalt,
                     false
                   )
                 }}
@@ -155,41 +155,8 @@ const $solicitationTotalPaidSalt = computed(() => {
 });
 
 const $totals = computed(() => {
-  const currentDate = moment();
-  return {
-    total: saltCredit.$all.reduce(
-      (acc, item) =>
-        !moment(item.expiredAt).isBefore(currentDate)
-          ? acc + Number(item.salt ?? 0)
-          : acc,
-      0
-    ),
-    // totalExpired: saltCredit.$all.reduce(
-    //   (acc, item) =>
-    //     moment(item.expiredAt).isBefore(currentDate)
-    //       ? acc + Number(item.salt ?? 0)
-    //       : acc,
-    //   0
-    // ),
-    // totalPending: saltCredit.$all.reduce(
-    //   (acc, item) =>
-    //     item.status === "PENDING" ? acc + Number(item.value) : acc,
-    //   0
-    // ),
-  };
+  return saltCredit.$credits?.totals;
 });
-
-watch(
-  () => show.value,
-  async (value) => {
-    if (value) {
-      const initialDate = moment().startOf("month").format("YYYY-MM-DD");
-      const finalDate = moment().endOf("month").format("YYYY-MM-DD");
-
-      await saltCredit.index({ initialDate, finalDate });
-    }
-  }
-);
 
 const handleSubmit = async () => {
   show.value = false;
@@ -215,7 +182,7 @@ const handleSubmit = async () => {
 };
 
 const handleUseSalt = () => {
-  if ($solicitationTotalPaidSalt.value > $totals.value.total) {
+  if ($solicitationTotalPaidSalt.value > Number($totals.value?.total ?? 0)) {
     return push.error("Saldo insuficiente para pagamento");
   }
   confirm.value = true;

@@ -4,14 +4,20 @@ import moment from "moment";
 export const index = async (input: {
   status?: string;
   userId: number;
-  initialDate: string;
-  finalDate: string;
+  initialDate?: string;
+  finalDate?: string;
 }) => {
   const { initialDate, finalDate, status, userId } = input;
 
+  let internalStatus = status;
+
+  if (status === "EXPIRED" || status === "FINISHED") {
+    internalStatus = undefined;
+  }
+
   try {
-    const gte = new Date(initialDate || "");
-    const lte = new Date(finalDate || "");
+    const gte = initialDate ? new Date(initialDate) : undefined;
+    const lte = finalDate ? new Date(finalDate) : undefined;
 
     const credits = await prisma.userCredit.findMany({
       select: {
@@ -26,9 +32,16 @@ export const index = async (input: {
       },
       where: {
         userId,
+        status: internalStatus,
         creditDate: {
           gte,
           lte,
+        },
+        expireDate: {
+          ...(status === "EXPIRED" ? { lt: new Date() } : { gte: new Date() }),
+        },
+        salt: {
+          ...(status === "FINISHED" ? { lte: 0 } : { gt: 0 }),
         },
       },
       orderBy: {
@@ -40,40 +53,35 @@ export const index = async (input: {
     const currentDate = moment();
 
     //totalizar os creditos independente do status, somente o periodo
-    const totals = {
-      total: credits.reduce(
-        (acc, item) =>
-          !moment(item.expireDate).isBefore(currentDate)
-            ? acc + Number(item.salt ?? 0)
-            : acc,
-        0
-      ),
-      totalExpired: credits.reduce(
-        (acc, item) =>
-          moment(item.expireDate).isBefore(currentDate)
-            ? acc + Number(item.salt ?? 0)
-            : acc,
-        0
-      ),
-      totalPending: credits.reduce(
-        (acc, item) =>
-          item.status === "PENDING" ? acc + Number(item.value) : acc,
-        0
-      ),
-    };
+    const totals = credits.reduce(
+      (acc, item) => {
+        const salt = Number(item.salt ?? 0);
+        const value = Number(item.value ?? 0);
 
-    const creditsReturn = credits
-      .map((credit) => {
-        return {
-          ...credit,
-          dateCreated: formatDate(credit.creditDate),
-          expireDate: formatDate(credit.expireDate),
-        };
-      })
-      .filter((credit) => {
-        // aqui filtrar o status quando usuário informar
-        return status ? credit.status === status : true;
-      });
+        // Verifica se o crédito expirou
+        if (moment(item.expireDate).isBefore(currentDate)) {
+          acc.totalExpired += salt;
+        } else {
+          acc.total += salt;
+        }
+
+        // Verifica se o status é "PENDING"
+        if (item.status === "PENDING") {
+          acc.totalPending += value;
+        }
+
+        return acc;
+      },
+      { total: 0, totalExpired: 0, totalPending: 0 }
+    );
+
+    const creditsReturn = credits.map((credit) => {
+      return {
+        ...credit,
+        dateCreated: formatDate(credit.creditDate),
+        expireDate: formatDate(credit.expireDate),
+      };
+    });
 
     return {
       totals,

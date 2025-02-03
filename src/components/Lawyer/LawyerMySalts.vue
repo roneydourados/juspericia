@@ -81,9 +81,9 @@
               <v-chip label :color="getStatusName(item).color">
                 <v-icon
                   :color="getStatusName(item).color"
-                  icon="mdi-circle"
-                  size="12"
-                  class="mr-1"
+                  :icon="getStatusName(item).icon"
+                  size="20"
+                  start
                 />
                 {{ getStatusName(item).text }}
               </v-chip>
@@ -205,21 +205,25 @@ const getStatusName = (item: UserCreditSalt) => {
         color: moment(item.expireDate).isBefore(currentDate)
           ? "warning"
           : "success",
+        icon: "mdi-check-circle-outline",
       };
     case "PENDING":
       return {
         text: "Pendente",
         color: "warning",
+        icon: "mdi-circle-outline",
       };
     case "REFUNDED":
       return {
         text: "Cancelado",
         color: "error",
+        icon: "mdi-cancel",
       };
     default:
       return {
         text: "Indefinido",
         color: "grey",
+        icon: "mdi-circle-outline",
       };
   }
 };

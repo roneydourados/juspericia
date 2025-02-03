@@ -52,7 +52,7 @@
             color="success"
             variant="outlined"
             size="small"
-            @click="showSaltCredit = true"
+            @click="handleUseCreditSalt"
           >
             <v-icon icon="mdi-cash-multiple" size="24" start />
             Utilzar Saldo
@@ -435,6 +435,7 @@ const {
   solicitationStatusName,
   solicitationStatusColor,
 } = useUtils();
+const saltCredit = useUserCreditSaltStore();
 
 const selected = ref<SolicitationConsultationProps>();
 const showSaltCredit = ref(false);
@@ -720,5 +721,15 @@ const handleReceipt = (item: SolicitationConsultationProps) => {
       await getSolicitations();
     }
   }, 700);
+};
+
+const handleUseCreditSalt = async () => {
+  loading.value = true;
+  try {
+    await saltCredit.index({ status: "CONFIRMED" });
+    showSaltCredit.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

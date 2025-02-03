@@ -119,6 +119,8 @@ const validationRules = computed<MaybeRef>(() => {
       .optional()
       .nullish()
       .refine((val) => {
+        if (!val) return true;
+
         const date = new Date(val!);
         const isValid = moment(date, true).isValid();
         return isValid;

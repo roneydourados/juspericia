@@ -14,9 +14,9 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     const { status, initialDate, finalDate } = input;
     const config = {
       params: {
+        status,
         initialDate,
         finalDate,
-        status,
       },
     };
     const { data } = await api.get<UserCreditSaltResponseProps>(

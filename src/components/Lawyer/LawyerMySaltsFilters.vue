@@ -1,9 +1,6 @@
 <template>
   <v-card flat>
-    <v-card-title>
-      <strong> Filtros </strong>
-    </v-card-title>
-    <v-card-text>
+    <v-card-text class="py-12">
       <v-row>
         <v-col cols="12" lg="3">
           <DatePicker
@@ -35,12 +32,12 @@
                 type: 'PENDING',
               },
               {
-                name: 'Cancelado',
-                type: 'REFUNDED',
+                name: 'Expirado',
+                type: 'EXPIRED',
               },
               {
-                name: 'Todos',
-                type: '',
+                name: 'Finalizado',
+                type: 'FINISHED',
               },
             ]"
             @update:model-value="handleFilter"
@@ -49,7 +46,6 @@
             variant="flat"
             color="primary"
             class="text-none"
-            size="small"
             @click="handleFilter"
           >
             <v-icon icon="mdi-filter-outline"> </v-icon>
@@ -63,15 +59,14 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
 const saltCredit = useUserCreditSaltStore();
 const reloadFilters = defineModel({
   default: false,
 });
 const loading = ref(false);
 const filters = ref({
-  initialDate: moment().startOf("month").format("YYYY-MM-DD"),
-  finalDate: moment().endOf("month").format("YYYY-MM-DD"),
+  initialDate: "",
+  finalDate: "",
   status: "CONFIRMED",
 });
 
