@@ -6,8 +6,6 @@ export default defineEventHandler(async (event) => {
   const user = userLogged(event);
 
   const { initialDate, finalDate, status } = getQuery(event);
-  console.log("🚀 ~ defineEventHandler ~ initialDate:", initialDate);
-  console.log("🚀 ~ defineEventHandler ~ finalDate:", finalDate);
 
   setResponseStatus(event, 200);
 
