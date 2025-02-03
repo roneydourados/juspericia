@@ -10,6 +10,9 @@ export interface UserProps {
   officePhone?: string;
   officeEmail?: string;
   officeCnpj?: string;
+  medicHourStart?: string;
+  medicHourEnd?: string;
+  medicQueryInterval?: number;
   oab?: string;
   oabUf?: string;
   crm?: string;

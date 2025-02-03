@@ -36,6 +36,10 @@ export const create = async (payload: UserProps) => {
         crmUf: payload.crmUf,
         phone: payload.phone,
         profileId: profile.id,
+        medicConsultationValue: payload.medicConsultationValue,
+        medicHourEnd: payload.medicHourEnd,
+        medicHourStart: payload.medicHourStart,
+        medicQueryInterval: payload.medicQueryInterval,
         publicId: uuidv7(),
       },
     });
@@ -92,6 +96,9 @@ export const update = async (payload: UserProps) => {
         cpfCnpj: payload.cpfCnpj,
         crmUf: payload.crmUf,
         phone: payload.phone,
+        medicHourEnd: payload.medicHourEnd,
+        medicHourStart: payload.medicHourStart,
+        medicQueryInterval: payload.medicQueryInterval,
         medicConsultationValue: payload.medicConsultationValue,
       },
 
@@ -175,6 +182,9 @@ export const index = async (inputQuery: string) => {
       crmUf: true,
       email: true,
       publicId: true,
+      medicHourEnd: true,
+      medicHourStart: true,
+      medicQueryInterval: true,
       medicConsultationValue: true,
     },
     where: {
@@ -215,6 +225,9 @@ export const index = async (inputQuery: string) => {
         active: user.active,
         crmUf: user.crmUf,
         email: user.email,
+        medicHourEnd: user.medicHourEnd,
+        medicHourStart: user.medicHourStart,
+        medicQueryInterval: user.medicQueryInterval,
         Address: address,
         publicId: user.publicId,
         medicConsultationValue: user.medicConsultationValue
@@ -249,6 +262,9 @@ const exists = async (id: string) => {
       oabUf: true,
       officeName: true,
       publicId: true,
+      medicHourEnd: true,
+      medicHourStart: true,
+      medicQueryInterval: true,
       Profile: {
         select: {
           id: true,

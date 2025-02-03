@@ -110,7 +110,6 @@
         </v-col>
       </v-row>
     </FormCrud>
-    <!-- <pre>{{ $schedules }}</pre> -->
   </DialogForm>
 </template>
 
@@ -133,8 +132,8 @@ const props = defineProps({
   },
 });
 
-const startTime = ref("08:00");
-const endTime = ref("22:00");
+// const startTime = ref("08:00");
+// const endTime = ref("22:00");
 
 const emit = defineEmits(["scheduled"]);
 const show = defineModel<boolean>({ default: false });
@@ -162,11 +161,15 @@ watch(
 
 // Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
 const timeSlots = async () => {
+  if (!model.value.medic) {
+    return;
+  }
+
   hours.value = [];
   hour.value = {};
 
-  const start = new Date(`1970-01-01T${startTime.value}`);
-  const end = new Date(`1970-01-01T${endTime.value}`);
+  const start = new Date(`1970-01-01T${model.value.medic.medicHourStart}`);
+  const end = new Date(`1970-01-01T${model.value.medic.medicHourEnd}`);
 
   while (start <= end) {
     const isSelected = $schedules.value.some(
@@ -203,7 +206,9 @@ const timeSlots = async () => {
       scheduleDate: model.value.scheduleDate,
       isSelected,
     });
-    start.setMinutes(start.getMinutes() + 15);
+    start.setMinutes(
+      start.getMinutes() + Number(model.value.medic.medicQueryInterval ?? 15)
+    );
   }
 };
 

@@ -129,6 +129,37 @@
           />
         </v-col>
       </v-row>
+
+      <div class="py-4">
+        <strong>Pametrização consulta</strong>
+      </div>
+      <v-row dense>
+        <v-col cols="12" lg="2">
+          <TimeInput
+            v-model="model.medicHourStart"
+            label="Hora de início"
+            placeholder="08:00"
+            required
+          />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <TimeInput
+            v-model="model.medicHourEnd"
+            label="Hora de fim"
+            placeholder="20:00"
+            required
+          />
+        </v-col>
+        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
+          <IntegerInput
+            v-model="model.medicQueryInterval"
+            label="Intervalo entre consultas"
+            placeholder="15"
+            required
+          />
+          <strong>minutos</strong>
+        </v-col>
+      </v-row>
     </FormCrud>
   </DialogForm>
   <DialogLoading :dialog="loading" />
@@ -160,7 +191,7 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
-const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
+
 const medicStore = useMedicStore();
 
 const loading = ref(false);
@@ -173,6 +204,9 @@ const model = ref({
   phone: "",
   crm: "",
   crmUf: "",
+  medicHourStart: "",
+  medicHourEnd: "",
+  medicQueryInterval: "",
   active: true,
   cepAddress: {
     cep: "",
@@ -195,6 +229,9 @@ const clearModel = () => {
     crm: "",
     crmUf: "",
     email: "",
+    medicHourStart: "",
+    medicHourEnd: "",
+    medicQueryInterval: "",
     active: true,
     cepAddress: {
       cep: "",
@@ -222,6 +259,11 @@ const loadModel = () => {
     name: props.data.name ?? "",
     phone: props.data.phone ?? "",
     cpfCnpj: props.data.cpfCnpj ?? "",
+    medicHourStart: props.data.medicHourStart ?? "",
+    medicHourEnd: props.data.medicHourEnd ?? "",
+    medicQueryInterval: props.data.medicQueryInterval
+      ? props.data.medicQueryInterval.toString()
+      : "",
     password: "",
     crm: props.data.crm ?? "",
     crmUf: props.data.crmUf ?? "",
@@ -264,6 +306,9 @@ const create = async () => {
     phone: model.value.phone,
     cpfCnpj: model.value.cpfCnpj,
     password: model.value.password,
+    medicHourStart: model.value.medicHourStart,
+    medicHourEnd: model.value.medicHourEnd,
+    medicQueryInterval: Number(model.value.medicQueryInterval ?? "15"),
     Address: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
@@ -288,6 +333,9 @@ const update = async () => {
     cpfCnpj: model.value.cpfCnpj,
     password: model.value.password,
     active: model.value.active,
+    medicHourStart: model.value.medicHourStart,
+    medicHourEnd: model.value.medicHourEnd,
+    medicQueryInterval: Number(model.value.medicQueryInterval ?? "15"),
     Address: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
