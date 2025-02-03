@@ -1,5 +1,6 @@
 <template>
   <SolicitationTable />
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -8,6 +9,7 @@ import moment from "moment";
 const { setSolicitationsFilters } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 
+const loading = ref(false);
 const modelFilters = ref<SolicitationConsultationFilterProps>({
   status: "open",
   initialDateSolicitation: moment().startOf("year").format("YYYY-MM-DD"),
@@ -18,11 +20,16 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
 });
 
 onMounted(async () => {
-  setSolicitationsFilters(modelFilters.value);
-  await storeConsultation.index(modelFilters.value);
+  loading.value = true;
+  try {
+    setSolicitationsFilters(modelFilters.value);
+    await storeConsultation.index(modelFilters.value);
+  } finally {
+    loading.value = false;
+  }
 });
 
-// await useAsyncData(async () => {
+// await useAsyncData("solicitations", async () => {
 //   //atualizar filtros para padrão
 //   setSolicitationsFilters(modelFilters.value);
 //   await storeConsultation.index(modelFilters.value);

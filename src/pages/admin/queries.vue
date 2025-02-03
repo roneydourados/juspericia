@@ -1,14 +1,18 @@
 <template>
   <ConsultationTable />
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
-import { on } from "nodemailer/lib/ses-transport";
-
 const consutationStore = useConsultationStore();
-
+const loading = ref(false);
 onMounted(async () => {
-  await consutationStore.index("");
+  loading.value = true;
+  try {
+    await consutationStore.index("");
+  } finally {
+    loading.value = false;
+  }
 });
 //await useAsyncData(async () => await consutationStore.index(""));
 </script>

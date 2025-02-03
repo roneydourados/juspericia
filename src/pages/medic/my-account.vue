@@ -1,17 +1,23 @@
 <template>
   <MedicMyAccount />
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
-import { on } from "nodemailer/lib/xoauth2";
-
 const medicStore = useMedicStore();
 const auth = useAuthStore();
 
 const $currentUser = computed(() => auth.$currentUser);
 
+const loading = ref(false);
+
 onMounted(async () => {
-  await medicStore.show($currentUser.value?.publicId!);
+  loading.value = true;
+  try {
+    await medicStore.show($currentUser.value?.publicId!);
+  } finally {
+    loading.value = false;
+  }
 });
 
 // await useAsyncData(

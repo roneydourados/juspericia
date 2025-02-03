@@ -1,5 +1,6 @@
 <template>
   <LawyerMySalts />
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -7,11 +8,18 @@ import moment from "moment";
 
 const saltCredit = useUserCreditSaltStore();
 
-onMounted(async () => {
-  const initialDate = moment().startOf("month").format("YYYY-MM-DD");
-  const finalDate = moment().endOf("month").format("YYYY-MM-DD");
+const loading = ref(false);
 
-  await saltCredit.index({ initialDate, finalDate, status: "CONFIRMED" });
+onMounted(async () => {
+  loading.value = true;
+  try {
+    const initialDate = moment().startOf("month").format("YYYY-MM-DD");
+    const finalDate = moment().endOf("month").format("YYYY-MM-DD");
+
+    await saltCredit.index({ initialDate, finalDate, status: "CONFIRMED" });
+  } finally {
+    loading.value = false;
+  }
 });
 
 // await useAsyncData(async () => {

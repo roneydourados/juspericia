@@ -7,11 +7,10 @@
       </h1>
     </div>
   </v-card>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
-import { on } from "nodemailer/lib/xoauth2";
-
 definePageMeta({
   title: "Login",
   description: "Login page",
@@ -22,8 +21,10 @@ definePageMeta({
 const auth = useAuthStore();
 const route = useRoute();
 const rounter = useRouter();
+const loading = ref(false);
 
 onMounted(async () => {
+  loading.value = true;
   try {
     const id = route.params.id as string;
 
@@ -34,6 +35,8 @@ onMounted(async () => {
   } catch (error) {
     rounter.push(`/activate-account/error/${route.params.id}`);
     console.error(error);
+  } finally {
+    loading.value = false;
   }
 });
 

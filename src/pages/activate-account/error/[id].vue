@@ -18,6 +18,7 @@
       </div>
     </template>
   </v-empty-state>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -33,9 +34,15 @@ const route = useRoute();
 const register = useAuthStore();
 
 const countdown = ref(15);
+const loading = ref(false);
 
 onMounted(async () => {
-  await startCountdown();
+  loading.value = true;
+  try {
+    await startCountdown();
+  } finally {
+    loading.value = false;
+  }
 });
 
 const startCountdown = async () => {
