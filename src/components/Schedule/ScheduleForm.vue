@@ -21,7 +21,9 @@
             v-model="model.scheduleDate"
             label="Agendar para o dia"
             required
-            @update:model-value="handleDate"
+            @click:day="clickDay($event)"
+            @update:model-value="datePickerModelValue($event)"
+            :disabled="!model.medic"
           />
         </v-col>
       </v-row>
@@ -110,6 +112,7 @@
         </v-col>
       </v-row>
     </FormCrud>
+    <DialogLoading :dialog="loading" />
   </DialogForm>
 </template>
 
@@ -142,6 +145,7 @@ const { mobile } = useDisplay();
 const hours = ref<HourProps[]>([]);
 const hour = ref<HourProps>({});
 
+const loading = ref(false);
 const model = ref({
   medic: undefined as UserProps | undefined,
   scheduleDate: moment().format("YYYY-MM-DD"),
@@ -161,12 +165,12 @@ watch(
 
 // Computa os horários com intervalo de 15 minutos entre 08:00 e 22:00
 const timeSlots = async () => {
+  hours.value = [];
+  hour.value = {};
+
   if (!model.value.medic) {
     return;
   }
-
-  hours.value = [];
-  hour.value = {};
 
   const start = new Date(`1970-01-01T${model.value.medic.medicHourStart}`);
   const end = new Date(`1970-01-01T${model.value.medic.medicHourEnd}`);
@@ -212,17 +216,13 @@ const timeSlots = async () => {
   }
 };
 
-const handleDate = async () => {
-  await getSchedules();
-  timeSlots();
-};
-
 const submitForm = async () => {
   if (!hour.value.medicId) {
     push.warning("Selecione um horário para agendar a consulta");
     return;
   }
 
+  loading.value = true;
   try {
     const schedule = {
       title: `Agendamento de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
@@ -238,6 +238,7 @@ const submitForm = async () => {
       await scheduleStore.create(schedule);
     }
   } finally {
+    loading.value = false;
     handleDialog();
     emit("scheduled");
   }
@@ -259,9 +260,36 @@ const handleDialog = () => {
 };
 
 const getSchedules = async () => {
-  await scheduleStore.index({
-    medicId: model.value.medic?.id,
-    scheduleDate: model.value.scheduleDate,
-  });
+  loading.value = true;
+  try {
+    await scheduleStore.index({
+      medicId: model.value.medic?.id,
+      scheduleDate: model.value.scheduleDate,
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const clickDay = async (date: string) => {
+  if (!date || !moment(date).isValid()) {
+    return;
+  }
+
+  model.value.scheduleDate = date;
+
+  await getSchedules();
+  timeSlots();
+};
+
+const datePickerModelValue = async (date: string) => {
+  if (!date || !moment(date).isValid()) {
+    return;
+  }
+
+  model.value.scheduleDate = date;
+
+  await getSchedules();
+  timeSlots();
 };
 </script>

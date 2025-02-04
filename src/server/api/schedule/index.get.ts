@@ -7,12 +7,17 @@ export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();
 
   const user = userLogged(event);
-
-  if (user.Profile?.type === "ADMIN") {
-    userId = medicId;
-  } else {
+  if (user.Profile?.type === "MEDICO") {
     userId = user.id;
+  } else {
+    userId = medicId;
   }
+
+  // if (user.Profile?.type === "ADMIN" || user.Profile?.type === "ADVOGADO") {
+  //   userId = medicId;
+  // } else {
+  //   userId = user.id;
+  // }
 
   setResponseStatus(event, 200);
 

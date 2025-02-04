@@ -40,7 +40,8 @@
             hide-title
             hide-header
             color="primary"
-            @update:model-value="handleUpdateDatePickerData"
+            @update:model-value="handleUpdateDatePickerData($event)"
+            @click="emit('click:day', moment(date).format('YYYY-MM-DD'))"
           />
         </v-locale-provider>
       </v-menu>
@@ -76,7 +77,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "click:day", "blur"]);
 
 const date = ref(); // Armazena a data para o v-date-picker
 const menu = ref(false);
@@ -216,7 +217,7 @@ const validateDateOnBlur = (event: any) => {
     if (isValid) {
       const formattedDate = moment(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
       value.value = formattedDate;
-      emit("update:modelValue", formattedDate);
+      emit("blur", formattedDate);
     } else {
       value.value = "";
       emit("update:modelValue", "");
