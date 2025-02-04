@@ -140,6 +140,8 @@ export default defineNuxtConfig({
     },
     tokenSecret: process.env.JWT_SECRET ?? "",
     public: {
+      zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
+      zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       appUrl: process.env.APP_URL,
       version: process.env.VERSION ?? "",

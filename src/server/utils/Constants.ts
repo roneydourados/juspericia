@@ -302,4 +302,13 @@ export const appRoutes = [
     profiles: ["ADMIN"],
     order: -1,
   },
+  {
+    title: "Teleconfêrencia",
+    to: "/teleconference",
+    icon: "mdi-video-outline",
+    visible: true,
+    isMenu: false,
+    profiles: ["ADMIN", "MEDICO", "ADVOGADO"],
+    order: -1,
+  },
 ];

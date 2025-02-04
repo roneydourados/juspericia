@@ -1,5 +1,5 @@
 <template>
-  <v-card flat elevation="2" rounded="lg">
+  <v-card v-if="!showTeleMedicine" flat elevation="2" rounded="lg">
     <v-card-title
       class="d-flex align-center justify-space-between pa-6"
       style="gap: 1rem; font-size: 1rem"
@@ -83,6 +83,22 @@
           <v-icon icon="mdi-credit-card-outline" size="24" start />
           Pagar
         </v-btn>
+
+        <v-btn
+          v-if="
+            solicitation.status === 'paid' ||
+            solicitation.status === 'scheduled'
+          "
+          color="info"
+          size="small"
+          variant="flat"
+          class="text-none text-white"
+          @click="handleQuery(solicitation)"
+        >
+          <v-icon icon="mdi-video-outline" start />
+          <span> Consulta </span>
+        </v-btn>
+
         <v-btn
           v-if="
             solicitation.status === 'paid' ||
@@ -431,8 +447,9 @@ const {
   solicitationStatusColor,
 } = useUtils();
 const saltCredit = useUserCreditSaltStore();
-
+const router = useRouter();
 const selected = ref<SolicitationConsultationProps>();
+const showTeleMedicine = ref(false);
 const showSaltCredit = ref(false);
 const isRate = ref(false);
 const showDateCorrection = ref(false);
@@ -718,5 +735,9 @@ const handleUseCreditSalt = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleQuery = (item: SolicitationConsultationProps) => {
+  router.push(`/teleconference/${item.publicId}`);
 };
 </script>
