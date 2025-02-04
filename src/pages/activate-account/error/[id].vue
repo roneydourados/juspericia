@@ -50,11 +50,11 @@ const startCountdown = async () => {
 
   await register.forgotActiveLink(id);
 
-  const interval = setInterval(() => {
+  const interval = setInterval(async () => {
     countdown.value--;
     if (countdown.value === 0) {
       clearInterval(interval);
-      router.push("/");
+      await router.push("/");
     }
   }, 1000);
 };

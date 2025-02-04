@@ -212,7 +212,7 @@ const { formatDateExtenso } = useUtils();
 const $currentUser = computed(() => auth.$currentUser);
 const $now = computed(() => formatDateExtenso(new Date()));
 
-const handleClickService = (route: string) => {
-  router.push(route);
+const handleClickService = async (route: string) => {
+  await router.push(route);
 };
 </script>

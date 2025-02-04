@@ -1,12 +1,5 @@
 <template>
-  <v-card flat width="100%" height="100%">
-    <v-toolbar>
-      <v-toolbar-title>
-        <div class="text-subtitle-1 font-weight-bold">
-          Video conferência telemedicina
-        </div>
-      </v-toolbar-title>
-    </v-toolbar>
+  <v-card flat class="pa-4 py-4">
     <div ref="root" />
     <v-card-actions class="d-flex justify-end px-12">
       <v-btn
@@ -37,6 +30,7 @@ const $currentUser = computed(() => auth.$currentUser);
 const id = String(route.params.id);
 const root = ref();
 const zp = ref<ZegoUIKitPrebuilt>();
+const loading = ref(false);
 
 onMounted(async () => {
   await storeConsultation.show(id);
@@ -87,11 +81,12 @@ const joinRoom = () => {
   });
 };
 
-const handleClose = () => {
+const handleClose = async () => {
   if ($currentUser.value?.Profile.type === "MEDICO") {
-    router.push("/schedules");
+    await router.push("/schedules");
     return;
   }
-  router.push("/solicitations");
+
+  await router.push("/solicitations");
 };
 </script>

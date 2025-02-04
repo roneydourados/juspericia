@@ -130,7 +130,7 @@ const handleSubmitRegister = async () => {
       tokenCapcha: model.value.tokenCapcha,
     });
 
-    rounter.push("/");
+    await rounter.push("/");
   } catch (error) {
     console.error(error);
     push.error("Erro ao registrar, tente novamente!");

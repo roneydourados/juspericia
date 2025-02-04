@@ -115,9 +115,9 @@ const handleClick = () => {
   }
 };
 
-const logout = () => {
+const logout = async () => {
   auth.logout();
-  route.push("/");
+  await route.push("/");
 };
 </script>
 

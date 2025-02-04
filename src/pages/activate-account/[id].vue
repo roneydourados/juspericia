@@ -31,9 +31,9 @@ onMounted(async () => {
     //await useAsyncData("activateAccount", () => auth.activeAccount(id));
     await auth.activeAccount(id);
 
-    rounter.push("/activate-account/success");
+    await rounter.push("/activate-account/success");
   } catch (error) {
-    rounter.push(`/activate-account/error/${route.params.id}`);
+    await rounter.push(`/activate-account/error/${route.params.id}`);
     console.error(error);
   } finally {
     loading.value = false;

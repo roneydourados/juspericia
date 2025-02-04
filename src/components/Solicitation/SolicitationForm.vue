@@ -217,9 +217,9 @@ const loadModel = () => {
   };
 };
 
-const handleClose = () => {
+const handleClose = async () => {
   clearModel();
-  router.push("/solicitations");
+  await router.push("/solicitations");
 };
 
 const submitForm = async () => {

@@ -105,14 +105,14 @@ const router = useRouter();
 const $single = computed(() => scheduleStore.$single);
 const dialog = defineModel({ default: false });
 
-const handleQueryStart = () => {
+const handleQueryStart = async () => {
   dialog.value = false;
   // await solicitationStore.update({
   //   publicId: $single.value?.PatientConsultation?.publicId,
   //   status: "in_progress",
   // });
 
-  router.push(
+  await router.push(
     `/teleconference/${$single.value?.PatientConsultation?.publicId}`
   );
 

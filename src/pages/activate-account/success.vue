@@ -34,12 +34,12 @@ const router = useRouter();
 
 const countdown = ref(3);
 
-const startCountdown = () => {
-  const interval = setInterval(() => {
+const startCountdown = async () => {
+  const interval = setInterval(async () => {
     countdown.value--;
     if (countdown.value === 0) {
       clearInterval(interval);
-      router.push("/");
+      await router.push("/");
     }
   }, 1000);
 };

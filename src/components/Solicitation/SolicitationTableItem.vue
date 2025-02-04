@@ -85,10 +85,7 @@
         </v-btn>
 
         <v-btn
-          v-if="
-            solicitation.status === 'paid' ||
-            solicitation.status === 'scheduled'
-          "
+          v-if="solicitation.status === 'scheduled'"
           color="info"
           size="small"
           variant="flat"
@@ -737,7 +734,7 @@ const handleUseCreditSalt = async () => {
   }
 };
 
-const handleQuery = (item: SolicitationConsultationProps) => {
-  router.push(`/teleconference/${item.publicId}`);
+const handleQuery = async (item: SolicitationConsultationProps) => {
+  await router.push(`/teleconference/${item.publicId}`);
 };
 </script>
