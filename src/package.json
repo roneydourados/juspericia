@@ -45,8 +45,7 @@
     "vee-validate": "^4.15.0",
     "vue": "latest",
     "vue3-apexcharts": "^1.8.0",
-    "zod": "^3.24.1",
-    "vite-plugin-vuetify": "^2.1.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@tiptap/extension-highlight": "^2.11.5",
