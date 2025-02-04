@@ -54,7 +54,6 @@
         </v-card-title>
         <v-card-text>
           <RitchTextEditor v-model="model.content" />
-          <!-- <Editor v-model="model.content" /> -->
         </v-card-text>
       </v-card>
     </FormCrud>
