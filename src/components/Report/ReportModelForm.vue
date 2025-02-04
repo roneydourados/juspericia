@@ -53,7 +53,7 @@
           </v-row>
         </v-card-title>
         <v-card-text>
-          <Editor v-model="model.content" />
+          <RitchTextEditor v-model="model.content" />
           <!-- <Editor v-model="model.content" /> -->
         </v-card-text>
       </v-card>

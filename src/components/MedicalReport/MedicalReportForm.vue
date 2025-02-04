@@ -61,7 +61,7 @@
             </v-col>
           </v-row>
           <v-card-text>
-            <Editor v-model="model.content" />
+            <RitchTextEditor v-model="model.content" />
             <v-card flat class="mt-4">
               <v-card-title class="mb-4">
                 <input

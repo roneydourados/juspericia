@@ -93,7 +93,7 @@
             <span class="text-h6 font-weight-bold">
               Descrição da realidade dos fatos
             </span>
-            <Editor v-model="form.content" />
+            <RitchTextEditor v-model="form.content" />
 
             <!-- <CKEditor v-model="form.content" /> -->
           </v-col>
