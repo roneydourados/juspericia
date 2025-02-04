@@ -43,6 +43,7 @@
     "prisma-import": "^1.0.5",
     "uuidv7": "^1.0.2",
     "vee-validate": "^4.15.0",
+    "vite-plugin-vuetify": "^2.1.0",
     "vue": "latest",
     "vue3-apexcharts": "^1.8.0",
     "zod": "^3.24.1"
@@ -59,7 +60,6 @@
     "prisma": "^6.3.1",
     "sass": "^1.83.4",
     "tsx": "^4.19.2",
-    "vite-plugin-vuetify": "^2.0.4",
     "vuetify": "^3.7.9"
   },
   "packageManager": "yarn@1.22.22"
