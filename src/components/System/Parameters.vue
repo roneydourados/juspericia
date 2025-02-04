@@ -137,6 +137,28 @@
               </v-card-text>
             </v-card>
           </v-col>
+          <v-col cols="12" lg="4">
+            <v-card flat rounded="lg" elevation="1" height="100%">
+              <v-card-title>
+                <div class="font-weight-bold">Whatsapp do suporte</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <TelefoneInput
+                  label="Whatsapp"
+                  v-model="form.suportWhatsapp"
+                  required
+                  icon="mdi-whatsapp"
+                />
+                <div>
+                  Aqui o número de telefone que será utilizado para chamadas de
+                  suporte via whatsapp, quando usuário clicar em suporte sistema
+                  vai efetuar algumas perguntas padrão e redirecionar para
+                  whatsapp web usando este número.
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </FormCrud>
     </v-card-text>
@@ -158,6 +180,7 @@ const form = ref({
   daysPointsExpire: "",
   comission: "",
   daysCreditExpire: "",
+  suportWhatsapp: "",
 });
 
 const $parameters = computed(() => systemParametersStore.$parameters);
@@ -174,6 +197,7 @@ onMounted(() => {
     daysPointsExpire: $parameters.value?.daysPointsExpire?.toString() ?? "",
     comission: amountFormated($parameters.value?.comission ?? 0, false),
     daysCreditExpire: $parameters.value?.daysCreditExpire?.toString() ?? "",
+    suportWhatsapp: $parameters.value?.suportWhatsapp ?? "",
   };
 });
 

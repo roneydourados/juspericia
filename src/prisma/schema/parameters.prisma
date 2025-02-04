@@ -7,6 +7,7 @@ model SystemParameters {
   daysPointsExpire    Int     @map("days_points_expire") @db.Integer
   comission           Decimal @map("comission_value") @db.Decimal(18, 2)
   daysCreditExpire    Int     @map("days_credit_expire") @db.Integer
+  suportWhatsapp      String? @map("suport_whatsapp") @db.VarChar(20)
 
   @@map("system_parameters")
 }

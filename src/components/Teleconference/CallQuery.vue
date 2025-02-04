@@ -36,7 +36,7 @@ const $currentUser = computed(() => auth.$currentUser);
 
 const id = String(route.params.id);
 const root = ref();
-const zc = ref<ZegoUIKitPrebuilt>();
+const zp = ref<ZegoUIKitPrebuilt>();
 
 onMounted(async () => {
   await storeConsultation.show(id);
@@ -44,15 +44,15 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  if (zc.value) {
-    zc.value.destroy();
+  if (zp.value) {
+    zp.value.destroy();
   }
 });
 
 const joinRoom = () => {
   if (!$single.value) return;
 
-  const zcConfig = {
+  const zpConfig = {
     appId: Number(config.public.zegoCloudAppId),
     secret: config.public.zegoCloudAppSecret,
     roomId: $single.value.publicId!,
@@ -64,19 +64,19 @@ const joinRoom = () => {
   };
 
   const zegoKit = ZegoUIKitPrebuilt.generateKitTokenForTest(
-    zcConfig.appId,
-    zcConfig.secret,
-    zcConfig.roomId,
-    zcConfig.userId,
-    zcConfig.userName
+    zpConfig.appId,
+    zpConfig.secret,
+    zpConfig.roomId,
+    zpConfig.userId,
+    zpConfig.userName
   );
 
-  zc.value = ZegoUIKitPrebuilt.create(zegoKit);
+  zp.value = ZegoUIKitPrebuilt.create(zegoKit);
 
-  zc.value.joinRoom({
+  zp.value.joinRoom({
     container: root.value,
     scenario: {
-      mode: ZegoUIKitPrebuilt.OneONoneCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
+      mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1, modifique o parâmetro aqui para [ZegoUIKitPrebuilt.OneONoneCall].
     },
     showPreJoinView: true,
     preJoinViewConfig: {

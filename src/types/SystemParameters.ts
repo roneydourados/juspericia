@@ -7,4 +7,5 @@ export interface SystemParametersProps {
   daysPointsExpire?: number;
   comission?: number;
   daysCreditExpire?: number;
+  suportWhatsapp?: string;
 }
