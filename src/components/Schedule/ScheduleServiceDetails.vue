@@ -21,7 +21,7 @@
           </v-toolbar-items>
         </v-toolbar>
 
-        <v-card flat rounded="lg" class="pa-4">
+        <v-card flat rounded="lg" class="pa-4" style="overflow-y: scroll">
           <v-row dense class="px-4">
             <v-col cols="12" lg="6">
               <v-card flat rounded="lg">
@@ -73,7 +73,7 @@
                 >
                   Descrição dos fatos
                 </div>
-                <div v-html="$single?.PatientConsultation?.content"></div>
+                <div v-html="$single?.PatientConsultation?.content" />
               </v-card>
               <v-card flat rounded="lg">
                 <div
@@ -82,7 +82,10 @@
                 >
                   Motivo para correção
                 </div>
-                <div v-html="$single?.PatientConsultation?.reasonCorrection" />
+                <div
+                  v-html="$single?.PatientConsultation?.reasonCorrection"
+                  style="overflow-y: scroll"
+                />
               </v-card>
             </v-col>
           </v-row>

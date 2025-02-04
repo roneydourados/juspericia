@@ -127,6 +127,18 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
           transactionReceiptUrl: true,
         },
       },
+      PatientConsultationReport: {
+        take: 1,
+        select: {
+          id: true,
+          content: true,
+          publicId: true,
+          reportDate: true,
+        },
+        where: {
+          status: "active",
+        },
+      },
     },
     orderBy: {
       id: "desc",
@@ -336,15 +348,15 @@ const exists = async (id: string) => {
           content: true,
           publicId: true,
           reportDate: true,
-          Medic: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              crm: true,
-              crmUf: true,
-            },
-          },
+          // Medic: {
+          //   select: {
+          //     id: true,
+          //     name: true,
+          //     email: true,
+          //     crm: true,
+          //     crmUf: true,
+          //   },
+          // },
         },
         where: {
           status: "active",

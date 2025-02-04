@@ -7,6 +7,8 @@ export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();
 
   const user = userLogged(event);
+
+  // se for médico filtrar o usuário logado, que será o médico
   if (user.Profile?.type === "MEDICO") {
     userId = user.id;
   } else {

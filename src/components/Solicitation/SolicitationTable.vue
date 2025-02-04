@@ -30,20 +30,14 @@
           </v-col>
           <v-col cols="1">
             <v-btn
-              icon
               color="info"
               size="small"
               variant="flat"
+              class="text-none"
               @click="getConsultations"
             >
-              <v-icon icon="mdi-reload" />
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Atualizar dados
-              </v-tooltip>
+              <v-icon icon="mdi-filter" />
+              Filtrar
             </v-btn>
           </v-col>
         </v-row>
@@ -53,7 +47,8 @@
           class="text-none"
           color="primary"
           size="small"
-          prepend-icon="mdi-filter"
+          flat
+          prepend-icon="mdi-filter-cog-outline"
           @click="showFilters = !showFilters"
         >
           Mais filtros
@@ -93,13 +88,13 @@
           ({{ getQuantity("scheduled") }})
         </span>
       </v-tab>
-      <v-tab value="in_progress" class="text-none">
+      <!-- <v-tab value="in_progress" class="text-none">
         <v-icon icon="mdi-clock-start" size="24" start />
         <span v-if="!mobile"> Em andamento </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("in_progress") }})
         </span>
-      </v-tab>
+      </v-tab> -->
       <v-tab value="finished" class="text-none">
         <v-icon icon="mdi-calendar-month-outline" size="24" start />
         <span v-if="!mobile">Finalizadas </span>
@@ -172,8 +167,8 @@ const headers = ref([
 
 const modelFilters = ref<SolicitationConsultationFilterProps>({
   status: "open",
-  initialDateSolicitation: moment().startOf("year").format("YYYY-MM-DD"),
-  finalDateSolicitation: moment().endOf("year").format("YYYY-MM-DD"),
+  initialDateSolicitation: moment().subtract(3, "month").format("YYYY-MM-DD"),
+  finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
   benefitType: undefined as BenefitTypeProps | undefined,
   patient: undefined as PatientProps | undefined,
   reportPurpose: undefined as ReportPurposeProps | undefined,

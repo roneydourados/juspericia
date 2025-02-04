@@ -34,13 +34,13 @@
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Descrição dos fatos
           </div>
-          <div v-html="$single?.content"></div>
+          <div v-html="$single?.content" />
         </v-card>
         <v-card flat rounded="lg">
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Motivo para correção
           </div>
-          <div v-html="$single?.reasonCorrection"></div>
+          <div v-html="$single?.reasonCorrection" />
         </v-card>
       </v-col>
     </v-row>
@@ -50,23 +50,11 @@
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Laudo médico
           </div>
-          <!-- <div
-            class="font-weight-bold mb-4 mt-4 text-info"
-            style="font-size: 1rem"
-          >
-            Dr(a): {{ $single?.PatientConsultationReport?.Medic?.name }} CRM:
-            {{ $single?.PatientConsultationReport?.Medic?.crm }}
-            Data:
-            {{
-              moment($single?.PatientConsultationReport?.reportDate).format(
-                "DD/MM/YYYY"
-              )
-            }}
-          </div> -->
+
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Descrição de laudo médico
           </div>
-          <div v-html="$single?.PatientConsultationReport?.content"></div>
+          <div v-html="$single?.PatientConsultationReport?.content" />
         </v-card>
       </v-col>
     </v-row>
