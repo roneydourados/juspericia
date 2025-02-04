@@ -1,11 +1,4 @@
 <template>
-  <div></div>
-</template>
-
-<script setup lang="ts"></script>
-
-<style scoped></style>
-<!-- <template>
   <v-card flat class="pa-4 py-4">
     <div ref="root" />
     <v-card-actions class="d-flex justify-end px-12">
@@ -96,4 +89,4 @@ const handleClose = async () => {
 
   await router.push("/solicitations");
 };
-</script> -->
+</script>

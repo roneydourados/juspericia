@@ -24,6 +24,7 @@
     "@tinymce/tinymce-vue": "^6.1.0",
     "@tiptap/extension-color": "^2.11.5",
     "@vee-validate/zod": "^4.15.0",
+    "@zegocloud/zego-uikit-prebuilt": "^2.14.1",
     "apexcharts": "^4.4.0",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
