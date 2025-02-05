@@ -60,7 +60,7 @@
     "sass": "^1.83.4",
     "tsx": "^4.19.2",
     "vite-plugin-vuetify": "^2.1.0",
-    "vuetify": "^3.7.9"
+    "vuetify": "^3.7.11"
   },
   "packageManager": "yarn@1.22.22"
 }
