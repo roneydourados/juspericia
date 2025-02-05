@@ -23,6 +23,7 @@ model PatientConsultation {
   consultationValue         Decimal                     @default(0) @map("consultation_value") @db.Decimal(18, 2)
   valueCredit               Decimal                     @default(0) @map("value_credit") @db.Decimal(18, 2)
   publicId                  String?                     @unique @map("public_id") @db.VarChar(40)
+  isTelemedicine            Boolean                     @default(false) @map("is_telemedicine")
   Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)

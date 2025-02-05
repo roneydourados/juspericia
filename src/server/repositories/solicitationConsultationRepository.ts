@@ -49,6 +49,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
       consultationValue: true,
       antecipationValue: true,
       publicId: true,
+      isTelemedicine: true,
       Schedule: {
         select: {
           scheduleDate: true,
@@ -271,6 +272,7 @@ export const consultationUpdate = async (
           : undefined,
         consultationValue: payload.consultationValue,
         antecipationValue: payload.antecipationValue,
+        isTelemedicine: payload.isTelemedicine,
       },
       where: {
         publicId: payload.publicId,
@@ -341,6 +343,7 @@ const exists = async (id: string) => {
       tipValue: true,
       userId: true,
       publicId: true,
+      isTelemedicine: true,
       PatientConsultationReport: {
         take: 1,
         select: {

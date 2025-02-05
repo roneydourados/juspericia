@@ -150,6 +150,6 @@ const handleUpdate = async () => {
 <style scoped>
 .selected-item {
   background-color: rgb(var(--v-theme-backMenu)) !important;
-  color: rgb(var(--v-theme-itemMenu)) !important;
+  color: rgb(var(--v-theme-itemInternalMenu)) !important;
 }
 </style>

@@ -13,10 +13,12 @@
       </v-btn>
     </v-card-actions>
   </v-card>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import DialogLoading from "../UI/DialogLoading.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -82,11 +84,24 @@ const joinRoom = () => {
 };
 
 const handleClose = async () => {
-  if ($currentUser.value?.Profile.type === "MEDICO") {
-    await router.push("/schedules");
-    return;
-  }
+  loading.value = true;
+  try {
+    if ($currentUser.value?.Profile.type === "MEDICO") {
+      //desativar teleconsulta
+      await storeConsultation.update({
+        publicId: $single.value?.publicId,
+        isTelemedicine: false,
+      });
 
-  await router.push("/solicitations");
+      await router.push("/schedules");
+      return;
+    }
+
+    await router.push("/solicitations");
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

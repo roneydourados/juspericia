@@ -107,6 +107,7 @@ const model = ref<UserModelProps>({
     numero: "",
     uf: "",
   },
+  tokenCapcha: "",
 });
 
 onMounted(async () => {
@@ -140,6 +141,7 @@ const loadModel = () => {
     officePhone: $single.value?.officePhone ?? "",
     officeEmail: $single.value?.officeEmail ?? "",
     officeCnpj: $single.value?.officeCnpj ?? "",
+    tokenCapcha: $single.value?.tokenCapcha ?? "",
   };
 };
 

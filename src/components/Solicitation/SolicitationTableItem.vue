@@ -85,7 +85,9 @@
         </v-btn>
 
         <v-btn
-          v-if="solicitation.status === 'scheduled'"
+          v-if="
+            solicitation.status === 'scheduled' && solicitation.isTelemedicine
+          "
           color="info"
           size="small"
           variant="flat"

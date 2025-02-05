@@ -99,7 +99,7 @@
 const { formatCPFOrCNPJ } = useUtils();
 const emit = defineEmits(["start-query"]);
 const scheduleStore = useScheduleStore();
-//const solicitationStore = useSolicitationConsultationStore();
+const solicitationStore = useSolicitationConsultationStore();
 const router = useRouter();
 
 const $single = computed(() => scheduleStore.$single);
@@ -107,10 +107,10 @@ const dialog = defineModel({ default: false });
 
 const handleQueryStart = async () => {
   dialog.value = false;
-  // await solicitationStore.update({
-  //   publicId: $single.value?.PatientConsultation?.publicId,
-  //   status: "in_progress",
-  // });
+  await solicitationStore.update({
+    publicId: $single.value?.PatientConsultation?.publicId,
+    isTelemedicine: true,
+  });
 
   await router.push(
     `/teleconference/${$single.value?.PatientConsultation?.publicId}`
