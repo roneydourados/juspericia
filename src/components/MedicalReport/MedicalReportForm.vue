@@ -90,6 +90,7 @@
                     <AttachementCard
                       :file-name="item.fileName!"
                       @delete="handleDeleteAttachment(item)"
+                      :download-visible="false"
                     />
                   </v-col>
                 </v-row>
@@ -109,6 +110,7 @@
       Já existe um conteúdo informado neste laudo, tem certeza que deseja
       alterá-lo?
     </Dialog>
+    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
@@ -122,6 +124,7 @@ const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
 
 const showAlterContent = ref(false);
+const loading = ref(false);
 const model = ref({
   id: 0,
   title: "",
@@ -147,6 +150,7 @@ onMounted(() => {
 // };
 
 const handleSubmit = async () => {
+  loading.value = true;
   try {
     await patientConsultationReport.create({
       content: model.value.content,
@@ -170,6 +174,7 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {
+    loading.value = false;
     emit("close");
   }
 };
