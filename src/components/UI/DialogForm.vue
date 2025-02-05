@@ -12,6 +12,7 @@
             class="d-flex align-center text-subtitle-2 text-md-body-2 text-lg-h6 font-weight-bold"
           >
             <slot name="title-preppend" />
+            <v-icon :icon="icon" start />
             <p class="ml-2">
               {{ title }}
             </p>

@@ -32,7 +32,10 @@
       </div>
       <div class="d-flex align-center" style="gap: 1rem">
         <div
-          v-if="solicitation.status === 'open'"
+          v-if="
+            solicitation.status === 'open' &&
+            $currentUser?.Profile.type === 'ADVOGADO'
+          "
           class="d-flex align-center"
           style="gap: 0.5rem"
         >
@@ -58,7 +61,10 @@
           </v-btn>
         </div>
         <v-btn
-          v-else-if="solicitation.status === 'paid'"
+          v-else-if="
+            solicitation.status === 'paid' &&
+            $currentUser?.Profile.type === 'ADVOGADO'
+          "
           class="text-none text-white"
           color="success"
           variant="outlined"

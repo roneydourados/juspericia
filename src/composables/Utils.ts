@@ -1,5 +1,6 @@
 import moment from "moment";
 import { formatCNPJ, formatCPF } from "@brazilian-utils/brazilian-utils";
+import { useDisplay } from "vuetify";
 type CompactDisplayType = "short" | "long" | undefined;
 
 export const useUtils = () => {
@@ -310,6 +311,19 @@ export const useUtils = () => {
     return `${diaDaSemana}, ${dia} de ${mes} de ${ano}`;
   };
 
+  const whatsappUrl = (phone: string, message: string) => {
+    const { mobile } = useDisplay();
+    let url = "";
+
+    if (mobile) {
+      url = `https://api.whatsapp.com/send?phone=${phone}&text=${message}`;
+    } else {
+      url = `https://web.whatsapp.com/send?phone=${phone}&text=${message}`;
+    }
+
+    return url;
+  };
+
   return {
     amountFormated,
     cardInvoices,
@@ -332,5 +346,6 @@ export const useUtils = () => {
     solicitationStatusName,
     solicitationStatusColor,
     formatDateExtenso,
+    whatsappUrl,
   };
 };

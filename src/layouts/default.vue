@@ -88,6 +88,7 @@
         style="background-color: rgb(var(--v-theme-background)) !important"
       >
         <slot />
+        <SuportButton />
       </div>
     </v-main>
     <v-footer app name="footer" height="30">
