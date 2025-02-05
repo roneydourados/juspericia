@@ -557,11 +557,16 @@ const handleTipValue = async (value: number) => {
 };
 
 const handleUpdateRate = async (rate: number) => {
-  await storeConsultation.update({
-    publicId: props.solicitation.publicId,
-    rate,
-  });
-  isRate.value = false;
+  loading.value = true;
+  try {
+    await storeConsultation.update({
+      publicId: props.solicitation.publicId,
+      rate,
+    });
+    isRate.value = false;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const getSolicitations = async () => {
