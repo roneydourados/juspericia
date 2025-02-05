@@ -11,6 +11,16 @@
         <v-icon icon="mdi-arrow-left" start />
         <strong>Voltar</strong>
       </v-btn>
+
+      <v-btn
+        class="text-none"
+        variant="flat"
+        color="success"
+        @click="handleCloseSolicitation"
+      >
+        <v-icon icon="mdi-contain-end" start />
+        <strong>Finalizar consulta</strong>
+      </v-btn>
     </v-card-actions>
   </v-card>
   <DialogLoading :dialog="loading" />
@@ -33,6 +43,8 @@ const id = String(route.params.id);
 const root = ref();
 const zp = ref<ZegoUIKitPrebuilt>();
 const loading = ref(false);
+
+const isFinishSolicitation = ref(false);
 
 onMounted(async () => {
   await storeConsultation.show(id);
@@ -91,6 +103,7 @@ const handleClose = async () => {
       await storeConsultation.update({
         publicId: $single.value?.publicId,
         isTelemedicine: false,
+        status: isFinishSolicitation.value ? "finished" : undefined,
       });
 
       await router.push("/schedules");
@@ -103,5 +116,10 @@ const handleClose = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleCloseSolicitation = async () => {
+  isFinishSolicitation.value = true;
+  await handleClose();
 };
 </script>
