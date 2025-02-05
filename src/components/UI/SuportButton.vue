@@ -1,10 +1,5 @@
 <template>
-  <div
-    v-if="
-      $currentUser?.Profile.type === 'ADVOGADO' ||
-      $currentUser?.Profile.type === 'MEDICO'
-    "
-  >
+  <div>
     <v-fab
       :app="true"
       color="success"

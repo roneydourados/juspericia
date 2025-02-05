@@ -88,7 +88,12 @@
         style="background-color: rgb(var(--v-theme-background)) !important"
       >
         <slot />
-        <SuportButton />
+        <SuportButton
+          v-if="
+            $currentUser?.Profile.type === 'ADVOGADO' ||
+            $currentUser?.Profile.type === 'MEDICO'
+          "
+        />
       </div>
     </v-main>
     <v-footer app name="footer" height="30">
