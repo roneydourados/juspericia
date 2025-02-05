@@ -163,25 +163,63 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     },
   });
 
-  const consultations = data.map((item) => {
-    const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
+  // const consultations = data.map((item) => {
+  //   const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
 
-    return {
-      ...item,
-      isSolicitationCorrection: !item.reasonCorrection && leftTime <= 30,
-      dateOpen: formatDate(item.dateOpen),
-      dateClose: item.dateClose ? formatDate(item.dateClose) : null,
-      dateAntecipation: item.dateAntecipation
-        ? formatDate(item.dateAntecipation)
-        : null,
-      dateCorrection: item.dateCorrection
-        ? formatDate(item.dateCorrection)
-        : null,
-      deadline: moment(formatDate(item.dateOpen))
-        .add(30, "days")
-        .format("YYYY-MM-DD"),
-    };
-  });
+  //   return {
+  //     ...item,
+  //     isSolicitationCorrection: !item.reasonCorrection && leftTime <= 30,
+  //     dateOpen: formatDate(item.dateOpen),
+  //     dateClose: item.dateClose ? formatDate(item.dateClose) : null,
+  //     dateAntecipation: item.dateAntecipation
+  //       ? formatDate(item.dateAntecipation)
+  //       : null,
+  //     dateCorrection: item.dateCorrection
+  //       ? formatDate(item.dateCorrection)
+  //       : null,
+  //     deadline: moment(formatDate(item.dateOpen))
+  //       .add(30, "days")
+  //       .format("YYYY-MM-DD"),
+  //   };
+  // });
+
+  const consultations = await Promise.all(
+    data.map(async (item) => {
+      // Calcula o tempo decorrido em dias a partir de dateOpen
+      const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
+
+      // Obtém o primeiro (ou único) registro de PatientConsultationReport, se existir
+      const report = item.PatientConsultationReport[0];
+
+      // Se houver um relatório, realiza a busca dos arquivos com base no id do relatório
+      let files = [] as any[];
+      if (report && report.id) {
+        files = await prisma.file.findMany({
+          where: {
+            ownerId: report.id,
+            fileCategory: "medical-report",
+          },
+        });
+      }
+
+      return {
+        ...item,
+        files, // Adiciona os arquivos encontrados
+        isSolicitationCorrection: !item.reasonCorrection && leftTime <= 30,
+        dateOpen: formatDate(item.dateOpen),
+        dateClose: item.dateClose ? formatDate(item.dateClose) : null,
+        dateAntecipation: item.dateAntecipation
+          ? formatDate(item.dateAntecipation)
+          : null,
+        dateCorrection: item.dateCorrection
+          ? formatDate(item.dateCorrection)
+          : null,
+        deadline: moment(formatDate(item.dateOpen))
+          .add(30, "days")
+          .format("YYYY-MM-DD"),
+      };
+    })
+  );
 
   return {
     consultations,
@@ -351,15 +389,6 @@ const exists = async (id: string) => {
           content: true,
           publicId: true,
           reportDate: true,
-          // Medic: {
-          //   select: {
-          //     id: true,
-          //     name: true,
-          //     email: true,
-          //     crm: true,
-          //     crmUf: true,
-          //   },
-          // },
         },
         where: {
           status: "active",
@@ -442,8 +471,23 @@ const exists = async (id: string) => {
     });
   }
 
+  //verificar se existe anexos de laudos
+  const report = data.PatientConsultationReport[0];
+
+  // Se houver um relatório, realiza a busca dos arquivos com base no id do relatório
+  let files = [] as any[];
+  if (report && report.id) {
+    files = await prisma.file.findMany({
+      where: {
+        ownerId: report.id,
+        fileCategory: "medical-report",
+      },
+    });
+  }
+
   return {
     ...data,
+    files,
     PatientConsultationReport: data.PatientConsultationReport[0],
   };
 };

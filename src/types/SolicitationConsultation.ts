@@ -43,6 +43,7 @@ export interface SolicitationConsultationProps {
   isTelemedicine?: boolean;
   PatientConsultationReport?: PatientConsultationReportProps;
   Sales?: SaleProps[];
+  files?: FileProps[];
 }
 
 export interface SolicitationConsultationFilterProps {

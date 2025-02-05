@@ -327,14 +327,14 @@
           >
             Dar Gorjeta
           </v-btn>
-          <v-btn
+          <!-- <v-btn
             v-if="solicitation.status === 'finished' && solicitation.rate! > 0"
             class="text-none font-weight-bold"
             prepend-icon="mdi-file-document-edit"
             color="info"
           >
             Laudo
-          </v-btn>
+          </v-btn> -->
         </v-col>
         <v-col cols="12" lg="3" class="d-flex align-center px-4">
           <v-btn
@@ -368,7 +368,23 @@
         </v-col>
       </v-row>
     </v-card-actions>
+    <v-card-text v-if="solicitation.files?.length ?? 0 > 0">
+      <v-divider />
+      <v-row>
+        <v-col cols="12" class="pa-4"><strong>Anexos / laudos</strong></v-col>
+      </v-row>
+      <v-row dense v-for="item in solicitation.files">
+        <v-col cols="12">
+          <AttachementCard
+            :file-name="item.fileName!"
+            @download="handleDownloadFile(item.publicId!)"
+            :delete-visible="false"
+          />
+        </v-col>
+      </v-row>
+    </v-card-text>
   </v-card>
+
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"
@@ -439,6 +455,8 @@ const auth = useAuthStore();
 const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const rounter = useRouter();
+const fileStore = useFileStore();
+
 const {
   amountFormated,
   getSolicitationsFilters,
@@ -738,5 +756,34 @@ const handleUseCreditSalt = async () => {
 
 const handleQuery = async (item: SolicitationConsultationProps) => {
   await router.push(`/teleconference/${item.publicId}`);
+};
+
+const handleDownloadFile = async (publicId: string) => {
+  loading.value = true;
+  try {
+    const { file, fileName } = await fileStore.download(publicId);
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = fileName;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadFile ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
