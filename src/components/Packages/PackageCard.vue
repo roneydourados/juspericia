@@ -16,7 +16,7 @@
       ></v-progress-linear>
     </template>
 
-    <v-img height="250" :src="item.urlImage" cover></v-img>
+    <v-img height="250" src="@/assets/images/package.avif" cover />
 
     <v-card-item>
       <v-card-title>

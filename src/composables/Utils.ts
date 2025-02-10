@@ -223,7 +223,9 @@ export const useUtils = () => {
     }
 
     return {
-      initialDateSolicitation: moment().startOf("month").format("YYYY-MM-DD"),
+      initialDateSolicitation: moment()
+        .subtract(3, "month")
+        .format("YYYY-MM-DD"),
       finalDateSolicitation: moment().endOf("month").format("YYYY-MM-DD"),
       status: "open",
     };
