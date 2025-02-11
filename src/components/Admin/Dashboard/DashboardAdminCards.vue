@@ -7,7 +7,6 @@
         value="489.299,33"
         icon-color="warning"
         elevation="4"
-        @click="showPendentSales = true"
       />
     </v-col>
     <v-col cols="12" lg="3">
@@ -46,7 +45,6 @@
         value="230"
         icon-color="success"
         elevation="4"
-        @click="showPackageDue = true"
       />
     </v-col>
     <v-col cols="12" lg="3">
@@ -56,7 +54,6 @@
         value="10"
         icon-color="info"
         elevation="4"
-        @click="showClientsLastQuery = true"
       />
     </v-col>
   </v-row>

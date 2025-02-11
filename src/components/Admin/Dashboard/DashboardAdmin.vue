@@ -74,6 +74,10 @@ const tabsDate = ref<TabProps[]>([
 
 const tabsRegion = ref<TabProps[]>([
   {
+    title: "Todos",
+    icon: "mdi-poll",
+  },
+  {
     title: "Norte",
     icon: "mdi-chart-arc",
   },

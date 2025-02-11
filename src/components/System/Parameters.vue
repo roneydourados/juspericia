@@ -167,6 +167,12 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps({
+  data: {
+    type: Object as PropType<SystemParametersProps>,
+    default: () => {},
+  },
+});
 const router = useRouter();
 const { amountFormated } = useUtils();
 const systemParametersStore = useSystemParametersStore();
@@ -183,30 +189,33 @@ const form = ref({
   suportWhatsapp: "",
 });
 
-const $parameters = computed(() => systemParametersStore.$parameters);
-
-onMounted(() => {
-  form.value = {
-    pointsPerIndication:
-      $parameters.value?.pointsPerIndication?.toString() ?? "",
-    pointsExchange: $parameters.value?.pointsExchange?.toString() ?? "",
-    pointsExchangeValue: amountFormated(
-      $parameters.value?.pointsExchangeValue ?? 0,
-      false
-    ),
-    daysPointsExpire: $parameters.value?.daysPointsExpire?.toString() ?? "",
-    comission: amountFormated($parameters.value?.comission ?? 0, false),
-    daysCreditExpire: $parameters.value?.daysCreditExpire?.toString() ?? "",
-    suportWhatsapp: $parameters.value?.suportWhatsapp ?? "",
-  };
-});
+watch(
+  () => props.data,
+  (newData) => {
+    if (newData) {
+      form.value = {
+        pointsPerIndication: newData.pointsPerIndication?.toString() ?? "",
+        pointsExchange: newData.pointsExchange?.toString() ?? "",
+        pointsExchangeValue: amountFormated(
+          newData.pointsExchangeValue ?? 0,
+          false
+        ),
+        daysPointsExpire: newData.daysPointsExpire?.toString() ?? "",
+        comission: amountFormated(newData.comission ?? 0, false),
+        daysCreditExpire: newData.daysCreditExpire?.toString() ?? "",
+        suportWhatsapp: newData.suportWhatsapp ?? "",
+      };
+    }
+  },
+  { immediate: true }
+);
 
 const handleSubmit = async () => {
   loading.value = true;
   try {
     await systemParametersStore.update({
       ...form.value,
-      publicId: $parameters.value!.publicId,
+      publicId: props.data!.publicId,
       pointsPerIndication: Number(form.value.pointsPerIndication),
       pointsExchange: Number(form.value.pointsExchange),
       pointsExchangeValue: Number(form.value.pointsExchangeValue),

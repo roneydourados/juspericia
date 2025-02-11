@@ -1,5 +1,5 @@
 <template>
-  <Parameters />
+  <Parameters :data="$parameters" />
   <DialogLoading :dialog="loading" />
 </template>
 
@@ -7,6 +7,7 @@
 const systemParametersStore = useSystemParametersStore();
 
 const loading = ref(false);
+const $parameters = computed(() => systemParametersStore.$parameters);
 onMounted(async () => {
   loading.value = true;
   try {

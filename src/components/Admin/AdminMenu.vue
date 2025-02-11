@@ -85,7 +85,7 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="3">
+    <!-- <v-col cols="12" lg="3">
       <v-card
         flat
         rounded="lg"
@@ -101,7 +101,7 @@
           realizadas dentro de um período
         </v-card-text>
       </v-card>
-    </v-col>
+    </v-col> -->
     <v-col cols="12" lg="3">
       <v-card
         flat

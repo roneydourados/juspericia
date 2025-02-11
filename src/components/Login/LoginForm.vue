@@ -104,6 +104,7 @@
 
 <script setup lang="ts">
 const auth = useAuthStore();
+const systemParametersStore = useSystemParametersStore();
 const cloudFlareToken = ref("");
 const turnstile = ref();
 const rounter = useRouter();
@@ -131,6 +132,8 @@ const submmitForm = async () => {
       password: form.value.password,
       tokenCapcha: cloudFlareToken.value,
     });
+
+    await systemParametersStore.index();
 
     if (form.value.saveCredentials) {
       localStorage.setItem("email", form.value.email);
