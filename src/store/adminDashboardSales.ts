@@ -21,7 +21,7 @@ export const useAdminDashboardSalesStore = defineStore(
         },
       };
       const { data } = await api.get<SalesAdminDashboardProps>(
-        "/admin/dashboard-sales",
+        "/user-admin/dashboard-sales",
         config
       );
 
