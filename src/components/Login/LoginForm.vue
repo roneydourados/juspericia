@@ -3,20 +3,8 @@
     <v-card-title>
       <v-row dense class="pa-8" justify="center">
         <v-col cols="12" class="d-flex flex-column align-center">
-          <LogoTransparente height="200" color="#6A6CF0" />
-          <!-- <span class="text-grey-darken-1"
-            >Acesse sua conta para continuar</span
-          > -->
+          <Logo height="60" color="#6A6CF0" />
         </v-col>
-        <!-- <v-col>
-          <v-icon
-            icon="mdi-account-key-outline"
-            color="primary"
-            start
-            size="40"
-          />
-          <span>Faça seu login</span>
-        </v-col> -->
       </v-row>
     </v-card-title>
     <FormCrud

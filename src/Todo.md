@@ -1,3 +1,10 @@
+# cobrar
+
+[] - Logo de empresa
+[] - Paleta de cores
+[] - CNPJ para cadastro no ASAAS
+[] - Se cadastrar com CNPJ, na plataforma de teleconferência
+
 # dúvidas
 
 O horário inicial/Final de atendimentos para configurar na agenda,
@@ -16,26 +23,26 @@ R:.
 
 # pendentes
 
-[] - Pensar em um cache para componentes que serão selects
-[] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
-[] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
+[x] - Pensar em um cache para componentes que serão selects
+[x] - Ter opção de dar uma gorjeta (habilitar na tela um QRCode de PIX)
+[x] - Criar tabela para controlar as vendas realizadas (mostrar dash posteriormente)
 [x] - Paginação de dados
-[] - Habilitar botão de correção depois do atendimento de laudo
-[] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
-[] - Cadastro de horários intervalo por médico
-[] - Liberação dos horários por médico levar consideração do dia da semana que pode atender
+[x] - Habilitar botão de correção depois do atendimento de laudo
+[x] - Financeiro do médico, pagamento por laudo, pagar os médicos por laudo entregue depois ver valor
+[x] - Cadastro de horários intervalo por médico
+[x] - Liberação dos horários por médico levar consideração do dia da semana que pode atender
 [x] - Cadastro de pacotes de serviço
 
 # pendente tela advogado (termiar aqui primeiro 11/01/2025)
 
-[] - interar com api as indicações
-[] - integração com asaas para pagamento de pacotes
+[x] - interar com api as indicações
+[x] - integração com asaas para pagamento de pacotes
 [] - integrar videos com youtube
-[] - acrescentar filtros na tela de meus saldos
-[] - Enviar email de confirmação de cadastro
-[] - Enviar email para resetar senha
-[] - Integrar pagamento de solicitações com asaas
-[] - Ter opção de pagar uma solicitação com saldo de crédito
+[x] - acrescentar filtros na tela de meus saldos
+[x] - Enviar email de confirmação de cadastro
+[x] - Enviar email para resetar senha
+[x] - Integrar pagamento de solicitações com asaas
+[x] - Ter opção de pagar uma solicitação com saldo de crédito
 
 # correções
 

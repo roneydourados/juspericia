@@ -170,7 +170,7 @@
 const props = defineProps({
   data: {
     type: Object as PropType<SystemParametersProps>,
-    default: () => {},
+    default: undefined,
   },
 });
 const router = useRouter();
