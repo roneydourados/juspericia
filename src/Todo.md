@@ -4,6 +4,7 @@
 [] - Paleta de cores
 [] - CNPJ para cadastro no ASAAS
 [] - Se cadastrar com CNPJ, na plataforma de teleconferência
+[] - Landing page para divulgação do produto
 
 # dúvidas
 

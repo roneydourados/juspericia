@@ -78,7 +78,7 @@
       <v-col cols="12">
         <v-card variant="flat" class="pa-4 border-thin">
           <div class="container">
-            <EditorContent :editor="editor" style="min-height: 40rem" />
+            <EditorContent :editor="editor" />
           </div>
         </v-card>
       </v-col>
@@ -149,7 +149,7 @@ watch(
   overflow-y: scroll;
 }
 .tiptap {
-  min-height: 20rem !important;
+  height: 100vh !important;
   :first-child {
     margin-top: 0;
   }
@@ -248,5 +248,10 @@ watch(
 }
 .tiptap:focus {
   outline: none;
+}
+
+.tiptap:focus {
+  outline: none;
+  background-color: #f0f0f0; /* Light gray color */
 }
 </style>

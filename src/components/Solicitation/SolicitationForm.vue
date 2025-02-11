@@ -2,16 +2,6 @@
   <v-card flat rounded="lg" class="pa-6">
     <v-card-title class="d-flex align-center justify-space-between pa-4">
       <strong style="font-size: 1.2rem">Solicitação de consulta</strong>
-
-      <v-btn
-        prepend-icon="mdi-arrow-left"
-        class="text-none"
-        size="small"
-        color="primary"
-        @click="handleClose"
-      >
-        voltar
-      </v-btn>
     </v-card-title>
     <v-card-text>
       <FormCrud :on-submit="submitForm" :show-submit-button="false">
@@ -19,16 +9,6 @@
           <v-col cols="12" lg="6">
             <SelectSearchConsultation
               v-model="form.consultation"
-              required
-              :clearable="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" lg="6">
-            <SelectSearchPatient
-              v-model="form.patient"
-              label="Paciente"
               required
               :clearable="true"
             />
@@ -48,6 +28,16 @@
               :clearable="true"
               @update:model-value="handleReportPurpose"
               show-new-button
+            />
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12" lg="6">
+            <SelectSearchPatient
+              v-model="form.patient"
+              label="Paciente"
+              required
+              :clearable="true"
             />
           </v-col>
         </v-row>
@@ -89,7 +79,7 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="12">
+          <v-col cols="12" lg="8">
             <span class="text-h6 font-weight-bold">
               Descrição da realidade dos fatos
             </span>
@@ -97,31 +87,43 @@
 
             <!-- <CKEditor v-model="form.content" /> -->
           </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
+          <v-col cols="12" lg="4" class="d-flex flex-column px-2">
             <v-switch
               v-model="form.factsRealityConfirm"
               color="info"
-              label="Confirmo que as informações acima descritas, correspondem à realidade dos fatos"
               hide-details
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12" lg="1">
-            <v-btn
-              block
-              prepend-icon="mdi-check"
-              color="primary"
-              class="text-none"
-              flat
-              size="small"
-              type="submit"
-              :disabled="!form.factsRealityConfirm"
             >
-              Salvar
-            </v-btn>
+              <template #label>
+                <span>
+                  Confirmo que as informações acima descritas, correspondem à
+                  realidade dos fatos
+                </span>
+              </template>
+            </v-switch>
+            <v-divider class="mt-4" />
+            <div class="d-flex justify-end mt-4" style="gap: 0.5rem">
+              <v-btn
+                prepend-icon="mdi-check"
+                color="primary"
+                class="text-none"
+                flat
+                size="small"
+                type="submit"
+                :disabled="!form.factsRealityConfirm"
+              >
+                Salvar
+              </v-btn>
+              <v-btn
+                prepend-icon="mdi-cancel"
+                class="text-none"
+                size="small"
+                color="error"
+                variant="flat"
+                @click="handleClose"
+              >
+                Cancelar
+              </v-btn>
+            </div>
           </v-col>
         </v-row>
       </FormCrud>
@@ -131,7 +133,6 @@
 </template>
 <script setup lang="ts">
 import moment from "moment";
-import { useDisplay } from "vuetify";
 
 const props = defineProps({
   show: {
@@ -223,6 +224,18 @@ const handleClose = async () => {
 };
 
 const submitForm = async () => {
+  if (!form.value.content) {
+    push.warning("Informe a descrição detalhada da realidade dos fatos.");
+    return;
+  }
+
+  if (form.value.content.length < 100) {
+    push.warning(
+      "Informe a descrição detalhada da realidade dos fatos. Explicação está muito curta."
+    );
+    return;
+  }
+
   loading.value = true;
   try {
     if (props.data.id) {
