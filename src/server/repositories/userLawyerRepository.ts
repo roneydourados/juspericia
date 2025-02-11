@@ -2,8 +2,6 @@ import prisma from "@/lib/prisma";
 import { UserProps } from "@/types/User";
 import { uuidv7 } from "uuidv7";
 import { useHash } from "@/server/providers/hash";
-import moment from "moment";
-import { sendEmail } from "../services/emailService";
 
 export const create = async (payload: UserProps) => {
   const { hashText } = useHash();

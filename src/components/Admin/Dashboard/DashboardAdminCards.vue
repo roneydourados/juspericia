@@ -4,7 +4,7 @@
       <DashboardCard
         title="Pendente"
         icon="mdi-currency-usd"
-        value="489.299,33"
+        :value="amountFormated($dash?.totalPending ?? 0, false)"
         icon-color="warning"
         elevation="4"
       />
@@ -13,7 +13,7 @@
       <DashboardCard
         title="Recebido"
         icon="mdi-currency-usd"
-        value="327.853,33"
+        :value="amountFormated($dash?.totalConfirmed ?? 0, false)"
         icon-color="success"
         elevation="4"
       />
@@ -22,7 +22,7 @@
       <DashboardCard
         title="Novos clientes"
         icon="mdi-account-group-outline"
-        value="120"
+        :value="$dash?.newClients ? $dash?.newClients.toString() : '0'"
         icon-color="info"
         elevation="4"
       />
@@ -31,7 +31,7 @@
       <DashboardCard
         title="Total de clientes"
         icon="mdi-account-group-outline"
-        value="875"
+        :value="$dash?.totalClients ? $dash?.totalClients.toString() : '0'"
         icon-color="success"
         elevation="4"
       />
@@ -75,6 +75,11 @@
 </template>
 
 <script setup lang="ts">
+const dash = useAdminDashboardSalesStore();
+const { amountFormated } = useUtils();
+
+const $dash = computed(() => dash.$dashboard);
+
 const showPendentSales = ref(false);
 const showPackageDue = ref(false);
 const showClientsLastQuery = ref(false);

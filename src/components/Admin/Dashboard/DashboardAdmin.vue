@@ -20,15 +20,15 @@
         <v-col cols="12">
           <DashboardAdminCards />
         </v-col>
-      </v-row>
-      <v-row dense no-gutters>
-        <v-col cols="12" lg="4">
+        <v-col cols="12">
           <DahsboardAdminYearbBillingChart />
         </v-col>
-        <v-col cols="12" lg="4">
+      </v-row>
+      <v-row dense no-gutters>
+        <v-col cols="12" lg="6">
           <DashboardAdminPaymentFormChart />
         </v-col>
-        <v-col cols="12" lg="4">
+        <v-col cols="12" lg="6">
           <DashboardAdminSolicitationStatus />
         </v-col>
       </v-row>
@@ -44,15 +44,20 @@
         </v-col>
       </v-row>
     </v-card-text>
+    <DialogLoading :dialog="loading" />
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { TabProps } from "@/types/Tab";
 import moment from "moment";
+
 const tabRegion = ref(1);
 const tabDate = ref(1);
-const medicStore = useMedicStore();
+const loading = ref(false);
+
+const dash = useAdminDashboardSalesStore();
+
 const tabsDate = ref<TabProps[]>([
   {
     title: "Hoje",
@@ -99,37 +104,47 @@ const tabsRegion = ref<TabProps[]>([
   },
 ]);
 
-onMounted(async () => {
-  await medicStore.index("");
-});
-
-const modelFilters = ref<DashboardSalesFilterProps>({
+const modelFilters = ref<AdminDashBoardSalesFilterProps>({
   initialDate: moment().format("YYYY-MM-DD"),
   finalDate: moment().format("YYYY-MM-DD"),
-  region: "Norte",
+  ufs: [],
 });
 
-const handleChangeRegion = () => {
+const handleChangeRegion = async () => {
   switch (tabRegion.value) {
-    case 1:
-      modelFilters.value.region = "Norte";
-      break;
     case 2:
-      modelFilters.value.region = "Nordeste";
+      modelFilters.value.ufs = ["AC", "AP", "AM", "PA", "RO", "RR", "TO"];
       break;
     case 3:
-      modelFilters.value.region = "Centro-Oeste";
+      modelFilters.value.ufs = [
+        "AL",
+        "BA",
+        "CE",
+        "MA",
+        "PB",
+        "PE",
+        "PI",
+        "RN",
+        "SE",
+      ];
       break;
     case 4:
-      modelFilters.value.region = "Sul";
+      modelFilters.value.ufs = ["DF", "GO", "MT", "MS"];
       break;
     case 5:
-      modelFilters.value.region = "Sudeste";
+      modelFilters.value.ufs = ["PR", "RS", "SC"];
       break;
+    case 6:
+      modelFilters.value.ufs = ["ES", "MG", "RJ", "SP"];
+      break;
+    default:
+      modelFilters.value.ufs = [];
   }
+
+  await getData();
 };
 
-const handleDateChange = () => {
+const handleDateChange = async () => {
   switch (tabDate.value) {
     case 1:
       modelFilters.value.initialDate = moment().format("YYYY-MM-DD");
@@ -159,6 +174,17 @@ const handleDateChange = () => {
         .endOf("year")
         .format("YYYY-MM-DD");
       break;
+  }
+
+  await getData();
+};
+
+const getData = async () => {
+  loading.value = true;
+  try {
+    await dash.index(modelFilters.value);
+  } finally {
+    loading.value = false;
   }
 };
 </script>

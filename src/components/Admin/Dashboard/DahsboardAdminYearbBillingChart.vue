@@ -1,7 +1,7 @@
 <template>
   <Card flat rounded="lg" class="pa-4">
     <template #title>
-      <span> Faturamento mensal - {{ currentYear }} </span>
+      <span> Faturamento - {{ currentYear }} </span>
     </template>
     <template #content>
       <Chart
@@ -18,7 +18,9 @@
 import moment from "moment";
 
 const { amountFormated } = useUtils();
+const dash = useAdminDashboardSalesStore();
 
+const $dash = computed(() => dash.$dashboard);
 const currentYear = computed(() => moment().year());
 
 const chartData = computed(() => {
@@ -26,10 +28,7 @@ const chartData = computed(() => {
     series: [
       {
         name: "",
-        data: [
-          10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000,
-          110000, 120000,
-        ],
+        data: $dash.value?.invoicingYear?.map((item) => item.total) || [],
       },
     ],
     chartOptions: {
@@ -47,9 +46,9 @@ const chartData = computed(() => {
       },
       dataLabels: {
         enabled: false,
-        formatter: function (val: number) {
-          return val + "%";
-        },
+        // formatter: function (val: number) {
+        //   return amountFormated(val ?? 0, true);
+        // },
         offsetY: -20,
         style: {
           fontSize: "12px",
@@ -92,7 +91,7 @@ const chartData = computed(() => {
         labels: {
           show: true,
           formatter: function (val: number) {
-            return val + "%";
+            return amountFormated(val ?? 0, true);
           },
         },
       },
