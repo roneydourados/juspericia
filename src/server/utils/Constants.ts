@@ -132,7 +132,7 @@ export const appRoutes = [
   {
     title: "Dashboard de vendas",
     to: "/admin/dashobard-sales",
-    icon: "mdi-cart-outline",
+    icon: "mdi-chart-arc",
     visible: true,
     isMenu: true,
     profiles: ["ADMIN"],
@@ -189,7 +189,7 @@ export const appRoutes = [
     icon: "mdi-cart-arrow-up",
     visible: true,
     isMenu: true,
-    profiles: ["ADVOGADO", "ADMIN"],
+    profiles: ["ADVOGADO"],
     order: 15,
   },
   {
@@ -209,6 +209,14 @@ export const appRoutes = [
     isMenu: true,
     profiles: ["MEDICO"],
     order: 17,
+  },
+  {
+    title: "Indicações de advogados",
+    to: "/admin/indications",
+    icon: "mdi-account-network-outline",
+    visible: true,
+    isMenu: true,
+    order: 18,
   },
 
   // Rotas que não serão apresentadas no menu

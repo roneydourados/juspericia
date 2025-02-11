@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   setResponseStatus(event, 200);
 
   return index({
-    userId: user.id!,
+    userId: user.Profile?.type === "ADMIN" ? undefined : user.id!,
     initialDate: initialDate
       ? String(initialDate)
       : moment().startOf("month").format("YYYY-MM-DD"),

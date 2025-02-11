@@ -6,14 +6,14 @@ import { sendEmail } from "../services/emailService";
 export const index = async (input: {
   initialDate: string;
   finalDate: string;
-  userId: number;
+  userId?: number;
   status?: string;
 }) => {
   const { initialDate, finalDate, status, userId } = input;
   try {
     const data = await prisma.userIndication.findMany({
       where: {
-        userId: userId,
+        userId,
         status: status,
         createdAt: {
           gte: new Date(initialDate),
