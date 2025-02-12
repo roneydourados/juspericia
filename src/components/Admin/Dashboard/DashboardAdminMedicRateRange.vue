@@ -11,12 +11,16 @@
         :showCrud="false"
       >
         <template v-slot:item.medic="{ item }">
-          <InfoLabel :title="item.medic" :show-divider="false" font-size="1" />
+          <InfoLabel
+            :content="item.medic"
+            :show-divider="false"
+            font-size="1"
+          />
         </template>
         <template v-slot:item.rate="{ item }">
           <div class="d-flex align-center">
             <InfoLabel
-              :title="item.rate.toString()"
+              :content="item.rate.toString()"
               :show-divider="false"
               font-size="1"
             />
