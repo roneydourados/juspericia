@@ -317,16 +317,39 @@ export const consultationUpdate = async (
       },
     });
 
-    //atualizar o agendamento para concluído
-    await prisma.schedule.updateMany({
-      where: {
-        patientConsultationId: dataConsultation.id,
-        status: "active",
-      },
-      data: {
-        status: "scheduled",
-      },
-    });
+    // aqui indica que se iniciou uma nova consulta de telemedicina
+    if (payload.isTelemedicine) {
+      //pegar a data que a consulta iniciou
+      const atendimentStart = moment().format("YYYY-MM-DD HH:mm:ss");
+
+      //atualizar o agendamento para concluído
+      await prisma.schedule.updateMany({
+        where: {
+          patientConsultationId: dataConsultation.id,
+          status: "active",
+        },
+        data: {
+          status: "scheduled",
+          atendimentStart,
+        },
+      });
+    }
+
+    // aqui indica que finalizou o atendimento
+    if (!payload.isTelemedicine && payload.status === "finished") {
+      //pegar a data que a consulta finalizou
+      const atendimentEnd = moment().format("YYYY-MM-DD HH:mm:ss");
+
+      //atualizar o agendamento para hora finalizada
+      await prisma.schedule.updateMany({
+        where: {
+          patientConsultationId: dataConsultation.id,
+        },
+        data: {
+          atendimentEnd,
+        },
+      });
+    }
 
     return dataConsultation;
   } catch (error) {

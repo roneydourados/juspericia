@@ -5,8 +5,8 @@
     </template>
     <template #content>
       <Chart
-        type="donut"
-        height="380"
+        :type="chartData.chartOptions.chart.type"
+        :height="chartData.chartOptions.chart.height"
         :chart-options="chartData.chartOptions"
         :series="chartData.series"
       />
@@ -15,12 +15,17 @@
 </template>
 
 <script setup lang="ts">
+const dash = useUserAdminStore();
+const $dash = computed(() => dash.$dashboard);
+
 const chartData = computed(() => {
   return {
-    series: [44, 55, 33, 47, 12],
+    series: $dash.value?.solicitationConsultationStatus.map((item) =>
+      Number(item.quantity)
+    ),
     chartOptions: {
       chart: {
-        width: 380,
+        height: "480",
         type: "donut",
       },
       theme: {
@@ -29,7 +34,9 @@ const chartData = computed(() => {
       stroke: {
         show: false,
       },
-      labels: ["Pendente", "Agendado", "Andamento", "Finalizado", "Cancelado"],
+      labels: $dash.value?.solicitationConsultationStatus.map(
+        (item) => item.status
+      ),
       plotOptions: {
         pie: {
           dataLabels: {
@@ -41,7 +48,7 @@ const chartData = computed(() => {
         enabled: true,
         formatter(val: any, opts: any) {
           const name = opts.w.globals.labels[opts.seriesIndex];
-          return [name, val.toFixed(1) + "%"];
+          return [name, val.toFixed(2) + "%"];
         },
       },
     },

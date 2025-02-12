@@ -40,24 +40,24 @@
   <v-row dense>
     <v-col cols="12" lg="3">
       <DashboardCard
-        title="Pacotes a vencer"
+        title="Qtde Pacotes a vencer"
         icon="mdi-package-variant"
-        value="230"
+        :value="$dash?.credisToExpire.toString()"
         icon-color="success"
         elevation="4"
       />
     </v-col>
     <v-col cols="12" lg="3">
       <DashboardCard
-        title="40 dias última consulta"
+        title="Qtde 40 dias última consulta"
         icon="mdi-file-document-edit-outline"
-        value="10"
+        :value="$dash?.client40DaysSolicitation.toString()"
         icon-color="info"
         elevation="4"
       />
     </v-col>
   </v-row>
-  <DashboardAdminPendentSales
+  <!-- <DashboardAdminPendentSales
     :show="showPendentSales"
     @close="showPendentSales = false"
     width="900"
@@ -71,7 +71,7 @@
     :show="showClientsLastQuery"
     @close="showClientsLastQuery = false"
     width="900"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -80,7 +80,7 @@ const { amountFormated } = useUtils();
 
 const $dash = computed(() => dash.$dashboard);
 
-const showPendentSales = ref(false);
-const showPackageDue = ref(false);
-const showClientsLastQuery = ref(false);
+// const showPendentSales = ref(false);
+// const showPackageDue = ref(false);
+// const showClientsLastQuery = ref(false);
 </script>

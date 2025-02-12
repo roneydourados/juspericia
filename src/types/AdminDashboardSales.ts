@@ -9,8 +9,13 @@ export interface SalesAdminDashboardProps {
   totalConfirmed: number;
   newClients: number;
   totalClients: number;
+  client40DaysSolicitation: number;
+  credisToExpire: number;
   invoicingYear: InvoicingYearProps[];
   salesStatus: SalesStatusProps[];
+  salesPaymentForm: SalesPaymentFormProps[];
+  solicitationConsultationStatus: SolicitationConsultationStatusProps[];
+  medicAtendimentHours: AdminDashboardMedicAtendimentHoursProps[];
 }
 
 export interface InvoicingYearProps {
@@ -22,7 +27,21 @@ export interface SalesStatusProps {
   total: number;
   status: string;
 }
+export interface SalesPaymentFormProps {
+  total: number;
+  payment: string;
+}
+
+export interface SolicitationConsultationStatusProps {
+  quantity: number;
+  status: string;
+}
 
 export interface AdminDashboardSalesClientsProps {
   quantity: number;
+}
+
+export interface AdminDashboardMedicAtendimentHoursProps {
+  medic: string;
+  duration: string;
 }

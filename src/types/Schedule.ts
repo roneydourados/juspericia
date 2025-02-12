@@ -11,6 +11,8 @@ export interface ScheduleProps {
   PatientConsultation?: SolicitationConsultationProps;
   publicId?: string;
   status?: string;
+  atendimentStart?: string;
+  atendimentEnd?: string;
 }
 
 export interface HourProps {

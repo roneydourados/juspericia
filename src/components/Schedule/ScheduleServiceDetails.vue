@@ -107,9 +107,11 @@ const dialog = defineModel({ default: false });
 
 const handleQueryStart = async () => {
   dialog.value = false;
+
   await solicitationStore.update({
     publicId: $single.value?.PatientConsultation?.publicId,
     isTelemedicine: true,
+    //status: "in_progress",
   });
 
   await router.push(

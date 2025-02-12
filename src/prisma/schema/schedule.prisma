@@ -4,6 +4,8 @@ model Schedule {
   patientConsultationId Int?                 @map("patient_consultation_id")
   scheduleDate          String               @map("schedule_date") @db.VarChar(10)
   scheduleHour          String               @map("schedule_hour") @db.VarChar(5)
+  atendimentStart       String?              @map("atendiment_start") @db.VarChar(40)
+  atendimentEnd         String?              @map("atendiment_end") @db.VarChar(40)
   title                 String               @db.VarChar(200)
   userSchedule          String               @map("user_schedule") @db.VarChar(200)
   publicId              String?              @unique @map("public_id") @db.VarChar(40)
