@@ -16,6 +16,7 @@ export interface SalesAdminDashboardProps {
   salesPaymentForm: SalesPaymentFormProps[];
   solicitationConsultationStatus: SolicitationConsultationStatusProps[];
   medicAtendimentHours: AdminDashboardMedicAtendimentHoursProps[];
+  medicRate: AdminDashboardMedicRateProps[];
 }
 
 export interface InvoicingYearProps {
@@ -44,4 +45,9 @@ export interface AdminDashboardSalesClientsProps {
 export interface AdminDashboardMedicAtendimentHoursProps {
   medic: string;
   duration: string;
+}
+
+export interface AdminDashboardMedicRateProps {
+  medic: string;
+  rate: number;
 }

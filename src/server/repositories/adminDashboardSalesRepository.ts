@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import {
   AdminDashboardMedicAtendimentHoursProps,
+  AdminDashboardMedicRateProps,
   AdminDashboardSalesClientsProps,
   AdminDashBoardSalesFilterProps,
   InvoicingYearProps,
@@ -186,6 +187,20 @@ export const index = async ({
     order by duration desc
   `;
 
+  const medicRate = await prisma.$queryRaw<AdminDashboardMedicRateProps[]>`
+    select
+      u.name medic,
+      cast(sum(pc.rate) as integer) rate
+    from patient_consultations pc 
+    join users u on u.id = pc.medic_id 
+    left join address a on a.owner_id = u.id and a.address_category = 'USER'
+    where pc.date_open between ${initialDateConvert} and ${finalDateConvert}
+      and pc.rate > 0
+      ${ufsFilter ? Prisma.sql` ${Prisma.raw(ufsFilter)}` : Prisma.empty}
+    group by u.name
+    order by rate desc    
+  `;
+
   return {
     totalPending: salesStatus.reduce((acc, item) => {
       return item.status === "Pendente" ? acc + Number(item.total) : acc;
@@ -209,5 +224,6 @@ export const index = async ({
     client40DaysSolicitation: client40DaysSolicitation[0].quantity ?? 0,
     credisToExpire: credisToExpire[0].quantity ?? 0,
     medicAtendimentHours,
+    medicRate,
   };
 };

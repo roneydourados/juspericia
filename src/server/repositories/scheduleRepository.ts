@@ -97,6 +97,7 @@ export const create = async (payload: ScheduleProps) => {
       await prisma.patientConsultation.update({
         data: {
           status: "scheduled",
+          medicId: payload.medicId!,
         },
         where: {
           id: payload.patientConsultationId,
@@ -134,6 +135,18 @@ export const update = async (payload: ScheduleProps) => {
         id: data.id,
       },
     });
+
+    if (payload.patientConsultationId && data.medicId !== payload.medicId) {
+      await prisma.patientConsultation.update({
+        data: {
+          status: "scheduled", //trocar o status vou deixar mas avaliar depois para ver se não vai dar problemas
+          medicId: payload.medicId!,
+        },
+        where: {
+          id: payload.patientConsultationId,
+        },
+      });
+    }
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);
     throw createError({
