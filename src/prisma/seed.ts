@@ -44,7 +44,7 @@ async function main() {
               data: appRoutes
                 .sort((a, b) => a.order - b.order)
                 .map((route) => {
-                  const exists = route.profiles.includes("ADMIN");
+                  const exists = route.profiles?.includes("ADMIN");
                   return {
                     icon: route.icon,
                     title: route.title,
@@ -79,7 +79,7 @@ async function main() {
               data: appRoutes
                 .sort((a, b) => a.order - b.order)
                 .map((route) => {
-                  const exists = route.profiles.includes("ADVOGADO");
+                  const exists = route.profiles?.includes("ADVOGADO");
                   return {
                     icon: route.icon,
                     title: route.title,
@@ -114,7 +114,7 @@ async function main() {
               data: appRoutes
                 .sort((a, b) => a.order - b.order)
                 .map((route) => {
-                  const exists = route.profiles.includes("MEDICO");
+                  const exists = route.profiles?.includes("MEDICO");
                   return {
                     icon: route.icon,
                     title: route.title,

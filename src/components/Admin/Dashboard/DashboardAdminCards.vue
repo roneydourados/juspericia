@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-const dash = useAdminDashboardSalesStore();
+const dash = useUserAdminStore();
 const { amountFormated } = useUtils();
 
 const $dash = computed(() => dash.$dashboard);

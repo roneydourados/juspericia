@@ -18,7 +18,7 @@
 import moment from "moment";
 
 const { amountFormated } = useUtils();
-const dash = useAdminDashboardSalesStore();
+const dash = useUserAdminStore();
 
 const $dash = computed(() => dash.$dashboard);
 const currentYear = computed(() => moment().year());

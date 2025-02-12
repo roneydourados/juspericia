@@ -56,7 +56,7 @@ const tabRegion = ref(1);
 const tabDate = ref(1);
 const loading = ref(false);
 
-const dash = useAdminDashboardSalesStore();
+const dash = useUserAdminStore();
 
 const tabsDate = ref<TabProps[]>([
   {
@@ -182,7 +182,7 @@ const handleDateChange = async () => {
 const getData = async () => {
   loading.value = true;
   try {
-    await dash.index(modelFilters.value);
+    await dash.getDashboardSales(modelFilters.value);
   } finally {
     loading.value = false;
   }
