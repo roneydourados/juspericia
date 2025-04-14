@@ -1,0 +1,25 @@
+model Patient {
+  id                  Int                   @id @default(autoincrement())
+  userId              Int                   @map("user_id")
+  name                String                @db.VarChar(200)
+  email               String?               @db.VarChar(1000)
+  motherName          String?               @map("mother_name") @db.VarChar(200)
+  phone               String?               @db.VarChar(20)
+  cpf                 String                @unique @db.VarChar(30)
+  rg                  String                @unique @db.VarChar(30)
+  status              String                @default("A") @db.VarChar(1)
+  sexy                String                @db.Char(1)
+  createdAt           DateTime              @default(now()) @map("created_at")
+  surname             String                @db.VarChar(200)
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+  birthDate           String                @map("birth_date") @db.VarChar(10)
+  publicId            String?               @unique @map("public_id") @db.VarChar(40)
+  User                User                  @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultation PatientConsultation[]
+
+  @@index([name], map: "patients_idx_name")
+  @@index([email], map: "patients_idx_email")
+  @@index([cpf], map: "patients_idx_cpf")
+  @@index([userId], map: "patients_idx_user_id")
+  @@map("patients")
+}

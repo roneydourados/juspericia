@@ -1,4 +1,4 @@
-import { prisma } from "@/prisma/db";
+import prisma from "@/lib/prisma";
 import moment from "moment";
 
 export const index = async (input: {

@@ -1,0 +1,20 @@
+model UserIndication {
+  id        Int      @id @default(autoincrement())
+  publicId  String   @map("public_id") @db.VarChar(40)
+  userId    Int
+  name      String   @db.VarChar(200)
+  email     String   @db.VarChar(1000)
+  whatsapp  String   @db.VarChar(20)
+  status    String   @default("PENDING") @db.VarChar(30)
+  points    Int      @default(0)
+  expiredAt DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId], map: "user_indications_idx_user_id")
+  @@index([publicId], map: "user_indications_idx_public_id")
+  @@index([status], map: "user_indications_idx_status")
+  @@index([name], map: "user_indications_idx_name")
+  @@index([email], map: "user_indications_idx_email")
+  @@map("user_indications")
+}

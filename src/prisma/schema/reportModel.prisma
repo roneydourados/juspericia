@@ -1,0 +1,8 @@
+model ReportModel {
+  id       Int     @id @default(autoincrement())
+  title    String  @db.VarChar(200)
+  content  String  @db.Text
+  publicId String? @unique @map("public_id") @db.VarChar(40)
+
+  @@map("report_models")
+}

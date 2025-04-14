@@ -1,4 +1,4 @@
-import { prisma } from "@/prisma/db";
+import prisma from "@/lib/prisma";
 import moment from "moment";
 import { uuidv7 } from "uuidv7";
 import { formatDate } from "@/server/utils/functionts";

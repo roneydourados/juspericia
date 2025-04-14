@@ -1,5 +1,5 @@
 import { JwtPayload } from "jsonwebtoken";
-import { prisma } from "@/prisma/db";
+import prisma from "@/lib/prisma";
 import { useHash } from "@/server/providers/hash";
 import { useJwtToken } from "@/server/providers/jwtToken";
 import { UserProfileProps, UserProps } from "@/types/User";

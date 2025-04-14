@@ -1,0 +1,23 @@
+model UserCredit {
+  id                    Int             @id @default(autoincrement())
+  publicId              String          @unique @map("public_id") @db.VarChar(40)
+  ownerId               Int             @map("owner_id")
+  userId                Int             @map("user_id")
+  creditDate            DateTime        @default(now()) @map("credit_date") @db.Date
+  expireDate            DateTime        @map("expire_date") @db.Date
+  value                 Decimal         @default(0) @map("value") @db.Decimal(18, 2)
+  salt                  Decimal         @default(0) @map("salt") @db.Decimal(18, 2)
+  category              String          @db.VarChar(20)
+  status                String          @default("PENDING") @db.VarChar(20)
+  transactionReceiptUrl String?         @map("transaction_receipt_url") @db.Text
+  invoiceUrl            String?         @map("invoice_url") @db.Text
+  createdAt             DateTime        @default(now()) @map("created_at")
+  UserCreditLog         UserCreditLog[]
+
+  @@index([creditDate], map: "user_credits_idx_credit_date")
+  @@index([userId], map: "user_credits_idx_user_id")
+  @@index([category], map: "user_credits_idx_category")
+  @@index([ownerId], map: "user_credits_idx_owner_id")
+  @@index([status], map: "user_credits_idx_status")
+  @@map("user_credits")
+}

@@ -1,0 +1,16 @@
+model Consultation {
+  id                  Int                   @id @default(autoincrement())
+  consultationName    String                @map("consultation_name") @db.VarChar(200)
+  createdAt           DateTime              @default(now()) @map("created_at")
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+  value               Decimal               @map("value") @db.Decimal(18, 2)
+  valueCredit         Decimal               @map("value_credit") @db.Decimal(18, 2)
+  valuePacket         Decimal               @map("value_packet") @db.Decimal(18, 2)
+  valueAntecipation24 Decimal               @default(0) @map("value_antecipation_24") @db.Decimal(18, 2)
+  valueAntecipation48 Decimal               @default(0) @map("value_antecipation_48") @db.Decimal(18, 2)
+  valueAntecipation72 Decimal               @default(0) @map("value_antecipation_72") @db.Decimal(18, 2)
+  publicId            String?               @unique @map("public_id") @db.VarChar(40)
+  PatientConsultation PatientConsultation[]
+
+  @@map("consultations")
+}

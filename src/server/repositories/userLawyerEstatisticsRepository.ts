@@ -1,4 +1,4 @@
-import { prisma } from "@/prisma/db";
+import prisma from "@/lib/prisma";
 import { months } from "~/utils/FrontConstants";
 
 export interface UserLawyerEstatisticsFilterProps {

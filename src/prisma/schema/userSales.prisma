@@ -1,0 +1,38 @@
+model Sales {
+  id                    Int                  @id @default(autoincrement())
+  saleId                String               @map("sale_id")
+  userId                Int                  @map("user_id")
+  dateCreated           DateTime             @map("date_created") @db.Date
+  dueDate               DateTime             @map("due_date") @db.Date
+  originalDueDate       DateTime?            @map("original_due_date") @db.Date
+  description           String
+  nossoNumero           String?              @map("nosso_numero")
+  value                 Decimal              @db.Decimal(18, 2)
+  netValue              Decimal              @default(0) @map("net_value") @db.Decimal(18, 2)
+  billingType           String               @map("billing_type")
+  status                String
+  confirmedDate         DateTime?            @map("confirmed_date") @db.Date
+  paymentDate           DateTime?            @map("payment_date") @db.Date
+  transactionReceiptUrl String?              @map("transaction_receipt_url") @db.Text
+  invoiceUrl            String?              @map("invoice_url") @db.Text
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             DateTime             @updatedAt @map("updated_at")
+  localStatus           String               @default("pending") @map("local_status")
+  expiredAt             DateTime?            @map("expired_at") @db.Date()
+  publicId              String?              @unique @map("public_id") @db.VarChar(40)
+  category              String?              @db.VarChar(40)
+  packageId             Int?                 @map("package_id")
+  solicitationId        Int?                 @map("solicitation_id")
+  User                  User                 @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultation   PatientConsultation? @relation(fields: [solicitationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([userId], map: "sales_idx_id")
+  @@index([saleId], map: "sales_idx_sale_id")
+  @@index([dateCreated], map: "sales_idx_date_created")
+  @@index([localStatus], map: "sales_idx_local_status")
+  @@index([publicId], map: "sales_idx_public_id")
+  @@index([category], map: "sales_idx_category")
+  @@index([packageId], map: "sales_idx_package_id")
+  @@index([solicitationId], map: "sales_idx_solicitation_id")
+  @@map("sales")
+}

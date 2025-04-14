@@ -1,0 +1,13 @@
+model File {
+  id             Int    @id @default(autoincrement())
+  ownerId        Int    @map("owner_id")
+  fileCategory   String @map("file_category") @db.VarChar(30)
+  fileName       String @map("file_name") @db.VarChar(300)
+  fileServerName String @map("file_server_name") @db.VarChar(300)
+  publicId       String @unique @map("public_id") @db.VarChar(40)
+
+  @@index([ownerId], map: "files_idx_owner_id")
+  @@index([fileCategory], map: "files_idx_file_category")
+  @@index([publicId], map: "files_idx_public_id")
+  @@map("files")
+}
