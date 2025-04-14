@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { SystemParametersProps } from "@/types/SystemParameters";
 
 export const index = async () => {

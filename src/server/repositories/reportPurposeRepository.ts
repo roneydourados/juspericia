@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { uuidv7 } from "uuidv7";
 import { ReportPurposeProps } from "@/types/ReportPurpose";
 

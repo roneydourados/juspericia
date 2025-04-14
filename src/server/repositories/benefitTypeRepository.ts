@@ -1,5 +1,5 @@
 import { uuidv7 } from "uuidv7";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 
 import { BenefitTypeProps } from "@/types/BenefitType";
 

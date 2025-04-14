@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 
 import { UserProps } from "@/types/User";
 import { uuidv7 } from "uuidv7";

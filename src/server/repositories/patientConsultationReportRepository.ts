@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { PatientConsultationReportProps } from "@/types/PatientConsultationReport";
 import { uuidv7 } from "uuidv7";
 

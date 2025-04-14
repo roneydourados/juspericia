@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { UserProfileProps } from "@/types/User";
 import { appRoutes } from "@/server/utils/Constants";
 import { uuidv7 } from "uuidv7";
@@ -13,7 +13,7 @@ export const create = async ({ profileName, type }: UserProfileProps) => {
         ProfileRoute: {
           createMany: {
             data: appRoutes.map((route) => {
-              const exists = route.profiles.includes(type!);
+              const exists = route.profiles?.includes(type!);
               return {
                 icon: route.icon,
                 title: route.title,

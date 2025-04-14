@@ -1,5 +1,5 @@
 import { AddressProps } from "@/types/Address";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { uuidv7 } from "uuidv7";
 
 export const create = async (payload: AddressProps) => {

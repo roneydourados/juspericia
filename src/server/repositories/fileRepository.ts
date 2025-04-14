@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import prisma from "~/lib/prisma";
+import { prisma } from "@/prisma/db";
 import {
   getItemMinionFile,
   removeMinionFile,

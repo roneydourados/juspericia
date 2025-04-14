@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { ScheduleProps } from "@/types/Schedule";
 import { uuidv7 } from "uuidv7";
 

@@ -8,7 +8,7 @@ import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: "2024-11-01",
   devtools: { enabled: false },
   ssr: false,
   css: [
@@ -57,7 +57,7 @@ export default defineNuxtConfig({
     //layoutTransition: { name: "default", mode: "out-in" },
   },
   build: {
-    transpile: ["vuetify"],
+    transpile: ["vuetify", "@prisma/client"],
   },
   //configurar depois
   // security: {

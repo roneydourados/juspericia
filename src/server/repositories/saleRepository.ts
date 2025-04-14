@@ -1,4 +1,4 @@
-import prisma from "~/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { SaleFilterProps } from "~/types/Sale";
 
 export const getSaleUser = async ({

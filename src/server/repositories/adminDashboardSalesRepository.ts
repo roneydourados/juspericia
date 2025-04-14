@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import { Prisma } from "@prisma/client";
 import {
   AdminDashboardMedicAtendimentHoursProps,

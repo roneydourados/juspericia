@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/prisma/db";
 import moment from "moment";
 import { uuidv7 } from "uuidv7";
 import { useCustomerAsaas } from "~/lib/asaas/customer-api";
