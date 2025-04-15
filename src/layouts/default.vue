@@ -68,7 +68,7 @@
             </v-tooltip>
           </v-btn>
         </div>
-        <v-btn
+        <!-- <v-btn
           :icon="
             $currentTheme === MAIN_THEME
               ? 'mdi-weather-sunny'
@@ -79,7 +79,7 @@
           class="mr-4"
           @click="toggleTheme"
         >
-        </v-btn>
+        </v-btn> -->
       </template>
     </v-app-bar>
 
@@ -107,34 +107,34 @@
   </v-app>
 </template>
 <script setup lang="ts">
-import { useThemeStore } from "@/store/theme";
-import { MAIN_THEME_DARK, MAIN_THEME } from "@/utils/vuetifyTheme";
-import { useDisplay, useTheme } from "vuetify";
+// import { useThemeStore } from "@/store/theme";
+// import { MAIN_THEME_DARK, MAIN_THEME } from "@/utils/vuetifyTheme";
+import { useDisplay } from "vuetify";
 
-const storeTheme = useThemeStore();
-const globalTheme = useTheme();
+// const storeTheme = useThemeStore();
+// const globalTheme = useTheme();
 
 const { mobile } = useDisplay();
 // const screen = useScreenStore();
 const config = useRuntimeConfig();
 const router = useRouter();
 const auth = useAuthStore();
-const { getInitials } = useUtils();
+//const { getInitials } = useUtils();
 
 const drawer = ref(true);
 
 // const $currentScreen = computed(() => screen.$currentScreen);
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
-const $currentTheme = computed(() => storeTheme.$theme);
+// const $currentTheme = computed(() => storeTheme.$theme);
 
-const $user = computed(() => {
-  const initials = getInitials(auth.$currentUser?.name!);
-  return {
-    ...auth.$currentUser,
-    initials,
-  };
-});
+// const $user = computed(() => {
+//   const initials = getInitials(auth.$currentUser?.name!);
+//   return {
+//     ...auth.$currentUser,
+//     initials,
+//   };
+// });
 
 onMounted(() => {
   closeDrawer();
@@ -150,14 +150,14 @@ const handleNewSolicitation = async () => {
   await router.push("/solicitations/new");
 };
 
-const toggleTheme = () => {
-  storeTheme.storeTheme(
-    globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME
-  );
+// const toggleTheme = () => {
+//   storeTheme.storeTheme(
+//     globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME
+//   );
 
-  globalTheme.global.name.value =
-    globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME;
+//   globalTheme.global.name.value =
+//     globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME;
 
-  storeTheme.getTheme();
-};
+//   storeTheme.getTheme();
+// };
 </script>
