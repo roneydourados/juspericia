@@ -5,19 +5,20 @@
   >
     <template v-slot:prepend>
       <v-list-item lines="two">
-        <template #prepend>
+        <!-- <template #prepend>
           <v-avatar color="primary">
             <span class="text-h6">{{ $user?.initials }}</span>
           </v-avatar>
-        </template>
+        </template> -->
         <template #title>
-          <span>{{ $user?.name }}</span>
+          <!-- <span>{{ $user?.name }}</span> -->
+          <Logo />
         </template>
-        <template #subtitle>
+        <!-- <template #subtitle>
           <span style="font-size: 0.8rem">
             {{ $user?.Profile?.profileName }}
           </span>
-        </template>
+        </template> -->
       </v-list-item>
       <!-- <div class="d-flex justify-center py-4 w-100">
         <LogoTransparente height="80" color="#03A9F4" />

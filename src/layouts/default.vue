@@ -8,12 +8,18 @@
 
     <v-app-bar color="primary" elevation="0">
       <template #title>
-        <Logo height="40" color="#fff" />
-        <!-- <v-icon icon="mdi-account-circle-outline" start size="30" />
-        <span>
-          {{ $user.Profile?.type === "MEDICO" ? "Dr(a)" : "" }}
-          {{ $user?.name }}
-        </span> -->
+        <!-- <Logo height="40" color="#fff" /> -->
+        <div class="d-flex align-center">
+          <v-icon icon="mdi-account-circle-outline" start size="30" />
+          <div class="d-flex flex-column">
+            <span>
+              {{ $currentUser?.name }}
+            </span>
+            <span class="mt-n2">
+              {{ $currentUser?.Profile?.profileName }}
+            </span>
+          </div>
+        </div>
       </template>
 
       <v-spacer v-if="!mobile" />
