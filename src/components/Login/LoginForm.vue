@@ -160,6 +160,7 @@ const submmitForm = async () => {
   }
 };
 </script>
+
 <style scoped>
 .background-image {
   background-image: url("@/assets/images/juspericialogin.jpg");

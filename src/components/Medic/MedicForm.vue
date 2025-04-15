@@ -166,9 +166,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { useDisplay } from "vuetify";
-import Loading from "../UI/infos/Loading.vue";
 
 const props = defineProps({
   show: {
@@ -282,7 +280,7 @@ const loadModel = () => {
 };
 
 const submitForm = async () => {
-  Loading.value = true;
+  loading.value = true;
   try {
     if (model.value.id && model.value.id > 0) {
       await update();
@@ -293,7 +291,7 @@ const submitForm = async () => {
     await medicStore.index("");
     handleClose();
   } finally {
-    Loading.value = false;
+    loading.value = false;
   }
 };
 
