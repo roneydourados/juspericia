@@ -30,10 +30,10 @@ import * as zod from "zod";
 import { textRequired } from "../utils";
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
+  // modelValue: {
+  //   type: String,
+  //   default: "",
+  // },
   icon: {
     type: String,
     default: "",
@@ -86,6 +86,10 @@ const props = defineProps({
     type: Number,
     default: true,
   },
+});
+
+const modelValue = defineModel({
+  default: "",
 });
 
 const dynamicLabel = computed(() =>
@@ -145,6 +149,7 @@ const { value, errorMessage, handleBlur, handleChange } = useField(
   validationRules,
   {
     syncVModel: true,
+    initialValue: modelValue.value,
   }
 );
 </script>

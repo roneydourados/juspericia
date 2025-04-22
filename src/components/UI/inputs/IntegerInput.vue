@@ -30,10 +30,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  modelValue: {
-    type: String, // Alterado para String para manter os zeros à esquerda
-    required: true,
-  },
+  // modelValue: {
+  //   type: String, // Alterado para String para manter os zeros à esquerda
+  //   required: true,
+  // },
   required: {
     type: Boolean,
     default: false,
@@ -49,6 +49,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+});
+
+const modelValue = defineModel({
+  default: "",
 });
 
 const fieldName = computed(() => {
@@ -135,6 +139,7 @@ const validationRules = computed(() => {
 
 const { value, errorMessage } = useField(fieldName, validationRules, {
   syncVModel: true,
+  initialValue: modelValue.value,
 });
 
 const dynamicLabel = props.required ? `${props.label}*` : props.label;
