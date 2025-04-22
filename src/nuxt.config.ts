@@ -139,20 +139,17 @@ export default defineNuxtConfig({
       pass: process.env.MAIL_PASS ?? "",
     },
     tokenSecret: process.env.JWT_SECRET ?? "",
+    zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
+    zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
+    asaasApikey: process.env.ASAAS_API_KEY ?? "",
+    asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
+    turnstile: {
+      secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
+    },
     public: {
-      zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
-      zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       appUrl: process.env.APP_URL,
       version: process.env.VERSION ?? "",
-      asaasApikey: process.env.ASAAS_API_KEY ?? "",
-      asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
-      turnstile: {
-        // This can be overridden at runtime via the NUXT_TURNSTILE_SECRET_KEY
-        // environment variable.
-        siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
-        secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
-      },
     },
   },
 });

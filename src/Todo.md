@@ -1,19 +1,19 @@
 # cobrar
 
-[] - Logo de empresa
-[] - Paleta de cores
-[] - CNPJ para cadastro no ASAAS
+[x] - Logo de empresa
+[x] - Paleta de cores
+[x] - CNPJ para cadastro no ASAAS (Dudu Fez o cadastro)
 [] - Se cadastrar com CNPJ, na plataforma de teleconferência
-[] - Landing page para divulgação do produto
+[x] - Landing page para divulgação do produto (Esta parte ficou com pessoal do marketing)
 
 # dúvidas
 
 O horário inicial/Final de atendimentos para configurar na agenda,
 será global para todos os médicos ou cada médico terá o seu ?
-R:.
 
-O valor a ser pago por laudo para os médicos, será informado no cadastro do laudo ?
-R:.
+O valor a ser pago por laudo para os médicos, será informado no cadastro do laudo ou no cadastro do mético ?
+
+O Valor a ser pago por laudo, será um valor fixo ou uma porcentagem do valor total cobrado sobre a consulta ?
 
 # Correções
 

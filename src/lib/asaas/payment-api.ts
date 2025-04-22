@@ -5,10 +5,10 @@ import { PaymentAsaasResponseProps } from "./types/PaymentResponse";
 
 export const useAsaasPayment = () => {
   const apiKey =
-    (useRuntimeConfig().public.asaasApikey as string) ||
+    (useRuntimeConfig().asaasApikey as string) ||
     "https://sandbox.asaas.com/api/v3";
 
-  const baseUrl = (useRuntimeConfig().public.asaasBaseUrl as string) || "";
+  const baseUrl = (useRuntimeConfig().asaasBaseUrl as string) || "";
 
   const asaasApi = axios.create({
     baseURL: baseUrl,

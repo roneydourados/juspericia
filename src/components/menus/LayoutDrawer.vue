@@ -60,6 +60,7 @@
       </div>
     </template>
   </v-navigation-drawer>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -81,6 +82,7 @@ const route = useRouter();
 const emit = defineEmits(["update:drawer"]);
 
 const changeDrawer = ref(props.drawer);
+const loading = ref(false);
 
 watchEffect(() => {
   changeDrawer.value = props.drawer;
@@ -117,8 +119,15 @@ const handleClick = () => {
 };
 
 const logout = async () => {
-  auth.logout();
-  await route.push("/");
+  loading.value = true;
+  try {
+    auth.logout();
+    await route.push("/");
+  } catch (error) {
+    console.log("🚀 ~ logout ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

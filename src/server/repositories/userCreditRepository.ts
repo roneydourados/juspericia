@@ -8,12 +8,15 @@ export const index = async (input: {
   finalDate?: string;
 }) => {
   const { initialDate, finalDate, status, userId } = input;
+  console.log("🚀 ~ status:", status);
 
   let internalStatus = status;
 
-  if (status === "EXPIRED" || status === "FINISHED") {
+  if (status === "EXPIRED" /*|| status === "FINISHED"*/) {
     internalStatus = undefined;
   }
+
+  console.log("🚀 ~ internalStatus:", internalStatus);
 
   try {
     const gte = initialDate ? new Date(initialDate) : undefined;
@@ -40,9 +43,9 @@ export const index = async (input: {
         expireDate: {
           ...(status === "EXPIRED" ? { lt: new Date() } : { gte: new Date() }),
         },
-        salt: {
-          ...(status === "FINISHED" ? { lte: 0 } : { gt: 0 }),
-        },
+        // salt: {
+        //   ...(status === "FINISHED" ? { lte: 0 } : { gt: 0 }),
+        // },
       },
       orderBy: {
         id: "desc",

@@ -7,7 +7,7 @@ import {
 
 export const useCustomerAsaas = () => {
   const apiKey =
-    (useRuntimeConfig().public.asaasApikey as string) ||
+    (useRuntimeConfig().asaasApikey as string) ||
     "https://sandbox.asaas.com/api/v3";
 
   const baseUrl = (useRuntimeConfig().public.asaasBaseUrl as string) || "";

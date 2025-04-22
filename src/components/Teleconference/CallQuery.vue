@@ -61,8 +61,8 @@ const joinRoom = () => {
   if (!$single.value) return;
 
   const zpConfig = {
-    appId: Number(config.public.zegoCloudAppId),
-    secret: config.public.zegoCloudAppSecret,
+    appId: Number(config.zegoCloudAppId),
+    secret: config.zegoCloudAppSecret,
     roomId: $single.value.publicId!,
     userId: $currentUser.value?.publicId!,
     userName: `${

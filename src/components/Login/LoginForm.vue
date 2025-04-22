@@ -100,6 +100,7 @@
     <v-col cols="12" lg="8">
       <div class="background-image" />
     </v-col>
+    <DialogLoading :dialog="loading" />
   </v-row>
 </template>
 
@@ -109,6 +110,7 @@ const systemParametersStore = useSystemParametersStore();
 const cloudFlareToken = ref("");
 const turnstile = ref();
 const rounter = useRouter();
+const loading = ref(false);
 
 const form = ref({
   email: "",
@@ -127,6 +129,7 @@ onMounted(() => {
 const $user = computed(() => auth.$currentUser);
 
 const submmitForm = async () => {
+  loading.value = true;
   try {
     await auth.login({
       email: form.value.email,
@@ -157,6 +160,8 @@ const submmitForm = async () => {
     console.log("🚀 ~ file: FormLogin.vue:82 ~ onSubmit ~ error:", error);
     push.error("Ocorreu um erro ao realizar login, tente novamente.");
     turnstile.value?.reset();
+  } finally {
+    loading.value = false;
   }
 };
 </script>
