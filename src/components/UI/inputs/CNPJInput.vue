@@ -23,8 +23,10 @@ import * as zod from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
 import { formatCNPJ, isValidCNPJ } from "@brazilian-utils/brazilian-utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 const textField = ref(null);
+const fieldName = uuid();
 
 const props = defineProps({
   label: {
@@ -73,9 +75,9 @@ const onKeyPress = (event: any) => {
   }
 };
 
-const fieldName = computed(() => {
-  return props.label.toLowerCase() || "cnpj";
-});
+// const fieldName = computed(() => {
+//   return props.label.toLowerCase() || "cnpj";
+// });
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {

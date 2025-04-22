@@ -62,6 +62,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
 import { textRequired } from "../utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 type VariantType =
   | "underlined"
@@ -115,10 +116,10 @@ const dynamicLabel = computed(() =>
 
 const date = ref();
 const menu = ref(false);
-
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
-});
+const fieldName = uuid();
+// const fieldName = computed<MaybeRef>(() => {
+//   return props.label;
+// });
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {

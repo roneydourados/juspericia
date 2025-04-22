@@ -54,6 +54,7 @@ import moment from "moment";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
+import { uuidv7 as uuid } from "uuidv7";
 
 const props = defineProps({
   label: {
@@ -87,10 +88,10 @@ const modelValue = defineModel({
 
 const inputValue = ref(""); // Para armazenar o valor conforme o usuário digita
 
-const fieldName = computed(() => {
-  return props.label || "datepicker";
-});
-
+// const fieldName = computed(() => {
+//   return props.label || "datepicker";
+// });
+const fieldName = uuid(); // Gerar um ID único para o campo
 const dynamicLabel = computed(() =>
   props.required ? `${props.label}*` : props.label
 );

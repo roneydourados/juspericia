@@ -40,6 +40,9 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
 import { textRequired } from "../utils";
+import { uuidv7 as uuid } from "uuidv7";
+
+const fieldName = uuid();
 
 const props = defineProps({
   itemTitle: {
@@ -113,9 +116,9 @@ const dynamicLabel = computed(() =>
 const autocomplete = ref();
 const nextField = ref<HTMLDivElement | null>(null);
 
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
-});
+// const fieldName = computed<MaybeRef>(() => {
+//   return props.label;
+// });
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {

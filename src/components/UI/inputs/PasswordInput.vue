@@ -30,6 +30,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
 import { textRequired } from "../utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 const props = defineProps({
   // modelValue: {
@@ -83,10 +84,11 @@ const dynamicLabel = computed(() =>
 );
 
 const showPassword = ref(false);
+const fieldName = uuid();
 
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
-});
+// const fieldName = computed<MaybeRef>(() => {
+//   return props.label;
+// });
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {

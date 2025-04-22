@@ -20,6 +20,7 @@
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
+import { uuidv7 as uuid } from "uuidv7";
 
 const textField = ref(null);
 
@@ -55,9 +56,11 @@ const modelValue = defineModel({
   default: "",
 });
 
-const fieldName = computed(() => {
-  return props.label || "integer-input";
-});
+const fieldName = uuid(); // Gerar um ID único para o campo
+
+// const fieldName = computed(() => {
+//   return props.label || "integer-input";
+// });
 
 const onKeyPress = (event: any) => {
   const isNumber = /^[0-9]$/;

@@ -24,6 +24,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
 import { isValidPhone } from "@brazilian-utils/brazilian-utils";
 import { textRequired } from "../utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 const textField = ref(null);
 
@@ -69,9 +70,11 @@ const modelValue = defineModel({
   default: "",
 });
 
-const fieldName = computed(() => {
-  return props.label || "phone";
-});
+// const fieldName = computed(() => {
+//   return props.label || "phone";
+// });
+
+const fieldName = uuid();
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {

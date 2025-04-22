@@ -32,6 +32,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 
 import { textRequired } from "../utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 // Define props
 const props = defineProps({
@@ -88,11 +89,11 @@ const model = defineModel<any>();
 const dynamicLabel = computed(() =>
   props.required ? props.label + "*" : props.label
 );
-
-// Field name (used as key in form)
-const fieldName = computed<MaybeRef>(() => {
-  return props.label;
-});
+const fieldName = uuid(); // Unique field name for VeeValidate
+// // Field name (used as key in form)
+// const fieldName = computed<MaybeRef>(() => {
+//   return props.label;
+// });
 
 // Validation rules based on props
 const validationRules = computed<MaybeRef>(() => {

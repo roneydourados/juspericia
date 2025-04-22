@@ -23,6 +23,7 @@ import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { textRequired } from "../utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 const props = defineProps({
   icon: {
@@ -75,9 +76,10 @@ const modelValue = defineModel<string | undefined>({
 
 const numeralValue = ref(0);
 const inputValue = ref();
-const fieldName = computed<MaybeRef>(() => {
-  return props.label.toLowerCase() || "currency";
-});
+const fieldName = uuid();
+// const fieldName = computed<MaybeRef>(() => {
+//   return props.label.toLowerCase() || "currency";
+// });
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {

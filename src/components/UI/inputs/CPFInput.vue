@@ -23,6 +23,7 @@ import * as zod from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
 import { formatCPF, isValidCPF } from "@brazilian-utils/brazilian-utils";
+import { uuidv7 as uuid } from "uuidv7";
 
 const textField = ref(null);
 
@@ -73,9 +74,11 @@ const onKeyPress = (event: any) => {
   }
 };
 
-const fieldName = computed(() => {
-  return props.label.toLowerCase() || "cpf";
-});
+const fieldName = uuid(); // Gerar um ID único para o campo
+
+// const fieldName = computed(() => {
+//   return props.label.toLowerCase() || "cpf";
+// });
 
 const validationRules = computed<MaybeRef>(() => {
   if (props.required) {
