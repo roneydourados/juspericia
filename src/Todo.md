@@ -11,9 +11,13 @@
 O horário inicial/Final de atendimentos para configurar na agenda,
 será global para todos os médicos ou cada médico terá o seu ?
 
+# R: Cada médico terá o seu horário de atendimento
+
+# R: Intervalo entre uma consulta e outra de 15 minutos
+
 O valor a ser pago por laudo para os médicos, será informado no cadastro do laudo ou no cadastro do mético ?
 
-O Valor a ser pago por laudo, será um valor fixo ou uma porcentagem do valor total cobrado sobre a consulta ?
+# R: O valor será informado no cadastro do médico, o valor vai ser em valor fixo ou porcentagem.
 
 # Correções
 
