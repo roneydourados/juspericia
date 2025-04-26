@@ -100,6 +100,7 @@ export const update = async (payload: UserProps) => {
         medicHourStart: payload.medicHourStart,
         medicQueryInterval: payload.medicQueryInterval,
         medicConsultationValue: payload.medicConsultationValue,
+        medicConsultationType: payload.medicConsultationType,
       },
 
       where: {
@@ -186,6 +187,7 @@ export const index = async (inputQuery: string) => {
       medicHourStart: true,
       medicQueryInterval: true,
       medicConsultationValue: true,
+      medicConsultationType: true,
     },
     where: {
       OR: [
@@ -230,6 +232,7 @@ export const index = async (inputQuery: string) => {
         medicQueryInterval: user.medicQueryInterval,
         Address: address,
         publicId: user.publicId,
+        medicConsultationType: user.medicConsultationType,
         medicConsultationValue: user.medicConsultationValue
           ? new Decimal(user.medicConsultationValue).mul(100)
           : 0,
@@ -265,6 +268,8 @@ const exists = async (id: string) => {
       medicHourEnd: true,
       medicHourStart: true,
       medicQueryInterval: true,
+      medicConsultationType: true,
+      medicConsultationValue: true,
       Profile: {
         select: {
           id: true,
@@ -300,6 +305,11 @@ const exists = async (id: string) => {
     email: data.email,
     Address: address,
     publicId: data.publicId,
+    medicHourEnd: data.medicHourEnd,
+    medicHourStart: data.medicHourStart,
+    medicQueryInterval: data.medicQueryInterval,
+    medicConsultationType: data.medicConsultationType,
+    medicConsultationValue: data.medicConsultationValue,
   };
 
   return user;

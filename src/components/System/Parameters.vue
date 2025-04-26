@@ -91,7 +91,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="4">
+          <!-- <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
               <v-card-title>
                 <div class="font-weight-bold">Valor comissão médica padrão</div>
@@ -115,7 +115,7 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-col>
+          </v-col> -->
           <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
               <v-card-title>

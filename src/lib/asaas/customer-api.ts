@@ -10,7 +10,7 @@ export const useCustomerAsaas = () => {
     (useRuntimeConfig().asaasApikey as string) ||
     "https://sandbox.asaas.com/api/v3";
 
-  const baseUrl = (useRuntimeConfig().public.asaasBaseUrl as string) || "";
+  const baseUrl = (useRuntimeConfig().asaasBaseUrl as string) || "";
 
   const asaasApi = axios.create({
     baseURL: baseUrl,
@@ -80,6 +80,7 @@ export const useCustomerAsaas = () => {
       }
 
       console.log("Unexpected get customer asaas error:", error);
+      console.log("Deu ruim ao consultar customer:", error);
 
       throw createError({
         statusCode: 500,

@@ -38,10 +38,21 @@
         </span>
       </template>
       <template v-slot:item.medicConsultationValue="{ item }">
-        <div class="mt-6">
+        <div class="d-flex align-center mt-6" style="gap: 0.5rem">
           <CurrencyInput
             v-model="item.medicConsultationValue"
             label="Valor comissão"
+            style="width: 6rem"
+          />
+          <SelectInput
+            v-model="item.medicConsultationType"
+            :items="consultationValueTypes"
+            label="Tipo comissão"
+            :hide-details="true"
+            item-title="label"
+            item-value="value"
+            class="mt-n6"
+            style="width: 8rem"
           />
         </div>
       </template>
@@ -94,10 +105,21 @@ const medicStore = useMedicStore();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => medicStore.$all);
 
+const consultationValueTypes = [
+  {
+    label: "Valor em R$",
+    value: "V",
+  },
+  {
+    label: "% Porcentagem",
+    value: "P",
+  },
+];
 const selected = ref<UserProps>();
 const loading = ref(false);
 const showForm = ref(false);
 const showDelete = ref(false);
+
 const headers = ref([
   {
     title: "Nome",
@@ -119,7 +141,6 @@ const headers = ref([
     title: "Comissão consulta",
     key: "medicConsultationValue",
   },
-
   {
     title: "Ações",
     key: "actions",
