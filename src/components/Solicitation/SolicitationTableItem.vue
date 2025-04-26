@@ -62,7 +62,9 @@
         </div>
         <v-btn
           v-else-if="
-            solicitation.status === 'paid' &&
+            solicitation.status !== 'open' &&
+            solicitation.status !== 'canceled' &&
+            solicitation.status !== 'payment_pending' &&
             $currentUser?.Profile.type === 'ADVOGADO'
           "
           class="text-none text-white"
