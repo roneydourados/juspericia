@@ -27,6 +27,7 @@ export interface UserProps {
   customerId?: string;
   whatsapp?: string;
   tokenCapcha?: string;
+  medicConsultationType?: string;
 }
 
 export interface UserProfileProps {

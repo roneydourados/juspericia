@@ -1,8 +1,0 @@
-model ReportPurpose {
-  id                  Int                   @id @default(autoincrement())
-  name                String                @db.VarChar(200)
-  publicId            String?               @unique @map("public_id") @db.VarChar(40)
-  PatientConsultation PatientConsultation[]
-
-  @@map("report_purposes")
-}

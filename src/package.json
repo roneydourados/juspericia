@@ -12,8 +12,7 @@
     "postinstall": "nuxt prepare"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts",
-    "schema": "prisma/schema"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@brazilian-utils/brazilian-utils": "1.0.0-rc.12",

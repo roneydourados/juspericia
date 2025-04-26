@@ -1,0 +1,435 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProfileType {
+  ADMIN
+  ADVOGADO
+  MEDICO
+}
+
+enum PaymentType {
+  CREDIT_CARD
+  BOLETO
+  PIX
+}
+
+model Address {
+  id                Int     @id @default(autoincrement())
+  ownerId           Int     @map("owner_id")
+  addressCategory   String  @map("address_category") @db.VarChar(30)
+  addressZipcode    String? @map("address_zipcode") @db.VarChar(20)
+  addressCity       String? @map("address_city") @db.VarChar(100)
+  addressDistrict   String? @map("address_district") @db.VarChar(100)
+  addressStreet     String? @map("address_street") @db.VarChar(100)
+  addressNumber     String? @map("address_number") @db.VarChar(10)
+  addressState      String? @map("address_state") @db.Char(2)
+  addressComplement String? @map("address_complement") @db.VarChar(100)
+  publicId          String? @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+
+  @@index([ownerId], map: "address_idx_owner_id")
+  @@index([addressCategory], map: "address_idx_address_category")
+  @@index([addressCity], map: "address_idx_address_city")
+  @@index([addressState], map: "address_idx_address_state")
+  @@map("address")
+}
+
+model BenefitType {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(200)
+  publicId            String?               @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  PatientConsultation PatientConsultation[]
+
+  @@map("benefit_types")
+}
+
+model Consultation {
+  id                  Int                   @id @default(autoincrement())
+  consultationName    String                @map("consultation_name") @db.VarChar(200)
+  createdAt           DateTime              @default(now()) @map("created_at")
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+  value               Decimal               @map("value") @db.Decimal(18, 2)
+  valueCredit         Decimal               @map("value_credit") @db.Decimal(18, 2)
+  valuePacket         Decimal               @map("value_packet") @db.Decimal(18, 2)
+  valueAntecipation24 Decimal               @default(0) @map("value_antecipation_24") @db.Decimal(18, 2)
+  valueAntecipation48 Decimal               @default(0) @map("value_antecipation_48") @db.Decimal(18, 2)
+  valueAntecipation72 Decimal               @default(0) @map("value_antecipation_72") @db.Decimal(18, 2)
+  publicId            String?               @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  PatientConsultation PatientConsultation[]
+
+  @@map("consultations")
+}
+
+model File {
+  id             Int     @id @default(autoincrement())
+  ownerId        Int     @map("owner_id")
+  fileCategory   String  @map("file_category") @db.VarChar(30)
+  fileName       String  @map("file_name") @db.VarChar(300)
+  fileServerName String  @map("file_server_name") @db.VarChar(300)
+  publicId       String? @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+
+  @@index([ownerId], map: "files_idx_owner_id")
+  @@index([fileCategory], map: "files_idx_file_category")
+  @@index([publicId], map: "files_idx_public_id")
+  @@map("files")
+}
+
+model Patient {
+  id                  Int                   @id @default(autoincrement())
+  userId              Int                   @map("user_id")
+  name                String                @db.VarChar(200)
+  email               String?               @db.VarChar(1000)
+  motherName          String?               @map("mother_name") @db.VarChar(200)
+  phone               String?               @db.VarChar(20)
+  cpf                 String                @unique @db.VarChar(30)
+  rg                  String                @unique @db.VarChar(30)
+  status              String                @default("A") @db.VarChar(1)
+  sexy                String                @db.Char(1)
+  createdAt           DateTime              @default(now()) @map("created_at")
+  surname             String                @db.VarChar(200)
+  updatedAt           DateTime              @updatedAt @map("updated_at")
+  birthDate           String                @map("birth_date") @db.VarChar(10)
+  publicId            String?               @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  User                User                  @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultation PatientConsultation[]
+
+  @@index([name], map: "patients_idx_name")
+  @@index([email], map: "patients_idx_email")
+  @@index([cpf], map: "patients_idx_cpf")
+  @@index([userId], map: "patients_idx_user_id")
+  @@map("patients")
+}
+
+model PatientConsultation {
+  id                        Int                         @id @default(autoincrement())
+  patientId                 Int                         @map("patient_id")
+  userId                    Int                         @map("user_id")
+  medicId                   Int?                        @map("medic_id")
+  consultationId            Int                         @map("consultation_id")
+  content                   String
+  benefitTypeId             Int                         @map("benefit_type_id")
+  proccessNumber            String?                     @map("proccess_number") @db.VarChar(30)
+  processSituation          String?                     @map("process_situation") @db.VarChar(2)
+  reportPurposeId           Int                         @map("report_purpose_id")
+  status                    String                      @default("open") @db.VarChar(30)
+  tipValue                  Decimal                     @default(0) @map("tip_value") @db.Decimal(18, 2)
+  dateClose                 DateTime?                   @map("date_close") @db.Date
+  dateOpen                  DateTime                    @default(now()) @map("date_open") @db.Date
+  rate                      Int?                        @default(0)
+  dateAntecipation          DateTime?                   @map("date_antecipation") @db.Date
+  dateCorrection            DateTime?                   @map("date_correction") @db.Date
+  createdAt                 DateTime                    @default(now()) @map("created_at")
+  reasonCorrection          String?                     @map("reason_correction")
+  updatedAt                 DateTime                    @default(now()) @updatedAt @map("updated_at")
+  antecipationValue         Decimal                     @default(0) @map("antecipation_value") @db.Decimal(18, 2)
+  consultationValue         Decimal                     @default(0) @map("consultation_value") @db.Decimal(18, 2)
+  valueCredit               Decimal                     @default(0) @map("value_credit") @db.Decimal(18, 2)
+  publicId                  String?                     @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  isTelemedicine            Boolean                     @default(false) @map("is_telemedicine")
+  Medic                     User?                       @relation(fields: [medicId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Patient                   Patient                     @relation(fields: [patientId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Consultation              Consultation                @relation(fields: [consultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  ReportPurpose             ReportPurpose               @relation(fields: [reportPurposeId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  BenefitType               BenefitType                 @relation(fields: [benefitTypeId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultationReport PatientConsultationReport[]
+  Schedule                  Schedule[]
+  Sales                     Sales[]
+
+  @@index([medicId], map: "patient_consultations_idx_medic_id")
+  @@index([patientId], map: "patient_consultations_idx_patient_id")
+  @@index([consultationId], map: "patient_consultations_idx_consultation_id")
+  @@index([reportPurposeId], map: "patient_consultations_idx_report_purpose_id")
+  @@index([benefitTypeId], map: "patient_consultations_idx_benefit_type_id")
+  @@index([publicId], map: "patient_consultations_idx_public_id")
+  @@index([status], map: "patient_consultations_idx_status")
+  @@map("patient_consultations")
+}
+
+model PatientConsultationReport {
+  id                    Int                 @id @default(autoincrement())
+  publicId              String?             @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  userId                Int                 @map("user_id")
+  patientConsultationId Int                 @map("patient_consultation_id")
+  content               String              @db.Text
+  status                String              @default("active") @db.VarChar(20)
+  reportDate            DateTime            @default(now()) @map("report_date") @db.Date()
+  createdAt             DateTime            @default(now()) @map("created_at") @db.Timestamptz()
+  deletedAt             DateTime?           @map("deleted_at") @db.Timestamptz()
+  userDeleted           String?             @map("user_deleted") @db.VarChar(255)
+  PatientConsultation   PatientConsultation @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Medic                 User                @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([patientConsultationId], map: "patients_consultation_reports_idx_patient_consultation_id")
+  @@index([userId], map: "patients_consultation_reports_idx_user_id")
+  @@index([status], map: "patients_consultation_reports_idx_status")
+  @@index([reportDate], map: "patients_consultation_reports_idx_report_date")
+  @@map("patients_consultation_reports")
+}
+
+model Profile {
+  id           Int            @id @default(autoincrement())
+  profileName  String         @map("profile_name") @db.VarChar(50)
+  publicId     String?        @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  type         ProfileType    @default(ADVOGADO)
+  User         User[]
+  ProfileRoute ProfileRoute[]
+
+  @@map("profiles")
+}
+
+model ProfileRoute {
+  id        Int     @id @default(autoincrement())
+  profileId Int     @map("profile_id")
+  title     String  @db.VarChar(200)
+  to        String  @db.VarChar(300)
+  icon      String  @db.VarChar(100)
+  visible   Boolean @default(true)
+  isMenu    Boolean @default(true) @map("is_menu")
+  Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([profileId], map: "profile_routes_idx_profile_id")
+  @@map("profile_routes")
+}
+
+model ReportModel {
+  id       Int     @id @default(autoincrement())
+  title    String  @db.VarChar(200)
+  content  String  @db.Text
+  publicId String? @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+
+  @@map("report_models")
+}
+
+model ReportPurpose {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @db.VarChar(200)
+  publicId            String?               @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  PatientConsultation PatientConsultation[]
+
+  @@map("report_purposes")
+}
+
+model Schedule {
+  id                    Int                  @id @default(autoincrement())
+  medicId               Int?                 @map("medic_id")
+  patientConsultationId Int?                 @map("patient_consultation_id")
+  scheduleDate          String               @map("schedule_date") @db.VarChar(10)
+  scheduleHour          String               @map("schedule_hour") @db.VarChar(5)
+  atendimentStart       String?              @map("atendiment_start") @db.VarChar(40)
+  atendimentEnd         String?              @map("atendiment_end") @db.VarChar(40)
+  title                 String               @db.VarChar(200)
+  userSchedule          String               @map("user_schedule") @db.VarChar(200)
+  publicId              String?              @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  status                String               @default("active") @db.VarChar(20)
+  Medic                 User?                @relation(fields: [medicId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultation   PatientConsultation? @relation(fields: [patientConsultationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([medicId], map: "schedules_idx_medic_id")
+  @@index([patientConsultationId], map: "schedules_idx_patient_consultation_id")
+  @@index([scheduleDate], map: "schedules_idx_schedule_date")
+  @@index([status], map: "schedules_idx_status")
+  @@map("schedules")
+}
+
+model ServicePackageHistory {
+  id          Int      @id @default(autoincrement())
+  publicId    String?  @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  packageId   Int      @map("package_id")
+  description String   @db.Text
+  action      String   @default("created")
+  userId      Int      @map("user_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  User        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "service_package_history_idx_user_id")
+  @@index([packageId], map: "service_package_history_idx_package_id")
+  @@map("service_package_history")
+}
+
+model ServicePackage {
+  id          Int      @id @default(autoincrement())
+  publicId    String?  @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  name        String
+  description String   @db.Text
+  urlImage    String   @map("url_image") @db.Text
+  value       Decimal  @default(0) @db.Decimal(18, 2)
+  status      String   @default("active")
+  dueDays     Int?     @map("due_days")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([status], name: "service_packages_status_index")
+  @@map("service_packages")
+}
+
+model SystemParameters {
+  id                  Int     @id @default(autoincrement())
+  publicId            String? @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  pointsPerIndication Int     @map("points_per_indication") @db.Integer
+  pointsExchange      Int     @map("points_exchange") @db.Integer
+  pointsExchangeValue Decimal @map("points_exchange_value") @db.Decimal(18, 2)
+  daysPointsExpire    Int     @map("days_points_expire") @db.Integer
+  comission           Decimal @map("comission_value") @db.Decimal(18, 2)
+  daysCreditExpire    Int     @map("days_credit_expire") @db.Integer
+  suportWhatsapp      String? @map("suport_whatsapp") @db.VarChar(20)
+
+  @@map("system_parameters")
+}
+
+model User {
+  id                        Int                         @id @default(autoincrement())
+  name                      String                      @db.VarChar(200)
+  email                     String                      @unique @db.VarChar(1000)
+  password                  String
+  phone                     String?                     @db.VarChar(20)
+  cpfCnpj                   String?                     @map("cpf_cnpj") @db.VarChar(30)
+  oab                       String?                     @db.VarChar(10)
+  oabUf                     String?                     @map("oab_uf") @db.Char(2)
+  crm                       String?                     @db.VarChar(10)
+  crmUf                     String?                     @map("crm_uf") @db.Char(2)
+  profileId                 Int                         @map("profile_id")
+  createdAt                 DateTime                    @default(now()) @map("created_at")
+  updatedAt                 DateTime                    @updatedAt @map("updated_at")
+  officeName                String?                     @map("office_name") @db.VarChar(200)
+  active                    Boolean                     @default(true)
+  officeCnpj                String?                     @map("office_cnpj") @db.VarChar(30)
+  officeEmail               String?                     @map("office_email") @db.VarChar(1000)
+  officePhone               String?                     @map("office_phone") @db.VarChar(20)
+  publicId                  String?                     @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  medicConsultationValue    Decimal?                    @default(0) @map("medic_consultation_value") @db.Decimal(18, 2)
+  medicConsultationType     String?                     @default("V") @map("medic_consultation_type") @db.Char(1)
+  customerId                String?                     @map("customer_id") @db.VarChar(40)
+  whatsapp                  String?                     @map("whatsapp") @db.VarChar(20)
+  medicHourEnd              String?                     @map("medic_hour_end") @db.VarChar(5)
+  medicHourStart            String?                     @map("medic_hour_start") @db.VarChar(5)
+  medicQueryInterval        Int?                        @map("medic_query_interval")
+  Profile                   Profile                     @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Patient                   Patient[]
+  PatientConsultationReport PatientConsultationReport[]
+  Schedules                 Schedule[]
+  PatientConsultation       PatientConsultation[]
+  UserSales                 Sales[]
+  ServicePackageHistory     ServicePackageHistory[]
+
+  @@index([name], map: "users_idx_name")
+  @@index([email], map: "users_idx_email")
+  @@index([cpfCnpj], map: "users_idx_cpf_cnpj")
+  @@index([active], map: "users_idx_active")
+  @@index([profileId], map: "users_idx_profile_id")
+  @@map("users")
+}
+
+model UserCredit {
+  id                    Int             @id @default(autoincrement())
+  publicId              String?         @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  ownerId               Int             @map("owner_id")
+  userId                Int             @map("user_id")
+  creditDate            DateTime        @default(now()) @map("credit_date") @db.Date
+  expireDate            DateTime        @map("expire_date") @db.Date
+  value                 Decimal         @default(0) @map("value") @db.Decimal(18, 2)
+  salt                  Decimal         @default(0) @map("salt") @db.Decimal(18, 2)
+  category              String          @db.VarChar(20)
+  status                String          @default("PENDING") @db.VarChar(20)
+  transactionReceiptUrl String?         @map("transaction_receipt_url") @db.Text
+  invoiceUrl            String?         @map("invoice_url") @db.Text
+  createdAt             DateTime        @default(now()) @map("created_at")
+  UserCreditLog         UserCreditLog[]
+
+  @@index([creditDate], map: "user_credits_idx_credit_date")
+  @@index([userId], map: "user_credits_idx_user_id")
+  @@index([category], map: "user_credits_idx_category")
+  @@index([ownerId], map: "user_credits_idx_owner_id")
+  @@index([status], map: "user_credits_idx_status")
+  @@map("user_credits")
+}
+
+model UserIndication {
+  id        Int      @id @default(autoincrement())
+  publicId  String?  @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  userId    Int
+  name      String   @db.VarChar(200)
+  email     String   @db.VarChar(1000)
+  whatsapp  String   @db.VarChar(20)
+  status    String   @default("PENDING") @db.VarChar(30)
+  points    Int      @default(0)
+  expiredAt DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId], map: "user_indications_idx_user_id")
+  @@index([publicId], map: "user_indications_idx_public_id")
+  @@index([status], map: "user_indications_idx_status")
+  @@index([name], map: "user_indications_idx_name")
+  @@index([email], map: "user_indications_idx_email")
+  @@map("user_indications")
+}
+
+model UserCreditLog {
+  id           Int        @id @default(autoincrement())
+  userCreditId Int        @map("user_credit_id")
+  history      String     @db.Text
+  type         String     @default("D") @db.Char(1)
+  value        Decimal    @default(0) @map("value") @db.Decimal(18, 2)
+  createdAt    DateTime   @default(now()) @map("created_at")
+  UserCredit   UserCredit @relation(fields: [userCreditId], references: [id], onDelete: Cascade, onUpdate: Restrict)
+
+  @@index([createdAt], map: "user_log_credits_idx_created_at")
+  @@index([userCreditId], map: "user_log_credits_idx_user_credit_id")
+  @@map("user_credit_log")
+}
+
+model Sales {
+  id                    Int                  @id @default(autoincrement())
+  saleId                String               @map("sale_id")
+  userId                Int                  @map("user_id")
+  dateCreated           DateTime             @map("date_created") @db.Date
+  dueDate               DateTime             @map("due_date") @db.Date
+  originalDueDate       DateTime?            @map("original_due_date") @db.Date
+  description           String
+  nossoNumero           String?              @map("nosso_numero")
+  value                 Decimal              @db.Decimal(18, 2)
+  netValue              Decimal              @default(0) @map("net_value") @db.Decimal(18, 2)
+  billingType           String               @map("billing_type")
+  status                String
+  confirmedDate         DateTime?            @map("confirmed_date") @db.Date
+  paymentDate           DateTime?            @map("payment_date") @db.Date
+  transactionReceiptUrl String?              @map("transaction_receipt_url") @db.Text
+  invoiceUrl            String?              @map("invoice_url") @db.Text
+  createdAt             DateTime             @default(now()) @map("created_at")
+  updatedAt             DateTime             @updatedAt @map("updated_at")
+  localStatus           String               @default("pending") @map("local_status")
+  expiredAt             DateTime?            @map("expired_at") @db.Date()
+  publicId              String?              @unique @default(uuid()) @map("public_id") @db.VarChar(40)
+  category              String?              @db.VarChar(40)
+  packageId             Int?                 @map("package_id")
+  solicitationId        Int?                 @map("solicitation_id")
+  User                  User                 @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  PatientConsultation   PatientConsultation? @relation(fields: [solicitationId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([userId], map: "sales_idx_id")
+  @@index([saleId], map: "sales_idx_sale_id")
+  @@index([dateCreated], map: "sales_idx_date_created")
+  @@index([localStatus], map: "sales_idx_local_status")
+  @@index([publicId], map: "sales_idx_public_id")
+  @@index([category], map: "sales_idx_category")
+  @@index([packageId], map: "sales_idx_package_id")
+  @@index([solicitationId], map: "sales_idx_solicitation_id")
+  @@map("sales")
+}
+
+model UserTokens {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId], name: "user_tokens_user_id_index")
+  @@index([expiresAt], name: "user_tokens_expiresAt_index")
+  @@map("user_tokens")
+}
