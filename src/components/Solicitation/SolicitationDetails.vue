@@ -19,11 +19,23 @@
         </v-col>
       </v-row>
     </v-card-title>
-
     <v-row dense class="px-4">
       <v-divider />
       <v-col cols="12" lg="6">
         <v-card flat rounded="lg">
+          <div
+            v-if="$single?.Schedule && $single?.Schedule.length > 0"
+            class="d-flex bg-green-darken-1 pa-2 rounded-lg"
+          >
+            <InfoLabel
+              title="Teleconsulta agendada para"
+              font-size="1.1"
+              font-size-content="1.1"
+              :content="`${moment($single.Schedule[0]?.scheduleDate).format(
+                'DD/MM/YYYY'
+              )} as ${$single.Schedule[0].scheduleHour}`"
+            />
+          </div>
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
           <SolicitationDetailsOffice />
