@@ -23,7 +23,7 @@
     <Tabs v-model="tab" :tabs="tabs" @update:model-value="handleTab">
       <template #content>
         <PatientInfoData v-if="tab === 1" />
-        <PatientQueriesServices v-if="tab === 2" />
+        <PatientSolicitations v-if="tab === 2" />
         <PatientFiles v-if="tab === 3" />
       </template>
     </Tabs>
