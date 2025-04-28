@@ -104,7 +104,7 @@ const handleFileUpload = async (event: Event) => {
 
   loading.value = true;
   try {
-    await fileStore.upload({
+    await fileStore.uploadAws({
       fileCategory: "patient",
       fileData: files[0],
       fileName: files[0].name,

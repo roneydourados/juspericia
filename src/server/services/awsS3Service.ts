@@ -62,6 +62,54 @@ export const sendAwsS3File = async (input: {
   }
 };
 
+export const removeAwsS3File = async (fileServerName: string) => {
+  try {
+    console.log(`🚀 ~ Apagar arquivo da aws S3 ${fileServerName}`);
+
+    await awsS3Config.s3Client.send(
+      new DeleteObjectCommand({
+        Bucket: awsS3Config.bucketName,
+        Key: fileServerName,
+      })
+    );
+    console.log(`🚀 ~ Arquivo apagado com sucesso aws S3 ${fileServerName}`);
+    return true;
+  } catch (error) {
+    console.error(
+      "🚀 ~ removeAwsS3File ~ error:",
+      error instanceof Error ? error.message : error
+    );
+    return false;
+  }
+};
+
+export const getAwsS3File = async (fileServerName: string) => {
+  try {
+    console.log(`🚀 ~ Consultar se arquivo existe na aws S3 ${fileServerName}`);
+
+    const resp = await awsS3Config.s3Client.send(
+      new GetObjectCommand({
+        Bucket: awsS3Config.bucketName,
+        Key: fileServerName,
+      })
+    );
+
+    if (resp.Body) {
+      console.log(`🚀 ~ Arquivo existe na aws S3 ${fileServerName}`);
+      return resp.Body?.transformToByteArray();
+    }
+
+    console.log(`🚀 ~ Arquivo não existe na aws S3 ${fileServerName}`);
+    return null;
+  } catch (error) {
+    console.error(
+      "🚀 ~ getAwsS3File ~ error:",
+      error instanceof Error ? error.message : error
+    );
+    return null;
+  }
+};
+
 /*
 export const sendAwsS3File = async (input: {
   fileServerName: string;
@@ -131,51 +179,3 @@ export const sendAwsS3File = async (input: {
   }
 };
 */
-
-export const removeAwsS3File = async (fileServerName: string) => {
-  try {
-    console.log(`🚀 ~ Apagar arquivo da aws S3 ${fileServerName}`);
-
-    await awsS3Config.s3Client.send(
-      new DeleteObjectCommand({
-        Bucket: awsS3Config.bucketName,
-        Key: fileServerName,
-      })
-    );
-    console.log(`🚀 ~ Arquivo apagado com sucesso aws S3 ${fileServerName}`);
-    return true;
-  } catch (error) {
-    console.error(
-      "🚀 ~ removeAwsS3File ~ error:",
-      error instanceof Error ? error.message : error
-    );
-    return false;
-  }
-};
-
-export const getAwsS3File = async (fileServerName: string) => {
-  try {
-    console.log(`🚀 ~ Consultar se arquivo existe na aws S3 ${fileServerName}`);
-
-    const resp = await awsS3Config.s3Client.send(
-      new GetObjectCommand({
-        Bucket: awsS3Config.bucketName,
-        Key: fileServerName,
-      })
-    );
-
-    if (resp.Body) {
-      console.log(`🚀 ~ Arquivo existe na aws S3 ${fileServerName}`);
-      return resp.Body?.transformToByteArray();
-    }
-
-    console.log(`🚀 ~ Arquivo não existe na aws S3 ${fileServerName}`);
-    return null;
-  } catch (error) {
-    console.error(
-      "🚀 ~ getAwsS3File ~ error:",
-      error instanceof Error ? error.message : error
-    );
-    return null;
-  }
-};

@@ -7,6 +7,97 @@ import {
   SolicitationConsultationProps,
 } from "@/types/SolicitationConsultation";
 
+export const getSolicitationPatient = async (patientId: number) => {
+  const data = await prisma.patientConsultation.findMany({
+    where: {
+      patientId,
+    },
+    select: {
+      id: true,
+      dateAntecipation: true,
+      dateCorrection: true,
+      rate: true,
+      dateOpen: true,
+      dateClose: true,
+      proccessNumber: true,
+      status: true,
+      processSituation: true,
+      valueCredit: true,
+      tipValue: true,
+      createdAt: true,
+      updatedAt: true,
+      reasonCorrection: true,
+      consultationValue: true,
+      antecipationValue: true,
+      publicId: true,
+      isTelemedicine: true,
+      Schedule: {
+        select: {
+          scheduleDate: true,
+          scheduleHour: true,
+          title: true,
+          Medic: {
+            select: {
+              name: true,
+            },
+          },
+        },
+        where: {
+          status: "active",
+        },
+      },
+      Medic: {
+        select: {
+          id: true,
+          name: true,
+          crm: true,
+          crmUf: true,
+        },
+      },
+      Consultation: {
+        select: {
+          id: true,
+          consultationName: true,
+          value: true,
+          valueCredit: true,
+          valueAntecipation24: true,
+          valueAntecipation48: true,
+          valueAntecipation72: true,
+        },
+      },
+      BenefitType: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      ReportPurpose: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+
+  return data.map((item) => {
+    return {
+      ...item,
+      dateOpen: formatDate(item.dateOpen),
+      dateClose: item.dateClose ? formatDate(item.dateClose) : null,
+      dateAntecipation: item.dateAntecipation
+        ? formatDate(item.dateAntecipation)
+        : null,
+      dateCorrection: item.dateCorrection
+        ? formatDate(item.dateCorrection)
+        : null,
+    };
+  });
+};
+
 export const index = async (filters: SolicitationConsultationFilterProps) => {
   const {
     initialDateSolicitation,
@@ -17,12 +108,14 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
     reportPurposeId,
     userId,
   } = filters;
+  const sStatus = status === "all" ? undefined : status;
+
   const where = {
     dateOpen: {
       gte: new Date(initialDateSolicitation),
       lte: new Date(finalDateSolicitation),
     },
-    status,
+    status: sStatus,
     userId: userId ? Number(userId) : undefined,
     patientId: patientId ? Number(patientId) : undefined,
     benefitTypeId: benefitTypeId ? Number(benefitTypeId) : undefined,

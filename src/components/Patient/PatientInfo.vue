@@ -35,15 +35,20 @@
     :data="itemSelected"
     width="800"
   />
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
+import moment from "moment";
+
 const patientStore = usePatientStore();
 const fileStore = useFileStore();
+//const storeConsultation = useSolicitationConsultationStore();
 //const rounter = useRouter();
 const itemSelected = ref<PatientProps>();
 const tab = ref(1);
 const showForm = ref(false);
+const loading = ref(false);
 const tabs = ref<TabProps[]>([
   {
     title: "Dados cadastrais",
@@ -77,13 +82,24 @@ const handleTab = async () => {
       //await patientStore.getSingle();
       break;
     case 2:
-      //await patientStore.getQueriesServices();
+      loading.value = true;
+      try {
+        await patientStore.getSolicitations(Number($single.value?.id ?? 0));
+      } finally {
+        loading.value = false;
+      }
+
       break;
     case 3:
-      await fileStore.index({
-        fileCategory: "patient",
-        ownerId: $single.value?.id!,
-      });
+      loading.value = true;
+      try {
+        await fileStore.index({
+          fileCategory: "patient",
+          ownerId: $single.value?.id!,
+        });
+      } finally {
+        loading.value = false;
+      }
       break;
   }
 };
