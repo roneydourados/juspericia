@@ -99,7 +99,10 @@ const $patient = computed(() => patientStore.$single);
 const $files = computed(() => fileStore.$files);
 
 const handleFileUpload = async (event: Event) => {
-  const files = (event.target as HTMLInputElement).files;
+  // const files = (event.target as HTMLInputElement).files;
+  const input = event.target as HTMLInputElement;
+  const files = input.files;
+
   if (!files) return;
 
   loading.value = true;
@@ -119,6 +122,7 @@ const handleFileUpload = async (event: Event) => {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {
     loading.value = false;
+    input.value = ""; // Limpa o input de arquivo após o upload
   }
 };
 

@@ -24,8 +24,7 @@ export const saveFileFromMinion = async (input: {
       });
 
       // apagar do minion caso exista
-      //await minioClient.removeObject("factory", fileServerName);
-      removeMinionFile(fileServerName);
+      await removeMinionFile(fileServerName);
 
       // enviar para o minion
       await s3MinioClient.putObject(

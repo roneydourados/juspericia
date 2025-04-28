@@ -203,7 +203,11 @@ const handleChatGpt = () => {
 };
 
 const handleFileUpload = (event: Event) => {
-  const files = (event.target as HTMLInputElement).files;
+  // const files = (event.target as HTMLInputElement).files;
+  // if (!files) return;
+  const input = event.target as HTMLInputElement;
+  const files = input.files;
+
   if (!files) return;
 
   try {
@@ -214,6 +218,8 @@ const handleFileUpload = (event: Event) => {
     });
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
+  } finally {
+    input.value = ""; // Limpa o input de arquivo após o upload
   }
 };
 

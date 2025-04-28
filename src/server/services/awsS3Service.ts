@@ -25,10 +25,12 @@ export const sendAwsS3File = async (input: {
 
     // Verifica se o arquivo já existe no S3
     const existsS3File = await getAwsS3File(fileServerName);
+
     if (existsS3File) {
       console.log(
         `🚀 ~ Arquivo já em aws S3 ${fileServerName}, então remover.`
       );
+
       await removeAwsS3File(fileServerName);
     }
 
@@ -58,7 +60,11 @@ export const sendAwsS3File = async (input: {
       "🚀 ~ sendAwsS3File ~ error:",
       error instanceof Error ? error.message : error
     );
-    return null;
+
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error checking file existence in S3",
+    });
   }
 };
 
