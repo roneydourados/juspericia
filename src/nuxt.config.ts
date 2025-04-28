@@ -132,6 +132,12 @@ export default defineNuxtConfig({
     addValidateEndpoint: true,
   },
   runtimeConfig: {
+    s3: {
+      secretAccessKeyId: process.env.S3_ACCESS_KEYID ?? "",
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+      bucketName: process.env.S3_BUCKET ?? "",
+      region: process.env.S3_REGION ?? "",
+    },
     emailProvider: {
       host: process.env.MAIL_HOST ?? "",
       port: process.env.MAIL_PORT ?? "",
