@@ -1,12 +1,11 @@
 import {
   PutObjectCommand,
-  PutObjectRequest,
   DeleteObjectCommand,
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
+
 import { awsS3Config } from "@/server/providers/awsS3";
 import mime from "mime";
-import { Readable } from "stream";
 
 export const sendAwsS3File = async (input: {
   fileServerName: string;
@@ -15,55 +14,43 @@ export const sendAwsS3File = async (input: {
   const { file, fileServerName } = input;
 
   try {
+    // Converte o arquivo para ArrayBuffer e depois para Buffer (requisito da AWS)
     const fileData = await file.arrayBuffer();
+    const buffer = Buffer.from(fileData);
 
-    if (!fileData) {
-      throw new Error(`No file data for: ${fileServerName}`);
+    if (!buffer.length) {
+      console.error("❌ AWS Arquivo vazio:", fileServerName);
+      throw new Error(`Arquivo vazio: ${fileServerName}`);
     }
 
-    console.log(`🚀 ~ Enviar Arquivo para aws S3 ${fileServerName}`);
-
-    // Verifica se o arquivo já existe no S3
-    const existsS3File = await getAwsS3File(fileServerName);
-
-    if (existsS3File) {
-      console.log(
-        `🚀 ~ Arquivo já em aws S3 ${fileServerName}, então remover.`
-      );
-
-      await removeAwsS3File(fileServerName);
-    }
+    console.log(`🚀 Enviando arquivo para AWS S3: ${fileServerName}`);
 
     const ContentType =
       mime.getType(fileServerName) || "application/octet-stream";
 
-    // Transforma arrayBuffer em readable stream
-    const readableStream = Readable.from(Buffer.from(fileData));
-
     const paramsPutObject = {
       Bucket: awsS3Config.bucketName,
       Key: fileServerName,
-      Body: readableStream,
+      Body: buffer,
       ContentType,
-      ACL: "bucket-owner-full-control",
-    } as PutObjectRequest;
+      ContentLength: buffer.length, // Recomendado para arquivos binários
+    };
 
     await awsS3Config.s3Client.send(new PutObjectCommand(paramsPutObject));
 
-    console.log(
-      `🚀 ~ Arquivo enviado com sucesso para aws S3 ${fileServerName}`
-    );
+    console.log(`Arquivo: ${fileServerName}, enviado com sucesso para AWS S3.`);
 
+    // Retorna a URL pública (ajuste se usar bucket privado ou CloudFront)
     return `https://${awsS3Config.bucketName}.s3.${awsS3Config.region}.amazonaws.com/${fileServerName}`;
   } catch (error) {
     console.error(
-      "🚀 ~ sendAwsS3File ~ error:",
+      "❌ Erro ao enviar arquivo para o S3:",
       error instanceof Error ? error.message : error
     );
 
     throw createError({
       statusCode: 500,
-      statusMessage: "Error checking file existence in S3",
+      statusMessage: "Erro ao enviar arquivo para o S3",
     });
   }
 };

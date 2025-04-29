@@ -774,7 +774,7 @@ const handleQuery = async (item: SolicitationConsultationProps) => {
 const handleDownloadFile = async (publicId: string) => {
   loading.value = true;
   try {
-    const { file, fileName } = await fileStore.download(publicId);
+    const { file, fileName } = await fileStore.downloadAws(publicId);
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
     const url = window.URL.createObjectURL(file);

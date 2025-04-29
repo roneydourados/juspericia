@@ -21,11 +21,10 @@ import { uuidv7 } from "uuidv7";
 export const uploadAwsS3 = async (payload: FileProps) => {
   try {
     const fileExtension = payload.fileName?.split(".").pop();
-
     const publicId = uuidv7();
-
     const fileServerName = `${publicId}.${fileExtension}`;
 
+    // tentar enviar para S3 AWS
     const url = await sendAwsS3File({
       file: payload.fileData!,
       fileServerName,
@@ -38,6 +37,7 @@ export const uploadAwsS3 = async (payload: FileProps) => {
       });
     }
 
+    // se deu certo então salvar informações do arquivo no banco de dados
     return prisma.file.create({
       data: {
         fileCategory: payload.fileCategory!,
@@ -63,31 +63,35 @@ export const uploadManyAwsS3 = async (payload: FileProps[]) => {
       payload.map(async (filePayload) => {
         if (!filePayload.fileData) return;
 
-        const fileExtension = filePayload.fileName?.split(".").pop();
-        const publicId = uuidv7();
-        const fileServerName = `${publicId}.${fileExtension}`;
+        await uploadAwsS3(filePayload);
 
-        const url = await sendAwsS3File({
-          file: filePayload.fileData!,
-          fileServerName,
-        });
+        /* forma antiga
+          const fileExtension = filePayload.fileName?.split(".").pop();
+          const publicId = uuidv7();
+          const fileServerName = `${publicId}.${fileExtension}`;
 
-        if (!url) {
-          throw createError({
-            statusCode: 500,
-            statusMessage: `File ${filePayload.fileName} could not be created, url not found`,
-          });
-        }
-
-        return prisma.file.create({
-          data: {
-            fileCategory: filePayload.fileCategory!,
-            fileName: filePayload.fileName!,
-            ownerId: filePayload.ownerId!,
+          const url = await sendAwsS3File({
+            file: filePayload.fileData!,
             fileServerName,
-            publicId,
-          },
-        });
+          });
+
+          if (!url) {
+            throw createError({
+              statusCode: 500,
+              statusMessage: `File ${filePayload.fileName} could not be created, url not found`,
+            });
+          }
+
+          return prisma.file.create({
+            data: {
+              fileCategory: filePayload.fileCategory!,
+              fileName: filePayload.fileName!,
+              ownerId: filePayload.ownerId!,
+              fileServerName,
+              publicId,
+            },
+          });
+        */
       })
     );
 
@@ -122,7 +126,7 @@ export const removeAwsS3 = async (publicId: string) => {
     // remover do banco de dados
     await prisma.file.delete({
       where: {
-        publicId: payload.publicId,
+        publicId: payload.publicId!,
       },
     });
   } catch (error) {
@@ -290,7 +294,7 @@ export const remove = async (publicId: string) => {
     // remover do banco de dados
     await prisma.file.delete({
       where: {
-        publicId: payload.publicId,
+        publicId: payload.publicId!,
       },
     });
   } catch (error) {

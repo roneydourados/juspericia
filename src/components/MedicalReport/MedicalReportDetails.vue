@@ -84,7 +84,7 @@ const dialog = defineModel({
 
 const handleDownloadFile = async (publicId: string) => {
   try {
-    const data = await fileStore.download(publicId);
+    const data = await fileStore.downloadAws(publicId);
     const url = window.URL.createObjectURL(data.file);
     const link = document.createElement("a");
     link.href = url;

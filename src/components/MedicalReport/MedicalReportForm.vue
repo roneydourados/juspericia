@@ -164,7 +164,7 @@ const handleSubmit = async () => {
         ownerId: $consultationReport.value?.id,
       }));
 
-      await fileStore.uploadMany(payload);
+      await fileStore.uploadManyAws(payload);
     }
 
     await scheduleStore.update({
