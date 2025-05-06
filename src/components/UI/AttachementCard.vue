@@ -16,7 +16,7 @@
           v-if="deleteVisible"
           icon
           color="error"
-          variant="tonal"
+          variant="text"
           @click="emit('delete')"
         >
           <v-icon icon="mdi-delete-outline" />
@@ -32,7 +32,7 @@
           v-if="downloadVisible"
           icon
           color="info"
-          variant="tonal"
+          variant="text"
           @click="emit('download')"
         >
           <v-icon icon="mdi-cloud-arrow-down-outline" />

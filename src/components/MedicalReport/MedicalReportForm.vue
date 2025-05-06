@@ -155,13 +155,14 @@ const handleSubmit = async () => {
     await patientConsultationReport.create({
       content: model.value.content,
       patientConsultationId: $sheduleConsultation.value?.patientConsultationId,
-      attachments: attachments.value,
+      //attachments: attachments.value,
     });
 
     if ($consultationReport.value?.id && attachments.value.length > 0) {
       const payload = attachments.value.map((attachment) => ({
         ...attachment,
         ownerId: $consultationReport.value?.id,
+        fileCategory: "medical-report",
       }));
 
       await fileStore.uploadManyAws(payload);
@@ -211,6 +212,15 @@ const handleFileUpload = (event: Event) => {
   if (!files) return;
 
   try {
+    const existingFile = attachments.value.find(
+      (attachment) => attachment.fileName === files[0].name
+    );
+
+    if (existingFile) {
+      push.warning("Já existe um arquivo com este nome anexado.");
+      return;
+    }
+
     attachments.value.push({
       fileCategory: "medical-report",
       fileData: files[0],

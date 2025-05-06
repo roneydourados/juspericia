@@ -59,7 +59,11 @@ export const uploadAwsS3 = async (payload: FileProps) => {
 
 export const uploadManyAwsS3 = async (payload: FileProps[]) => {
   try {
-    const uploadResults = await Promise.all(
+    if (payload.length === 0) {
+      return;
+    }
+
+    await Promise.all(
       payload.map(async (filePayload) => {
         if (!filePayload.fileData) return;
 
@@ -95,12 +99,48 @@ export const uploadManyAwsS3 = async (payload: FileProps[]) => {
       })
     );
 
-    return uploadResults; // Retorna a lista de resultados do upload de arquivos
+    //return uploadResults; // Retorna a lista de resultados do upload de arquivos
   } catch (error) {
     console.log("🚀 ~ error: create many aws s3", error);
     throw createError({
       statusCode: 500,
       statusMessage: "Files could not be created many aws s3",
+    });
+  }
+};
+
+export const removeManyAwsS3 = async (
+  ownerId: number,
+  fileCategory: string
+) => {
+  try {
+    const files = await prisma.file.findMany({
+      where: {
+        ownerId,
+        fileCategory,
+      },
+    });
+
+    if (files) {
+      await Promise.all(
+        files.map(async (payload) => {
+          // remover do bucket
+          await removeAwsS3File(payload.fileServerName);
+
+          // remover do banco de dados
+          await prisma.file.delete({
+            where: {
+              publicId: payload.publicId!,
+            },
+          });
+        })
+      );
+    }
+  } catch (error) {
+    console.log("🚀 ~ remove many aws s3 ~ error:", error);
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Files Could not be removed",
     });
   }
 };

@@ -48,6 +48,7 @@
           </div>
           <div v-html="$single?.content" />
         </v-card>
+        <SolicitationDetailsDocuments />
         <v-card flat rounded="lg">
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
             Motivo para correção

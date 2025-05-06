@@ -6,6 +6,7 @@ import {
   SolicitationConsultationFilterProps,
   SolicitationConsultationProps,
 } from "@/types/SolicitationConsultation";
+import { removeManyAwsS3, uploadManyAwsS3 } from "./fileRepository";
 
 export const getSolicitationPatient = async (patientId: number) => {
   const data = await prisma.patientConsultation.findMany({
@@ -329,7 +330,7 @@ export const consultationCreate = async (
   payload: SolicitationConsultationProps
 ) => {
   try {
-    return await prisma.patientConsultation.create({
+    const data = await prisma.patientConsultation.create({
       data: {
         content: String(payload.content),
         benefitTypeId: Number(payload.benefitTypeId),
@@ -352,6 +353,8 @@ export const consultationCreate = async (
         publicId: uuidv7(),
       },
     });
+
+    return data;
   } catch (error) {
     console.log("🚀 ~ error:", error);
     throw createError({
@@ -599,6 +602,18 @@ const exists = async (id: string) => {
         fileCategory: "medical-report",
       },
     });
+  }
+
+  //verificar se existe anexos de solicitação de consulta
+  if (data.id) {
+    const solicitationFiles = await prisma.file.findMany({
+      where: {
+        ownerId: data.id,
+        fileCategory: "solicitation-consultation",
+      },
+    });
+
+    files = [...files, ...solicitationFiles];
   }
 
   return {

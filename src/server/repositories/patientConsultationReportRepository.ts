@@ -118,6 +118,7 @@ export const create = async (payload: PatientConsultationReportProps) => {
       },
     });
 
+    //se já existe um laudo ativo, então atualizar o status dele para deleted
     if (exists) {
       await prisma.patientConsultationReport.update({
         where: {

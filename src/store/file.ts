@@ -43,6 +43,17 @@ export const useFileStore = defineStore("file", () => {
     await api.post("files/aws/upload-many", formData);
   };
 
+  const removeManyAws = async (ownerId: number, fileCategory: string) => {
+    const config = {
+      params: {
+        ownerId,
+        fileCategory,
+      },
+    };
+
+    await api.delete("files/aws/remove-many", config);
+  };
+
   const removeAws = async (publicId: string) => {
     await api.delete(`/files/aws/${publicId}`);
   };
@@ -197,5 +208,6 @@ export const useFileStore = defineStore("file", () => {
     uploadAws,
     uploadManyAws,
     downloadAws,
+    removeManyAws,
   };
 });

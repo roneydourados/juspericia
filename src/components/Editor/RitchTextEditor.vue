@@ -77,7 +77,10 @@
     <v-row dense class="pa-2" no-gutters>
       <v-col cols="12">
         <v-card variant="flat" class="pa-4 border-thin">
-          <div class="container">
+          <div
+            class="container"
+            :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }"
+          >
             <EditorContent :editor="editor" />
           </div>
         </v-card>
@@ -99,6 +102,10 @@ const props = defineProps({
   modelValue: {
     type: String,
     default: "",
+  },
+  height: {
+    type: String,
+    default: "20",
   },
 });
 
@@ -144,10 +151,6 @@ watch(
 </script>
 
 <style lang="scss">
-.container {
-  height: 20rem;
-  overflow-y: scroll;
-}
 .tiptap {
   height: 100vh !important;
   :first-child {

@@ -79,15 +79,41 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="12" lg="8">
+          <v-col cols="12">
             <span class="text-h6 font-weight-bold">
               Descrição da realidade dos fatos
             </span>
-            <RitchTextEditor v-model="form.content" />
-
-            <!-- <CKEditor v-model="form.content" /> -->
+            <RitchTextEditor height="10" v-model="form.content" />
+            <div class="d-flex flex-column mt-4">
+              <input
+                type="file"
+                @input="handleFileUpload"
+                style="display: none"
+                ref="fileInput"
+              />
+              <div class="d-flex justify-space-between flex-wrap w-100 px-2">
+                <strong> Documentos: </strong>
+                <v-btn
+                  color="primary"
+                  flat
+                  class="text-none"
+                  size="small"
+                  prepend-icon="mdi-paperclip"
+                  @click="($refs.fileInput as HTMLInputElement).click()"
+                >
+                  Novo documento
+                </v-btn>
+              </div>
+            </div>
+            <div v-for="item in form.files" class="w-100 mt-4">
+              <AttachementCard
+                :file-name="item.fileName!"
+                @delete="getFileDelete(item)"
+                :download-visible="false"
+              />
+            </div>
           </v-col>
-          <v-col cols="12" lg="4" class="d-flex flex-column px-2">
+          <v-col cols="12" class="d-flex flex-column px-2">
             <v-switch
               v-model="form.factsRealityConfirm"
               color="info"
@@ -101,7 +127,7 @@
               </template>
             </v-switch>
             <v-divider class="mt-4" />
-            <div class="d-flex justify-end mt-4" style="gap: 0.5rem">
+            <div class="d-flex mt-4" style="gap: 0.5rem">
               <v-btn
                 prepend-icon="mdi-check"
                 color="primary"
@@ -111,7 +137,7 @@
                 type="submit"
                 :disabled="!form.factsRealityConfirm"
               >
-                Salvar
+                Enviar
               </v-btn>
               <v-btn
                 prepend-icon="mdi-cancel"
@@ -129,6 +155,18 @@
       </FormCrud>
     </v-card-text>
     <DialogLoading :dialog="loading" />
+    <Dialog
+      title="Confirmação"
+      :dialog="showDelete"
+      @cancel="showDelete = false"
+      @confirm="handleDeleteAttachment"
+      show-cancel
+    >
+      <span>
+        Apagar documento
+        <strong>{{ selectedFile?.fileName }}</strong> ?
+      </span>
+    </Dialog>
   </v-card>
 </template>
 <script setup lang="ts">
@@ -155,8 +193,11 @@ const { /*amountFormated,*/ getSolicitationsFilters } = useUtils();
 const router = useRouter();
 
 const storeConsultation = useSolicitationConsultationStore();
+const fileStore = useFileStore();
 
 const loading = ref(false);
+const showDelete = ref(false);
+const selectedFile = ref<FileProps>();
 const judicialItems = ref([
   {
     name: "Processo a distribuir",
@@ -178,9 +219,12 @@ const form = ref({
   judicialProcessNumber: "",
   content: "",
   factsRealityConfirm: false,
+  files: [] as FileProps[],
 });
 
 const filters = ref(getSolicitationsFilters());
+
+const $single = computed(() => storeConsultation.$single);
 
 onMounted(() => {
   if (props.data.id && props.show) {
@@ -201,6 +245,7 @@ const clearModel = () => {
     judicialProcessNumber: "",
     content: "",
     factsRealityConfirm: false,
+    files: [],
   };
 };
 
@@ -215,6 +260,7 @@ const loadModel = () => {
     judicialProcessNumber: props.data.proccessNumber ?? "",
     content: props.data.content!,
     factsRealityConfirm: false,
+    files: props.data.files as FileProps[],
   };
 };
 
@@ -268,6 +314,17 @@ const create = async () => {
       consultationValue: form.value.consultation?.value ?? 0,
       valueCredit: form.value.consultation?.valueCredit ?? 0,
     });
+
+    if ($single.value?.id && form.value.files.length > 0) {
+      const payload = form.value.files.map((attachment) => ({
+        ...attachment,
+        ownerId: $single.value?.id,
+        fileCategory: "solicitation-consultation",
+      }));
+
+      //enviar arquivos
+      await fileStore.uploadManyAws(payload);
+    }
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);
   }
@@ -292,6 +349,29 @@ const update = async () => {
       dateOpen: moment().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
     });
+
+    if ($single.value?.id) {
+      const payload: FileProps[] = form.value.files
+        .filter(
+          (
+            attachment
+          ): attachment is Omit<FileProps, "publicId"> | FileProps => {
+            return !attachment.publicId;
+          }
+        )
+        .map((attachment) => ({
+          ...attachment,
+          ownerId: $single.value?.id,
+          fileCategory: "solicitation-consultation",
+        }));
+
+      console.log("🚀 ~ payload ~ payload:", payload);
+
+      if (payload && payload.length > 0) {
+        //enviar arquivos
+        await fileStore.uploadManyAws(payload);
+      }
+    }
   } catch (error) {
     console.log("🚀 ~ create ~ error:", error);
   }
@@ -301,5 +381,60 @@ const handleReportPurpose = () => {
     form.value.processSituation = "";
     form.value.judicialProcessNumber = "";
   }
+};
+
+const handleDeleteAttachment = async () => {
+  showDelete.value = false;
+
+  if (!selectedFile.value) return;
+
+  loading.value = true;
+  try {
+    if (selectedFile.value.publicId) {
+      await fileStore.removeAws(selectedFile.value.publicId);
+      form.value.files = form.value.files.filter(
+        (attachment) => attachment.fileName !== selectedFile.value?.fileName
+      );
+    } else {
+      form.value.files = form.value.files.filter(
+        (attachment) => attachment !== selectedFile.value
+      );
+    }
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleFileUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const files = input.files;
+
+  if (!files) return;
+
+  try {
+    const existingFile = form.value.files.find(
+      (attachment) => attachment.fileName === files[0].name
+    );
+
+    if (existingFile) {
+      push.warning("Já existe um arquivo com este nome anexado.");
+      return;
+    }
+
+    form.value.files.push({
+      fileCategory: "solicitation-consultation",
+      fileData: files[0],
+      fileName: files[0].name,
+    });
+  } catch (error) {
+    console.log("🚀 ~ handleFileUpload ~ error:", error);
+  } finally {
+    input.value = ""; // Limpa o input de arquivo após o upload
+  }
+};
+
+const getFileDelete = (item: FileProps) => {
+  selectedFile.value = item;
+  showDelete.value = true;
 };
 </script>
