@@ -2,6 +2,7 @@ import "@mdi/font/css/materialdesignicons.css";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
+import * as directives from "vuetify/directives";
 import { MAIN_THEME } from "@/utils/vuetifyTheme";
 
 export default defineNuxtPlugin((app) => {
@@ -19,6 +20,7 @@ export default defineNuxtPlugin((app) => {
         darken: 3,
       },
     },
+    directives,
   });
   app.vueApp.use(vuetify);
 });
