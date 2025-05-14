@@ -9,6 +9,10 @@ export default class extends BaseSchema {
       table.uuid('public_id').index('report_purposes_idx_public_id')
       table.string('name', 200).notNullable().index('report_purposes_idx_name')
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

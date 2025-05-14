@@ -9,13 +9,14 @@ export default class extends BaseSchema {
 
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table
-        .uuid('publicId')
-        //.defaultTo(this.schema.raw('uuid_generate_v4()'))
-        .index('profiles_idx_public_id')
+      table.uuid('public_id').index('profiles_idx_public_id')
       table.string('profileName', 50)
-      table.enu('type', profileTypes).defaultTo('ADVOGADO')
+      table.enu('type', profileTypes).defaultTo(profileTypes[1])
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

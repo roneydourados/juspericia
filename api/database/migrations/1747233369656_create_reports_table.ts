@@ -10,6 +10,10 @@ export default class extends BaseSchema {
       table.string('title', 200).notNullable().index('report_models_idx_title')
       table.text('content', 'longtext').notNullable()
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

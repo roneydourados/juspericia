@@ -15,6 +15,10 @@ export default class extends BaseSchema {
       table.integer('days_credit_expire').defaultTo(0)
       table.string('suport_whatsapp', 20).nullable()
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

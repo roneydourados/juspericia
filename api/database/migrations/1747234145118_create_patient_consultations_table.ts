@@ -40,6 +40,10 @@ export default class extends BaseSchema {
     this.schema.raw(
       'ALTER TABLE public.patient_consultations ALTER COLUMN date_open SET DEFAULT current_date'
     )
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

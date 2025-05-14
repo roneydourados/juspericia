@@ -18,6 +18,10 @@ export default class extends BaseSchema {
       table.decimal('value', 15, 2).defaultTo(0)
       table.timestamp('created_at')
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

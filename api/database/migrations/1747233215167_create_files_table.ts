@@ -12,6 +12,10 @@ export default class extends BaseSchema {
       table.string('file_name', 300).notNullable()
       table.string('file_server_name', 300).notNullable()
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {

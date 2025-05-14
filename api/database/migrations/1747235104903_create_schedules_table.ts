@@ -22,6 +22,10 @@ export default class extends BaseSchema {
       table.string('user_schedule', 200).notNullable().index('schedules_idx_user_schedule')
       table.string('status', 20).defaultTo('active').index('schedules_idx_status')
     })
+
+    this.schema.raw(
+      `ALTER TABLE public.${this.tableName} ALTER COLUMN public_id SET DEFAULT uuid_generate_v4();`
+    )
   }
 
   async down() {
