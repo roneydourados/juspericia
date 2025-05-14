@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class UserCredit extends BaseModel {
-  static table = 'system_parameters'
+  static table = 'user_credits'
 
   @column({ isPrimary: true })
   declare id: number
