@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\lib",
+    "\\prisma",
+    "\\server",
+    "\\server\\providers",
+    "\\server\\services",
+    "\\server\\utils"
+  ],
+  "SelectedNode": "\\lib\\prisma.ts",
+  "PreviewInSolutionExplorer": false
+}
