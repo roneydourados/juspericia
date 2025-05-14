@@ -9,6 +9,8 @@
 
 import router from '@adonisjs/core/services/router'
 
+import './api-routes/auth.js'
+
 router.get('/', async () => {
   return {
     hello: 'world',
