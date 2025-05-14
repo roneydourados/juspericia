@@ -6,10 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table
-        .uuid('public_id')
-        .defaultTo(this.db.raw('uuid_generate_v4()'))
-        .index('patient_consultations_idx_public_id')
+      table.uuid('public_id').index('patient_consultations_idx_public_id')
       table.integer('patient_id').references('id').inTable('patients').onDelete('CASCADE')
       table.integer('user_id').references('id').inTable('users').onDelete('CASCADE')
       table.integer('medic_id').references('id').inTable('users').onDelete('CASCADE')
@@ -26,7 +23,7 @@ export default class extends BaseSchema {
       table.string('status', 30).defaultTo('open').index('patient_consultations_idx_status')
       table.decimal('tip_value', 15, 2).defaultTo(0)
       table.date('date_close').notNullable()
-      table.date('date_open').defaultTo(this.db.raw('now()'))
+      table.date('date_open').notNullable()
       table.integer('rate').defaultTo(0)
       table.date('date_antecipation').nullable()
       table.date('date_correction').nullable()
@@ -39,6 +36,10 @@ export default class extends BaseSchema {
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
+
+    this.schema.raw(
+      'ALTER TABLE public.patient_consultations ALTER COLUMN date_open SET DEFAULT current_date'
+    )
   }
 
   async down() {

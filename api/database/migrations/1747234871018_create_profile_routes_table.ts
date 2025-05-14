@@ -6,10 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table
-        .uuid('public_id')
-        .defaultTo(this.db.raw('uuid_generate_v4()'))
-        .index('profile_routes_idx_public_id')
+      table.uuid('public_id').index('profile_routes_idx_public_id')
       table
         .integer('profile_id')
         .notNullable()

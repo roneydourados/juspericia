@@ -6,10 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table
-        .uuid('public_id')
-        .defaultTo(this.db.raw('uuid_generate_v4()'))
-        .index('patient_consultation_reports_idx_public_id')
+      table.uuid('public_id').index('patient_consultation_reports_idx_public_id')
       table.integer('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
       table
         .integer('patient_consultation_id')
@@ -19,12 +16,16 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.text('content', 'longtext').notNullable()
       table.string('status', 20).defaultTo('active')
-      table.date('report_date').defaultTo(this.db.raw('now()'))
+      table.date('report_date').notNullable()
       table.string('user_deleted', 255).nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
+
+    this.schema.raw(
+      'ALTER TABLE public.patient_consultation_reports ALTER COLUMN report_date SET DEFAULT current_date'
+    )
   }
 
   async down() {

@@ -6,10 +6,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table
-        .uuid('public_id')
-        .defaultTo(this.db.raw('uuid_generate_v4()'))
-        .index('service_package_histories_idx_public_id')
+      table.uuid('public_id').index('service_package_histories_idx_public_id')
       table.integer('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
       table
         .integer('package_id')
@@ -17,7 +14,6 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('service_packages')
         .onDelete('CASCADE')
-      table.integer('user_id').notNullable().references('id').inTable('users').onDelete('CASCADE')
       table.text('description', 'longtext').notNullable()
       table.string('action').defaultTo('created')
 
