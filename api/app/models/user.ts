@@ -16,77 +16,80 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
+  @column({ columnName: 'public_id' })
+  declare publicId: string
+
   @column()
   declare name: string
 
   @column()
   declare email: string
 
-  @column({ serializeAs: null })
+  @column()
   declare password: string
 
   @column()
-  declare phone: string | null
+  declare phone: string
 
   @column({ columnName: 'cpf_cnpj' })
-  declare cpfCnpj: string | null
+  declare cpfCnpj: string
 
   @column()
-  declare oab: string | null
+  declare oab: string
+
+  @column({ columnName: 'oab_uf' })
+  declare oabUf: string
 
   @column()
-  declare crm: string | null
+  declare crm: string
 
   @column({ columnName: 'crm_uf' })
-  declare crmUf: string | null
+  declare crmUf: string
 
   @column({ columnName: 'profile_id' })
   declare profileId: number
 
   @column({ columnName: 'office_name' })
-  declare officeName: string | null
+  declare officeName: string
+
+  @column({ columnName: 'office_cnpj' })
+  declare officeCnpj: string
+
+  @column({ columnName: 'office_email' })
+  declare officeEmail: string
+
+  @column({ columnName: 'office_phone' })
+  declare officePhone: string
 
   @column()
   declare active: boolean
 
-  @column({ columnName: 'office_cnpj' })
-  declare officeCnpj: string | null
-
-  @column({ columnName: 'office_email' })
-  declare officeEmail: string | null
-
-  @column({ columnName: 'office_phone' })
-  declare officePhone: string | null
-
-  @column({ columnName: 'public_id' })
-  declare publicId: string | null
-
   @column({ columnName: 'medic_consultation_value' })
-  declare medicConsultationValue: number | null
+  declare medicConsultationValue: number
 
   @column({ columnName: 'medic_consultation_type' })
-  declare medicConsultationType: string | null
+  declare medicConsultationType: string
 
   @column({ columnName: 'customer_id' })
-  declare customerId: string | null
+  declare customerId: string
 
   @column()
-  declare whatsapp: string | null
+  declare whatsapp: string
 
   @column({ columnName: 'medic_hour_end' })
-  declare medicHourEnd: string | null
+  declare medicHourEnd: string
 
   @column({ columnName: 'medic_hour_start' })
-  declare medicHourStart: string | null
+  declare medicHourStart: string
 
   @column({ columnName: 'medic_query_interval' })
-  declare medicQueryInterval: number | null
+  declare medicQueryInterval: number
+
+  static accessTokens = DbAccessTokensProvider.forModel(User)
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
-
-  static accessTokens = DbAccessTokensProvider.forModel(User)
+  declare updatedAt: DateTime
 }

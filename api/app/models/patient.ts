@@ -1,0 +1,51 @@
+import { DateTime } from 'luxon'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
+
+export default class Patient extends BaseModel {
+  static table = 'patients'
+
+  @column({ isPrimary: true })
+  declare id: number
+
+  @column({ columnName: 'public_id' })
+  declare publicId: string
+
+  @column({ columnName: 'user_id' })
+  declare userId: number
+
+  @column()
+  declare name: string
+
+  @column()
+  declare surname: string
+
+  @column({ columnName: 'birth_date' })
+  declare birthDate: string
+
+  @column()
+  declare email: string
+
+  @column({ columnName: 'mother_name' })
+  declare motherName: string
+
+  @column()
+  declare phone: string
+
+  @column()
+  declare cpf: string
+
+  @column()
+  declare rg: string
+
+  @column()
+  declare status: string
+
+  @column()
+  declare sexy: string
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+}
