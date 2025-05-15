@@ -1,15 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { User, Profile, UserToken, Address } from '#models/index'
-
-import { validHash } from '../../services/hash.js'
-import db from '@adonisjs/lucid/services/db'
-
 import { createPostValidator } from '#validators/user/main'
 import { authValidator } from '#validators/auth/main'
-import dayjs from 'dayjs'
-import { uuidv7 } from 'uuidv7'
-import { addressCategoryType } from '../../utils/datatypes.js'
-
 import { AuthService } from '#services/index'
 import { inject } from '@adonisjs/core'
 

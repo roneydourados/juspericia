@@ -1,1 +1,2 @@
 export { default as AuthService } from './auth_service.js'
+export { default as AddressService } from './address_service.js'
