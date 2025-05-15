@@ -3,7 +3,7 @@ import { BaseModel, column, beforeSave, belongsTo } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { hashText } from '../services/hash.js'
-import Profile from './profile.js'
+import { Profile } from '#models/index'
 
 export default class User extends BaseModel {
   static table = 'users'
