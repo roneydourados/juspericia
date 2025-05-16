@@ -33,11 +33,18 @@ export default class AuthService {
       // Criando um token de acesso corretamente
       const token = await User.accessTokens.create(user)
 
-      return {
-        ...user.$attributes,
-        ...user.$preloaded,
+      const userData = {
+        id: user.id,
+        customerId: user.customerId,
+        publicId: user.publicId,
+        cpfCnpj: user.cpfCnpj,
+        name: user.name,
+        email: user.email,
+        profile: user.profile,
         token,
       }
+
+      return userData
     } catch (error) {
       throw error
     }
