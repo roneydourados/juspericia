@@ -13,7 +13,7 @@ export default class File extends BaseModel {
   declare ownerId: number
 
   @column({ columnName: 'file_category' })
-  declare fileCategory: number
+  declare fileCategory: string
 
   @column({ columnName: 'file_name' })
   declare fileName: string
