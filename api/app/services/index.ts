@@ -1,3 +1,5 @@
 export { default as AuthService } from './auth_service.js'
 export { default as AddressService } from './address_service.js'
 export { default as AdminSalesDashboardService } from './admin_sales_dashboard_service.js'
+export { default as AsaasCustomerService } from './asaas_customer_service.js'
+export { default as AsaasPaymentService } from './asaas_payment_service.js'
