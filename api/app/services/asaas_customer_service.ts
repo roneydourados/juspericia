@@ -15,7 +15,7 @@ export default class AsaasCustomerService {
     },
   })
 
-  public async createCustomer(customerData: CustomerProps): Promise<CustomerResponseCreataedProps> {
+  async createCustomer(customerData: CustomerProps): Promise<CustomerResponseCreataedProps> {
     try {
       const exists = await this.getCustomer(customerData.cpfCnpj!)
 
@@ -40,7 +40,7 @@ export default class AsaasCustomerService {
     }
   }
 
-  public async getCustomer(cpfCnpj: string) {
+  async getCustomer(cpfCnpj: string) {
     try {
       const response = await this.api.get<CustomerListProps>('/customers', {
         params: { cpfCnpj },
