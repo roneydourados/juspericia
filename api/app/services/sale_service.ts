@@ -1,4 +1,5 @@
 import { Sale } from '#models/index'
+import { SaleProps } from '../dtos/index.js'
 
 export default class SaleService {
   async create({
@@ -18,7 +19,7 @@ export default class SaleService {
     category,
     packageId,
     solicitationId,
-  }: Sale) {
+  }: SaleProps) {
     try {
       const sale = await Sale.create({
         publicId,

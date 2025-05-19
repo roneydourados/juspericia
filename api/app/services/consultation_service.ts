@@ -1,45 +1,55 @@
 import { Consultation } from '#models/index'
 import { Exception } from '@adonisjs/core/exceptions'
+import { ConsultationProps } from '../dtos/index.js'
 
 export default class ConsultationService {
-  async create(payload: {
-    consultationName: string
-    value: number
-    valueAntecipation24: number
-    valueAntecipation48: number
-    valueAntecipation72: number
-    valueCredit: number
-    valuePacket: number
-  }) {
+  async create({
+    consultationName,
+    value,
+    valueAntecipation24,
+    valueAntecipation48,
+    valueAntecipation72,
+    valueCredit,
+    valuePacket,
+  }: ConsultationProps) {
     try {
-      return await Consultation.create(payload)
+      return await Consultation.create({
+        consultationName,
+        value,
+        valueAntecipation24,
+        valueAntecipation48,
+        valueAntecipation72,
+        valueCredit,
+        valuePacket,
+      })
     } catch (error) {
       console.error('🚀 ~ Error creating Consultation:', error)
       throw new Exception('Error to create', { status: 500 })
     }
   }
 
-  async update(payload: {
-    publicId: string
-    consultationName: string
-    value: number
-    valueAntecipation24: number
-    valueAntecipation48: number
-    valueAntecipation72: number
-    valueCredit: number
-    valuePacket: number
-  }) {
-    const consultation = await this.exists(payload.publicId)
+  async update({
+    publicId,
+    consultationName,
+    value,
+    valueAntecipation24,
+    valueAntecipation48,
+    valueAntecipation72,
+    valueCredit,
+    valuePacket,
+  }: ConsultationProps) {
+    const consultation = await this.exists(publicId!)
 
     try {
       consultation.merge({
-        consultationName: payload.consultationName,
-        value: payload.value,
-        valueAntecipation24: payload.valueAntecipation24,
-        valueAntecipation48: payload.valueAntecipation48,
-        valueAntecipation72: payload.valueAntecipation72,
-        valueCredit: payload.valueCredit,
-        valuePacket: payload.valuePacket,
+        publicId,
+        consultationName,
+        value,
+        valueAntecipation24,
+        valueAntecipation48,
+        valueAntecipation72,
+        valueCredit,
+        valuePacket,
       })
 
       await consultation.save()

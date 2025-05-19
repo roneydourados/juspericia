@@ -2,20 +2,14 @@ import { AwsS3Service } from '#services/index'
 import { File } from '#models/index'
 import { uuidv7 } from 'uuidv7'
 
-interface UploadInput {
-  fileData: File
-  fileName?: string
-  fileServerName: string
-  fileCategory: string
-  ownerId: number
-}
+import { FileProps } from '../dtos/index.js'
 
 export default class FileService {
   private s3Service = new AwsS3Service()
   /**
    * Envia um arquivo para o S3 e retorna a URL pública.
    */
-  public async upload(payload: UploadInput) {
+  public async upload(payload: FileProps) {
     try {
       const fileExtension = payload.fileName?.split('.').pop()
       const publicId = uuidv7()

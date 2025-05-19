@@ -3,6 +3,8 @@ import { PatientConsultationReport, File, PatientConsultation } from '#models/in
 
 import { formatDate } from '../utils/functions.js'
 
+import { PatientConsultationReportProps } from '../dtos/index.js'
+
 export default class PatientConsultationService {
   async index(input: {
     initialDate: string
@@ -59,7 +61,7 @@ export default class PatientConsultationService {
     return result
   }
 
-  async create(payload: PatientConsultationReport) {
+  async create(payload: PatientConsultationReportProps) {
     const trx = await db.transaction()
     try {
       //verificar se existe um laudo já

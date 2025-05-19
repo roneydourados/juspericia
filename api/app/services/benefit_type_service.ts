@@ -1,9 +1,10 @@
 import { BenefitType } from '#models/index'
 import { Exception } from '@adonisjs/core/exceptions'
 
+import { BenefitTypeProps } from '../dtos/index.js'
+
 export default class BenefitTypeService {
-  async create(input: { name: string }) {
-    const { name } = input
+  async create({ name }: BenefitTypeProps) {
     try {
       return await BenefitType.create({ name })
     } catch (error) {
@@ -12,10 +13,8 @@ export default class BenefitTypeService {
     }
   }
 
-  async update(input: { publicId: string; name: string }) {
-    const { publicId, name } = input
-
-    const benefitType = await this.exists(publicId)
+  async update({ publicId, name }: BenefitTypeProps) {
+    const benefitType = await this.exists(publicId!)
 
     try {
       benefitType.name = name

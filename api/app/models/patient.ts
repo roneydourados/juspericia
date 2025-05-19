@@ -53,5 +53,5 @@ export default class Patient extends BaseModel {
   declare updatedAt: DateTime
 
   @belongsTo(() => User)
-  public Medic!: BelongsTo<typeof User>
+  public User!: BelongsTo<typeof User>
 }

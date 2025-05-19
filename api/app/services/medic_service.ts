@@ -1,36 +1,6 @@
 import { User, Profile, Address } from '#models/index'
 import { addressCategoryType } from '../utils/datatypes.js'
-
-interface UserProps {
-  id?: number
-  email?: string
-  name?: string
-  password?: string
-  active?: boolean
-  crm?: string
-  cpfCnpj?: string
-  crmUf?: string
-  phone?: string
-  profileId?: number
-  medicConsultationValue?: number
-  medicHourEnd?: string
-  medicHourStart?: string
-  medicQueryInterval?: number
-  publicId?: string
-  Address?: {
-    //  Adjust this to match your Address model properties.
-    addressCity?: string
-    addressComplement?: string
-    addressDistrict?: string
-    addressNumber?: string
-    addressState?: string
-    addressStreet?: string
-    addressZipcode?: string
-    addressCategory?: string // You might have an enum or type for this
-  }
-  profile_id?: number
-  medicConsultationType?: string
-}
+import { UserProps } from '../dtos/index.js'
 
 export default class MedicService {
   async index(inputQuery: string) {
@@ -64,7 +34,7 @@ export default class MedicService {
     const usersWithAddresses = await Promise.all(
       users.map(async (user) => {
         const address = await Address.query()
-          .where('owner_id', user.id)
+          .where('owner_id', user.id!)
           .where('address_category', 'user')
           .first()
         return {
@@ -161,7 +131,7 @@ export default class MedicService {
 
       if (payload.Address) {
         // Delete the existing address
-        await Address.query().where('owner_id', user.id).where('address_category', 'user').delete()
+        await Address.query().where('owner_id', user.id!).where('address_category', 'user').delete()
 
         // Create the new address
         await Address.create({
@@ -195,7 +165,7 @@ export default class MedicService {
     try {
       // Delete the user's address first
       await Address.query()
-        .where('owner_id', user.id)
+        .where('owner_id', user.id!)
         .where('address_category', addressCategoryType.user)
         .delete()
 
@@ -216,8 +186,9 @@ export default class MedicService {
     if (!user) {
       throw new Error('Not found')
     }
+
     const address = await Address.query()
-      .where('owner_id', user.id)
+      .where('owner_id', user.id!)
       .where('address_category', 'user')
       .first()
 

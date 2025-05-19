@@ -1,7 +1,7 @@
 import { ReportModel } from '#models/index'
-
+import { ReportModelProps } from '../dtos/index.js'
 export default class ReportModelService {
-  async create({ title, content }: ReportModel) {
+  async create({ title, content }: ReportModelProps) {
     try {
       const reportModel = await ReportModel.create({
         title,
@@ -15,9 +15,9 @@ export default class ReportModelService {
     }
   }
 
-  async update({ publicId, title, content }: ReportModel) {
+  async update({ publicId, title, content }: ReportModelProps) {
     try {
-      const reportModel = await ReportModel.query().where('publicId', publicId).firstOrFail()
+      const reportModel = await ReportModel.query().where({ publicId }).firstOrFail()
 
       reportModel.merge({ title, content })
 

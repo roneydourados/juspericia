@@ -1,7 +1,7 @@
 import { ReportPurpose } from '#models/index'
-
+import { ReportPurposeProps } from '../dtos/index.js'
 export default class ReportPurposeService {
-  async create({ name }: ReportPurpose) {
+  async create({ name }: ReportPurposeProps) {
     try {
       const reportPurpose = await ReportPurpose.create({
         name,
@@ -14,9 +14,9 @@ export default class ReportPurposeService {
     }
   }
 
-  async update({ publicId, name }: ReportPurpose) {
+  async update({ publicId, name }: ReportPurposeProps) {
     try {
-      const reportPurpose = await ReportPurpose.query().where('publicId', publicId).firstOrFail()
+      const reportPurpose = await ReportPurpose.query().where({ publicId }).firstOrFail()
 
       reportPurpose.merge({ name })
 

@@ -7,6 +7,8 @@ import dayjs from 'dayjs'
 import { uuidv7 } from 'uuidv7'
 import { addressCategoryType } from '../utils/datatypes.js'
 
+import { UserProps } from '../dtos/index.js'
+
 export default class AuthService {
   async auth(email: string, password: string) {
     try {
@@ -15,13 +17,9 @@ export default class AuthService {
           query.preload('routes')
         })
         .where({ email, active: true })
-        .first()
+        .firstOrFail()
 
-      if (!user) {
-        throw new Error('Invalid credentials')
-      }
-
-      const isPasswordValid = await validHash(password, user.password)
+      const isPasswordValid = await validHash(password, user.password ?? '')
 
       if (!isPasswordValid) {
         throw new Error('Invalid credentials')
@@ -50,7 +48,7 @@ export default class AuthService {
     }
   }
 
-  async verifyUser({ id }: User) {
+  async verifyUser({ id }: UserProps) {
     try {
       const user = await User.query()
         .preload('profile', (query) => {
@@ -79,8 +77,7 @@ export default class AuthService {
     }
   }
 
-  async register(input: { userPayload: User; AddressPayload: Address }) {
-    const { userPayload, AddressPayload } = input
+  async register(payload: UserProps) {
     try {
       const profile = await Profile.query().where({ type: 'ADVOGADO' }).first()
 
@@ -89,7 +86,7 @@ export default class AuthService {
       }
 
       //verificar se já não existe um usuário com o mesmo email
-      const userExists = await User.query().where({ email: userPayload.email }).first()
+      const userExists = await User.query().where({ email: payload.email }).first()
 
       if (userExists && userExists.active) {
         throw new Error('User already exists')
@@ -110,20 +107,23 @@ export default class AuthService {
         // aqui criar a rotina para enviar o email
       }
 
+      // Remove createdAt and updatedAt if present in payload to avoid type errors
+      //const { createdAt, updatedAt, ...userPayload } = payload
+
       const user = await User.create({
-        ...userPayload,
+        ...payload,
         profileId: profile.id,
       })
 
-      if (AddressPayload) {
+      if (payload.Address) {
         await Address.create({
-          addressCity: AddressPayload.addressCity,
-          addressComplement: AddressPayload.addressComplement,
-          addressDistrict: AddressPayload.addressDistrict,
-          addressNumber: AddressPayload.addressNumber,
-          addressState: AddressPayload.addressState,
-          addressStreet: AddressPayload.addressStreet,
-          addressZipcode: AddressPayload.addressZipcode,
+          addressCity: payload.Address.addressCity,
+          addressComplement: payload.Address.addressComplement,
+          addressDistrict: payload.Address.addressDistrict,
+          addressNumber: payload.Address.addressNumber,
+          addressState: payload.Address.addressState,
+          addressStreet: payload.Address.addressStreet,
+          addressZipcode: payload.Address.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
         })

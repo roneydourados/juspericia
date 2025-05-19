@@ -1,5 +1,6 @@
 import db from '@adonisjs/lucid/services/db'
 import { Schedule, PatientConsultation } from '#models/index'
+import { ScheduleProps } from '../dtos/index.js'
 
 export default class ScheduleService {
   async create({
@@ -9,7 +10,7 @@ export default class ScheduleService {
     scheduleHour,
     title,
     userSchedule,
-  }: Schedule) {
+  }: ScheduleProps) {
     const trx = await db.transaction()
     try {
       /*
@@ -69,10 +70,10 @@ export default class ScheduleService {
     title,
     userSchedule,
     publicId,
-  }: Schedule) {
+  }: ScheduleProps) {
     const trx = await db.transaction()
     try {
-      const scheduleExists = await this.show(publicId)
+      const scheduleExists = await this.show(publicId!)
 
       if (scheduleExists) {
         scheduleExists.useTransaction(trx)

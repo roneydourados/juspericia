@@ -13,7 +13,7 @@ export default class Sale extends BaseModel {
   declare publicId: string
 
   @column({ columnName: 'solicitation_id' })
-  declare solicitationId: string
+  declare solicitationId: number
 
   @column({ columnName: 'sale_id' })
   declare saleId: string

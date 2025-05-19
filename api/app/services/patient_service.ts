@@ -2,21 +2,22 @@ import db from '@adonisjs/lucid/services/db'
 import { Patient, Address } from '#models/index'
 import { addressCategoryType } from '../utils/datatypes.js'
 
+import { PatientProps } from '../dtos/index.js'
+
 export default class PatientService {
-  async create(
-    { birthDate, cpf, email, motherName, name, surname, phone, rg, userId, sexy }: Patient,
-    Adress?: {
-      addressCity: string
-      addressComplement: string
-      addressDistrict: string
-      addressNumber: string
-      addressState: string
-      addressStreet: string
-      addressZipcode: string
-      ownerId: number
-      addressCategory: string
-    }
-  ) {
+  async create({
+    birthDate,
+    cpf,
+    email,
+    motherName,
+    name,
+    surname,
+    phone,
+    rg,
+    userId,
+    sexy,
+    PatientAddress,
+  }: PatientProps) {
     const trx = await db.transaction()
     try {
       const patient = await Patient.create(
@@ -35,16 +36,16 @@ export default class PatientService {
         { client: trx }
       )
 
-      if (Adress) {
+      if (PatientAddress) {
         await Address.create(
           {
-            addressCity: Adress.addressCity,
-            addressComplement: Adress.addressComplement,
-            addressDistrict: Adress.addressDistrict,
-            addressNumber: Adress.addressNumber,
-            addressState: Adress.addressState,
-            addressStreet: Adress.addressStreet,
-            addressZipcode: Adress.addressZipcode,
+            addressCity: PatientAddress.addressCity,
+            addressComplement: PatientAddress.addressComplement,
+            addressDistrict: PatientAddress.addressDistrict,
+            addressNumber: PatientAddress.addressNumber,
+            addressState: PatientAddress.addressState,
+            addressStreet: PatientAddress.addressStreet,
+            addressZipcode: PatientAddress.addressZipcode,
             ownerId: patient.id,
             addressCategory: addressCategoryType.patient,
           },
@@ -62,34 +63,22 @@ export default class PatientService {
     }
   }
 
-  async update(
-    {
-      birthDate,
-      cpf,
-      email,
-      motherName,
-      name,
-      surname,
-      phone,
-      rg,
-      userId,
-      sexy,
-      publicId,
-    }: Patient,
-    Adress?: {
-      addressCity: string
-      addressComplement: string
-      addressDistrict: string
-      addressNumber: string
-      addressState: string
-      addressStreet: string
-      addressZipcode: string
-      ownerId: number
-      addressCategory: string
-    }
-  ) {
+  async update({
+    birthDate,
+    cpf,
+    email,
+    motherName,
+    name,
+    surname,
+    phone,
+    rg,
+    userId,
+    sexy,
+    publicId,
+    PatientAddress,
+  }: PatientProps) {
     //verificcar se existe um paciente
-    const patient = await Patient.query().where('publicId', publicId).firstOrFail()
+    const patient = await Patient.query().where({ publicId }).firstOrFail()
 
     const trx = await db.transaction()
     try {
@@ -108,7 +97,7 @@ export default class PatientService {
         sexy,
       })
 
-      if (Adress) {
+      if (PatientAddress) {
         const existsAddress = await Address.query().where('owner_id', patient.id).first()
 
         if (existsAddress) {
@@ -119,13 +108,13 @@ export default class PatientService {
 
         await Address.create(
           {
-            addressCity: Adress.addressCity,
-            addressComplement: Adress.addressComplement,
-            addressDistrict: Adress.addressDistrict,
-            addressNumber: Adress.addressNumber,
-            addressState: Adress.addressState,
-            addressStreet: Adress.addressStreet,
-            addressZipcode: Adress.addressZipcode,
+            addressCity: PatientAddress.addressCity,
+            addressComplement: PatientAddress.addressComplement,
+            addressDistrict: PatientAddress.addressDistrict,
+            addressNumber: PatientAddress.addressNumber,
+            addressState: PatientAddress.addressState,
+            addressStreet: PatientAddress.addressStreet,
+            addressZipcode: PatientAddress.addressZipcode,
             ownerId: patient.id,
             addressCategory: addressCategoryType.patient,
           },

@@ -1,7 +1,7 @@
 import { ServicePackage } from '#models/index'
-
+import { ServicePackagesProps } from '../dtos/index.js'
 export default class ServicePackageService {
-  async create({ name, value, description, urlImage, dueDays }: ServicePackage) {
+  async create({ name, value, description, urlImage, dueDays }: ServicePackagesProps) {
     try {
       const servicePackage = await ServicePackage.create({
         name,
@@ -17,7 +17,7 @@ export default class ServicePackageService {
     }
   }
 
-  async update({ name, value, description, urlImage, dueDays, publicId }: ServicePackage) {
+  async update({ name, value, description, urlImage, dueDays, publicId }: ServicePackagesProps) {
     try {
       const service = await ServicePackage.query().where({ publicId }).firstOrFail()
 
