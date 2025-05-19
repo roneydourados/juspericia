@@ -18,7 +18,6 @@ export default class extends BaseSchema {
       table.string('status', 20).defaultTo('active')
       table.date('report_date').notNullable()
       table.string('user_deleted', 255).nullable()
-
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

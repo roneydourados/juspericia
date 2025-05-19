@@ -1,5 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+
+import { ServicePackageHistory } from '#models/index'
 
 export default class ServicePackage extends BaseModel {
   static table = 'service_packages'
@@ -33,4 +36,7 @@ export default class ServicePackage extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => ServicePackageHistory)
+  declare ServicePackageHistory: HasMany<typeof ServicePackageHistory>
 }

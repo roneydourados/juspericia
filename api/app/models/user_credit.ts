@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { UserCreditLog } from '#models/index'
 
 export default class UserCredit extends BaseModel {
   static table = 'user_credits'
@@ -42,4 +44,7 @@ export default class UserCredit extends BaseModel {
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+
+  @hasMany(() => UserCreditLog)
+  public UserCreditLog!: HasMany<typeof UserCreditLog>
 }

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { PatientConsultation, User } from '#models/index'
 
 export default class PatientConsultationReport extends BaseModel {
   static table = 'patient_consultation_reports'
@@ -12,6 +14,9 @@ export default class PatientConsultationReport extends BaseModel {
 
   @column({ columnName: 'user_id' })
   declare userId: number
+
+  @column({ columnName: 'patient_consultation_id' })
+  declare patientConsultationId: number
 
   @column()
   declare content: string
@@ -30,4 +35,10 @@ export default class PatientConsultationReport extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @belongsTo(() => PatientConsultation)
+  public PatientConsultation!: BelongsTo<typeof PatientConsultation>
+
+  @belongsTo(() => User)
+  public Medic!: BelongsTo<typeof User>
 }

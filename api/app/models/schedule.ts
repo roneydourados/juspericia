@@ -1,4 +1,6 @@
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { User, PatientConsultation } from '#models/index'
 
 export default class Schedule extends BaseModel {
   static table = 'schedules'
@@ -35,4 +37,10 @@ export default class Schedule extends BaseModel {
 
   @column()
   declare status: string
+
+  @belongsTo(() => User)
+  public Medic!: BelongsTo<typeof User>
+
+  @belongsTo(() => PatientConsultation)
+  public PatientConsultation!: BelongsTo<typeof PatientConsultation>
 }

@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { User } from '#models/index'
 
 export default class ServicePackageHistory extends BaseModel {
   static table = 'service_package_histories'
@@ -21,4 +23,7 @@ export default class ServicePackageHistory extends BaseModel {
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+
+  @belongsTo(() => User)
+  public User!: BelongsTo<typeof User>
 }
