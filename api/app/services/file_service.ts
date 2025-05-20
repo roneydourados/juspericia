@@ -1,3 +1,4 @@
+import db from '@adonisjs/lucid/services/db'
 import { AwsS3Service } from '#services/index'
 import { File } from '#models/index'
 import { uuidv7 } from 'uuidv7'
@@ -11,6 +12,7 @@ export default class FileService {
    * Envia um arquivo para o S3 e retorna a URL pública.
    */
   public async upload(payload: FileProps) {
+    const trx = await db.transaction()
     try {
       const fileExtension = payload.fileName?.split('.').pop()
       const publicId = uuidv7()
@@ -31,15 +33,21 @@ export default class FileService {
         throw new Error(`Not send file to aws s3 file: ${payload.fileName}`)
       }
 
-      await File.create({
-        fileCategory: payload.fileCategory!,
-        fileName: payload.fileName!,
-        ownerId: payload.ownerId!,
-        fileServerName,
-        publicId,
-      })
+      await File.create(
+        {
+          fileCategory: payload.fileCategory!,
+          fileName: payload.fileName!,
+          ownerId: payload.ownerId!,
+          fileServerName,
+          publicId,
+        },
+        { client: trx }
+      )
+
+      await trx.commit()
     } catch (error) {
       console.log('🚀 ~ uploadAwsS3 ~ error:', error)
+      await trx.rollback()
       throw new Error(`Not send file to aws s3 file: ${payload.fileName}`)
     }
   }
@@ -47,8 +55,25 @@ export default class FileService {
   /**
    * Remove um arquivo do S3.
    */
-  public async remove(fileServerName: string) {
-    return this.s3Service.removeAwsS3File(fileServerName)
+  public async remove(publicId: string) {
+    const trx = await db.transaction()
+    try {
+      const file = await File.query().where({ publicId }).first()
+
+      if (file) {
+        await this.s3Service.removeAwsS3File(file.fileServerName)
+
+        file.useTransaction(trx)
+
+        await file.delete()
+      }
+
+      await trx.commit()
+    } catch (error) {
+      await trx.rollback()
+      console.error('❌ Erro ao remover arquivo do S3:', error)
+      throw new Error('Not remove file to aws s3 file')
+    }
   }
 
   /**

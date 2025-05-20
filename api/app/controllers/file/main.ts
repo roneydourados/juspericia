@@ -38,7 +38,11 @@ export default class FileController {
     return response.created(uploadedFile)
   }
 
-  async destroy({ params }: HttpContext) {
-    // Aqui você pode usar o service para deletar do banco e do S3
+  async destroy({ params, response }: HttpContext) {
+    const { id } = params
+
+    await this.fileService.remove(id)
+
+    response.status(204)
   }
 }
