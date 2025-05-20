@@ -5,7 +5,7 @@ import {
   benefitTypeUpdateValidator,
 } from '#validators/benefit_type/main'
 
-export default class BenefitTypesController {
+export default class BenefitTypeController {
   constructor(private benefitTypeService: BenefitTypeService) {}
 
   public async index({ request }: HttpContext) {

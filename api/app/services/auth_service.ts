@@ -32,6 +32,7 @@ export default class AuthService {
       const token = await User.accessTokens.create(user)
 
       const userData = {
+        token,
         id: user.id,
         customerId: user.customerId,
         publicId: user.publicId,
@@ -39,7 +40,6 @@ export default class AuthService {
         name: user.name,
         email: user.email,
         profile: user.profile,
-        token,
       }
 
       return userData

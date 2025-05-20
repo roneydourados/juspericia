@@ -1,3 +1,5 @@
+import type { MultipartFile } from '@adonisjs/core/bodyparser'
+
 export interface FileProps {
   id?: number
   ownerId?: number
@@ -5,5 +7,5 @@ export interface FileProps {
   fileName?: string
   fileServerName?: string
   publicId?: string
-  fileData?: File
+  fileData?: MultipartFile
 }

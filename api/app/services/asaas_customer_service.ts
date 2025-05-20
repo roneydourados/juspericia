@@ -1,10 +1,6 @@
 import axios from 'axios'
 import env from '#start/env'
-import {
-  CustomerListProps,
-  CustomerProps,
-  CustomerResponseCreataedProps,
-} from '../types/asaas_customer.js'
+import { CustomerListProps, CustomerProps, CustomerResponseCreataedProps } from '../dtos/index.js'
 
 export default class AsaasCustomerService {
   private api = axios.create({

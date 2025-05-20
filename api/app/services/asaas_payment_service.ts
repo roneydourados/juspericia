@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from 'axios'
 import { formatDate } from '../utils/functions.js'
-import type { PaymentAsaasProps } from '../types/assaas_payment_types.js'
-import { inject } from '@adonisjs/core'
+import type { PaymentAsaasProps } from '../dtos/index.js'
+//import { inject } from '@adonisjs/core'
 import env from '#start/env'
 
-@inject()
+//@inject()
 export default class AsaasPaymentService {
   private readonly asaasApi: AxiosInstance
 
