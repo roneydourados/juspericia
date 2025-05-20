@@ -37,46 +37,6 @@ export default class AwsS3Service {
       throw error
     }
   }
-  // async sendAwsS3File(input: { fileServerName: string; file: File }) {
-  //   const { file, fileServerName } = input
-
-  //   try {
-  //     // Converte o arquivo para ArrayBuffer e depois para Buffer (requisito da AWS)
-  //     const fileData = await file.arrayBuffer()
-  //     const buffer = Buffer.from(fileData)
-
-  //     if (!buffer.length) {
-  //       console.error('❌ AWS Arquivo vazio:', fileServerName)
-  //       throw new Error(`Arquivo vazio: ${fileServerName}`)
-  //     }
-
-  //     console.log(`🚀 Enviando arquivo para AWS S3: ${fileServerName}`)
-
-  //     const ContentType = mime.getType(fileServerName) || 'application/octet-stream'
-
-  //     const paramsPutObject = {
-  //       Bucket: awsS3Config.bucketName,
-  //       Key: fileServerName,
-  //       Body: buffer,
-  //       ContentType,
-  //       ContentLength: buffer.length, // Recomendado para arquivos binários
-  //     }
-
-  //     await awsS3Config.s3Client.send(new PutObjectCommand(paramsPutObject))
-
-  //     console.log(`Arquivo: ${fileServerName}, enviado com sucesso para AWS S3.`)
-
-  //     // Retorna a URL pública (ajuste se usar bucket privado ou CloudFront)
-  //     return `https://${awsS3Config.bucketName}.s3.${awsS3Config.region}.amazonaws.com/${fileServerName}`
-  //   } catch (error) {
-  //     console.error(
-  //       '❌ Erro ao enviar arquivo para o S3:',
-  //       error instanceof Error ? error.message : error
-  //     )
-
-  //     throw new Error(`Erro ao enviar arquivo para o S3: ${fileServerName}`)
-  //   }
-  // }
 
   async removeAwsS3File(fileServerName: string) {
     try {
