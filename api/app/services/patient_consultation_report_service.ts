@@ -24,6 +24,7 @@ export default class PatientConsultationReportService {
       .whereBetween('report_date', [initialDate, finalDate])
       .whereNot('status', 'deleted')
       .whereHas('PatientConsultation', (query) => {
+        query.preload('Patient')
         query
           .if(userId, (q) => {
             q.where({ userId })
