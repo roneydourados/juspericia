@@ -21,12 +21,16 @@ export default class UserIndicationController {
     return response.json(indications)
   }
 
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     const data = request.all()
 
+    const user = auth.user
     const payload = await createValidator.validate(data)
 
-    const indication = await this.userIndicationService.store(payload)
+    const indication = await this.userIndicationService.store({
+      ...payload,
+      userId: user!.id,
+    })
 
     return response.json(indication)
   }
