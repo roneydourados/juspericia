@@ -1,43 +1,10 @@
 import db from '@adonisjs/lucid/services/db'
 import { PatientConsultation, Schedule, UserCredit, UserCreditLog } from '#models/index'
 import dayjs from 'dayjs'
-import { formatDate } from '../utils/functions.js'
+
 import { SolicitationConsultationProps } from '../dtos/index.js'
 
 export default class SolicitationConsultationService {
-  async getsolicitationsPatient(patientId: number) {
-    const data = await PatientConsultation.query()
-      .preload('Schedule', (query) => {
-        query.preload('Medic')
-        query.where('status', 'active')
-      })
-      .preload('Medic')
-      .preload('Patient', (query) => {
-        query.preload('User')
-      })
-      .preload('Consultation')
-      .preload('BenefitType')
-      .preload('ReportPurpose')
-      .preload('Sales')
-      .preload('PatientConsultationReport', (query) => {
-        query.first()
-        query.where('status', 'active')
-      })
-      .where({ patientId })
-
-    return data.map((item) => {
-      return {
-        ...item,
-        dateOpen: formatDate(new Date(item.dateOpen)),
-        dateClose: item.dateClose ? formatDate(new Date(item.dateClose)) : null,
-        dateAntecipation: item.dateAntecipation
-          ? formatDate(new Date(item.dateAntecipation))
-          : null,
-        dateCorrection: item.dateCorrection ? formatDate(new Date(item.dateCorrection)) : null,
-      }
-    })
-  }
-
   async index(filters: {
     initialDateSolicitation: string
     finalDateSolicitation: string

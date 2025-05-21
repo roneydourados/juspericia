@@ -9,9 +9,9 @@ type PaymentType = (typeof paymentTypes)[number]
 //tipos de categoria para endereço
 const addressCategoryType = {
   patient: 'PATIENT',
-  medic: 'MEDIC',
-  lawyer: 'LAWYER',
-  admin: 'ADMIN',
+  //medic: 'MEDIC',
+  //lawyer: 'LAWYER',
+  //admin: 'ADMIN',
   user: 'USER',
 }
 

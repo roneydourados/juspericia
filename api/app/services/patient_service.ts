@@ -1,10 +1,14 @@
 import db from '@adonisjs/lucid/services/db'
-import { Patient, Address } from '#models/index'
+import { Patient, Address, PatientConsultation } from '#models/index'
 import { addressCategoryType } from '../utils/datatypes.js'
 
 import { PatientProps } from '../dtos/index.js'
 
+import { formatDate } from '../utils/functions.js'
+
 export default class PatientService {
+  //constructor(private solicitationConsultationService: SolicitationConsultationService) {}
+
   async create({
     birthDate,
     cpf,
@@ -18,6 +22,12 @@ export default class PatientService {
     sexy,
     PatientAddress,
   }: PatientProps) {
+    const exists = await Patient.query().where({ cpf }).first()
+
+    if (exists) {
+      throw new Error('Patient already exists cpf')
+    }
+
     const trx = await db.transaction()
     try {
       const patient = await Patient.create(
@@ -80,6 +90,13 @@ export default class PatientService {
     //verificcar se existe um paciente
     const patient = await Patient.query().where({ publicId }).firstOrFail()
 
+    //verificar se o CPF passado existe em outro paciente que não seja o atualizado em questão
+    const exists = await Patient.query().where({ cpf }).andWhereNot({ publicId }).first()
+
+    if (exists) {
+      throw new Error('Patient already exists cpf')
+    }
+
     const trx = await db.transaction()
     try {
       patient.useTransaction(trx)
@@ -137,8 +154,18 @@ export default class PatientService {
 
     const trx = await db.transaction()
     try {
-      await Address.query().delete().where('owner_id', patient.id).firstOrFail()
+      patient.useTransaction(trx)
+
+      const address = await Address.query()
+        .where({ ownerId: patient.id })
+        .andWhere({ addressCategory: addressCategoryType.patient })
+        .firstOrFail()
+
+      address.useTransaction(trx)
+
+      await address.delete()
       await patient.delete()
+
       await trx.commit()
     } catch (error) {
       await trx.rollback()
@@ -150,35 +177,57 @@ export default class PatientService {
   async index(input: { inputQuery: string; userId?: number }) {
     const { inputQuery, userId } = input
 
-    const query = Patient.query()
+    const patients = Patient.query()
       .if(inputQuery, (q) => {
-        if (inputQuery) {
-          q.where('name', 'ILIKE', `%${inputQuery}%`)
-            .orWhere('email', 'ILIKE', `%${inputQuery}%`)
-            .orWhere('cpf', 'ILIKE', `%${inputQuery}%`)
-            .orWhere('surname', 'ILIKE', `%${inputQuery}%`)
-        }
+        q.where('name', 'ILIKE', `%${inputQuery}%`)
+          .orWhere('email', 'ILIKE', `%${inputQuery}%`)
+          .orWhere('cpf', 'ILIKE', `%${inputQuery}%`)
+          .orWhere('surname', 'ILIKE', `%${inputQuery}%`)
       })
       .if(userId, (q) => {
-        if (userId) {
-          q.where('user_id', userId)
-        }
+        q.where({ userId })
       })
       .orderBy('name', 'asc')
 
-    return await query
+    return await patients
   }
 
   async show(publicId: string) {
-    const patient = await Patient.query().where('publicId', publicId).firstOrFail()
-    const address = await Address.query()
-      .where('owner_id', patient.id)
-      .andWhere('addres_category', addressCategoryType.patient)
-      .first()
+    const patient = await Patient.query().preload('Address').where({ publicId }).firstOrFail()
 
-    return {
-      ...patient.serialize(),
-      Address: address?.serialize(),
-    }
+    return patient
+  }
+
+  async getsolicitationsPatient(patientId: number) {
+    const data = await PatientConsultation.query()
+      .preload('Schedule', (query) => {
+        query.preload('Medic')
+        query.where('status', 'active')
+      })
+      .preload('Medic')
+      .preload('Patient', (query) => {
+        query.preload('User')
+      })
+      .preload('Consultation')
+      .preload('BenefitType')
+      .preload('ReportPurpose')
+      .preload('Sales')
+      .preload('PatientConsultationReport', (query) => {
+        query.first()
+        query.where('status', 'active')
+      })
+      .where({ patientId })
+
+    return data.map((item) => {
+      return {
+        ...item,
+        dateOpen: formatDate(new Date(item.dateOpen)),
+        dateClose: item.dateClose ? formatDate(new Date(item.dateClose)) : null,
+        dateAntecipation: item.dateAntecipation
+          ? formatDate(new Date(item.dateAntecipation))
+          : null,
+        dateCorrection: item.dateCorrection ? formatDate(new Date(item.dateCorrection)) : null,
+      }
+    })
   }
 }

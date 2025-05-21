@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, beforeSave, belongsTo } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, beforeSave, belongsTo, hasOne } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { hashText } from '../services/hash.js'
-import { Profile } from '#models/index'
+import { Address, Profile } from '#models/index'
+import { addressCategoryType } from '../utils/datatypes.js'
 
 export default class User extends BaseModel {
   static table = 'users'
@@ -103,4 +104,13 @@ export default class User extends BaseModel {
 
   @belongsTo(() => Profile)
   public profile!: BelongsTo<typeof Profile>
+
+  @hasOne(() => Address, {
+    localKey: 'id',
+    foreignKey: 'ownerId',
+    onQuery: (query) => {
+      query.where('address_category', addressCategoryType.user)
+    },
+  })
+  public Address!: HasOne<typeof Address>
 }

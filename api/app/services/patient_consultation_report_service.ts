@@ -5,7 +5,7 @@ import { formatDate } from '../utils/functions.js'
 
 import { PatientConsultationReportProps } from '../dtos/index.js'
 
-export default class PatientConsultationService {
+export default class PatientConsultationReportService {
   async index(input: {
     initialDate: string
     finalDate: string
@@ -16,25 +16,21 @@ export default class PatientConsultationService {
     const { finalDate, initialDate, userId, medicId, patientId } = input
 
     const reports = await PatientConsultationReport.query()
-      .where('userId', medicId ?? 0)
-      .whereBetween('reportDate', [initialDate, finalDate])
+      .preload('Medic')
+      .preload('PatientConsultation', (query) => {
+        query.preload('Patient')
+      })
+      .where({ userId: medicId ?? 0 })
+      .whereBetween('report_date', [initialDate, finalDate])
       .whereNot('status', 'deleted')
       .whereHas('PatientConsultation', (query) => {
         query
           .if(userId, (q) => {
-            if (userId) {
-              q.where('userId', userId)
-            }
+            q.where({ userId })
           })
           .if(patientId, (q) => {
-            if (patientId) {
-              q.where('patientId', patientId)
-            }
+            q.where({ patientId })
           })
-      })
-      .preload('Medic')
-      .preload('PatientConsultation', (query) => {
-        query.preload('Patient')
       })
 
     const result = await Promise.all(
@@ -67,7 +63,7 @@ export default class PatientConsultationService {
       //verificar se existe um laudo já
       const exists = await PatientConsultationReport.query()
         .where('status', 'active')
-        .where('patientConsultationId', payload.patientConsultationId!)
+        .where({ patientConsultationId: payload.patientConsultationId! })
         .first()
 
       if (exists) {
@@ -98,7 +94,7 @@ export default class PatientConsultationService {
 
   async show(publicId: string) {
     const report = await PatientConsultationReport.query()
-      .where('publicId', publicId)
+      .where({ publicId })
       .preload('Medic')
       .preload('PatientConsultation', (query) => {
         query.preload('Patient')

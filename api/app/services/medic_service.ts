@@ -117,7 +117,10 @@ export default class MedicService {
 
       if (payload.Address) {
         // Delete the existing address
-        await Address.query().where('owner_id', user.id!).where('address_category', 'user').delete()
+        await Address.query()
+          .where('owner_id', user.id!)
+          .where('address_category', addressCategoryType.user)
+          .delete()
 
         // Create the new address
         await Address.create({
@@ -167,34 +170,9 @@ export default class MedicService {
     const user = await User.query()
       .where('public_id', id)
       .preload('profile') // Eager load the profile
-      .first()
+      .preload('Address')
+      .firstOrFail()
 
-    if (!user) {
-      throw new Error('Not found')
-    }
-
-    const address = await Address.query()
-      .where('owner_id', user.id!)
-      .where('address_category', 'user')
-      .first()
-
-    return {
-      id: user.id,
-      name: user.name,
-      cpfCnpj: user.cpfCnpj,
-      phone: user.phone,
-      crm: user.crm,
-      active: user.active,
-      crmUf: user.crmUf,
-      email: user.email,
-      Address: address,
-      publicId: user.publicId,
-      medicHourEnd: user.medicHourEnd,
-      medicHourStart: user.medicHourStart,
-      medicQueryInterval: user.medicQueryInterval,
-      medicConsultationType: user.medicConsultationType,
-      medicConsultationValue: user.medicConsultationValue,
-      profile: user.profile, // Include the profile data
-    }
+    return user
   }
 }
