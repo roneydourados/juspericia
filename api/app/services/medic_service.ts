@@ -5,31 +5,16 @@ import { UserProps } from '../dtos/index.js'
 export default class MedicService {
   async index(inputQuery: string) {
     const users = await User.query()
-      .select(
-        'id',
-        'name',
-        'cpfCnpj',
-        'phone',
-        'crm',
-        'active',
-        'crmUf',
-        'email',
-        'public_id',
-        'medicHourEnd',
-        'medicHourStart',
-        'medicQueryInterval',
-        'medicConsultationValue',
-        'medicConsultationType'
-      )
-      .where((query) => {
-        query.where('email', 'LIKE', `%${inputQuery}%`).orWhere('name', 'LIKE', `%${inputQuery}%`)
+      .preload('profile') // Eager load the profile
+      .if(inputQuery, (query) => {
+        query.where('email', 'ilike', `%${inputQuery}%`)
+        query.orWhere('name', 'ilike', `%${inputQuery}%`)
       })
       .whereHas('profile', (profileQuery) => {
         // Use whereHas for the Profile relation
-        profileQuery.where('type', 'MEDICO')
+        profileQuery.where({ type: 'MEDICO' })
       })
       .orderBy('name', 'asc')
-      .exec()
 
     const usersWithAddresses = await Promise.all(
       users.map(async (user) => {
@@ -53,6 +38,7 @@ export default class MedicService {
           publicId: user.publicId,
           medicConsultationType: user.medicConsultationType,
           medicConsultationValue: user.medicConsultationValue,
+          profile: user.profile, // Include the profile data
         }
       })
     )

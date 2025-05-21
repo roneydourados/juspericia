@@ -17,3 +17,4 @@ export { default as SystemParameterService } from './system_parameter_service.js
 export { default as UserAdminService } from './user_admin_service.js'
 export { default as ConsultationService } from './consultation_service.js'
 export { default as FileService } from './file_service.js'
+export { default as MedicService } from './medic_service.js'
