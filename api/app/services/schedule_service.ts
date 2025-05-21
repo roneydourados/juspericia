@@ -146,4 +146,35 @@ export default class ScheduleService {
 
     return schedule
   }
+
+  async index({ medicId, scheduleDate, patientId, status }: ScheduleProps) {
+    const schedule = await Schedule.query()
+      .preload('Medic')
+      .preload('PatientConsultation', (query) => {
+        query.preload('Patient')
+        query.preload('BenefitType')
+        query.preload('ReportPurpose')
+      })
+      .where((query) => {
+        if (medicId) {
+          query.where({ medicId })
+        }
+
+        if (scheduleDate) {
+          query.where({ scheduleDate })
+        }
+
+        if (patientId) {
+          query.whereHas('PatientConsultation', (q) => {
+            q.where({ patientId })
+          })
+        }
+
+        if (status) {
+          query.where('status', status)
+        }
+      })
+
+    return schedule
+  }
 }

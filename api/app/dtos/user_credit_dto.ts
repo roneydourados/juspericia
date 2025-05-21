@@ -1,4 +1,4 @@
-export interface UserCreditSalt {
+export interface UserCreditSaltProps {
   id?: number
   publicId?: string
   ownerId?: number
@@ -29,5 +29,5 @@ export interface UserCreditSaltResponseProps {
     totalExpired: number
     totalPending: number
   }
-  credits: UserCreditSalt[]
+  credits: UserCreditSaltProps[]
 }
