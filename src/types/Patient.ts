@@ -19,7 +19,7 @@ export interface PatientProps {
   BenefitType?: BenefitTypeProps;
   User?: UserProps;
   PatientConsultation?: SolicitationConsultationProps[];
-  Address: AddressProps;
+  PatientAddress: AddressProps;
 }
 
 export interface ReportModelProps {

@@ -91,10 +91,16 @@ export default class PatientService {
     const patient = await Patient.query().where({ publicId }).firstOrFail()
 
     //verificar se o CPF passado existe em outro paciente que não seja o atualizado em questão
-    const exists = await Patient.query().where({ cpf }).andWhereNot({ publicId }).first()
+    if (cpf) {
+      const exists = await Patient.query()
+        .where((query) => {
+          query.where('cpf', cpf).whereNot('id', patient.id)
+        })
+        .first()
 
-    if (exists) {
-      throw new Error('Patient already exists cpf')
+      if (exists) {
+        throw new Error('Patient already exists cpf')
+      }
     }
 
     const trx = await db.transaction()
@@ -113,6 +119,8 @@ export default class PatientService {
         userId,
         sexy,
       })
+
+      await patient.save()
 
       if (PatientAddress) {
         const existsAddress = await Address.query().where('owner_id', patient.id).first()
@@ -193,7 +201,10 @@ export default class PatientService {
   }
 
   async show(publicId: string) {
-    const patient = await Patient.query().preload('Address').where({ publicId }).firstOrFail()
+    const patient = await Patient.query()
+      .preload('PatientAddress')
+      .where({ publicId })
+      .firstOrFail()
 
     return patient
   }
@@ -211,7 +222,7 @@ export default class PatientService {
       .preload('Consultation')
       .preload('BenefitType')
       .preload('ReportPurpose')
-      .preload('Sales')
+      //.preload('Sales')
       .preload('PatientConsultationReport', (query) => {
         query.first()
         query.where('status', 'active')

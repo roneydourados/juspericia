@@ -38,7 +38,9 @@ export default class Schedule extends BaseModel {
   @column()
   declare status: string
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'medicId',
+  })
   public Medic!: BelongsTo<typeof User>
 
   @belongsTo(() => PatientConsultation)

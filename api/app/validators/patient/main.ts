@@ -2,7 +2,7 @@ import vine from '@vinejs/vine'
 
 const baseSchemaObject = {
   sexy: vine.string().trim().maxLength(1),
-  userId: vine.number(),
+  userId: vine.number().optional(),
   birthDate: vine.string(),
   cpf: vine.string().trim().minLength(11).maxLength(11),
   rg: vine.string().trim().optional(),

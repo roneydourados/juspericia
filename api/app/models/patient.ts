@@ -63,5 +63,5 @@ export default class Patient extends BaseModel {
       query.where('address_category', addressCategoryType.patient)
     },
   })
-  public Address!: HasOne<typeof Address>
+  public PatientAddress!: HasOne<typeof Address>
 }

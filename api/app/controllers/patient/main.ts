@@ -34,7 +34,7 @@ export default class PatientController {
 
     const payload = await updateValidator.validate(data)
 
-    const patient = await this.patientService.create(payload)
+    const patient = await this.patientService.update(payload)
 
     return response.status(201).json(patient)
   }

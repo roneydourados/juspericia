@@ -4,7 +4,9 @@ import {
   benefitTypeStoreValidator,
   benefitTypeUpdateValidator,
 } from '#validators/benefit_type/main'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class BenefitTypeController {
   constructor(private benefitTypeService: BenefitTypeService) {}
 

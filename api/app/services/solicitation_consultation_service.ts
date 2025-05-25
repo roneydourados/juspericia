@@ -1,8 +1,9 @@
 import db from '@adonisjs/lucid/services/db'
-import { PatientConsultation, Schedule, UserCredit, UserCreditLog } from '#models/index'
+import { PatientConsultation, Schedule, UserCredit, UserCreditLog, File } from '#models/index'
 import dayjs from 'dayjs'
 
 import { SolicitationConsultationProps } from '../dtos/index.js'
+import { formatDate } from '../utils/functions.js'
 
 export default class SolicitationConsultationService {
   async index(filters: {
@@ -38,7 +39,7 @@ export default class SolicitationConsultationService {
       .preload('Consultation')
       .preload('BenefitType')
       .preload('ReportPurpose')
-      .preload('Sales')
+      //.preload('Sales')
       .preload('PatientConsultationReport', (query) => {
         query.first()
         query.where('status', 'active')
@@ -71,7 +72,65 @@ export default class SolicitationConsultationService {
       })
       .orderBy('id', 'desc')
 
-    return patientConsultation
+    const totals = await db
+      .from('patient_consultations')
+      .select('status')
+      .count('* as total')
+      .where((query) => {
+        if (initialDateSolicitation && finalDateSolicitation) {
+          query.whereBetween('date_open', [
+            new Date(initialDateSolicitation),
+            new Date(finalDateSolicitation),
+          ])
+        }
+
+        if (userId) query.where('user_id', Number(userId))
+        if (patientId) query.where('patient_id', Number(patientId))
+        if (benefitTypeId) query.where('benefit_type_id', Number(benefitTypeId))
+        if (reportPurposeId) query.where('report_purpose_id', Number(reportPurposeId))
+      })
+      .groupBy('status')
+
+    const consultations = await Promise.all(
+      patientConsultation.map(async (item) => {
+        // Calcula o tempo decorrido em dias a partir de dateOpen
+        const leftTime = dayjs().diff(dayjs(formatDate(new Date(item.dateOpen))), 'days')
+
+        // Obtém o primeiro (ou único) registro de PatientConsultationReport, se existir
+        const report = item.PatientConsultationReport[0]
+
+        // Se houver um relatório, realiza a busca dos arquivos com base no id do relatório
+        let files = [] as any[]
+        if (report && report.id) {
+          files = await File.query().where({ ownerId: report.id, fileCategory: 'medical-report' })
+        }
+
+        return {
+          ...item.serialize(),
+          files, // Adiciona os arquivos encontrados
+          isSolicitationCorrection: !item.reasonCorrection && leftTime <= 30,
+          dateOpen: formatDate(new Date(item.dateOpen)),
+          dateClose: item.dateClose ? formatDate(new Date(item.dateClose)) : null,
+          dateAntecipation: item.dateAntecipation
+            ? formatDate(new Date(item.dateAntecipation))
+            : null,
+          dateCorrection: item.dateCorrection ? formatDate(new Date(item.dateCorrection)) : null,
+          deadline: dayjs(formatDate(new Date(item.dateOpen)))
+            .add(30, 'days')
+            .format('YYYY-MM-DD'),
+        }
+      })
+    )
+
+    return {
+      consultations,
+      totals: totals.map((item) => {
+        return {
+          status: item.status,
+          total: item.total,
+        }
+      }),
+    }
   }
 
   async create({

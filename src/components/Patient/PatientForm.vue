@@ -307,13 +307,13 @@ const loadModel = () => {
     sexy: props.data.sexy,
     status: props.data.status ?? "A",
     cepAddress: {
-      bairro: props.data.Address.addressDistrict ?? "",
-      complemento: props.data.Address.addressComplement ?? "",
-      localidade: props.data.Address.addressCity ?? "",
-      uf: props.data.Address.addressState ?? "",
-      numero: props.data.Address.addressNumber ?? "",
-      logradouro: props.data.Address.addressStreet ?? "",
-      cep: props.data.Address.addressZipcode ?? "",
+      bairro: props.data.PatientAddress.addressDistrict ?? "",
+      complemento: props.data.PatientAddress.addressComplement ?? "",
+      localidade: props.data.PatientAddress.addressCity ?? "",
+      uf: props.data.PatientAddress.addressState ?? "",
+      numero: props.data.PatientAddress.addressNumber ?? "",
+      logradouro: props.data.PatientAddress.addressStreet ?? "",
+      cep: props.data.PatientAddress.addressZipcode ?? "",
     },
     lawyer: props.data.User,
   };
@@ -332,7 +332,7 @@ const create = async () => {
     sexy: model.value.sexy,
     status: model.value.status,
     userId: model.value.lawyer?.id,
-    Address: {
+    PatientAddress: {
       addressCity: model.value.cepAddress?.localidade ?? "",
       addressComplement: model.value.cepAddress?.complemento ?? "",
       addressDistrict: model.value.cepAddress?.bairro ?? "",
@@ -359,7 +359,7 @@ const update = async () => {
     sexy: model.value.sexy,
     status: model.value.status,
     userId: model.value.lawyer?.id,
-    Address: {
+    PatientAddress: {
       addressCity: model.value.cepAddress?.localidade ?? "",
       addressComplement: model.value.cepAddress?.complemento ?? "",
       addressDistrict: model.value.cepAddress?.bairro ?? "",

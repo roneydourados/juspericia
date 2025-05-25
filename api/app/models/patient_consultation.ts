@@ -112,6 +112,6 @@ export default class PatientConsultation extends BaseModel {
   @hasMany(() => Schedule)
   public Schedule!: HasMany<typeof Schedule>
 
-  @hasMany(() => Sale)
-  public Sales!: HasMany<typeof Sale>
+  // @hasMany(() => Sale)
+  // public Sales!: HasMany<typeof Sale>
 }

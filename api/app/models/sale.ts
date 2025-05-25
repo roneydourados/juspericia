@@ -81,6 +81,8 @@ export default class Sale extends BaseModel {
   @belongsTo(() => User)
   public User!: BelongsTo<typeof User>
 
-  @belongsTo(() => PatientConsultation)
-  public PatientConsultation!: BelongsTo<typeof PatientConsultation>
+  // @belongsTo(() => PatientConsultation, {
+  //   foreignKey: 'solicitationId',
+  // })
+  // public PatientConsultation!: BelongsTo<typeof PatientConsultation>
 }
