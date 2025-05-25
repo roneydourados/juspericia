@@ -159,12 +159,12 @@
           />
         </v-col>
       </v-row>
-      <v-row v-if="$currentUser?.Profile.type === 'ADMIN'" dense>
+      <v-row v-if="$currentUser?.profile?.type === 'ADMIN'" dense>
         <v-col cols="12">
           <SelectSearchLawyer
             v-model="model.lawyer"
             clearable
-            :required="$currentUser?.Profile.type === 'ADMIN'"
+            :required="$currentUser?.profile?.type === 'ADMIN'"
           />
         </v-col>
       </v-row>

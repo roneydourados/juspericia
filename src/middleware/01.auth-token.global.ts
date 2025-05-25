@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware((to) => {
     try {
       const token = JSON.parse(stoken);
 
-      const tokenExpires = moment(token.expires_at).isBefore(new Date());
+      const tokenExpires = moment(token.expiresAt).isBefore(new Date());
 
       // se tem o token e esta expirado então expulsa para o login
       if (tokenExpires) {
@@ -36,11 +36,11 @@ export default defineNuxtRouteMiddleware((to) => {
       }
 
       if (to.path === "/") {
-        if (auth.$currentUser?.Profile.type === "ADMIN") {
+        if (auth.$currentUser?.profile?.type === "ADMIN") {
           return navigateTo("/admin/home");
-        } else if (auth.$currentUser?.Profile.type === "ADVOGADO") {
+        } else if (auth.$currentUser?.profile?.type === "ADVOGADO") {
           return navigateTo("/lawyer/home");
-        } else if (auth.$currentUser?.Profile.type === "MEDICO") {
+        } else if (auth.$currentUser?.profile?.type === "MEDICO") {
           return navigateTo("/medic/home");
         }
       }

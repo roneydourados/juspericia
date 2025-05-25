@@ -2,9 +2,10 @@ import { User, Profile, UserToken, Address } from '#models/index'
 
 import { validHash } from './hash.js'
 import db from '@adonisjs/lucid/services/db'
-
+import axios from 'axios'
 import dayjs from 'dayjs'
 import { uuidv7 } from 'uuidv7'
+import env from '#start/env'
 import { addressCategoryType } from '../utils/datatypes.js'
 
 import { UserProps } from '../dtos/index.js'
@@ -301,6 +302,33 @@ export default class AuthService {
     } catch (error) {
       //se der erro ao ativar o usuário, apagar o token
       throw new Error('Error updating password')
+    }
+  }
+
+  async verifyTurnstileToken(token: string, ip: string): Promise<boolean> {
+    const secret = env.get('TURNSTILE_SECRET_KEY', '')
+
+    const api = axios.create()
+
+    try {
+      const { data } = await api.post(
+        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+        new URLSearchParams({
+          secret: secret ?? '',
+          response: token,
+          remoteip: ip,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      )
+
+      return data.success === true
+    } catch (error) {
+      console.error('Erro ao verificar Turnstile:', error)
+      return false
     }
   }
 }

@@ -13,7 +13,7 @@ const $currentUser = computed(() => auth.$currentUser);
 const loading = ref(false);
 // se for médico sempre passar ele
 const medicId =
-  $currentUser.value?.Profile?.type === "MEDICO"
+  $currentUser.value?.profile?.type === "MEDICO"
     ? $currentUser.value?.id
     : undefined;
 

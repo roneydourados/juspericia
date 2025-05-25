@@ -14,6 +14,9 @@ export default class Profile extends BaseModel {
   @column({ columnName: 'profile_name' })
   declare profileName: string
 
+  @column()
+  declare type: string
+
   @hasMany(() => ProfileRoute)
   declare routes: HasMany<typeof ProfileRoute>
 }

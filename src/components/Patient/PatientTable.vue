@@ -187,7 +187,7 @@ const auth = useAuthStore();
 const $all = computed(() => itemStore.$all);
 const $single = computed(() => itemStore.$single);
 const headers = computed(() => {
-  if (auth.$currentUser?.Profile.type === "ADVOGADO") {
+  if (auth.$currentUser?.profile?.type === "ADVOGADO") {
     return [
       { title: "Nome", key: "name" },
       { title: "CPF", key: "cpf" },

@@ -66,7 +66,7 @@ const joinRoom = () => {
     roomId: $single.value.publicId!,
     userId: $currentUser.value?.publicId!,
     userName: `${
-      $currentUser.value?.Profile.type === "MEDICO" ? "Dr(a)" : ""
+      $currentUser.value?.profile?.type === "MEDICO" ? "Dr(a)" : ""
     } ${$currentUser.value?.name}`,
     appUrl: `${config.public.appUrl}/teleconference/${$single.value.publicId!}`,
   };
@@ -98,7 +98,7 @@ const joinRoom = () => {
 const handleClose = async () => {
   loading.value = true;
   try {
-    if ($currentUser.value?.Profile.type === "MEDICO") {
+    if ($currentUser.value?.profile?.type === "MEDICO") {
       //desativar teleconsulta
       await storeConsultation.update({
         publicId: $single.value?.publicId,

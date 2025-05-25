@@ -1,25 +1,23 @@
 import { defineStore } from "pinia";
-import { jwtDecode } from "jwt-decode";
-import { JWTDecodedProps } from "@/types/JWTDecoded";
+// import { jwtDecode } from "jwt-decode";
+// import { JWTDecodedProps } from "@/types/JWTDecoded";
 import { AuthProps } from "@/types/Auth";
 
 export const useAuthStore = defineStore("auth", () => {
   const { api } = useAxios();
 
-  const currentUser = ref<JWTDecodedProps | null>(null);
+  const currentUser = ref<AuthProps | null>(null);
 
   const $currentUser = computed(() => {
-    const stoken = localStorage.getItem("token");
+    const sUser = localStorage.getItem("user");
 
-    if (stoken) {
-      const token = JSON.parse(stoken);
+    if (sUser) {
+      const user = JSON.parse(sUser);
 
-      currentUser.value = token
-        ? jwtDecode<JWTDecodedProps>(token.token)
-        : null;
+      currentUser.value = user;
     }
 
-    return currentUser.value?.data;
+    return currentUser.value;
   });
 
   const login = async ({ email, password, tokenCapcha }: AuthProps) => {
@@ -31,9 +29,9 @@ export const useAuthStore = defineStore("auth", () => {
 
     localStorage.setItem("token", JSON.stringify(resp.data.token));
 
-    currentUser.value = resp.data.token?.token
-      ? jwtDecode<JWTDecodedProps>(resp.data.token?.token)
-      : null;
+    currentUser.value = resp.data;
+
+    localStorage.setItem("user", JSON.stringify(resp.data));
   };
 
   const verifyUser = async (id: number) => {
@@ -43,9 +41,9 @@ export const useAuthStore = defineStore("auth", () => {
       localStorage.removeItem("token");
       localStorage.setItem("token", JSON.stringify(resp.data.token));
 
-      currentUser.value = resp.data.token.token
-        ? jwtDecode<JWTDecodedProps>(resp.data.token.token)
-        : null;
+      currentUser.value = resp.data;
+
+      localStorage.setItem("user", JSON.stringify(resp.data));
     }
   };
 

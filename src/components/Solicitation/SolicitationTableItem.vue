@@ -22,7 +22,7 @@
             {{ solicitation.Schedule[0].scheduleHour }}
           </strong>
 
-          <div v-if="$currentUser?.Profile.type === 'ADMIN'">
+          <div v-if="$currentUser?.profile?.type === 'ADMIN'">
             Dr(a):
             <strong>
               {{ solicitation.Schedule[0].Medic?.name }}
@@ -34,7 +34,7 @@
         <div
           v-if="
             solicitation.status === 'open' &&
-            $currentUser?.Profile.type === 'ADVOGADO'
+            $currentUser?.profile?.type === 'ADVOGADO'
           "
           class="d-flex align-center"
           style="gap: 0.5rem"
@@ -65,7 +65,7 @@
             solicitation.status !== 'open' &&
             solicitation.status !== 'canceled' &&
             solicitation.status !== 'payment_pending' &&
-            $currentUser?.Profile.type === 'ADVOGADO'
+            $currentUser?.profile?.type === 'ADVOGADO'
           "
           class="text-none text-white"
           color="success"
@@ -195,7 +195,7 @@
           </span>
         </v-col>
       </v-row>
-      <v-row v-if="$currentUser?.Profile.type !== 'MEDICO'" dense>
+      <v-row v-if="$currentUser?.profile?.type !== 'MEDICO'" dense>
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Valor:</span>
           <span class="font-weight-bold">{{
@@ -268,7 +268,7 @@
           </span>
         </v-col>
         <v-col
-          v-if="$currentUser?.Profile.type !== 'MEDICO'"
+          v-if="$currentUser?.profile?.type !== 'MEDICO'"
           cols="12"
           lg="2"
           class="d-flex flex-column"
@@ -286,7 +286,10 @@
       </v-row>
       <v-divider class="mt-2" />
     </v-card-text>
-    <v-card-actions v-if="$currentUser?.Profile.type !== 'MEDICO'" class="px-8">
+    <v-card-actions
+      v-if="$currentUser?.profile?.type !== 'MEDICO'"
+      class="px-8"
+    >
       <v-row dense align="center">
         <v-col v-if="solicitation.status === 'finished'" cols="12" lg="2">
           <v-btn

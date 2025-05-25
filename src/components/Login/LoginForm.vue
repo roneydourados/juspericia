@@ -149,11 +149,11 @@ const submmitForm = async () => {
       localStorage.setItem("saveCredentials", "false");
     }
 
-    if ($user?.value?.Profile.type === "ADMIN") {
+    if ($user?.value?.profile?.type === "ADMIN") {
       return navigateTo("/admin/home");
-    } else if ($user?.value?.Profile.type === "ADVOGADO") {
+    } else if ($user?.value?.profile?.type === "ADVOGADO") {
       return navigateTo("/lawyer/home");
-    } else if ($user?.value?.Profile.type === "MEDICO") {
+    } else if ($user?.value?.profile?.type === "MEDICO") {
       return navigateTo("/medic/home");
     }
   } catch (error) {

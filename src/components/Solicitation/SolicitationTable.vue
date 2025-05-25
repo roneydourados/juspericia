@@ -4,7 +4,11 @@
       <div class="d-flex flex-column w-100">
         <HeaderPage title="Solicitações" />
         <v-row class="mt-4" dense>
-          <v-col v-if="$currentUser?.Profile.type === 'ADMIN'" cols="12" lg="3">
+          <v-col
+            v-if="$currentUser?.profile?.type === 'ADMIN'"
+            cols="12"
+            lg="3"
+          >
             <SelectSearchLawyer
               label="Escritório/Advogado"
               v-model="modelFilters.lawyer"

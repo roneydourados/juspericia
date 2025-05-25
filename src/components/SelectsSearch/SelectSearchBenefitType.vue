@@ -21,7 +21,7 @@
         <v-list-item v-bind="props" :title="item.raw.name" density="compact">
           <template #append>
             <v-btn
-              v-if="$currentUser?.Profile.type === 'ADMIN'"
+              v-if="$currentUser?.profile?.type === 'ADMIN'"
               icon="mdi-pencil"
               variant="text"
               color="warning"
@@ -40,7 +40,7 @@
       </template>
     </AutoCompleteInput>
 
-    <div v-if="showNewButton && $currentUser?.Profile.type === 'ADMIN'">
+    <div v-if="showNewButton && $currentUser?.profile?.type === 'ADMIN'">
       <v-tooltip text="Novo" content-class="tooltip-background">
         <template v-slot:activator="{ props }">
           <v-btn

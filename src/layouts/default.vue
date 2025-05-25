@@ -16,7 +16,7 @@
               {{ $currentUser?.name }}
             </span>
             <span class="mt-n2">
-              {{ $currentUser?.Profile?.profileName }}
+              {{ $currentUser?.profile?.profileName }}
             </span>
           </div>
         </div>
@@ -32,7 +32,7 @@
       />
       <template v-slot:append>
         <div
-          v-if="$currentUser?.Profile.type === 'ADVOGADO'"
+          v-if="$currentUser?.profile?.type === 'ADVOGADO'"
           class="d-flex align-center px-4"
           style="gap: 0.5rem"
         >
@@ -97,8 +97,8 @@
         <slot />
         <SuportButton
           v-if="
-            $currentUser?.Profile.type === 'ADVOGADO' ||
-            $currentUser?.Profile.type === 'MEDICO'
+            $currentUser?.profile?.type === 'ADVOGADO' ||
+            $currentUser?.profile?.type === 'MEDICO'
           "
         />
       </div>

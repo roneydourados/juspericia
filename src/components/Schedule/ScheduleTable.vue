@@ -8,7 +8,7 @@
             <span class="text-grey-darken-1">{{ formattedDate }}</span>
             <v-row dense>
               <v-col
-                v-if="$currentUser?.Profile.type === 'ADMIN'"
+                v-if="$currentUser?.profile?.type === 'ADMIN'"
                 cols="12"
                 lg="6"
               >
@@ -116,7 +116,7 @@
                       </span>
                     </div>
                     <div
-                      v-if="$currentUser?.Profile.type === 'ADMIN'"
+                      v-if="$currentUser?.profile?.type === 'ADMIN'"
                       class="d-flex w-100"
                       style="gap: 0.5rem"
                     >

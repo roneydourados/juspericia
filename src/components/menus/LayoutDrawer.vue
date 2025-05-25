@@ -16,7 +16,7 @@
         </template>
         <!-- <template #subtitle>
           <span style="font-size: 0.8rem">
-            {{ $user?.Profile?.profileName }}
+            {{ $user?.profile?.profileName }}
           </span>
         </template> -->
       </v-list-item>
@@ -97,16 +97,18 @@ const $user = computed(() => {
 });
 
 const itemsMenu = computed(() => {
-  const items = auth.$currentUser?.Profile.ProfileRoute!.map((item) => {
-    return {
-      title: item.title,
-      to: item.to,
-      icon: item.icon,
-      visible: item.visible,
-      isMenu: item.isMenu,
-      id: item.id,
-    };
-  }).filter((item) => item.visible && item.isMenu);
+  const items = auth.$currentUser?.profile
+    ?.routes!.map((item) => {
+      return {
+        title: item.title,
+        to: item.to,
+        icon: item.icon,
+        visible: item.visible,
+        isMenu: item.isMenu,
+        id: item.id,
+      };
+    })
+    .filter((item) => item.visible && item.isMenu);
 
   return items;
 });

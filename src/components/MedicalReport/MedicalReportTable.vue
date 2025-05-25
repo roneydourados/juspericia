@@ -14,8 +14,8 @@
         </v-col>
         <v-col
           v-if="
-            $currentUser?.Profile.type === 'ADMIN' ||
-            $currentUser?.Profile.type === 'ADVOGADO'
+            $currentUser?.profile?.type === 'ADMIN' ||
+            $currentUser?.profile?.type === 'ADVOGADO'
           "
           cols="12"
           lg="3"
@@ -118,8 +118,8 @@
           </v-btn>
           <v-btn
             v-if="
-              $currentUser?.Profile.type === 'ADMIN' ||
-              $currentUser?.Profile.type === 'MEDICO'
+              $currentUser?.profile?.type === 'ADMIN' ||
+              $currentUser?.profile?.type === 'MEDICO'
             "
             icon
             color="orange"
@@ -137,8 +137,8 @@
           </v-btn>
           <v-btn
             v-if="
-              $currentUser?.Profile.type === 'ADMIN' ||
-              $currentUser?.Profile.type === 'MEDICO'
+              $currentUser?.profile?.type === 'ADMIN' ||
+              $currentUser?.profile?.type === 'MEDICO'
             "
             icon
             color="purple"

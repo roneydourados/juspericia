@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { createPostValidator } from '#validators/user/main'
+import { createValidator } from '#validators/user/main'
 import { authValidator } from '#validators/auth/main'
 import { AuthService } from '#services/index'
 import { inject } from '@adonisjs/core'
@@ -9,8 +9,15 @@ export default class AuthController {
   constructor(private authService: AuthService) {}
 
   async store({ request, response }: HttpContext) {
-    const { email, password } = request.only(['email', 'password'])
-    const payload = await authValidator.validate({ email, password })
+    const { email, password, tokenCapcha } = request.only(['email', 'password', 'tokenCapcha'])
+
+    const payload = await authValidator.validate({ email, password, tokenCapcha })
+
+    const isValid = await this.authService.verifyTurnstileToken(tokenCapcha, request.ip())
+
+    if (!isValid) {
+      return response.badRequest({ message: 'Falha na verificação do Turnstile.' })
+    }
 
     const auth = await this.authService.auth(payload.email, payload.password)
 
@@ -27,7 +34,7 @@ export default class AuthController {
     const data = request.all()
 
     //validar os dados
-    const payload = await createPostValidator.validate(data)
+    const payload = await createValidator.validate(data)
 
     const payloadData = {
       userPayload: {
