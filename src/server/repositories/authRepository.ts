@@ -4,7 +4,7 @@ import { useHash } from "@/server/providers/hash";
 import { useJwtToken } from "@/server/providers/jwtToken";
 import { UserProfileProps, UserProps } from "@/types/User";
 import { AuthProps } from "@/types/Auth";
-import moment from "moment";
+import dayjs from "dayjs";
 import { sendEmail } from "../services/emailService";
 import { uuidv7 } from "uuidv7";
 
@@ -225,7 +225,7 @@ export const register = async (payload: UserProps) => {
       });
 
       //expirar token em 3 minutos
-      const expiresAt = moment().add(3, "minutes").toDate();
+      const expiresAt = dayjs().add(3, "minutes").toDate();
 
       // primeiro criar o token
       const userToken = await prisma.userTokens.create({
@@ -288,7 +288,7 @@ export const register = async (payload: UserProps) => {
     }
 
     //expirar token em 3 minutos
-    const expiresAt = moment().add(3, "minutes").toDate();
+    const expiresAt = dayjs().add(3, "minutes").toDate();
 
     // primeiro criar o token
     const userToken = await prisma.userTokens.create({
@@ -337,7 +337,7 @@ export const activeAccount = async (token: string) => {
     });
   }
 
-  const expired = moment().isAfter(tokenExists?.expiresAt);
+  const expired = dayjs().isAfter(tokenExists?.expiresAt);
 
   if (expired) {
     throw createError({
@@ -413,7 +413,7 @@ export const forgotActivateLink = async (token: string) => {
     });
 
     //expirar token em 3 minutos
-    const expiresAt = moment().add(3, "minutes").toDate();
+    const expiresAt = dayjs().add(3, "minutes").toDate();
 
     // primeiro criar o token
     const userToken = await prisma.userTokens.create({
@@ -472,7 +472,7 @@ export const forgotPassword = async (email: string) => {
     });
 
     //expirar token em 3 minutos
-    const expiresAt = moment().add(3, "minutes").toDate();
+    const expiresAt = dayjs().add(3, "minutes").toDate();
 
     // primeiro criar o token
     const userToken = await prisma.userTokens.create({
@@ -533,7 +533,7 @@ export const renewPassword = async ({ password }: UserProps, token: string) => {
   }
 
   //se existir verificar se ainda é válido
-  const expired = moment().isAfter(tokenExists.expiresAt);
+  const expired = dayjs().isAfter(tokenExists.expiresAt);
 
   // se estiver expirado parar por aqui
   if (expired) {

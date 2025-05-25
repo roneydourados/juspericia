@@ -106,13 +106,13 @@
               </span>
             </template>
             <template #item.createdAt="{ item }">
-              {{ moment(item.createdAt).format("DD/MM/YYYY") }}
+              {{ dayjs(item.createdAt).format("DD/MM/YYYY") }}
             </template>
             <template #item.expiredAt="{ item }">
               <strong>
                 {{
                   item.status === "PENDING"
-                    ? moment(item.expiredAt).format("DD/MM/YYYY")
+                    ? dayjs(item.expiredAt).format("DD/MM/YYYY")
                     : ""
                 }}
               </strong>
@@ -182,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const indicationStore = useUserIndicationStore();
 
@@ -269,8 +269,8 @@ const handleDeleteIitem = async () => {
     try {
       await indicationStore.destroy(selected.value.publicId!);
 
-      const initialDate = moment().startOf("month").format("YYYY-MM-DD");
-      const finalDate = moment().endOf("month").format("YYYY-MM-DD");
+      const initialDate = dayjs().startOf("month").format("YYYY-MM-DD");
+      const finalDate = dayjs().endOf("month").format("YYYY-MM-DD");
 
       await indicationStore.index({ initialDate, finalDate });
     } catch (error) {
@@ -289,12 +289,12 @@ const handleChangeMonth = async (monthIndex: number) => {
     const currentYear = new Date().getFullYear();
 
     // Cria a data inicial do mês (primeiro dia do mês)
-    const initialDate = moment(new Date(currentYear, monthIndex, 1)).format(
+    const initialDate = dayjs(new Date(currentYear, monthIndex, 1)).format(
       "YYYY-MM-DD"
     );
 
     // Cria a data final do mês (último dia do mês)
-    const finalDate = moment(new Date(currentYear, monthIndex + 1, 0)).format(
+    const finalDate = dayjs(new Date(currentYear, monthIndex + 1, 0)).format(
       "YYYY-MM-DD"
     );
 

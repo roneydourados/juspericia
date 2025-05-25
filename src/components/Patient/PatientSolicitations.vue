@@ -9,7 +9,7 @@
       >
         <template v-slot:item.dateOpen="{ item }">
           <span class="text-info font-weight-bold">
-            {{ moment(item.dateOpen).format("DD/MM/YYYY") }}
+            {{ dayjs(item.dateOpen).format("DD/MM/YYYY") }}
           </span>
         </template>
         <template v-slot:item.BenefitType.name="{ item }">
@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 const patientStore = usePatientStore();
 const { amountFormated, solicitationStatusName, solicitationStatusColor } =
   useUtils();

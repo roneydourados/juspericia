@@ -71,7 +71,7 @@
       :items="$consultationReports"
     >
       <template v-slot:item.reportDate="{ item }">
-        <span>{{ moment(item.reportDate).format("DD/MM/YYYY") }}</span>
+        <span>{{ dayjs(item.reportDate).format("DD/MM/YYYY") }}</span>
       </template>
       <template v-slot:item.Medic="{ item }">
         <div class="d-flex flex-column">
@@ -164,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
 
@@ -178,8 +178,8 @@ const showReportDetails = ref(false);
 const selectedReport = ref<PatientConsultationReportProps>();
 
 const filters = ref({
-  initialDate: moment().startOf("month").format("YYYY-MM-DD"),
-  finalDate: moment().endOf("month").format("YYYY-MM-DD"),
+  initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+  finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
   patient: undefined as PatientProps | undefined,
   medic: undefined as UserProps | undefined,
 });

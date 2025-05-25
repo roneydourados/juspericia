@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import moment from "moment";
+import dayjs from "dayjs";
 import { uuidv7 } from "uuidv7";
 import { formatDate } from "@/server/utils/functionts";
 import {
@@ -258,7 +258,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
   });
 
   // const consultations = data.map((item) => {
-  //   const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
+  //   const leftTime = dayjs().diff(dayjs(formatDate(item.dateOpen)), "days");
 
   //   return {
   //     ...item,
@@ -271,7 +271,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
   //     dateCorrection: item.dateCorrection
   //       ? formatDate(item.dateCorrection)
   //       : null,
-  //     deadline: moment(formatDate(item.dateOpen))
+  //     deadline: dayjs(formatDate(item.dateOpen))
   //       .add(30, "days")
   //       .format("YYYY-MM-DD"),
   //   };
@@ -280,7 +280,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
   const consultations = await Promise.all(
     data.map(async (item) => {
       // Calcula o tempo decorrido em dias a partir de dateOpen
-      const leftTime = moment().diff(moment(formatDate(item.dateOpen)), "days");
+      const leftTime = dayjs().diff(dayjs(formatDate(item.dateOpen)), "days");
 
       // Obtém o primeiro (ou único) registro de PatientConsultationReport, se existir
       const report = item.PatientConsultationReport[0];
@@ -308,7 +308,7 @@ export const index = async (filters: SolicitationConsultationFilterProps) => {
         dateCorrection: item.dateCorrection
           ? formatDate(item.dateCorrection)
           : null,
-        deadline: moment(formatDate(item.dateOpen))
+        deadline: dayjs(formatDate(item.dateOpen))
           .add(30, "days")
           .format("YYYY-MM-DD"),
       };
@@ -416,7 +416,7 @@ export const consultationUpdate = async (
     // aqui indica que se iniciou uma nova consulta de telemedicina
     if (payload.isTelemedicine) {
       //pegar a data que a consulta iniciou
-      const atendimentStart = moment().format("YYYY-MM-DD HH:mm:ss");
+      const atendimentStart = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
       //atualizar o agendamento para concluído
       await prisma.schedule.updateMany({
@@ -434,7 +434,7 @@ export const consultationUpdate = async (
     // aqui indica que finalizou o atendimento
     if (!payload.isTelemedicine && payload.status === "finished") {
       //pegar a data que a consulta finalizou
-      const atendimentEnd = moment().format("YYYY-MM-DD HH:mm:ss");
+      const atendimentEnd = dayjs().format("YYYY-MM-DD HH:mm:ss");
 
       //atualizar o agendamento para hora finalizada
       await prisma.schedule.updateMany({
@@ -659,10 +659,10 @@ export const paidConsultationCreditSalt = async (
       Number(solicitation.antecipationValue ?? 0);
 
     const updateSalts = salts.map(async (userCreditItem) => {
-      const currentDate = moment();
+      const currentDate = dayjs();
 
       //verificar se a data de expiração do saldo não foi expirada
-      if (!moment(userCreditItem.expireDate).isBefore(currentDate)) {
+      if (!dayjs(userCreditItem.expireDate).isBefore(currentDate)) {
         if (Number(userCreditItem.salt) >= totalCheck && totalCheck > 0) {
           // se o saldo disponível do item for maior ou igual ao total
           await prisma.userCredit.update({

@@ -31,8 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
-const monthIndex = ref(moment().month());
+import dayjs from "dayjs";
+const monthIndex = ref(dayjs().month());
 
 const emit = defineEmits(["month"]);
 
@@ -41,7 +41,7 @@ const $months = computed(() => {
 });
 
 onMounted(() => {
-  const currentMonth = moment().month();
+  const currentMonth = dayjs().month();
   const index = $months.value.findIndex(
     (month) => month.monthIndex === currentMonth
   );

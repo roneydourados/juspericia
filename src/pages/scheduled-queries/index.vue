@@ -3,7 +3,7 @@
   <DialogLoading :dialog="loading" />
 </template>
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
@@ -21,7 +21,7 @@ onMounted(async () => {
   loading.value = true;
   try {
     await scheduleStore.index({
-      scheduleDate: moment().format("YYYY-MM-DD"),
+      scheduleDate: dayjs().format("YYYY-MM-DD"),
       medicId,
     });
   } finally {
@@ -30,7 +30,7 @@ onMounted(async () => {
 });
 // await useAsyncData(async () => {
 //   await scheduleStore.index({
-//     scheduleDate: moment().format("YYYY-MM-DD"),
+//     scheduleDate: dayjs().format("YYYY-MM-DD"),
 //     medicId,
 //   });
 // });

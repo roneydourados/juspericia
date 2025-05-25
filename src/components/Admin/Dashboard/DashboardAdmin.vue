@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { TabProps } from "@/types/Tab";
-import moment from "moment";
+import dayjs from "dayjs";
 
 const tabRegion = ref(1);
 const tabDate = ref(1);
@@ -105,8 +105,8 @@ const tabsRegion = ref<TabProps[]>([
 ]);
 
 const modelFilters = ref<AdminDashBoardSalesFilterProps>({
-  initialDate: moment().format("YYYY-MM-DD"),
-  finalDate: moment().format("YYYY-MM-DD"),
+  initialDate: dayjs().format("YYYY-MM-DD"),
+  finalDate: dayjs().format("YYYY-MM-DD"),
   ufs: [],
 });
 
@@ -147,32 +147,28 @@ const handleChangeRegion = async () => {
 const handleDateChange = async () => {
   switch (tabDate.value) {
     case 1:
-      modelFilters.value.initialDate = moment().format("YYYY-MM-DD");
-      modelFilters.value.finalDate = moment().format("YYYY-MM-DD");
+      modelFilters.value.initialDate = dayjs().format("YYYY-MM-DD");
+      modelFilters.value.finalDate = dayjs().format("YYYY-MM-DD");
       break;
     case 2:
-      modelFilters.value.initialDate = moment()
+      modelFilters.value.initialDate = dayjs()
         .startOf("week")
         .format("YYYY-MM-DD");
-      modelFilters.value.finalDate = moment()
-        .endOf("week")
-        .format("YYYY-MM-DD");
+      modelFilters.value.finalDate = dayjs().endOf("week").format("YYYY-MM-DD");
       break;
     case 3:
-      modelFilters.value.initialDate = moment()
+      modelFilters.value.initialDate = dayjs()
         .startOf("month")
         .format("YYYY-MM-DD");
-      modelFilters.value.finalDate = moment()
+      modelFilters.value.finalDate = dayjs()
         .endOf("month")
         .format("YYYY-MM-DD");
       break;
     case 4:
-      modelFilters.value.initialDate = moment()
+      modelFilters.value.initialDate = dayjs()
         .startOf("year")
         .format("YYYY-MM-DD");
-      modelFilters.value.finalDate = moment()
-        .endOf("year")
-        .format("YYYY-MM-DD");
+      modelFilters.value.finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
       break;
   }
 

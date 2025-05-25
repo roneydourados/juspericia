@@ -15,13 +15,13 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const { amountFormated } = useUtils();
 const dash = useUserAdminStore();
 
 const $dash = computed(() => dash.$dashboard);
-const currentYear = computed(() => moment().year());
+const currentYear = computed(() => dayjs().year());
 
 const chartData = computed(() => {
   return {

@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const patientStore = usePatientStore();
 const fileStore = useFileStore();

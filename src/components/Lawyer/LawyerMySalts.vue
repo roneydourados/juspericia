@@ -90,7 +90,7 @@
             </template>
             <template #item.dateCreated="{ item }">
               <strong>
-                {{ moment(item.dateCreated).format("DD/MM/YYYY") }}
+                {{ dayjs(item.dateCreated).format("DD/MM/YYYY") }}
               </strong>
             </template>
             <template #item.value="{ item }">
@@ -101,11 +101,11 @@
             </template>
             <template #item.expireDate="{ item }">
               <strong>
-                {{ moment(item.expireDate).format("DD/MM/YYYY") }}
+                {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
               </strong>
             </template>
             <template #item.createdAt="{ item }">
-              <strong>{{ moment(item.createdAt).format("DD/MM/YYYY") }}</strong>
+              <strong>{{ dayjs(item.createdAt).format("DD/MM/YYYY") }}</strong>
             </template>
             <template #item.actions="{ item }">
               <v-btn
@@ -165,7 +165,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
@@ -193,16 +193,16 @@ const headers = ref([
 ]);
 
 const getStatusName = (item: UserCreditSalt) => {
-  const currentDate = moment();
+  const currentDate = dayjs();
 
   switch (item.status) {
     case "CONFIRMED":
       // se estiver ativo, então verificar se não expirou
       return {
-        text: moment(item.expireDate).isBefore(currentDate)
+        text: dayjs(item.expireDate).isBefore(currentDate)
           ? "Expirado"
           : "Disponível",
-        color: moment(item.expireDate).isBefore(currentDate)
+        color: dayjs(item.expireDate).isBefore(currentDate)
           ? "warning"
           : "success",
         icon: "mdi-check-circle-outline",
@@ -235,11 +235,11 @@ const handleDetails = async (item: UserCreditSalt) => {
 
 const handlePaid = async (item: SaleProps) => {
   // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
-  if (moment().isAfter(moment(item.dueDate))) {
+  if (dayjs().isAfter(dayjs(item.dueDate))) {
     await asaas.deletePayment(item.saleId!);
 
     await asaas.createPayment({
-      dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
+      dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
       value: item.value!,
       description: item.description,
       category: "package",

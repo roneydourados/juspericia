@@ -24,7 +24,7 @@ import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { textRequired } from "../utils";
-import moment from "moment";
+import dayjs from "dayjs";
 import { uuidv7 as uuid } from "uuidv7";
 
 const props = defineProps({
@@ -96,7 +96,7 @@ const validationRules = computed<MaybeRef>(() => {
         .refine(
           (val: string) => {
             if (props.min > 0) {
-              return moment(val, "HH:mm", true).isValid();
+              return dayjs(val, "HH:mm", true).isValid();
             }
 
             return true;
@@ -116,7 +116,7 @@ const validationRules = computed<MaybeRef>(() => {
       .refine(
         (val: string | undefined | null) => {
           if (props.min > 0 && val) {
-            return moment(val, "HH:mm", true).isValid();
+            return dayjs(val, "HH:mm", true).isValid();
           }
 
           return true;

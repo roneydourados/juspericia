@@ -170,7 +170,7 @@
   </v-card>
 </template>
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const props = defineProps({
   show: {
@@ -310,7 +310,7 @@ const create = async () => {
       proccessNumber: form.value.judicialProcessNumber
         ? form.value.judicialProcessNumber
         : undefined,
-      dateOpen: moment().format("YYYY-MM-DD"),
+      dateOpen: dayjs().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
       valueCredit: form.value.consultation?.valueCredit ?? 0,
     });
@@ -346,7 +346,7 @@ const update = async () => {
       proccessNumber: form.value.judicialProcessNumber
         ? form.value.judicialProcessNumber
         : undefined,
-      dateOpen: moment().format("YYYY-MM-DD"),
+      dateOpen: dayjs().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
     });
 

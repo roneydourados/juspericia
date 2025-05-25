@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const props = defineProps({
   item: {
@@ -103,7 +103,7 @@ const handleSaleItem = async () => {
     }
 
     await asaas.createPayment({
-      dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
+      dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
       value: props.item.value!,
       description: props.item.name!,
       category: "package",

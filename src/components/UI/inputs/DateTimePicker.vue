@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
@@ -132,7 +132,7 @@ const validationRules = computed<MaybeRef>(() => {
         .min(10, "Data inválida")
         .refine((val) => {
           const date = new Date(val!);
-          const isValid = moment(date, true).isValid();
+          const isValid = dayjs(date, true).isValid();
 
           return isValid;
         }, "Data inválida")
@@ -148,7 +148,7 @@ const validationRules = computed<MaybeRef>(() => {
       .nullish()
       .refine((val) => {
         const date = new Date(val!);
-        const isValid = moment(date, true).isValid();
+        const isValid = dayjs(date, true).isValid();
 
         return isValid;
       }, "Data inválida")
@@ -182,7 +182,7 @@ const handleClickMenu = () => {
 
 const handleUpdateDatePickerData = () => {
   if (date.value) {
-    value.value = moment(date.value).format("YYYY-MM-DD HH:mm");
+    value.value = dayjs(date.value).format("YYYY-MM-DD HH:mm");
   }
 
   sendValue();

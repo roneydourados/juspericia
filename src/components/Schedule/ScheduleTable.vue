@@ -101,7 +101,7 @@
                         {{ item.PatientConsultation?.Patient?.surname }}
                       </span>
                       <span style="font-size: 0.8rem">
-                        {{ moment(item.scheduleDate).format("DD/MM/YYYY") }} ás
+                        {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} ás
                         {{ item.scheduleHour }}
                       </span>
                     </div>
@@ -157,7 +157,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
@@ -189,10 +189,10 @@ const formattedDate = computed(() => {
 });
 
 // const allowedDates = (val: any) => {
-//   const today = moment().add(-1, "days");
-//   const date = moment(val as Date);
+//   const today = dayjs().add(-1, "days");
+//   const date = dayjs(val as Date);
 
-//   if (moment(date).isBefore(today)) {
+//   if (dayjs(date).isBefore(today)) {
 //     return false;
 //   }
 
@@ -205,7 +205,7 @@ const getSchedules = async () => {
   loading.value = true;
   try {
     await scheduleStore.index({
-      scheduleDate: moment(model.date).format("YYYY-MM-DD"),
+      scheduleDate: dayjs(model.date).format("YYYY-MM-DD"),
       medicId: model.medic?.id,
       patientId: model.patient?.id,
     });

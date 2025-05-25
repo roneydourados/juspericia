@@ -12,7 +12,7 @@
           <span> Agendado: </span>
           <strong>
             {{
-              moment($single?.Schedule?.[0]?.scheduleDate ?? "").format(
+              dayjs($single?.Schedule?.[0]?.scheduleDate ?? "").format(
                 "DD/MM/YYYY"
               )
             }}
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 const { amountFormated, formatTelephoneNumber, formatCPFOrCNPJ } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 

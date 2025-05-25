@@ -51,7 +51,7 @@
           color-icon="warning"
           :content="`${
             $single?.birthDate
-              ? moment($single?.birthDate).format('DD/MM/YYYY')
+              ? dayjs($single?.birthDate).format('DD/MM/YYYY')
               : 'Não informado!'
           }`"
           :show-divider="true"
@@ -181,7 +181,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 import { formatCEP } from "@brazilian-utils/brazilian-utils";
 
 const patientStore = usePatientStore();

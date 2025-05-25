@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import moment from "moment";
+import dayjs from "dayjs";
 import { uuidv7 } from "uuidv7";
 import { useCustomerAsaas } from "~/lib/asaas/customer-api";
 import { useAsaasPayment } from "~/lib/asaas/payment-api";
@@ -116,7 +116,7 @@ export const createPayment = async (
       let expiredAt = null;
 
       if (payload.category === "package") {
-        expiredAt = moment().add(payload.dueDays, "days").format("YYYY-MM-DD");
+        expiredAt = dayjs().add(payload.dueDays, "days").format("YYYY-MM-DD");
       }
 
       const sale = await prisma.sales.create({

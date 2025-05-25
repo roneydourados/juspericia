@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 
 export default defineNuxtRouteMiddleware((to) => {
   const stoken = localStorage.getItem("token");
@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware((to) => {
     try {
       const token = JSON.parse(stoken);
 
-      const tokenExpires = moment(token.expiresAt).isBefore(new Date());
+      const tokenExpires = dayjs(token.expiresAt).isBefore(new Date());
 
       // se tem o token e esta expirado então expulsa para o login
       if (tokenExpires) {

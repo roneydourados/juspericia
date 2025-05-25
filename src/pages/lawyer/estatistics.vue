@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const userLawyer = useUserLawyerStore();
 
@@ -13,8 +13,8 @@ const loading = ref(false);
 onMounted(async () => {
   loading.value = true;
   try {
-    const initialDate = moment().startOf("year").format("YYYY-MM-DD");
-    const finalDate = moment().endOf("year").format("YYYY-MM-DD");
+    const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
+    const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
 
     await userLawyer.getEstatistics({
       initialDate,

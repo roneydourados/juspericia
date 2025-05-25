@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -107,8 +107,8 @@ const handleSubmit = async () => {
       await create();
     }
 
-    const initialDate = moment().startOf("month").format("YYYY-MM-DD");
-    const finalDate = moment().endOf("month").format("YYYY-MM-DD");
+    const initialDate = dayjs().startOf("month").format("YYYY-MM-DD");
+    const finalDate = dayjs().endOf("month").format("YYYY-MM-DD");
 
     await indicationStore.index({ initialDate, finalDate });
   } catch (error) {
@@ -119,7 +119,7 @@ const handleSubmit = async () => {
 };
 
 const create = async () => {
-  const expiredAt = moment().add(1, "month").format("YYYY-MM-DD");
+  const expiredAt = dayjs().add(1, "month").format("YYYY-MM-DD");
 
   await indicationStore.create({
     email: form.value.email,

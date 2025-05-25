@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const props = defineProps({
   solicitation: {
@@ -53,16 +53,16 @@ const hour = defineModel<HourProps>("hour", {
 // Função para verificar se o horário é no passado para o dia atual
 const isPastHour = (slot: HourProps) => {
   // pegar a data e hora atual
-  const now = moment();
+  const now = dayjs();
   const nowHour = now.format("HH:mm");
   const nowDate = now.format("YYYY-MM-DD");
 
   // verificar se a data do slot é igual a data atual
-  if (moment(slot.scheduleDate).format("YYYY-MM-DD") !== nowDate) {
+  if (dayjs(slot.scheduleDate).format("YYYY-MM-DD") !== nowDate) {
     return false;
   }
 
-  return moment(slot.scheduleHour, "HH:mm").isBefore(moment(nowHour, "HH:mm"));
+  return dayjs(slot.scheduleHour, "HH:mm").isBefore(dayjs(nowHour, "HH:mm"));
 };
 
 // Função para selecionar apenas um horário, desmarcando os demais do mesmo `medicId`, `patientConsultationId`, e `scheduleDate`

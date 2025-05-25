@@ -73,9 +73,9 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
-//import moment from "moment";
+//import dayjs from "dayjs";
 
 /**
  * Deixe aqui por enquanto para pegar as estadísticas do ano inteiro
@@ -125,8 +125,8 @@ const $solicitationScheduled = computed(() => {
 });
 
 const filterEstatistics = ref({
-  initialDate: moment().startOf("year").format("YYYY-MM-DD"),
-  finalDate: moment().endOf("year").format("YYYY-MM-DD"),
+  initialDate: dayjs().startOf("year").format("YYYY-MM-DD"),
+  finalDate: dayjs().endOf("year").format("YYYY-MM-DD"),
 });
 
 const loading = ref(false);
@@ -134,11 +134,8 @@ const loading = ref(false);
 const handleYear = async (year: number) => {
   loading.value = true;
   try {
-    const initialDate = moment()
-      .year(year)
-      .startOf("year")
-      .format("YYYY-MM-DD");
-    const finalDate = moment().year(year).endOf("year").format("YYYY-MM-DD");
+    const initialDate = dayjs().year(year).startOf("year").format("YYYY-MM-DD");
+    const finalDate = dayjs().year(year).endOf("year").format("YYYY-MM-DD");
 
     filterEstatistics.value = {
       initialDate,
@@ -177,26 +174,26 @@ const handleYear = async (year: number) => {
 //     switch (tab.value) {
 //       case 1:
 //         filterEstatistics.value = {
-//           initialDate: moment().format("YYYY-MM-DD"),
-//           finalDate: moment().format("YYYY-MM-DD"),
+//           initialDate: dayjs().format("YYYY-MM-DD"),
+//           finalDate: dayjs().format("YYYY-MM-DD"),
 //         };
 //         break;
 //       case 2:
 //         filterEstatistics.value = {
-//           initialDate: moment().startOf("week").format("YYYY-MM-DD"),
-//           finalDate: moment().endOf("week").format("YYYY-MM-DD"),
+//           initialDate: dayjs().startOf("week").format("YYYY-MM-DD"),
+//           finalDate: dayjs().endOf("week").format("YYYY-MM-DD"),
 //         };
 //         break;
 //       case 3:
 //         filterEstatistics.value = {
-//           initialDate: moment().startOf("month").format("YYYY-MM-DD"),
-//           finalDate: moment().endOf("month").format("YYYY-MM-DD"),
+//           initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+//           finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
 //         };
 //         break;
 //       case 4:
 //         filterEstatistics.value = {
-//           initialDate: moment().startOf("year").format("YYYY-MM-DD"),
-//           finalDate: moment().endOf("year").format("YYYY-MM-DD"),
+//           initialDate: dayjs().startOf("year").format("YYYY-MM-DD"),
+//           finalDate: dayjs().endOf("year").format("YYYY-MM-DD"),
 //         };
 //         break;
 //     }

@@ -37,7 +37,7 @@
         <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
           <span>Solicitado:</span>
           <span class="font-weight-bold">
-            {{ moment(solicitation.dateOpen).format("DD/MM/YYYY") }}
+            {{ dayjs(solicitation.dateOpen).format("DD/MM/YYYY") }}
           </span>
         </v-col>
         <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -148,7 +148,7 @@ const hour = ref<HourProps>({});
 const loading = ref(false);
 const model = ref({
   medic: undefined as UserProps | undefined,
-  scheduleDate: moment().format("YYYY-MM-DD"),
+  scheduleDate: dayjs().format("YYYY-MM-DD"),
   scheduleHour: "",
 });
 
@@ -253,7 +253,7 @@ const handleDialog = () => {
   show.value = false;
   model.value = {
     medic: undefined,
-    scheduleDate: moment().format("YYYY-MM-DD"),
+    scheduleDate: dayjs().format("YYYY-MM-DD"),
     scheduleHour: "",
   };
   scheduleStore.clear();
@@ -272,7 +272,7 @@ const getSchedules = async () => {
 };
 
 const clickDay = async (date: string) => {
-  if (!date || !moment(date).isValid()) {
+  if (!date || !dayjs(date).isValid()) {
     return;
   }
 
@@ -283,7 +283,7 @@ const clickDay = async (date: string) => {
 };
 
 const datePickerModelValue = async (date: string) => {
-  if (!date || !moment(date).isValid()) {
+  if (!date || !dayjs(date).isValid()) {
     return;
   }
 

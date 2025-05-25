@@ -11,7 +11,7 @@ import {
   SolicitationConsultationStatusProps,
 } from "@/types/AdminDashboardSales";
 import { months } from "@/utils/FrontConstants";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const index = async ({
   initialDate,
@@ -22,9 +22,9 @@ export const index = async ({
   const finalDateConvert = new Date(finalDate);
 
   const initialYearDate = new Date(
-    moment().startOf("year").format("YYYY-MM-DD")
+    dayjs().startOf("year").format("YYYY-MM-DD")
   );
-  const finalYearDate = new Date(moment().endOf("year").format("YYYY-MM-DD"));
+  const finalYearDate = new Date(dayjs().endOf("year").format("YYYY-MM-DD"));
 
   //validação do filtro por reigão
   const ufsFilter =

@@ -17,7 +17,7 @@
             >
               <template #item.createdAt="{ item }">
                 <strong style="font-size: 0.8rem">
-                  {{ moment(item.createdAt).format("DD/MM/YYYY HH:mm") }}
+                  {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
                 </strong>
               </template>
               <template #item.description="{ item }">
@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
-import moment from "moment";
+import dayjs from "dayjs";
 const show = defineModel({
   default: false,
 });

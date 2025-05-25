@@ -38,7 +38,7 @@
         <InfoLabel
           title="Nascimento"
           font-size="1"
-          :content="`${moment($single?.Patient?.birthDate).format(
+          :content="`${dayjs($single?.Patient?.birthDate).format(
             'DD/MM/YYYY'
           )} - ${
             $single?.Patient?.birthDate ? age($single?.Patient?.birthDate) : ''
@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const { formatTelephoneNumber, formatCPFOrCNPJ, age } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();

@@ -4,12 +4,12 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const consultationReport = usePatientConsultationReportStore();
 
-const initialDate = moment().startOf("month").format("YYYY-MM-DD");
-const finalDate = moment().endOf("month").format("YYYY-MM-DD");
+const initialDate = dayjs().startOf("month").format("YYYY-MM-DD");
+const finalDate = dayjs().endOf("month").format("YYYY-MM-DD");
 
 const loading = ref(false);
 

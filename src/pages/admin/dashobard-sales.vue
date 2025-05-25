@@ -3,7 +3,7 @@
   <DialogLoading :dialog="loading" />
 </template>
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const dash = useUserAdminStore();
 
@@ -13,8 +13,8 @@ onMounted(async () => {
   try {
     loading.value = true;
     await dash.getDashboardSales({
-      initialDate: moment().format("YYYY-MM-DD"),
-      finalDate: moment().format("YYYY-MM-DD"),
+      initialDate: dayjs().format("YYYY-MM-DD"),
+      finalDate: dayjs().format("YYYY-MM-DD"),
     });
   } finally {
     loading.value = false;

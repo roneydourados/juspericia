@@ -41,7 +41,7 @@
             hide-header
             color="primary"
             @update:model-value="handleUpdateDatePickerData($event)"
-            @click="emit('click:day', moment(date).format('YYYY-MM-DD'))"
+            @click="emit('click:day', dayjs(date).format('YYYY-MM-DD'))"
           />
         </v-locale-provider>
       </v-menu>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
@@ -107,7 +107,7 @@ const validationRules = computed<MaybeRef>(() => {
         .min(10, "Campo não pode ser vazio!")
         .refine((val) => {
           const date = new Date(val!);
-          const isValid = moment(date, true).isValid();
+          const isValid = dayjs(date, true).isValid();
           return isValid;
         }, "Data inválida")
     );
@@ -124,7 +124,7 @@ const validationRules = computed<MaybeRef>(() => {
         if (!val) return true;
 
         const date = new Date(val!);
-        const isValid = moment(date, true).isValid();
+        const isValid = dayjs(date, true).isValid();
         return isValid;
       }, "Data inválida")
   );
@@ -138,7 +138,7 @@ const { value, errorMessage } = useField<string>(fieldName, validationRules, {
 // Sincroniza o valor inicial do modelValue com o inputValue
 onMounted(() => {
   if (modelValue.value) {
-    inputValue.value = moment(modelValue.value, "YYYY-MM-DD").format(
+    inputValue.value = dayjs(modelValue.value, "YYYY-MM-DD").format(
       "DD/MM/YYYY"
     );
   }
@@ -149,15 +149,15 @@ watch(
   () => modelValue.value,
   (newValue) => {
     if (newValue) {
-      inputValue.value = moment(newValue, "YYYY-MM-DD").format("DD/MM/YYYY");
+      inputValue.value = dayjs(newValue, "YYYY-MM-DD").format("DD/MM/YYYY");
     }
   }
 );
 
 const handleClickMenu = () => {
   // Abre o menu do v-date-picker e tenta carregar a data selecionada
-  if (moment(value.value, "YYYY-MM-DD", true).isValid()) {
-    date.value = moment(value.value, "YYYY-MM-DD").toDate();
+  if (dayjs(value.value, "YYYY-MM-DD", true).isValid()) {
+    date.value = dayjs(value.value, "YYYY-MM-DD").toDate();
   } else {
     date.value = null; // Limpa a data se for inválida
   }
@@ -166,8 +166,8 @@ const handleClickMenu = () => {
 
 const handleUpdateDatePickerData = (newDate: Date) => {
   if (newDate) {
-    const formattedDate = moment(newDate).format("YYYY-MM-DD");
-    inputValue.value = moment(newDate).format("DD/MM/YYYY");
+    const formattedDate = dayjs(newDate).format("YYYY-MM-DD");
+    inputValue.value = dayjs(newDate).format("DD/MM/YYYY");
     value.value = formattedDate;
     emit("update:modelValue", formattedDate);
     menu.value = false; // Fecha o menu
@@ -197,9 +197,9 @@ const formatDateOnInput = (event: any) => {
 };
 
 const setValidDateApi = (textDate: string) => {
-  const isValid = moment(textDate, "DD/MM/YYYY", true).isValid();
+  const isValid = dayjs(textDate, "DD/MM/YYYY", true).isValid();
   if (isValid) {
-    const formattedDate = moment(textDate, "DD/MM/YYYY").format("YYYY-MM-DD");
+    const formattedDate = dayjs(textDate, "DD/MM/YYYY").format("YYYY-MM-DD");
     value.value = formattedDate;
     emit("update:modelValue", formattedDate);
   } else {
@@ -214,9 +214,9 @@ const validateDateOnBlur = (event: any) => {
 
   // Somente valida se a data estiver completa (10 caracteres)
   if (inputVal.length === 10) {
-    const isValid = moment(inputVal, "DD/MM/YYYY", true).isValid();
+    const isValid = dayjs(inputVal, "DD/MM/YYYY", true).isValid();
     if (isValid) {
-      const formattedDate = moment(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
+      const formattedDate = dayjs(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
       value.value = formattedDate;
       emit("blur", formattedDate);
     } else {

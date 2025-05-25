@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const index = async (input: {
   status?: string;
@@ -53,7 +53,7 @@ export const index = async (input: {
     });
 
     //pegar a data atual
-    const currentDate = moment();
+    const currentDate = dayjs();
 
     //totalizar os creditos independente do status, somente o periodo
     const totals = credits.reduce(
@@ -62,7 +62,7 @@ export const index = async (input: {
         const value = Number(item.value ?? 0);
 
         // Verifica se o crédito expirou
-        if (moment(item.expireDate).isBefore(currentDate)) {
+        if (dayjs(item.expireDate).isBefore(currentDate)) {
           acc.totalExpired += salt;
         } else {
           acc.total += salt;

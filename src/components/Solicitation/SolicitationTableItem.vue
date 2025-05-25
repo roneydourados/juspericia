@@ -16,7 +16,7 @@
           <span> Agendado: </span>
           <strong>
             {{
-              moment(solicitation.Schedule[0].scheduleDate).format("DD/MM/YYYY")
+              dayjs(solicitation.Schedule[0].scheduleDate).format("DD/MM/YYYY")
             }}
             as
             {{ solicitation.Schedule[0].scheduleHour }}
@@ -166,7 +166,7 @@
         <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
           <span>Solicitado:</span>
           <span class="font-weight-bold">
-            {{ moment(solicitation.dateOpen).format("DD/MM/YYYY") }}
+            {{ dayjs(solicitation.dateOpen).format("DD/MM/YYYY") }}
           </span>
         </v-col>
         <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
@@ -247,14 +247,14 @@
         >
           <span>Data limite para solicitar correção:</span>
           <span class="font-weight-bold">
-            {{ moment(solicitation.deadline).format("DD/MM/YYYY") }}
+            {{ dayjs(solicitation.deadline).format("DD/MM/YYYY") }}
           </span>
 
           <span>Data de solicitação de correção:</span>
           <span class="font-weight-bold">
             {{
               solicitation.dateCorrection
-                ? moment(solicitation.dateCorrection).format("DD/MM/YYYY")
+                ? dayjs(solicitation.dateCorrection).format("DD/MM/YYYY")
                 : "Não solicitado"
             }}
           </span>
@@ -262,7 +262,7 @@
           <span class="font-weight-bold">
             {{
               solicitation.dateAntecipation
-                ? moment(solicitation.dateAntecipation).format("DD/MM/YYYY")
+                ? dayjs(solicitation.dateAntecipation).format("DD/MM/YYYY")
                 : "Não solicitado"
             }}
           </span>
@@ -452,7 +452,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 const props = defineProps({
   solicitation: {
@@ -523,7 +523,7 @@ const handleUpdateCorrection = async (motive: string) => {
       await storeConsultation.update({
         id: props.solicitation.id,
         reasonCorrection: motive,
-        dateCorrection: moment().format("YYYY-MM-DD"),
+        dateCorrection: dayjs().format("YYYY-MM-DD"),
       });
 
       await getSolicitations();
@@ -540,7 +540,7 @@ const handleUpdateAntecipation = async (value: number) => {
     try {
       await storeConsultation.update({
         id: props.solicitation.id,
-        dateAntecipation: moment().format("YYYY-MM-DD"),
+        dateAntecipation: dayjs().format("YYYY-MM-DD"),
         antecipationValue: value,
       });
 
@@ -637,7 +637,7 @@ const handleSaleItemForAsaas = async () => {
     }
 
     await asaas.createPayment({
-      dueDate: moment().add(2, "days").format("YYYY-MM-DD"),
+      dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
       value: $solicitationTotal.value,
       description: `Solicitação de consulta Nº ${props.solicitation.id} do paciente ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
       category: "solicitation",
@@ -686,7 +686,7 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
     }
 
     // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
-    if (moment().isAfter(moment(item.Sales[0].dueDate))) {
+    if (dayjs().isAfter(dayjs(item.Sales[0].dueDate))) {
       await asaas.deletePayment(item.Sales[0].saleId!);
       await getSolicitations();
       await handleSaleItemForAsaas();

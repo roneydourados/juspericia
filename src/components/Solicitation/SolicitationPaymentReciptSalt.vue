@@ -75,7 +75,7 @@
           </v-col>
           <v-col cols="12" lg="8" style="gap: 0.5rem">
             <strong>
-              {{ moment(solicitation.dateOpen).format("DD/MM/YYYY") }}
+              {{ dayjs(solicitation.dateOpen).format("DD/MM/YYYY") }}
             </strong>
           </v-col>
         </v-row>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 
 defineProps({
   solicitation: {

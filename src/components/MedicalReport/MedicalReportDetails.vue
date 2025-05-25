@@ -30,7 +30,7 @@
             <InfoLabel
               title="Data abertura"
               :content="
-                moment(data.PatientConsultation?.createdAt).format('DD/MM/YYYY')
+                dayjs(data.PatientConsultation?.createdAt).format('DD/MM/YYYY')
               "
               font-size-content="0.8"
             />
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 defineProps({
   data: {
     type: Object as PropType<PatientConsultationReportProps>,

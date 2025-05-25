@@ -9,11 +9,11 @@
         :showCrud="false"
       >
         <template #item.dateOpen="{ item }">
-          {{ item.dateOpen ? moment(item.dateOpen).format("DD/MM/YYYY") : "-" }}
+          {{ item.dateOpen ? dayjs(item.dateOpen).format("DD/MM/YYYY") : "-" }}
         </template>
         <template #item.dateClose="{ item }">
           {{
-            item.dateClose ? moment(item.dateClose).format("DD/MM/YYYY") : "-"
+            item.dateClose ? dayjs(item.dateClose).format("DD/MM/YYYY") : "-"
           }}
         </template>
       </Table>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 const userLawyer = useUserLawyerStore();
 const $estatistics = computed(() => userLawyer.$estatistics);
 

@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 
 export const formatDate = (date: Date): string => {
   // remove T00:00:00.000Z evitando de formatar a data passando um dia amais ou a menos
@@ -6,8 +6,8 @@ export const formatDate = (date: Date): string => {
 };
 
 export const difDaysDelay = (initialDate: string, finalDate: string) => {
-  const initDate = moment(initialDate);
-  const endDate = moment(finalDate);
+  const initDate = dayjs(initialDate);
+  const endDate = dayjs(finalDate);
 
   const days = endDate.diff(initDate, "days");
   return days < 0 ? 0 : days;

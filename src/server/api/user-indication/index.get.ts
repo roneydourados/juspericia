@@ -1,5 +1,5 @@
 import { index } from "@/server/repositories/userIndicationRepository";
-import moment from "moment";
+import dayjs from "dayjs";
 
 export default defineEventHandler(async (event) => {
   const { userLogged } = useAuthUser();
@@ -14,10 +14,10 @@ export default defineEventHandler(async (event) => {
     userId: user.Profile?.type === "ADMIN" ? undefined : user.id!,
     initialDate: initialDate
       ? String(initialDate)
-      : moment().startOf("month").format("YYYY-MM-DD"),
+      : dayjs().startOf("month").format("YYYY-MM-DD"),
     finalDate: finalDate
       ? String(finalDate)
-      : moment().endOf("month").format("YYYY-MM-DD"),
+      : dayjs().endOf("month").format("YYYY-MM-DD"),
     status: status ? String(status) : undefined,
   });
 });

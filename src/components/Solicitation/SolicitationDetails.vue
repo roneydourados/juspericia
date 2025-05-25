@@ -31,7 +31,7 @@
               title="Teleconsulta agendada para"
               font-size="1.1"
               font-size-content="1.1"
-              :content="`${moment($single.Schedule[0]?.scheduleDate).format(
+              :content="`${dayjs($single.Schedule[0]?.scheduleDate).format(
                 'DD/MM/YYYY'
               )} as ${$single.Schedule[0].scheduleHour}`"
             />
@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
+import dayjs from "dayjs";
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
 const $single = computed(() => storeConsultation.$single);
