@@ -8,7 +8,7 @@ import {
   Consultation,
   ReportPurpose,
   BenefitType,
-  Sale,
+  //Sale,
   Schedule,
   PatientConsultationReport,
 } from '#models/index'

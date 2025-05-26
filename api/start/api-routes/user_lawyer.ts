@@ -1,7 +1,6 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
-const UserLawyerEstatisticController = () => import('#controllers/user_lawyer_estatistics/main')
 const UserLaywerController = () => import('#controllers/user_lawyer/main')
 
 //usuário advogado
@@ -13,5 +12,5 @@ router.delete('/user-lawyer/:id', [UserLaywerController, 'destroy']).use(middlew
 
 //estatísticas do usuário advogado
 router
-  .get('/user-lawyer/estatistics', [UserLawyerEstatisticController, 'index'])
+  .get('/user-lawyer/estatistics', [UserLaywerController, 'getEstatistics'])
   .use(middleware.auth())
