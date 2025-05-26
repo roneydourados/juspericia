@@ -3,10 +3,10 @@ import vine from '@vinejs/vine'
 const baseSchema = {
   email: vine.string().trim().email(),
   name: vine.string().trim().minLength(3),
-  password: vine.string().trim().minLength(6),
+  password: vine.string().trim().minLength(6).optional(),
   cpfCnpj: vine.string().trim().minLength(11).maxLength(14),
   phone: vine.string().trim().minLength(10).maxLength(11),
-  profileId: vine.number().min(1),
+  profileId: vine.number().min(1).optional(),
   oab: vine.string().trim().optional(),
   oabUf: vine.string().trim().optional(),
   officeName: vine.string().trim().optional(),
@@ -15,7 +15,7 @@ const baseSchema = {
   officePhone: vine.string().trim().optional(),
   whatsapp: vine.string().trim().optional(),
   active: vine.boolean(),
-  Address: vine
+  UserAddress: vine
     .object({
       addressCity: vine.string().trim().minLength(3),
       addressComplement: vine.string().trim().optional(),
@@ -24,8 +24,8 @@ const baseSchema = {
       addressState: vine.string().trim().minLength(2).maxLength(2),
       addressStreet: vine.string().trim().minLength(3),
       addressZipcode: vine.string().trim().minLength(8).maxLength(8),
-      ownerId: vine.number().min(1),
-      addressCategory: vine.string().trim(),
+      ownerId: vine.number().min(1).optional(),
+      addressCategory: vine.string().trim().optional(),
     })
     .optional(),
 }

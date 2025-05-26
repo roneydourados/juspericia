@@ -1,15 +1,12 @@
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
-import { UserLawyerEstatisticService, UserLawyerService } from '#services/index'
+import { UserLawyerService } from '#services/index'
 import { createValidator, updateValidator } from '#validators/user/main'
 
 @inject()
 export default class UserLaywerController {
-  constructor(
-    private userLawyerService: UserLawyerService,
-    private userLawyerEstatisticService: UserLawyerEstatisticService
-  ) {}
+  constructor(private userLawyerService: UserLawyerService) {}
 
   async index({ request, response }: HttpContext) {
     const { inputQuery } = request.qs()
@@ -28,8 +25,8 @@ export default class UserLaywerController {
   }
 
   async show({ params, response }: HttpContext) {
-    const { publicId } = params
-    const lawyer = await this.userLawyerService.show(publicId)
+    const { id } = params
+    const lawyer = await this.userLawyerService.show(id)
     return response.json(lawyer)
   }
 
@@ -54,11 +51,9 @@ export default class UserLaywerController {
   async getEstatistics({ request, response, auth }: HttpContext) {
     const { initialDate, finalDate } = request.qs()
 
-    console.log('🚀 ~ UserLawyerEstatisticController ~ index ~ initialDate:', initialDate)
-
     const userId = auth.user!.id
 
-    const userLawyerEstatistics = await this.userLawyerEstatisticService.index({
+    const userLawyerEstatistics = await this.userLawyerService.estatistics({
       userId,
       initialDate,
       finalDate,

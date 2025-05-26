@@ -118,7 +118,7 @@ const handleSubmitRegister = async () => {
       officePhone: model.value?.officePhone,
       officeCnpj: model.value?.officeCnpj,
       officeEmail: model.value?.officeEmail,
-      Address: {
+      UserAddress: {
         addressCity: model.value.cepAddress.localidade,
         addressComplement: model.value.cepAddress.complemento,
         addressDistrict: model.value.cepAddress.bairro,

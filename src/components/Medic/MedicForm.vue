@@ -307,7 +307,7 @@ const create = async () => {
     medicHourStart: model.value.medicHourStart,
     medicHourEnd: model.value.medicHourEnd,
     medicQueryInterval: Number(model.value.medicQueryInterval ?? "15"),
-    Address: {
+    UserAddress: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
       addressDistrict: model.value.cepAddress.bairro,
@@ -334,7 +334,7 @@ const update = async () => {
     medicHourStart: model.value.medicHourStart,
     medicHourEnd: model.value.medicHourEnd,
     medicQueryInterval: Number(model.value.medicQueryInterval ?? "15"),
-    Address: {
+    UserAddress: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
       addressDistrict: model.value.cepAddress.bairro,

@@ -12,5 +12,5 @@ router.delete('/user-lawyer/:id', [UserLaywerController, 'destroy']).use(middlew
 
 //estatísticas do usuário advogado
 router
-  .get('/user-lawyer/estatistics', [UserLaywerController, 'getEstatistics'])
+  .get('/user-lawyer-estatistics', [UserLaywerController, 'getEstatistics'])
   .use(middleware.auth())

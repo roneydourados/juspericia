@@ -112,5 +112,5 @@ export default class User extends BaseModel {
       query.where('address_category', addressCategoryType.user)
     },
   })
-  public Address!: HasOne<typeof Address>
+  public UserAddress!: HasOne<typeof Address>
 }

@@ -69,15 +69,15 @@ export default class MedicService {
         medicQueryInterval: payload.medicQueryInterval,
       })
 
-      if (payload.Address) {
+      if (payload.UserAddress) {
         await Address.create({
-          addressCity: payload.Address.addressCity,
-          addressComplement: payload.Address.addressComplement,
-          addressDistrict: payload.Address.addressDistrict,
-          addressNumber: payload.Address.addressNumber,
-          addressState: payload.Address.addressState,
-          addressStreet: payload.Address.addressStreet,
-          addressZipcode: payload.Address.addressZipcode,
+          addressCity: payload.UserAddress.addressCity,
+          addressComplement: payload.UserAddress.addressComplement,
+          addressDistrict: payload.UserAddress.addressDistrict,
+          addressNumber: payload.UserAddress.addressNumber,
+          addressState: payload.UserAddress.addressState,
+          addressStreet: payload.UserAddress.addressStreet,
+          addressZipcode: payload.UserAddress.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
         })
@@ -115,7 +115,7 @@ export default class MedicService {
       user.medicConsultationType = payload.medicConsultationType ?? user.medicConsultationType
       await user.save()
 
-      if (payload.Address) {
+      if (payload.UserAddress) {
         // Delete the existing address
         await Address.query()
           .where('owner_id', user.id!)
@@ -124,13 +124,13 @@ export default class MedicService {
 
         // Create the new address
         await Address.create({
-          addressCity: payload.Address.addressCity,
-          addressComplement: payload.Address.addressComplement,
-          addressDistrict: payload.Address.addressDistrict,
-          addressNumber: payload.Address.addressNumber,
-          addressState: payload.Address.addressState,
-          addressStreet: payload.Address.addressStreet,
-          addressZipcode: payload.Address.addressZipcode,
+          addressCity: payload.UserAddress.addressCity,
+          addressComplement: payload.UserAddress.addressComplement,
+          addressDistrict: payload.UserAddress.addressDistrict,
+          addressNumber: payload.UserAddress.addressNumber,
+          addressState: payload.UserAddress.addressState,
+          addressStreet: payload.UserAddress.addressStreet,
+          addressZipcode: payload.UserAddress.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user, // Use the correct address category
         })
@@ -170,7 +170,7 @@ export default class MedicService {
     const user = await User.query()
       .where('public_id', id)
       .preload('profile') // Eager load the profile
-      .preload('Address')
+      .preload('UserAddress')
       .firstOrFail()
 
     return user

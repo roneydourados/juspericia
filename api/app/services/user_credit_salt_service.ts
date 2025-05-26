@@ -57,7 +57,7 @@ export default class UserCreditServiceService {
 
     const creditsReturn = credits.map((credit) => {
       return {
-        ...credit,
+        ...credit.serialize(),
         dateCreated: formatDate(new Date(credit.creditDate)),
         expireDate: formatDate(new Date(credit.expireDate)),
       }

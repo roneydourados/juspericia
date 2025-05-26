@@ -35,6 +35,7 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
   };
 
   const update = async (input: UserProps) => {
+    console.log(input)
     const { data } = await api.put<UserProps>("/user-lawyer", input);
 
     user.value = data;
@@ -56,7 +57,7 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     };
 
     const { data } = await api.get<UserLawyerEstatisticsProps>(
-      `/user-lawyer/estatistics`,
+      `/user-lawyer-estatistics`,
       config
     );
 

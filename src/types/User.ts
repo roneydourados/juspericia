@@ -21,7 +21,7 @@ export interface UserProps {
   updatedAt?: string;
   active?: boolean;
   Profile?: UserProfileProps;
-  Address?: AddressProps;
+  UserAddress?: AddressProps;
   publicId?: string;
   medicConsultationValue?: number;
   customerId?: string;
