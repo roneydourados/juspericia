@@ -32,12 +32,34 @@ export default class SolicitationConsultationController {
     return response.json(solicitations)
   }
 
-  async store({ request, response }: HttpContext) {
-    const data = request.body()
+  async store({ request, response, auth }: HttpContext) {
+    const dataBody = request.body()
+    const user = auth.user
+
+    const data = {
+      ...dataBody,
+      userId: user!.id,
+    }
 
     const payload = await createValidator.validate(data)
 
     const solicitation = await this.solicitationConsultationService.create(payload)
+
+    return response.status(201).json(solicitation)
+  }
+
+  async update({ request, response, auth }: HttpContext) {
+    const dataBody = request.body()
+    const user = auth.user
+
+    const data = {
+      ...dataBody,
+      userId: user!.id,
+    }
+
+    const payload = await createValidator.validate(data)
+
+    const solicitation = await this.solicitationConsultationService.update(payload)
 
     return response.status(201).json(solicitation)
   }
@@ -48,16 +70,6 @@ export default class SolicitationConsultationController {
     const solicitation = await this.solicitationConsultationService.show(id)
 
     return response.json(solicitation)
-  }
-
-  async update({ request, response }: HttpContext) {
-    const data = request.body()
-
-    const payload = await updateValidator.validate(data)
-
-    const solicitation = await this.solicitationConsultationService.create(payload)
-
-    return response.status(200).json(solicitation)
   }
 
   async destroy({ params, response }: HttpContext) {

@@ -5,12 +5,6 @@ const SolicitationConsultationController = () =>
   import('#controllers/solicitation_consultation/main')
 
 router
-  .get('/solicitation-consultation', [SolicitationConsultationController, 'index'])
-  .use(middleware.auth())
-router
-  .get('/solicitation-consultation/:id', [SolicitationConsultationController, 'show'])
-  .use(middleware.auth())
-router
   .post('/solicitation-consultation', [SolicitationConsultationController, 'store'])
   .use(middleware.auth())
 router
@@ -18,4 +12,10 @@ router
   .use(middleware.auth())
 router
   .delete('/solicitation-consultation/:id', [SolicitationConsultationController, 'destroy'])
+  .use(middleware.auth())
+router
+  .get('/solicitation-consultation', [SolicitationConsultationController, 'index'])
+  .use(middleware.auth())
+router
+  .get('/solicitation-consultation/:id', [SolicitationConsultationController, 'show'])
   .use(middleware.auth())
