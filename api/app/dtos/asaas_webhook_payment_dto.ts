@@ -1,7 +1,7 @@
 export interface WebHookPaymentResponseProps {
   id?: string
   event?: string
-  dateCreated: Date
+  dateCreated: string
   payment: Payment
 }
 
@@ -17,30 +17,30 @@ interface Payment {
   originalDueDate: string
   value: number
   netValue: number
-  originalValue: any
-  interestValue: any
-  nossoNumero: any
+  originalValue?: any
+  interestValue?: any
+  nossoNumero?: any
   description: string
   externalReference: string
   billingType: string
   status: string
-  pixTransaction: any
+  pixTransaction?: any
   confirmedDate: string
   paymentDate: string
   clientPaymentDate: string
-  installmentNumber: any
+  installmentNumber?: any
   creditDate: string
-  custody: any
+  custody?: any
   estimatedCreditDate: string
   invoiceUrl: string
-  bankSlipUrl: any
+  bankSlipUrl?: any
   transactionReceiptUrl: string
   invoiceNumber: string
   deleted: boolean
   anticipated: boolean
   anticipable: boolean
   lastInvoiceViewedDate: string
-  lastBankSlipViewedDate: any
+  lastBankSlipViewedDate?: any
   postalService: boolean
   creditCard: CreditCard
   discount: Discount
@@ -48,7 +48,7 @@ interface Payment {
   interest: Interest
   split: Split[]
   chargeback: Chargeback
-  refunds: any
+  refunds?: any
 }
 
 interface CreditCard {
@@ -60,7 +60,7 @@ interface CreditCard {
 interface Discount {
   value: number
   dueDateLimitDays: number
-  limitedDate: any
+  limitedDate?: any
   type: string
 }
 
@@ -78,7 +78,7 @@ interface Split {
   walletId: string
   fixedValue?: number
   status: string
-  refusalReason: any
+  refusalReason?: any
   percentualValue?: number
 }
 

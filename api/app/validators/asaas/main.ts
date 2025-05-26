@@ -27,10 +27,10 @@ export const asaasCustomerValidator = vine.compile(
 
 export const asaasPaymentValidator = vine.compile(
   vine.object({
-    customer: vine.string().trim(),
-    billingType: vine.enum(['CREDIT_CARD', 'BOLETO', 'UNDEFINED']),
-    dueDate: vine.string(),
-    value: vine.number().min(0),
+    customer: vine.string().trim().optional(),
+    billingType: vine.enum(['CREDIT_CARD', 'BOLETO', 'UNDEFINED']).optional(),
+    dueDate: vine.string().optional(),
+    value: vine.number().min(0).optional(),
     description: vine.string().trim().optional(),
     externalReference: vine.string().trim().optional(),
     installmentCount: vine.number().optional(),

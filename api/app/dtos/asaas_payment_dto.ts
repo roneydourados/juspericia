@@ -1,5 +1,5 @@
 export interface PaymentAsaasProps {
-  customer: string
+  customer?: string
   billingType?: 'BOLETO' | 'CREDIT_CARD' | 'PIX' | 'UNDEFINED'
   dueDate: string
   value: number

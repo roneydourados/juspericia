@@ -116,15 +116,15 @@ export default class AuthService {
         profileId: profile.id,
       })
 
-      if (payload.Address) {
+      if (payload.UserAddress) {
         await Address.create({
-          addressCity: payload.Address.addressCity,
-          addressComplement: payload.Address.addressComplement,
-          addressDistrict: payload.Address.addressDistrict,
-          addressNumber: payload.Address.addressNumber,
-          addressState: payload.Address.addressState,
-          addressStreet: payload.Address.addressStreet,
-          addressZipcode: payload.Address.addressZipcode,
+          addressCity: payload.UserAddress.addressCity,
+          addressComplement: payload.UserAddress.addressComplement,
+          addressDistrict: payload.UserAddress.addressDistrict,
+          addressNumber: payload.UserAddress.addressNumber,
+          addressState: payload.UserAddress.addressState,
+          addressStreet: payload.UserAddress.addressStreet,
+          addressZipcode: payload.UserAddress.addressZipcode,
           ownerId: user.id,
           addressCategory: addressCategoryType.user,
         })
