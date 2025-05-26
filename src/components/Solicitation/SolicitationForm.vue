@@ -315,7 +315,7 @@ const create = async () => {
       valueCredit: form.value.consultation?.valueCredit ?? 0,
     });
 
-    if ($single.value?.id && form.value.files.length > 0) {
+    if ($single.value?.id && form.value.files && form.value.files.length > 0) {
       const payload = form.value.files.map((attachment) => ({
         ...attachment,
         ownerId: $single.value?.id,
@@ -350,7 +350,7 @@ const update = async () => {
       consultationValue: form.value.consultation?.value ?? 0,
     });
 
-    if ($single.value?.id) {
+    if ($single.value?.id && form.value.files && form.value.files.length > 0) {
       const payload: FileProps[] = form.value.files
         .filter(
           (

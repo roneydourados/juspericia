@@ -197,7 +197,11 @@ export default class SolicitationConsultationService {
   }: SolicitationConsultationProps) {
     const trx = await db.transaction()
     try {
-      const solicitation = await this.show(publicId!)
+      if (!publicId) {
+        throw new Error('Public ID is required to update the patient consultation.')
+      }
+
+      const solicitation = await this.show(publicId)
 
       if (solicitation) {
         solicitation.useTransaction(trx)
@@ -250,6 +254,7 @@ export default class SolicitationConsultationService {
         if (isTelemedicine && status === 'finished') {
           //pegar a data que a consulta finalizou
           const atendimentEnd = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
           await Schedule.updateOrCreate(
             {
               status: 'active',
@@ -264,7 +269,7 @@ export default class SolicitationConsultationService {
           )
         }
 
-        trx.commit()
+        await trx.commit()
 
         return solicitation
       }

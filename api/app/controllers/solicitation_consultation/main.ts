@@ -57,7 +57,7 @@ export default class SolicitationConsultationController {
       userId: user!.id,
     }
 
-    const payload = await createValidator.validate(data)
+    const payload = await updateValidator.validate(data)
 
     const solicitation = await this.solicitationConsultationService.update(payload)
 
