@@ -185,19 +185,17 @@ export default class PatientService {
   async index(input: { inputQuery: string; userId?: number }) {
     const { inputQuery, userId } = input
 
-    const patients = Patient.query()
+    const patients = await Patient.query()
       .if(inputQuery, (q) => {
-        q.where('name', 'ILIKE', `%${inputQuery}%`)
-          .orWhere('email', 'ILIKE', `%${inputQuery}%`)
-          .orWhere('cpf', 'ILIKE', `%${inputQuery}%`)
-          .orWhere('surname', 'ILIKE', `%${inputQuery}%`)
+        q.whereILike('name', `%${inputQuery}%`)
+          .orWhereILike('email', `%${inputQuery}%`)
+          .orWhereILike('cpf', `%${inputQuery}%`)
+          .orWhereILike('surname', `%${inputQuery}%`)
       })
-      .if(userId, (q) => {
-        q.where({ userId })
-      })
+      .where({ userId })
       .orderBy('name', 'asc')
 
-    return await patients
+    return patients.filter((patient) => patient.userId === userId)
   }
 
   async show(publicId: string) {

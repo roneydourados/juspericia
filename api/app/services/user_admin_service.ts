@@ -60,8 +60,9 @@ export default class UserAdminService {
   async index(inputQuery: string) {
     try {
       const adminUsers = await User.query()
-        .where('name', 'ILIKE', `%${inputQuery}%`)
-        .orWhere('email', 'ILIKE', `%${inputQuery}%`)
+        .if(inputQuery, (query) => {
+          query.whereILike('name', `%${inputQuery}%`).orWhereILike('email', `%${inputQuery}%`)
+        })
         .andWhereHas('profile', (query) => {
           query.where('type', 'ADMIN')
         })

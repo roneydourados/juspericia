@@ -73,7 +73,9 @@ export default class ConsultationService {
 
   async index(query: string) {
     return Consultation.query()
-      .whereILike('consultationName', `%${query}%`)
+      .if(query, (q) => {
+        q.whereILike('consultationName', `%${query}%`)
+      })
       .orderBy('id', 'asc')
       .select([
         'id',

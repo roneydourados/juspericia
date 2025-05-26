@@ -46,7 +46,7 @@ export default class ReportModelService {
   async index(inputQuery: string) {
     const reportModels = await ReportModel.query().if(inputQuery, (q) => {
       if (inputQuery) {
-        q.where('title', 'ILIKE', `%${inputQuery}%`)
+        q.whereILike('title', `%${inputQuery}%`)
       }
     })
 

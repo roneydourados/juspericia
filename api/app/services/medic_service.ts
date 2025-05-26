@@ -7,8 +7,8 @@ export default class MedicService {
     const users = await User.query()
       .preload('profile') // Eager load the profile
       .if(inputQuery, (query) => {
-        query.where('email', 'ilike', `%${inputQuery}%`)
-        query.orWhere('name', 'ilike', `%${inputQuery}%`)
+        query.whereILike('email', `%${inputQuery}%`)
+        query.orWhereILike('name', `%${inputQuery}%`)
       })
       .whereHas('profile', (profileQuery) => {
         // Use whereHas for the Profile relation

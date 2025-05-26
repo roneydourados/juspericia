@@ -177,9 +177,7 @@ export default class UserLaywerService {
       const adminUsers = await User.query()
         .preload('profile')
         .if(inputQuery, (query) => {
-          query
-            .where('name', 'ILIKE', `%${inputQuery}%`)
-            .orWhere('email', 'ILIKE', `%${inputQuery}%`)
+          query.whereILike('name', `%${inputQuery}%`).orWhereILike('email', `%${inputQuery}%`)
         })
         .whereHas('profile', (query) => {
           query.where('type', 'ADVOGADO')

@@ -39,9 +39,10 @@ export default class BenefitTypeService {
 
   async index(query: string) {
     return BenefitType.query()
-      .whereILike('name', `%${query}%`)
+      .if(query, (q) => {
+        q.whereILike('name', `%${query}%`)
+      })
       .orderBy('id', 'asc')
-      .select(['id', 'name', 'publicId'])
   }
 
   async show(publicId: string) {

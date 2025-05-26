@@ -45,7 +45,7 @@ export default class ReportPurposeService {
   async index(inputQuery: string) {
     const reportPurposes = await ReportPurpose.query().if(inputQuery, (q) => {
       if (inputQuery) {
-        q.where('name', 'ILIKE', `%${inputQuery}%`)
+        q.whereILike('name', `%${inputQuery}%`)
       }
     })
 
