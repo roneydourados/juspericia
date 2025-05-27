@@ -1,5 +1,5 @@
-import { CustomerProps } from "@/lib/asaas/types/Customer";
-import { PaymentAsaasProps } from "@/lib/asaas/types/Payment";
+import { CustomerProps } from "@/types/assaas/Customer";
+import { PaymentAsaasProps } from "@/types/assaas/Payment";
 import { defineStore } from "pinia";
 
 export const useAsaasStore = defineStore("asaas", () => {
