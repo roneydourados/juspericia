@@ -50,20 +50,10 @@ export default class AsaasController {
   async paymentWebhook({ request, response }: HttpContext) {
     const body = request.body() as WebHookPaymentResponseProps
 
-    console.log('🚀 ~ AsaasController ~ paymentWebhook ~ body:', body)
-
     await this.asaasWebhookService.paymentWebhook(body)
 
     return response.status(200).json({
       received: true,
     })
-
-    // const payload = await request.validateUsing(assaasWebhookPaymentValidator)
-
-    // await this.asaasWebhookService.paymentWebhook(payload)
-
-    // return response.status(200).json({
-    //   received: true,
-    // })
   }
 }
