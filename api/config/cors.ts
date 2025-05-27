@@ -7,6 +7,8 @@ import env from '#start/env'
  *
  * https://docs.adonisjs.com/guides/security/cors
  */
+console.log('🔍 CORS_ORIGIN:', env.get('CORS_ORIGIN'))
+
 const corsConfig = defineConfig({
   enabled: true,
   origin: [env.get('CORS_ORIGIN', '*')],
