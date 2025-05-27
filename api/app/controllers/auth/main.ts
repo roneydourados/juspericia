@@ -53,7 +53,7 @@ export default class AuthController {
         active: payload.active,
       },
 
-      addressPayload: payload.Address,
+      addressPayload: payload.UserAddress,
     } as any
 
     const registerUser = await this.authService.register(payloadData)

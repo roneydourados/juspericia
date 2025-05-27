@@ -11,6 +11,7 @@ import {
   //Sale,
   Schedule,
   PatientConsultationReport,
+  File,
 } from '#models/index'
 
 export default class PatientConsultation extends BaseModel {
@@ -111,6 +112,15 @@ export default class PatientConsultation extends BaseModel {
 
   @hasMany(() => Schedule)
   public Schedule!: HasMany<typeof Schedule>
+
+  @hasMany(() => File, {
+    localKey: 'id',
+    foreignKey: 'ownerId',
+    onQuery: (query) => {
+      query.where('file_category', 'solicitation-consultation')
+    },
+  })
+  public files!: HasMany<typeof File>
 
   // @hasMany(() => Sale)
   // public Sales!: HasMany<typeof Sale>

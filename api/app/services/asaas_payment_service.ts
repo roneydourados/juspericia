@@ -24,19 +24,26 @@ export default class AsaasPaymentService {
   async createPayment(payload: PaymentAsaasProps) {
     try {
       const baseUrl = env.get('ASAAS_BASE_URL')
-      const apiKey =
-        '$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjI3NDEyM2I0LTBlMASAAS_API_KEY2=TgtNDYwMy1hOTg0LWZhZjFmODZkN2Y0ZTo6JGFhY2hfZTEyMzY4ZjUtMzY0My00ODQ3LTk1NDItYTY1YzNmM2EwYzcz'
+      const apiKey = env.get('ASAAS_API_KEY')
+
       console.log('🚀 ~ createPayment ~ baseUrl:', baseUrl)
       console.log('🚀 ~ createPayment ~ apiKey:', apiKey)
-
       const asaasApi = axios.create({
         baseURL: baseUrl,
-        responseType: 'json',
         headers: {
-          Accept: 'application/json',
+          accept: 'application/json',
           access_token: apiKey,
         },
       })
+
+      // const asaasApi = axios.create({
+      //   baseURL: baseUrl,
+      //   responseType: 'json',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     access_token: apiKey,
+      //   },
+      // })
       return
       const { data } = await asaasApi.post('/payments', payload)
       return data

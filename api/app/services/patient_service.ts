@@ -1,3 +1,4 @@
+import { prettyPrintError } from '@adonisjs/core'
 import db from '@adonisjs/lucid/services/db'
 import { Patient, Address, PatientConsultation } from '#models/index'
 import { addressCategoryType } from '../utils/datatypes.js'
@@ -201,6 +202,7 @@ export default class PatientService {
   async show(publicId: string) {
     const patient = await Patient.query()
       .preload('PatientAddress')
+      .preload('files')
       .where({ publicId })
       .firstOrFail()
 

@@ -5,6 +5,7 @@ import { FileService } from '#services/index'
 import { fileStoreValidator } from '#validators/file/main'
 
 import { uuidv7 } from 'uuidv7'
+import { unlink } from 'node:fs'
 
 @inject()
 export default class FileController {
@@ -89,5 +90,31 @@ export default class FileController {
     await this.fileService.remove(id)
 
     response.status(204)
+  }
+
+  async download({ params, response }: HttpContext) {
+    const { id } = params
+
+    const file = await this.fileService.download(id)
+
+    if (!file) {
+      return { message: 'Arquivo não encontrado.' }
+    }
+
+    response.response.on('finish', async () => {
+      try {
+        unlink(file.filePath, (err) => {
+          if (err) {
+            console.error(`Erro ao apagar o arquivo: ${err.message}`)
+          } else {
+            console.log(`Arquivo ${file.filePath} apagado com sucesso.`)
+          }
+        })
+      } catch (error) {
+        console.error(`Erro ao apagar o arquivo: ${error.message}`)
+      }
+    })
+
+    return response.download(file.filePath)
   }
 }

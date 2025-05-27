@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasOne } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, belongsTo, hasOne, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasOne, HasMany } from '@adonisjs/lucid/types/relations'
 
-import { User, Address } from '#models/index'
+import { User, Address, File } from '#models/index'
 import { addressCategoryType } from '../utils/datatypes.js'
 
 export default class Patient extends BaseModel {
@@ -64,4 +64,13 @@ export default class Patient extends BaseModel {
     },
   })
   public PatientAddress!: HasOne<typeof Address>
+
+  @hasMany(() => File, {
+    localKey: 'id',
+    foreignKey: 'ownerId',
+    onQuery: (query) => {
+      query.where('file_category', 'patient')
+    },
+  })
+  public files!: HasMany<typeof File>
 }

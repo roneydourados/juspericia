@@ -11,7 +11,7 @@
         :file-name="item.fileName!"
         download-visible
         :delete-visible="$single?.status === 'open'"
-        @download="handleDownloadFile(item.publicId!)"
+        @download="handleDownloadFile(item.publicId!, item.fileName!)"
         @delete="getFileDelete(item)"
       />
     </div>
@@ -40,13 +40,13 @@ const loading = ref(false);
 const showDelete = ref(false);
 const itemSelected = ref<FileProps>();
 
-const handleDownloadFile = async (publicId: string) => {
+const handleDownloadFile = async (publicId: string, fileName: string) => {
   loading.value = true;
   try {
-    const { file, fileName } = await fileStore.downloadAws(publicId);
+    const resp = await fileStore.downloadAws(publicId);
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
-    const url = window.URL.createObjectURL(file);
+    const url = window.URL.createObjectURL(resp.file);
 
     // Cria um link temporário
     const link = document.createElement("a");

@@ -27,11 +27,13 @@ export const useAuthStore = defineStore("auth", () => {
       tokenCapcha,
     });
 
-    localStorage.setItem("token", JSON.stringify(resp.data.token));
+    if (resp.data.token) {
+      localStorage.setItem("token", JSON.stringify(resp.data.token));
 
-    currentUser.value = resp.data;
+      currentUser.value = resp.data;
 
-    localStorage.setItem("user", JSON.stringify(resp.data));
+      localStorage.setItem("user", JSON.stringify(resp.data));
+    }
   };
 
   const verifyUser = async (id: number) => {

@@ -1,6 +1,7 @@
 <template>
   <v-card flat>
     <v-card-title>
+      <h3>Anexos/Documentos</h3>
       <input
         type="file"
         @change="handleFileUpload"
@@ -19,7 +20,17 @@
       </v-btn>
     </v-card-title>
     <v-card-text>
-      <Table
+      <div v-for="item in $patient?.files" class="w-100 mt-4">
+        <AttachementCard
+          :file-name="item.fileName!"
+          download-visible
+          :delete-visible="true"
+          @download="handleDownloadFile(item.publicId!, item.fileName!)"
+          @delete="getFileDelete(item)"
+        />
+      </div>
+
+      <!-- <Table
         :headers="headers"
         :items="$files"
         itle="Documentos/Anexos"
@@ -35,7 +46,7 @@
               color="info"
               variant="text"
               size="small"
-              @click="handleDownloadFile(item.publicId)"
+              @click="handleDownloadFile(item.publicId, item.fileName)"
             >
               <v-icon icon="mdi-cloud-download-outline" size="20"></v-icon>
               <v-tooltip
@@ -65,7 +76,7 @@
             </v-btn>
           </div>
         </template>
-      </Table>
+      </Table> -->
     </v-card-text>
   </v-card>
   <Dialog
@@ -99,7 +110,6 @@ const $patient = computed(() => patientStore.$single);
 const $files = computed(() => fileStore.$files);
 
 const handleFileUpload = async (event: Event) => {
-  // const files = (event.target as HTMLInputElement).files;
   const input = event.target as HTMLInputElement;
   const files = input.files;
 
@@ -114,10 +124,7 @@ const handleFileUpload = async (event: Event) => {
       ownerId: $patient.value?.id!,
     });
 
-    await fileStore.index({
-      fileCategory: "patient",
-      ownerId: $patient.value?.id!,
-    });
+    await patientStore.show($patient.value?.publicId!);
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {
@@ -126,10 +133,10 @@ const handleFileUpload = async (event: Event) => {
   }
 };
 
-const handleDownloadFile = async (publicId: string) => {
+const handleDownloadFile = async (publicId: string, fileName: string) => {
   loading.value = true;
   try {
-    const { file, fileName } = await fileStore.downloadAws(publicId);
+    const { file } = await fileStore.downloadAws(publicId);
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
     const url = window.URL.createObjectURL(file);
@@ -166,11 +173,7 @@ const handleDeleteFile = async () => {
   loading.value = true;
   try {
     await fileStore.removeAws(itemSelected.value.publicId!);
-
-    await fileStore.index({
-      fileCategory: "patient",
-      ownerId: $patient.value?.id!,
-    });
+    await patientStore.show($patient.value?.publicId!);
   } catch (error) {
     console.log("🚀 ~ handleDeleteFile ~ error:", error);
   } finally {

@@ -294,7 +294,7 @@ export default class SolicitationConsultationService {
 
   async show(publicId: string) {
     const patientConsultation = await PatientConsultation.query()
-      .where({ publicId })
+      .preload('files')
       .preload('PatientConsultationReport')
       .preload('Schedule', (query) => {
         query.preload('Medic')
@@ -305,6 +305,7 @@ export default class SolicitationConsultationService {
         query.preload('User')
       })
       .preload('Consultation')
+      .where({ publicId })
       .first()
 
     return patientConsultation

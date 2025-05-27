@@ -5,6 +5,9 @@ import { uuidv7 } from 'uuidv7'
 import { FileProps } from '../dtos/index.js'
 import { inject } from '@adonisjs/core'
 
+import fs from 'node:fs'
+import path from 'node:path'
+
 @inject()
 export default class FileService {
   private s3Service = new AwsS3Service()
@@ -79,7 +82,25 @@ export default class FileService {
   /**
    * Busca o conteúdo de um arquivo no S3 (em bytes).
    */
-  public async download(fileServerName: string) {
-    return this.s3Service.getAwsS3File(fileServerName)
+  public async download(publicId: string) {
+    const file = await File.query().where({ publicId }).firstOrFail()
+
+    const objectData = await this.s3Service.getAwsS3File(file.fileServerName)
+
+    if (!objectData) {
+      throw new Error('File not found in aws s3')
+    }
+
+    const uploadsDir = path.join(process.cwd(), './uploads')
+
+    // Garante que o diretório existe
+    await fs.promises.mkdir(uploadsDir, { recursive: true })
+
+    const filePath = path.join(uploadsDir, file.fileName)
+
+    // Escreve o arquivo
+    await fs.promises.writeFile(filePath, objectData)
+
+    return { filePath, file }
   }
 }

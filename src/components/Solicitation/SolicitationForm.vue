@@ -365,8 +365,6 @@ const update = async () => {
           fileCategory: "solicitation-consultation",
         }));
 
-      console.log("🚀 ~ payload ~ payload:", payload);
-
       if (payload && payload.length > 0) {
         //enviar arquivos
         await fileStore.uploadManyAws(payload);

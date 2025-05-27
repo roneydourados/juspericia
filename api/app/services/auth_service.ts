@@ -327,7 +327,7 @@ export default class AuthService {
 
       return data.success === true
     } catch (error) {
-      console.error('Erro ao verificar Turnstile:', error)
+      console.error('Erro ao verificar Turnstile:')
       return false
     }
   }
