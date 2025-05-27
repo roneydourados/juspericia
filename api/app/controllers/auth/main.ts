@@ -13,11 +13,11 @@ export default class AuthController {
 
     const payload = await authValidator.validate({ email, password, tokenCapcha })
 
-    // const isValid = await this.authService.verifyTurnstileToken(tokenCapcha, request.ip())
+    const isValid = await this.authService.verifyTurnstileToken(tokenCapcha, request.ip())
 
-    // if (!isValid) {
-    //   return response.badRequest({ message: 'Falha na verificação do Turnstile.' })
-    // }
+    if (!isValid) {
+      return response.badRequest({ message: 'Falha na verificação do Turnstile.' })
+    }
 
     const auth = await this.authService.auth(payload.email, payload.password)
 
