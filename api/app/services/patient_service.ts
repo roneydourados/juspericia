@@ -199,6 +199,22 @@ export default class PatientService {
     return patients.filter((patient) => patient.userId === userId)
   }
 
+  async indexAdmin(input: { inputQuery: string }) {
+    const { inputQuery } = input
+
+    const patients = await Patient.query()
+      .preload('User')
+      .if(inputQuery, (q) => {
+        q.whereILike('name', `%${inputQuery}%`)
+          .orWhereILike('email', `%${inputQuery}%`)
+          .orWhereILike('cpf', `%${inputQuery}%`)
+          .orWhereILike('surname', `%${inputQuery}%`)
+      })
+      .orderBy('name', 'asc')
+
+    return patients
+  }
+
   async show(publicId: string) {
     const patient = await Patient.query()
       .preload('PatientAddress')

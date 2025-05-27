@@ -13,8 +13,12 @@ export default class PatientController {
 
     const user = auth.user
 
-    const patients = await this.patientService.index({ inputQuery, userId: user!.id })
+    if (user?.profile.type !== 'ADMIN') {
+      const patients = await this.patientService.index({ inputQuery, userId: user!.id })
+      return response.json(patients)
+    }
 
+    const patients = await this.patientService.indexAdmin({ inputQuery })
     return response.json(patients)
   }
 
