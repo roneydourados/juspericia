@@ -123,7 +123,7 @@ export default class UserLaywerService {
       })
 
       await user.save()
-      console.log('🚀 ~ UserLaywerService ~ UserAddress:', UserAddress)
+
       if (UserAddress) {
         const existsAddress = await Address.query()
           .where({ ownerId: user.id })
@@ -162,11 +162,26 @@ export default class UserLaywerService {
   }
 
   async destroy(publicId: string) {
+    const user = await User.query().where({ publicId }).firstOrFail()
+    const trx = await db.transaction()
     try {
-      const adminUser = await User.query().where({ publicId }).firstOrFail()
+      user.useTransaction(trx)
 
-      await adminUser.delete()
+      const existsAddress = await Address.query()
+        .where({ ownerId: user.id })
+        .where({ addressCategory: addressCategoryType.user })
+        .first()
+
+      if (existsAddress) {
+        existsAddress.useTransaction(trx)
+
+        await existsAddress.delete()
+      }
+
+      await user.delete()
+      await trx.commit()
     } catch (error) {
+      await trx.rollback()
       console.error('Error deleting user admin:', error)
       throw error
     }

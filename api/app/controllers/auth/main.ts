@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { createValidator } from '#validators/user/main'
+
 import { authValidator } from '#validators/auth/main'
 import { AuthService } from '#services/index'
 import { inject } from '@adonisjs/core'
@@ -9,7 +9,7 @@ import { resgiterUserValidator } from '#validators/user_register/main'
 export default class AuthController {
   constructor(private authService: AuthService) {}
 
-  async store({ request, response }: HttpContext) {
+  async auth({ request, response }: HttpContext) {
     const { email, password, tokenCapcha } = request.only(['email', 'password', 'tokenCapcha'])
 
     const payload = await authValidator.validate({ email, password, tokenCapcha })

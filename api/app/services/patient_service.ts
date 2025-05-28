@@ -123,11 +123,13 @@ export default class PatientService {
       await patient.save()
 
       if (PatientAddress) {
-        const existsAddress = await Address.query().where('owner_id', patient.id).first()
+        const existsAddress = await Address.query()
+          .where('owner_id', patient.id)
+          .where('address_category', addressCategoryType.patient)
+          .first()
 
         if (existsAddress) {
           existsAddress.useTransaction(trx)
-
           await existsAddress.delete()
         }
 
@@ -158,7 +160,7 @@ export default class PatientService {
   }
 
   async destroy(publicId: string) {
-    const patient = await Patient.query().where('publicId', publicId).firstOrFail()
+    const patient = await Patient.query().where({ publicId }).firstOrFail()
 
     const trx = await db.transaction()
     try {
