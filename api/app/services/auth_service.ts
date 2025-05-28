@@ -1,4 +1,5 @@
 import { User, Profile, UserToken, Address } from '#models/index'
+import { EmailService } from '#services/index'
 
 import { validHash } from './hash.js'
 import db from '@adonisjs/lucid/services/db'
@@ -11,6 +12,8 @@ import { addressCategoryType } from '../utils/datatypes.js'
 import { UserProps } from '../dtos/index.js'
 
 export default class AuthService {
+  constructor(private emailService: EmailService) {}
+
   async auth(email: string, password: string) {
     try {
       const user = await User.query()
@@ -99,13 +102,20 @@ export default class AuthService {
         await UserToken.query().delete().where({ userId: userExists.id })
 
         //token temporário para ativação de conta
-        await UserToken.create({
+        const userToken = await UserToken.create({
           userId: userExists.id,
           token: uuidv7(),
           expiresAt,
         })
 
-        // aqui criar a rotina para enviar o email
+        //enviar email com o token para o usuário
+        await this.emailService.sendMail({
+          email: userExists.email,
+          name: userExists.name,
+          office: userExists.officeName,
+          template: 'email',
+          linkConfirmation: `${env.get('APP_URL')}/activate-account/${userToken.token}`,
+        })
       }
 
       // Remove createdAt and updatedAt if present in payload to avoid type errors
@@ -129,18 +139,6 @@ export default class AuthService {
           addressCategory: addressCategoryType.user,
         })
       }
-
-      //token temporário para ativação de conta
-      await UserToken.create({
-        userId: user.id,
-        token: uuidv7(),
-        expiresAt,
-      })
-
-      /**Criar a rotina de envio de email
-       *
-       *
-       */
 
       return user
     } catch (error) {
@@ -202,19 +200,27 @@ export default class AuthService {
 
       await UserToken.query().delete().where({ userId: user.id })
 
+      //token expirar em 3 minutos
       const expiresAt = dayjs().add(3, 'minute').format('YYYY-MM-DD HH:mm:ss')
 
+      //apagar qualquer token antigo do usuário
+      await UserToken.query().delete().where({ userId: user.id })
+
       //token temporário para ativação de conta
-      await UserToken.create({
+      const userToken = await UserToken.create({
         userId: user.id,
         token: uuidv7(),
         expiresAt,
       })
 
-      /**Criar a rotina de envio de email
-       *
-       *
-       */
+      //enviar email com o token para o usuário
+      await this.emailService.sendMail({
+        email: user.email,
+        name: user.name,
+        office: user.officeName,
+        template: 'email',
+        linkConfirmation: `${env.get('APP_URL')}/activate-account/${userToken.token}`,
+      })
 
       return {
         name: user.name,
@@ -228,27 +234,36 @@ export default class AuthService {
 
   async forgotPassword(email: string) {
     const user = await User.query().where({ email, active: true }).first()
+
     if (!user) {
       throw new Error('User not found')
     }
 
     try {
+      //apagar qualquer token antigo do usuário
+      await UserToken.query().delete().where({ userId: user.id })
+
+      //expirar token em 3 minutos
       const expiresAt = dayjs().add(3, 'minute').format('YYYY-MM-DD HH:mm:ss')
 
       //token temporário para ativação de conta
-      await UserToken.create({
+      const userToken = await UserToken.create({
         userId: user.id,
         token: uuidv7(),
         expiresAt,
       })
 
-      /**Criar a rotina de envio de email
-       *
-       *
-       */
+      //enviar email com o token para o usuário
+      await this.emailService.sendMail({
+        email: user.email,
+        name: user.name,
+        office: user.officeName,
+        template: 'passwrod',
+        linkConfirmation: `${env.get('APP_URL')}/forgot-password/renew/${userToken.token}`,
+      })
     } catch (error) {
-      //se der erro ao ativar o usuário, apagar o token
-      throw new Error('Error creating token for password reset')
+      console.log('🚀 ~ error forgot password:', error)
+      throw new Error(`Error forgot password ${error.message}`)
     }
   }
 

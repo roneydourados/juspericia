@@ -43,9 +43,8 @@ export default class AssaasWebhookService {
     user: User,
     trx: TransactionClientContract
   ) {
-    console.log('🚀 ~ AssaasWebhookService ~ paymentWebhook ~ PAYMENT_CONFIRMED')
-
     const sale = await Sale.query().where({ publicId: payload.payment.externalReference }).first()
+
     if (!sale) return
 
     sale.useTransaction(trx)

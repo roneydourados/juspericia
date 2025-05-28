@@ -21,3 +21,4 @@ export { default as UserCreditServiceService } from './user_credit_salt_service.
 export { default as UserIndicationService } from './user_indication_service.js'
 export { default as UserLawyerService } from './user_lawyer_service.js'
 export { default as AssaasWebhookService } from './assaas_webhook_service.js'
+export { default as EmailService } from './email_service.js'
