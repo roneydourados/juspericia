@@ -8809,10 +8809,10 @@ vue@^3.5.13, vue@latest:
     "@vue/server-renderer" "3.5.13"
     "@vue/shared" "3.5.13"
 
-vuetify@3.8.4:
-  version "3.8.4"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.8.4.tgz#3d3316868d789407c6fb5adb26ad90a0e09b6dfc"
-  integrity sha512-hfA1eqA6vhrF5LF8Yfk0uHdNUmh8Uckxn5wREiThO82HW/9Vfreh+IpxPgEtCsAhV33KW+NVamltQCu3HczRKw==
+vuetify@3.8.7:
+  version "3.8.7"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.8.7.tgz#59377e406551c92f5d532694095462c9ee2bc6fa"
+  integrity sha512-Xid5za36cOA9We0QShcjiI4qoWXcwABhlhDHi8/0qpjSrBgJ63GobQdZ9YYyRvjMT3XXJqgbkdis1RS/oGL8Bw==
 
 w3c-keyname@^2.2.0:
   version "2.2.8"
