@@ -1,13 +1,12 @@
 import vine from '@vinejs/vine'
 
-const baseSchema = {
+const baseSchema = vine.object({
+  name: vine.string().trim(),
   email: vine.string().trim().email(),
-  name: vine.string().trim().minLength(3),
-  password: vine.string().trim().minLength(6).optional(),
+  password: vine.string().trim(),
   cpfCnpj: vine.string().trim().minLength(11).maxLength(14),
-  phone: vine.string().trim().minLength(10).maxLength(11),
-  profileId: vine.number().min(1).optional(),
-  oab: vine.string().trim().optional(),
+  phone: vine.string().trim().optional(),
+  oab: vine.string().trim(),
   oabUf: vine.string().trim().optional(),
   officeName: vine.string().trim().optional(),
   officeCnpj: vine.string().trim().optional(),
@@ -15,7 +14,7 @@ const baseSchema = {
   officePhone: vine.string().trim().optional(),
   whatsapp: vine.string().trim().optional(),
   active: vine.boolean(),
-  tokenCapcha: vine.string().trim().optional(),
+  tokenCapcha: vine.string().trim(),
   UserAddress: vine
     .object({
       addressCity: vine.string().trim().minLength(3),
@@ -29,13 +28,6 @@ const baseSchema = {
       addressCategory: vine.string().trim().optional(),
     })
     .optional(),
-}
+})
 
-export const createValidator = vine.compile(vine.object(baseSchema))
-
-export const updateValidator = vine.compile(
-  vine.object({
-    ...baseSchema,
-    publicId: vine.string().trim(),
-  })
-)
+export const resgiterUserValidator = vine.compile(baseSchema)

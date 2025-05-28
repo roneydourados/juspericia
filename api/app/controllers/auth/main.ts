@@ -3,6 +3,7 @@ import { createValidator } from '#validators/user/main'
 import { authValidator } from '#validators/auth/main'
 import { AuthService } from '#services/index'
 import { inject } from '@adonisjs/core'
+import { resgiterUserValidator } from '#validators/user_register/main'
 
 @inject()
 export default class AuthController {
@@ -31,32 +32,16 @@ export default class AuthController {
   }
 
   async register({ request, response }: HttpContext) {
-    const data = request.all()
+    const payload = await request.validateUsing(resgiterUserValidator)
 
-    //validar os dados
-    const payload = await createValidator.validate(data)
+    const isValid = await this.authService.verifyTurnstileToken(payload.tokenCapcha, request.ip())
 
-    const payloadData = {
-      userPayload: {
-        name: payload.name,
-        email: payload.email,
-        password: payload.password,
-        cpfCnpj: payload.cpfCnpj,
-        phone: payload.phone,
-        oab: payload.oab,
-        oabUf: payload.oabUf,
-        officeName: payload.officeName,
-        officeCnpj: payload.officeCnpj,
-        officeEmail: payload.officeEmail,
-        officePhone: payload.officePhone,
-        whatsapp: payload.whatsapp,
-        active: payload.active,
-      },
+    if (!isValid) {
+      return response.badRequest({ message: 'Falha na verificação do Turnstile.' })
+    }
 
-      addressPayload: payload.UserAddress,
-    } as any
+    const registerUser = await this.authService.register(payload)
 
-    const registerUser = await this.authService.register(payloadData)
     return response.json(registerUser)
   }
 
