@@ -65,8 +65,9 @@
     "dayjs": "^1.11.13",
     "luxon": "^3.6.1",
     "mime": "^4.0.7",
-    "nodemailer": "^7.0.3",
-    "nodemailer-express-handlebars": "^7.0.0",
+    "nodemailer": "7.0.3",
+    "nodemailer-express-handlebars": "7.0.0",
+    "express-handlebars": "8.0.1",
     "pg": "^8.16.0",
     "reflect-metadata": "^0.2.2",
     "uuidv7": "^1.0.2"
