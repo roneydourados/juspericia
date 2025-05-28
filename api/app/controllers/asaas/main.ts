@@ -1,4 +1,3 @@
-import { assaasWebhookPaymentValidator } from '#validators/assaas_webhook/main'
 import { asaasCustomerValidator, asaasPaymentValidator } from '#validators/asaas/main'
 import { AsaasPaymentService, AssaasWebhookService } from '#services/index'
 import type { HttpContext } from '@adonisjs/core/http'
