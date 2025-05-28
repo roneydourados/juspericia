@@ -10,14 +10,14 @@ export default class UserLaywerController {
 
   async index({ request, response }: HttpContext) {
     const { inputQuery } = request.qs()
+
     const lawyers = await this.userLawyerService.index(inputQuery)
+
     return response.json(lawyers)
   }
 
   async store({ request, response }: HttpContext) {
-    const data = request.all()
-
-    const payload = await createValidator.validate(data)
+    const payload = await request.validateUsing(createValidator)
 
     const lawyer = await this.userLawyerService.create(payload)
 
@@ -26,14 +26,14 @@ export default class UserLaywerController {
 
   async show({ params, response }: HttpContext) {
     const { id } = params
+
     const lawyer = await this.userLawyerService.show(id)
+
     return response.json(lawyer)
   }
 
   async update({ request, response }: HttpContext) {
-    const data = request.all()
-
-    const payload = await updateValidator.validate(data)
+    const payload = await request.validateUsing(updateValidator)
 
     const lawyer = await this.userLawyerService.update(payload)
 

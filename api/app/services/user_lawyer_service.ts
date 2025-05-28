@@ -33,7 +33,7 @@ export default class UserLaywerService {
     try {
       await this.validations({ email, name })
 
-      const profile = await Profile.query().where({ name: 'ADVOGADO' }).firstOrFail()
+      const profile = await Profile.query().where({ type: 'ADVOGADO' }).firstOrFail()
 
       const user = await User.create(
         {
@@ -191,6 +191,7 @@ export default class UserLaywerService {
     try {
       const adminUsers = await User.query()
         .preload('profile')
+        .preload('UserAddress')
         .if(inputQuery, (query) => {
           query.whereILike('name', `%${inputQuery}%`).orWhereILike('email', `%${inputQuery}%`)
         })

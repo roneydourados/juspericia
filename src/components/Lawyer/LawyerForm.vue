@@ -266,13 +266,13 @@ const loadModel = () => {
     oabUf: props.data.oabUf ?? "",
     officeName: props.data.officeName ?? "",
     cepAddress: {
-      cep: props.data.Address?.addressZipcode ?? "",
-      logradouro: props.data.Address?.addressStreet ?? "",
-      complemento: props.data.Address?.addressComplement ?? "",
-      bairro: props.data.Address?.addressDistrict ?? "",
-      localidade: props.data.Address?.addressCity ?? "",
-      uf: props.data.Address?.addressState ?? "",
-      numero: props.data.Address?.addressNumber ?? "",
+      cep: props.data.UserAddress?.addressZipcode ?? "",
+      logradouro: props.data.UserAddress?.addressStreet ?? "",
+      complemento: props.data.UserAddress?.addressComplement ?? "",
+      bairro: props.data.UserAddress?.addressDistrict ?? "",
+      localidade: props.data.UserAddress?.addressCity ?? "",
+      uf: props.data.UserAddress?.addressState ?? "",
+      numero: props.data.UserAddress?.addressNumber ?? "",
     },
 
     officeCnpj: props.data.officeCnpj ?? "",
@@ -308,7 +308,8 @@ const create = async () => {
     oab: model.value.oab,
     oabUf: model.value.oabUf,
     officeName: model.value.officeName,
-    Address: {
+    active: model.value.active,
+    UserAddress: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
       addressDistrict: model.value.cepAddress.bairro,
@@ -336,7 +337,7 @@ const update = async () => {
     officeName: model.value.officeName,
     officeEmail: model.value.officeEmail,
     officePhone: model.value.officePhone,
-    Address: {
+    UserAddress: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
       addressDistrict: model.value.cepAddress.bairro,

@@ -6,7 +6,7 @@ export default class UserAdminService {
     try {
       await this.validations({ email, name })
 
-      const profile = await Profile.query().where({ name: 'ADMIN' }).firstOrFail()
+      const profile = await Profile.query().where({ type: 'ADMIN' }).firstOrFail()
 
       const adminUser = await User.create({
         email,

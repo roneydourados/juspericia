@@ -10,7 +10,9 @@ import env from '#start/env'
 import { addressCategoryType } from '../utils/datatypes.js'
 
 import { UserProps } from '../dtos/index.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class AuthService {
   constructor(private emailService: EmailService) {}
 
