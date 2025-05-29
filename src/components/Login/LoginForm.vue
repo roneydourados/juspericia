@@ -19,7 +19,7 @@
               <v-col cols="12">
                 <StringInput
                   v-model="form.email"
-                  label="*E-mail"
+                  label="E-mail"
                   placeholder="informe seu e-mail"
                   icon="mdi-email-outline"
                   required
@@ -30,7 +30,7 @@
               <v-col cols="12">
                 <PasswordInput
                   v-model="form.password"
-                  label="*Senha"
+                  label="Senha"
                   type="password"
                   placeholder="informe sua senha"
                   icon="mdi-form-textbox-password"

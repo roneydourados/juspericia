@@ -7,16 +7,36 @@
           label="E-mail"
           placeholder="E-mail"
           icon="mdi-email-outline"
+          required
         />
       </v-col>
     </v-row>
     <v-row>
+      <v-col cols="12" class="d-flex flex-column">
+        <p class="text-grey-darken-1 text-subtitle-2">
+          Senha deve conter Mínimo de 8 caracteres.
+        </p>
+        <p class="text-grey-darken-1 text-subtitle-2">
+          Senha deve conter pelo menos uma letra maiúscula.
+        </p>
+        <p class="text-grey-darken-1 text-subtitle-2">
+          Senha deve conter pelo menos um número.
+        </p>
+        <p class="text-grey-darken-1 text-subtitle-2">
+          Senha deve conter pelo menos um caractere especial ex. @#$*()!.
+        </p>
+        <p class="text-grey-darken-1 text-subtitle-2">
+          As senhas deve se coicidir.
+        </p>
+      </v-col>
       <v-col cols="12" lg="6">
         <PasswordInput
           v-model="model.password"
           label="Nova senha"
           placeholder="informe nova senha"
           icon="mdi-lock-outline"
+          required
+          :strong="true"
         />
       </v-col>
       <v-col cols="12" lg="6">
@@ -25,6 +45,8 @@
           label="Confirme a senha"
           placeholder="confirme a senha"
           icon="mdi-lock-outline"
+          required
+          :strong="true"
         />
       </v-col>
       <v-col v-if="$invalidPasword" cols="12" class="d-flex justify-center">
@@ -45,15 +67,7 @@
           <v-icon icon="mdi-chevron-left" start />
           Anterior
         </v-btn>
-        <v-btn
-          type="submit"
-          color="primary"
-          variant="tonal"
-          class="text-none"
-          :disabled="
-            $invalidPasword || !model.confirmPassword || !model.email || !terms
-          "
-        >
+        <v-btn type="submit" color="primary" variant="tonal" class="text-none">
           Registrar
           <v-icon icon="mdi-account" end />
         </v-btn>
@@ -105,6 +119,12 @@ const $invalidPasword = computed(() => {
 const submitForm = () => {
   try {
     if ($invalidPasword.value) {
+      push.warning("Informe as senhas corretamente.");
+      return;
+    }
+
+    if (!terms.value) {
+      push.warning("Você deve aceitar os termos e condições.");
       return;
     }
 

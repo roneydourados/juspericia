@@ -1,6 +1,4 @@
 <template>
-  <!-- Tive que deixar isso aqui, por algum motivo sem ele não funciona -->
-  <span style="display: none">{{ showPassword }}</span>
   <v-text-field
     v-model="value"
     :label="dynamicLabel"
@@ -23,20 +21,12 @@
   />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
+import { z } from "zod";
+import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 
-import { toTypedSchema } from "@vee-validate/zod";
-import * as zod from "zod";
-
-import { textRequired } from "../utils";
-import { uuidv7 as uuid } from "uuidv7";
-
 const props = defineProps({
-  // modelValue: {
-  //   type: String,
-  //   default: "",
-  // },
   icon: {
     type: String,
     default: "",
@@ -73,6 +63,10 @@ const props = defineProps({
     type: Number,
     default: 255,
   },
+  strong: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const modelValue = defineModel({
@@ -84,57 +78,37 @@ const dynamicLabel = computed(() =>
 );
 
 const showPassword = ref(false);
-const fieldName = uuid();
+const fieldName = uuidv7();
 
-// const fieldName = computed<MaybeRef>(() => {
-//   return props.label;
-// });
+const validationRules = computed(() => {
+  let schema = z.string();
 
-const validationRules = computed<MaybeRef>(() => {
   if (props.required) {
-    return toTypedSchema(
-      zod
-        .string({
-          invalid_type_error: textRequired,
-          required_error: textRequired,
-        })
-        .min(1, textRequired)
-        .refine(
-          (val: string) => {
-            if (props.min > 0) {
-              return val.length >= props.min;
-            }
-
-            return true;
-          },
-          {
-            message: `Campo deve ter no mínimo ${props.min} caracteres!`,
-          }
-        )
-    );
+    schema = schema.min(1, "Campo não pode ser vazio!");
   }
 
-  return toTypedSchema(
-    zod
-      .string()
-      .nullish()
-      .optional()
-      .refine(
-        (val: string | undefined | null) => {
-          if (props.min > 0 && val) {
-            return val.length >= props.min;
-          }
+  if (props.min) {
+    schema = schema.min(props.min, `Mínimo de ${props.min} caracteres.`);
+  }
 
-          return true;
-        },
-        {
-          message: `Campo deve ter no mínimo ${props.min} caracteres!`,
-        }
-      )
-  );
+  if (props.strong) {
+    schema = schema
+      .min(8, "Mínimo de 8 caracteres.")
+      .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula.")
+      .regex(/[0-9]/, "A senha deve conter pelo menos um número.")
+      .regex(
+        /[^A-Za-z0-9]/,
+        "A senha deve conter pelo menos um caractere especial."
+      );
+  }
+
+  return (value: string) => {
+    const result = schema.safeParse(value);
+    return result.success ? true : result.error.errors[0].message;
+  };
 });
 
-const { value, errorMessage, handleBlur, handleChange } = useField<String>(
+const { value, errorMessage, handleBlur, handleChange } = useField<string>(
   fieldName,
   validationRules,
   {
