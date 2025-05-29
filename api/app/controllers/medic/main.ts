@@ -22,8 +22,7 @@ export default class MedicController {
    * Handle form submission for the create action
    */
   async store({ request, response }: HttpContext) {
-    const data = request.body()
-    const payload = await createValidator.validate(data)
+    const payload = await request.validateUsing(createValidator)
 
     const medic = await this.medicService.create(payload)
 
@@ -45,9 +44,7 @@ export default class MedicController {
    * Handle form submission for the edit action
    */
   async update({ request, response }: HttpContext) {
-    const data = request.body()
-
-    const payload = await updateValidator.validate(data)
+    const payload = await request.validateUsing(updateValidator)
 
     const medic = await this.medicService.update(payload)
 

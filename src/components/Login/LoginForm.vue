@@ -31,11 +31,17 @@
                 <PasswordInput
                   v-model="form.password"
                   label="Senha"
-                  type="password"
                   placeholder="informe sua senha"
                   icon="mdi-form-textbox-password"
                   required
                 />
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col cols="12">
+                <div class="text-red text-center w-100" v-if="isError">
+                  Login inválido, tente novamente!!!
+                </div>
               </v-col>
             </v-row>
             <v-row>
@@ -111,6 +117,7 @@ const cloudFlareToken = ref("");
 const turnstile = ref();
 const rounter = useRouter();
 const loading = ref(false);
+const isError = ref(false);
 
 const form = ref({
   email: "",
@@ -130,6 +137,7 @@ const $user = computed(() => auth.$currentUser);
 
 const submmitForm = async () => {
   loading.value = true;
+  isError.value = false;
   try {
     await auth.login({
       email: form.value.email,
@@ -157,6 +165,7 @@ const submmitForm = async () => {
       return navigateTo("/medic/home");
     }
   } catch (error) {
+    isError.value = true;
     console.log("🚀 ~ file: FormLogin.vue:82 ~ onSubmit ~ error:", error);
     push.error("Ocorreu um erro ao realizar login, tente novamente.");
     turnstile.value?.reset();

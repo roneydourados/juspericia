@@ -172,6 +172,7 @@ export default class ScheduleService {
         query.preload('BenefitType')
         query.preload('ReportPurpose')
       })
+      .whereNot('status', 'canceled')
       .where((query) => {
         if (medicId) {
           query.where({ medicId })
