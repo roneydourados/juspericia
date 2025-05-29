@@ -13,7 +13,7 @@
   </div>
   <DialogForm
     :show="showPopupSuport"
-    title="Atedimento ao cliente"
+    title="Atendimento ao cliente"
     :width="mobile ? '100%' : '40%'"
     @dialog="showPopupSuport = false"
     icon="mdi-whatsapp"
@@ -52,15 +52,14 @@ const showPopupSuport = ref(false);
 const loading = ref(false);
 const textSuport = ref("");
 
-const handleGetSuporte = () => {
+const handleGetSuporte = async () => {
+  await systemParametersStore.index();
   showPopupSuport.value = true;
 };
 
-const sendSuport = async () => {
+const sendSuport = () => {
   loading.value = true;
   try {
-    await systemParametersStore.index();
-
     if ($systemParameters.value?.suportWhatsapp) {
       const text = textSuport.value
         ? textSuport.value
@@ -68,7 +67,8 @@ const sendSuport = async () => {
 
       const url = whatsappUrl(
         $systemParameters.value.suportWhatsapp,
-        `${$currentUser.value?.name} \n\n solicita suporte referente a: \n\n ${text}`
+        `${$currentUser.value?.name} \n\n solicita suporte referente a: \n\n ${text}`,
+        mobile.value
       );
 
       window.open(url, "_blank");
