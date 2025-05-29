@@ -33,8 +33,9 @@
       <div class="d-flex align-center" style="gap: 1rem">
         <div
           v-if="
-            solicitation.status === 'open' &&
-            $currentUser?.profile?.type === 'ADVOGADO'
+            solicitation.status === 'open' ||
+            (solicitation.status === 'payment_pending' &&
+              $currentUser?.profile?.type === 'ADVOGADO')
           "
           class="d-flex align-center"
           style="gap: 0.5rem"
@@ -50,6 +51,7 @@
             Pagar
           </v-btn>
           <v-btn
+            v-if="!solicitation.sale?.saleId"
             class="text-none text-white"
             color="success"
             variant="outlined"
@@ -78,9 +80,7 @@
         </v-btn>
         <v-btn
           v-else-if="
-            solicitation.Sales &&
-            solicitation.Sales.length > 0 &&
-            solicitation.status === 'payment_pending'
+            solicitation.sale && solicitation.status === 'payment_pending'
           "
           class="text-none text-white"
           color="info"
@@ -612,8 +612,8 @@ const cancel = async () => {
     });
 
     // apagar a cobrança do asaas e a venda pendente
-    if (selected.value.Sales && selected.value.Sales.length > 0) {
-      await asaas.deletePayment(selected.value.Sales[0].saleId!);
+    if (selected.value.sale) {
+      await asaas.deletePayment(selected.value.sale.saleId!);
     }
 
     await getSolicitations();
@@ -657,7 +657,7 @@ const handleSaleItemForAsaas = async () => {
       const popup = window.open(
         $paymentResponse.value?.data?.invoiceUrl,
         "_blank",
-        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+        `left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
       );
 
       // verificar se o popup foi fechado
@@ -680,14 +680,14 @@ const handleSaleItemForAsaas = async () => {
 const handleReloadPayment = async (item: SolicitationConsultationProps) => {
   loading.value = true;
   try {
-    if (!item.Sales || item.Sales.length === 0) {
+    if (!item.sale) {
       push.warning("Pagamento não encontrado");
       return;
     }
 
     // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
-    if (dayjs().isAfter(dayjs(item.Sales[0].dueDate))) {
-      await asaas.deletePayment(item.Sales[0].saleId!);
+    if (dayjs().isAfter(dayjs(item.sale.dueDate))) {
+      await asaas.deletePayment(item.sale.saleId!);
       await getSolicitations();
       await handleSaleItemForAsaas();
       return;
@@ -702,7 +702,7 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
     const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
     const popup = window.open(
-      item.Sales[0].invoiceUrl,
+      item.sale.invoiceUrl,
       "_blank",
       `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
     );
@@ -723,17 +723,13 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
 
 const handleReceipt = (item: SolicitationConsultationProps) => {
   // se cair aqiu é porque foi pago com saldo em créditos
-  if ((!item.Sales || item.Sales.length === 0) && item.status === "paid") {
+  if (!item.sale && item.status === "paid") {
     showRecipt.value = true;
     return;
   }
 
   //se não tem venda então não fazer nada no asaas
-  if (!item.Sales || item.Sales.length === 0) {
-    return;
-  }
-
-  if (!item.Sales || item.Sales.length === 0) {
+  if (!item.sale) {
     push.warning("Pagamento não encontrado");
     return;
   }
@@ -746,9 +742,9 @@ const handleReceipt = (item: SolicitationConsultationProps) => {
   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
   const popup = window.open(
-    item.Sales[0].transactionReceiptUrl,
+    item.sale.transactionReceiptUrl,
     "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    `left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
   );
 
   // verificar se o popup foi fechado

@@ -39,7 +39,7 @@ export default class SolicitationConsultationService {
       .preload('Consultation')
       .preload('BenefitType')
       .preload('ReportPurpose')
-      //.preload('Sales')
+      .preload('sale')
       .preload('PatientConsultationReport', (query) => {
         query.first()
         query.where('status', 'active')

@@ -9,37 +9,28 @@
       <v-col cols="12" lg="6">
         <v-card flat elevation="0" rounded="lg">
           <v-card-title class="text-subtitle-2"> Saldo Créditos </v-card-title>
-          <v-card-text class="d-flex align-center justify-space-between">
+          <v-card-text class="d-flex align-center">
             <v-icon icon="mdi-cash-100" size="25" color="success" />
-            <div class="d-flex">
-              <span class="text-grey-darken-1" style="font-size: 1.2rem">
-                R$
-              </span>
-              <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                {{ amountFormated($totals?.total ?? 0, false) }}
-              </span>
-            </div>
+            <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
+              {{ amountFormated($totals?.total ?? 0, false) }}
+            </span>
           </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12" lg="6">
         <v-card flat elevation="0" rounded="lg">
           <v-card-title class="text-subtitle-2"> Saldo futuro </v-card-title>
-          <v-card-text class="d-flex align-center justify-space-between">
+          <v-card-text class="d-flex align-center">
             <v-icon icon="mdi-currency-usd" size="25" color="info" />
-            <div class="d-flex">
-              <span class="text-grey-darken-1" style="font-size: 1.2rem">
-                R$
-              </span>
-              <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                {{
-                  amountFormated(
-                    Number($totals?.total ?? 0) - $solicitationTotalPaidSalt,
-                    false
-                  )
-                }}
-              </span>
-            </div>
+            <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
+              {{
+                amountFormated(
+                  Number($totals?.total ?? 0) -
+                    Number($solicitationTotalPaidSalt),
+                  false
+                )
+              }}
+            </span>
           </v-card-text>
         </v-card>
       </v-col>

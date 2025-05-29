@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, column, belongsTo, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 
 import {
   User,
@@ -8,7 +8,7 @@ import {
   Consultation,
   ReportPurpose,
   BenefitType,
-  //Sale,
+  Sale,
   Schedule,
   PatientConsultationReport,
   File,
@@ -122,6 +122,11 @@ export default class PatientConsultation extends BaseModel {
   })
   public files!: HasMany<typeof File>
 
+  @hasOne(() => Sale, {
+    localKey: 'id',
+    foreignKey: 'solicitationId',
+  })
+  public sale!: HasOne<typeof Sale>
   // @hasMany(() => Sale)
   // public Sales!: HasMany<typeof Sale>
 }

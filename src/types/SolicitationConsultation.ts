@@ -42,7 +42,7 @@ export interface SolicitationConsultationProps {
   publicId?: string;
   isTelemedicine?: boolean;
   PatientConsultationReport?: PatientConsultationReportProps;
-  Sales?: SaleProps[];
+  sale?: SaleProps;
   files?: FileProps[];
 }
 
