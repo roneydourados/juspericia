@@ -3194,10 +3194,10 @@
   resolved "https://registry.yarnpkg.com/@yr/monotone-cubic-spline/-/monotone-cubic-spline-1.0.3.tgz#7272d89f8e4f6fb7a1600c28c378cc18d3b577b9"
   integrity sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==
 
-"@zegocloud/zego-uikit-prebuilt@2.14.2":
-  version "2.14.2"
-  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-prebuilt/-/zego-uikit-prebuilt-2.14.2.tgz#f3842bb2a247b5f9c2bcae399e21eace466d88a2"
-  integrity sha512-7RlONVnQ4fLQ00sf+VtwgXSBaQo4ADMgiX6mnvsXWyJZGQLRyUY+d2OWW1uH3tVpP+umIAxpC3YYkdlxwDahFQ==
+"@zegocloud/zego-uikit-prebuilt@2.15.0":
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-prebuilt/-/zego-uikit-prebuilt-2.15.0.tgz#b1d21d255e48cea0235b0c9d0f406cc0c340c9db"
+  integrity sha512-tLvC9/wb2cHicUyEAhf6gJstA6TUj0c2UbX0oIa/vHB6Yo8//QXyuGWAeu7mV0+2kn173kBhoRfn7dEIsDU3OQ==
 
 "@zxing/text-encoding@0.9.0":
   version "0.9.0"
@@ -8412,7 +8412,12 @@ zip-stream@^6.0.1:
     compress-commons "^6.0.2"
     readable-stream "^4.0.0"
 
-zod@3.25.32, zod@^3.23.8:
+zod@3.25.36:
+  version "3.25.36"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.36.tgz#e5ae0fb7803662b8a21d9a1e282e7d5b8ff57726"
+  integrity sha512-eRFS3i8T0IrpGdL8HQyqFAugGOn7jOjyGgGdtv5NY4Wkhi7lJDk732bNZ609YMIGFbLoaj6J69O1Mura23gfIw==
+
+zod@^3.23.8:
   version "3.25.32"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.32.tgz#769cc684072df780fc8f38130b0cd9283a8d3818"
   integrity sha512-OSm2xTIRfW8CV5/QKgngwmQW/8aPfGdaQFlrGoErlgg/Epm7cjb6K6VEyExfe65a3VybUOnu381edLb0dfJl0g==
