@@ -15,7 +15,7 @@ export default class PatientController {
 
     await user!.load('profile')
 
-    if (user!.profile.type !== 'ADMIN') {
+    if (user!.profile.type !== 'ADMIN' && user!.profile.type !== 'MEDICO') {
       const patients = await this.patientService.index({ inputQuery, userId: user!.id })
 
       return response.json(patients)
@@ -26,8 +26,7 @@ export default class PatientController {
   }
 
   async store({ request, response, auth }: HttpContext) {
-    const data = request.body()
-    const payload = await createValidator.validate(data)
+    const payload = await request.validateUsing(createValidator)
 
     const user = auth.user
 
@@ -37,9 +36,7 @@ export default class PatientController {
   }
 
   async update({ request, response }: HttpContext) {
-    const data = request.body()
-
-    const payload = await updateValidator.validate(data)
+    const payload = await request.validateUsing(updateValidator)
 
     const patient = await this.patientService.update(payload)
 
