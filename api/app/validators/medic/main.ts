@@ -27,7 +27,7 @@ export const updateValidator = vine.compile(
     publicId: vine.string().trim(),
     email: vine.string().trim().email(),
     name: vine.string().trim().minLength(3),
-    password: vine.string().trim(),
+    password: vine.string().trim().optional(),
     crm: vine.string().trim().optional(),
     cpfCnpj: vine.string().trim().minLength(11).maxLength(14).optional(),
     crmUf: vine.string().trim().maxLength(2).optional(),
