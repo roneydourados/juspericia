@@ -20,12 +20,26 @@ export default class ScheduleController {
     return response.json(schedule)
   }
 
-  async store({ request, response }: HttpContext) {
-    const data = request.body()
+  async store({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(createValidator)
+    const user = auth.user
 
-    const payload = await createValidator.validate(data)
+    const schedule = await this.scheduleService.create({
+      ...payload,
+      userSchedule: user!.name,
+    })
 
-    const schedule = await this.scheduleService.create(payload)
+    return response.json(schedule)
+  }
+
+  async update({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(updateValidator)
+    const user = auth.user
+
+    const schedule = await this.scheduleService.update({
+      ...payload,
+      userSchedule: user!.name,
+    })
 
     return response.json(schedule)
   }
@@ -34,16 +48,6 @@ export default class ScheduleController {
     const { id } = params
 
     const schedule = await this.scheduleService.show(id)
-
-    return response.json(schedule)
-  }
-
-  async update({ request, response }: HttpContext) {
-    const data = request.body()
-
-    const payload = await updateValidator.validate(data)
-
-    const schedule = await this.scheduleService.update(payload)
 
     return response.json(schedule)
   }

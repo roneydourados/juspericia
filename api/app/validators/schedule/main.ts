@@ -1,7 +1,7 @@
 import vine from '@vinejs/vine'
 
 const baseSchema = {
-  medicId: vine.number().optional(),
+  medicId: vine.number(),
   patientId: vine.number().optional(),
   patientConsultationId: vine.number().optional(),
   scheduleDate: vine.string().trim(),

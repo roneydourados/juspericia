@@ -13,25 +13,17 @@ export default class ScheduleService {
   }: ScheduleProps) {
     const trx = await db.transaction()
     try {
-      /*
-       EXEMPLO DE UPDATE OR CREATE
-      await PatientConsultation.updateOrCreate(
-        { id: payload.patientConsultationId }, // where (searchCriteria)
-        { status: 'finished' }, // dados para atualizar/criar
-        { client: trx } // transação
-      )
-      */
+      const scheduleExists = await Schedule.query()
+        .where({ status: 'active', patientConsultationId })
+        .first()
 
-      await Schedule.updateOrCreate(
-        {
-          status: 'active',
-          patientConsultationId: patientConsultationId,
-        },
-        {
-          status: 'canceled',
-        },
-        { client: trx }
-      )
+      if (scheduleExists) {
+        scheduleExists.useTransaction(trx)
+
+        // Cancela a consulta ativa
+        scheduleExists.merge({ status: 'canceled' })
+        await scheduleExists.save()
+      }
 
       await Schedule.create(
         {
@@ -47,11 +39,20 @@ export default class ScheduleService {
 
       //atualiza a solicitação de consulta
       if (patientConsultationId) {
-        await PatientConsultation.updateOrCreate(
-          { id: patientConsultationId },
-          { status: 'scheduled', medicId: medicId },
-          { client: trx }
-        )
+        const patienConsultation = await PatientConsultation.query()
+          .where({ id: patientConsultationId })
+          .first()
+
+        if (patienConsultation) {
+          patienConsultation.useTransaction(trx)
+
+          patienConsultation.merge({
+            status: 'scheduled',
+            medicId: medicId,
+          })
+
+          await patienConsultation.save()
+        }
       }
 
       await trx.commit()
@@ -90,11 +91,20 @@ export default class ScheduleService {
         await scheduleExists.save()
 
         if (patientConsultationId && scheduleExists.medicId !== medicId) {
-          await PatientConsultation.updateOrCreate(
-            { id: patientConsultationId },
-            { status: 'scheduled', medicId: medicId },
-            { client: trx }
-          )
+          const patienConsultation = await PatientConsultation.query()
+            .where({ id: patientConsultationId })
+            .first()
+
+          if (patienConsultation) {
+            patienConsultation.useTransaction(trx)
+
+            patienConsultation.merge({
+              status: 'scheduled',
+              medicId: medicId,
+            })
+
+            await patienConsultation.save()
+          }
         }
       }
 
@@ -117,14 +127,21 @@ export default class ScheduleService {
         await scheduleExists.delete()
 
         if (scheduleExists.patientConsultationId) {
-          await PatientConsultation.updateOrCreate(
-            { id: scheduleExists.patientConsultationId },
-            { status: 'open' },
-            { client: trx }
-          )
+          const patienConsultation = await PatientConsultation.query()
+            .where({ id: scheduleExists.patientConsultationId })
+            .first()
+
+          if (patienConsultation) {
+            patienConsultation.useTransaction(trx)
+
+            patienConsultation.merge({
+              status: 'paid',
+            })
+
+            await patienConsultation.save()
+          }
         }
       }
-
       await trx.commit()
     } catch (error) {
       await trx.rollback()

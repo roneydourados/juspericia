@@ -3,26 +3,26 @@
     <v-row dense>
       <v-col
         cols="1"
-        v-for="(slot, index) in hoursSelected"
+        v-for="(item, index) in hoursSelected"
         :key="index"
         @click="
-          (slot.patientConsultationId === props.solicitation.id ||
-            !slot.isSelected) &&
-            !isPastHour(slot) &&
-            setBlockHour(slot)
+          (item.patientConsultationId === props.solicitation.id ||
+            !item.isSelected) &&
+            !isPastHour(item) &&
+            setBlockHour(item)
         "
         :class="[
           'time-slot',
           {
-            booked: isSelectedHour(slot),
+            booked: isSelectedHour(item),
             'disabled-slot':
-              (slot.isSelected &&
-                slot.patientConsultationId !== props.solicitation.id) ||
-              isPastHour(slot),
+              (item.isSelected &&
+                item.patientConsultationId !== props.solicitation.id) ||
+              isPastHour(item),
           },
         ]"
       >
-        {{ slot.scheduleHour }}
+        {{ item.scheduleHour }}
       </v-col>
     </v-row>
   </v-card>
@@ -52,17 +52,13 @@ const hour = defineModel<HourProps>("hour", {
 
 // Função para verificar se o horário é no passado para o dia atual
 const isPastHour = (slot: HourProps) => {
-  // pegar a data e hora atual
+  const slotDateTime = dayjs(
+    `${slot.scheduleDate} ${slot.scheduleHour}`,
+    "YYYY-MM-DD HH:mm"
+  );
   const now = dayjs();
-  const nowHour = now.format("HH:mm");
-  const nowDate = now.format("YYYY-MM-DD");
 
-  // verificar se a data do slot é igual a data atual
-  if (dayjs(slot.scheduleDate).format("YYYY-MM-DD") !== nowDate) {
-    return false;
-  }
-
-  return dayjs(slot.scheduleHour, "HH:mm").isBefore(dayjs(nowHour, "HH:mm"));
+  return slotDateTime.isBefore(now);
 };
 
 // Função para selecionar apenas um horário, desmarcando os demais do mesmo `medicId`, `patientConsultationId`, e `scheduleDate`

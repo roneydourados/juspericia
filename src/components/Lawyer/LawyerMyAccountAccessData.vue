@@ -23,6 +23,8 @@
               label="Nova senha"
               placeholder="informe nova senha"
               icon="mdi-lock-outline"
+              required
+              strong
             />
           </v-col>
           <v-col cols="12" lg="4">
@@ -31,6 +33,7 @@
               label="Confirme a senha"
               placeholder="confirme a senha"
               icon="mdi-lock-outline"
+              required
             />
           </v-col>
         </v-row>

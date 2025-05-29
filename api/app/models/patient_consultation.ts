@@ -92,7 +92,9 @@ export default class PatientConsultation extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'medicId',
+  })
   public Medic!: BelongsTo<typeof User>
 
   @belongsTo(() => Patient)

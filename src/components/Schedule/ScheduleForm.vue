@@ -256,6 +256,7 @@ const handleDialog = () => {
     scheduleDate: dayjs().format("YYYY-MM-DD"),
     scheduleHour: "",
   };
+  hours.value = [];
   scheduleStore.clear();
 };
 
