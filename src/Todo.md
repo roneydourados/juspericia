@@ -1,3 +1,11 @@
+# Reunião 29/05/2025
+
+- Eliminar nome do médico no agendamento
+- Deixar agendar conforme quantidade de médico dentro do intervalo de horário
+- Criar uma tela de transações (pegar detalhes)
+- Criar uma tela de voucher / promoção, nela informar o valor de desconto, data e hora de inicio e fim
+  e quais pacotes farão parte do voucher
+
 # cobrar
 
 [x] - Logo de empresa
