@@ -181,6 +181,7 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 import { formatCPF } from "@brazilian-utils/brazilian-utils";
+import { useDebounceFn } from "@vueuse/core";
 
 const itemStore = usePatientStore();
 const auth = useAuthStore();
@@ -214,16 +215,17 @@ const showForm = ref(false);
 const showDelete = ref(false);
 const loading = ref(false);
 
-const handleSearch = async (search: string, isLoading: boolean = true) => {
-  setTimeout(async () => {
+const handleSearch = useDebounceFn(
+  async (search: string, isLoading: boolean = true) => {
     loading.value = isLoading;
     try {
       await itemStore.index(search);
     } finally {
       loading.value = false;
     }
-  }, 700);
-};
+  },
+  500
+);
 
 const handleEdit = async (item: PatientProps) => {
   loading.value = true;

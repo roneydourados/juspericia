@@ -54,6 +54,7 @@ import { uuidv7 } from "uuidv7";
 
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import { useDebounceFn } from "@vueuse/core";
 
 defineProps({
   type: {
@@ -125,14 +126,12 @@ const { value } = useField<Object>(fieldName, validationRules, {
   syncVModel: true,
 });
 
-const handleSearch = async () => {
-  setTimeout(async () => {
-    loadingSearch.value = true;
-    try {
-      await consultation.index(search.value);
-    } finally {
-      loadingSearch.value = false;
-    }
-  }, 700);
-};
+const handleSearch = useDebounceFn(async () => {
+  loadingSearch.value = true;
+  try {
+    await consultation.index(search.value);
+  } finally {
+    loadingSearch.value = false;
+  }
+}, 500);
 </script>

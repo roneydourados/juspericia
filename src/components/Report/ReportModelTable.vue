@@ -90,6 +90,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from "@vueuse/core";
+
 const reportModel = useReportModelStore();
 const router = useRouter();
 
@@ -141,14 +143,15 @@ const handleDeleteItem = async () => {
   }
 };
 
-const handleSearch = async (search: string, isLoading: boolean = true) => {
-  setTimeout(async () => {
+const handleSearch = useDebounceFn(
+  async (search: string, isLoading: boolean = true) => {
     loading.value = isLoading;
     try {
       await reportModel.index(search);
     } finally {
       loading.value = false;
     }
-  }, 700);
-};
+  },
+  500
+);
 </script>

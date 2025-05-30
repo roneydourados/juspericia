@@ -173,6 +173,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from "@vueuse/core";
 const userLawyerStore = useUserLawyerStore();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => userLawyerStore.$all);
@@ -204,16 +205,17 @@ const headers = ref([
   },
 ]);
 
-const handleSearch = async (search: string, isLoading: boolean = true) => {
-  setTimeout(async () => {
+const handleSearch = useDebounceFn(
+  async (search: string, isLoading: boolean = true) => {
     loading.value = isLoading;
     try {
       await userLawyerStore.index(search);
     } finally {
       loading.value = false;
     }
-  }, 700);
-};
+  },
+  500
+);
 
 const handleCloseForm = () => {
   showForm.value = false;

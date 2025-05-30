@@ -69,6 +69,7 @@ import { uuidv7 } from "uuidv7";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { ReportPurposeProps } from "@/types/ReportPurpose";
+import { useDebounceFn } from "@vueuse/core";
 
 defineProps({
   type: {
@@ -150,14 +151,12 @@ const handleClose = () => {
   selected.value = undefined;
 };
 
-const handleSearch = async () => {
-  setTimeout(async () => {
-    loadingSearch.value = true;
-    try {
-      await reportPurpose.index(search.value);
-    } finally {
-      loadingSearch.value = false;
-    }
-  }, 700);
-};
+const handleSearch = useDebounceFn(async () => {
+  loadingSearch.value = true;
+  try {
+    await reportPurpose.index(search.value);
+  } finally {
+    loadingSearch.value = false;
+  }
+}, 500);
 </script>

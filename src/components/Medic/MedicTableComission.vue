@@ -101,6 +101,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from "@vueuse/core";
 const medicStore = useMedicStore();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => medicStore.$all);
@@ -147,16 +148,17 @@ const headers = ref([
   },
 ]);
 
-const handleSearch = async (search: string, isLoading: boolean = true) => {
-  setTimeout(async () => {
+const handleSearch = useDebounceFn(
+  async (search: string, isLoading: boolean = true) => {
     loading.value = isLoading;
     try {
       await medicStore.index(search);
     } finally {
       loading.value = false;
     }
-  }, 700);
-};
+  },
+  500
+);
 
 const handleCloseForm = () => {
   showForm.value = false;
