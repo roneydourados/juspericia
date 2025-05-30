@@ -7,28 +7,6 @@
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>
-        <v-col cols="12" lg="9">
-          <SelectSearchMedic
-            v-model="model.medic"
-            label="Médico"
-            required
-            clearable
-            @update:model-value="handleEnabledDisabledHours"
-          />
-        </v-col>
-        <v-col cols="12" lg="3">
-          <DatePicker
-            v-model="model.scheduleDate"
-            label="Agendar para o dia"
-            required
-            @click:day="clickDay($event)"
-            @update:model-value="datePickerModelValue($event)"
-            :disabled="!model.medic"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row dense>
         <v-col cols="12">
           <strong>Dados da solicitação de consulta</strong>
         </v-col>
@@ -99,16 +77,19 @@
         </v-col>
       </v-row>
       <v-row dense class="mt-4">
-        <v-col cols="12">
-          <strong>Horários disponíveis</strong>
-        </v-col>
-        <v-col cols="12">
-          <MedicHours
-            :solicitation="solicitation"
-            :medic-id="model.medic?.id"
-            v-model="hours"
-            v-model:hour="hour"
+        <!-- <v-col cols="12" lg="3">
+          <div class="mb-4 font-weight-bold">Horários disponíveis</div>
+          <DatePicker
+            v-model="model.scheduleDate"
+            label="Agendar para o dia"
+            required
+            @click:day="clickDay($event)"
+            @update:model-value="datePickerModelValue($event)"
           />
+        </v-col> -->
+
+        <v-col cols="12">
+          <ScheduleHours :solicitation="solicitation" />
         </v-col>
       </v-row>
     </FormCrud>

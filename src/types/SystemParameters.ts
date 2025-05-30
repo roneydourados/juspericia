@@ -8,4 +8,7 @@ export interface SystemParametersProps {
   comission?: number;
   daysCreditExpire?: number;
   suportWhatsapp?: string;
+  hourInitial?: string;
+  hourFinal?: string;
+  medicQueryInterval?: number;
 }

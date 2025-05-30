@@ -134,6 +134,30 @@
                   expirar em
                   <strong>{{ form.daysCreditExpire }} dias</strong>
                 </div>
+                <div class="font-weight-bold mt-8">
+                  Horário geral de atendimento dos médicos
+                </div>
+                <v-divider class="mt-2"></v-divider>
+                <div class="d-flex flex-column align-center px-12">
+                  <div
+                    class="d-flex flex-wrap align-center mt-4 w-100"
+                    style="gap: 0.5rem"
+                  >
+                    <TimeInput
+                      label="Início"
+                      v-model="form.hourInitial"
+                      required
+                    />
+                    <TimeInput label="Fim" v-model="form.hourFinal" required />
+                  </div>
+                  <div class="w-100">
+                    <IntegerInput
+                      label="Intervalo entre consultas (minutos)"
+                      v-model="form.medicQueryInterval"
+                      required
+                    />
+                  </div>
+                </div>
               </v-card-text>
             </v-card>
           </v-col>
@@ -187,6 +211,9 @@ const form = ref({
   comission: "",
   daysCreditExpire: "",
   suportWhatsapp: "",
+  hourInitial: "",
+  hourFinal: "",
+  medicQueryInterval: "15",
 });
 
 watch(
@@ -204,6 +231,9 @@ watch(
         comission: amountFormated(newData.comission ?? 0, false),
         daysCreditExpire: newData.daysCreditExpire?.toString() ?? "",
         suportWhatsapp: newData.suportWhatsapp ?? "",
+        hourInitial: newData.hourInitial ?? "",
+        hourFinal: newData.hourFinal ?? "",
+        medicQueryInterval: newData.medicQueryInterval?.toString() ?? "",
       };
     }
   },
@@ -222,6 +252,7 @@ const handleSubmit = async () => {
       daysPointsExpire: Number(form.value.daysPointsExpire),
       comission: Number(form.value.comission),
       daysCreditExpire: Number(form.value.daysCreditExpire),
+      medicQueryInterval: Number(form.value.medicQueryInterval),
     });
   } catch (error) {
     console.error(error);

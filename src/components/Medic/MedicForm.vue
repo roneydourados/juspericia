@@ -150,7 +150,7 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
+        <!-- <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
           <IntegerInput
             v-model="model.medicQueryInterval"
             label="Intervalo entre consultas"
@@ -158,7 +158,7 @@
             required
           />
           <strong>minutos</strong>
-        </v-col>
+        </v-col> -->
       </v-row>
     </FormCrud>
   </DialogForm>
@@ -204,7 +204,7 @@ const model = ref({
   crmUf: "",
   medicHourStart: "",
   medicHourEnd: "",
-  medicQueryInterval: "",
+  medicQueryInterval: "15",
   active: true,
   cepAddress: {
     cep: "",
@@ -268,13 +268,13 @@ const loadModel = () => {
     email: props.data.email ?? "",
     active: props.data.active ?? false,
     cepAddress: {
-      cep: props.data.Address?.addressZipcode ?? "",
-      logradouro: props.data.Address?.addressStreet ?? "",
-      complemento: props.data.Address?.addressComplement ?? "",
-      bairro: props.data.Address?.addressDistrict ?? "",
-      localidade: props.data.Address?.addressCity ?? "",
-      uf: props.data.Address?.addressState ?? "",
-      numero: props.data.Address?.addressNumber ?? "",
+      cep: props.data.UserAddress?.addressZipcode ?? "",
+      logradouro: props.data.UserAddress?.addressStreet ?? "",
+      complemento: props.data.UserAddress?.addressComplement ?? "",
+      bairro: props.data.UserAddress?.addressDistrict ?? "",
+      localidade: props.data.UserAddress?.addressCity ?? "",
+      uf: props.data.UserAddress?.addressState ?? "",
+      numero: props.data.UserAddress?.addressNumber ?? "",
     },
   };
 };
