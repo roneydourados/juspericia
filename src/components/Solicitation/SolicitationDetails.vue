@@ -3,6 +3,9 @@
     <v-card-title>
       <v-row dense>
         <v-col cols="12" lg="11">
+          <span style="font-size: 1.5rem" class="mr-2 font-weight-bold">
+            #{{ $single?.id }}
+          </span>
           <span style="font-size: 1.5rem">Detalhes</span>
         </v-col>
         <v-col cols="12" lg="1">

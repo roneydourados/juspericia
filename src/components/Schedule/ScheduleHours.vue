@@ -1,42 +1,31 @@
 <template>
-  <v-card flat>
-    <v-row dense>
-      <v-col cols="3">
-        <div class="mb-4 font-weight-bold">Horários disponíveis</div>
-        <DatePicker
-          v-model="model.scheduleDate"
-          label="Agendar para o dia"
-          required
-          @update:model-value="timeSlots"
-        />
-      </v-col>
-    </v-row>
-    <v-row dense>
-      <v-col
-        cols="1"
-        v-for="(item, index) in hoursSelected"
-        :key="index"
-        @click="
-          (item.patientConsultationId === props.solicitation.id ||
-            !item.isSelected) &&
-            !isPastHour(item) &&
-            setBlockHour(item)
-        "
-        :class="[
-          'time-slot',
-          {
-            booked: isSelectedHour(item),
-            'disabled-slot':
-              (item.isSelected &&
-                item.patientConsultationId !== props.solicitation.id) ||
-              isPastHour(item),
-          },
-        ]"
-      >
-        {{ item.scheduleHour }}
-      </v-col>
-    </v-row>
-  </v-card>
+  <v-row dense class="px-4">
+    <v-col
+      cols="3"
+      lg="1"
+      v-for="(item, index) in hoursSelected"
+      :key="index"
+      @click="
+        (item.patientConsultationId === props.solicitation.id ||
+          !item.isSelected) &&
+          !isPastHour(item) &&
+          setBlockHour(item)
+      "
+      :class="[
+        'time-slot',
+        {
+          booked: isSelectedHour(item),
+          'disabled-slot':
+            item.isDisabled ||
+            (item.isSelected &&
+              item.patientConsultationId !== props.solicitation.id) ||
+            isPastHour(item),
+        },
+      ]"
+    >
+      {{ item.scheduleHour }}
+    </v-col>
+  </v-row>
 </template>
 
 <script setup lang="ts">
@@ -49,16 +38,8 @@ const props = defineProps({
   },
 });
 
-const systemParametersStore = useSystemParametersStore();
-const scheduleStore = useScheduleStore();
-
-onMounted(async () => {
-  await systemParametersStore.index();
-  timeSlots();
-});
-
-const $systemParameters = computed(() => systemParametersStore.$parameters);
-const $schedules = computed(() => scheduleStore.$all);
+//const systemParametersStore = useSystemParametersStore();
+//const scheduleStore = useScheduleStore();
 
 const hoursSelected = defineModel<HourProps[]>({
   default: [],
@@ -68,10 +49,10 @@ const hour = defineModel<HourProps>("hour", {
   default: {} as HourProps,
 });
 
-const model = ref({
-  scheduleDate: dayjs().format("YYYY-MM-DD"),
-  scheduleHour: "",
-});
+// const model = ref({
+//   scheduleDate: dayjs().format("YYYY-MM-DD"),
+//   scheduleHour: "",
+// });
 
 // Função para verificar se o horário é no passado para o dia atual
 const isPastHour = (slot: HourProps) => {
@@ -122,53 +103,6 @@ const isSelectedHour = (hour: HourProps) => {
       h.scheduleDate === hour.scheduleDate &&
       h.isSelected
   );
-};
-
-//monta o array de horários disponíveis
-const timeSlots = () => {
-  hoursSelected.value = [];
-  hour.value = {};
-
-  const start = new Date(`1970-01-01T${$systemParameters.value?.hourInitial}`);
-  const end = new Date(`1970-01-01T${$systemParameters.value?.hourFinal}`);
-
-  while (start <= end) {
-    const isSelected = $schedules.value.some(
-      (s) =>
-        s.scheduleDate === model.value.scheduleDate &&
-        s.scheduleHour ===
-          start.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })
-    );
-
-    const filter = $schedules.value.find(
-      (s) =>
-        s.scheduleDate === model.value.scheduleDate &&
-        s.scheduleHour ===
-          start.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })
-    );
-
-    const solicitationId = isSelected ? filter?.id : props.solicitation.id;
-
-    hoursSelected.value.push({
-      scheduleHour: start.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      patientConsultationId: solicitationId,
-      scheduleDate: model.value.scheduleDate,
-      isSelected,
-    });
-    start.setMinutes(
-      start.getMinutes() +
-        Number($systemParameters.value?.medicQueryInterval ?? 15)
-    );
-  }
 };
 </script>
 

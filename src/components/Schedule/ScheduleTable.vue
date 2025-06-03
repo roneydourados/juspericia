@@ -175,7 +175,7 @@ const model = reactive({
 const loading = ref(false);
 
 const $currentUser = computed(() => auth.$currentUser);
-const $shedules = computed(() => scheduleStore.$all);
+const $shedules = computed(() => scheduleStore.$all?.schedules || []);
 
 const formattedDate = computed(() => {
   const data = new Date();
@@ -206,7 +206,7 @@ const getSchedules = async () => {
   try {
     await scheduleStore.index({
       scheduleDate: dayjs(model.date).format("YYYY-MM-DD"),
-      medicId: model.medic?.id,
+      //medicId: model.medic?.id,
       patientId: model.patient?.id,
     });
   } finally {

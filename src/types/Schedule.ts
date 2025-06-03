@@ -21,4 +21,10 @@ export interface HourProps {
   scheduleDate?: string;
   scheduleHour?: string;
   isSelected?: boolean;
+  isDisabled?: boolean;
+}
+
+export interface ScheduleListProps {
+  schedules: ScheduleProps[];
+  medics: UserProps[];
 }

@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useScheduleStore = defineStore("schedule", () => {
   const { api } = useAxios();
   const schedule = ref<ScheduleProps>();
-  const schedules = ref<ScheduleProps[]>([]);
+  const schedules = ref<ScheduleListProps>();
 
   const $single = computed(() => schedule.value);
   const $all = computed(() => schedules.value);
@@ -36,12 +36,12 @@ export const useScheduleStore = defineStore("schedule", () => {
         scheduleDate,
       },
     };
-    const { data } = await api.get<ScheduleProps[]>("/schedule", config);
+    const { data } = await api.get<ScheduleListProps>("/schedule", config);
     schedules.value = data;
   };
 
   const clear = () => {
-    schedules.value = [];
+    schedules.value = undefined;
     schedule.value = {};
   };
 

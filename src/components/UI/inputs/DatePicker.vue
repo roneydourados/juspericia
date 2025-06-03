@@ -107,7 +107,7 @@ const validationRules = computed<MaybeRef>(() => {
         .min(10, "Campo não pode ser vazio!")
         .refine((val) => {
           const date = new Date(val!);
-          const isValid = dayjs(date, true).isValid();
+          const isValid = dayjs(date).isValid();
           return isValid;
         }, "Data inválida")
     );
@@ -124,7 +124,7 @@ const validationRules = computed<MaybeRef>(() => {
         if (!val) return true;
 
         const date = new Date(val!);
-        const isValid = dayjs(date, true).isValid();
+        const isValid = dayjs(date).isValid();
         return isValid;
       }, "Data inválida")
   );

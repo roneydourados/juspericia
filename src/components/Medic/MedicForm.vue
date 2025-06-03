@@ -160,6 +160,29 @@
           <strong>minutos</strong>
         </v-col> -->
       </v-row>
+      <v-row dense>
+        <v-col cols="12">
+          <strong>Dias da semana</strong>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-checkbox v-model="model.seg" label="Seg" />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-checkbox v-model="model.ter" label="Ter" />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-checkbox v-model="model.qua" label="Qua" />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-checkbox v-model="model.qui" label="Qui" />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-checkbox v-model="model.sex" label="Sex" />
+        </v-col>
+        <v-col cols="12" v-model="model.sab" lg="2">
+          <v-checkbox label="Sab" />
+        </v-col>
+      </v-row>
     </FormCrud>
   </DialogForm>
   <DialogLoading :dialog="loading" />
@@ -215,6 +238,13 @@ const model = ref({
     uf: "",
     numero: "",
   } as CepAdderssProps,
+  seg: false,
+  ter: false,
+  qua: false,
+  qui: false,
+  sex: false,
+  sab: false,
+  dom: false,
 });
 
 const clearModel = () => {
@@ -240,6 +270,13 @@ const clearModel = () => {
       uf: "",
       numero: "",
     },
+    seg: false,
+    ter: false,
+    qua: false,
+    qui: false,
+    sex: false,
+    sab: false,
+    dom: false,
   };
 };
 
@@ -276,6 +313,13 @@ const loadModel = () => {
       uf: props.data.UserAddress?.addressState ?? "",
       numero: props.data.UserAddress?.addressNumber ?? "",
     },
+    seg: props.data.seg ?? false,
+    ter: props.data.ter ?? false,
+    qua: props.data.qua ?? false,
+    qui: props.data.qui ?? false,
+    sex: props.data.sex ?? false,
+    sab: props.data.sab ?? false,
+    dom: props.data.dom ?? false,
   };
 };
 
@@ -316,6 +360,13 @@ const create = async () => {
       addressStreet: model.value.cepAddress.logradouro,
       addressZipcode: model.value.cepAddress.cep,
     },
+    seg: model.value.seg,
+    ter: model.value.ter,
+    qua: model.value.qua,
+    qui: model.value.qui,
+    sex: model.value.sex,
+    sab: model.value.sab,
+    dom: model.value.dom,
   });
 };
 
@@ -343,6 +394,13 @@ const update = async () => {
       addressStreet: model.value.cepAddress.logradouro,
       addressZipcode: model.value.cepAddress.cep,
     },
+    seg: model.value.seg,
+    ter: model.value.ter,
+    qua: model.value.qua,
+    qui: model.value.qui,
+    sex: model.value.sex,
+    sab: model.value.sab,
+    dom: model.value.dom,
   });
 };
 

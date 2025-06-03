@@ -28,6 +28,13 @@ export interface UserProps {
   whatsapp?: string;
   tokenCapcha?: string;
   medicConsultationType?: string;
+  seg?: boolean;
+  ter?: boolean;
+  qua?: boolean;
+  qui?: boolean;
+  sex?: boolean;
+  sab?: boolean;
+  dom?: boolean;
 }
 
 export interface UserProfileProps {

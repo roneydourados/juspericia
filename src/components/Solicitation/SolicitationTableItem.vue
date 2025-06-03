@@ -5,9 +5,10 @@
       style="gap: 1rem; font-size: 1rem"
     >
       <div class="d-flex align-center" style="gap: 1rem">
-        <span class="text-truncate font-weight-bold">
-          Solicitação {{ solicitation.Consultation?.consultationName }}
-        </span>
+        <div class="text-truncate font-weight-bold">
+          #{{ solicitation.id }} - Solicitação
+          {{ solicitation.Consultation?.consultationName }}
+        </div>
         <div
           class="d-flex align-center flex-wrap text-deep-purple"
           style="gap: 0.5rem"
@@ -223,7 +224,7 @@
             {{ solicitation.Patient?.surname }}
           </span>
         </v-col>
-        <v-col
+        <!-- <v-col
           v-if="solicitation.Medic"
           cols="12"
           lg="6"
@@ -236,7 +237,7 @@
           <span class="font-weight-bold">
             {{ solicitation.Medic?.crm }}/{{ solicitation.Medic?.crmUf }}
           </span>
-        </v-col>
+        </v-col> -->
       </v-row>
       <v-row dense>
         <v-col
