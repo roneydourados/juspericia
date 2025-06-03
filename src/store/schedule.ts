@@ -4,9 +4,11 @@ export const useScheduleStore = defineStore("schedule", () => {
   const { api } = useAxios();
   const schedule = ref<ScheduleProps>();
   const schedules = ref<ScheduleListProps>();
+  const schedulesForMedics = ref<ScheduleProps[]>([]);
 
   const $single = computed(() => schedule.value);
   const $all = computed(() => schedules.value);
+  const $schedulesForMedics = computed(() => schedulesForMedics.value);
 
   const create = async (payload: ScheduleProps) => {
     const { data } = await api.post<ScheduleProps>("/schedule", payload);
@@ -40,10 +42,34 @@ export const useScheduleStore = defineStore("schedule", () => {
     schedules.value = data;
   };
 
+  const indexForMedic = async (filters: ScheduleProps) => {
+    const { medicId, scheduleDate, patientId } = filters;
+    const config = {
+      params: {
+        medicId,
+        patientId,
+        scheduleDate,
+      },
+    };
+    const { data } = await api.get<ScheduleProps[]>("/schedule-medic", config);
+    schedulesForMedics.value = data;
+  };
+
   const clear = () => {
     schedules.value = undefined;
     schedule.value = {};
   };
 
-  return { $all, $single, create, update, destroy, show, index, clear };
+  return {
+    $all,
+    $single,
+    $schedulesForMedics,
+    create,
+    update,
+    destroy,
+    show,
+    index,
+    clear,
+    indexForMedic,
+  };
 });

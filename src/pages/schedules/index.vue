@@ -11,7 +11,7 @@ const loading = ref(false);
 onMounted(async () => {
   loading.value = true;
   try {
-    await scheduleStore.index({
+    await scheduleStore.indexForMedic({
       scheduleDate: dayjs().format("YYYY-MM-DD"),
     });
   } finally {
