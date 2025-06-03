@@ -6,12 +6,8 @@
           <v-card-title class="d-flex flex-column py-8" style="gap: 0.5rem">
             <span class="text-h5 font-weight-bold"> Horários agendados </span>
             <span class="text-grey-darken-1">{{ formattedDate }}</span>
-            <v-row dense>
-              <v-col
-                v-if="$currentUser?.profile?.type === 'ADMIN'"
-                cols="12"
-                lg="6"
-              >
+            <v-row dense v-if="$currentUser?.profile?.type === 'ADMIN'">
+              <v-col cols="12" lg="6">
                 <SelectSearchMedic
                   v-model="model.medic"
                   @update:model-value="getSchedules"
