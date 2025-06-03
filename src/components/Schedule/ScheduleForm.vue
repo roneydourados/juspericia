@@ -218,8 +218,17 @@ const timeSlots = async () => {
 
     const solicitationId = isSelected ? filter?.id : props.solicitation.id;
 
+    // Quantos médicos estão disponíveis nesse horário
+    const availableAtThisHour = availableMedics.filter((medic: UserProps) => {
+      const start = medic.medicHourStart!;
+      const end = medic.medicHourEnd!;
+
+      // Verifica se hourStr está entre start e end
+      return start <= hourStr && hourStr <= end;
+    });
+
     // ❌ Se já tiver agendamentos ≥ médicos disponíveis, bloqueia
-    const isDisabled = schedulesAtThisHour.length >= availableMedics.length;
+    const isDisabled = schedulesAtThisHour.length >= availableAtThisHour.length;
 
     hours.value.push({
       scheduleHour: hourStr,
@@ -275,11 +284,6 @@ const timeSlots = async () => {
 };
 
 const submitForm = async () => {
-  // if (!hour.value.medicId) {
-  //   push.warning("Selecione um horário para agendar a consulta");
-  //   return;
-  // }
-
   loading.value = true;
   try {
     const schedule = {
