@@ -116,9 +116,10 @@ const handleQueryStart = async () => {
     medicId: $user.value?.id,
   });
 
-  // await router.push(
-  //   `/teleconference/${$single.value?.PatientConsultation?.publicId}`
-  // );
+  // Aqui vai abrir a tela para conversação de vídeo
+  await router.push(
+    `/teleconference/${$single.value?.PatientConsultation?.publicId}`
+  );
 
   emit("start-query");
 };
