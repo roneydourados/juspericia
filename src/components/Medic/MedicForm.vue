@@ -179,8 +179,8 @@
         <v-col cols="12" lg="2">
           <v-checkbox v-model="model.sex" label="Sex" />
         </v-col>
-        <v-col cols="12" v-model="model.sab" lg="2">
-          <v-checkbox label="Sab" />
+        <v-col cols="12" lg="2">
+          <v-checkbox label="Sab" v-model="model.sab" />
         </v-col>
       </v-row>
     </FormCrud>
