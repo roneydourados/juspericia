@@ -202,7 +202,7 @@ const getSchedules = async () => {
   try {
     await scheduleStore.indexForMedic({
       scheduleDate: dayjs(model.date).format("YYYY-MM-DD"),
-      //medicId: model.medic?.id,
+      medicId: model.medic?.id,
       patientId: model.patient?.id,
     });
   } finally {
