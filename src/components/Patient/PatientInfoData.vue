@@ -131,8 +131,8 @@
           font-size="0.9"
           font-size-content="0.9"
           :content="`${
-            $single?.Address?.addressZipcode
-              ? formatCEP($single?.Address?.addressZipcode)
+            $single?.PatientAddress?.addressZipcode
+              ? formatCEP($single?.PatientAddress?.addressZipcode)
               : '00000-000'
           }`"
           :show-divider="true"
@@ -146,8 +146,8 @@
           font-size="0.9"
           font-size-content="0.9"
           :content="`${
-            $single?.Address?.addressStreet ?? 'Não informado!'
-          } Nº: ${$single?.Address?.addressNumber ?? 'S/N'}`"
+            $single?.PatientAddress?.addressStreet ?? 'Não informado!'
+          } Nº: ${$single?.PatientAddress?.addressNumber ?? 'S/N'}`"
           :show-divider="true"
         />
       </v-col>
@@ -158,7 +158,9 @@
           color-icon="info"
           font-size="0.9"
           font-size-content="0.9"
-          :content="`${$single?.Address?.addressDistrict ?? 'Não informado!'}`"
+          :content="`${
+            $single?.PatientAddress?.addressDistrict ?? 'Não informado!'
+          }`"
           :show-divider="true"
         />
       </v-col>
@@ -169,9 +171,9 @@
           color-icon="info"
           font-size="0.9"
           font-size-content="0.9"
-          :content="`${$single?.Address?.addressCity ?? 'Não informado!'}/${
-            $single?.Address?.addressState ?? 'NT'
-          }`"
+          :content="`${
+            $single?.PatientAddress?.addressCity ?? 'Não informado!'
+          }/${$single?.PatientAddress?.addressState ?? 'NT'}`"
           :show-divider="true"
         />
       </v-col>
