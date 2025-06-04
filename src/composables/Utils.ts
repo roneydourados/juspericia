@@ -40,10 +40,11 @@ export const useUtils = () => {
 
   const formatDate = (date?: string) => {
     if (date) {
-      return dayjs(date.substring(0, 10)).format("DD/MM/yyyy");
+      console.log(date.substring(0, 10));
+      return dayjs(date.substring(0, 10)).format("DD/MM/YYYY");
     }
 
-    return dayjs().format("DD/MM/yyyy");
+    return dayjs().format("DD/MM/YYYY");
   };
 
   const extenseDate = (date?: string) => {

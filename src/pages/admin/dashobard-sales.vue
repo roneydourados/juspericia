@@ -1,5 +1,5 @@
 <template>
-  <DashboardAdmin />
+  <AdminDashboardInvoicing />
   <DialogLoading :dialog="loading" />
 </template>
 <script setup lang="ts">
@@ -12,10 +12,18 @@ const loading = ref(false);
 onMounted(async () => {
   try {
     loading.value = true;
-    await dash.getDashboardSales({
-      initialDate: dayjs().format("YYYY-MM-DD"),
-      finalDate: dayjs().format("YYYY-MM-DD"),
+    const initialDate = dayjs().startOf("week").format("YYYY-MM-DD");
+    const finalDate = dayjs().endOf("week").format("YYYY-MM-DD");
+
+    await dash.getDashboardInvoicing({
+      initialDate,
+      finalDate,
     });
+
+    // await dash.getDashboardSales({
+    //   initialDate: dayjs().format("YYYY-MM-DD"),
+    //   finalDate: dayjs().format("YYYY-MM-DD"),
+    // });
   } finally {
     loading.value = false;
   }
