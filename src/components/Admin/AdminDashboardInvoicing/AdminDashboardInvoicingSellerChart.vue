@@ -2,7 +2,7 @@
   <v-card flat rounded="lg" height="100%">
     <v-card-title>
       <span class="font-weight-bold text-subtitle-1">
-        Vendas por categoria
+        Vendas por vendedor
       </span>
     </v-card-title>
     <v-card-text>
@@ -19,14 +19,12 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
 const userAdmin = useUserAdminStore();
-const { mobile } = useDisplay();
 //const { amountFormated } = useUtils();
 
 const chartData = computed(() => {
   return {
-    series: userAdmin.$dashboardInvoicing?.salesCategories.map((item) =>
+    series: userAdmin.$dashboardInvoicing?.salesSellers.map((item) =>
       Number(item.total)
     ),
     chartOptions: {
@@ -40,8 +38,8 @@ const chartData = computed(() => {
       stroke: {
         show: false,
       },
-      labels: userAdmin.$dashboardInvoicing?.salesCategories.map(
-        (item) => item.category
+      labels: userAdmin.$dashboardInvoicing?.salesSellers.map(
+        (item) => item.seller
       ),
       plotOptions: {
         pie: {

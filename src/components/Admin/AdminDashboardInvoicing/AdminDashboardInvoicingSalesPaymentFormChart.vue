@@ -1,11 +1,11 @@
 <template>
-  <Card height="300">
-    <template #title>
+  <v-card flat rounded="lg" height="100%">
+    <v-card-title>
       <span class="font-weight-bold text-subtitle-1">
         Vendas por forma de pagamento
       </span>
-    </template>
-    <template #content>
+    </v-card-title>
+    <v-card-text>
       <Chart
         v-if="chartData.series && chartData.series.length > 0"
         :type="chartData.chartOptions.chart.type"
@@ -14,8 +14,8 @@
         :series="chartData.series"
       />
       <EmptyContent v-else />
-    </template>
-  </Card>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
@@ -29,7 +29,7 @@ const chartData = computed(() => {
     ),
     chartOptions: {
       chart: {
-        height: "580",
+        height: "480",
         type: "donut",
       },
       theme: {

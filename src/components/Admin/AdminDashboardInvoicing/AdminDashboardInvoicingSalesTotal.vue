@@ -1,5 +1,5 @@
 <template>
-  <Card height="300">
+  <Card>
     <template #title>
       <span class="font-weight-bold text-subtitle-1">
         Total de Vendas do período

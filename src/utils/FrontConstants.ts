@@ -134,3 +134,11 @@ export const monthsObject = [
     monthIndex: 11,
   },
 ];
+
+export const profileTypes = [
+  "ADMIN",
+  "ADVOGADO",
+  "MEDICO",
+  "CLIENTE",
+  "VENDEDOR",
+];

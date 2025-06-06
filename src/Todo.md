@@ -6,6 +6,7 @@
 [] - Criar uma tela de voucher / promoção, nela informar o valor de desconto, data e hora de inicio e fim
 e quais pacotes farão parte do voucher
 [] - Mudar cor caso o agendamento passe da data em detalhes de solicitação
+[] - Criar tela de adminstração de perfil para o usuário admin
 
 # cobrar
 

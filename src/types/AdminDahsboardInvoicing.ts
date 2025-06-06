@@ -4,6 +4,7 @@ export interface AdminDashboardInvoicingProps {
   salesCategories: SalesCategoriesProps[];
   salesClients: SalesClientsProps[];
   salesGeral: SalesGeralProps[];
+  salesSellers: SalesSellerProps[];
 }
 
 interface TotalSalesProps {
@@ -23,6 +24,11 @@ interface SalesCategoriesProps {
 interface SalesClientsProps {
   total: number;
   client: string;
+}
+
+interface SalesSellerProps {
+  total: number;
+  seller: string;
 }
 
 interface SalesGeralProps {
