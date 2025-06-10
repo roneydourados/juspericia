@@ -20,7 +20,7 @@
         <template v-slot:item.duration="{ item }">
           <div class="d-flex align-center">
             <InfoLabel
-              :content="`${item.duration.toString()}hrs`"
+              :content="`${item.duration?.toString()}hrs`"
               :show-divider="false"
               font-size="1"
             />
@@ -33,7 +33,9 @@
 
 <script setup lang="ts">
 const dash = useUserAdminStore();
-const $dash = computed(() => dash.$dashboard);
+const $dash = computed(
+  () => dash.$dashboard ?? ({} as SalesAdminDashboardProps)
+);
 const headers = [
   {
     title: "Médico",
