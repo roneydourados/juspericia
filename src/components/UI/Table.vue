@@ -86,6 +86,9 @@
           density="comfortable"
         />
       </template>
+      <template v-slot:top>
+        <slot name="top-table" />
+      </template>
     </v-data-table>
     <v-data-table-virtual
       v-else

@@ -38,3 +38,11 @@ interface SalesGeralProps {
   billingType: string;
   total: number;
 }
+
+export interface TransactionProps {
+  client: string;
+  dateCreated: string;
+  description: string;
+  billingType: string;
+  total: number;
+}

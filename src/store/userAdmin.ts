@@ -7,11 +7,13 @@ export const useUserAdminStore = defineStore("userAdmin", () => {
   const user = ref<UserProps>();
   const users = ref<UserProps[]>([]);
   const dashboardInvoicing = ref<AdminDashboardInvoicingProps>();
+  const transactions = ref<TransactionProps[]>([]);
 
   const $single = computed(() => user.value);
   const $all = computed(() => users.value);
   const $dashboard = computed(() => dashboard.value);
   const $dashboardInvoicing = computed(() => dashboardInvoicing.value);
+  const $transactions = computed(() => transactions.value);
 
   const index = async (inputQuery: string) => {
     const config = {
@@ -85,11 +87,31 @@ export const useUserAdminStore = defineStore("userAdmin", () => {
     dashboardInvoicing.value = data;
   };
 
+  const getTransactions = async ({
+    initialDate,
+    finalDate,
+  }: AdminDashBoardSalesFilterProps) => {
+    const config = {
+      params: {
+        initialDate,
+        finalDate,
+      },
+    };
+
+    const { data } = await api.get<TransactionProps[]>(
+      "user-admin-transactions",
+      config
+    );
+
+    transactions.value = data;
+  };
+
   return {
     $single,
     $all,
     $dashboard,
     $dashboardInvoicing,
+    $transactions,
     index,
     create,
     update,
@@ -97,5 +119,6 @@ export const useUserAdminStore = defineStore("userAdmin", () => {
     show,
     getDashboardSales,
     getDashboardInvoicing,
+    getTransactions,
   };
 });

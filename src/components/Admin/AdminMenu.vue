@@ -85,23 +85,6 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <!-- <v-col cols="12" lg="3">
-      <v-card
-        flat
-        rounded="lg"
-        min-height="200"
-        @click="handlClick('/admin/report-sales')"
-        elevation="8"
-      >
-        <v-card-title class="d-flex justify-center py-4">
-          <AdminMenuReportSalesSVG height="50" color="#3F51B5" />
-        </v-card-title>
-        <v-card-text class="text-center">
-          Relatório de vendas. Relatório de resultado e acompanhamento de vendas
-          realizadas dentro de um período
-        </v-card-text>
-      </v-card>
-    </v-col> -->
     <v-col cols="12" lg="3">
       <v-card
         flat
@@ -116,6 +99,24 @@
         <v-card-text class="text-center">
           Parametrizações. Configurações gerais do sistema.
         </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="12" lg="3">
+      <v-card
+        flat
+        rounded="lg"
+        min-height="200"
+        @click="handlClick('/admin/vouchers')"
+        elevation="8"
+      >
+        <v-card-title class="d-flex justify-center py-4">
+          <v-icon
+            icon="mdi-ticket-percent-outline"
+            size="50"
+            color="green-darken-3"
+          />
+        </v-card-title>
+        <v-card-text class="text-center"> Controle de Vouchers. </v-card-text>
       </v-card>
     </v-col>
   </v-row>
