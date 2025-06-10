@@ -1,7 +1,11 @@
 <template>
   <v-row desnse>
     <v-col cols="12" lg="2">
-      <DatePicker v-model="filters.initialDate" label="Data" class="mb-4" />
+      <DatePicker
+        v-model="filters.initialDate"
+        label="Data inicial"
+        class="mb-4"
+      />
     </v-col>
     <v-col cols="12" lg="2">
       <DatePicker v-model="filters.finalDate" label="Data final" class="mb-4" />

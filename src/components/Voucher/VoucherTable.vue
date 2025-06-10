@@ -5,12 +5,15 @@
       :headers="headers"
       :items="vounchers"
       :showCrud="true"
+      @add="hanelNewVoucher"
     >
       <template v-slot:item.discount="{ item }">
         {{ item.discountType === "percentage" ? "%" : "R$" }}
         {{ amountFormated(item.discount ?? 0, false) }}
       </template>
     </Table>
+    <VoucherForm v-model="showForm" />
+    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
@@ -18,6 +21,10 @@
 import dayjs from "dayjs";
 
 const { amountFormated } = useUtils();
+const consultationPackageStore = useServicePackageStore();
+
+const showForm = ref(false);
+const loading = ref(false);
 const headers = [
   { title: "Código", key: "code" },
   { title: "Descrição", key: "description" },
@@ -83,4 +90,14 @@ const vounchers = [
     status: "active",
   },
 ];
+
+const hanelNewVoucher = async () => {
+  loading.value = true;
+  try {
+    await consultationPackageStore.index("active");
+    showForm.value = true;
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

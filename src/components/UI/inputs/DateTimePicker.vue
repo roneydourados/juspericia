@@ -132,7 +132,7 @@ const validationRules = computed<MaybeRef>(() => {
         .min(10, "Data inválida")
         .refine((val) => {
           const date = new Date(val!);
-          const isValid = dayjs(date, true).isValid();
+          const isValid = dayjs(date).isValid();
 
           return isValid;
         }, "Data inválida")
@@ -148,7 +148,7 @@ const validationRules = computed<MaybeRef>(() => {
       .nullish()
       .refine((val) => {
         const date = new Date(val!);
-        const isValid = dayjs(date, true).isValid();
+        const isValid = dayjs(date).isValid();
 
         return isValid;
       }, "Data inválida")
