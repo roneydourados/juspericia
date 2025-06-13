@@ -90,6 +90,7 @@
                 @input="handleFileUpload"
                 style="display: none"
                 ref="fileInput"
+                multiple
               />
               <div class="d-flex justify-space-between flex-wrap w-100 px-2">
                 <strong> Documentos: </strong>
@@ -410,20 +411,35 @@ const handleFileUpload = (event: Event) => {
   if (!files) return;
 
   try {
-    const existingFile = form.value.files.find(
-      (attachment) => attachment.fileName === files[0].name
-    );
-
-    if (existingFile) {
-      push.warning("Já existe um arquivo com este nome anexado.");
-      return;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const exists = form.value.files.some(
+        (attachment) => attachment.fileName === file.name
+      );
+      if (exists) {
+        // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
+        continue;
+      }
+      form.value.files.push({
+        fileCategory: "solicitation-consultation",
+        fileData: file,
+        fileName: file.name,
+      });
     }
+    // const existingFile = form.value.files.find(
+    //   (attachment) => attachment.fileName === files[0].name
+    // );
 
-    form.value.files.push({
-      fileCategory: "solicitation-consultation",
-      fileData: files[0],
-      fileName: files[0].name,
-    });
+    // if (existingFile) {
+    //   push.warning("Já existe um arquivo com este nome anexado.");
+    //   return;
+    // }
+
+    // form.value.files.push({
+    //   fileCategory: "solicitation-consultation",
+    //   fileData: files[0],
+    //   fileName: files[0].name,
+    // });
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {

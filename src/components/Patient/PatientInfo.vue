@@ -39,8 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
-
 const patientStore = usePatientStore();
 const fileStore = useFileStore();
 //const storeConsultation = useSolicitationConsultationStore();
@@ -77,30 +75,33 @@ const handleGetEditItem = () => {
 };
 
 const handleTab = async () => {
-  switch (tab.value) {
-    case 1:
-      //await patientStore.getSingle();
-      break;
-    case 2:
-      loading.value = true;
-      try {
-        await patientStore.getSolicitations(Number($single.value?.id ?? 0));
-      } finally {
-        loading.value = false;
-      }
+  if (!$single.value) {
+    return;
+  }
 
-      break;
-    case 3:
-      loading.value = true;
-      try {
-        await fileStore.index({
-          fileCategory: "patient",
-          ownerId: $single.value?.id!,
-        });
-      } finally {
-        loading.value = false;
-      }
-      break;
+  loading.value = true;
+  try {
+    switch (tab.value) {
+      case 1:
+        //await patientStore.getSingle();
+        break;
+      case 2:
+        await patientStore.getSolicitations($single.value.publicId!);
+        break;
+      // case 3:
+      //   loading.value = true;
+      //   try {
+      //     await fileStore.index({
+      //       fileCategory: "patient",
+      //       ownerId: $single.value?.id!,
+      //     });
+      //   } finally {
+      //     loading.value = false;
+      //   }
+      //   break;
+    }
+  } finally {
+    loading.value = false;
   }
 };
 </script>

@@ -3,6 +3,7 @@
     <v-card-title>
       <h3>Anexos/Documentos</h3>
       <input
+        multiple
         type="file"
         @change="handleFileUpload"
         style="display: none"
@@ -20,7 +21,7 @@
       </v-btn>
     </v-card-title>
     <v-card-text>
-      <div v-for="item in $patient?.files" class="w-100 mt-4">
+      <div v-for="item in fileList" class="w-100 mt-4">
         <AttachementCard
           :file-name="item.fileName!"
           download-visible
@@ -29,54 +30,6 @@
           @delete="getFileDelete(item)"
         />
       </div>
-
-      <!-- <Table
-        :headers="headers"
-        :items="$files"
-        itle="Documentos/Anexos"
-        :show-crud="false"
-      >
-        <template v-slot:item.fileName="{ item }">
-          <span class="text-info">{{ item.fileName }}</span>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <div class="d-flex justify-content-center">
-            <v-btn
-              icon
-              color="info"
-              variant="text"
-              size="small"
-              @click="handleDownloadFile(item.publicId, item.fileName)"
-            >
-              <v-icon icon="mdi-cloud-download-outline" size="20"></v-icon>
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Baixar arquivo
-              </v-tooltip>
-            </v-btn>
-
-            <v-btn
-              icon
-              color="error"
-              variant="text"
-              size="small"
-              @click="getFileDelete(item)"
-            >
-              <v-icon icon="mdi-delete-outline" size="20"></v-icon>
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Apagar arquivo
-              </v-tooltip>
-            </v-btn>
-          </div>
-        </template>
-      </Table> -->
     </v-card-text>
   </v-card>
   <Dialog
@@ -101,13 +54,19 @@ const patientStore = usePatientStore();
 const loading = ref(false);
 const showDelete = ref(false);
 const itemSelected = ref<FileProps>();
-const headers = ref([
-  { title: "Arquivo", key: "fileName" },
-  { title: "Ações", key: "actions", sortable: false },
-]);
+const fileList = ref<FileProps[]>([]);
 
 const $patient = computed(() => patientStore.$single);
-const $files = computed(() => fileStore.$files);
+
+watch(
+  () => $patient.value?.files,
+  (newFiles) => {
+    if (newFiles) {
+      fileList.value = newFiles;
+    }
+  },
+  { immediate: true }
+);
 
 const handleFileUpload = async (event: Event) => {
   const input = event.target as HTMLInputElement;
@@ -117,21 +76,58 @@ const handleFileUpload = async (event: Event) => {
 
   loading.value = true;
   try {
-    await fileStore.uploadAws({
-      fileCategory: "patient",
-      fileData: files[0],
-      fileName: files[0].name,
-      ownerId: $patient.value?.id!,
-    });
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const exists = fileList.value.some(
+        (attachment) => attachment.fileName === file.name
+      );
+      if (exists) {
+        // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
+        continue;
+      }
+      fileList.value.push({
+        fileCategory: "patient",
+        ownerId: $patient.value?.id!,
+        fileData: file,
+        fileName: file.name,
+      });
+    }
 
+    if (fileList.value.length > 0) {
+      await fileStore.uploadManyAws(fileList.value);
+    }
     await patientStore.show($patient.value?.publicId!);
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {
-    loading.value = false;
     input.value = ""; // Limpa o input de arquivo após o upload
+    loading.value = false;
   }
 };
+
+// const handleFileUploadOld = async (event: Event) => {
+//   const input = event.target as HTMLInputElement;
+//   const files = input.files;
+
+//   if (!files) return;
+
+//   loading.value = true;
+//   try {
+//     await fileStore.uploadAws({
+//       fileCategory: "patient",
+//       fileData: files[0],
+//       fileName: files[0].name,
+//       ownerId: $patient.value?.id!,
+//     });
+
+//     await patientStore.show($patient.value?.publicId!);
+//   } catch (error) {
+//     console.log("🚀 ~ handleFileUpload ~ error:", error);
+//   } finally {
+//     loading.value = false;
+//     input.value = ""; // Limpa o input de arquivo após o upload
+//   }
+// };
 
 const handleDownloadFile = async (publicId: string, fileName: string) => {
   loading.value = true;

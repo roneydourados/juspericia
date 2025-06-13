@@ -237,6 +237,10 @@ export const useUtils = () => {
   };
 
   const solicitationStatusName = (status: string) => {
+    if (!status) {
+      return ""; // Default color for unknown status
+    }
+
     switch (status.trim().toLowerCase()) {
       case "open":
         return "Pendente";
@@ -258,6 +262,10 @@ export const useUtils = () => {
   };
 
   const solicitationStatusColor = (status: string) => {
+    if (!status) {
+      return "#000"; // Default color for unknown status
+    }
+
     switch (status.trim().toLowerCase()) {
       case "open":
         return "#3F51B5";

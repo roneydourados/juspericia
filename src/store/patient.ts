@@ -28,10 +28,12 @@ export const usePatientStore = defineStore("patient", () => {
     patient.value = data;
   };
 
-  const getSolicitations = async (id: number) => {
+  const getSolicitations = async (publicId: string) => {
     const { data } = await api.get<SolicitationConsultationList[]>(
-      `/patient/solicitations/${id}`
+      `/patient/solicitations/${publicId}`
     );
+
+    console.log("🚀 ~ getSolicitations ~ data:", data);
 
     solicitations.value = data;
   };
