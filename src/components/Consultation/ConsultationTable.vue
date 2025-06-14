@@ -85,19 +85,6 @@
                     :show-divider="true"
                   />
                 </v-col>
-                <!-- <v-col cols="12" lg="4">
-                  <InfoLabel
-                    font-size="0.9"
-                    font-size-content="1"
-                    title="Preço Pacote"
-                    icon="mdi-cash"
-                    color-icon="purple"
-                    :content="
-                      amountFormated(consultation.valuePacket ?? 0, false)
-                    "
-                    :show-divider="true"
-                  />
-                </v-col> -->
               </v-row>
             </v-card-title>
             <v-card-actions class="d-flex justify-end">

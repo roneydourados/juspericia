@@ -10,4 +10,5 @@ export interface ConsultationProps {
   createdAt?: string;
   updatedAt?: string;
   publicId?: string;
+  benefitTypes?: BenefitTypeProps[];
 }

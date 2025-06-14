@@ -14,40 +14,71 @@
             required
           />
         </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="4">
           <CurrencyInput v-model="model.value" label="Preço" required />
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="4">
           <CurrencyInput
             v-model="model.valueCredit"
             label="Preço Crédito"
             required
           />
         </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="4">
           <CurrencyInput
             v-model="model.valueAntecipation24"
             label="Valor Atencipação 24hrs"
             required
           />
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="4">
           <CurrencyInput
             v-model="model.valueAntecipation48"
             label="Valor Atencipação 48hrs"
             required
           />
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="4">
           <CurrencyInput
             v-model="model.valueAntecipation72"
             label="Valor Atencipação 72hrs"
             required
           />
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col col="12" lg="10">
+          <StringInput v-model="benefitTypeName" label="Tipo Benefócio" />
+        </v-col>
+        <v-col col="12" lg="2">
+          <v-btn
+            color="success"
+            variant="flat"
+            class="text-none"
+            size="small"
+            @click="handleAddBenefitType(benefitTypeName)"
+          >
+            Adicionar
+          </v-btn>
+        </v-col>
+        <v-col
+          v-for="(benefit, index) in model.benefitTypes"
+          cols="12"
+          :key="benefit"
+        >
+          <div class="d-flex align-center w-100">
+            <v-icon icon="mdi-check-circle" color="success" start />
+            <span>{{ benefit }}</span>
+            <v-btn
+              icon
+              variant="text"
+              class="ml-auto"
+              size="x-small"
+              @click="handleDeleteBenefitType(index)"
+            >
+              <v-icon icon="mdi-delete" color="error" />
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
     </FormCrud>
@@ -83,6 +114,8 @@ const consultationStore = useConsultationStore();
 
 const { amountFormated } = useUtils();
 
+const benefitTypeName = ref("");
+
 const model = ref({
   id: 0,
   consultationName: "",
@@ -92,6 +125,7 @@ const model = ref({
   valueAntecipation48: "",
   valueAntecipation72: "",
   valuePacket: "0",
+  benefitTypes: [] as string[],
 });
 
 watchPostEffect(() => {
@@ -123,6 +157,11 @@ const loadModel = () => {
       false
     ),
     valuePacket: amountFormated(props.data.valuePacket ?? 0, false),
+    benefitTypes: props.data.benefitTypes
+      ? props.data.benefitTypes.map((item) => {
+          return item.name;
+        })
+      : [],
   };
 };
 
@@ -136,6 +175,7 @@ const clearModel = () => {
     valueAntecipation48: "",
     valueAntecipation72: "",
     valuePacket: "0",
+    benefitTypes: [],
   };
 };
 
@@ -146,7 +186,6 @@ const handleSubmit = async () => {
     } else {
       await update();
     }
-
     await consultationStore.index("");
     handleClose();
   } catch (error) {
@@ -163,11 +202,14 @@ const create = async () => {
     valueAntecipation48: Number(model.value.valueAntecipation48 ?? "0"),
     valueAntecipation72: Number(model.value.valueAntecipation72 ?? "0"),
     valuePacket: Number(model.value.valuePacket ?? "0"),
+    benefitTypes: model.value.benefitTypes.map((item) => {
+      return { name: item };
+    }),
   });
 };
 
 const update = async () => {
-  await consultationStore.update({
+  const payload = {
     publicId: props.data.publicId!,
     id: model.value.id,
     consultationName: model.value.consultationName,
@@ -177,11 +219,25 @@ const update = async () => {
     valueAntecipation48: Number(model.value.valueAntecipation48 ?? "0"),
     valueAntecipation72: Number(model.value.valueAntecipation72 ?? "0"),
     valuePacket: Number(model.value.valuePacket ?? "0"),
-  });
+    benefitTypes: model.value.benefitTypes.map((item) => {
+      return { name: item };
+    }),
+  };
+
+  await consultationStore.update(payload);
 };
 
 const handleClose = () => {
   clearModel();
   emit("close");
+};
+
+const handleDeleteBenefitType = (index: number) => {
+  model.value.benefitTypes.splice(index, 1);
+};
+
+const handleAddBenefitType = (benefitType: string) => {
+  model.value.benefitTypes.push(benefitType);
+  benefitTypeName.value = "";
 };
 </script>
