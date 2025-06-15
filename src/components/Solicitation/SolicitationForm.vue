@@ -11,15 +11,24 @@
               v-model="form.consultation"
               required
               :clearable="true"
+              @update:model-value="form.benefitTypeId = undefined"
             />
           </v-col>
           <v-col cols="12" lg="3">
-            <SelectSearchBenefitType
+            <AutoCompleteInput
+              v-model="form.benefitTypeId"
+              :items="$benefitTypes"
+              item-title="name"
+              item-value="id"
+              label="Tipo de benefício"
+              required
+            />
+            <!-- <SelectSearchBenefitType
               v-model="form.benefitType"
               required
               :clearable="true"
               show-new-button
-            />
+            /> -->
           </v-col>
           <v-col cols="12" lg="3">
             <SelectSearchReportPurpose
@@ -212,9 +221,9 @@ const judicialItems = ref([
 
 const form = ref({
   id: 0,
+  benefitTypeId: undefined as number | undefined,
   consultation: undefined as ConsultationProps | undefined,
   patient: undefined as PatientProps | undefined,
-  benefitType: undefined as BenefitTypeProps | undefined,
   reportPurpose: undefined as ReportPurposeProps | undefined,
   processSituation: "",
   judicialProcessNumber: "",
@@ -235,12 +244,16 @@ onMounted(() => {
   }
 });
 
+const $benefitTypes = computed(() => {
+  return form.value.consultation?.benefitTypes ?? [];
+});
+
 const clearModel = () => {
   form.value = {
     id: 0,
+    benefitTypeId: undefined,
     consultation: undefined,
     patient: undefined,
-    benefitType: undefined,
     reportPurpose: undefined,
     processSituation: "",
     judicialProcessNumber: "",
@@ -255,13 +268,13 @@ const loadModel = () => {
     id: props.data.id!,
     consultation: props.data.Consultation,
     patient: props.data.Patient,
-    benefitType: props.data.BenefitType,
     reportPurpose: props.data.ReportPurpose,
     processSituation: props.data.processSituation ?? "",
     judicialProcessNumber: props.data.proccessNumber ?? "",
     content: props.data.content!,
     factsRealityConfirm: false,
     files: props.data.files as FileProps[],
+    benefitTypeId: props.data.benefitTypeId ?? 0,
   };
 };
 
@@ -302,7 +315,7 @@ const create = async () => {
     await storeConsultation.create({
       consultationId: form.value.consultation?.id,
       patientId: form.value.patient?.id,
-      benefitTypeId: form.value.benefitType?.id,
+      benefitTypeId: form.value.benefitTypeId,
       reportPurposeId: form.value.reportPurpose?.id,
       processSituation: form.value.processSituation
         ? form.value.processSituation
@@ -338,7 +351,7 @@ const update = async () => {
       id: form.value.id,
       consultationId: form.value.consultation?.id,
       patientId: form.value.patient?.id,
-      benefitTypeId: form.value.benefitType?.id,
+      benefitTypeId: form.value.benefitTypeId,
       reportPurposeId: form.value.reportPurpose?.id,
       processSituation: form.value.processSituation
         ? form.value.processSituation
@@ -426,20 +439,6 @@ const handleFileUpload = (event: Event) => {
         fileName: file.name,
       });
     }
-    // const existingFile = form.value.files.find(
-    //   (attachment) => attachment.fileName === files[0].name
-    // );
-
-    // if (existingFile) {
-    //   push.warning("Já existe um arquivo com este nome anexado.");
-    //   return;
-    // }
-
-    // form.value.files.push({
-    //   fileCategory: "solicitation-consultation",
-    //   fileData: files[0],
-    //   fileName: files[0].name,
-    // });
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {

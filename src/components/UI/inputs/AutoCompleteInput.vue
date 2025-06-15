@@ -23,13 +23,18 @@
     @update:model-value="handleComplet"
     @keydown.enter="handleComplet"
   >
-    <template v-slot:item="{ props, item }">
+    <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+      <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+      <slot v-else :name="name" v-bind="slotProps" />
+    </template>
+
+    <!-- <template v-slot:item="{ props, item }">
       <slot name="items" :props="props" :item="item" />
     </template>
 
     <template v-slot:selection="{ item }">
       <slot name="selection" :item="item" />
-    </template>
+    </template> -->
   </v-autocomplete>
 </template>
 
