@@ -7,31 +7,66 @@
       :showCrud="false"
     >
       <template v-slot:top-table>
-        <div
-          class="d-flex flex-wrap align-center justify-end mb-4"
-          style="gap: 0.5rem"
-        >
-          <v-btn
-            variant="flat"
-            color="info"
-            class="text-none"
-            size="small"
-            @click="$router.back()"
+        <v-row dense>
+          <v-col cols="12" lg="2">
+            <DatePicker
+              v-model="filters.initialDate"
+              label="Data Inicial"
+              variant="outlined"
+              color="primary"
+              hide-details
+            />
+          </v-col>
+          <v-col cols="12" lg="2">
+            <DatePicker
+              v-model="filters.finalDate"
+              label="Data Final"
+              variant="outlined"
+              color="primary"
+              hide-details
+            />
+          </v-col>
+          <v-col cols="12" lg="4">
+            <SelectSearchMedic v-model="filters.seller" />
+          </v-col>
+          <v-col
+            cols="12"
+            lg="4"
+            class="d-flex flex-wrap align-center justify-end mb-4"
+            style="gap: 0.5rem"
           >
-            <v-icon icon="mdi-arrow-left"> </v-icon>
-            Voltar
-          </v-btn>
-          <v-btn
-            variant="flat"
-            color="primary"
-            class="text-none"
-            size="small"
-            @click="hanelNewVoucher"
-          >
-            <v-icon icon="mdi-plus"> </v-icon>
-            Novo
-          </v-btn>
-        </div>
+            <v-btn
+              color="primary"
+              variant="flat"
+              size="small"
+              class="text-none"
+              @click="getVouchers"
+            >
+              <v-icon icon="mdi-filter" start />
+              Filtrar
+            </v-btn>
+            <v-btn
+              variant="flat"
+              color="info"
+              class="text-none"
+              size="small"
+              @click="$router.back()"
+            >
+              <v-icon icon="mdi-arrow-left"> </v-icon>
+              Voltar
+            </v-btn>
+            <v-btn
+              variant="flat"
+              color="primary"
+              class="text-none"
+              size="small"
+              @click="hanelNewVoucher"
+            >
+              <v-icon icon="mdi-plus"> </v-icon>
+              Novo
+            </v-btn>
+          </v-col>
+        </v-row>
       </template>
       <template v-slot:item.voucherName="{ item }">
         <v-chip color="success" text-color="white" label variant="flat">
@@ -85,7 +120,6 @@
         </v-btn>
       </template>
     </Table>
-    <!-- <pre>{{ vounchers[0] }}</pre> -->
     <VoucherForm v-model="showForm" :data="selected" />
     <DialogLoading :dialog="loading" />
   </div>
@@ -101,6 +135,12 @@ const consultationPackageStore = useServicePackageStore();
 const showForm = ref(false);
 const loading = ref(false);
 const selected = ref<VoucherFormProps>();
+const filters = ref({
+  initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+  finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
+  status: "active",
+  seller: undefined as UserProps | undefined,
+});
 const headers = [
   { title: "Nome/Código", key: "voucherName" },
   { title: "Descrição", key: "description" },
@@ -129,6 +169,17 @@ const hanelNewVoucher = async () => {
     await consultationPackageStore.index("active");
     selected.value = undefined;
     showForm.value = true;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getVouchers = async () => {
+  loading.value = true;
+  try {
+    await voucher.index(filters.value);
+  } catch (error) {
+    console.error("Error fetching vouchers:", error);
   } finally {
     loading.value = false;
   }

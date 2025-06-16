@@ -29,7 +29,7 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col cols="12" lg="2">
           <IntegerInput
             label="Quantidade de usos"
             v-model="form.useQuantity"
