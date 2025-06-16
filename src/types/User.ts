@@ -9,7 +9,8 @@ export interface UserProps {
   officeName?: string;
   officePhone?: string;
   officeEmail?: string;
-  officeCnpj?: string;
+  officeCpfCnpj?: string;
+  officePersonType?: string;
   medicHourStart?: string;
   medicHourEnd?: string;
   medicQueryInterval?: number;
@@ -68,11 +69,12 @@ export interface UserModelProps {
   oab: string;
   oabUf: string;
   officeName: string;
+  officePersonType: string;
   active: boolean;
   cepAddress: CepAdderssProps;
   officePhone: string;
   officeEmail: string;
-  officeCnpj: string;
+  officeCpfCnpj: string;
   tokenCapcha: string;
 }
 

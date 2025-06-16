@@ -1,6 +1,6 @@
 <template>
   <FormCrud :on-submit="submitForm" :show-submit-button="false">
-    <v-row>
+    <v-row dense>
       <v-col cols="12">
         <StringInput
           v-model="model.email"
@@ -11,7 +11,7 @@
         />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="12" class="d-flex flex-column">
         <p class="text-grey-darken-1 text-subtitle-2">
           Senha deve conter Mínimo de 8 caracteres.

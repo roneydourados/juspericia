@@ -1,6 +1,6 @@
 <template>
   <FormCrud :on-submit="submitForm" :show-submit-button="false">
-    <v-row>
+    <v-row dense>
       <v-col cols="12">
         <StringInput
           v-model="model.officeName"
@@ -10,7 +10,7 @@
           required
         />
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" lg="8">
         <StringInput
           v-model="model.officeEmail"
           label="E-mail"
@@ -19,9 +19,7 @@
           required
         />
       </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" lg="6">
+      <v-col cols="12" lg="4">
         <TelefoneInput
           v-model="model.officePhone"
           label="Telefone"
@@ -29,9 +27,54 @@
           icon="mdi-phone-outline"
         />
       </v-col>
-      <v-col cols="12" lg="6">
+    </v-row>
+    <v-row dense>
+      <v-col cols="12" lg="4">
+        <SelectInput
+          v-model="model.officePersonType"
+          label="Tipo"
+          item-title="text"
+          item-value="value"
+          :items="[
+            { text: 'Física', value: 'F' },
+            {
+              text: 'Jurídica',
+              value: 'J',
+            },
+          ]"
+          @update:model-value="model.officeCpfCnpj = ''"
+        />
+      </v-col>
+      <v-col cols="12" lg="8">
+        <div v-if="model.officePersonType === 'F'" class="d-flex flex-wrap">
+          <CPFInput
+            v-model="model.officeCpfCnpj"
+            label="CPF"
+            placeholder="CPF"
+            icon="mdi-card-account-details"
+            required
+          />
+          <v-btn
+            icon
+            color="success"
+            variant="flat"
+            size="x-small"
+            class="ml-2"
+            @click="model.officeCpfCnpj = model.cpfCnpj"
+          >
+            <v-icon icon="mdi-card-account-details" size="18" />
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Clique para usar mesmo CPF do usuário
+            </v-tooltip>
+          </v-btn>
+        </div>
         <CNPJInput
-          v-model="model.officeCnpj"
+          v-else
+          v-model="model.officeCpfCnpj"
           label="CNPJ"
           placeholder="CNPJ"
           icon="mdi-card-account-details-outline"
@@ -60,6 +103,8 @@
 </template>
 
 <script setup lang="ts">
+import CPFInput from "../UI/inputs/CPFInput.vue";
+
 const emit = defineEmits(["next", "prev"]);
 
 const model = defineModel<UserModelProps>({

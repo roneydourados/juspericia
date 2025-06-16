@@ -1,6 +1,6 @@
 <template>
   <FormCrud :on-submit="submitForm" :show-submit-button="false">
-    <v-row>
+    <v-row dense>
       <v-col cols="12" lg="3">
         <CepInput
           label="Cep"
@@ -30,7 +30,7 @@
         />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="12" lg="4">
         <StringInput
           label="Bairro"
@@ -57,7 +57,7 @@
         />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="12">
         <StringInput
           label="Complemento"

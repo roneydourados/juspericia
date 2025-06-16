@@ -16,7 +16,6 @@
           <UserRegisterFormPersonalData v-model="model" @next="step = 2" />
         </v-card>
       </template>
-
       <template v-slot:item.2>
         <v-card class="pa-2">
           <UserRegisterFormAddress
@@ -26,7 +25,6 @@
           />
         </v-card>
       </template>
-
       <template v-slot:item.3>
         <v-card class="pa-2">
           <UserRegisterFormOffice
@@ -36,7 +34,6 @@
           />
         </v-card>
       </template>
-
       <template v-slot:item.4>
         <v-card class="pa-2">
           <UserRegisterFormAccessData
@@ -87,7 +84,8 @@ const model = ref<UserModelProps>({
   active: true,
   officePhone: "",
   officeEmail: "",
-  officeCnpj: "",
+  officeCpfCnpj: "",
+  officePersonType: "F",
   cepAddress: {
     cep: "",
     logradouro: "",
@@ -116,7 +114,8 @@ const handleSubmitRegister = async () => {
       oabUf: model.value?.oabUf,
       officeName: model.value?.officeName,
       officePhone: model.value?.officePhone,
-      officeCnpj: model.value?.officeCnpj,
+      officeCpfCnpj: model.value?.officeCpfCnpj,
+      officePersonType: model.value?.officePersonType,
       officeEmail: model.value?.officeEmail,
       UserAddress: {
         addressCity: model.value.cepAddress.localidade,

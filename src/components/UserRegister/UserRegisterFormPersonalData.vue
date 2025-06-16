@@ -1,6 +1,6 @@
 <template>
   <FormCrud :on-submit="submitForm" :show-submit-button="false">
-    <v-row>
+    <v-row dense>
       <v-col cols="12">
         <StringInput
           v-model="model.name"
@@ -11,7 +11,7 @@
         />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="12" lg="6">
         <TelefoneInput
           v-model="model.phone"
@@ -31,7 +31,7 @@
         />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row dense>
       <v-col cols="12" lg="6">
         <CPFInput
           v-model="model.cpfCnpj"
@@ -60,21 +60,23 @@
         />
       </v-col>
     </v-row>
-    <v-col cols="12" class="d-flex justify-space-between">
-      <v-btn
-        color="primary"
-        variant="elevated"
-        class="text-none"
-        @click="router.push('/')"
-      >
-        <v-icon icon="mdi-login" start />
-        Voltar para login
-      </v-btn>
-      <v-btn type="submit" color="primary" variant="tonal" class="text-none">
-        Próximo
-        <v-icon icon="mdi-chevron-right" end />
-      </v-btn>
-    </v-col>
+    <v-row>
+      <v-col cols="12" class="d-flex justify-space-between">
+        <v-btn
+          color="primary"
+          variant="flat"
+          class="text-none"
+          @click="router.push('/')"
+        >
+          <v-icon icon="mdi-login" start />
+          Voltar para login
+        </v-btn>
+        <v-btn type="submit" color="primary" variant="tonal" class="text-none">
+          Próximo
+          <v-icon icon="mdi-chevron-right" end />
+        </v-btn>
+      </v-col>
+    </v-row>
   </FormCrud>
 </template>
 
