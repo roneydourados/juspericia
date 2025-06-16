@@ -168,6 +168,9 @@ const handleUpdate = async () => {
       oab: model.value?.oab,
       oabUf: model.value?.oabUf,
       officeName: model.value?.officeName,
+      officePersonType: model.value?.officePersonType,
+      officePhone: model.value?.officePhone,
+      officeCpfCnpj: model.value?.officeCpfCnpj,
       UserAddress: {
         addressCity: model.value.cepAddress.localidade,
         addressComplement: model.value.cepAddress.complemento,

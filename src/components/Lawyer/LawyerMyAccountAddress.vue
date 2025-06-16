@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <FormCrud :on-submit="submitForm">
-        <v-row>
+        <v-row dense>
           <v-col cols="12" lg="3">
             <CepInput
               label="Cep"
@@ -33,7 +33,7 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="12" lg="5">
+          <v-col cols="12" lg="6">
             <StringInput
               label="Bairro"
               :clearable="true"
@@ -41,7 +41,15 @@
               icon="mdi-map-marker-outline"
             />
           </v-col>
-          <v-col cols="12" lg="5">
+          <v-col cols="12" lg="6">
+            <StringInput
+              label="Complemento"
+              :clearable="true"
+              v-model="model.cepAddress.complemento"
+              icon="mdi-map-marker-outline"
+            />
+          </v-col>
+          <v-col cols="12" lg="9">
             <StringInput
               label="Cidade"
               :clearable="true"
@@ -49,19 +57,9 @@
               icon="mdi-map-marker-outline"
             />
           </v-col>
-          <v-col cols="12" md="2">
+          <v-col cols="12" lg="3">
             <StatesSelectSearch
               v-model="model.cepAddress.uf"
-              icon="mdi-map-marker-outline"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <StringInput
-              label="Complemento"
-              :clearable="true"
-              v-model="model.cepAddress.complemento"
               icon="mdi-map-marker-outline"
             />
           </v-col>

@@ -32,15 +32,50 @@
               icon="mdi-phone-outline"
             />
           </v-col>
-          <v-col cols="12" lg="4">
-            <CPFInput
-              v-if="model.officePersonType === 'F'"
-              v-model="model.officeCpfCnpj"
-              label="CPF"
-              placeholder="CPF"
-              icon="mdi-card-account-details-outline"
-              :required="model.officePersonType === 'F'"
+          <v-col cols="12" lg="3">
+            <SelectInput
+              v-model="model.officePersonType"
+              label="Tipo"
+              item-title="text"
+              item-value="value"
+              :items="[
+                { text: 'Física', value: 'F' },
+                {
+                  text: 'Jurídica',
+                  value: 'J',
+                },
+              ]"
+              @update:model-value="model.officeCpfCnpj = ''"
             />
+          </v-col>
+          <v-col cols="12" lg="6">
+            <div v-if="model.officePersonType === 'F'" class="d-flex flex-wrap">
+              <CPFInput
+                v-model="model.officeCpfCnpj"
+                label="CPF"
+                placeholder="CPF"
+                icon="mdi-card-account-details"
+                :required="model.officePersonType === 'F'"
+              />
+              <v-btn
+                icon
+                color="success"
+                variant="flat"
+                size="x-small"
+                class="ml-2"
+                @click="model.officeCpfCnpj = model.cpfCnpj"
+              >
+                <v-icon icon="mdi-card-account-details" size="18" />
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Clique para usar mesmo CPF do usuário
+                </v-tooltip>
+              </v-btn>
+            </div>
+
             <CNPJInput
               v-else
               v-model="model.officeCpfCnpj"
