@@ -14,7 +14,7 @@
     :prepend-inner-icon="icon"
     :readonly="readonly"
     :clearable="clearable"
-    @blur="handleBlur"
+    @blur="blur"
     @input="handleChange"
   />
 </template>
@@ -71,7 +71,13 @@ const props = defineProps({
     type: Number,
     default: 255,
   },
+  isUpperCase: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const emit = defineEmits(["update:modelValue", "blur"]);
 
 const modelValue = defineModel({
   default: "",
@@ -131,7 +137,7 @@ const validationRules = computed<MaybeRef>(() => {
   );
 });
 
-const { value, errorMessage, handleBlur, handleChange } = useField<string>(
+const { value, errorMessage, handleChange } = useField<string>(
   fieldName,
   validationRules,
   {
@@ -139,4 +145,20 @@ const { value, errorMessage, handleBlur, handleChange } = useField<string>(
     initialValue: modelValue.value,
   }
 );
+
+const blur = () => {
+  emit("blur", value.value);
+};
+
+watch(value, (newValue) => {
+  if (props.isUpperCase && newValue) {
+    const upper = newValue.toUpperCase();
+    if (newValue !== upper) {
+      value.value = upper;
+    }
+    emit("update:modelValue", upper);
+  } else {
+    emit("update:modelValue", newValue);
+  }
+});
 </script>

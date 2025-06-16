@@ -31,10 +31,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  // modelValue: {
-  //   type: String, // Alterado para String para manter os zeros à esquerda
-  //   required: true,
-  // },
   required: {
     type: Boolean,
     default: false,
@@ -58,15 +54,24 @@ const modelValue = defineModel({
 
 const fieldName = uuid(); // Gerar um ID único para o campo
 
-// const fieldName = computed(() => {
-//   return props.label || "integer-input";
-// });
-
 const onKeyPress = (event: any) => {
   const isNumber = /^[0-9]$/;
   if (!isNumber.test(event.key)) {
     event.preventDefault();
   }
+};
+
+const validateValue = (val: string | null | undefined) => {
+  if (!val) return !props.required;
+
+  if (val.includes(" ")) return false;
+
+  const numericVal = Number(val.trim().replaceAll(".", "").replaceAll(",", ""));
+  if (isNaN(numericVal)) return false;
+
+  if (props.min !== undefined && numericVal < props.min) return false;
+
+  return true;
 };
 
 // Converter valor para número apenas na validação
@@ -103,6 +108,12 @@ const validationRules = computed(() => {
             message: "Valor inválido!!",
           }
         )
+        .refine(validateValue, {
+          message:
+            props.min !== undefined
+              ? `Valor deve ser maior ou igual a ${props.min}`
+              : "Valor inválido!!",
+        })
     );
   }
 
@@ -137,6 +148,12 @@ const validationRules = computed(() => {
           message: "Valor inválido!!",
         }
       )
+      .refine(validateValue, {
+        message:
+          props.min !== undefined
+            ? `Valor deve ser maior ou igual a ${props.min}`
+            : "Valor inválido!!",
+      })
   );
 });
 
