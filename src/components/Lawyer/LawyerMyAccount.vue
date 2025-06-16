@@ -97,7 +97,8 @@ const model = ref<UserModelProps>({
   active: true,
   officePhone: "",
   officeEmail: "",
-  officeCnpj: "",
+  officeCpfCnpj: "",
+  officePersonType: "F",
   cepAddress: {
     cep: "",
     logradouro: "",
@@ -140,7 +141,8 @@ const loadModel = () => {
     },
     officePhone: $single.value?.officePhone ?? "",
     officeEmail: $single.value?.officeEmail ?? "",
-    officeCnpj: $single.value?.officeCnpj ?? "",
+    officeCpfCnpj: $single.value?.officeCpfCnpj ?? "",
+    officePersonType: $single.value?.officePersonType ?? "F",
     tokenCapcha: $single.value?.tokenCapcha ?? "",
   };
 };

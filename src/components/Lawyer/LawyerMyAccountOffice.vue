@@ -33,11 +33,21 @@
             />
           </v-col>
           <v-col cols="12" lg="4">
+            <CPFInput
+              v-if="model.officePersonType === 'F'"
+              v-model="model.officeCpfCnpj"
+              label="CPF"
+              placeholder="CPF"
+              icon="mdi-card-account-details-outline"
+              :required="model.officePersonType === 'F'"
+            />
             <CNPJInput
-              v-model="model.officeCnpj"
+              v-else
+              v-model="model.officeCpfCnpj"
               label="CNPJ"
               placeholder="CNPJ"
               icon="mdi-card-account-details-outline"
+              :required="model.officePersonType === 'J'"
             />
           </v-col>
         </v-row>

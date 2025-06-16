@@ -52,7 +52,7 @@
             label="CPF"
             placeholder="CPF"
             icon="mdi-card-account-details"
-            required
+            :required="model.officePersonType === 'F'"
           />
           <v-btn
             icon
@@ -78,7 +78,7 @@
           label="CNPJ"
           placeholder="CNPJ"
           icon="mdi-card-account-details-outline"
-          required
+          :required="model.officePersonType === 'J'"
         />
       </v-col>
     </v-row>
