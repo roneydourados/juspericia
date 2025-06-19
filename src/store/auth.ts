@@ -60,7 +60,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   //ativar a conta com o token válido
   const activeAccount = async (token: string) => {
-    await api.put(`/auth/register/${token}`);
+    await api.put(`/auth/active-account/${token}`);
   };
 
   // caso o token tenha expirado, reenviar um novo email para ativação

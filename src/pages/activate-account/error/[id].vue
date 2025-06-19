@@ -39,6 +39,8 @@ const loading = ref(false);
 onMounted(async () => {
   loading.value = true;
   try {
+    const id = route.params.id as string;
+    await register.forgotActiveLink(id);
     await startCountdown();
   } finally {
     loading.value = false;
@@ -46,10 +48,6 @@ onMounted(async () => {
 });
 
 const startCountdown = async () => {
-  const id = route.params.id as string;
-
-  await register.forgotActiveLink(id);
-
   const interval = setInterval(async () => {
     countdown.value--;
     if (countdown.value === 0) {
@@ -58,8 +56,4 @@ const startCountdown = async () => {
     }
   }, 1000);
 };
-
-onMounted(() => {
-  startCountdown();
-});
 </script>
