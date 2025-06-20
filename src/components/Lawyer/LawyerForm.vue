@@ -275,7 +275,7 @@ const loadModel = () => {
       numero: props.data.UserAddress?.addressNumber ?? "",
     },
 
-    officeCnpj: props.data.officeCnpj ?? "",
+    officeCnpj: props.data.officeCpfCnpj ?? "",
   };
 };
 
@@ -301,7 +301,7 @@ const create = async () => {
     name: model.value.name,
     phone: model.value.phone,
     cpfCnpj: model.value.cpfCnpj,
-    officeCnpj: model.value.officeCnpj,
+    officeCpfCnpj: model.value.officeCnpj,
     officeEmail: model.value.officeEmail,
     officePhone: model.value.officePhone,
     password: model.value.password,
@@ -329,7 +329,7 @@ const update = async () => {
     name: model.value.name,
     phone: model.value.phone,
     cpfCnpj: model.value.cpfCnpj,
-    officeCnpj: model.value.officeCnpj,
+    officeCpfCnpj: model.value.officeCnpj,
     password: model.value.password,
     active: model.value.active,
     oab: model.value.oab,

@@ -5,7 +5,7 @@
     :width="mobile ? '' : width"
     @dialog="handleClose"
   >
-    <FormCrud :on-submit="handleSubmit">
+    <FormCrud :on-submit="handleSubmit" :show-submit-button="true">
       <v-row dense>
         <v-col cols="12">
           <StringInput
@@ -52,7 +52,7 @@
         </v-col>
         <v-col col="12" lg="2">
           <v-btn
-            color="success"
+            color="primary"
             variant="flat"
             class="text-none"
             size="small"
