@@ -5,7 +5,7 @@
     :width="mobile ? '' : width"
     @dialog="handleClose"
   >
-    <FormCrud :on-submit="handleSubmit" :show-submit-button="true">
+    <FormCrud :on-submit="handleSubmit">
       <v-row dense>
         <v-col cols="12">
           <StringInput
