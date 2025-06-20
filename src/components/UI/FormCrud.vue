@@ -51,7 +51,7 @@ const props = defineProps({
   },
   showSubmitButton: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   buttonLabel: {
     type: String,
