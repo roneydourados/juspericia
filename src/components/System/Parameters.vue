@@ -183,6 +183,46 @@
               </v-card-text>
             </v-card>
           </v-col>
+
+          <v-col cols="12" lg="4">
+            <v-card flat rounded="lg" elevation="1" height="100%">
+              <v-card-title>
+                <div class="font-weight-bold">Parametrizações de voucher</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12" lg="6">
+                    <CurrencyInput
+                      label="Desconto máximo em (%)"
+                      v-model="form.voucherMaxDiscountPercentage"
+                    />
+                  </v-col>
+                  <v-col cols="12" lg="6">
+                    <CurrencyInput
+                      label="Desconto máximo em R$"
+                      v-model="form.voucherMaxDiscountValue"
+                    />
+                  </v-col>
+                  <v-col cols="12" lg="6">
+                    <IntegerInput
+                      label="Voucher pode ser usado quantas vezes"
+                      v-model="form.voucherMaxQuantityUse"
+                    />
+                  </v-col>
+                  <v-col cols="12" lg="6">
+                    <IntegerInput
+                      label="Voucher vale por quantos dias"
+                      v-model="form.voucherMaxQuantityDays"
+                    />
+                  </v-col>
+                </v-row>
+                <div>
+                  Definição de limites para os vouchers que serão gerados
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </FormCrud>
     </v-card-text>
@@ -214,6 +254,10 @@ const form = ref({
   hourInitial: "",
   hourFinal: "",
   medicQueryInterval: "15",
+  voucherMaxDiscountPercentage: "",
+  voucherMaxDiscountValue: "",
+  voucherMaxQuantityUse: "",
+  voucherMaxQuantityDays: "",
 });
 
 watch(
@@ -234,6 +278,17 @@ watch(
         hourInitial: newData.hourInitial ?? "",
         hourFinal: newData.hourFinal ?? "",
         medicQueryInterval: newData.medicQueryInterval?.toString() ?? "",
+        voucherMaxDiscountPercentage: amountFormated(
+          newData.voucherMaxDiscountPercentage ?? 0,
+          false
+        ),
+        voucherMaxDiscountValue: amountFormated(
+          newData.voucherMaxDiscountValue ?? 0,
+          false
+        ),
+        voucherMaxQuantityUse: newData.voucherMaxQuantityUse?.toString() ?? "",
+        voucherMaxQuantityDays:
+          newData.voucherMaxQuantityDays?.toString() ?? "",
       };
     }
   },
@@ -253,6 +308,12 @@ const handleSubmit = async () => {
       comission: Number(form.value.comission),
       daysCreditExpire: Number(form.value.daysCreditExpire),
       medicQueryInterval: Number(form.value.medicQueryInterval),
+      voucherMaxDiscountPercentage: Number(
+        form.value.voucherMaxDiscountPercentage
+      ),
+      voucherMaxDiscountValue: Number(form.value.voucherMaxDiscountValue),
+      voucherMaxQuantityUse: Number(form.value.voucherMaxQuantityUse),
+      voucherMaxQuantityDays: Number(form.value.voucherMaxQuantityDays),
     });
   } catch (error) {
     console.error(error);
