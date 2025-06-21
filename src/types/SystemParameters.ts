@@ -11,4 +11,8 @@ export interface SystemParametersProps {
   hourInitial?: string;
   hourFinal?: string;
   medicQueryInterval?: number;
+  voucherMaxDiscountPercentage?: number;
+  voucherMaxDiscountValue?: number;
+  voucherMaxQuantityUse?: number;
+  voucherMaxQuantityDays?: number;
 }
