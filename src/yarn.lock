@@ -6845,7 +6845,7 @@ vue3-apexcharts@1.8.0:
   resolved "https://registry.yarnpkg.com/vue3-apexcharts/-/vue3-apexcharts-1.8.0.tgz#1984648d966aa91bc4dc3e87fa847f5289f7f1cf"
   integrity sha512-5tSD4mXTBbIJ9ir+58qHE6oNtIe0RNgqIRYMKpcsIaxkKtwUww4JhvPkpUFlmiW4OJbbdklgjleXq1lfcM4gdA==
 
-vue@^3.5.14, vue@latest:
+vue@3.5.16, vue@^3.5.14:
   version "3.5.16"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.16.tgz#f0cde88c2688354f00ff2d77eb295c26440f8c7a"
   integrity sha512-rjOV2ecxMd5SiAmof2xzh2WxntRcigkX/He4YFJ6WdRvVUrbt6DxC1Iujh10XLl8xCDRDtGKMeO3D+pRQ1PP9w==
