@@ -11,7 +11,6 @@
     :loading="loading"
     @keypress="onKeyPress"
     @input="inputFormated($event.target.value)"
-    @blur="getData"
     autocomplete="section-blue one-time-code"
     variant="outlined"
     density="compact"
@@ -40,6 +39,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
 import { formatCEP, isValidCEP } from "@brazilian-utils/brazilian-utils";
 import { uuidv7 as uuid } from "uuidv7";
+import { useDebounceFn } from "@vueuse/core";
 
 const textField = ref(null);
 const fieldName = uuid();
@@ -163,11 +163,15 @@ watch(
   }
 );
 
-const inputFormated = (event: string) => {
+const inputFormated = useDebounceFn(async (event: string) => {
   inputValue.value = formatCEP(event);
+
   value.value = inputValue.value.replace(/\D/g, "");
+
   emit("update:modelValue", value.value);
-};
+
+  await getData();
+}, 500);
 
 const getData = async () => {
   if (isValidCEP(value.value)) {
