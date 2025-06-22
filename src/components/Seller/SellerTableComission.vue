@@ -95,10 +95,9 @@
       </template> -->
     </Table>
   </div>
-
-  <MedicForm
+  <SellerForm
     width="800"
-    title="Médico"
+    title="Vendedor"
     :show="showForm"
     :data="selected"
     @close="handleCloseForm"
