@@ -5,7 +5,7 @@
     :width="mobile ? '' : width"
     @dialog="handleClose"
   >
-    <FormCrud :on-submit="submitForm">
+    <FormCrud ref="formCrudRef" :on-submit="submitForm">
       <v-row dense>
         <v-col cols="12" lg="6">
           <StringInput
@@ -42,12 +42,12 @@
           />
         </v-col>
         <v-col cols="12" lg="4">
-          <StringInput
+          <PasswordInput
             v-model="model.password"
             label="Senha temporária"
             placeholder="crie uma senha temporária"
             :required="!model.id"
-            type="password"
+            :strong="!!(model.id && model.id > 0 && model.password)"
           />
         </v-col>
 
@@ -111,7 +111,7 @@
       </v-row>
     </FormCrud>
   </DialogForm>
-  <DialogLoading :dialog="loading" />
+  <!-- <DialogLoading :dialog="loading" /> -->
 </template>
 
 <script setup lang="ts">
@@ -140,8 +140,9 @@ const emit = defineEmits(["close"]);
 const { mobile } = useDisplay();
 
 const sellerStore = useSellerStore();
+const formCrudRef = ref();
 
-const loading = ref(false);
+// const loading = ref(false);
 const model = ref({
   id: 0,
   name: "",
@@ -212,18 +213,18 @@ const loadModel = () => {
 };
 
 const submitForm = async () => {
-  loading.value = true;
+  // loading.value = true;
   try {
     if (model.value.id && model.value.id > 0) {
       await update();
     } else {
       await create();
     }
-
     await sellerStore.index("");
     handleClose();
   } finally {
-    loading.value = false;
+    // loading.value = false;
+    formCrudRef.value?.resetForm();
   }
 };
 

@@ -98,7 +98,7 @@ const validationRules = computed(() => {
       .regex(/[0-9]/, "A senha deve conter pelo menos um número.")
       .regex(
         /[^A-Za-z0-9]/,
-        "A senha deve conter pelo menos um caractere especial."
+        "A senha deve conter pelo menos um caractere especial (!@&$)."
       );
   }
 

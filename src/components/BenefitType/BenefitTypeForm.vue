@@ -61,17 +61,21 @@ const handleClose = () => {
 };
 
 const submitForm = async () => {
-  if (model.value?.id) {
-    await store.update({
-      ...model.value,
-      publicId: props.data.publicId!,
-    });
-  } else {
-    if (model.value) {
-      await store.create(model.value);
+  try {
+    if (model.value?.id) {
+      await store.update({
+        ...model.value,
+        publicId: props.data.publicId!,
+      });
+    } else {
+      if (model.value) {
+        await store.create(model.value);
+      }
     }
+    await store.index("");
+    handleClose();
+  } catch (error) {
+    console.log("🚀 ~ submitForm  benefitType~ error:", error);
   }
-  await store.index("");
-  handleClose();
 };
 </script>

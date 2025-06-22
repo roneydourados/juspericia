@@ -189,7 +189,7 @@ const handleSubmit = async () => {
     await consultationStore.index("");
     handleClose();
   } catch (error) {
-    console.log("🚀 ~ handleSubmit ~ error:", error);
+    console.log("🚀 ~ handleSubmit consultation ~ error:", error);
   }
 };
 

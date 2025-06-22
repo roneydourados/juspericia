@@ -106,7 +106,6 @@
     <v-col cols="12" lg="8">
       <div class="background-image" />
     </v-col>
-    <DialogLoading :dialog="loading" />
   </v-row>
 </template>
 
@@ -136,7 +135,6 @@ onMounted(() => {
 const $user = computed(() => auth.$currentUser);
 
 const submmitForm = async () => {
-  loading.value = true;
   isError.value = false;
   try {
     await auth.login({
@@ -169,8 +167,6 @@ const submmitForm = async () => {
     console.log("🚀 ~ file: FormLogin.vue:82 ~ onSubmit ~ error:", error);
     push.error("Ocorreu um erro ao realizar login, tente novamente.");
     turnstile.value?.reset();
-  } finally {
-    loading.value = false;
   }
 };
 </script>

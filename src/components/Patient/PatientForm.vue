@@ -248,9 +248,10 @@ const submitForm = async (data: any) => {
       await create();
     } else {
       await update();
+      await itemStore.show(props.data.publicId!);
     }
-
     await itemStore.index("");
+
     emit("close");
   } catch (error) {
     console.error(error);

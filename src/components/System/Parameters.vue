@@ -227,7 +227,6 @@
       </FormCrud>
     </v-card-text>
   </v-card>
-  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">

@@ -27,7 +27,6 @@
       </v-row>
     </FormCrud>
   </DialogForm>
-  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -59,8 +58,6 @@ const consultationPackageStore = useServicePackageStore();
 
 const { amountFormated } = useUtils();
 
-const loading = ref(false);
-
 const model = ref({
   publicId: "",
   name: "",
@@ -90,7 +87,6 @@ const loadModel = () => {
 };
 
 const handleSubmit = async () => {
-  loading.value = true;
   try {
     if (model.value.publicId) {
       await consultationPackageStore.update({
@@ -116,8 +112,6 @@ const handleSubmit = async () => {
     handleClose();
   } catch (error) {
     console.log("🚀 ~ handleSubmit ~ error:", error);
-  } finally {
-    loading.value = false;
   }
 };
 

@@ -41,12 +41,12 @@
           />
         </v-col>
         <v-col cols="12" lg="4">
-          <StringInput
+          <PasswordInput
             v-model="model.password"
             label="Senha temporária"
             placeholder="crie uma senha temporária"
             :required="!model.id"
-            type="password"
+            :strong="!!(model.id && model.id > 0 && model.password)"
           />
         </v-col>
       </v-row>
@@ -63,7 +63,6 @@
       </v-row>
     </FormCrud>
   </DialogForm>
-  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -90,10 +89,9 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
-const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
+
 const userAdminStore = useUserAdminStore();
 
-const loading = ref(false);
 const model = ref({
   id: 0,
   name: "",
@@ -137,18 +135,16 @@ const loadModel = () => {
 };
 
 const submitForm = async () => {
-  loading.value = true;
   try {
     if (model.value.id && model.value.id > 0) {
       await update();
     } else {
       await create();
     }
-
     await userAdminStore.index("");
     handleClose();
-  } finally {
-    loading.value = false;
+  } catch (error) {
+    console.log("🚀 ~ submitForm user admin ~ error:", error);
   }
 };
 

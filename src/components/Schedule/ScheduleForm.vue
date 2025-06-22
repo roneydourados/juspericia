@@ -100,7 +100,6 @@
       <!-- <pre>{{ hour }}</pre> -->
       <!-- <pre>{{ $schedules }}</pre> -->
     </FormCrud>
-    <DialogLoading :dialog="loading" />
   </DialogForm>
 </template>
 
@@ -131,7 +130,6 @@ const { mobile } = useDisplay();
 const hours = ref<HourProps[]>([]);
 const hour = ref<HourProps>({});
 
-const loading = ref(false);
 const model = ref({
   medic: undefined as UserProps | undefined,
   scheduleDate: dayjs().format("YYYY-MM-DD"),
@@ -284,7 +282,6 @@ const timeSlots = async () => {
 };
 
 const submitForm = async () => {
-  loading.value = true;
   try {
     const schedule = {
       title: `Agendamento de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
@@ -299,17 +296,17 @@ const submitForm = async () => {
     } else {
       await scheduleStore.create(schedule);
     }
+    await getSchedules();
   } finally {
-    loading.value = false;
     handleDialog();
     emit("scheduled");
   }
 };
 
-const handleEnabledDisabledHours = async () => {
-  await getSchedules();
-  timeSlots();
-};
+// const handleEnabledDisabledHours = async () => {
+//   await getSchedules();
+//   timeSlots();
+// };
 
 const handleDialog = () => {
   show.value = false;
@@ -322,16 +319,11 @@ const handleDialog = () => {
 };
 
 const getSchedules = async () => {
-  loading.value = true;
-  try {
-    await scheduleStore.index({
-      //medicId: model.value.medic?.id,
-      patientConsultationId: props.solicitation.id,
-      scheduleDate: model.value.scheduleDate,
-    });
-  } finally {
-    loading.value = false;
-  }
+  await scheduleStore.index({
+    //medicId: model.value.medic?.id,
+    patientConsultationId: props.solicitation.id,
+    scheduleDate: model.value.scheduleDate,
+  });
 };
 
 const clickDay = async (date: string) => {

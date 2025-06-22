@@ -1,6 +1,3 @@
-<!-- 
- Formulário para manutenção e criação de laudos médicos
- -->
 <template>
   <div>
     <v-card flat rounded="lg">
@@ -69,6 +66,7 @@
                   @change="handleFileUpload"
                   style="display: none"
                   ref="fileInput"
+                  multiple
                 />
                 <div class="d-flex justify-space-between flex-wrap w-100 px-2">
                   <span> Anexos: </span>
@@ -110,7 +108,6 @@
       Já existe um conteúdo informado neste laudo, tem certeza que deseja
       alterá-lo?
     </Dialog>
-    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
@@ -124,7 +121,7 @@ const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
 
 const showAlterContent = ref(false);
-const loading = ref(false);
+
 const model = ref({
   id: 0,
   title: "",
@@ -150,7 +147,6 @@ onMounted(() => {
 // };
 
 const handleSubmit = async () => {
-  loading.value = true;
   try {
     await patientConsultationReport.create({
       content: model.value.content,
@@ -175,7 +171,6 @@ const handleSubmit = async () => {
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {
-    loading.value = false;
     emit("close");
   }
 };
@@ -212,20 +207,37 @@ const handleFileUpload = (event: Event) => {
   if (!files) return;
 
   try {
-    const existingFile = attachments.value.find(
-      (attachment) => attachment.fileName === files[0].name
-    );
-
-    if (existingFile) {
-      push.warning("Já existe um arquivo com este nome anexado.");
-      return;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const exists = attachments.value.some(
+        (attachment) => attachment.fileName === file.name
+      );
+      if (exists) {
+        // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
+        continue;
+      }
+      attachments.value.push({
+        fileCategory: "medical-report",
+        //ownerId: $patient.value?.id!,
+        fileData: file,
+        fileName: file.name,
+      });
     }
 
-    attachments.value.push({
-      fileCategory: "medical-report",
-      fileData: files[0],
-      fileName: files[0].name,
-    });
+    // const existingFile = attachments.value.find(
+    //   (attachment) => attachment.fileName === files[0].name
+    // );
+
+    // if (existingFile) {
+    //   push.warning("Já existe um arquivo com este nome anexado.");
+    //   return;
+    // }
+
+    // attachments.value.push({
+    //   fileCategory: "medical-report",
+    //   fileData: files[0],
+    //   fileName: files[0].name,
+    // });
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {

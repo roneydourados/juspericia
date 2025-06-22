@@ -59,12 +59,12 @@
           />
         </v-col>
         <v-col cols="12" lg="4">
-          <StringInput
+          <PasswordInput
             v-model="model.password"
             label="Senha temporária"
             placeholder="crie uma senha temporária"
             :required="!model.id"
-            type="password"
+            :strong="!!(model.id && model.id > 0 && model.password)"
           />
         </v-col>
         <v-col cols="12" lg="4">

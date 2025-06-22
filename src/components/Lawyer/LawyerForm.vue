@@ -196,7 +196,6 @@
       </v-row>
     </FormCrud>
   </DialogForm>
-  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -223,10 +222,9 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
-const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
+
 const userLawyerStore = useUserLawyerStore();
 
-const loading = ref(false);
 const model = ref({
   id: 0,
   officePersonType: "F",
@@ -319,7 +317,6 @@ const loadModel = () => {
 };
 
 const submitForm = async () => {
-  loading.value = true;
   try {
     if (model.value.id && model.value.id > 0) {
       await update();
@@ -329,8 +326,8 @@ const submitForm = async () => {
 
     await userLawyerStore.index("");
     handleClose();
-  } finally {
-    loading.value = false;
+  } catch (error) {
+    console.log("🚀 ~ submitForm ~ error:", error);
   }
 };
 

@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { useForm } from "vee-validate";
-import { ref, onUnmounted } from "vue";
+// import { ref, onUnmounted } from "vue";
 
 const props = defineProps({
   onSubmit: {
@@ -64,7 +64,7 @@ const showErrorAlert = defineModel("showError", {
   default: false,
 });
 
-const { handleSubmit, validate, resetForm } = useForm();
+const { handleSubmit, validate, resetForm: veeResetForm } = useForm();
 
 const onValidSubmit = async () => {
   if (!props.onSubmit) return;
@@ -87,13 +87,19 @@ const onInvalidSubmit = ({ errors }: any) => {
 const onSubmit = handleSubmit(onValidSubmit, onInvalidSubmit);
 
 onUnmounted(() => {
-  if (formRef.value) {
-    formRef.value.reset();
-  }
   resetForm();
 });
 
+const resetForm = () => {
+  if (formRef.value) {
+    formRef.value.reset();
+  }
+  veeResetForm();
+};
+
 defineExpose({
+  formRef,
+  resetForm,
   validateForm: validate,
 });
 </script>
