@@ -155,7 +155,7 @@ const headers = ref([
     key: "active",
   },
   {
-    title: "Comissão consulta",
+    title: "Comissão venda",
     key: "comissionValue",
   },
 ]);
