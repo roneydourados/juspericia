@@ -2,7 +2,7 @@
   <div>
     <!-- <pre>{{ $consultationReports }}</pre> -->
     <div class="d-flex flex-column w-100">
-      <HeaderPage title="Solicitações" />
+      <HeaderPage title="Gestão de laudos emitidos" />
       <v-row class="mt-4" dense>
         <v-col cols="12" lg="4">
           <SelectSearchPatient
