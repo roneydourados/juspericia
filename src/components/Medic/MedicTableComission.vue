@@ -9,6 +9,20 @@
       :loading="loading"
       :show-crud="false"
     >
+      <template #top-table>
+        <div class="d-flex justify-end">
+          <v-btn
+            color="info"
+            variant="flat"
+            size="small"
+            class="text-none"
+            @click="showUpdateComissions = true"
+          >
+            <v-icon icon="mdi-reload" size="20" start></v-icon>
+            Atualizar valores comissão
+          </v-btn>
+        </div>
+      </template>
       <template v-slot:item.name="{ item }">
         <span
           style="cursor: pointer"
@@ -37,15 +51,15 @@
           </span>
         </span>
       </template>
-      <template v-slot:item.medicConsultationValue="{ item }">
+      <template v-slot:item.comissionValue="{ item }">
         <div class="d-flex align-center mt-6" style="gap: 0.5rem">
           <CurrencyInput
-            v-model="item.medicConsultationValue"
+            v-model="item.comissionValue"
             label="Valor comissão"
             style="width: 6rem"
           />
           <SelectInput
-            v-model="item.medicConsultationType"
+            v-model="item.comissionType"
             :items="consultationValueTypes"
             label="Tipo comissão"
             :hide-details="true"
@@ -67,7 +81,7 @@
           />
         </span>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <!-- <template v-slot:item.actions="{ item }">
         <v-btn
           color="info"
           variant="text"
@@ -78,7 +92,7 @@
           <v-icon icon="mdi-reload" size="20" start></v-icon>
           Atualizar valor
         </v-btn>
-      </template>
+      </template> -->
     </Table>
   </div>
 
@@ -91,12 +105,14 @@
   />
   <Dialog
     title="CONFIRME"
-    :dialog="showDelete"
-    @cancel="showDelete = false"
-    @confirm="handleDeleteItem"
+    :dialog="showUpdateComissions"
+    @cancel="showUpdateComissions = false"
+    @confirm="handleUpdateAllComissions"
     show-cancel
   >
-    <span>Apagar {{ selected?.name }} ? </span>
+    <span
+      >Tem certeza que deseja atualizar o valor de todas as comissões ?
+    </span>
   </Dialog>
 </template>
 
@@ -119,7 +135,7 @@ const consultationValueTypes = [
 const selected = ref<UserProps>();
 const loading = ref(false);
 const showForm = ref(false);
-const showDelete = ref(false);
+const showUpdateComissions = ref(false);
 
 const headers = ref([
   {
@@ -140,12 +156,12 @@ const headers = ref([
   },
   {
     title: "Comissão consulta",
-    key: "medicConsultationValue",
+    key: "comissionValue",
   },
-  {
-    title: "Ações",
-    key: "actions",
-  },
+  // {
+  //   title: "Ações",
+  //   key: "actions",
+  // },
 ]);
 
 const handleSearch = useDebounceFn(
@@ -170,29 +186,42 @@ const getItemEdit = (item: UserProps) => {
   showForm.value = true;
 };
 
-const getItemDelete = (item: UserProps) => {
-  selected.value = item;
-  showDelete.value = true;
-};
+// const getItemDelete = (item: UserProps) => {
+//   selected.value = item;
+//   showUpdateComissions.value = true;
+// };
 
-const handleDeleteItem = async () => {
-  showDelete.value = false;
+// const handleDeleteItem = async () => {
+//   showUpdateComissions.value = false;
+//   loading.value = true;
+//   try {
+//     await medicStore.destroy(selected.value?.publicId!);
+//     await handleSearch("", false);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+// const handleUpdateComissrionValue = async (item: UserProps) => {
+//   loading.value = true;
+//   try {
+//     await medicStore.update(item);
+//     await handleSearch("", false);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+
+const handleUpdateAllComissions = async () => {
   loading.value = true;
   try {
-    await medicStore.destroy(selected.value?.publicId!);
+    $all.value.forEach(async (item) => {
+      await medicStore.update(item);
+    });
     await handleSearch("", false);
   } finally {
     loading.value = false;
-  }
-};
-
-const handleUpdateComissrionValue = async (item: UserProps) => {
-  loading.value = true;
-  try {
-    await medicStore.update(item);
-    await handleSearch("", false);
-  } finally {
-    loading.value = false;
+    showUpdateComissions.value = false;
   }
 };
 </script>

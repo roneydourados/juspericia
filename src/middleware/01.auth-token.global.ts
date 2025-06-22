@@ -42,6 +42,8 @@ export default defineNuxtRouteMiddleware((to) => {
           return navigateTo("/lawyer/home");
         } else if (auth.$currentUser?.profile?.type === "MEDICO") {
           return navigateTo("/medic/home");
+        } else if (auth.$currentUser?.profile?.type === "VENDEDOR") {
+          return navigateTo("/seller/home");
         }
       }
     } catch {

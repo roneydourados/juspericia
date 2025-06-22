@@ -24,11 +24,9 @@ export interface UserProps {
   Profile?: UserProfileProps;
   UserAddress?: AddressProps;
   publicId?: string;
-  medicConsultationValue?: number;
   customerId?: string;
   whatsapp?: string;
   tokenCapcha?: string;
-  medicConsultationType?: string;
   seg?: boolean;
   ter?: boolean;
   qua?: boolean;
@@ -36,6 +34,8 @@ export interface UserProps {
   sex?: boolean;
   sab?: boolean;
   dom?: boolean;
+  comissionType?: string;
+  comissionValue?: number;
 }
 
 export interface UserProfileProps {

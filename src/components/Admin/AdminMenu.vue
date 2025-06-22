@@ -39,6 +39,22 @@
         flat
         rounded="lg"
         min-height="200"
+        @click="handlClick('/admin/sellers')"
+        elevation="8"
+      >
+        <v-card-title class="d-flex justify-center py-4">
+          <v-icon icon="mdi-account-tie-outline" size="60" color="#2196F3" />
+        </v-card-title>
+        <v-card-text class="text-center">
+          Usuários vendedores. Gestão dos usuários vendedores.
+        </v-card-text>
+      </v-card>
+    </v-col>
+    <v-col cols="12" lg="3">
+      <v-card
+        flat
+        rounded="lg"
+        min-height="200"
         @click="handlClick('/admin/queries')"
         elevation="8"
       >

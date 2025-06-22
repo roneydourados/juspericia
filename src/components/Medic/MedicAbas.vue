@@ -1,8 +1,8 @@
 <template>
   <v-card>
     <v-tabs v-model="tab" bg-color="primary">
-      <v-tab value="medic">Médicos</v-tab>
-      <v-tab value="comission">Comissão consulta</v-tab>
+      <v-tab value="medic" class="text-none">Médicos</v-tab>
+      <v-tab value="comission" class="text-none">Comissão consulta</v-tab>
     </v-tabs>
 
     <v-card-text>

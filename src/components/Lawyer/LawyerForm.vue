@@ -51,7 +51,11 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12" lg="5">
+        <v-col cols="12">
+          <strong>Dados do escritório</strong>
+        </v-col>
+
+        <v-col cols="12">
           <StringInput
             v-model="model.officeName"
             label="Nome do escritório"
@@ -59,10 +63,39 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="3">
-          <CNPJInput v-model="model.officeCnpj" label="CNPJ" placeholder="" />
-        </v-col>
         <v-col cols="12" lg="2">
+          <SelectInput
+            v-model="model.officePersonType"
+            label="Tipo"
+            item-title="text"
+            item-value="value"
+            :items="[
+              { text: 'Física', value: 'F' },
+              {
+                text: 'Jurídica',
+                value: 'J',
+              },
+            ]"
+            @update:model-value="model.officeCpfCnpj = ''"
+          />
+        </v-col>
+        <v-col v-if="model.officePersonType === 'F'" cols="12" lg="4">
+          <CPFInput
+            v-model="model.officeCpfCnpj"
+            label="CPF"
+            placeholder=""
+            :required="model.officePersonType === 'F'"
+          />
+        </v-col>
+        <v-col v-else cols="12" lg="4">
+          <CNPJInput
+            v-model="model.officeCpfCnpj"
+            label="CNPJ"
+            placeholder=""
+            :required="model.officePersonType === 'J'"
+          />
+        </v-col>
+        <v-col cols="12" lg="3">
           <StringInput
             v-model="model.oab"
             label="Nª OAB"
@@ -70,7 +103,7 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3">
           <StatesSelectSearch
             v-model="model.oabUf"
             label="UF OAB"
@@ -95,7 +128,10 @@
           />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row dense>
+        <v-col cols="12">
+          <strong>Dados de endereço</strong>
+        </v-col>
         <v-col cols="12" lg="3">
           <CepInput
             label="Cep"
@@ -193,6 +229,7 @@ const userLawyerStore = useUserLawyerStore();
 const loading = ref(false);
 const model = ref({
   id: 0,
+  officePersonType: "F",
   name: "",
   email: "",
   password: "",
@@ -203,7 +240,7 @@ const model = ref({
   officeName: "",
   officePhone: "",
   cpfCnpj: "",
-  officeCnpj: "",
+  officeCpfCnpj: "",
   active: true,
   cepAddress: {
     cep: "",
@@ -219,12 +256,13 @@ const model = ref({
 const clearModel = () => {
   model.value = {
     id: 0,
+    officePersonType: "F",
     name: "",
     phone: "",
     officeEmail: "",
     officePhone: "",
     cpfCnpj: "",
-    officeCnpj: "",
+    officeCpfCnpj: "",
     password: "",
     email: "",
     oab: "",
@@ -275,7 +313,8 @@ const loadModel = () => {
       numero: props.data.UserAddress?.addressNumber ?? "",
     },
 
-    officeCnpj: props.data.officeCpfCnpj ?? "",
+    officeCpfCnpj: props.data.officeCpfCnpj ?? "",
+    officePersonType: props.data.officePersonType ?? "F",
   };
 };
 
@@ -301,7 +340,7 @@ const create = async () => {
     name: model.value.name,
     phone: model.value.phone,
     cpfCnpj: model.value.cpfCnpj,
-    officeCpfCnpj: model.value.officeCnpj,
+    officeCpfCnpj: model.value.officeCpfCnpj,
     officeEmail: model.value.officeEmail,
     officePhone: model.value.officePhone,
     password: model.value.password,
@@ -329,7 +368,7 @@ const update = async () => {
     name: model.value.name,
     phone: model.value.phone,
     cpfCnpj: model.value.cpfCnpj,
-    officeCpfCnpj: model.value.officeCnpj,
+    officeCpfCnpj: model.value.officeCpfCnpj,
     password: model.value.password,
     active: model.value.active,
     oab: model.value.oab,
