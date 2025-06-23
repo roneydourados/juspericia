@@ -6,7 +6,7 @@ export interface PaymentAsaasProps {
   billingType?: string;
 
   //Valor da cobrança
-  value: number;
+  value?: number;
 
   //Data de vencimento da cobrança
   dueDate: string;
@@ -96,4 +96,35 @@ interface PaymentAsaasSplitProps {
 
   //Descrição do split
   description?: string;
+}
+
+//response do simulador de compras
+export interface PaymentSimulationReponseProps {
+  value: number;
+  creditCard?: {
+    netValue: number;
+    feePercentage: number;
+    operationFee: number;
+    installment?: {
+      paymentNetValue: number;
+      paymentValue: number;
+    };
+  };
+  bankSlip?: {
+    netValue: number;
+    feeValue: number;
+    installment?: {
+      paymentNetValue: number;
+      paymentValue: number;
+    };
+  };
+  pix?: {
+    netValue: number;
+    feePercentage: number;
+    feeValue: number;
+    installment?: {
+      paymentNetValue: number;
+      paymentValue: number;
+    };
+  };
 }
