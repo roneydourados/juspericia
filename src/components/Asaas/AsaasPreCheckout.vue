@@ -2,7 +2,7 @@
   <Dialog
     title="CONFIRME"
     :dialog="show"
-    @cancel="$emit('cancel')"
+    @cancel="handleCancel"
     @confirm="$emit('confirm-sale', model)"
     show-cancel
   >
@@ -38,13 +38,53 @@
         />
       </v-col>
     </v-row>
+    <v-row dense>
+      <v-col cols="12" class="d-flex flex-wrap">
+        <StringInput
+          label="Voucher de desconto"
+          v-model="model.voucherDesconto"
+          is-upper-case
+          :disabled="$disableVoucher"
+        />
+        <v-btn
+          size="small"
+          variant="flat"
+          color="success"
+          class="text-none ml-2"
+          @click="getVoucher"
+          :disabled="$disableVoucher"
+        >
+          Aplicar
+        </v-btn>
+      </v-col>
+      <v-col v-if="$voucher" cols="12" class="mt-n6">
+        <div>{{ $voucher?.description }}</div>
+        <div class="d-flex" style="gap: 0.5rem">
+          <strong>
+            {{ $voucher?.discount }}
+            {{ $voucher?.discountType === "percentage" ? "%" : "R$" }}
+          </strong>
+        </div>
+      </v-col>
+      <v-col v-else-if="isInvalidvoucher" cols="12" class="mt-n6">
+        <strong class="text-red">VOUCHER INVÁLIDO</strong>
+      </v-col>
+    </v-row>
+    <v-progress-linear v-if="loadingVoucher" color="green" indeterminate />
     <v-divider class="mb-4"></v-divider>
-    <strong>Totais</strong>
-    <div class="d-flex" style="gap: 0.5rem">
-      <strong>Valor:</strong>
+    <div class="d-flex justify-space-between" style="gap: 0.5rem">
+      <strong>Total bruto:</strong>
+      <strong>{{ amountFormated(model.totalBruteValue ?? 0, false) }}</strong>
+    </div>
+    <div class="d-flex justify-space-between" style="gap: 0.5rem">
+      <strong>Desconto:</strong>
+      <strong>{{ amountFormated(model.discount ?? 0, false) }}</strong>
+    </div>
+    <div class="d-flex justify-space-between" style="gap: 0.5rem">
+      <strong>Total a pagar:</strong>
       <strong>{{ amountFormated(model.totalValue ?? 0, false) }}</strong>
     </div>
-    <div class="d-flex" style="gap: 0.5rem">
+    <div class="d-flex justify-space-between" style="gap: 0.5rem">
       <strong>Parcelas:</strong>
       <div class="d-flex">
         <strong>{{ model.installmentCount }}</strong>
@@ -73,17 +113,28 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from "@vueuse/core";
 import { AssasPreCheckoutProps } from "@/types/assaas/Precheckout";
 
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
-
+const voucherStore = useVoucherStore();
 const loading = ref(false);
+const loadingVoucher = ref(false);
+const isInvalidvoucher = ref(false);
 const show = defineModel("show", { default: false });
 
-defineEmits(["confirm-sale", "cancel"]);
+const emit = defineEmits(["confirm-sale", "cancel"]);
 
 const $paymentSimulation = computed(() => asaas.$paymentSimulation);
+const $voucher = computed(() => voucherStore.$voucherExists);
+const $disableVoucher = computed(() => {
+  if (voucherStore.$voucherExists) {
+    return true;
+  }
+
+  return false;
+});
 
 const paymentFormsType = ref([
   { title: "Cartão", value: "CREDIT_CARD" },
@@ -112,15 +163,55 @@ const model = defineModel<AssasPreCheckoutProps>({
     description: "",
     dueDays: undefined as number | undefined,
     paymentForm: "CREDIT_CARD",
-    discount: "",
+    discount: 0,
     installmentCount: undefined as number | undefined,
     itemValue: undefined as number | undefined,
     totalValue: undefined as number | undefined,
     category: "",
     packageId: undefined as number | undefined,
     solicitationId: undefined as number | undefined,
+    voucherDesconto: "",
+    totalBruteValue: 0,
   },
 });
+
+const getVoucher = useDebounceFn(async () => {
+  if (model.value.voucherDesconto) {
+    loadingVoucher.value = true;
+    isInvalidvoucher.value = false;
+    try {
+      await voucherStore.existsInUse(model.value.voucherDesconto);
+      if (!$voucher.value) {
+        isInvalidvoucher.value = true;
+      }
+      await paymentSimulation();
+      calculateDiscount();
+    } finally {
+      loadingVoucher.value = false;
+    }
+  } else {
+    model.value.discount = undefined;
+  }
+}, 500);
+
+const calculateDiscount = () => {
+  if ($voucher.value) {
+    //calcular o valor total com desconto
+    if ($voucher.value.discountType === "percentage") {
+      model.value.discount =
+        (model.value.itemValue * Number($voucher.value.discount ?? 0)) / 100;
+
+      //model.value.totalValue = model.value.itemValue - model.value.discount;
+    } else {
+      model.value.discount = Number($voucher.value.discount ?? 0);
+      // model.value.totalValue =
+      //   model.value.itemValue - Number($voucher.value.discount ?? 0);
+    }
+  } else {
+    model.value.discount = 0;
+    //model.value.totalValue = model.value.itemValue;
+  }
+};
 
 const handlePaymentForm = async () => {
   model.value.installmentCount = 1;
@@ -139,7 +230,7 @@ const paymentSimulation = async () => {
 
     //calcular a taxa reversa
     if (model.value.installmentCount && model.value.installmentCount > 1) {
-      model.value.totalValue = Number(
+      model.value.totalBruteValue = Number(
         (
           (Number(model.value.itemValue ?? 0) +
             Number($paymentSimulation.value?.creditCard?.operationFee ?? 0)) /
@@ -149,8 +240,10 @@ const paymentSimulation = async () => {
         ).toFixed(2)
       );
     } else {
-      model.value.totalValue = model.value.itemValue;
+      model.value.totalBruteValue = model.value.itemValue;
     }
+
+    model.value.totalValue = model.value.totalBruteValue;
 
     //segunda consulta para retornar o valor final com total atualizado
     await asaas.paymentSimulation({
@@ -158,8 +251,20 @@ const paymentSimulation = async () => {
       installmentCount: model.value.installmentCount,
       billingType: model.value.paymentForm,
     });
+
+    calculateDiscount();
+
+    model.value.totalValue =
+      Number(model.value.totalValue ?? 0) - Number(model.value.discount ?? 0);
   } finally {
     loading.value = false;
   }
+};
+
+const handleCancel = () => {
+  loading.value = false;
+  isInvalidvoucher.value = false;
+  show.value = false;
+  emit("cancel");
 };
 </script>

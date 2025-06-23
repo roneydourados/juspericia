@@ -15,7 +15,7 @@
     :readonly="readonly"
     :clearable="clearable"
     @blur="blur"
-    @input="handleChange"
+    @input="$emit('input', handleChange($event))"
   />
 </template>
 
@@ -77,7 +77,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue", "blur"]);
+const emit = defineEmits(["update:modelValue", "blur", "input"]);
 
 const modelValue = defineModel({
   default: "",

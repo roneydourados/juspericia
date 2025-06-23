@@ -77,24 +77,25 @@ const props = defineProps({
 
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
-
+const voucherStore = useVoucherStore();
 const loading = ref(false);
 const showSale = ref(false);
 
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 
 const modelPrececkout = ref({
-  name: props.item.name,
-  description: props.item.description,
+  name: props.item.name ?? "",
+  description: props.item.description ?? "",
   dueDays: 2,
   paymentForm: "CREDIT_CARD",
-  discount: undefined as number | undefined,
+  //discount: undefined as number | undefined,
   installmentCount: 1,
-  itemValue: props.item.value,
+  itemValue: Number(props.item.value ?? 0),
   totalValue: props.item.value,
   category: "package",
   packageId: props.item.id,
-  solicitationId: undefined as number | undefined,
+  voucherDesconto: "",
+  totalBruteValue: Number(props.item.value ?? 0),
 });
 
 const handleSaleItem = async () => {
@@ -166,18 +167,20 @@ const handleCancel = () => {
 };
 
 const clearModel = () => {
+  voucherStore.clear();
   modelPrececkout.value = {
-    name: props.item.name,
-    description: props.item.description,
+    name: props.item.name ?? "",
+    description: props.item.description ?? "",
     dueDays: 2,
     paymentForm: "CREDIT_CARD",
-    discount: undefined as number | undefined,
+    //discount: undefined as number | undefined,
     installmentCount: 1,
-    itemValue: props.item.value,
+    itemValue: Number(props.item.value ?? 0),
     totalValue: props.item.value,
     category: "package",
     packageId: props.item.id,
-    solicitationId: undefined as number | undefined,
+    voucherDesconto: "",
+    totalBruteValue: Number(props.item.value ?? 0),
   };
 };
 </script>

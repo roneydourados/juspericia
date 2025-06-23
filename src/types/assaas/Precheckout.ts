@@ -7,7 +7,9 @@ export interface AssasPreCheckoutProps {
   installmentCount?: number;
   itemValue: number;
   totalValue?: number;
+  totalBruteValue?: number;
   category: string;
   packageId?: number;
   solicitationId?: number;
+  voucherDesconto: string;
 }
