@@ -53,76 +53,16 @@
         text="Comprar"
         block
         variant="flat"
-        @click="handleSale"
+        @click="showSale = true"
       />
     </v-card-actions>
   </v-card>
-  <Dialog
-    title="CONFIRME"
-    :dialog="showSale"
-    @cancel="showSale = false"
-    @confirm="handleSaleItem"
-    show-cancel
-  >
-    <div class="d-flex flex-column">
-      <span>confirma a compra de {{ item.name }} ? </span>
-      <div class="d-flex py-4" style="gap: 0.5rem">
-        Valor:
-        <strong>{{ amountFormated(item.value ?? 0, false) }}</strong>
-      </div>
-      <v-divider class="mb-4"></v-divider>
-    </div>
-
-    <v-row dense class="mt-">
-      <v-col cols="12" lg="9">
-        <SelectInput
-          label="Forma de pagamento"
-          :items="paymentFormsType"
-          v-model="model.paymentForm"
-          item-title="title"
-          item-value="value"
-          @update:model-value="handlePaymentForm"
-        />
-      </v-col>
-
-      <v-col v-if="model.paymentForm === 'CREDIT_CARD'" cols="12" lg="3">
-        <SelectInput
-          label="Parcelas"
-          :items="installments"
-          v-model="model.installmentCount"
-          item-title="title"
-          item-value="value"
-          @update:model-value="paymentSimulation"
-        />
-      </v-col>
-    </v-row>
-    <v-divider class="mb-4"></v-divider>
-    <strong>Totais</strong>
-    <div class="d-flex" style="gap: 0.5rem">
-      <strong>Valor:</strong>
-      <strong>{{ amountFormated(model.totalValue ?? 0, false) }}</strong>
-    </div>
-    <div class="d-flex" style="gap: 0.5rem">
-      <strong>Parcelas:</strong>
-      <div class="d-flex">
-        <strong>{{ model.installmentCount }}</strong>
-        <strong class="ml-1 mr-1">x</strong>
-        <strong>
-          {{
-            amountFormated(
-              Number(model.totalValue ?? 0) / model.installmentCount,
-              false
-            )
-          }}
-        </strong>
-        <span v-if="model.installmentCount > 1" class="ml-2">(Com juros)</span>
-        <span v-else class="ml-2">(Sem juros)</span>
-      </div>
-    </div>
-    <!-- <pre>{{ $paymentSimulation }}</pre>
-    <pre>{{ model }}</pre> -->
-    <DialogLoading :dialog="loading" />
-  </Dialog>
+  <AsaasPreCheckout
+    v-model:show="showSale"
+    v-model="modelPrececkout"
+    @confirm-sale="handleSaleItem"
+    @cancel="handleCancel"
+  />
 </template>
 
 <script setup lang="ts">
@@ -142,35 +82,19 @@ const loading = ref(false);
 const showSale = ref(false);
 
 const $paymentResponse = computed(() => asaas.$paymentReponse);
-const $paymentSimulation = computed(() => asaas.$paymentSimulation);
 
-const paymentFormsType = ref([
-  { title: "Cartão de crédito", value: "CREDIT_CARD" },
-  { title: "Boleto", value: "BOLETO" },
-  { title: "Cartão de débito", value: "DEBIT_CARD" },
-  { title: "Pix", value: "PIX" },
-]);
-
-const installments = ref([
-  { title: "1x", value: 1 },
-  { title: "2x", value: 2 },
-  { title: "3x", value: 3 },
-  { title: "4x", value: 4 },
-  { title: "5x", value: 5 },
-  { title: "6x", value: 6 },
-  { title: "7x", value: 7 },
-  { title: "8x", value: 8 },
-  { title: "9x", value: 9 },
-  { title: "10x", value: 10 },
-  { title: "11x", value: 11 },
-  { title: "12x", value: 12 },
-]);
-
-const model = ref({
+const modelPrececkout = ref({
+  name: props.item.name,
+  description: props.item.description,
+  dueDays: 2,
   paymentForm: "CREDIT_CARD",
-  discount: "",
+  discount: undefined as number | undefined,
   installmentCount: 1,
+  itemValue: props.item.value,
   totalValue: props.item.value,
+  category: "package",
+  packageId: props.item.id,
+  solicitationId: undefined as number | undefined,
 });
 
 const handleSaleItem = async () => {
@@ -181,26 +105,35 @@ const handleSaleItem = async () => {
       push.warning("Selecione um item para comprar");
     }
 
-    if (model.value.installmentCount > 1) {
+    if (
+      modelPrececkout.value.installmentCount &&
+      modelPrececkout.value.installmentCount > 1
+    ) {
       //se for parcelada enviar quantidade de parcelas e o valor total
       await asaas.createPayment({
-        dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
+        dueDate: dayjs()
+          .add(modelPrececkout.value.dueDays, "days")
+          .format("YYYY-MM-DD"),
         description: props.item.name!,
-        category: "package",
+        category: modelPrececkout.value.category,
         packageId: props.item.id,
         dueDays: props.item.dueDays,
-        totalValue: model.value.totalValue,
-        installmentCount: model.value.installmentCount,
+        totalValue: modelPrececkout.value.totalValue,
+        installmentCount: modelPrececkout.value.installmentCount,
+        billingType: modelPrececkout.value.paymentForm,
       });
     } else {
       //caso contrário enviar o valor normal
       await asaas.createPayment({
-        dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
+        dueDate: dayjs()
+          .add(modelPrececkout.value.dueDays, "days")
+          .format("YYYY-MM-DD"),
         value: props.item.value!,
         description: props.item.name!,
-        category: "package",
+        category: modelPrececkout.value.category,
         packageId: props.item.id,
         dueDays: props.item.dueDays,
+        billingType: modelPrececkout.value.paymentForm,
       });
     }
 
@@ -218,6 +151,7 @@ const handleSaleItem = async () => {
         `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
       );
     }
+    clearModel();
   } catch (error) {
     push.error("Erro ao finalizar pagamento");
     console.log("🚀 ~ handleSaleItem ~ error:", error);
@@ -226,49 +160,24 @@ const handleSaleItem = async () => {
   }
 };
 
-const handlePaymentForm = async () => {
-  model.value.installmentCount = 1;
-  await paymentSimulation();
+const handleCancel = () => {
+  showSale.value = false;
+  clearModel();
 };
 
-const paymentSimulation = async () => {
-  loading.value = true;
-  try {
-    //primeira consulta para retornar a taxa
-    await asaas.paymentSimulation({
-      value: props.item.value!,
-      installmentCount: model.value.installmentCount,
-      billingType: model.value.paymentForm,
-    });
-
-    //calcular a taxa reversa
-    if (model.value.installmentCount > 1) {
-      model.value.totalValue = Number(
-        (
-          (Number(props.item.value ?? 0) +
-            Number($paymentSimulation.value?.creditCard?.operationFee ?? 0)) /
-          (1 -
-            Number($paymentSimulation.value?.creditCard?.feePercentage ?? 0) /
-              100)
-        ).toFixed(2)
-      );
-    } else {
-      model.value.totalValue = props.item.value!;
-    }
-
-    //segunda consulta para retornar o valor final com total atualizado
-    await asaas.paymentSimulation({
-      value: model.value.totalValue,
-      installmentCount: model.value.installmentCount,
-      billingType: model.value.paymentForm,
-    });
-  } finally {
-    loading.value = false;
-  }
-};
-
-const handleSale = async () => {
-  await paymentSimulation();
-  showSale.value = true;
+const clearModel = () => {
+  modelPrececkout.value = {
+    name: props.item.name,
+    description: props.item.description,
+    dueDays: 2,
+    paymentForm: "CREDIT_CARD",
+    discount: undefined as number | undefined,
+    installmentCount: 1,
+    itemValue: props.item.value,
+    totalValue: props.item.value,
+    category: "package",
+    packageId: props.item.id,
+    solicitationId: undefined as number | undefined,
+  };
 };
 </script>
