@@ -110,7 +110,7 @@
     </div>
     <!-- <pre>{{ $paymentSimulation }}</pre>
     <pre>{{ $systemParameters }}</pre> -->
-    <pre>{{ model }}</pre>
+    <!-- <FormDebug v-model="model" /> -->
     <DialogLoading :dialog="loading" />
   </Dialog>
 </template>
@@ -118,6 +118,7 @@
 <script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
 import { AssasPreCheckoutProps } from "@/types/assaas/Precheckout";
+import FormDebug from "../UI/FormDebug.vue";
 
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
