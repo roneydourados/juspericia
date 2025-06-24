@@ -3,7 +3,7 @@
     title="CONFIRME"
     :dialog="show"
     @cancel="handleCancel"
-    @confirm="$emit('confirm-sale', model)"
+    @confirm="handleConfirm"
     show-cancel
   >
     <div class="d-flex flex-column">
@@ -110,6 +110,7 @@
     </div>
     <!-- <pre>{{ $paymentSimulation }}</pre>
     <pre>{{ $systemParameters }}</pre> -->
+    <pre>{{ model }}</pre>
     <DialogLoading :dialog="loading" />
   </Dialog>
 </template>
@@ -291,6 +292,32 @@ const handleCancel = () => {
   loading.value = false;
   isInvalidvoucher.value = false;
   show.value = false;
+  voucherStore.clear();
+  asaas.clear();
+  model.value = {
+    name: "",
+    description: "",
+    dueDays: undefined,
+    paymentForm: "CREDIT_CARD",
+    discount: 0,
+    installmentCount: undefined,
+    itemValue: 0,
+    totalValue: undefined,
+    category: "",
+    packageId: undefined,
+    solicitationId: undefined,
+    voucherDesconto: "",
+    totalBruteValue: 0,
+  };
   emit("cancel");
+};
+
+const handleConfirm = () => {
+  loading.value = false;
+  isInvalidvoucher.value = false;
+  show.value = false;
+  voucherStore.clear();
+  asaas.clear();
+  emit("confirm-sale", model.value);
 };
 </script>

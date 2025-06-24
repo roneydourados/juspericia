@@ -53,7 +53,7 @@
         text="Comprar"
         block
         variant="flat"
-        @click="showSale = true"
+        @click="handleGetItemSale"
       />
     </v-card-actions>
   </v-card>
@@ -159,6 +159,24 @@ const handleSaleItem = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleGetItemSale = () => {
+  modelPrececkout.value = {
+    name: props.item.name ?? "",
+    description: props.item.description ?? "",
+    dueDays: 2,
+    paymentForm: "CREDIT_CARD",
+    //discount: undefined as number | undefined,
+    installmentCount: 1,
+    itemValue: Number(props.item.value ?? 0),
+    totalValue: props.item.value,
+    category: "package",
+    packageId: props.item.id,
+    voucherDesconto: "",
+    totalBruteValue: Number(props.item.value ?? 0),
+  };
+  showSale.value = true;
 };
 
 const handleCancel = () => {

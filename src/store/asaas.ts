@@ -45,6 +45,11 @@ export const useAsaasStore = defineStore("asaas", () => {
     paymentSimulationResponse.value = data;
   };
 
+  const clear = () => {
+    paymentReponse.value = undefined;
+    paymentSimulationResponse.value = undefined;
+  };
+
   return {
     createCustomer,
     createPayment,
@@ -52,5 +57,6 @@ export const useAsaasStore = defineStore("asaas", () => {
     $paymentReponse,
     $paymentSimulation,
     paymentSimulation,
+    clear,
   };
 });
