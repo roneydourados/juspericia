@@ -15,4 +15,6 @@ export interface SystemParametersProps {
   voucherMaxDiscountValue?: number;
   voucherMaxQuantityUse?: number;
   voucherMaxQuantityDays?: number;
+  cardFeeInstallment?: number;
+  ticketFeeInstallment?: number;
 }

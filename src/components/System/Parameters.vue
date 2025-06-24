@@ -183,7 +183,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-
           <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
               <v-card-title>
@@ -223,6 +222,28 @@
               </v-card-text>
             </v-card>
           </v-col>
+
+          <v-col cols="12" lg="4">
+            <v-card flat rounded="lg" elevation="1" height="100%">
+              <v-card-title>
+                <div class="font-weight-bold">Taxas de antecipações</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12" lg="6">
+                    <CurrencyInput
+                      label="Taxa cartão de crédito parcelado (%)"
+                      v-model="form.cardFeeInstallment"
+                    />
+                  </v-col>
+                </v-row>
+                <div>
+                  Valor a ser embutido de taxa de antecipação para pagamentos
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </FormCrud>
     </v-card-text>
@@ -257,6 +278,7 @@ const form = ref({
   voucherMaxDiscountValue: "",
   voucherMaxQuantityUse: "",
   voucherMaxQuantityDays: "",
+  cardFeeInstallment: "",
 });
 
 watch(
@@ -288,6 +310,10 @@ watch(
         voucherMaxQuantityUse: newData.voucherMaxQuantityUse?.toString() ?? "",
         voucherMaxQuantityDays:
           newData.voucherMaxQuantityDays?.toString() ?? "",
+        cardFeeInstallment: amountFormated(
+          newData.cardFeeInstallment ?? 0,
+          false
+        ),
       };
     }
   },
@@ -300,19 +326,22 @@ const handleSubmit = async () => {
     await systemParametersStore.update({
       ...form.value,
       publicId: props.data!.publicId,
-      pointsPerIndication: Number(form.value.pointsPerIndication),
-      pointsExchange: Number(form.value.pointsExchange),
-      pointsExchangeValue: Number(form.value.pointsExchangeValue),
-      daysPointsExpire: Number(form.value.daysPointsExpire),
-      comission: Number(form.value.comission),
-      daysCreditExpire: Number(form.value.daysCreditExpire),
-      medicQueryInterval: Number(form.value.medicQueryInterval),
+      pointsPerIndication: Number(form.value.pointsPerIndication ?? "0"),
+      pointsExchange: Number(form.value.pointsExchange ?? "0"),
+      pointsExchangeValue: Number(form.value.pointsExchangeValue ?? "0"),
+      daysPointsExpire: Number(form.value.daysPointsExpire ?? "0"),
+      comission: Number(form.value.comission ?? "0"),
+      daysCreditExpire: Number(form.value.daysCreditExpire ?? "0"),
+      medicQueryInterval: Number(form.value.medicQueryInterval ?? "15"),
       voucherMaxDiscountPercentage: Number(
-        form.value.voucherMaxDiscountPercentage
+        form.value.voucherMaxDiscountPercentage ?? "0"
       ),
-      voucherMaxDiscountValue: Number(form.value.voucherMaxDiscountValue),
-      voucherMaxQuantityUse: Number(form.value.voucherMaxQuantityUse),
-      voucherMaxQuantityDays: Number(form.value.voucherMaxQuantityDays),
+      voucherMaxDiscountValue: Number(
+        form.value.voucherMaxDiscountValue ?? "0"
+      ),
+      voucherMaxQuantityUse: Number(form.value.voucherMaxQuantityUse ?? "0"),
+      voucherMaxQuantityDays: Number(form.value.voucherMaxQuantityDays ?? "0"),
+      cardFeeInstallment: Number(form.value.cardFeeInstallment ?? "0"),
     });
   } catch (error) {
     console.error(error);

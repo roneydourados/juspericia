@@ -91,12 +91,12 @@
         <strong class="ml-1 mr-1">x</strong>
         <strong>
           {{
-            model.installmentCount
+            $paymentSimulation?.creditCard?.installment?.paymentNetValue
               ? amountFormated(
-                  Number(model.totalValue ?? 0) / model.installmentCount,
+                  $paymentSimulation?.creditCard?.installment?.paymentValue,
                   false
                 )
-              : Number(model.totalValue ?? 0)
+              : amountFormated(Number(model.totalValue ?? 0), false)
           }}
         </strong>
         <span
@@ -108,6 +108,8 @@
         <span v-else class="ml-2">(Sem juros)</span>
       </div>
     </div>
+    <!-- <pre>{{ $paymentSimulation }}</pre>
+    <pre>{{ $systemParameters }}</pre> -->
     <DialogLoading :dialog="loading" />
   </Dialog>
 </template>
@@ -119,6 +121,8 @@ import { AssasPreCheckoutProps } from "@/types/assaas/Precheckout";
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
 const voucherStore = useVoucherStore();
+const systemParametersStore = useSystemParametersStore();
+
 const loading = ref(false);
 const loadingVoucher = ref(false);
 const isInvalidvoucher = ref(false);
@@ -128,6 +132,7 @@ const emit = defineEmits(["confirm-sale", "cancel"]);
 
 const $paymentSimulation = computed(() => asaas.$paymentSimulation);
 const $voucher = computed(() => voucherStore.$voucherExists);
+const $systemParameters = computed(() => systemParametersStore.$parameters);
 const $disableVoucher = computed(() => {
   if (voucherStore.$voucherExists) {
     return true;
@@ -175,6 +180,16 @@ const model = defineModel<AssasPreCheckoutProps>({
   },
 });
 
+watch(
+  () => show.value,
+  async (newValue) => {
+    if (newValue) {
+      await systemParametersStore.index();
+    }
+  },
+  { immediate: true }
+);
+
 const getVoucher = useDebounceFn(async () => {
   if (model.value.voucherDesconto) {
     loadingVoucher.value = true;
@@ -195,21 +210,15 @@ const getVoucher = useDebounceFn(async () => {
 }, 500);
 
 const calculateDiscount = () => {
+  model.value.discount = 0;
   if ($voucher.value) {
     //calcular o valor total com desconto
     if ($voucher.value.discountType === "percentage") {
       model.value.discount =
         (model.value.itemValue * Number($voucher.value.discount ?? 0)) / 100;
-
-      //model.value.totalValue = model.value.itemValue - model.value.discount;
     } else {
       model.value.discount = Number($voucher.value.discount ?? 0);
-      // model.value.totalValue =
-      //   model.value.itemValue - Number($voucher.value.discount ?? 0);
     }
-  } else {
-    model.value.discount = 0;
-    //model.value.totalValue = model.value.itemValue;
   }
 };
 
@@ -230,15 +239,32 @@ const paymentSimulation = async () => {
 
     //calcular a taxa reversa
     if (model.value.installmentCount && model.value.installmentCount > 1) {
+      const totalAntecipationFee =
+        Number($systemParameters.value?.cardFeeInstallment ?? 0) *
+        Number(model.value.installmentCount);
+
+      const feePercentage =
+        Number($paymentSimulation.value?.creditCard?.feePercentage ?? 0) +
+        totalAntecipationFee;
+
       model.value.totalBruteValue = Number(
         (
           (Number(model.value.itemValue ?? 0) +
             Number($paymentSimulation.value?.creditCard?.operationFee ?? 0)) /
-          (1 -
-            Number($paymentSimulation.value?.creditCard?.feePercentage ?? 0) /
-              100)
+          (1 - feePercentage / 100)
         ).toFixed(2)
       );
+      // const feePercentage =
+      //   Number($paymentSimulation.value?.creditCard?.feePercentage ?? 0) +
+      //   Number($systemParameters.value?.cardFeeInstallment ?? 0);
+
+      // model.value.totalBruteValue = Number(
+      //   (
+      //     (Number(model.value.itemValue ?? 0) +
+      //       Number($paymentSimulation.value?.creditCard?.operationFee ?? 0)) /
+      //     (1 - feePercentage / 100)
+      //   ).toFixed(2)
+      // );
     } else {
       model.value.totalBruteValue = model.value.itemValue;
     }
