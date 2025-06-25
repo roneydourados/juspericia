@@ -43,6 +43,11 @@
           />
         </v-card>
       </template>
+      <template v-slot:item.5>
+        <v-card class="pa-2">
+          <UserRegisterSuccess v-model="model" />
+        </v-card>
+      </template>
     </v-stepper>
   </v-card>
   <Dialog
@@ -62,10 +67,10 @@ import { useDisplay } from "vuetify";
 const emit = defineEmits(["login"]);
 const { mobile } = useDisplay();
 
-const rounter = useRouter();
+//const rounter = useRouter();
 const user = useAuthStore();
 
-const items = ["Dados pessoais", "Endereço", "Escritório", "Acesso"];
+const items = ["Dados pessoais", "Endereço", "Escritório", "Acesso", "Fim"];
 const loading = ref(false);
 const confirmRegister = ref(false);
 const step = ref(1);
@@ -129,7 +134,8 @@ const handleSubmitRegister = async () => {
       tokenCapcha: model.value.tokenCapcha,
     });
 
-    await rounter.push("/");
+    step.value = 5;
+    //await rounter.push("/");
   } catch (error) {
     console.error(error);
     push.error("Erro ao registrar, tente novamente!");
