@@ -22,35 +22,46 @@
           <v-col cols="12" lg="6">
             <InfoLabel
               title="Paciente"
-              :content="`${data.PatientConsultation?.Patient?.name} ${data.PatientConsultation?.Patient?.surname}`"
+              :content="`${data.patient}`"
               font-size-content="0.8"
             />
           </v-col>
           <v-col cols="12" lg="3">
             <InfoLabel
               title="Data abertura"
-              :content="
-                dayjs(data.PatientConsultation?.createdAt).format('DD/MM/YYYY')
-              "
+              :content="dayjs(data.reportDate).format('DD/MM/YYYY')"
               font-size-content="0.8"
             />
           </v-col>
           <v-col cols="12" lg="3">
             <InfoLabel
               title="CPF"
-              :content="
-                formatCPFOrCNPJ(data.PatientConsultation?.Patient?.cpf ?? '')
-              "
+              :content="formatCPFOrCNPJ(data.cpf ?? '')"
               font-size-content="0.8"
             />
           </v-col>
         </v-row>
+        <v-row dense class="mt-4">
+          <v-col cols="12">
+            <strong>Laudo:</strong>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12">
+            <div
+              v-html="data.reportContent"
+              style="max-height: 30rem; overflow-y: auto"
+            ></div>
+          </v-col>
+        </v-row>
+
+        <!-- 
         <v-row dense>
           <v-col cols="12">
             <strong>Anexos:</strong>
           </v-col>
         </v-row>
-
+        
         <v-row dense>
           <v-col v-for="attachent in data.attachments" cols="12">
             <AttachementCard
@@ -59,7 +70,7 @@
               @download="handleDownloadFile(attachent.publicId!)"
             />
           </v-col>
-        </v-row>
+        </v-row> -->
         <!-- <pre>{{ data }}</pre> -->
       </v-card-text>
     </v-card>
@@ -70,7 +81,7 @@
 import dayjs from "dayjs";
 defineProps({
   data: {
-    type: Object as PropType<PatientConsultationReportProps>,
+    type: Object as PropType<PatientConsultationReportListProps>,
     default: {},
   },
 });

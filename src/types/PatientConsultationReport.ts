@@ -23,4 +23,5 @@ export interface PatientConsultationReportListProps {
   dateOpen: string;
   dateClose: string;
   reportContent: string;
+  reportDate: string;
 }
