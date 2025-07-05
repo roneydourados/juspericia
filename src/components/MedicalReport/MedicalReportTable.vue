@@ -84,13 +84,16 @@
         <span>{{ formatCPFOrCNPJ(item.cpf) }}</span>
       </template>
       <template v-slot:item.reportStatus="{ item }">
-        <v-chip :color="getReportStatusColor(item.reportStatus)" label>
+        <v-chip
+          :color="getReportStatusColor(item.reportStatus).color"
+          label
+          variant="flat"
+        >
+          <v-icon :icon="getReportStatusColor(item.reportStatus).icon" start />
           <strong style="font-size: 0.8rem">
             {{
               item.reportStatus === "empty"
                 ? "Sem laudo"
-                : item.reportStatus === "pending"
-                ? "Pendente"
                 : item.reportStatus === "cancel"
                 ? "Cancelado"
                 : item.reportStatus === "sign-pending"
@@ -253,13 +256,15 @@ const handleGeneratePDF = async (item: PatientConsultationReportListProps) => {
         htmlContent,
         "\n",
         {
-          text: `Laudo Médico - ${item.patient} ${dayjs(item.dateClose).format(
-            "DD/MM/YYYY"
-          )}`,
+          text: `Laudo Médico ${dayjs(item.dateClose).format("DD/MM/YYYY")}`,
           style: "subheader",
         },
         {
-          text: `Emitido por: Dr(a) ${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
+          text: `Paciente: ${item.patient} CPF: ${formatCPFOrCNPJ(item.cpf)}`,
+          style: "subheader",
+        },
+        {
+          text: `Emitido por: Dr(a) ${item.medic}`,
           style: "subheader",
         },
         "\n\n\n\n",
@@ -353,15 +358,30 @@ const handleEditCorrection = async (
 const getReportStatusColor = (status: string) => {
   switch (status) {
     case "empty":
-      return "orange";
+      return {
+        color: "orange-darken-1",
+        icon: "mdi-alert-circle-outline",
+      };
     case "cancel":
-      return "red";
+      return {
+        color: "red",
+        icon: "mdi-close-circle-outline",
+      };
     case "sign-pending":
-      return "blue-grey";
+      return {
+        color: "blue",
+        icon: "mdi-clock-alert-outline",
+      };
     case "sign":
-      return "green";
+      return {
+        color: "green",
+        icon: "mdi-check-all",
+      };
     default:
-      return "grey";
+      return {
+        color: "grey",
+        icon: "mdi-help-circle-outline",
+      };
   }
 };
 </script>
