@@ -51,7 +51,7 @@
             <div
               v-html="data.reportContent"
               style="max-height: 30rem; overflow-y: auto"
-            ></div>
+            />
           </v-col>
         </v-row>
 
