@@ -33,6 +33,7 @@ const route = useRoute();
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
 const auth = useAuthStore();
+
 //const config = useRuntimeConfig();
 
 const $single = computed(() => storeConsultation.$single);
@@ -106,7 +107,6 @@ const handleClose = async () => {
           ? dayjs().format("YYYY-MM-DD")
           : undefined,
       };
-      console.log("🚀 ~ handleClose ~ payload:", payload);
 
       //desativar teleconsulta
       await storeConsultation.update(payload);

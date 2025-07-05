@@ -24,4 +24,9 @@ export interface PatientConsultationReportListProps {
   dateClose: string;
   reportContent: string;
   reportDate: string;
+  reportPublicId: string;
+  reportStatus: string;
+  medic: string;
+  medicCrm: string;
+  medicCrmUf: string;
 }

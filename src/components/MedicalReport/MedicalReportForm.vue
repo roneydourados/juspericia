@@ -121,7 +121,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 const reportModelStore = useReportModelStore();
-const scheduleStore = useScheduleStore();
+//const scheduleStore = useScheduleStore();
 const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
@@ -129,7 +129,7 @@ const solicitationStore = useSolicitationConsultationStore();
 const showAlterContent = ref(false);
 
 const model = ref({
-  id: 0,
+  publicId: "",
   title: "",
   content: "",
   reportModel: undefined as ReportModelProps | undefined,
@@ -137,20 +137,31 @@ const model = ref({
 const attachments = ref<FileProps[]>([]);
 
 const $reportModel = computed(() => reportModelStore.$single);
-const $sheduleConsultation = computed(() => scheduleStore.$single);
-const $consultationSolicitation = computed(() => solicitationStore.$single);
+//const $sheduleConsultation = computed(() => scheduleStore.$single);
+//const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
 
-onMounted(() => {
-  if ($consultationSolicitation.value?.PatientConsultationReport?.content) {
-    model.value.content =
-      $consultationSolicitation.value?.PatientConsultationReport?.content;
-  }
-});
+// onMounted(() => {
+//   if ($consultationSolicitation.value?.PatientConsultationReport?.content) {
+//     model.value.content =
+//       $consultationSolicitation.value?.PatientConsultationReport?.content;
+//   }
+// });
 
 // const handlePDF = () => {
 //   stringToHandlePDF(model.value.content);
 // };
+
+watch(
+  () => props.data,
+  (newData) => {
+    if (newData.id) {
+      model.value.publicId = newData.reportPublicId || "";
+      model.value.content = newData.reportContent || "";
+    }
+  },
+  { immediate: true }
+);
 
 const handleSubmit = async () => {
   if (!props.data.id) {

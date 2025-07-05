@@ -83,22 +83,52 @@
       <template v-slot:item.cpf="{ item }">
         <span>{{ formatCPFOrCNPJ(item.cpf) }}</span>
       </template>
+      <template v-slot:item.reportStatus="{ item }">
+        <v-chip :color="getReportStatusColor(item.reportStatus)" label>
+          <strong style="font-size: 0.8rem">
+            {{
+              item.reportStatus === "empty"
+                ? "Sem laudo"
+                : item.reportStatus === "pending"
+                ? "Pendente"
+                : item.reportStatus === "cancel"
+                ? "Cancelado"
+                : item.reportStatus === "sign-pending"
+                ? "Assinatura pendente"
+                : item.reportStatus === "sign"
+                ? "Assinado"
+                : "Desconhecido"
+            }}
+          </strong>
+        </v-chip>
+      </template>
       <template v-slot:item.actions="{ item }">
         <div v-if="item.reportContent" class="d-flex justify-content-center">
           <v-btn
+            v-if="item.reportStatus === 'sign-pending'"
             icon
-            color="info"
+            color="blue"
             variant="text"
             size="small"
-            @click="handleGeneratePDF(item.publicId)"
+            @click="handleGeneratePDF(item)"
           >
-            <v-icon icon="mdi-printer-outline" size="20"></v-icon>
+            <v-icon icon="mdi-file-edit-outline" size="20"></v-icon>
             <v-tooltip
               activator="parent"
               location="top center"
               content-class="tooltip-background"
             >
-              Imprimir
+              Assinar documento
+            </v-tooltip>
+          </v-btn>
+          <v-btn v-else icon color="red" variant="text" size="small">
+            <v-icon icon="mdi-file-pdf-box" size="20"></v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Laudo
             </v-tooltip>
           </v-btn>
           <v-btn
@@ -110,6 +140,8 @@
             color="orange"
             variant="text"
             size="small"
+            @click="handleEditCorrection(item)"
+            :disabled="item.reportStatus === 'sign'"
           >
             <v-icon icon="mdi-clock-edit-outline" size="20"></v-icon>
             <v-tooltip
@@ -117,7 +149,7 @@
               location="top center"
               content-class="tooltip-background"
             >
-              Efetuar correção
+              Correção/Editar
             </v-tooltip>
           </v-btn>
           <v-btn
@@ -171,13 +203,17 @@
 </template>
 
 <script setup lang="ts">
+import { pdfMakeFonts } from "@/utils/pdfMakeFonts";
+import pdfMake from "pdfmake/build/pdfmake";
+import htmlToPdfmake from "html-to-pdfmake";
 import dayjs from "dayjs";
+
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
 
 const { formatCPFOrCNPJ, stringToHandlePDF } = useUtils();
 const $consultationReports = computed(() => consultationReport.$all);
-const $single = computed(() => consultationReport.$single);
+//const $single = computed(() => consultationReport.$single);
 const $currentUser = computed(() => auth.$currentUser);
 
 const loading = ref(false);
@@ -199,17 +235,73 @@ const headers = ref([
   { title: "Finalidade", key: "reportPurpose" },
   { title: "Paciente", key: "patient" },
   { title: "CPF", key: "cpf" },
+  { title: "Status", key: "reportStatus" },
   { title: "Ações", key: "actions", sortable: false },
 ]);
 
-const handleGeneratePDF = async (pulicId: string) => {
+const handleGeneratePDF = async (item: PatientConsultationReportListProps) => {
   loading.value = true;
   try {
-    await consultationReport.show(pulicId);
+    if (!item.reportContent) {
+      return push.error("Laudo não possui conteúdo para gerar PDF.");
+    }
 
-    if (!$single.value?.content) return;
+    const htmlContent = htmlToPdfmake(item.reportContent);
 
-    stringToHandlePDF($single.value.content);
+    const report = {
+      content: [
+        htmlContent,
+        "\n",
+        {
+          text: `Laudo Médico - ${item.patient} ${dayjs(item.dateClose).format(
+            "DD/MM/YYYY"
+          )}`,
+          style: "subheader",
+        },
+        {
+          text: `Emitido por: Dr(a) ${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
+          style: "subheader",
+        },
+        "\n\n\n\n",
+        {
+          canvas: [
+            {
+              type: "line" as const,
+              x1: 0,
+              y1: 0,
+              x2: 400,
+              y2: 0,
+              lineWidth: 1,
+            },
+          ],
+        },
+        {
+          text: `${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
+          style: "subheader",
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+        },
+        subheader: {
+          fontSize: 12,
+          bold: true,
+        },
+        quote: {
+          italics: true,
+        },
+        small: {
+          fontSize: 8,
+        },
+      },
+    };
+
+    pdfMake.vfs = pdfMakeFonts.vfs;
+    pdfMake
+      .createPdf(report)
+      .download(`Laudo_${item.patient}_${item.publicId}.pdf`);
   } finally {
     loading.value = false;
   }
@@ -244,5 +336,32 @@ const handleCloseForm = async () => {
   showReportForm.value = false;
   selectedReport.value = undefined;
   await getReports();
+};
+
+const handleEditCorrection = async (
+  item: PatientConsultationReportListProps
+) => {
+  loading.value = true;
+  try {
+    selectedReport.value = item;
+    showReportForm.value = true;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getReportStatusColor = (status: string) => {
+  switch (status) {
+    case "empty":
+      return "orange";
+    case "cancel":
+      return "red";
+    case "sign-pending":
+      return "blue-grey";
+    case "sign":
+      return "green";
+    default:
+      return "grey";
+  }
 };
 </script>
