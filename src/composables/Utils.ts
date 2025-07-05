@@ -176,6 +176,8 @@ export const useUtils = () => {
   };
 
   const formatCPFOrCNPJ = (value: string) => {
+    if (!value) return "";
+
     if (value.length === 11) {
       return formatCPF(value);
     }

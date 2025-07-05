@@ -16,13 +16,12 @@ const loading = ref(false);
 onMounted(async () => {
   loading.value = true;
   try {
-    await consultationReport.index({ initialDate, finalDate });
+    await consultationReport.index({
+      initialDate,
+      finalDate,
+    });
   } finally {
     loading.value = false;
   }
 });
-
-// await useAsyncData(async () => {
-//   await consultationReport.index({ initialDate, finalDate });
-//});
 </script>

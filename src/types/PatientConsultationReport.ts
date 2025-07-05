@@ -12,3 +12,15 @@ export interface PatientConsultationReportProps {
   PatientConsultation?: SolicitationConsultationProps;
   attachments?: FileProps[];
 }
+
+export interface PatientConsultationReportListProps {
+  id: number;
+  publicId: string;
+  patient: string;
+  cpf: string;
+  benefitType: string;
+  reportPurpose: string;
+  dateOpen: string;
+  dateClose: string;
+  reportContent: string;
+}

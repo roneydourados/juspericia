@@ -1,5 +1,5 @@
 <template>
-  <CallQuery :solicitation="$single" />
+  <CallQuery />
 </template>
 
 <script setup lang="ts">

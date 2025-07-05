@@ -4,7 +4,7 @@
     v-model:search="search"
     :label="label"
     placeholder="Digite algo para pesquisar..."
-    item-title="name"
+    item-title="title"
     item-value="id"
     return-object
     :required="required"

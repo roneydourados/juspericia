@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <!-- <pre>{{ $consultationReports }}</pre> -->
+  <div v-if="!showReportForm">
     <div class="d-flex flex-column w-100">
-      <HeaderPage title="Gestão de laudos emitidos" />
+      <HeaderPage title="Gestão de laudos" />
       <v-row class="mt-4" dense>
         <v-col cols="12" lg="4">
           <SelectSearchPatient
@@ -10,6 +9,14 @@
             v-model="filters.patient"
             @update:model-value="getReports"
             clearable
+          />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <SelectInput
+            v-model="filters.emitReport"
+            label="Laudo Emitido"
+            :items="['Não', 'Sim']"
+            @update:model-value="getReports"
           />
         </v-col>
         <v-col
@@ -70,36 +77,14 @@
       :headers="headers"
       :items="$consultationReports"
     >
-      <template v-slot:item.reportDate="{ item }">
-        <span>{{ dayjs(item.reportDate).format("DD/MM/YYYY") }}</span>
+      <template v-slot:item.dateClose="{ item }">
+        <span>{{ dayjs(item.dateClose).format("DD/MM/YYYY") }}</span>
       </template>
-      <template v-slot:item.Medic="{ item }">
-        <div class="d-flex flex-column">
-          <span>{{ item.Medic.name }}</span>
-          <span style="font-size: 0.7rem">
-            CRM:
-            <strong style="font-size: 0.7rem"
-              >{{ item.Medic.crm }}/{{ item.Medic.crmUf }}</strong
-            >
-          </span>
-        </div>
-      </template>
-      <template v-slot:item.PatientConsultation="{ item }">
-        <div class="d-flex flex-column">
-          <span>
-            {{ item.PatientConsultation.Patient.name }}
-            {{ item.PatientConsultation.Patient.surname }}
-          </span>
-          <span style="font-size: 0.7rem">
-            CPF:
-            <strong style="font-size: 0.7rem">
-              {{ formatCPFOrCNPJ(item.PatientConsultation.Patient.cpf) }}
-            </strong>
-          </span>
-        </div>
+      <template v-slot:item.cpf="{ item }">
+        <span>{{ formatCPFOrCNPJ(item.cpf) }}</span>
       </template>
       <template v-slot:item.actions="{ item }">
-        <div class="d-flex justify-content-center">
+        <div v-if="item.reportContent" class="d-flex justify-content-center">
           <v-btn
             icon
             color="info"
@@ -156,11 +141,33 @@
             </v-tooltip>
           </v-btn>
         </div>
+        <v-btn
+          v-else
+          icon
+          color="info"
+          variant="text"
+          size="small"
+          @click="handleNewReport(item)"
+        >
+          <v-icon icon="mdi-file-document-edit-outline" size="20"></v-icon>
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Digitar laudo
+          </v-tooltip>
+        </v-btn>
       </template>
     </Table>
     <DialogLoading :dialog="loading" />
     <MedicalReportDetails v-model="showReportDetails" :data="selectedReport" />
   </div>
+  <MedicalReportForm
+    v-if="showReportForm"
+    @close="handleCloseForm"
+    :data="selectedReport"
+  />
 </template>
 
 <script setup lang="ts">
@@ -175,18 +182,23 @@ const $currentUser = computed(() => auth.$currentUser);
 
 const loading = ref(false);
 const showReportDetails = ref(false);
-const selectedReport = ref<PatientConsultationReportProps>();
+const showReportForm = ref(false);
+const selectedReport = ref<PatientConsultationReportListProps>();
 
 const filters = ref({
   initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
   patient: undefined as PatientProps | undefined,
   medic: undefined as UserProps | undefined,
+  emitReport: "Não",
 });
+
 const headers = ref([
-  { title: "Data Laudo", key: "reportDate" },
-  { title: "Médico", key: "Medic" },
-  { title: "Paciente", key: "PatientConsultation" },
+  { title: "Data consulta", key: "dateClose" },
+  { title: "Benefício", key: "benefitType" },
+  { title: "Finalidade", key: "reportPurpose" },
+  { title: "Paciente", key: "patient" },
+  { title: "CPF", key: "cpf" },
   { title: "Ações", key: "actions", sortable: false },
 ]);
 
@@ -211,14 +223,26 @@ const getReports = async () => {
       finalDate: filters.value.finalDate,
       patientId: filters.value.patient?.id,
       medicId: filters.value.medic?.id,
+      emitReport: filters.value.emitReport === "Sim",
     });
   } finally {
     loading.value = false;
   }
 };
 
-const handleReportDetails = (item: PatientConsultationReportProps) => {
+const handleReportDetails = (item: PatientConsultationReportListProps) => {
   selectedReport.value = item;
   showReportDetails.value = true;
+};
+
+const handleNewReport = (item: PatientConsultationReportListProps) => {
+  selectedReport.value = item;
+  showReportForm.value = true;
+};
+
+const handleCloseForm = async () => {
+  showReportForm.value = false;
+  selectedReport.value = undefined;
+  await getReports();
 };
 </script>

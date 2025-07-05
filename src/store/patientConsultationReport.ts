@@ -7,9 +7,10 @@ export const usePatientConsultationReportStore = defineStore(
     const { api } = useAxios();
 
     const patientConsultationReport = ref<PatientConsultationReportProps>();
-    const patientConsultationReports = ref<PatientConsultationReportProps[]>(
-      []
-    );
+    const patientConsultationReports = ref<
+      PatientConsultationReportListProps[]
+    >([]);
+
     const $single = computed(() => patientConsultationReport.value);
     const $all = computed(() => patientConsultationReports.value);
 
@@ -18,10 +19,10 @@ export const usePatientConsultationReportStore = defineStore(
       finalDate: string;
       patientId?: number;
       medicId?: number;
-      /*userId?: number;*/
+      emitReport?: boolean;
     }) => {
-      const { finalDate, initialDate, patientId, medicId } = input;
-      const { data } = await api.get<PatientConsultationReportProps[]>(
+      const { finalDate, initialDate, patientId, medicId, emitReport } = input;
+      const { data } = await api.get<PatientConsultationReportListProps[]>(
         "/patient-consultation-report",
         {
           params: {
@@ -29,6 +30,7 @@ export const usePatientConsultationReportStore = defineStore(
             finalDate,
             patientId,
             medicId,
+            emitReport,
           },
         }
       );
@@ -67,6 +69,12 @@ export const usePatientConsultationReportStore = defineStore(
       patientConsultationReport.value = data;
     };
 
-    return { $single, $all, create, show, index };
+    return {
+      $single,
+      $all,
+      create,
+      show,
+      index,
+    };
   }
 );

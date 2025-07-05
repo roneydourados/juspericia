@@ -1,6 +1,6 @@
 <template>
   <v-card flat class="pa-4 py-4">
-    <div ref="root" />
+    <!-- <div ref="root" /> -->
     <v-card-actions class="d-flex justify-end px-12">
       <v-btn
         class="text-none"
@@ -27,90 +27,94 @@
 </template>
 
 <script setup lang="ts">
-import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import DialogLoading from "../UI/DialogLoading.vue";
-
+// import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import dayjs from "dayjs";
 const route = useRoute();
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
 const auth = useAuthStore();
-const config = useRuntimeConfig();
+//const config = useRuntimeConfig();
 
 const $single = computed(() => storeConsultation.$single);
 const $currentUser = computed(() => auth.$currentUser);
 
 const id = String(route.params.id);
-const root = ref();
-const zp = ref<ZegoUIKitPrebuilt>();
+//const root = ref();
+// const zp = ref<ZegoUIKitPrebuilt>();
 const loading = ref(false);
 
 const isFinishSolicitation = ref(false);
 
 onMounted(async () => {
   await storeConsultation.show(id);
-  joinRoom();
+  //joinRoom();
 });
 
 onUnmounted(() => {
-  if (zp.value) {
-    zp.value.destroy();
-  }
+  // if (zp.value) {
+  //   zp.value.destroy();
+  // }
 });
 
-const joinRoom = () => {
-  if (!$single.value) return;
+// const joinRoom = () => {
+//   if (!$single.value) return;
 
-  const zpConfig = {
-    appId: Number(config.zegoCloudAppId),
-    secret: config.zegoCloudAppSecret,
-    roomId: $single.value.publicId!,
-    userId: $currentUser.value?.publicId!,
-    userName: `${
-      $currentUser.value?.profile?.type === "MEDICO" ? "Dr(a)" : ""
-    } ${$currentUser.value?.name}`,
-    appUrl: `${config.public.appUrl}/teleconference/${$single.value.publicId!}`,
-  };
+//   const zpConfig = {
+//     appId: Number(config.zegoCloudAppId),
+//     secret: config.zegoCloudAppSecret,
+//     roomId: $single.value.publicId!,
+//     userId: $currentUser.value?.publicId!,
+//     userName: `${
+//       $currentUser.value?.profile?.type === "MEDICO" ? "Dr(a)" : ""
+//     } ${$currentUser.value?.name}`,
+//     appUrl: `${config.public.appUrl}/teleconference/${$single.value.publicId!}`,
+//   };
 
-  const zegoKit = ZegoUIKitPrebuilt.generateKitTokenForTest(
-    zpConfig.appId,
-    zpConfig.secret,
-    zpConfig.roomId,
-    zpConfig.userId,
-    zpConfig.userName
-  );
+//   const zegoKit = ZegoUIKitPrebuilt.generateKitTokenForTest(
+//     zpConfig.appId,
+//     zpConfig.secret,
+//     zpConfig.roomId,
+//     zpConfig.userId,
+//     zpConfig.userName
+//   );
 
-  zp.value = ZegoUIKitPrebuilt.create(zegoKit);
+//   zp.value = ZegoUIKitPrebuilt.create(zegoKit);
 
-  zp.value.joinRoom({
-    container: root.value,
-    scenario: {
-      mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1, modifique o parâmetro aqui para [ZegoUIKitPrebuilt.OneONoneCall].
-    },
-    showPreJoinView: true,
-    preJoinViewConfig: {
-      title: "Juntar-se à chamada",
-    },
-    onLeaveRoom: handleClose,
-    showLeaveRoomConfirmDialog: false,
-  });
-};
+//   zp.value.joinRoom({
+//     container: root.value,
+//     scenario: {
+//       mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1, modifique o parâmetro aqui para [ZegoUIKitPrebuilt.OneONoneCall].
+//     },
+//     showPreJoinView: true,
+//     preJoinViewConfig: {
+//       title: "Juntar-se à chamada",
+//     },
+//     onLeaveRoom: handleClose,
+//     showLeaveRoomConfirmDialog: false,
+//   });
+// };
 
 const handleClose = async () => {
   loading.value = true;
   try {
     if ($currentUser.value?.profile?.type === "MEDICO") {
-      //desativar teleconsulta
-      await storeConsultation.update({
+      const payload = {
         publicId: $single.value?.publicId,
         isTelemedicine: false,
         status: isFinishSolicitation.value ? "finished" : undefined,
-      });
+        dateClose: isFinishSolicitation.value
+          ? dayjs().format("YYYY-MM-DD")
+          : undefined,
+      };
+      console.log("🚀 ~ handleClose ~ payload:", payload);
+
+      //desativar teleconsulta
+      await storeConsultation.update(payload);
 
       await router.push("/schedules");
       return;
     }
-
-    await router.push("/solicitations");
+    await router.push("/");
   } catch (error) {
     console.error(error);
   } finally {

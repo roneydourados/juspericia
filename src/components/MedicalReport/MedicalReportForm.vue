@@ -112,8 +112,14 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps({
+  data: {
+    type: Object as () => PatientConsultationReportListProps,
+    default: () => ({}),
+  },
+});
+
 const emit = defineEmits(["close"]);
-//const { stringToHandlePDF } = useUtils();
 const reportModelStore = useReportModelStore();
 const scheduleStore = useScheduleStore();
 const fileStore = useFileStore();
@@ -147,11 +153,15 @@ onMounted(() => {
 // };
 
 const handleSubmit = async () => {
+  if (!props.data.id) {
+    console.error("Patient consultation ID is required.");
+    return;
+  }
+
   try {
     await patientConsultationReport.create({
       content: model.value.content,
-      patientConsultationId: $sheduleConsultation.value?.patientConsultationId,
-      //attachments: attachments.value,
+      patientConsultationId: props.data.id,
     });
 
     if ($consultationReport.value?.id && attachments.value.length > 0) {
@@ -164,10 +174,10 @@ const handleSubmit = async () => {
       await fileStore.uploadManyAws(payload);
     }
 
-    await scheduleStore.update({
-      publicId: $sheduleConsultation.value?.publicId,
-      status: "completed",
-    });
+    // await scheduleStore.update({
+    //   publicId: $sheduleConsultation.value?.publicId,
+    //   status: "completed",
+    // });
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {
