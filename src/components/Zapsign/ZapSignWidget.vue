@@ -1,5 +1,6 @@
 <template>
   <div class="zapsign-widget">
+    <!-- <pre>url: {{ widgetUrl }}</pre> -->
     <iframe
       :src="widgetUrl"
       frameborder="0"
@@ -19,9 +20,14 @@ const emit = defineEmits<{
   (e: "closed"): void;
 }>();
 
-const widgetUrl = ref(
-  `${config.public.zapSignUrl}/${config.public.zapsignApiToken}`
-);
+const props = defineProps({
+  token: {
+    type: String,
+    required: true,
+  },
+});
+
+const widgetUrl = ref(`${config.public.zapSignUrl}/${props.token}`);
 
 /**
  * Listener dos eventos enviados pelo iframe Zapsign via postMessage

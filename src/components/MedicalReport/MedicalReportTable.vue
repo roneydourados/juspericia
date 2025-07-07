@@ -71,6 +71,7 @@
         </v-col>
       </v-row>
     </div>
+    <!-- <pre>{{ $consultationReports }}</pre> -->
     <Table
       title="Laudos Médicos"
       :show-crud="false"
@@ -113,7 +114,7 @@
             color="blue"
             variant="text"
             size="small"
-            @click="handleGeneratePDF(item)"
+            @click="handleSignDocument(item)"
           >
             <v-icon icon="mdi-file-edit-outline" size="20"></v-icon>
             <v-tooltip
@@ -203,6 +204,10 @@
     @close="handleCloseForm"
     :data="selectedReport"
   />
+  <MedicSignDocument
+    v-model:dialog="showSignDocument"
+    v-model:token="signerToken"
+  />
 </template>
 
 <script setup lang="ts">
@@ -213,15 +218,18 @@ import dayjs from "dayjs";
 
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
+const zapSign = useZapsignStore();
 
-const { formatCPFOrCNPJ, stringToHandlePDF } = useUtils();
+const { formatCPFOrCNPJ } = useUtils();
 const $consultationReports = computed(() => consultationReport.$all);
-//const $single = computed(() => consultationReport.$single);
+const $document = computed(() => zapSign.$document);
 const $currentUser = computed(() => auth.$currentUser);
 
 const loading = ref(false);
 const showReportDetails = ref(false);
 const showReportForm = ref(false);
+const showSignDocument = ref(false);
+const signerToken = ref("");
 const selectedReport = ref<PatientConsultationReportListProps>();
 
 const filters = ref({
@@ -242,10 +250,10 @@ const headers = ref([
   { title: "Ações", key: "actions", sortable: false },
 ]);
 
-const handleGeneratePDF = async (item: PatientConsultationReportListProps) => {
+const handleSignDocument = async (item: PatientConsultationReportListProps) => {
   loading.value = true;
   try {
-    if (!item.reportContent) {
+    if (!item.reportContent || !item.reportId) {
       return push.error("Laudo não possui conteúdo para gerar PDF.");
     }
 
@@ -304,9 +312,42 @@ const handleGeneratePDF = async (item: PatientConsultationReportListProps) => {
     };
 
     pdfMake.vfs = pdfMakeFonts.vfs;
-    pdfMake
-      .createPdf(report)
-      .download(`Laudo_${item.patient}_${item.publicId}.pdf`);
+    pdfMake.createPdf(report).getBase64(async (base64) => {
+      if (!$currentUser.value) {
+        push.error("Usuário não autenticado.");
+        return;
+      }
+
+      loading.value = true;
+      try {
+        const payload = {
+          fileBase64: base64,
+          fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
+          name: $currentUser.value.name as string,
+          email: $currentUser.value.email as string,
+          fileCategory: "solicitation-report",
+          ownerId: item.reportId,
+        };
+
+        if (!item.signToken) {
+          await zapSign.sendDocument(payload);
+        } else {
+          await zapSign.getDocument(item.signToken);
+        }
+
+        //atualizar a lista de laudos após o envio
+        await getReports();
+
+        signerToken.value = $document.value?.signers[0]?.token ?? "";
+        showSignDocument.value = true;
+      } catch (error) {
+        console.error("Erro ao enviar documento para ZapSign:", error);
+        push.error("Erro ao enviar documento para ZapSign.");
+      } finally {
+        loading.value = false;
+      }
+    });
+    //.download(`Laudo_${item.patient}_${item.publicId}.pdf`);
   } finally {
     loading.value = false;
   }

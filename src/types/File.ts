@@ -6,4 +6,6 @@ export interface FileProps {
   fileServerName?: string;
   publicId?: string;
   fileData?: File;
+  signToken?: string;
+  signStatus?: string;
 }

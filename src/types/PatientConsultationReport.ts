@@ -29,4 +29,7 @@ export interface PatientConsultationReportListProps {
   medic: string;
   medicCrm: string;
   medicCrmUf: string;
+  reportId: number;
+  signToken: string;
+  signStatus: string;
 }
