@@ -99,7 +99,7 @@
                 ? "Cancelado"
                 : item.reportStatus === "sign-pending"
                 ? "Assinatura pendente"
-                : item.reportStatus === "sign"
+                : item.reportStatus === "signed"
                 ? "Assinado"
                 : "Desconhecido"
             }}
@@ -125,7 +125,14 @@
               Assinar documento
             </v-tooltip>
           </v-btn>
-          <v-btn v-else icon color="red" variant="text" size="small">
+          <v-btn
+            v-else
+            icon
+            color="red"
+            variant="text"
+            size="small"
+            @click="handleDownloadSignedFile(item)"
+          >
             <v-icon icon="mdi-file-pdf-box" size="20"></v-icon>
             <v-tooltip
               activator="parent"
@@ -145,7 +152,7 @@
             variant="text"
             size="small"
             @click="handleEditCorrection(item)"
-            :disabled="item.reportStatus === 'sign'"
+            :disabled="item.reportStatus === 'signed'"
           >
             <v-icon icon="mdi-clock-edit-outline" size="20"></v-icon>
             <v-tooltip
@@ -207,6 +214,7 @@
   <MedicSignDocument
     v-model:dialog="showSignDocument"
     v-model:token="signerToken"
+    @close="getReports"
   />
 </template>
 
@@ -272,31 +280,11 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
           style: "subheader",
         },
         {
-          text: `Emitido por: Dr(a) ${item.medic}`,
+          text: `Emitido por Dr(a) ${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
           style: "subheader",
         },
-        "\n\n\n\n",
-        {
-          stack: [
-            {
-              canvas: [
-                {
-                  type: "line" as const,
-                  x1: 0,
-                  y1: 0,
-                  x2: 400,
-                  y2: 0,
-                  lineWidth: 1,
-                },
-              ],
-            },
-            {
-              text: `${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
-              style: "subheader",
-            },
-          ],
-          pageBreak: "avoid", // <- evita quebra entre os dois elementos
-        },
+
+        //"\n\n\n\n",
         // {
         //   canvas: [
         //     {
@@ -375,6 +363,44 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
   }
 };
 
+const handleDownloadSignedFile = async (
+  item: PatientConsultationReportListProps
+) => {
+  if (!item.reportPublicId) {
+    push.error("Documento não assinado.");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const { fileBlob, fileName } = await zapSign.getSignedFile(
+      item.reportPublicId
+    );
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(fileBlob);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = fileName;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadSignedFile ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
 const getReports = async () => {
   loading.value = true;
   try {
@@ -435,7 +461,7 @@ const getReportStatusColor = (status: string) => {
         color: "blue",
         icon: "mdi-clock-alert-outline",
       };
-    case "sign":
+    case "signed":
       return {
         color: "green",
         icon: "mdi-check-all",

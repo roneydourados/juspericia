@@ -105,30 +105,6 @@ const handleFileUpload = async (event: Event) => {
   }
 };
 
-// const handleFileUploadOld = async (event: Event) => {
-//   const input = event.target as HTMLInputElement;
-//   const files = input.files;
-
-//   if (!files) return;
-
-//   loading.value = true;
-//   try {
-//     await fileStore.uploadAws({
-//       fileCategory: "patient",
-//       fileData: files[0],
-//       fileName: files[0].name,
-//       ownerId: $patient.value?.id!,
-//     });
-
-//     await patientStore.show($patient.value?.publicId!);
-//   } catch (error) {
-//     console.log("🚀 ~ handleFileUpload ~ error:", error);
-//   } finally {
-//     loading.value = false;
-//     input.value = ""; // Limpa o input de arquivo após o upload
-//   }
-// };
-
 const handleDownloadFile = async (publicId: string, fileName: string) => {
   loading.value = true;
   try {

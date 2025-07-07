@@ -13,7 +13,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon @click="dialog = false" variant="text">
+        <v-btn icon @click="handleClose" variant="text">
           <v-icon icon="mdi-close" />
         </v-btn>
       </v-toolbar>
@@ -28,6 +28,7 @@
 import { useDisplay } from "vuetify";
 
 const { mobile } = useDisplay();
+const emit = defineEmits(["close"]);
 
 const dialog = defineModel("dialog", {
   default: false,
@@ -38,4 +39,9 @@ const token = defineModel("token", {
   default: "",
   type: String,
 });
+
+const handleClose = () => {
+  emit("close");
+  dialog.value = false;
+};
 </script>
