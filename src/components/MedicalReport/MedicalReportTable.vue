@@ -277,21 +277,42 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
         },
         "\n\n\n\n",
         {
-          canvas: [
+          stack: [
             {
-              type: "line" as const,
-              x1: 0,
-              y1: 0,
-              x2: 400,
-              y2: 0,
-              lineWidth: 1,
+              canvas: [
+                {
+                  type: "line" as const,
+                  x1: 0,
+                  y1: 0,
+                  x2: 400,
+                  y2: 0,
+                  lineWidth: 1,
+                },
+              ],
+            },
+            {
+              text: `${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
+              style: "subheader",
             },
           ],
+          pageBreak: "avoid", // <- evita quebra entre os dois elementos
         },
-        {
-          text: `${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
-          style: "subheader",
-        },
+        // {
+        //   canvas: [
+        //     {
+        //       type: "line" as const,
+        //       x1: 0,
+        //       y1: 0,
+        //       x2: 400,
+        //       y2: 0,
+        //       lineWidth: 1,
+        //     },
+        //   ],
+        // },
+        // {
+        //   text: `${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
+        //   style: "subheader",
+        // },
       ],
       styles: {
         header: {
@@ -312,6 +333,7 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
     };
 
     pdfMake.vfs = pdfMakeFonts.vfs;
+    //@ts-ignore
     pdfMake.createPdf(report).getBase64(async (base64) => {
       if (!$currentUser.value) {
         push.error("Usuário não autenticado.");

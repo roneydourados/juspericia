@@ -5,7 +5,6 @@
       :src="widgetUrl"
       frameborder="0"
       width="100%"
-      height="600"
       allowfullscreen
     ></iframe>
   </div>
@@ -70,5 +69,6 @@ onBeforeUnmount(() => {
 .zapsign-widget iframe {
   border-radius: 8px;
   border: 1px solid #ccc;
+  height: 80dvh;
 }
 </style>

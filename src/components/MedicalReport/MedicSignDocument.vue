@@ -3,8 +3,9 @@
     v-model="dialog"
     transition="dialog-bottom-transition"
     :width="mobile ? '100%' : '70%'"
+    style="overflow: hidden"
   >
-    <v-card rounded="lg">
+    <v-card rounded="lg" style="overflow: hidden">
       <v-toolbar>
         <v-toolbar-title>
           <div class="text-subtitle-1 font-weight-bold">Detalhes do laudo</div>
