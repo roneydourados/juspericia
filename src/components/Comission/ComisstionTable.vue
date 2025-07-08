@@ -75,7 +75,9 @@
               <div class="d-flex flex-column align-center" style="gap: 0.5rem">
                 <h3>Total:</h3>
                 <v-chip label color="blue" class="text-none" variant="flat">
-                  {{ $total }}
+                  <div style="font-size: 1rem">
+                    {{ $total }}
+                  </div>
                 </v-chip>
               </div>
             </v-card-text>
@@ -87,7 +89,9 @@
               <div class="d-flex flex-column align-center" style="gap: 0.5rem">
                 <h3>Total selecionado:</h3>
                 <v-chip label color="blue" class="text-none" variant="flat">
-                  {{ $totalSelected }}
+                  <div style="font-size: 1rem">
+                    {{ $totalSelected }}
+                  </div>
                 </v-chip>
               </div>
             </v-card-text>
@@ -100,7 +104,7 @@
           style="gap: 0.5rem"
         >
           <v-btn
-            color="primary"
+            color="blue"
             variant="flat"
             size="small"
             class="text-none"
@@ -232,7 +236,7 @@
   >
     <strong>Confirma o cancelamento de todas as comssões selecionadas ?</strong>
   </Dialog>
-  <DialogLoading :dialog="loadingDialog" />
+  <DialogLoading :dialog="loading" />
   <ComissionDetails v-model="showComissionDetails" />
 </template>
 
@@ -259,7 +263,7 @@ const $totalSelected = computed(() => {
 });
 const showForm = ref(false);
 const loading = ref(false);
-const loadingDialog = ref(false);
+
 const showPaidComissionDialog = ref(false);
 const showCancelComissionDialog = ref(false);
 const showComissionDetails = ref(false);
@@ -324,6 +328,7 @@ const handleGetComissions = async () => {
       comissionType: filters.value.comissionType,
       userId: filters.value.user?.id,
     });
+    comissionsSelecteds.value = [];
   } catch (error) {
     console.error("Error fetching comissions:", error);
   } finally {
@@ -334,7 +339,7 @@ const handleGetComissions = async () => {
 const handlePaidComissions = async () => {
   if (comissionsSelecteds.value.length === 0) return;
 
-  loadingDialog.value = true;
+  loading.value = true;
   try {
     for (const comissionItem of comissionsSelecteds.value) {
       if (!comissionItem.publicId) continue;
@@ -347,14 +352,14 @@ const handlePaidComissions = async () => {
     console.error("Error paying comissions:", error);
   } finally {
     showPaidComissionDialog.value = false;
-    loadingDialog.value = false;
+    loading.value = false;
   }
 };
 
 const handleCancelComissions = async () => {
   if (comissionsSelecteds.value.length === 0) return;
 
-  loadingDialog.value = true;
+  loading.value = true;
   try {
     for (const comissionItem of comissionsSelecteds.value) {
       await comission.cancelComission(comissionItem.publicId!);
@@ -366,19 +371,19 @@ const handleCancelComissions = async () => {
     console.error("Error paying comissions:", error);
   } finally {
     showCancelComissionDialog.value = false;
-    loadingDialog.value = false;
+    loading.value = false;
   }
 };
 
 const getComissionDetails = async (item: ComissionProps) => {
   if (!item.publicId) return;
 
-  loadingDialog.value = true;
+  loading.value = true;
   try {
     await comission.show(item.publicId);
     showComissionDetails.value = true;
   } finally {
-    loadingDialog.value = false;
+    loading.value = false;
   }
 };
 </script>
