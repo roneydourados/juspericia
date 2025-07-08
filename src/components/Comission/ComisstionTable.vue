@@ -289,6 +289,10 @@ const headers = ref([
   { title: "Ações", key: "actions" },
 ]);
 
+onUnmounted(() => {
+  comission.clear();
+});
+
 const getComissionType = (type: string) => {
   switch (type) {
     case "seller":

@@ -48,8 +48,14 @@ export const useComissionStore = defineStore("comission", () => {
   const paidComission = async (publicId: string) => {
     await api.put(`/comission-paid/${publicId}`);
   };
+
   const cancelComission = async (publicId: string) => {
     await api.put(`/comission-cancel/${publicId}`);
+  };
+
+  const clear = () => {
+    comissions.value = [];
+    comission.value = undefined;
   };
 
   return {
@@ -61,5 +67,6 @@ export const useComissionStore = defineStore("comission", () => {
     update,
     paidComission,
     cancelComission,
+    clear,
   };
 });
