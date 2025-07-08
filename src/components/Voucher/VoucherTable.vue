@@ -7,7 +7,7 @@
       :showCrud="false"
     >
       <template v-slot:top-table>
-        <v-row dense>
+        <v-row dense class="mt-4">
           <v-col cols="12" lg="2">
             <DatePicker
               v-model="filters.initialDate"
@@ -27,7 +27,7 @@
             />
           </v-col>
           <v-col cols="12" lg="4">
-            <SelectSearchMedic v-model="filters.seller" />
+            <SelectSearchSeller v-model="filters.seller" />
           </v-col>
           <v-col
             cols="12"
@@ -50,7 +50,7 @@
               color="info"
               class="text-none"
               size="small"
-              @click="$router.back()"
+              @click="router.back()"
             >
               <v-icon icon="mdi-arrow-left"> </v-icon>
               Voltar
@@ -131,6 +131,7 @@ import dayjs from "dayjs";
 const { amountFormated } = useUtils();
 const voucher = useVoucherStore();
 const consultationPackageStore = useServicePackageStore();
+const router = useRouter();
 
 const showForm = ref(false);
 const loading = ref(false);

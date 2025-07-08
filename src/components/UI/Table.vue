@@ -71,6 +71,7 @@
       :hide-default-header="hideDfaultHeader"
       no-data-text="Nenhum dado encontrado"
       loading-text="Buscando dados aguarde..."
+      select-strategy="all"
     >
       <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
         <slot v-if="slotProps" :name="name" v-bind="slotProps" />
@@ -105,6 +106,7 @@
       sticky
       :loading="loading"
       loading-text="Buscando dados aguarde..."
+      select-strategy="all"
     >
       <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
         <slot v-if="slotProps" :name="name" v-bind="slotProps" />

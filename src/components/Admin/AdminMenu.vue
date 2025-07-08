@@ -135,6 +135,22 @@
         <v-card-text class="text-center"> Controle de Vouchers. </v-card-text>
       </v-card>
     </v-col>
+    <v-col cols="12" lg="3">
+      <v-card
+        flat
+        rounded="lg"
+        min-height="200"
+        @click="handlClick('/admin/comissions')"
+        elevation="8"
+      >
+        <v-card-title class="d-flex justify-center py-4">
+          <v-icon icon="mdi-briefcase-account-outline" size="50" color="blue" />
+        </v-card-title>
+        <v-card-text class="text-center">
+          Gestão de comissões. Controle de comissões dos médicos e vendedores.
+        </v-card-text>
+      </v-card>
+    </v-col>
   </v-row>
 </template>
 
