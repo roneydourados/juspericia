@@ -68,12 +68,47 @@
           />
         </v-col>
       </v-row>
-      <v-row dense>
+      <v-row dense class="py-4">
+        <v-col cols="12" lg="2">
+          <v-card rounded="lg">
+            <v-card-text>
+              <div class="d-flex flex-column align-center" style="gap: 0.5rem">
+                <h3>Total:</h3>
+                <v-chip label color="blue" class="text-none" variant="flat">
+                  {{ $total }}
+                </v-chip>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <v-card rounded="lg">
+            <v-card-text>
+              <div class="d-flex flex-column align-center" style="gap: 0.5rem">
+                <h3>Total selecionado:</h3>
+                <v-chip label color="blue" class="text-none" variant="flat">
+                  {{ $totalSelected }}
+                </v-chip>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-col>
         <v-col
           cols="12"
+          lg="8"
           class="d-flex flex-wrap align-center justify-end mb-4"
           style="gap: 0.5rem"
         >
+          <v-btn
+            color="primary"
+            variant="flat"
+            size="small"
+            class="text-none"
+            @click="router.back()"
+          >
+            <v-icon icon="mdi-arrow-left" start />
+            Voltar
+          </v-btn>
           <v-btn
             color="primary"
             variant="flat"
@@ -113,6 +148,7 @@
         </v-col>
       </v-row>
     </template>
+
     <template v-slot:item.user="{ item }">
       <span>{{ item.user.name }}</span>
     </template>
@@ -205,12 +241,22 @@ import dayjs from "dayjs";
 import SelectSearchMedic from "../SelectsSearch/SelectSearchMedic.vue";
 
 const comission = useComissionStore();
-const authStore = useAuthStore();
+const router = useRouter();
 const { formatDate, amountFormated } = useUtils();
 
 const $all = computed(() => comission.$all);
-const $currentUser = computed(() => authStore.$currentUser);
-
+const $total = computed(() => {
+  const total = comission.$all.reduce((acc, item) => {
+    return acc + (Number(item.comissionValue) || 0);
+  }, 0);
+  return amountFormated(total, false);
+});
+const $totalSelected = computed(() => {
+  const total = comissionsSelecteds.value.reduce((acc, item) => {
+    return acc + (Number(item.comissionValue) || 0);
+  }, 0);
+  return amountFormated(total, false);
+});
 const showForm = ref(false);
 const loading = ref(false);
 const loadingDialog = ref(false);
