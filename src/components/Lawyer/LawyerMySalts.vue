@@ -169,10 +169,12 @@ import dayjs from "dayjs";
 
 const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
+const auth = useAuthStore();
 const { amountFormated } = useUtils();
 
 const $salts = computed(() => saltCredit.$credits);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
+const $currentUser = computed(() => auth.$currentUser);
 
 const showDetails = ref(false);
 const reloadFilters = ref(false);
@@ -244,6 +246,7 @@ const handlePaid = async (item: SaleProps) => {
       description: item.description,
       category: "package",
       packageId: item.id,
+      userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
     });
 
     reloadFilters.value = true;

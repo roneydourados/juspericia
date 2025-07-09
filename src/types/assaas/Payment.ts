@@ -75,7 +75,10 @@ export interface PaymentAsaasProps {
   category?: string;
   packageId?: number;
   solicitationId?: number;
+  voucherId?: number;
   dueDays?: number;
+  userId: number;
+  saleValue: number;
 }
 
 interface PaymentAsaasSplitProps {

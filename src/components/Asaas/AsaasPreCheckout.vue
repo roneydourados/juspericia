@@ -52,12 +52,12 @@
           color="success"
           class="text-none ml-2"
           @click="getVoucher"
-          :disabled="$disableVoucher"
+          :disabled="!model.voucherDesconto"
         >
           Aplicar
         </v-btn>
       </v-col>
-      <v-col v-if="$voucher" cols="12" class="mt-n6">
+      <v-col v-if="$voucher && !isInvalidvoucher" cols="12" class="mt-n6">
         <div>{{ $voucher?.description }}</div>
         <div class="d-flex" style="gap: 0.5rem">
           <strong>
@@ -76,9 +76,12 @@
       <strong>Total bruto:</strong>
       <strong>{{ amountFormated(model.totalBruteValue ?? 0, false) }}</strong>
     </div>
-    <div class="d-flex justify-space-between" style="gap: 0.5rem">
+    <div class="d-flex justify-space-between text-green" style="gap: 0.5rem">
       <strong>Desconto:</strong>
-      <strong>{{ amountFormated(model.discount ?? 0, false) }}</strong>
+      <strong>
+        {{ Number(model.discount ?? 0) > 0 ? "-" : "" }}
+        {{ amountFormated(model.discount ?? 0, false) }}
+      </strong>
     </div>
     <div class="d-flex justify-space-between" style="gap: 0.5rem">
       <strong>Total a pagar:</strong>
@@ -118,7 +121,6 @@
 <script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
 import { AssasPreCheckoutProps } from "@/types/assaas/Precheckout";
-import FormDebug from "../UI/FormDebug.vue";
 
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
@@ -179,6 +181,9 @@ const model = defineModel<AssasPreCheckoutProps>({
     solicitationId: undefined as number | undefined,
     voucherDesconto: "",
     totalBruteValue: 0,
+    voucherId: undefined as number | undefined,
+    discountType: undefined as string | undefined,
+    discountValue: undefined as number | undefined,
   },
 });
 
@@ -198,8 +203,29 @@ const getVoucher = useDebounceFn(async () => {
     isInvalidvoucher.value = false;
     try {
       await voucherStore.existsInUse(model.value.voucherDesconto);
+
       if (!$voucher.value) {
         isInvalidvoucher.value = true;
+      } else {
+        if ($voucher.value.voucherUseCount) {
+          isInvalidvoucher.value =
+            $voucher.value.voucherUseCount >=
+            Number($voucher.value.useQuantity ?? 0);
+
+          return;
+        }
+
+        if ($voucher.value.voucherItems) {
+          const filter = $voucher.value.voucherItems.find(
+            (item) => item.servicePackage?.id === model.value.packageId
+          );
+
+          isInvalidvoucher.value = !filter;
+
+          if (isInvalidvoucher.value) {
+            return;
+          }
+        }
       }
       await paymentSimulation();
       calculateDiscount();
@@ -214,6 +240,10 @@ const getVoucher = useDebounceFn(async () => {
 const calculateDiscount = () => {
   model.value.discount = 0;
   if ($voucher.value) {
+    model.value.voucherId = $voucher.value.id;
+    model.value.discountType = $voucher.value.discountType;
+    model.value.discountValue = Number($voucher.value.discount ?? 0);
+
     //calcular o valor total com desconto
     if ($voucher.value.discountType === "percentage") {
       model.value.discount =
@@ -256,17 +286,6 @@ const paymentSimulation = async () => {
           (1 - feePercentage / 100)
         ).toFixed(2)
       );
-      // const feePercentage =
-      //   Number($paymentSimulation.value?.creditCard?.feePercentage ?? 0) +
-      //   Number($systemParameters.value?.cardFeeInstallment ?? 0);
-
-      // model.value.totalBruteValue = Number(
-      //   (
-      //     (Number(model.value.itemValue ?? 0) +
-      //       Number($paymentSimulation.value?.creditCard?.operationFee ?? 0)) /
-      //     (1 - feePercentage / 100)
-      //   ).toFixed(2)
-      // );
     } else {
       model.value.totalBruteValue = model.value.itemValue;
     }
@@ -307,6 +326,7 @@ const handleCancel = () => {
     category: "",
     packageId: undefined,
     solicitationId: undefined,
+    voucherId: undefined,
     voucherDesconto: "",
     totalBruteValue: 0,
   };

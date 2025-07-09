@@ -643,6 +643,7 @@ const handleSaleItemForAsaas = async () => {
       description: `Solicitação de consulta Nº ${props.solicitation.id} do paciente ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
       category: "solicitation",
       solicitationId: props.solicitation.id,
+      userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
     });
 
     await getSolicitations();

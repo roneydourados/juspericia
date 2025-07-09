@@ -36,6 +36,10 @@ export default defineNuxtRouteMiddleware((to) => {
       }
 
       if (to.path === "/") {
+        console.log(
+          "🚀 ~ defineNuxtRouteMiddleware ~ auth.$currentUser?.profile?.type:",
+          auth.$currentUser?.profile?.type
+        );
         if (auth.$currentUser?.profile?.type === "ADMIN") {
           return navigateTo("/admin/home");
         } else if (auth.$currentUser?.profile?.type === "ADVOGADO") {

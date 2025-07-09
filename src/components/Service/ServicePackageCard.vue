@@ -78,10 +78,12 @@ const props = defineProps({
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
 const voucherStore = useVoucherStore();
+const auth = useAuthStore();
 const loading = ref(false);
 const showSale = ref(false);
 
 const $paymentResponse = computed(() => asaas.$paymentReponse);
+const $currentUser = computed(() => auth.$currentUser);
 
 const modelPrececkout = ref({
   name: props.item.name ?? "",
@@ -89,6 +91,8 @@ const modelPrececkout = ref({
   dueDays: 2,
   paymentForm: "CREDIT_CARD",
   //discount: undefined as number | undefined,
+  discountValue: undefined as number | undefined,
+  discountType: undefined as string | undefined,
   installmentCount: 1,
   itemValue: Number(props.item.value ?? 0),
   totalValue: props.item.value,
@@ -96,6 +100,7 @@ const modelPrececkout = ref({
   packageId: props.item.id,
   voucherDesconto: "",
   totalBruteValue: Number(props.item.value ?? 0),
+  voucherId: undefined as number | undefined,
 });
 
 const handleSaleItem = async () => {
@@ -122,20 +127,36 @@ const handleSaleItem = async () => {
         totalValue: modelPrececkout.value.totalValue,
         installmentCount: modelPrececkout.value.installmentCount,
         billingType: modelPrececkout.value.paymentForm,
+        voucherId: modelPrececkout.value.voucherId,
+        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        discount: {
+          value: modelPrececkout.value.discountValue ?? 0,
+          type: modelPrececkout.value.discountType,
+        },
+        saleValue: modelPrececkout.value.totalValue ?? 0,
       });
     } else {
-      //caso contrário enviar o valor normal
-      await asaas.createPayment({
+      const payload = {
         dueDate: dayjs()
           .add(modelPrececkout.value.dueDays, "days")
           .format("YYYY-MM-DD"),
-        value: props.item.value!,
+        //value: props.item.value!,
+        value: modelPrececkout.value.totalValue,
         description: props.item.name!,
         category: modelPrececkout.value.category,
         packageId: props.item.id,
         dueDays: props.item.dueDays,
         billingType: modelPrececkout.value.paymentForm,
-      });
+        voucherId: modelPrececkout.value.voucherId,
+        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        discount: {
+          value: modelPrececkout.value.discountValue ?? 0,
+          type: modelPrececkout.value.discountType,
+        },
+        saleValue: modelPrececkout.value.totalValue ?? 0,
+      };
+
+      await asaas.createPayment(payload);
     }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
@@ -175,6 +196,9 @@ const handleGetItemSale = () => {
     packageId: props.item.id,
     voucherDesconto: "",
     totalBruteValue: Number(props.item.value ?? 0),
+    voucherId: undefined,
+    discountValue: undefined,
+    discountType: undefined,
   };
   showSale.value = true;
 };
@@ -199,6 +223,9 @@ const clearModel = () => {
     packageId: props.item.id,
     voucherDesconto: "",
     totalBruteValue: Number(props.item.value ?? 0),
+    voucherId: undefined,
+    discountValue: undefined,
+    discountType: undefined,
   };
 };
 </script>

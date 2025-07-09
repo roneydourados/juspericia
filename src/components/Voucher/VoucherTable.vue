@@ -69,7 +69,13 @@
         </v-row>
       </template>
       <template v-slot:item.voucherName="{ item }">
-        <v-chip color="success" text-color="white" label variant="flat">
+        <v-chip
+          color="success"
+          text-color="white"
+          label
+          variant="flat"
+          @click="handleCopy(item.voucherName)"
+        >
           <strong>
             {{ item.voucherName }}
           </strong>
@@ -184,5 +190,16 @@ const getVouchers = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleCopy = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      push.success("Texto copiado para a área de transferência");
+    })
+    .catch((err) => {
+      push.error("Erro ao copiar texto: " + err);
+    });
 };
 </script>

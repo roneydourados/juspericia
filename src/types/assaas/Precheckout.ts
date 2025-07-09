@@ -3,13 +3,16 @@ export interface AssasPreCheckoutProps {
   description: string;
   dueDays?: number;
   paymentForm: string;
-  discount?: number;
   installmentCount?: number;
+  discount?: number;
   itemValue: number;
   totalValue?: number;
   totalBruteValue?: number;
   category: string;
   packageId?: number;
   solicitationId?: number;
+  voucherId?: number;
   voucherDesconto: string;
+  discountValue?: number;
+  discountType?: string;
 }
