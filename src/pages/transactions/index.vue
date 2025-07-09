@@ -1,5 +1,5 @@
 <template>
-  <AdminTransactions />
+  <TransactionsTable />
 </template>
 
 <script setup lang="ts">

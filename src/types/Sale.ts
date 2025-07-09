@@ -25,6 +25,9 @@ export interface SaleProps {
   packageId?: number;
   solicitationId?: number;
   sellerId?: number;
+  packgeQuantity?: number;
+  packgeSaleValue?: number;
+  saleType?: string;
 }
 
 export interface SaleFilterProps {

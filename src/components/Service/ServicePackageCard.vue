@@ -134,6 +134,8 @@ const handleSaleItem = async () => {
           type: modelPrececkout.value.discountType,
         },
         saleValue: modelPrececkout.value.totalValue ?? 0,
+        packgeSaleValue: modelPrececkout.value.itemValue ?? 0,
+        packgeQuantity: props.item.packageQuantity ?? 1,
       });
     } else {
       const payload = {
@@ -154,6 +156,8 @@ const handleSaleItem = async () => {
           type: modelPrececkout.value.discountType,
         },
         saleValue: modelPrececkout.value.totalValue ?? 0,
+        packgeSaleValue: modelPrececkout.value.itemValue ?? 0,
+        packgeQuantity: props.item.packageQuantity ?? 1,
       };
 
       await asaas.createPayment(payload);

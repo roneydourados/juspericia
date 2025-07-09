@@ -7,8 +7,15 @@
   >
     <FormCrud :on-submit="handleSubmit">
       <v-row dense>
-        <v-col cols="12">
+        <v-col cols="12" lg="8">
           <StringInput v-model="model.name" label="Título" required />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <IntegerInput
+            v-model="model.packageQuantity"
+            label="Quantidade de consultas"
+            required
+          />
         </v-col>
         <v-col cols="12">
           <TextInput v-model="model.description" label="Descrição" required />
@@ -66,6 +73,7 @@ const model = ref({
   value: "",
   status: "",
   dueDays: "30",
+  packageQuantity: "1",
 });
 
 watchPostEffect(() => {
@@ -83,6 +91,7 @@ const loadModel = () => {
     value: amountFormated(props.data.value ?? 0, false),
     status: props.data.status ?? "",
     dueDays: props.data.dueDays?.toString() ?? "",
+    packageQuantity: props.data.packageQuantity?.toString() ?? "1",
   };
 };
 
@@ -96,6 +105,7 @@ const handleSubmit = async () => {
         value: Number(model.value.value),
         urlImage: model.value.urlImage,
         dueDays: Number(model.value.dueDays),
+        packageQuantity: Number(model.value.packageQuantity),
       });
     } else {
       await consultationPackageStore.create({
@@ -104,6 +114,7 @@ const handleSubmit = async () => {
         value: Number(model.value.value),
         urlImage: model.value.urlImage,
         dueDays: Number(model.value.dueDays),
+        packageQuantity: Number(model.value.packageQuantity),
       });
     }
 
@@ -129,6 +140,7 @@ const clearModel = () => {
     value: "",
     status: "",
     dueDays: "30",
+    packageQuantity: "1",
   };
 };
 </script>

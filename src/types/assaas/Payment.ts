@@ -79,6 +79,9 @@ export interface PaymentAsaasProps {
   dueDays?: number;
   userId: number;
   saleValue: number;
+  packgeQuantity?: number;
+  packgeSaleValue?: number;
+  sellerId?: number;
 }
 
 interface PaymentAsaasSplitProps {

@@ -33,10 +33,20 @@
         :items-per-page="30"
       >
         <template v-slot:top-table>
-          <div class="d-flex justify-end w-100 py-6">
+          <div class="d-flex justify-space-between w-100 py-6">
+            <v-btn
+              color="primary"
+              variant="flat"
+              size="small"
+              class="text-none"
+              @click="showFormTransaction = true"
+            >
+              <v-icon icon="mdi-plus" start />
+              Nova transação
+            </v-btn>
             <v-chip
               label
-              color="primary"
+              color="blue"
               text-color="white"
               class="ma-2"
               variant="flat"
@@ -61,6 +71,7 @@
     </v-col>
   </v-row>
   <DialogLoading :dialog="loading" />
+  <SellerCheckoutSale v-model:show="showFormTransaction" />
 </template>
 
 <script setup lang="ts">
@@ -77,7 +88,7 @@ const $total = computed(() =>
 );
 
 const loading = ref(false);
-
+const showFormTransaction = ref(false);
 const headers = [
   { title: "Cliente", key: "client" },
   { title: "Data", key: "dateCreated" },

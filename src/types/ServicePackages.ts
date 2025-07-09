@@ -9,6 +9,7 @@ export interface ServicePackagesProps {
   dueDays?: number;
   createdAt?: string;
   updatedAt?: string;
+  packageQuantity?: number;
 }
 
 export interface ServicePackagesHistoryProps {

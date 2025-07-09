@@ -47,12 +47,13 @@
 
     <v-card-title>Preço</v-card-title>
 
-    <div class="px-4 mb-2">
+    <div class="d-flex justify-space-between px-4 mb-2">
       <v-chip color="deep-purple-lighten-2" label>
         <strong style="font-size: 1rem">
           R$ {{ amountFormated(item.value ?? 0, false) }}
         </strong>
       </v-chip>
+      <strong>Atende {{ item.packageQuantity }} consultas</strong>
     </div>
 
     <v-card-actions
