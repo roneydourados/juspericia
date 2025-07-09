@@ -164,17 +164,24 @@
     </template>
     <template v-slot:item.comissionPercentage="{ item }">
       <span>
-        {{ amountFormated(Number(item.comissionPercentage ?? "0"), false) }}%
+        {{
+          Number(item.comissionPercentage ?? 0) > 0
+            ? `${amountFormated(
+                Number(item.comissionPercentage ?? "0"),
+                false
+              )}%`
+            : "Comissão fixa"
+        }}
       </span>
     </template>
     <template v-slot:item.comissionValue="{ item }">
       <strong>
-        {{ amountFormated(Number(item.comissionValue ?? "0"), false) }}
+        {{ amountFormated(Number(item.comissionValue ?? "0"), true) }}
       </strong>
     </template>
     <template v-slot:item.comissionBase="{ item }">
       <span>
-        {{ amountFormated(Number(item.comissionBase ?? "0"), false) }}
+        {{ amountFormated(Number(item.comissionBase ?? "0"), true) }}
       </span>
     </template>
     <template v-slot:item.comissionType="{ item }">
@@ -280,8 +287,8 @@ const filters = ref({
 const headers = ref([
   { title: "Beneficiado", key: "user" },
   { title: "Data comissão", key: "comissionDate" },
-  { title: "Base comissão", key: "comissionBase" },
   { title: "%Comissão", key: "comissionPercentage" },
+  { title: "Base comissão", key: "comissionBase" },
   { title: "Valor comissão", key: "comissionValue" },
   { title: "Status", key: "comissionStatus" },
   { title: "Data pagamento", key: "comissionDatePaid" },
