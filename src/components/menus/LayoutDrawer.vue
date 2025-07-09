@@ -2,27 +2,14 @@
   <v-navigation-drawer
     v-model="changeDrawer"
     @update:model-value="$emit('update:drawer', changeDrawer)"
+    :width="mobile ? '' : '300'"
   >
     <template v-slot:prepend>
       <v-list-item lines="two">
-        <!-- <template #prepend>
-          <v-avatar color="primary">
-            <span class="text-h6">{{ $user?.initials }}</span>
-          </v-avatar>
-        </template> -->
         <template #title>
-          <!-- <span>{{ $user?.name }}</span> -->
           <Logo />
         </template>
-        <!-- <template #subtitle>
-          <span style="font-size: 0.8rem">
-            {{ $user?.profile?.profileName }}
-          </span>
-        </template> -->
       </v-list-item>
-      <!-- <div class="d-flex justify-center py-4 w-100">
-        <LogoTransparente height="80" color="#03A9F4" />
-      </div> -->
     </template>
 
     <v-divider />
@@ -75,7 +62,7 @@ const props = defineProps({
     required: true,
   },
 });
-const { getInitials } = useUtils();
+
 const auth = useAuthStore();
 const route = useRouter();
 
@@ -86,14 +73,6 @@ const loading = ref(false);
 
 watchEffect(() => {
   changeDrawer.value = props.drawer;
-});
-
-const $user = computed(() => {
-  const initials = getInitials(auth.$currentUser?.name!);
-  return {
-    ...auth.$currentUser,
-    initials,
-  };
 });
 
 const itemsMenu = computed(() => {
