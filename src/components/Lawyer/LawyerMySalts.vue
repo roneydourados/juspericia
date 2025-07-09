@@ -247,6 +247,7 @@ const handlePaid = async (item: SaleProps) => {
       category: "package",
       packageId: item.id,
       userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+      saleValue: item.value!,
     });
 
     reloadFilters.value = true;

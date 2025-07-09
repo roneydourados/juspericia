@@ -22,10 +22,31 @@ export const useSaleStore = defineStore("sale", () => {
     sale.value = data;
   };
 
+  const getSalesUser = async (input: {
+    userId: number;
+    initialDate: string;
+    finalDate: string;
+    status?: string;
+  }) => {
+    const { userId, initialDate, finalDate, status } = input;
+    const config = {
+      params: {
+        userId,
+        initialDate,
+        finalDate,
+        status,
+      },
+    };
+
+    const { data } = await api.get<SaleProps[]>(`/sales-user`, config);
+    sales.value = data;
+  };
+
   return {
     create,
     update,
     show,
+    getSalesUser,
     $single,
     $all,
   };

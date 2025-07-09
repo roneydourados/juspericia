@@ -52,7 +52,7 @@
         </v-col>
       </v-row>
     </FormCrud>
-    <FormDebug v-model="model" />
+    <!-- <FormDebug v-model="model" /> -->
     <DialogLoading :dialog="loading" />
   </DialogForm>
 </template>
