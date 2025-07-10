@@ -213,10 +213,11 @@ const getVoucher = useDebounceFn(async () => {
             $voucher.value.voucherUseCount >=
             Number($voucher.value.useQuantity ?? 0);
 
-          return;
+          if (isInvalidvoucher.value) return;
         }
 
-        if ($voucher.value.voucherItems) {
+        // se o voucher tem os pacotes específicos e a venda possui um pacote em si
+        if ($voucher.value.voucherItems && model.value.packageId) {
           const filter = $voucher.value.voucherItems.find(
             (item) => item.servicePackage?.id === model.value.packageId
           );
@@ -226,6 +227,24 @@ const getVoucher = useDebounceFn(async () => {
           if (isInvalidvoucher.value) {
             return;
           }
+        }
+
+        if (
+          $voucher.value.voucherUsePersonalizedSale &&
+          !model.value.packageId
+        ) {
+          isInvalidvoucher.value = model.value.packageId !== undefined; //as se exisitir um pacote, o voucher não pode ser usado em vendas sob demanda
+
+          if (isInvalidvoucher.value) {
+            return;
+          }
+        } else if (
+          !$voucher.value.voucherUsePersonalizedSale &&
+          !model.value.packageId
+        ) {
+          //não esta liberado para venda avulsa não tem pacote id
+          isInvalidvoucher.value = true;
+          return;
         }
       }
       await paymentSimulation();

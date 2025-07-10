@@ -46,7 +46,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" lg="4">
           <v-radio-group
             label="Tipo desconto"
             v-model="form.discountType"
@@ -55,6 +55,13 @@
             <v-radio label="% Porcentagem" value="percentage"></v-radio>
             <v-radio label="R$ Valor" value="value"></v-radio>
           </v-radio-group>
+        </v-col>
+        <v-col cols="12" lg="8">
+          <v-checkbox
+            class="mt-5"
+            v-model="form.voucherUsePersonalizedSale"
+            label="Voucher pode ser usado em vendas sob demanda ?"
+          />
         </v-col>
       </v-row>
       <v-divider class="mb-4" />
@@ -117,6 +124,7 @@ const form = ref({
   expirationDate: "",
   packages: [] as VoucherItemsProps[],
   useQuantity: "1",
+  voucherUsePersonalizedSale: false,
 });
 
 const $packages = computed(() => {
@@ -155,6 +163,7 @@ const loadForm = () => {
     discountType: props.data.discountType || "percentage",
     expirationDate: props.data.expirationDate || "",
     useQuantity: props.data.useQuantity.toString() || "1",
+    voucherUsePersonalizedSale: props.data.voucherUsePersonalizedSale ?? false,
     packages: props.data.voucherItems
       ? [
           ...props.data.voucherItems.map((item) => ({
@@ -231,6 +240,7 @@ const clearForm = () => {
     expirationDate: "",
     packages: [],
     useQuantity: "1",
+    voucherUsePersonalizedSale: false,
   };
   vouchers.clear();
 };
