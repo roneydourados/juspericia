@@ -114,6 +114,7 @@
     <!-- <pre>{{ $paymentSimulation }}</pre>
     <pre>{{ $systemParameters }}</pre> -->
     <!-- <FormDebug v-model="model" /> -->
+    <!-- <FormDebug v-model="$voucher" /> -->
     <DialogLoading :dialog="loading" />
   </Dialog>
 </template>

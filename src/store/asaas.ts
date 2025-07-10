@@ -20,6 +20,13 @@ export const useAsaasStore = defineStore("asaas", () => {
     paymentReponse.value = await api.post("/asaas/payment", payload);
   };
 
+  const createPaymentManualSale = async (payload: PaymentAsaasProps) => {
+    paymentReponse.value = await api.post(
+      "/asaas/payment-manual-sale",
+      payload
+    );
+  };
+
   const deletePayment = async (id: string) => {
     await api.delete(`/asaas/payment/${id}`);
   };
@@ -58,5 +65,6 @@ export const useAsaasStore = defineStore("asaas", () => {
     $paymentSimulation,
     paymentSimulation,
     clear,
+    createPaymentManualSale,
   };
 });

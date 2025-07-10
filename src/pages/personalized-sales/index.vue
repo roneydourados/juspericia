@@ -1,5 +1,5 @@
 <template>
-  <SalesUserTable />
+  <UserPersonalizedSalesTable />
 </template>
 
 <script setup lang="ts">

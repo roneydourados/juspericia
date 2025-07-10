@@ -82,6 +82,7 @@ export interface PaymentAsaasProps {
   packgeQuantity?: number;
   packgeSaleValue?: number;
   sellerId?: number;
+  publicSaleId?: string;
 }
 
 interface PaymentAsaasSplitProps {
