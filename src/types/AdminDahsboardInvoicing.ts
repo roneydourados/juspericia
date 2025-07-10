@@ -46,4 +46,5 @@ export interface TransactionProps {
   billingType: string;
   total: number;
   status: string;
+  publicId: string;
 }

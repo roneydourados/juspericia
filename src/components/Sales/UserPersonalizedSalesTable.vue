@@ -1,4 +1,5 @@
 <template>
+  <!-- <pre>{{ $sales[1] }}</pre> -->
   <Table
     title="Minhas compras personalizadas"
     :headers="headers"
@@ -68,13 +69,11 @@
     </template>
     <template v-slot:item.status="{ item }">
       <v-chip
-        :prepend-icon="
-          item.status === 'CONFIRMED' ? 'mdi-check-circle' : 'mdi-clock-outline'
-        "
+        :prepend-icon="getTransactionStatusDetails(item).icon"
         variant="flat"
-        :color="item.status === 'CONFIRMED' ? 'green' : 'orange-darken-2'"
+        :color="getTransactionStatusDetails(item).color"
       >
-        {{ item.status === "CONFIRMED" ? "Confirmado" : "Pendente" }}
+        {{ getTransactionStatusDetails(item).label }}
       </v-chip>
     </template>
     <template #item.actions="{ item }">
@@ -94,6 +93,8 @@
         variant="text"
         color="info"
         icon
+        @click="handleReceipt(item)"
+        size="small"
       >
         <v-icon icon="mdi-file-multiple"></v-icon>
         <v-tooltip
@@ -331,5 +332,63 @@ const handleCancel = async () => {
   };
 
   await getTransactions();
+};
+const getTransactionStatusDetails = (item: SaleProps) => {
+  switch (item.status) {
+    case "CONFIRMED":
+      return {
+        label: "Confirmado",
+        color: "green",
+        icon: "mdi-check-circle",
+      };
+    case "PENDING":
+      return {
+        label: "Pendente",
+        color: "orange-darken-2",
+        icon: "mdi-clock-outline",
+      };
+    case "CANCELED":
+      return {
+        label: "Cancelado",
+        color: "red",
+        icon: "mdi-close-circle",
+      };
+    case "REFUNDED":
+      return {
+        label: "Reembolsado",
+        color: "blue-grey",
+        icon: "mdi-undo",
+      };
+    default:
+      return {
+        label: "Desconhecido",
+        color: "grey",
+        icon: "mdi-help-circle",
+      };
+  }
+};
+
+const handleReceipt = (item: SaleProps) => {
+  const popupWidth = 800;
+  const popupHeight = 600;
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+
+  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+  const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+  const popup = window.open(
+    item.transactionReceiptUrl,
+    "_blank",
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+  );
+
+  // verificar se o popup foi fechado
+  const popupChecker = setInterval(async () => {
+    if (popup && popup.closed) {
+      clearInterval(popupChecker);
+      await getTransactions();
+    }
+  }, 700);
 };
 </script>

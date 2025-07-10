@@ -35,5 +35,9 @@ export const useTransactionsStore = defineStore("transactions", () => {
     transactions.value = data;
   };
 
-  return { $transactions, getTransactions };
+  const cancelTransaction = async (publicId: string) => {
+    await api.put(`/transactions/cancel/${publicId}`);
+  };
+
+  return { $transactions, getTransactions, cancelTransaction };
 });

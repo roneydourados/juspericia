@@ -10,14 +10,12 @@
   >
     <template v-slot:top-table>
       <v-row desnse>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3" class="d-flex flex-wrap" style="gap: 0.5rem">
           <DatePicker
             v-model="filters.initialDate"
             label="Data inicial"
             class="mb-4"
           />
-        </v-col>
-        <v-col cols="12" lg="2">
           <DatePicker
             v-model="filters.finalDate"
             label="Data final"
@@ -34,7 +32,14 @@
             @update:model-value="getTransactions"
           />
         </v-col>
-        <v-col cols="12" lg="4" class="d-flex flex-wrap" style="gap: 0.5rem">
+        <v-col cols="12" lg="3">
+          <SelectSearchLawyer
+            label="Cliente"
+            v-model="filters.client"
+            clearable
+          />
+        </v-col>
+        <v-col cols="12" lg="3" class="d-flex flex-wrap" style="gap: 0.5rem">
           <v-btn
             color="primary"
             variant="flat"
@@ -91,12 +96,34 @@
         {{ getTransactionStatusDetails(item).label }}
       </v-chip>
     </template>
+    <template #item.actions="{ item }">
+      <v-btn
+        v-if="item.status === 'PENDING'"
+        variant="flat"
+        color="error"
+        size="small"
+        class="text-none"
+        @click="getTransactionCancel(item.publicId)"
+      >
+        <v-icon icon="mdi-cancel" start />
+        <span class="text-caption">Cancelar</span>
+      </v-btn>
+    </template>
   </Table>
   <DialogLoading :dialog="loading" />
   <SellerManualSale
     v-model:show="showFormTransaction"
     @confirm-sale="getTransactions"
   />
+  <Dialog
+    title="CONFIRME"
+    :dialog="showCancelSale"
+    @cancel="showCancelSale = false"
+    @confirm="handleCancelItem"
+    show-cancel
+  >
+    <span>Conforma o cancelamento da transação ? </span>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -115,8 +142,10 @@ const $total = computed(() =>
   )
 );
 
+const showCancelSale = ref(false);
 const loading = ref(false);
 const showFormTransaction = ref(false);
+const publicIdCancel = ref("");
 const statusSale = ref([
   {
     label: "Todos",
@@ -142,13 +171,14 @@ const headers = [
   { title: "Forma Pgto", key: "billingType" },
   { title: "Total", key: "total" },
   { title: "Status", key: "status" },
-  // { title: "Ações", key: "actions", sortable: false },
+  { title: "Ações", key: "actions", sortable: false },
 ];
 
 const filters = ref({
   initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
   status: "all",
+  client: undefined as UserProps | undefined,
 });
 
 const getTransactions = async () => {
@@ -157,6 +187,7 @@ const getTransactions = async () => {
     await transactionsStore.getTransactions({
       ...filters.value,
       status: filters.value.status === "all" ? undefined : filters.value.status,
+      userId: filters.value.client ? filters.value.client.id : undefined,
       sellerId:
         $currentUser.value?.profile?.type === "VENDEDOR"
           ? $currentUser.value?.id
@@ -166,6 +197,29 @@ const getTransactions = async () => {
     console.error("Error fetching transactions:", error);
   } finally {
     loading.value = false;
+  }
+};
+
+const getTransactionCancel = (publicId: string) => {
+  publicIdCancel.value = publicId;
+  showCancelSale.value = true;
+};
+
+const handleCancelItem = async () => {
+  if (!publicIdCancel.value) {
+    console.warn("Selecione uma transação para cancelar.");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    await transactionsStore.cancelTransaction(publicIdCancel.value);
+  } catch (error) {
+    console.error("Error canceling transaction:", error);
+  } finally {
+    loading.value = false;
+    showCancelSale.value = false;
+    await getTransactions();
   }
 };
 

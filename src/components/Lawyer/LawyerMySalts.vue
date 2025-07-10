@@ -303,10 +303,11 @@ const handlePaid = async (item: SaleProps) => {
 };
 
 const handleReceipt = (item: SaleProps) => {
+  const popupWidth = 800;
+  const popupHeight = 600;
   const screenWidth = window.screen.width;
   const screenHeight = window.screen.height;
-  const popupWidth = Math.round(screenWidth * 0.7);
-  const popupHeight = Math.round(screenHeight * 0.7);
+
   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
