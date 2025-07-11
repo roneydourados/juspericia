@@ -6,7 +6,7 @@
       @update:drawer="drawer = $event"
     />
 
-    <v-app-bar color="primary" elevation="0">
+    <v-app-bar :color="$isDevelop ? 'red' : 'primary'" elevation="0">
       <template #title>
         <!-- <Logo height="40" color="#fff" /> -->
         <div class="d-flex align-center">
@@ -19,6 +19,8 @@
               {{ $currentUser?.profile?.profileName }}
             </span>
           </div>
+          <v-spacer />
+          <h3>AMBIENTE DE TESTES SEM VALIDADE</h3>
         </div>
       </template>
 
@@ -133,6 +135,7 @@ const drawer = ref(true);
 // const $currentScreen = computed(() => screen.$currentScreen);
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
+const $isDevelop = computed(() => config.public.develop);
 // const $currentTheme = computed(() => storeTheme.$theme);
 
 // const $user = computed(() => {

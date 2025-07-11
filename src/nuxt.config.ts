@@ -160,6 +160,7 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       appUrl: process.env.APP_URL,
       version: process.env.VERSION ?? "",
+      develop: process.env.DEVELOP === "true" ? true : false,
     },
   },
 });
