@@ -19,8 +19,8 @@
               {{ $currentUser?.profile?.profileName }}
             </span>
           </div>
-          <v-spacer />
-          <h3>AMBIENTE DE TESTES SEM VALIDADE</h3>
+          <v-spacer v-if="$isDevelop" />
+          <h3 v-if="$isDevelop">AMBIENTE DE TESTES SEM VALIDADE</h3>
         </div>
       </template>
 
