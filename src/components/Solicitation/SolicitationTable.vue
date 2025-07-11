@@ -5,7 +5,10 @@
         <HeaderPage title="Solicitações" />
         <v-row class="mt-4" dense>
           <v-col
-            v-if="$currentUser?.profile?.type === 'ADMIN'"
+            v-if="
+              $currentUser?.profile?.type === 'ADMIN' ||
+              $currentUser?.profile?.type === 'VENDEDOR'
+            "
             cols="12"
             lg="3"
           >

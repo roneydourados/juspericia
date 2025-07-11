@@ -100,6 +100,12 @@
             <template #item.salt="{ item }">
               <strong>{{ amountFormated(item.salt, true) }}</strong>
             </template>
+            <template #item.solicitationConsultationValue="{ item }">
+              <strong>{{
+                amountFormated(item.solicitationConsultationValue, true)
+              }}</strong>
+            </template>
+
             <template #item.expireDate="{ item }">
               <strong>
                 {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
@@ -190,13 +196,7 @@ import dayjs from "dayjs";
 
 const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
-//const auth = useAuthStore();
 const { amountFormated } = useUtils();
-
-const $salts = computed(() => saltCredit.$credits);
-// const $paymentResponse = computed(() => asaas.$paymentReponse);
-// const $currentUser = computed(() => auth.$currentUser);
-
 const showDetails = ref(false);
 const reloadFilters = ref(false);
 const showErrorAlert = ref(false);
@@ -209,12 +209,17 @@ const headers = ref([
     key: "status",
   },
   { title: "Data da compra", key: "dateCreated" },
-  // { title: "Prazo pgto", key: "dueDate" },
   { title: "Data de expiração", key: "expireDate" },
   { title: "Valor", key: "value" },
   { title: "Saldo", key: "salt" },
+  {
+    title: "Valor descontar por solicitação",
+    key: "solicitationConsultationValue",
+  },
   { title: "Ações", key: "actions" },
 ]);
+
+const $salts = computed(() => saltCredit.$credits);
 
 const getStatusName = (item: UserCreditSalt) => {
   const currentDate = dayjs();

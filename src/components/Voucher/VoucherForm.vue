@@ -60,7 +60,7 @@
           <v-checkbox
             class="mt-5"
             v-model="form.voucherUsePersonalizedSale"
-            label="Voucher pode ser usado em vendas sob demanda ?"
+            label="Voucher pode ser usado em vendas sob demanda e pagamento de solicitação avulsa ?"
           />
         </v-col>
       </v-row>

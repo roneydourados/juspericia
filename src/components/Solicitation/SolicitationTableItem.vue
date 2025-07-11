@@ -46,7 +46,7 @@
             color="info"
             variant="outlined"
             size="small"
-            @click="showSale = true"
+            @click="handleMountModelPrececkout(solicitation)"
           >
             <v-icon icon="mdi-credit-card-outline" size="24" start />
             Pagar
@@ -396,7 +396,6 @@
       </v-row>
     </v-card-text>
   </v-card>
-
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"
@@ -431,25 +430,18 @@
   >
     Tem certeza que deseja cancelar a consulta?
   </Dialog>
-  <Dialog
-    title="Pagamento de solicitação"
-    :dialog="showSale"
-    @cancel="showSale = false"
-    @confirm="handleSaleItemForAsaas"
-    show-cancel
-  >
-    <div class="d-flex flex-column">
-      <span>Confirma pagamento da solicitação de consulta ? </span>
-      <div class="d-flex" style="gap: 0.5rem">
-        Total: <strong>{{ amountFormated($solicitationTotal, false) }}</strong>
-      </div>
-    </div>
-  </Dialog>
   <UserCreditSaltForm v-model="showSaltCredit" :solicitation="solicitation" />
   <SolicitationPaymentReciptSalt
     v-model="showRecipt"
     :solicitation="solicitation"
   />
+  <AsaasPreCheckout
+    v-model:show="showSale"
+    v-model="modelPrececkout"
+    @confirm-sale="handleSaleItemForAsaas"
+    @cancel="handleCancel"
+  />
+  <!-- <pre>{{ props.solicitation.sale }}</pre> -->
 </template>
 
 <script setup lang="ts">
@@ -468,6 +460,7 @@ const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const rounter = useRouter();
 const fileStore = useFileStore();
+const transactionsStore = useTransactionsStore();
 
 const {
   amountFormated,
@@ -490,6 +483,27 @@ const showSale = ref(false);
 const showRecipt = ref(false);
 const showSolicitationSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
+
+const modelPrececkout = ref({
+  name: "",
+  description: "",
+  dueDays: 2,
+  paymentForm: "CREDIT_CARD",
+  discountValue: undefined as number | undefined,
+  discountType: undefined as string | undefined,
+  installmentCount: 1,
+  itemValue: 0,
+  totalValue: 0,
+  category: "package",
+  packageId: undefined as number | undefined,
+  voucherDesconto: "",
+  totalBruteValue: 0,
+  voucherId: undefined as number | undefined,
+  publicSaleId: "",
+  packgeSaleValue: 0,
+  packgeQuantity: 1,
+});
+
 const $currentUser = computed(() => auth.$currentUser);
 const $solicitationTotal = computed(() => {
   return (
@@ -629,6 +643,50 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
   showSolicitationSchedule.value = true;
 };
 
+const handleMountModelPrececkout = async (
+  item: SolicitationConsultationProps
+) => {
+  //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
+  if (item.sale) {
+    const dueDate = item.sale.dueDate?.substring(0, 10);
+    if (dayjs().isAfter(dayjs(dueDate)) && item.sale.saleId) {
+      // se a cobrança venceu, então apagar a mesma do asaas
+      await asaas.deletePayment(item.sale.saleId);
+
+      //também cancelar a venda vinculada
+      await transactionsStore.cancelTransaction(item.sale.publicId!);
+
+      //atualizsar a lista de solicitações
+      await getSolicitations();
+    } else if (item.sale.invoiceUrl) {
+      // se já existir uma fatura então só chamar ela
+      window.location.href = item.sale.invoiceUrl;
+      return;
+    }
+  }
+
+  showSale.value = true;
+  modelPrececkout.value = {
+    name: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
+    description: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
+    dueDays: 2,
+    paymentForm: "CREDIT_CARD",
+    discountValue: undefined,
+    discountType: undefined,
+    installmentCount: 1,
+    itemValue: $solicitationTotal.value,
+    totalValue: $solicitationTotal.value,
+    category: "solicitation",
+    totalBruteValue: $solicitationTotal.value,
+    packageId: undefined,
+    voucherDesconto: "",
+    voucherId: undefined,
+    publicSaleId: "",
+    packgeSaleValue: $solicitationTotal.value, // valor do pacote, no caso é uma solicitação única
+    packgeQuantity: 1, //atende apenas uma solicitação
+  };
+};
+
 const handleSaleItemForAsaas = async () => {
   showSale.value = false;
   loading.value = true;
@@ -637,17 +695,59 @@ const handleSaleItemForAsaas = async () => {
       push.warning("Solicitação não encontrada!");
     }
 
-    await asaas.createPayment({
-      dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
-      value: $solicitationTotal.value,
-      description: `Solicitação de consulta Nº ${props.solicitation.id} do paciente ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
-      category: "solicitation",
-      solicitationId: props.solicitation.id,
-      userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
-      saleValue: $solicitationTotal.value,
-    });
+    if (
+      modelPrececkout.value.installmentCount &&
+      modelPrececkout.value.installmentCount > 1
+    ) {
+      //se for parcelada enviar quantidade de parcelas e o valor total
+      await asaas.createPayment({
+        dueDate: dayjs()
+          .add(modelPrececkout.value.dueDays, "days")
+          .format("YYYY-MM-DD"),
+        description: modelPrececkout.value.name,
+        category: modelPrececkout.value.category,
+        //packageId: props.item.id,
+        dueDays: modelPrececkout.value.dueDays,
+        totalValue: modelPrececkout.value.totalValue,
+        installmentCount: modelPrececkout.value.installmentCount,
+        billingType: modelPrececkout.value.paymentForm,
+        voucherId: modelPrececkout.value.voucherId,
+        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        discount: {
+          value: modelPrececkout.value.discountValue ?? 0,
+          type: modelPrececkout.value.discountType,
+        },
+        saleValue: modelPrececkout.value.totalValue ?? 0,
+        publicSaleId: modelPrececkout.value.publicSaleId,
+        packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
+        packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
+        solicitationId: props.solicitation.id,
+      });
+    } else {
+      const payload = {
+        dueDate: dayjs()
+          .add(modelPrececkout.value.dueDays, "days")
+          .format("YYYY-MM-DD"),
+        value: modelPrececkout.value.totalValue,
+        description: modelPrececkout.value.name!,
+        category: modelPrececkout.value.category,
+        dueDays: modelPrececkout.value.dueDays,
+        billingType: modelPrececkout.value.paymentForm,
+        voucherId: modelPrececkout.value.voucherId,
+        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        discount: {
+          value: modelPrececkout.value.discountValue ?? 0,
+          type: modelPrececkout.value.discountType,
+        },
+        saleValue: modelPrececkout.value.totalValue ?? 0,
+        publicSaleId: modelPrececkout.value.publicSaleId,
+        packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
+        packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
+        solicitationId: props.solicitation.id,
+      };
 
-    await getSolicitations();
+      await asaas.createPayment(payload);
+    }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
       window.location.href = $paymentResponse.value.data.invoiceUrl;
@@ -739,26 +839,19 @@ const handleReceipt = (item: SolicitationConsultationProps) => {
     return;
   }
 
+  const popupWidth = 800;
+  const popupHeight = 600;
   const screenWidth = window.screen.width;
   const screenHeight = window.screen.height;
-  const popupWidth = Math.round(screenWidth * 0.7);
-  const popupHeight = Math.round(screenHeight * 0.7);
+
   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-  const popup = window.open(
+  window.open(
     item.sale.transactionReceiptUrl,
     "_blank",
-    `left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
   );
-
-  // verificar se o popup foi fechado
-  const popupChecker = setInterval(async () => {
-    if (popup && popup.closed) {
-      clearInterval(popupChecker);
-      await getSolicitations();
-    }
-  }, 700);
 };
 
 const handleUseCreditSalt = async () => {
@@ -802,5 +895,28 @@ const handleDownloadFile = async (publicId: string) => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleCancel = () => {
+  showSale.value = false;
+  modelPrececkout.value = {
+    name: "",
+    description: "",
+    dueDays: 2,
+    paymentForm: "CREDIT_CARD",
+    discountValue: undefined,
+    discountType: undefined,
+    installmentCount: 1,
+    itemValue: 0,
+    totalValue: 0,
+    category: "package",
+    packageId: undefined,
+    voucherDesconto: "",
+    totalBruteValue: 0,
+    voucherId: undefined,
+    publicSaleId: "",
+    packgeSaleValue: 0,
+    packgeQuantity: 1,
+  };
 };
 </script>
