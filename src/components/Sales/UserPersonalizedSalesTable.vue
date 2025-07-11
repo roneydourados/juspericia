@@ -1,5 +1,5 @@
 <template>
-  <!-- <pre>{{ $sales[1] }}</pre> -->
+  <!-- <pre>{{ $sales }}</pre> -->
   <Table
     title="Minhas compras personalizadas"
     :headers="headers"
@@ -62,6 +62,11 @@
         {{ formatDate(item.dateCreated) }}
       </span>
     </template>
+    <template v-slot:item.dueDate="{ item }">
+      <span class="font-weight-bold">
+        {{ formatDate(item.dueDate) }}
+      </span>
+    </template>
     <template v-slot:item.billingType="{ item }">
       <span class="font-weight-bold">
         {{ getPaymentForm(item.billingType) }}
@@ -77,34 +82,58 @@
       </v-chip>
     </template>
     <template #item.actions="{ item }">
-      <v-btn
-        v-if="item.status === 'PENDING'"
-        variant="flat"
-        color="success"
-        size="small"
-        class="text-none"
-        @click="hanelMountModelPrececkout(item)"
-      >
-        <v-icon icon="mdi-cash-multiple" start class="mt-n1" />
-        <span class="text-caption">Pagamento</span>
-      </v-btn>
-      <v-btn
-        v-if="item.status === 'CONFIRMED'"
-        variant="text"
-        color="info"
-        icon
-        @click="handleReceipt(item)"
-        size="small"
-      >
-        <v-icon icon="mdi-file-multiple"></v-icon>
-        <v-tooltip
-          activator="parent"
-          location="top center"
-          content-class="tooltip-background"
+      <div class="d-flex align-center" style="gap: 0.5rem">
+        <v-btn
+          v-if="item.status === 'PENDING'"
+          variant="text"
+          color="success"
+          icon
+          @click="hanelMountModelPrececkout(item)"
         >
-          Comprovante de pagamento
-        </v-tooltip>
-      </v-btn>
+          <v-icon icon="mdi-cash-multiple" />
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Efetuar pagamento
+          </v-tooltip>
+        </v-btn>
+        <v-btn
+          v-if="item.status === 'PENDING'"
+          variant="text"
+          color="error"
+          size="small"
+          class="text-none"
+          icon
+          @click="getTransactionCancel(item.publicId)"
+        >
+          <v-icon icon="mdi-cancel" />
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Cancelar compra
+          </v-tooltip>
+        </v-btn>
+        <v-btn
+          v-if="item.status === 'CONFIRMED'"
+          variant="text"
+          color="info"
+          icon
+          @click="handleReceipt(item)"
+        >
+          <v-icon icon="mdi-file-multiple"></v-icon>
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Comprovante de pagamento
+          </v-tooltip>
+        </v-btn>
+      </div>
     </template>
   </Table>
   <DialogLoading :dialog="loading" />
@@ -114,6 +143,35 @@
     @confirm-sale="handleSaleItem"
     @cancel="handleCancel"
   />
+  <Dialog
+    title="CONFIRME"
+    :dialog="showCancelSale"
+    @cancel="showCancelSale = false"
+    @confirm="handleCancelItem"
+    show-cancel
+  >
+    <span>Conforma o cancelamento da compra ? </span>
+  </Dialog>
+  <v-snackbar
+    v-model="showErrorAlert"
+    vertical
+    color="warning"
+    :timeout="10000"
+  >
+    <div class="text-subtitle-1 pb-2">Compra fora do prazo de pagamento</div>
+    <div class="text-subtitle-1 pb-2">
+      Não foi possível gerar cobrança desta compra porque passou o prazo para
+      pagamento. Entre em contato com nossa equipe de vendas para que seja
+      gerada uma nova compra personalizada. Não se preocupe, não será gerada
+      nenhuma cobrança adicional para você. COMPRA FOI CANCELADA
+      AUTOMATICAMENTE.
+    </div>
+    <template #actions>
+      <v-btn color="white" variant="text" @click="showErrorAlert = false">
+        Fechar
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -122,6 +180,7 @@ import dayjs from "dayjs";
 const salesStore = useSaleStore();
 const auth = useAuthStore();
 const asaas = useAsaasStore();
+const transactionsStore = useTransactionsStore();
 const { amountFormated, formatDate } = useUtils();
 
 const $sales = computed(() => salesStore.$all);
@@ -156,8 +215,12 @@ const modelPrececkout = ref({
   packgeQuantity: 1,
 });
 
+const showCancelSale = ref(false);
+const publicIdCancel = ref("");
+const showErrorAlert = ref(false);
 const headers = [
   { title: "Data", key: "dateCreated" },
+  { title: "Valida até", key: "dueDate" },
   { title: "Descrição", key: "description" },
   { title: "Forma Pgto", key: "billingType" },
   { title: "Total", key: "value" },
@@ -169,6 +232,11 @@ const filters = ref({
   initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
 });
+
+const getTransactionCancel = (publicId: string) => {
+  publicIdCancel.value = publicId;
+  showCancelSale.value = true;
+};
 
 const getTransactions = async () => {
   loading.value = true;
@@ -197,7 +265,26 @@ const getPaymentForm = (value: string) => {
   }
 };
 
-const hanelMountModelPrececkout = (item: SaleProps) => {
+const hanelMountModelPrececkout = async (item: SaleProps) => {
+  const dueDate = item.dueDate?.substring(0, 10);
+  if (dayjs().isAfter(dayjs(dueDate)) && item.saleId) {
+    // se a cobrança venceu, então apagar a mesma do asaas
+    await asaas.deletePayment(item.saleId!);
+
+    //pegar o públicId da venda que vai ser cancelada
+    publicIdCancel.value = item.publicId!;
+
+    //cancelar a venda
+    await handleCancelItem();
+
+    //atualizar a lista de vendas
+    await getTransactions();
+
+    showErrorAlert.value = true;
+
+    return;
+  }
+
   modelPrececkout.value = {
     name: item.description ?? "",
     description: item.description ?? "",
@@ -287,18 +374,7 @@ const handleSaleItem = async () => {
     }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      const screenWidth = window.screen.width;
-      const screenHeight = window.screen.height;
-      const popupWidth = Math.round(screenWidth * 0.95);
-      const popupHeight = Math.round(screenHeight * 0.95);
-      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-      const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-      window.open(
-        $paymentResponse.value?.data?.invoiceUrl,
-        "_blank",
-        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-      );
+      window.location.href = $paymentResponse.value.data.invoiceUrl;
     }
 
     await getTransactions();
@@ -334,6 +410,19 @@ const handleCancel = async () => {
   await getTransactions();
 };
 const getTransactionStatusDetails = (item: SaleProps) => {
+  //se a venda for vencida e ainda esta pendente, já retornar este status
+  const dueDate = item.dueDate?.substring(0, 10);
+  if (
+    dayjs().isAfter(dayjs(dueDate)) &&
+    item.saleId &&
+    item.status === "PENDING"
+  ) {
+    return {
+      label: "Vencida",
+      color: "orange-darken-2",
+      icon: "mdi-clock-outline",
+    };
+  }
   switch (item.status) {
     case "CONFIRMED":
       return {
@@ -390,5 +479,23 @@ const handleReceipt = (item: SaleProps) => {
       await getTransactions();
     }
   }, 700);
+};
+
+const handleCancelItem = async () => {
+  if (!publicIdCancel.value) {
+    console.warn("Selecione uma transação para cancelar.");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    await transactionsStore.cancelTransaction(publicIdCancel.value);
+  } catch (error) {
+    console.error("Error canceling transaction:", error);
+  } finally {
+    loading.value = false;
+    showCancelSale.value = false;
+    await getTransactions();
+  }
 };
 </script>

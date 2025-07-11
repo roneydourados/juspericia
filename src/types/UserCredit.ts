@@ -12,6 +12,9 @@ export interface UserCreditSalt {
   transactionReceiptUrl?: string;
   invoiceUrl?: string;
   createdAt?: string;
+  saleId?: string;
+  description?: string;
+  saleValue?: number;
 }
 
 export interface UserCreditLog {

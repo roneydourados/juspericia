@@ -111,7 +111,7 @@
     </template>
   </Table>
   <DialogLoading :dialog="loading" />
-  <SellerManualSale
+  <TransactionForm
     v-model:show="showFormTransaction"
     @confirm-sale="getTransactions"
   />

@@ -40,7 +40,6 @@ export const useUtils = () => {
 
   const formatDate = (date?: string) => {
     if (date) {
-      console.log(date.substring(0, 10));
       return dayjs(date.substring(0, 10)).format("DD/MM/YYYY");
     }
 

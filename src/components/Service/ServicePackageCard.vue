@@ -164,19 +164,23 @@ const handleSaleItem = async () => {
     }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      const screenWidth = window.screen.width;
-      const screenHeight = window.screen.height;
-      const popupWidth = Math.round(screenWidth * 0.95);
-      const popupHeight = Math.round(screenHeight * 0.95);
-      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-      const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-      window.open(
-        $paymentResponse.value?.data?.invoiceUrl,
-        "_blank",
-        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-      );
+      window.location.href = $paymentResponse.value.data.invoiceUrl;
     }
+
+    // if ($paymentResponse.value?.data?.invoiceUrl) {
+    //   const screenWidth = window.screen.width;
+    //   const screenHeight = window.screen.height;
+    //   const popupWidth = Math.round(screenWidth * 0.95);
+    //   const popupHeight = Math.round(screenHeight * 0.95);
+    //   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+    //   const popupTop = Math.round((screenHeight - popupHeight) / 2);
+
+    //   window.open(
+    //     $paymentResponse.value?.data?.invoiceUrl,
+    //     "_blank",
+    //     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    //   );
+    // }
     clearModel();
   } catch (error) {
     push.error("Erro ao finalizar pagamento");

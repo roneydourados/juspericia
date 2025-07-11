@@ -644,32 +644,35 @@ const handleSaleItemForAsaas = async () => {
       category: "solicitation",
       solicitationId: props.solicitation.id,
       userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+      saleValue: $solicitationTotal.value,
     });
 
     await getSolicitations();
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      const screenWidth = window.screen.width;
-      const screenHeight = window.screen.height;
-      const popupWidth = Math.round(screenWidth * 0.95);
-      const popupHeight = Math.round(screenHeight * 0.95);
-      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-      const popupTop = Math.round((screenHeight - popupHeight) / 2);
+      window.location.href = $paymentResponse.value.data.invoiceUrl;
+      // window.open($paymentResponse.value.data.invoiceUrl, "_blank");
+      // const screenWidth = window.screen.width;
+      // const screenHeight = window.screen.height;
+      // const popupWidth = Math.round(screenWidth * 0.95);
+      // const popupHeight = Math.round(screenHeight * 0.95);
+      // const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+      // const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-      const popup = window.open(
-        $paymentResponse.value?.data?.invoiceUrl,
-        "_blank",
-        `left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-      );
+      // const popup = window.open(
+      //   $paymentResponse.value?.data?.invoiceUrl,
+      //   "_blank",
+      //   `left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+      // );
 
-      // verificar se o popup foi fechado
-      const popupChecker = setInterval(async () => {
-        if (popup && popup.closed) {
-          clearInterval(popupChecker);
-          console.log("🚀 ~ handleSaleItemForAsaas ~ popup.closed");
-          await getSolicitations();
-        }
-      }, 700);
+      // // verificar se o popup foi fechado
+      // const popupChecker = setInterval(async () => {
+      //   if (popup && popup.closed) {
+      //     clearInterval(popupChecker);
+      //     console.log("🚀 ~ handleSaleItemForAsaas ~ popup.closed");
+      //     await getSolicitations();
+      //   }
+      // }, 700);
     }
   } catch (error) {
     push.error("Erro ao finalizar pagamento");

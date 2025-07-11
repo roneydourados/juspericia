@@ -71,6 +71,7 @@
           </v-col>
         </v-row>
         <div class="py-4">
+          <!-- <pre>{{ $salts?.credits }}</pre> -->
           <Table
             title="Compras"
             :headers="headers"
@@ -161,6 +162,26 @@
       </v-card-text>
     </v-card>
     <LawyerMySaltsDetails v-model="showDetails" />
+    <v-snackbar
+      v-model="showErrorAlert"
+      vertical
+      color="warning"
+      :timeout="10000"
+    >
+      <div class="text-subtitle-1 pb-2">Saldo de crédito estava expirado</div>
+      <div class="text-subtitle-1 pb-2">
+        Não foi possível gerar cobrança deste saldo, pois o mesmo estava
+        expirado. Acesse a sessão de pacotes efetue uma nova compra ou entre em
+        contato com nossa equipe de vendas. Não se preocupe, não será gerada
+        nenhuma cobrança adicional para você. ESTE SALDO DE CRÉDITO FOI REMOVIDO
+        DA SUA CONTA.
+      </div>
+      <template #actions>
+        <v-btn color="white" variant="text" @click="showErrorAlert = false">
+          Fechar
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -169,15 +190,16 @@ import dayjs from "dayjs";
 
 const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
-const auth = useAuthStore();
+//const auth = useAuthStore();
 const { amountFormated } = useUtils();
 
 const $salts = computed(() => saltCredit.$credits);
-const $paymentResponse = computed(() => asaas.$paymentReponse);
-const $currentUser = computed(() => auth.$currentUser);
+// const $paymentResponse = computed(() => asaas.$paymentReponse);
+// const $currentUser = computed(() => auth.$currentUser);
 
 const showDetails = ref(false);
 const reloadFilters = ref(false);
+const showErrorAlert = ref(false);
 
 const headers = ref([
   {
@@ -235,71 +257,19 @@ const handleDetails = async (item: UserCreditSalt) => {
   showDetails.value = true;
 };
 
-const handlePaid = async (item: SaleProps) => {
-  // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
-  if (dayjs().isAfter(dayjs(item.dueDate))) {
+const handlePaid = async (item: UserCreditSalt) => {
+  if (dayjs().isAfter(dayjs(item.expireDate)) && item.saleId) {
+    // se a cobrança venceu, então apagar a mesma
     await asaas.deletePayment(item.saleId!);
 
-    await asaas.createPayment({
-      dueDate: dayjs().add(2, "days").format("YYYY-MM-DD"),
-      value: item.value!,
-      description: item.description,
-      category: "package",
-      packageId: item.id,
-      userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
-      saleValue: item.value!,
-    });
-
     reloadFilters.value = true;
-
-    if ($paymentResponse.value?.data?.invoiceUrl) {
-      //window.open($paymentResponse.value?.data?.invoiceUrl);
-
-      const screenWidth = window.screen.width;
-      const screenHeight = window.screen.height;
-      const popupWidth = Math.round(screenWidth * 0.95);
-      const popupHeight = Math.round(screenHeight * 0.95);
-      const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-      const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-      const popup = window.open(
-        $paymentResponse.value?.data?.invoiceUrl,
-        "_blank",
-        `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-      );
-
-      // verificar se o popup foi fechado
-      const popupChecker = setInterval(() => {
-        if (popup && popup.closed) {
-          clearInterval(popupChecker);
-          reloadFilters.value = true;
-        }
-      }, 700);
-    }
-
+    showErrorAlert.value = true;
     return;
   }
 
-  const screenWidth = window.screen.width;
-  const screenHeight = window.screen.height;
-  const popupWidth = Math.round(screenWidth * 0.95);
-  const popupHeight = Math.round(screenHeight * 0.95);
-  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-  const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-  const popup = window.open(
-    item.invoiceUrl,
-    "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-  );
-
-  // verificar se o popup foi fechado
-  const popupChecker = setInterval(() => {
-    if (popup && popup.closed) {
-      clearInterval(popupChecker);
-      reloadFilters.value = true;
-    }
-  }, 700);
+  if (item.invoiceUrl) {
+    window.location.href = item.invoiceUrl;
+  }
 };
 
 const handleReceipt = (item: SaleProps) => {
