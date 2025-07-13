@@ -161,7 +161,10 @@ const submmitForm = async () => {
       return navigateTo("/lawyer/home");
     } else if ($user?.value?.profile?.type === "MEDICO") {
       return navigateTo("/medic/home");
-    } else if ($user?.value?.profile?.type === "VENDEDOR") {
+    } else if (
+      $user?.value?.profile?.type === "VENDEDOR" ||
+      $user?.value?.profile?.type === "GERENTE"
+    ) {
       return navigateTo("/seller/home");
     }
   } catch (error) {

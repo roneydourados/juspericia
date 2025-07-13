@@ -100,7 +100,10 @@
             v-model:model-value="model.cepAddress.complemento"
           />
         </v-col>
-        <v-col cols="12" lg="4">
+        <v-col cols="12" lg="6">
+          <SelectSearchProfileSeller v-model="model.profile" required />
+        </v-col>
+        <v-col cols="12" lg="3" class="d-flex justify-end">
           <v-switch
             v-model="model.active"
             color="success"
@@ -160,6 +163,7 @@ const model = ref({
     uf: "",
     numero: "",
   } as CepAdderssProps,
+  profile: undefined as ProfileProps | undefined,
 });
 
 const clearModel = () => {
@@ -180,6 +184,7 @@ const clearModel = () => {
       uf: "",
       numero: "",
     },
+    profile: undefined,
   };
 };
 
@@ -209,6 +214,7 @@ const loadModel = () => {
       uf: props.data.UserAddress?.addressState ?? "",
       numero: props.data.UserAddress?.addressNumber ?? "",
     },
+    profile: props.data.profile,
   };
 };
 
@@ -245,6 +251,7 @@ const create = async () => {
       addressZipcode: model.value.cepAddress.cep,
     },
     active: model.value.active,
+    profileId: model.value.profile?.id,
   });
 };
 
@@ -267,6 +274,7 @@ const update = async () => {
       addressStreet: model.value.cepAddress.logradouro,
       addressZipcode: model.value.cepAddress.cep,
     },
+    profileId: model.value.profile?.id,
   });
 };
 

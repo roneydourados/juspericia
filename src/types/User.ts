@@ -21,7 +21,7 @@ export interface UserProps {
   createdAt?: string;
   updatedAt?: string;
   active?: boolean;
-  Profile?: UserProfileProps;
+  profile?: UserProfileProps;
   UserAddress?: AddressProps;
   publicId?: string;
   customerId?: string;
