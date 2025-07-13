@@ -94,7 +94,10 @@ const handleCloseForm = () => {
 const handleSearch = async () => {
   loading.value = true;
   try {
-    await consutationPackage.index(search.value);
+    await consutationPackage.index({
+      name: "",
+      status: search.value,
+    });
   } finally {
     loading.value = false;
   }
