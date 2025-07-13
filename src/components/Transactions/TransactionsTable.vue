@@ -171,6 +171,7 @@ const headers = [
   { title: "Forma Pgto", key: "billingType" },
   { title: "Total", key: "total" },
   { title: "Status", key: "status" },
+  { title: "Vendedor", key: "seller" },
   { title: "Ações", key: "actions", sortable: false },
 ];
 
@@ -188,10 +189,10 @@ const getTransactions = async () => {
       ...filters.value,
       status: filters.value.status === "all" ? undefined : filters.value.status,
       userId: filters.value.client ? filters.value.client.id : undefined,
-      sellerId:
-        $currentUser.value?.profile?.type === "VENDEDOR"
-          ? $currentUser.value?.id
-          : undefined,
+      // sellerId:
+      //   $currentUser.value?.profile?.type === "VENDEDOR"
+      //     ? $currentUser.value?.id
+      //     : undefined,
     });
   } catch (error) {
     console.error("Error fetching transactions:", error);

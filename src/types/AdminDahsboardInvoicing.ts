@@ -47,4 +47,6 @@ export interface TransactionProps {
   total: number;
   status: string;
   publicId: string;
+  sellerId: number;
+  seller: string;
 }
