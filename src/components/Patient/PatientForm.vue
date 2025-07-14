@@ -7,7 +7,7 @@
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>
-        <v-col cols="12" lg="6">
+        <v-col cols="12" lg="4">
           <StringInput
             v-model="model.name"
             label="Nome"
@@ -15,13 +15,37 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="6">
+        <v-col cols="12" lg="4">
           <StringInput
             v-model="model.surname"
             label="Sobrenome"
             placeholder="Sobrenome"
             required
           />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <SelectInput
+            v-model="model.sexy"
+            label="Sexo"
+            placeholder="Sexo"
+            item-title="title"
+            item-value="value"
+            :items="sexItems"
+          >
+            <template #items="{ props, item }">
+              <v-list-item
+                v-bind="props"
+                :title="String((item as any).raw.title)"
+                density="compact"
+              />
+            </template>
+
+            <template #item-selection="{ item }">
+              <div class="d-flex align-center">
+                {{ (item as any).raw.title }}
+              </div>
+            </template>
+          </SelectInput>
         </v-col>
       </v-row>
       <v-row dense>
@@ -69,36 +93,12 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12" lg="6">
+        <v-col cols="12">
           <StringInput
             v-model="model.motherName"
             label="Nome da mãe"
             placeholder="Nome da mãe"
           />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <SelectInput
-            v-model="model.sexy"
-            label="Sexo"
-            placeholder="Sexo"
-            item-title="title"
-            item-value="value"
-            :items="sexItems"
-          >
-            <template #items="{ props, item }">
-              <v-list-item
-                v-bind="props"
-                :title="String((item as any).raw.title)"
-                density="compact"
-              />
-            </template>
-
-            <template #item-selection="{ item }">
-              <div class="d-flex align-center">
-                {{ (item as any).raw.title }}
-              </div>
-            </template>
-          </SelectInput>
         </v-col>
       </v-row>
       <v-row dense>

@@ -157,7 +157,7 @@ const handleDeleteItem = async () => {
     if (props.item.publicId) {
       await consutationPackage.destroy(props.item.publicId);
     }
-    await consutationPackage.index("active");
+    await consutationPackage.index({ name: "", status: "active" });
   } catch (error) {
     console.log("🚀 ~ handleDeleteItem ~ error", error);
   } finally {
@@ -171,7 +171,7 @@ const handleCloseForm = async () => {
   loading.value = true;
   try {
     emit("update-status");
-    await consutationPackage.index("active");
+    await consutationPackage.index({ name: "", status: "active" });
   } finally {
     loading.value = false;
   }
@@ -201,7 +201,7 @@ const handleRecoverItem = async () => {
         status: "active",
       });
     }
-    await consutationPackage.index("active");
+    await consutationPackage.index({ name: "", status: "active" });
   } catch (error) {
     console.log("🚀 ~ handleRecoverItem ~ error", error);
   } finally {

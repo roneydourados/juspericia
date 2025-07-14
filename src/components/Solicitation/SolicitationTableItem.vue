@@ -750,7 +750,8 @@ const handleSaleItemForAsaas = async () => {
     }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      window.location.href = $paymentResponse.value.data.invoiceUrl;
+      //window.location.href = $paymentResponse.value.data.invoiceUrl;
+      window.open($paymentResponse.value.data.invoiceUrl, "_blank");
       // window.open($paymentResponse.value.data.invoiceUrl, "_blank");
       // const screenWidth = window.screen.width;
       // const screenHeight = window.screen.height;

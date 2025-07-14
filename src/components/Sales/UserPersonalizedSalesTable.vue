@@ -374,7 +374,8 @@ const handleSaleItem = async () => {
     }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      window.location.href = $paymentResponse.value.data.invoiceUrl;
+      //window.location.href = $paymentResponse.value.data.invoiceUrl;
+      window.open($paymentResponse.value.data.invoiceUrl, "_blank");
     }
 
     await getTransactions();
