@@ -162,7 +162,7 @@ const vounchers = computed(() => voucher.$all);
 const getItemEdit = async (item: VoucherFormProps) => {
   loading.value = true;
   try {
-    await consultationPackageStore.index("active");
+    await consultationPackageStore.index({ name: "", status: "active" });
     selected.value = item;
     showForm.value = true;
   } finally {
@@ -173,7 +173,7 @@ const getItemEdit = async (item: VoucherFormProps) => {
 const hanelNewVoucher = async () => {
   loading.value = true;
   try {
-    await consultationPackageStore.index("active");
+    await consultationPackageStore.index({ name: "", status: "active" });
     selected.value = undefined;
     showForm.value = true;
   } finally {

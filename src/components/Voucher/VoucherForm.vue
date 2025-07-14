@@ -92,8 +92,6 @@
           </div>
         </v-col>
       </v-row>
-      <!-- <pre>{{ form.packages }}</pre> -->
-      <!-- <pre>{{ $packages }}</pre> -->
     </FormCrud>
     <DialogLoading :dialog="loading" />
   </DialogForm>
@@ -140,9 +138,13 @@ const $packages = computed(() => {
     props.data.voucherItems &&
     props.data.voucherItems.length > 0
   ) {
+    const voucherItemsFiltered = props.data.voucherItems.filter(
+      (item) => item.servicePackage
+    );
+
     return consultationPackageStore.$all.filter(
       (pkg) =>
-        !props.data.voucherItems.some((p) => p.servicePackage?.id === pkg.id)
+        !voucherItemsFiltered.some((p) => p.servicePackage!.id === pkg.id)
     );
   }
 
@@ -166,11 +168,19 @@ const loadForm = () => {
     voucherUsePersonalizedSale: props.data.voucherUsePersonalizedSale ?? false,
     packages: props.data.voucherItems
       ? [
-          ...props.data.voucherItems.map((item) => ({
-            ...item.servicePackage,
-            isChecked: true,
-            itemType: "service-package",
-          })),
+          ...props.data.voucherItems
+            .map((item) => {
+              if (item.itemType === "service-package") {
+                return {
+                  ...item.servicePackage,
+                  isChecked: true,
+                  itemType: "service-package",
+                };
+              }
+              // If not service-package, return undefined
+              return undefined;
+            })
+            .filter((pkg) => pkg !== undefined),
           ...$packages.value.map((pkg) => ({
             ...pkg,
             isChecked: false,
@@ -183,8 +193,6 @@ const loadForm = () => {
           itemType: "service-package",
         })),
   };
-
-  console.log("Form loaded with data:", props.data.voucherItems);
 };
 
 watch(
