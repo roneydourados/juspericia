@@ -621,23 +621,15 @@ const cancel = async () => {
   loading.value = true;
 
   try {
-    if (selected.value.sale) {
-      if (selected.value.sale.saleId) {
-        await asaas.deletePayment(selected.value.sale.saleId);
-      }
-
-      //também cancelar a venda vinculada
-      await transactionsStore.cancelTransaction(selected.value.sale.publicId!);
-    }
-
     await storeConsultation.update({
       ...selected.value,
       status: "canceled",
     });
 
-    // apagar a cobrança do asaas e a venda pendente
     if (selected.value.sale) {
-      await asaas.deletePayment(selected.value.sale.saleId!);
+      if (selected.value.sale.saleId) {
+        await asaas.deletePayment(selected.value.sale.saleId);
+      }
     }
 
     await getSolicitations();
@@ -660,28 +652,7 @@ const handleMountModelPrececkout = async (
     if (item.sale.saleId) {
       await asaas.deletePayment(item.sale.saleId);
     }
-
-    //também cancelar a venda vinculada
-    await transactionsStore.cancelTransaction(item.sale.publicId!);
-    showSale.value = true;
-
-    // const dueDate = item.sale.dueDate?.substring(0, 10);
-    // if (dayjs().isAfter(dayjs(dueDate)) && item.sale.saleId) {
-    //   // se a cobrança venceu, então apagar a mesma do asaas
-    //   await asaas.deletePayment(item.sale.saleId);
-
-    //   //também cancelar a venda vinculada
-    //   await transactionsStore.cancelTransaction(item.sale.publicId!);
-
-    //   //atualizsar a lista de solicitações
-    //   await getSolicitations();
-    // } else if (item.sale.invoiceUrl) {
-    //   // se já existir uma fatura então só chamar ela
-    //   window.location.href = item.sale.invoiceUrl;
-    //   return;
-    // }
   }
-
   showSale.value = true;
   modelPrececkout.value = {
     name: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
