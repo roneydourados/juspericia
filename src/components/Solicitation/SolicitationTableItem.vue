@@ -650,6 +650,7 @@ const handleMountModelPrececkout = async (
   //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
   if (item.sale) {
     if (item.sale.saleId) {
+      // este método aqui já cancela a venda vinculada ao pagament
       await asaas.deletePayment(item.sale.saleId);
     }
   }
