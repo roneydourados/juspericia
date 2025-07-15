@@ -3,6 +3,7 @@ export interface VoucherFilterProps {
   finalDate: string;
   status?: string;
   sellerId?: string;
+  userId?: string;
 }
 export interface VoucherFormProps {
   id?: number;

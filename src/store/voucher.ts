@@ -15,6 +15,7 @@ export const useVoucherStore = defineStore("voucher", () => {
     finalDate,
     sellerId,
     status,
+    userId,
   }: VoucherFilterProps) => {
     const config = {
       params: {
@@ -22,6 +23,7 @@ export const useVoucherStore = defineStore("voucher", () => {
         finalDate,
         sellerId,
         status,
+        userId,
       },
     };
 

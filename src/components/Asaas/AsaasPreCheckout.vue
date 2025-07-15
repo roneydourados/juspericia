@@ -127,6 +127,7 @@ const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
 const voucherStore = useVoucherStore();
 const systemParametersStore = useSystemParametersStore();
+const auth = useAuthStore();
 
 const loading = ref(false);
 const loadingVoucher = ref(false);
@@ -135,6 +136,7 @@ const show = defineModel("show", { default: false });
 
 const emit = defineEmits(["confirm-sale", "cancel"]);
 
+const $currentUser = computed(() => auth.$currentUser);
 const $paymentSimulation = computed(() => asaas.$paymentSimulation);
 const $voucher = computed(() => voucherStore.$voucherExists);
 const $systemParameters = computed(() => systemParametersStore.$parameters);
@@ -208,6 +210,16 @@ const getVoucher = useDebounceFn(async () => {
       if (!$voucher.value) {
         isInvalidvoucher.value = true;
       } else {
+        //validar se é um voucher exclusivo para um usuário
+        if (
+          $voucher.value.userId &&
+          $voucher.value.userId !== $currentUser.value?.id
+        ) {
+          // se o usuário que esta tentando usar o o voucher não é o dono do voucher
+          isInvalidvoucher.value = true;
+          return;
+        }
+
         if ($voucher.value.voucherUseCount) {
           isInvalidvoucher.value =
             $voucher.value.voucherUseCount >=
@@ -321,8 +333,13 @@ const paymentSimulation = async () => {
 
     calculateDiscount();
 
-    model.value.totalValue =
-      Number(model.value.totalValue ?? 0) - Number(model.value.discount ?? 0);
+    //evitar valor de desconto maior que o valor total
+    if (
+      Number(model.value.discount ?? 0) < Number(model.value.totalValue ?? 0)
+    ) {
+      model.value.totalValue =
+        Number(model.value.totalValue ?? 0) - Number(model.value.discount ?? 0);
+    }
   } finally {
     loading.value = false;
   }
