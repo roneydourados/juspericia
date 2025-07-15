@@ -337,7 +337,7 @@ const clickDay = async (date: string) => {
   timeSlots();
 };
 
-const datePickerModelValue = async (date: string) => {
+const datePickerModelValue = async (date: string | null) => {
   if (!date || !dayjs(date).isValid()) {
     return;
   }

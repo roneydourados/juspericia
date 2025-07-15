@@ -27,7 +27,11 @@
       <v-col cols="12" lg="6">
         <v-card flat rounded="lg">
           <div
-            v-if="$single?.Schedule && $single?.Schedule.length > 0"
+            v-if="
+              $single?.Schedule &&
+              $single?.Schedule.length > 0 &&
+              $single?.status !== 'finished'
+            "
             class="d-flex bg-green-darken-1 pa-2 rounded-lg"
           >
             <InfoLabel
@@ -37,7 +41,36 @@
               :content="`${dayjs($single.Schedule[0]?.scheduleDate).format(
                 'DD/MM/YYYY'
               )} as ${$single.Schedule[0].scheduleHour}`"
+              :show-divider="false"
             />
+          </div>
+          <div
+            v-else-if="$single?.status === 'finished'"
+            class="d-flex bg-green-darken-1 pa-2 rounded-lg"
+          >
+            <InfoLabel
+              :title="`Solicitação finalizada em ${dayjs(
+                $single?.dateClose
+              ).format('DD/MM/YYYY')}`"
+              font-size="1.1"
+              font-size-content="1.1"
+              :show-divider="false"
+              :content="`${
+                $single?.PatientConsultationReport
+                  ? 'Laudo médico disponível'
+                  : 'Laudo médico Pendente'
+              }`"
+            />
+            <v-btn
+              v-if="$single?.PatientConsultationReport"
+              class="text-none font-weight-bold"
+              prepend-icon="mdi-file-document-edit"
+              @click="handleDownloadSignedFile($single)"
+              variant="text"
+              size="small"
+            >
+              Baixar Laudo
+            </v-btn>
           </div>
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
@@ -74,6 +107,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <DialogLoading :dialog="loading" />
   </v-card>
 </template>
 
@@ -81,5 +115,46 @@
 import dayjs from "dayjs";
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
+const zapSign = useZapsignStore();
 const $single = computed(() => storeConsultation.$single);
+
+const loading = ref(false);
+
+const handleDownloadSignedFile = async (
+  item: SolicitationConsultationProps
+) => {
+  if (!item.PatientConsultationReport) {
+    push.error("Documento não assinado.");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const { fileBlob, fileName } = await zapSign.getSignedFile(
+      item.PatientConsultationReport.publicId!
+    );
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(fileBlob);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = fileName;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadSignedFile ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

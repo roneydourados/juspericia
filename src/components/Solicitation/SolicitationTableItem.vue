@@ -5,7 +5,12 @@
       style="gap: 1rem; font-size: 1rem"
     >
       <div class="d-flex align-center" style="gap: 1rem">
-        <div class="text-truncate font-weight-bold">
+        <div
+          @click="handleDetailsClick(solicitation.publicId!)"
+          class="text-truncate font-weight-bold"
+          v-ripple
+          style="cursor: pointer"
+        >
           #{{ solicitation.id }} - Solicitação
           {{ solicitation.Consultation?.consultationName }}
         </div>
@@ -31,7 +36,18 @@
           </div>
         </div>
       </div>
-      <div class="d-flex align-center" style="gap: 1rem">
+      <div class="d-flex flex-wrap align-center" style="gap: 1rem">
+        <v-btn
+          v-if="solicitation.PatientConsultationReport"
+          class="text-none font-weight-bold"
+          prepend-icon="mdi-file-document-edit"
+          color="info"
+          @click="handleDownloadSignedFile(solicitation)"
+          variant="flat"
+          size="small"
+        >
+          Baixar Laudo
+        </v-btn>
         <div
           v-if="
             solicitation.status === 'open' ||
@@ -339,16 +355,8 @@
           >
             Dar Gorjeta
           </v-btn>
-          <!-- <v-btn
-            v-if="solicitation.status === 'finished' && solicitation.rate! > 0"
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-file-document-edit"
-            color="info"
-          >
-            Laudo
-          </v-btn> -->
         </v-col>
-        <v-col cols="12" lg="3" class="d-flex align-center px-4">
+        <v-col cols="12" lg="3" class="d-flex flex-wrap align-center px-4">
           <v-btn
             v-if="solicitation.rate === 0 && solicitation.status === 'finished'"
             class="text-none font-weight-bold"
@@ -441,7 +449,7 @@
     @confirm-sale="handleSaleItemForAsaas"
     @cancel="handleCancel"
   />
-  <!-- <pre>{{ props.solicitation.sale }}</pre> -->
+  <!-- <pre>{{ props.solicitation }}</pre> -->
 </template>
 
 <script setup lang="ts">
@@ -460,7 +468,8 @@ const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const rounter = useRouter();
 const fileStore = useFileStore();
-const transactionsStore = useTransactionsStore();
+const zapSign = useZapsignStore();
+// const transactionsStore = useTransactionsStore();
 
 const {
   amountFormated,
@@ -739,30 +748,7 @@ const handleSaleItemForAsaas = async () => {
     }
 
     if ($paymentResponse.value?.data?.invoiceUrl) {
-      //window.location.href = $paymentResponse.value.data.invoiceUrl;
       window.open($paymentResponse.value.data.invoiceUrl, "_blank");
-      // window.open($paymentResponse.value.data.invoiceUrl, "_blank");
-      // const screenWidth = window.screen.width;
-      // const screenHeight = window.screen.height;
-      // const popupWidth = Math.round(screenWidth * 0.95);
-      // const popupHeight = Math.round(screenHeight * 0.95);
-      // const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-      // const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-      // const popup = window.open(
-      //   $paymentResponse.value?.data?.invoiceUrl,
-      //   "_blank",
-      //   `left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-      // );
-
-      // // verificar se o popup foi fechado
-      // const popupChecker = setInterval(async () => {
-      //   if (popup && popup.closed) {
-      //     clearInterval(popupChecker);
-      //     console.log("🚀 ~ handleSaleItemForAsaas ~ popup.closed");
-      //     await getSolicitations();
-      //   }
-      // }, 700);
     }
   } catch (error) {
     push.error("Erro ao finalizar pagamento");
@@ -847,7 +833,15 @@ const handleReceipt = (item: SolicitationConsultationProps) => {
 const handleUseCreditSalt = async () => {
   loading.value = true;
   try {
-    await saltCredit.index({ status: "CONFIRMED" });
+    const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
+    const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
+    await saltCredit.index({
+      userId: $currentUser.value?.id!,
+      initialDate,
+      finalDate,
+      status: "CONFIRMED",
+      isSalt: true,
+    });
     showSaltCredit.value = true;
   } finally {
     loading.value = false;
@@ -908,5 +902,43 @@ const handleCancel = () => {
     packgeSaleValue: 0,
     packgeQuantity: 1,
   };
+};
+
+const handleDownloadSignedFile = async (
+  item: SolicitationConsultationProps
+) => {
+  if (!item.PatientConsultationReport) {
+    push.error("Documento não assinado.");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const { fileBlob, fileName } = await zapSign.getSignedFile(
+      item.PatientConsultationReport.publicId!
+    );
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(fileBlob);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = fileName;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadSignedFile ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
