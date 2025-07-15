@@ -3,7 +3,7 @@
     <div class="d-flex flex-column w-100">
       <HeaderPage title="Gestão de laudos" />
       <v-row class="mt-4" dense>
-        <v-col cols="12" lg="4">
+        <v-col cols="12" lg="3">
           <SelectSearchPatient
             label="Paciente"
             v-model="filters.patient"
@@ -11,7 +11,7 @@
             clearable
           />
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="1">
           <SelectInput
             v-model="filters.emitReport"
             label="Laudo Emitido"
@@ -107,100 +107,124 @@
         </v-chip>
       </template>
       <template v-slot:item.actions="{ item }">
-        <div v-if="item.reportContent" class="d-flex justify-content-center">
-          <v-btn
-            v-if="item.reportStatus === 'sign-pending'"
-            icon
-            color="blue"
-            variant="text"
-            size="small"
-            @click="handleSignDocument(item)"
+        <div class="d-flex justify-content-center">
+          <div
+            v-if="item.reportContent && item.reportStatus !== 'cancel'"
+            class="d-flex justify-content-center"
           >
-            <v-icon icon="mdi-file-edit-outline" size="20"></v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
+            <v-btn
+              v-if="item.reportStatus === 'sign-pending'"
+              icon
+              color="blue"
+              variant="text"
+              size="small"
+              @click="handleSignDocument(item)"
             >
-              Assinar documento
-            </v-tooltip>
-          </v-btn>
-          <v-btn
-            v-else
-            icon
-            color="red"
-            variant="text"
-            size="small"
-            @click="handleDownloadSignedFile(item)"
-          >
-            <v-icon icon="mdi-file-pdf-box" size="20"></v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
+              <v-icon icon="mdi-file-edit-outline" size="20"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Assinar documento
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-else
+              icon
+              color="red"
+              variant="text"
+              size="small"
+              @click="handleDownloadSignedFile(item)"
             >
-              Laudo
-            </v-tooltip>
-          </v-btn>
-          <v-btn
-            v-if="
-              $currentUser?.profile?.type === 'ADMIN' ||
-              $currentUser?.profile?.type === 'MEDICO'
-            "
-            icon
-            color="orange"
-            variant="text"
-            size="small"
-            @click="handleEditCorrection(item)"
-            :disabled="item.reportStatus === 'signed'"
-          >
-            <v-icon icon="mdi-clock-edit-outline" size="20"></v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
+              <v-icon icon="mdi-file-pdf-box" size="20"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Laudo
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="item.reportStatus === 'signed'"
+              icon
+              color="danger"
+              variant="text"
+              size="small"
+              @click="handleGetSignatureCancel(item)"
             >
-              Correção/Editar
-            </v-tooltip>
-          </v-btn>
-          <v-btn
-            v-if="
-              $currentUser?.profile?.type === 'ADMIN' ||
-              $currentUser?.profile?.type === 'MEDICO'
-            "
-            icon
-            color="purple"
-            variant="text"
-            size="small"
-            @click="handleReportDetails(item)"
-          >
-            <v-icon icon="mdi-dots-vertical-circle-outline" size="20"></v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
+              <v-icon icon="mdi-pencil-off-outline" size="20"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Cancelar assinatura
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="
+                ($currentUser?.profile?.type === 'ADMIN' ||
+                  $currentUser?.profile?.type === 'MEDICO') &&
+                item.reportStatus !== 'signed'
+              "
+              icon
+              color="orange"
+              variant="text"
+              size="small"
+              @click="handleEditCorrection(item)"
+              :disabled="item.reportStatus === 'signed'"
             >
-              Detalhes do laudo
-            </v-tooltip>
-          </v-btn>
+              <v-icon icon="mdi-clock-edit-outline" size="20"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Correção/Editar
+              </v-tooltip>
+            </v-btn>
+          </div>
+          <div class="d-flex justify-content-center">
+            <v-btn
+              v-if="item.reportContent && !item.reportStatus"
+              icon
+              color="info"
+              variant="text"
+              size="small"
+              @click="handleNewReport(item)"
+            >
+              <v-icon icon="mdi-file-document-edit-outline" size="20"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Digitar laudo
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              icon
+              color="purple"
+              variant="text"
+              size="small"
+              @click="handleReportDetails(item)"
+            >
+              <v-icon
+                icon="mdi-dots-vertical-circle-outline"
+                size="20"
+              ></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Detalhes do laudo
+              </v-tooltip>
+            </v-btn>
+          </div>
         </div>
-        <v-btn
-          v-else
-          icon
-          color="info"
-          variant="text"
-          size="small"
-          @click="handleNewReport(item)"
-        >
-          <v-icon icon="mdi-file-document-edit-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Digitar laudo
-          </v-tooltip>
-        </v-btn>
       </template>
     </Table>
     <DialogLoading :dialog="loading" />
@@ -216,6 +240,18 @@
     v-model:token="signerToken"
     @close="getReports"
   />
+  <Dialog
+    title="CONFIRME"
+    :dialog="showSignedCancel"
+    @cancel="showSignedCancel = false"
+    @confirm="handleSetSignedCancel"
+    show-cancel
+  >
+    <span>
+      Este Laudo encontra-se assinado, a cobrança pela assinatura digital não
+      será revertida, tem certeza que deseja cancelar assinatura atual ?
+    </span>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
@@ -237,6 +273,7 @@ const loading = ref(false);
 const showReportDetails = ref(false);
 const showReportForm = ref(false);
 const showSignDocument = ref(false);
+const showSignedCancel = ref(false);
 const signerToken = ref("");
 const selectedReport = ref<PatientConsultationReportListProps>();
 
@@ -249,6 +286,8 @@ const filters = ref({
 });
 
 const headers = ref([
+  { title: "Nº", key: "reportId" },
+  { title: "Solicitação Nº", key: "id" },
   { title: "Data consulta", key: "dateClose" },
   { title: "Benefício", key: "benefitType" },
   { title: "Finalidade", key: "reportPurpose" },
@@ -444,6 +483,11 @@ const handleEditCorrection = async (
   }
 };
 
+const handleGetSignatureCancel = (item: PatientConsultationReportListProps) => {
+  selectedReport.value = item;
+  showSignedCancel.value = true;
+};
+
 const getReportStatusColor = (status: string) => {
   switch (status) {
     case "empty":
@@ -471,6 +515,20 @@ const getReportStatusColor = (status: string) => {
         color: "grey",
         icon: "mdi-help-circle-outline",
       };
+  }
+};
+
+const handleSetSignedCancel = async () => {
+  if (!selectedReport.value) return;
+  loading.value = true;
+  try {
+    await consultationReport.cancelSign(selectedReport.value.reportPublicId!);
+  } catch (error) {
+    console.error("Erro ao cancelar assinatura:", error);
+  } finally {
+    showSignedCancel.value = false;
+    loading.value = false;
+    await getReports();
   }
 };
 </script>

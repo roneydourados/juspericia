@@ -19,7 +19,7 @@
       <v-list-item
         v-bind="props"
         :title="item.raw.name"
-        :subtitle="item.raw.officeName"
+        :subtitle="item.raw.surname"
         density="compact"
       >
       </v-list-item>

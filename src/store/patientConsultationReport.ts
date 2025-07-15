@@ -69,12 +69,17 @@ export const usePatientConsultationReportStore = defineStore(
       patientConsultationReport.value = data;
     };
 
+    const cancelSign = async (publicId: string) => {
+      await api.put(`/patient-consultation-report/cancel-sign/${publicId}`);
+    };
+
     return {
       $single,
       $all,
       create,
       show,
       index,
+      cancelSign,
     };
   }
 );

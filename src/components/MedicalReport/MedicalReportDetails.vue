@@ -28,8 +28,12 @@
           </v-col>
           <v-col cols="12" lg="3">
             <InfoLabel
-              title="Data abertura"
-              :content="dayjs(data.reportDate).format('DD/MM/YYYY')"
+              title="Data geração laudo"
+              :content="`${
+                data.reportDate
+                  ? dayjs(data.reportDate).format('DD/MM/YYYY')
+                  : 'Não informado'
+              }`"
               font-size-content="0.8"
             />
           </v-col>
@@ -85,26 +89,26 @@ defineProps({
   },
 });
 
-const fileStore = useFileStore();
+//const fileStore = useFileStore();
 const { formatCPFOrCNPJ } = useUtils();
 
 const dialog = defineModel({
   default: false,
 });
 
-const handleDownloadFile = async (publicId: string) => {
-  try {
-    const data = await fileStore.downloadAws(publicId);
-    const url = window.URL.createObjectURL(data.file);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", data.fileName); // You can set the file name here
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.log("🚀 ~ handleDownloadFile ~ error:", error);
-  }
-};
+// const handleDownloadFile = async (publicId: string) => {
+//   try {
+//     const data = await fileStore.downloadAws(publicId);
+//     const url = window.URL.createObjectURL(data.file);
+//     const link = document.createElement("a");
+//     link.href = url;
+//     link.setAttribute("download", data.fileName); // You can set the file name here
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+//     window.URL.revokeObjectURL(url);
+//   } catch (error) {
+//     console.log("🚀 ~ handleDownloadFile ~ error:", error);
+//   }
+// };
 </script>

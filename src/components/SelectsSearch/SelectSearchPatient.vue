@@ -33,7 +33,6 @@
       </div>
     </template>
   </AutoCompleteInput>
-
   <div v-if="showNewButton" cols="12" lg="2">
     <v-tooltip text="Novo" content-class="tooltip-background">
       <template v-slot:activator="{ props }">
