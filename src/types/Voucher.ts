@@ -16,6 +16,7 @@ export interface VoucherFormProps {
   status?: string;
   voucherUseCount?: number;
   voucherUsePersonalizedSale?: boolean;
+  userId?: number;
   seller?: UserProps;
   user?: UserProps;
   voucherItems: VoucherItemsProps[];

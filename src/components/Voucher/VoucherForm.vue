@@ -6,8 +6,8 @@
     @dialog="handleClose"
   >
     <FormCrud @submit="handleSubmit">
-      <v-row>
-        <v-col cols="12" lg="8">
+      <v-row dense>
+        <v-col cols="12" lg="4">
           <StringInput label="Descrição" v-model="form.description" required />
         </v-col>
         <v-col cols="12" lg="4">
@@ -19,8 +19,27 @@
             @blur="voucherExisteInUse($event)"
           />
         </v-col>
+        <v-col cols="12" lg="4">
+          <v-card flat color="error" v-if="$voucherExists">
+            <v-card-text>
+              <span>
+                Existe um voucher em uso com nome: {{ form.voucherName }}
+              </span>
+            </v-card-text>
+          </v-card>
+          <v-card flat color="success" v-else>
+            <v-card-text>
+              <span> Informe o código -> {{ form.voucherName }} </span>
+            </v-card-text>
+          </v-card>
+        </v-col>
         <v-col cols="12" lg="2">
-          <CurrencyInput label="Desconto" v-model="form.discount" required />
+          <CurrencyInput
+            label="Desconto"
+            v-model="form.discount"
+            required
+            :disabled="!!form.user"
+          />
         </v-col>
         <v-col cols="12" lg="3">
           <DateTimePicker
@@ -35,22 +54,24 @@
             v-model="form.useQuantity"
             required
             :min="1"
+            :disabled="!!form.user"
           />
         </v-col>
-        <v-col cols="12" lg="3">
-          <v-card flat color="error" v-if="$voucherExists">
-            <v-card-text>
-              <span>
-                Existe um voucher em uso com nome: {{ form.voucherName }}
-              </span>
-            </v-card-text>
-          </v-card>
+        <v-col cols="12" lg="5">
+          <SelectSearchLawyer
+            label="Cliente"
+            v-model="form.user"
+            @update:model-value="getSaltCredit"
+            clearable
+          />
         </v-col>
+
         <v-col cols="12" lg="4">
           <v-radio-group
             label="Tipo desconto"
             v-model="form.discountType"
             inline
+            :disabled="!!form.user"
           >
             <v-radio label="% Porcentagem" value="percentage"></v-radio>
             <v-radio label="R$ Valor" value="value"></v-radio>
@@ -60,14 +81,14 @@
           <v-checkbox
             class="mt-5"
             v-model="form.voucherUsePersonalizedSale"
-            label="Voucher pode ser usado em vendas sob demanda e pagamento de solicitação avulsa ?"
+            label="Liberar para vendas sob demanda e pagamento de solicitação avulsa ?"
           />
         </v-col>
       </v-row>
       <v-divider class="mb-4" />
       <v-row dense class="mb-6">
         <v-col cols="12">
-          <div style="height: 20rem">
+          <div v-if="!form.user" style="height: 15rem">
             <div class="text-subtitle-1 font-weight-bold">
               Pacotes adicionados ao voucher:
             </div>
@@ -90,6 +111,93 @@
               </v-list-item>
             </v-list>
           </div>
+          <Tabs v-else v-model="tab" :tabs="tabs">
+            <template #content>
+              <div v-if="tab === 1" style="height: 15rem">
+                <div class="text-subtitle-1 font-weight-bold">
+                  Pacotes adicionados ao voucher:
+                </div>
+                <v-list height="100%">
+                  <v-list-item v-for="pkgv in form.packages" :key="pkgv.id">
+                    <v-list-item-title>
+                      {{ pkgv.name }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      <div class="d-flex flex-column">
+                        <strong>Valor: {{ pkgv.value }}</strong>
+                        <span>
+                          {{ pkgv.description }}
+                        </span>
+                      </div>
+                    </v-list-item-subtitle>
+                    <template v-slot:append>
+                      <v-checkbox v-model="pkgv.isChecked" />
+                    </template>
+                  </v-list-item>
+                </v-list>
+              </div>
+              <div v-if="tab === 2" style="height: 15rem">
+                total: {{ $totalSalts }}
+                <Table
+                  title="Saldo de créditos"
+                  :headers="headers"
+                  :items="$salts"
+                  :show-crud="false"
+                  show-select
+                  v-model="selectedCredits"
+                  @update:model-value="setDiscountForSalt"
+                >
+                  <template #top-table>
+                    <div class="d-flex justify-center mb-2">
+                      <strong class="text-error text-center">
+                        TODOS OS SALDOS DE CRÉDITOS AQUI SELECIONADOS SERÃO
+                        ZERADOS AO SALVAR O VOUCHER, ESTA AÇÃO É
+                        IRREVERSÍVEL!</strong
+                      >
+                    </div>
+                  </template>
+                  <template #item.status="{ item }">
+                    <v-chip label :color="getStatusName(item).color">
+                      <v-icon
+                        :color="getStatusName(item).color"
+                        :icon="getStatusName(item).icon"
+                        size="20"
+                        start
+                      />
+                      {{ getStatusName(item).text }}
+                    </v-chip>
+                  </template>
+                  <template #item.dateCreated="{ item }">
+                    <strong>
+                      {{ dayjs(item.dateCreated).format("DD/MM/YYYY") }}
+                    </strong>
+                  </template>
+                  <template #item.value="{ item }">
+                    <strong>{{ amountFormated(item.value, true) }}</strong>
+                  </template>
+                  <template #item.salt="{ item }">
+                    <strong>{{ amountFormated(item.salt, true) }}</strong>
+                  </template>
+                  <template #item.solicitationConsultationValue="{ item }">
+                    <strong>{{
+                      amountFormated(item.solicitationConsultationValue, true)
+                    }}</strong>
+                  </template>
+
+                  <template #item.expireDate="{ item }">
+                    <strong>
+                      {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
+                    </strong>
+                  </template>
+                  <template #item.createdAt="{ item }">
+                    <strong>{{
+                      dayjs(item.createdAt).format("DD/MM/YYYY")
+                    }}</strong>
+                  </template>
+                </Table>
+              </div>
+            </template>
+          </Tabs>
         </v-col>
       </v-row>
     </FormCrud>
@@ -109,11 +217,14 @@ const props = defineProps({
 });
 
 const { mobile } = useDisplay();
+const { amountFormated } = useUtils();
 const consultationPackageStore = useServicePackageStore();
+const saltCredit = useUserCreditSaltStore();
 const vouchers = useVoucherStore();
 const show = defineModel({ default: false });
 const loading = ref(false);
-
+const selectedCredits = ref<UserCreditSalt[]>([]);
+const tab = ref(1);
 const form = ref({
   voucherName: "",
   description: "",
@@ -123,6 +234,37 @@ const form = ref({
   packages: [] as VoucherItemsProps[],
   useQuantity: "1",
   voucherUsePersonalizedSale: false,
+  user: undefined as UserProps | undefined,
+});
+const headers = ref([
+  {
+    title: "Status",
+    align: "start",
+    sortable: false,
+    key: "status",
+  },
+  { title: "Data da compra", key: "dateCreated" },
+  { title: "Data de expiração", key: "expireDate" },
+  { title: "Valor", key: "value" },
+  { title: "Saldo", key: "salt" },
+  {
+    title: "Valor descontar por solicitação",
+    key: "solicitationConsultationValue",
+  },
+  { title: "Marcar", key: "actions" },
+]);
+
+const tabs = computed(() => {
+  return [
+    {
+      title: "Pacotes",
+      icon: "mdi-package-variant",
+    },
+    {
+      title: "Saldo de créditos",
+      icon: "mdi-cash-multiple",
+    },
+  ];
 });
 
 const $packages = computed(() => {
@@ -156,6 +298,20 @@ const $packages = computed(() => {
 });
 
 const $voucherExists = computed(() => vouchers.$voucherExists);
+const $salts = computed(() => {
+  return saltCredit.$credits?.credits
+    ? saltCredit.$credits.credits.map((credit) => ({
+        ...credit,
+        isChecked: false,
+      }))
+    : [];
+});
+
+const $totalSalts = computed(() => {
+  return selectedCredits.value.reduce((total, credit) => {
+    return total + Number(credit.salt ?? 0);
+  }, 0);
+});
 
 const loadForm = () => {
   form.value = {
@@ -166,6 +322,7 @@ const loadForm = () => {
     expirationDate: props.data.expirationDate || "",
     useQuantity: props.data.useQuantity.toString() || "1",
     voucherUsePersonalizedSale: props.data.voucherUsePersonalizedSale ?? false,
+    user: props.data.user || undefined,
     packages: props.data.voucherItems
       ? [
           ...props.data.voucherItems
@@ -249,8 +406,10 @@ const clearForm = () => {
     packages: [],
     useQuantity: "1",
     voucherUsePersonalizedSale: false,
+    user: undefined,
   };
   vouchers.clear();
+  selectedCredits.value = [];
 };
 
 const create = async () => {
@@ -259,10 +418,23 @@ const create = async () => {
   }
 
   try {
+    const voucherItems = form.value.packages.filter((pkg) => pkg.isChecked);
+
+    // se possuir saldo em créditos selecionados, adicionar ao voucherItems
+    if (selectedCredits.value.length > 0) {
+      selectedCredits.value.forEach((credit) => {
+        voucherItems.push({
+          itemType: "user-credit",
+          id: credit.id,
+        });
+      });
+    }
+
     await vouchers.create({
       ...form.value,
+      userId: form.value.user ? Number(form.value.user.id) : undefined,
       publicId: props.data.publicId,
-      voucherItems: form.value.packages.filter((pkg) => pkg.isChecked),
+      voucherItems,
     });
   } catch (error) {
     console.error("Error creating voucher:", error);
@@ -275,13 +447,91 @@ const voucherExisteInUse = async (voucherName: string) => {
 
 const update = async () => {
   try {
+    const voucherItems = form.value.packages.filter((pkg) => pkg.isChecked);
+
+    // se possuir saldo em créditos selecionados, adicionar ao voucherItems
+    if (selectedCredits.value.length > 0) {
+      selectedCredits.value.forEach((credit) => {
+        voucherItems.push({
+          itemType: "user-credit",
+          id: credit.id,
+        });
+      });
+    }
+
     await vouchers.update({
       ...form.value,
+      userId: form.value.user ? Number(form.value.user.id) : undefined,
       publicId: props.data.publicId,
-      voucherItems: form.value.packages.filter((pkg) => pkg.isChecked),
+      voucherItems,
     });
   } catch (error) {
     console.error("Error updating voucher:", error);
   }
+};
+
+const getSaltCredit = async () => {
+  if (!form.value.user || !form.value.user.id) {
+    selectedCredits.value = [];
+    return;
+  }
+
+  form.value.discountType = "value";
+  form.value.useQuantity = "1";
+  form.value.discount = "";
+
+  try {
+    const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
+    const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
+    await saltCredit.index({
+      initialDate,
+      finalDate,
+      userId: form.value.user.id,
+      isSalt: true,
+      status: "CONFIRMED",
+    });
+  } catch (error) {
+    console.error("Error fetching salt credit:", error);
+  }
+};
+
+const getStatusName = (item: UserCreditSalt) => {
+  const currentDate = dayjs();
+
+  switch (item.status) {
+    case "CONFIRMED":
+      // se estiver ativo, então verificar se não expirou
+      return {
+        text: dayjs(item.expireDate).isBefore(currentDate)
+          ? "Expirado"
+          : "Disponível",
+        color: dayjs(item.expireDate).isBefore(currentDate)
+          ? "warning"
+          : "success",
+        icon: "mdi-check-circle-outline",
+      };
+    case "PENDING":
+      return {
+        text: "Pendente",
+        color: "warning",
+        icon: "mdi-circle-outline",
+      };
+    case "REFUNDED":
+      return {
+        text: "Cancelado",
+        color: "error",
+        icon: "mdi-cancel",
+      };
+    default:
+      return {
+        text: "Indefinido",
+        color: "grey",
+        icon: "mdi-circle-outline",
+      };
+  }
+};
+
+const setDiscountForSalt = () => {
+  form.value.discount = amountFormated($totalSalts.value ?? 0, false);
 };
 </script>

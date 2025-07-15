@@ -118,7 +118,7 @@ const handleSubmit = async () => {
       });
     }
 
-    await consultationPackageStore.index("active");
+    await consultationPackageStore.index({ name: "", status: "active" });
 
     handleClose();
   } catch (error) {

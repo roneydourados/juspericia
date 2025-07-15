@@ -10,7 +10,7 @@ const loading = ref(false);
 onMounted(async () => {
   loading.value = true;
   try {
-    await consutationPackage.index("active");
+    await consutationPackage.index({ name: "", status: "active" });
   } finally {
     loading.value = false;
   }

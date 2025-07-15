@@ -10,13 +10,21 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
   const $credits = computed(() => userCreditSalts.value);
   const $userCreditLog = computed(() => userCreditLog.value);
 
-  const index = async (input: SaleFilterProps) => {
-    const { status, initialDate, finalDate } = input;
+  const index = async (input: {
+    status?: string;
+    userId: number;
+    initialDate?: string;
+    finalDate?: string;
+    isSalt?: boolean;
+  }) => {
+    const { status, initialDate, finalDate, isSalt, userId } = input;
     const config = {
       params: {
+        userId,
         status,
         initialDate,
         finalDate,
+        isSalt,
       },
     };
     const { data } = await api.get<UserCreditSaltResponseProps>(

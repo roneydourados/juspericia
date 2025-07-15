@@ -72,6 +72,7 @@
       no-data-text="Nenhum dado encontrado"
       loading-text="Buscando dados aguarde..."
       select-strategy="all"
+      @update:model-value="$emit('update:modelValue', $event)"
     >
       <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
         <slot v-if="slotProps" :name="name" v-bind="slotProps" />
@@ -107,6 +108,7 @@
       :loading="loading"
       loading-text="Buscando dados aguarde..."
       select-strategy="all"
+      @update:model-value="$emit('update:modelValue', $event)"
     >
       <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
         <slot v-if="slotProps" :name="name" v-bind="slotProps" />
