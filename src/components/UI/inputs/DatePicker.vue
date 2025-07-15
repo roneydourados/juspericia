@@ -160,7 +160,7 @@ watch(modelValue, (newValue) => {
   }
   // Chame handleChange para revalidar com o novo valor que veio do pai
   // Isso é crucial para que VeeValidate saiba que o valor mudou
-  handleChange(newValue || ""); // Passe o valor final da API (YYYY-MM-DD)
+  handleChange(newValue); // Passe o valor final da API (YYYY-MM-DD)
 });
 
 // Centraliza a lógica de formatação e atualização ao digitar
@@ -186,48 +186,45 @@ const handleInputAndFormat = (event: Event) => {
 
   inputValue.value = formatted; // Atualiza o v-model do text-field
 
-  // Tenta converter e atualizar o valor para a API (YYYY-MM-DD)
-  // O valor só é considerado completo e válido para API se tiver 10 caracteres
+  let apiValue: string | null = null;
+  // Tenta converter para o formato da API (YYYY-MM-DD) se a data estiver completa e válida no display
   if (
     formatted.length === 10 &&
     dayjs(formatted, "DD/MM/YYYY", true).isValid()
   ) {
-    const formattedForApi = dayjs(formatted, "DD/MM/YYYY").format("YYYY-MM-DD");
-    value.value = formattedForApi; // Atualiza o valor do useField (YYYY-MM-DD)
-    modelValue.value = formattedForApi; // Atualiza o defineModel
-  } else {
-    // Se não for completo ou válido, o valor da API deve ser nulo/vazio
-    value.value = null;
-    modelValue.value = null;
+    apiValue = dayjs(formatted, "DD/MM/YYYY").format("YYYY-MM-DD");
   }
 
-  // Chame o handleChange do vee-validate com o valor formatado para que a validação parcial ocorra.
-  // Isso permite que o erro "Data inválida ou incompleta" apareça em tempo real.
-  handleChange(inputValue.value);
+  // Atualiza o valor do useField e defineModel
+  value.value = apiValue;
+  modelValue.value = apiValue;
+
+  // No @input, chamamos handleChange com o valor *final* (YYYY-MM-DD ou null)
+  // Isso permite que a validação do Zod atue sobre o valor correto em tempo real.
+  // No entanto, para validações que dependem do campo completo, o "on blur" ainda será mais efetivo.
+  handleChange(apiValue);
 };
 
 // Função para validar e emitir a data ao desfocar o campo (blur)
 const validateAndEmitOnBlur = () => {
   const inputVal = inputValue.value;
 
-  // Se o inputVal estiver vazio e não for required, limpa e considera válido.
-  if (!props.required && (!inputVal || inputVal.length === 0)) {
-    value.value = null;
-    modelValue.value = null;
-  } else if (
-    inputVal.length === 10 &&
-    dayjs(inputVal, "DD/MM/YYYY", true).isValid()
-  ) {
-    const formattedDate = dayjs(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
-    value.value = formattedDate;
-    modelValue.value = formattedDate;
-  } else {
-    // Se a data for inválida ou incompleta no blur, zera o valor para a API
-    value.value = null;
-    modelValue.value = null;
+  let apiValue: string | null = null;
+
+  if (inputVal.length === 10 && dayjs(inputVal, "DD/MM/YYYY", true).isValid()) {
+    apiValue = dayjs(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
+  } else if (!props.required && (!inputVal || inputVal.length === 0)) {
+    // Se não for obrigatório e o campo estiver vazio, é válido
+    apiValue = null;
   }
-  // Força a validação final no blur
-  handleChange(inputValue.value, true); // Força a validação do VeeValidate com o valor atual do input
+  // Se a data for incompleta ou inválida E for obrigatória, apiValue permanecerá null,
+  // e a validação do Zod cuidará da mensagem "Campo não pode ser vazio!".
+
+  value.value = apiValue;
+  modelValue.value = apiValue;
+
+  // Força a validação final no blur com o valor que o Zod espera
+  handleChange(apiValue, true); // O 'true' força a validação imediata
 };
 
 const handleClickMenu = () => {
@@ -265,13 +262,9 @@ const handleUpdateDatePickerData = (newDate: Date | null) => {
     modelValue.value = null;
     menu.value = false;
   }
-  handleChange(inputValue.value); // Dispara validação do vee-validate
+  handleChange(value.value); // Dispara validação do vee-validate com o valor do campo
 };
 </script>
-
-<style scoped>
-/* Seus estilos aqui */
-</style>
 
 <!-- <template>
   <v-text-field
