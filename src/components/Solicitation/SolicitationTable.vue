@@ -102,19 +102,19 @@
           ({{ getQuantity("in_progress") }})
         </span>
       </v-tab> -->
-      <v-tab value="finished" class="text-none">
-        <v-icon icon="mdi-calendar-month-outline" size="24" start />
-        <span v-if="!mobile">Finalizadas </span>
-        <span class="text-info font-weight-bold"
-          >({{ getQuantity("finished") }})</span
-        >
-      </v-tab>
       <v-tab value="canceled" class="text-none">
         <v-icon icon="mdi-cancel" size="24" start />
         <span v-if="!mobile">Canceladas </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("canceled") }})
         </span>
+      </v-tab>
+      <v-tab value="finished" class="text-none">
+        <v-icon icon="mdi-calendar-month-outline" size="24" start />
+        <span v-if="!mobile">Finalizadas </span>
+        <span class="text-info font-weight-bold"
+          >({{ getQuantity("finished") }})</span
+        >
       </v-tab>
     </v-tabs>
     <v-divider />
