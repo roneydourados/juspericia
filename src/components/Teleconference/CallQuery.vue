@@ -98,23 +98,23 @@ onUnmounted(() => {
 const handleClose = async () => {
   loading.value = true;
   try {
-    if ($currentUser.value?.profile?.type === "MEDICO") {
-      const payload = {
-        publicId: $single.value?.publicId,
-        isTelemedicine: false,
-        status: isFinishSolicitation.value ? "finished" : undefined,
-        dateClose: isFinishSolicitation.value
-          ? dayjs().format("YYYY-MM-DD")
-          : undefined,
-      };
+    //if ($currentUser.value?.profile?.type === "MEDICO") {
+    const payload = {
+      publicId: $single.value?.publicId,
+      isTelemedicine: false,
+      status: isFinishSolicitation.value ? "finished" : undefined,
+      dateClose: isFinishSolicitation.value
+        ? dayjs().format("YYYY-MM-DD")
+        : undefined,
+    };
 
-      //desativar teleconsulta
-      await storeConsultation.update(payload);
+    //desativar teleconsulta
+    await storeConsultation.update(payload);
 
-      await router.push("/schedules");
-      return;
-    }
-    await router.push("/");
+    await router.push("/schedules");
+    //return;
+    //}
+    //await router.push("/");
   } catch (error) {
     console.error(error);
   } finally {

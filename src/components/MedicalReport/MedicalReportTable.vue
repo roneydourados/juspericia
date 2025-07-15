@@ -71,7 +71,7 @@
         </v-col>
       </v-row>
     </div>
-    <!-- <pre>{{ $consultationReports }}</pre> -->
+    <pre>{{ $consultationReports }}</pre>
     <Table
       title="Laudos Médicos"
       :show-crud="false"

@@ -184,17 +184,6 @@ const formattedDate = computed(() => {
   return `${diaSemana}, ${dia} de ${mes} de ${ano}`;
 });
 
-// const allowedDates = (val: any) => {
-//   const today = dayjs().add(-1, "days");
-//   const date = dayjs(val as Date);
-
-//   if (dayjs(date).isBefore(today)) {
-//     return false;
-//   }
-
-//   return true;
-// };
-
 const getSchedules = async () => {
   if (!model.date) return;
 
@@ -212,6 +201,7 @@ const getSchedules = async () => {
 
 const handleServiceDetails = async (item: ScheduleProps) => {
   await scheduleStore.show(item.publicId!);
+  await solicitationStore.show(item.PatientConsultation?.publicId!);
   serviceDetails.value = true;
 };
 

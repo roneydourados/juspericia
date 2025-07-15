@@ -75,6 +75,7 @@
                 </div>
                 <div v-html="$single?.PatientConsultation?.content" />
               </v-card>
+              <SolicitationDetailsDocuments />
               <v-card flat rounded="lg">
                 <div
                   class="font-weight-bold mb-4 mt-4"
