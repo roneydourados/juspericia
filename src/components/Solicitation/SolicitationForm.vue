@@ -47,6 +47,7 @@
               label="Paciente"
               required
               :clearable="true"
+              show-new-Button
             />
           </v-col>
         </v-row>

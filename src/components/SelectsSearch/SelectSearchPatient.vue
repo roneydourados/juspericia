@@ -1,50 +1,59 @@
 <template>
-  <AutoCompleteInput
-    v-model="value"
-    v-model:search="search"
-    :label="label"
-    placeholder="Digite algo para pesquisar..."
-    item-title="name"
-    return-object
-    :required="required"
-    icon="mdi-magnify"
-    :items="$all"
-    :loading="loadingSearch"
-    @click="search = ''"
-    @update:model-value="$emit('update:modelValue', $event)"
-    :clearable="clearable"
-    :disabled="disabled"
-  >
-    <template #items="{ item, props }">
-      <v-list-item
-        v-bind="props"
-        :title="item.raw.name"
-        :subtitle="item.raw.surname"
-        density="compact"
-      >
-      </v-list-item>
-    </template>
-
-    <template #selection="{ item }">
-      <div class="d-flex align-center">
-        <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.name }} {{ item.raw.surname }}
-        </span>
-      </div>
-    </template>
-  </AutoCompleteInput>
-  <div v-if="showNewButton" cols="12" lg="2">
-    <v-tooltip text="Novo" content-class="tooltip-background">
-      <template v-slot:activator="{ props }">
-        <v-btn
+  <div class="d-flex align-center">
+    <AutoCompleteInput
+      v-model="value"
+      v-model:search="search"
+      :label="label"
+      placeholder="Digite algo para pesquisar..."
+      item-title="name"
+      return-object
+      :required="required"
+      icon="mdi-magnify"
+      :items="$all"
+      :loading="loadingSearch"
+      @click="search = ''"
+      @update:model-value="$emit('update:modelValue', $event)"
+      :clearable="clearable"
+      :disabled="disabled"
+    >
+      <template #items="{ item, props }">
+        <v-list-item
           v-bind="props"
-          icon="mdi-plus"
-          size="x-small"
-          color="info"
-          flat
-        />
+          :title="item.raw.name"
+          :subtitle="item.raw.surname"
+          density="compact"
+        >
+        </v-list-item>
       </template>
-    </v-tooltip>
+
+      <template #selection="{ item }">
+        <div class="d-flex align-center">
+          <span class="ml-2 d-inline-block text-truncate">
+            {{ item.raw.name }} {{ item.raw.surname }}
+          </span>
+        </div>
+      </template>
+    </AutoCompleteInput>
+    <div v-if="showNewButton" class="mt-n6 ml-2">
+      <v-tooltip text="Novo" content-class="tooltip-background">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            v-bind="props"
+            icon="mdi-plus"
+            size="x-small"
+            color="info"
+            flat
+            @click="showForm = true"
+          />
+        </template>
+      </v-tooltip>
+    </div>
+    <PatientForm
+      :show="showForm"
+      title="Dados do Paciente"
+      @close="handleCloseForm"
+      width="800"
+    />
   </div>
 </template>
 
@@ -100,7 +109,7 @@ const patient = usePatientStore();
 
 const search = ref("");
 const loadingSearch = ref(false);
-
+const showForm = ref(false);
 const $all = computed(() => patient.$all);
 
 watch(search, async () => {
@@ -131,4 +140,9 @@ const handleSearch = useDebounceFn(async () => {
     loadingSearch.value = false;
   }
 }, 500);
+
+const handleCloseForm = async () => {
+  showForm.value = false;
+  await handleSearch();
+};
 </script>
