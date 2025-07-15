@@ -188,7 +188,7 @@
           </div>
           <div class="d-flex justify-content-center">
             <v-btn
-              v-if="item.reportContent && !item.reportStatus"
+              v-if="!item.reportContent && item.reportStatus === 'empty'"
               icon
               color="info"
               variant="text"
