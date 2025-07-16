@@ -89,15 +89,24 @@
               @click="handleReportCorrection(item)"
             >
               <strong>
-                {{ item.reportId }} - Solicitação de correção enviada
+                {{ item.reportId }} - Laudo contém justificativas
               </strong>
               <v-tooltip
                 activator="parent"
                 location="top center"
                 content-class="tooltip-background"
               >
-                Foi enviada uma solicitação de correção para este laudo. Clique
-                para ver a justificativa.
+                <p
+                  style="
+                    white-space: normal;
+                    max-width: 260px;
+                    word-break: break-word;
+                  "
+                >
+                  Laudo contém justificativas, seja de solicitação de correção
+                  ou de informações adicionais, como cancelamento de assinatura.
+                  Clique para ver a justificativa.
+                </p>
               </v-tooltip>
             </v-chip>
           </div>
@@ -512,6 +521,7 @@ const handleReportDetails = (item: PatientConsultationReportListProps) => {
 
 const handleNewReport = async (item: PatientConsultationReportListProps) => {
   await storeConsultation.show(item.publicId!);
+
   selectedReport.value = item;
   showReportForm.value = true;
 };
@@ -528,6 +538,7 @@ const handleEditCorrection = async (
   loading.value = true;
   try {
     await storeConsultation.show(item.publicId!);
+    await consultationReport.show(item.reportPublicId!);
     selectedReport.value = item;
     showReportForm.value = true;
   } finally {

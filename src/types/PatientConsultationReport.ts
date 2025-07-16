@@ -44,4 +44,5 @@ export interface PatientConsultationReportListProps {
   signStatus: string;
   reasonCorrection?: string;
   justifyId?: number;
+  attachments?: FileProps[];
 }

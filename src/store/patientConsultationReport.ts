@@ -54,20 +54,6 @@ export const usePatientConsultationReportStore = defineStore(
       );
 
       patientConsultationReport.value = data;
-
-      // // caso possua anexos então enviar
-      // if (payload.attachments && payload.attachments?.length > 0 && data.id) {
-      //   const formData = new FormData();
-
-      //   payload.attachments.map((attachment) => {
-      //     formData.append("file", attachment.fileData!);
-      //     formData.append("fileCategory", attachment.fileCategory!);
-      //     formData.append("fileName", attachment.fileName!);
-      //     formData.append("ownerId", data.id?.toString()!);
-      //   });
-
-      //   await api.post("/files/upload-many", formData);
-      // }
     };
 
     const show = async (publicId: string) => {

@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col cols="12" lg="4">
+    <v-col cols="12" lg="6">
       <v-card flat rounded="lg" height="100%">
         <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
           <v-card flat rounded="lg">
@@ -90,7 +90,7 @@
                     <v-col cols="12">
                       <AttachementCard
                         :file-name="item.fileName!"
-                        @delete="handleDeleteAttachment(item)"
+                        @delete="getFileDelete(item)"
                         :download-visible="false"
                       />
                     </v-col>
@@ -102,8 +102,8 @@
         </FormCrud>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="8">
-      <SolicitationDetails :show-voltar="false" />
+    <v-col cols="12" lg="6">
+      <SolicitationDetails :show-voltar="false" :show-report="false" />
     </v-col>
     <Dialog
       title="Alterar conteúdo"
@@ -114,6 +114,18 @@
     >
       Já existe um conteúdo informado neste laudo, tem certeza que deseja
       alterá-lo?
+    </Dialog>
+    <Dialog
+      title="Confirmação"
+      :dialog="showDelete"
+      @cancel="showDelete = false"
+      @confirm="handleDeleteAttachment"
+      show-cancel
+    >
+      <span>
+        Apagar documento
+        <strong>{{ selectedFile?.fileName }}</strong> ?
+      </span>
     </Dialog>
   </v-row>
 </template>
@@ -141,23 +153,14 @@ const model = ref({
   content: "",
   reportModel: undefined as ReportModelProps | undefined,
 });
+const showDelete = ref(false);
+const loading = ref(false);
+const selectedFile = ref<FileProps>();
 const attachments = ref<FileProps[]>([]);
 
 const $reportModel = computed(() => reportModelStore.$single);
-//const $sheduleConsultation = computed(() => scheduleStore.$single);
 const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
-
-// onMounted(() => {
-//   if ($consultationSolicitation.value?.PatientConsultationReport?.content) {
-//     model.value.content =
-//       $consultationSolicitation.value?.PatientConsultationReport?.content;
-//   }
-// });
-
-// const handlePDF = () => {
-//   stringToHandlePDF(model.value.content);
-// };
 
 watch(
   () => props.data,
@@ -165,6 +168,7 @@ watch(
     if (newData.id) {
       model.value.publicId = newData.reportPublicId || "";
       model.value.content = newData.reportContent || "";
+      attachments.value = $consultationReport.value?.attachments || [];
     }
   },
   { immediate: true }
@@ -178,7 +182,6 @@ const handleSubmit = async () => {
 
   try {
     if (props.data.reportPublicId) {
-      console.log("🚀 ~ vai atualizar:", props.data.reportPublicId);
       await patientConsultationReport.update({
         content: model.value.content,
         patientConsultationId: props.data.id,
@@ -192,19 +195,28 @@ const handleSubmit = async () => {
     }
 
     if ($consultationReport.value?.id && attachments.value.length > 0) {
-      const payload = attachments.value.map((attachment) => ({
-        ...attachment,
-        ownerId: $consultationReport.value?.id,
-        fileCategory: "medical-report",
-      }));
+      // const payload = attachments.value.map((attachment) => ({
+      //   ...attachment,
+      //   ownerId: $consultationReport.value?.id,
+      //   fileCategory: "medical-report",
+      // }));
+
+      const payload: FileProps[] = attachments.value
+        .filter(
+          (
+            attachment
+          ): attachment is Omit<FileProps, "publicId"> | FileProps => {
+            return !attachment.publicId;
+          }
+        )
+        .map((attachment) => ({
+          ...attachment,
+          ownerId: $consultationReport.value?.id,
+          fileCategory: "medical-report",
+        }));
 
       await fileStore.uploadManyAws(payload);
     }
-
-    // await scheduleStore.update({
-    //   publicId: $sheduleConsultation.value?.publicId,
-    //   status: "completed",
-    // });
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {
@@ -255,26 +267,10 @@ const handleFileUpload = (event: Event) => {
       }
       attachments.value.push({
         fileCategory: "medical-report",
-        //ownerId: $patient.value?.id!,
         fileData: file,
         fileName: file.name,
       });
     }
-
-    // const existingFile = attachments.value.find(
-    //   (attachment) => attachment.fileName === files[0].name
-    // );
-
-    // if (existingFile) {
-    //   push.warning("Já existe um arquivo com este nome anexado.");
-    //   return;
-    // }
-
-    // attachments.value.push({
-    //   fileCategory: "medical-report",
-    //   fileData: files[0],
-    //   fileName: files[0].name,
-    // });
   } catch (error) {
     console.log("🚀 ~ handleFileUpload ~ error:", error);
   } finally {
@@ -282,9 +278,36 @@ const handleFileUpload = (event: Event) => {
   }
 };
 
-const handleDeleteAttachment = (item: FileProps) => {
-  attachments.value = attachments.value.filter(
-    (attachment) => attachment !== item
-  );
+const handleDeleteAttachment = async () => {
+  showDelete.value = false;
+
+  if (!selectedFile.value) return;
+
+  loading.value = true;
+  try {
+    if (selectedFile.value.publicId) {
+      await fileStore.removeAws(selectedFile.value.publicId);
+      attachments.value = attachments.value.filter(
+        (attachment) => attachment.fileName !== selectedFile.value?.fileName
+      );
+    } else {
+      attachments.value = attachments.value.filter(
+        (attachment) => attachment !== selectedFile.value
+      );
+    }
+  } finally {
+    loading.value = false;
+  }
+};
+
+// const handleDeleteAttachment = (item: FileProps) => {
+//   attachments.value = attachments.value.filter(
+//     (attachment) => attachment !== item
+//   );
+// };
+
+const getFileDelete = (item: FileProps) => {
+  selectedFile.value = item;
+  showDelete.value = true;
 };
 </script>
