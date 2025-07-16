@@ -143,7 +143,7 @@ const reportModelStore = useReportModelStore();
 //const scheduleStore = useScheduleStore();
 const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
-const solicitationStore = useSolicitationConsultationStore();
+//const solicitationStore = useSolicitationConsultationStore();
 
 const showAlterContent = ref(false);
 
@@ -159,7 +159,7 @@ const selectedFile = ref<FileProps>();
 const attachments = ref<FileProps[]>([]);
 
 const $reportModel = computed(() => reportModelStore.$single);
-const $consultationSolicitation = computed(() => solicitationStore.$single);
+//const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
 
 watch(

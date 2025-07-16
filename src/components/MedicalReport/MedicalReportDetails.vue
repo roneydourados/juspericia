@@ -22,7 +22,7 @@
           <v-col cols="12" lg="6">
             <InfoLabel
               title="Paciente"
-              :content="`${data.patient}`"
+              :content="`${$report?.PatientConsultation?.Patient?.name}`"
               font-size-content="0.8"
             />
           </v-col>
@@ -30,8 +30,8 @@
             <InfoLabel
               title="Data geração laudo"
               :content="`${
-                data.reportDate
-                  ? dayjs(data.reportDate).format('DD/MM/YYYY')
+                $report?.reportDate
+                  ? dayjs($report?.reportDate).format('DD/MM/YYYY')
                   : 'Não informado'
               }`"
               font-size-content="0.8"
@@ -40,7 +40,11 @@
           <v-col cols="12" lg="3">
             <InfoLabel
               title="CPF"
-              :content="formatCPFOrCNPJ(data.cpf ?? '')"
+              :content="
+                formatCPFOrCNPJ(
+                  $report?.PatientConsultation?.Patient?.cpf ?? ''
+                )
+              "
               font-size-content="0.8"
             />
           </v-col>
@@ -53,62 +57,68 @@
         <v-row dense>
           <v-col cols="12">
             <div
-              v-html="data.reportContent"
-              style="max-height: 30rem; overflow-y: auto"
+              v-html="$report?.content"
+              style="max-height: 25rem; overflow-y: auto"
             />
           </v-col>
         </v-row>
-        <!-- 
-        <v-row dense>
-          <v-col cols="12">
-            <strong>Anexos:</strong>
-          </v-col>
-        </v-row>
-        
-        <v-row dense>
-          <v-col v-for="attachent in data.attachments" cols="12">
+        <v-row>
+          <v-col v-for="item in $report?.attachments" :key="item.id" cols="12">
             <AttachementCard
-              :file-name="attachent.fileName!"
+              :file-name="item.fileName!"
+              download-visible
+              @download="handleDownloadFile(item.publicId!, item.fileName!)"
               :delete-visible="false"
-              @download="handleDownloadFile(attachent.publicId!)"
             />
           </v-col>
-        </v-row> -->
-        <!-- <pre>{{ data }}</pre> -->
+        </v-row>
       </v-card-text>
     </v-card>
+    <DialogLoading :dialog="loading" />
   </v-dialog>
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-defineProps({
-  data: {
-    type: Object as PropType<PatientConsultationReportListProps>,
-    default: {},
-  },
-});
 
-//const fileStore = useFileStore();
+const fileStore = useFileStore();
+const consultationReport = usePatientConsultationReportStore();
 const { formatCPFOrCNPJ } = useUtils();
 
 const dialog = defineModel({
   default: false,
 });
 
-// const handleDownloadFile = async (publicId: string) => {
-//   try {
-//     const data = await fileStore.downloadAws(publicId);
-//     const url = window.URL.createObjectURL(data.file);
-//     const link = document.createElement("a");
-//     link.href = url;
-//     link.setAttribute("download", data.fileName); // You can set the file name here
-//     document.body.appendChild(link);
-//     link.click();
-//     document.body.removeChild(link);
-//     window.URL.revokeObjectURL(url);
-//   } catch (error) {
-//     console.log("🚀 ~ handleDownloadFile ~ error:", error);
-//   }
-// };
+const loading = ref(false);
+
+const $report = computed(() => consultationReport.$single);
+
+const handleDownloadFile = async (publicId: string, fileName: string) => {
+  loading.value = true;
+  try {
+    const { file } = await fileStore.downloadAws(publicId);
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = fileName;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadFile ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 </script>

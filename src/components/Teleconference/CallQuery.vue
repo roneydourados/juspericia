@@ -16,7 +16,7 @@
         class="text-none"
         variant="flat"
         color="success"
-        @click="handleCloseSolicitation"
+        @click="handleClose"
       >
         <v-icon icon="mdi-contain-end" start />
         <strong>Finalizar consulta</strong>
@@ -28,28 +28,29 @@
 
 <script setup lang="ts">
 // import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
 const route = useRoute();
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
+//const scheduleStore = useScheduleStore();
 const auth = useAuthStore();
 
 //const config = useRuntimeConfig();
 
-const $single = computed(() => storeConsultation.$single);
-const $currentUser = computed(() => auth.$currentUser);
+// const $single = computed(() => storeConsultation.$single);
+// const $currentUser = computed(() => auth.$currentUser);
 
-const id = String(route.params.id);
+// const id = String(route.params.id);
 //const root = ref();
 // const zp = ref<ZegoUIKitPrebuilt>();
 const loading = ref(false);
 
 const isFinishSolicitation = ref(false);
 
-onMounted(async () => {
-  await storeConsultation.show(id);
-  //joinRoom();
-});
+// onMounted(async () => {
+//   await storeConsultation.show(id);
+//   //joinRoom();
+// });
 
 onUnmounted(() => {
   // if (zp.value) {
@@ -95,35 +96,40 @@ onUnmounted(() => {
 //   });
 // };
 
-const handleClose = async () => {
-  loading.value = true;
-  try {
-    //if ($currentUser.value?.profile?.type === "MEDICO") {
-    const payload = {
-      publicId: $single.value?.publicId,
-      isTelemedicine: false,
-      status: isFinishSolicitation.value ? "finished" : undefined,
-      dateClose: isFinishSolicitation.value
-        ? dayjs().format("YYYY-MM-DD")
-        : undefined,
-    };
-
-    //desativar teleconsulta
-    await storeConsultation.update(payload);
-
-    await router.push("/schedules");
-    //return;
-    //}
-    //await router.push("/");
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
+const handleClose = () => {
+  router.push("/schedules");
 };
 
-const handleCloseSolicitation = async () => {
-  isFinishSolicitation.value = true;
-  await handleClose();
-};
+// const finalizeConsultation = async () => {
+//   if (!$single.value) {
+//     push.error("Consulta não encontrada");
+//     return;
+//   }
+
+//   loading.value = true;
+//   try {
+//     isFinishSolicitation.value = true;
+//     const payload = {
+//       publicId: $single.value?.publicId,
+//       isTelemedicine: false,
+//       status: isFinishSolicitation.value ? "finished" : undefined,
+//       dateClose: isFinishSolicitation.value
+//         ? dayjs().format("YYYY-MM-DD")
+//         : undefined,
+//     };
+
+//     //desativar teleconsulta
+//     await storeConsultation.update(payload);
+
+//     //finalizar agenda
+//     await scheduleStore.finalizeSchedule($single.value.id!);
+
+//     //retornar para lista de consultas
+//     await router.push("/schedules");
+//   } catch (error) {
+//     console.error(error);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 </script>

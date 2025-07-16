@@ -57,13 +57,17 @@
               font-size-content="1.1"
               :show-divider="false"
               :content="`${
-                $single?.PatientConsultationReport
+                $single?.PatientConsultationReport &&
+                $single?.PatientConsultationReport?.status === 'signed'
                   ? 'Laudo médico disponível'
-                  : 'Laudo médico Pendente'
+                  : 'Laudo médico Pendente Assinatura'
               }`"
             />
             <v-btn
-              v-if="$single?.PatientConsultationReport"
+              v-if="
+                $single?.PatientConsultationReport &&
+                $single?.PatientConsultationReport?.status === 'signed'
+              "
               class="text-none font-weight-bold"
               prepend-icon="mdi-file-document-edit"
               @click="handleDownloadSignedFile($single)"
@@ -107,13 +111,26 @@
       dense
       class="px-4 mt-9"
     >
+      <v-col
+        v-if="
+          $single?.PatientConsultationReport &&
+          $single?.PatientConsultationReport?.status === 'signed'
+        "
+        cols="12"
+      >
+        <v-btn
+          class="text-none font-weight-bold"
+          prepend-icon="mdi-file-document-edit"
+          @click="handleDownloadSignedFile($single)"
+          variant="flat"
+          color="success"
+          size="small"
+        >
+          Baixar Laudo
+        </v-btn>
+      </v-col>
       <v-col cols="12">
-        <v-card flat rounded="lg">
-          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
-            Laudo médico atual
-          </div>
-          <div v-html="$single?.PatientConsultationReport?.content" />
-        </v-card>
+        <SolicitationDetailsMedicReportVinculado :data="$single" />
       </v-col>
     </v-row>
     <DialogLoading :dialog="loading" />
@@ -135,6 +152,7 @@ defineProps({
 });
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
+
 const authStore = useAuthStore();
 const zapSign = useZapsignStore();
 

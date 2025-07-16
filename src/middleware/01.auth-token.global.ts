@@ -13,7 +13,8 @@ export default defineNuxtRouteMiddleware((to) => {
     to.path.includes("/forgot-password/renew") ||
     to.path.includes("/forgot-password/renew/") ||
     to.path.includes("/terms") ||
-    to.path.includes("/register");
+    to.path.includes("/register") ||
+    to.path.startsWith("/teleconference");
 
   if (existsFreeRoute) {
     return;
@@ -36,10 +37,6 @@ export default defineNuxtRouteMiddleware((to) => {
       }
 
       if (to.path === "/") {
-        console.log(
-          "🚀 ~ defineNuxtRouteMiddleware ~ auth.$currentUser?.profile?.type:",
-          auth.$currentUser?.profile?.type
-        );
         if (auth.$currentUser?.profile?.type === "ADMIN") {
           return navigateTo("/admin/home");
         } else if (auth.$currentUser?.profile?.type === "ADVOGADO") {

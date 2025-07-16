@@ -3,7 +3,7 @@
     rounded="lg"
     prepend-icon="mdi-file-document-outline"
     rel="noopener"
-    subtitle="Documento em anxo referente ao laudo"
+    subtitle="Documento em anexo"
     target="_blank"
     flat
   >

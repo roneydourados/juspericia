@@ -123,12 +123,13 @@
           :color="getReportStatusColor(item.reportStatus).color"
           label
           variant="flat"
+          @click="handleShowConsultationRoom(item)"
         >
           <v-icon :icon="getReportStatusColor(item.reportStatus).icon" start />
           <strong style="font-size: 0.8rem">
             {{
               item.reportStatus === "empty"
-                ? "Sem laudo"
+                ? "Sem laudo (clique para consulta)"
                 : item.reportStatus === "cancel"
                 ? "Cancelado"
                 : item.reportStatus === "sign-pending"
@@ -282,6 +283,7 @@
     show-cancel
   >
     <span>
+      Todos os anexos do laudo serão apagados, este processo é irreversível.
       Este Laudo encontra-se assinado, a cobrança pela assinatura digital não
       será revertida, tem certeza que deseja cancelar assinatura atual ?
     </span>
@@ -316,16 +318,21 @@ import { pdfMakeFonts } from "@/utils/pdfMakeFonts";
 import pdfMake from "pdfmake/build/pdfmake";
 import htmlToPdfmake from "html-to-pdfmake";
 import dayjs from "dayjs";
+import { uuidv7 } from "uuidv7";
 
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
 const storeConsultation = useSolicitationConsultationStore();
+const scheduleStore = useScheduleStore();
 const zapSign = useZapsignStore();
+const fileStore = useFileStore();
 
 const { formatCPFOrCNPJ } = useUtils();
 const $consultationReports = computed(() => consultationReport.$all);
+const $consultationReport = computed(() => consultationReport.$single);
 const $document = computed(() => zapSign.$document);
 const $currentUser = computed(() => auth.$currentUser);
+const $solicitation = computed(() => storeConsultation.$single);
 
 const loading = ref(false);
 const showReportDetails = ref(false);
@@ -428,12 +435,15 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
 
       loading.value = true;
       try {
+        const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
+        console.log("🚀 ~ pdfMake.createPdf ~ fileName:", fileName);
         const payload = {
           fileBase64: base64,
-          fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
+          fileName,
+          //fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
           name: $currentUser.value.name as string,
           email: $currentUser.value.email as string,
-          fileCategory: "solicitation-report",
+          fileCategory: "medical-report",
           ownerId: item.reportId,
         };
 
@@ -514,16 +524,40 @@ const getReports = async () => {
   }
 };
 
-const handleReportDetails = (item: PatientConsultationReportListProps) => {
-  selectedReport.value = item;
-  showReportDetails.value = true;
+const handleReportDetails = async (
+  item: PatientConsultationReportListProps
+) => {
+  loading.value = true;
+  try {
+    await consultationReport.show(item.reportPublicId!);
+    showReportDetails.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleNewReport = async (item: PatientConsultationReportListProps) => {
-  await storeConsultation.show(item.publicId!);
+  loading.value = true;
+  try {
+    // Finalizar a solicitação de consulta
+    await storeConsultation.update({
+      publicId: item.publicId,
+      isTelemedicine: false,
+      dateClose: dayjs().format("YYYY-MM-DD"), //atualizar a data de fechamento novamente para o dia que foi finalizado de fato
+      status: "finished",
+    });
 
-  selectedReport.value = item;
-  showReportForm.value = true;
+    //pegar solicitação atualizada
+    await storeConsultation.show(item.publicId!);
+
+    // finalizar qualuqer agenda pendente
+    await scheduleStore.finalizeSchedule(item.id!);
+
+    selectedReport.value = item;
+    showReportForm.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleCloseForm = async () => {
@@ -585,6 +619,23 @@ const handleSetSignedCancel = async () => {
   if (!selectedReport.value) return;
   loading.value = true;
   try {
+    await consultationReport.show(selectedReport.value.reportPublicId!);
+
+    // antes de cancelar a assinatura, verificar se existem anexos a serem deletados
+    if (
+      $consultationReport.value &&
+      $consultationReport.value.attachments &&
+      $consultationReport.value.attachments.length > 0
+    ) {
+      console.log("vai passar nos arquivos");
+      for (const attachment of $consultationReport.value.attachments) {
+        if (attachment.publicId) {
+          await fileStore.removeAws(attachment.publicId);
+        }
+      }
+    }
+    // apagar os anexos do laudo
+
     await consultationReport.cancelSign({
       publicId: selectedReport.value.reportPublicId!,
       justify: `Cancelamento de assinatura pelo usuário: ${$currentUser.value?.name}`,
@@ -603,5 +654,35 @@ const handleReportCorrection = async (
 ) => {
   await consultationReport.show(item.reportPublicId!);
   showJustificationCorrection.value = true;
+};
+
+const handleShowConsultationRoom = async (
+  item: PatientConsultationReportListProps
+) => {
+  if (!item.publicId) {
+    push.error("Consulta não encontrada.");
+    return;
+  }
+
+  if (item.reportStatus !== "empty") {
+    push.warning(
+      "Laudo já iniciado, não é possível acessar a sala de consulta."
+    );
+
+    return;
+  }
+
+  const url = `/teleconference/${item.publicId}`;
+
+  navigator.clipboard
+    .writeText(url)
+    .then(() => {
+      push.success("Texto copiado para a área de transferência");
+    })
+    .catch((err) => {
+      push.error("Erro ao copiar texto: " + err);
+    });
+
+  window.open(url, "_blank");
 };
 </script>

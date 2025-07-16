@@ -33,6 +33,7 @@
             <div class="w-100 px-4">
               <v-list density="compact">
                 <v-list-subheader>Consultas</v-list-subheader>
+
                 <v-list-item
                   v-for="item in $shedules"
                   :key="item.id"
@@ -200,9 +201,14 @@ const getSchedules = async () => {
 };
 
 const handleServiceDetails = async (item: ScheduleProps) => {
-  await scheduleStore.show(item.publicId!);
-  await solicitationStore.show(item.PatientConsultation?.publicId!);
-  serviceDetails.value = true;
+  loading.value = true;
+  try {
+    await scheduleStore.show(item.publicId!);
+    await solicitationStore.show(item.PatientConsultation?.publicId!);
+    serviceDetails.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const handleShowMedicalReportForm = async (item: ScheduleProps) => {
@@ -213,8 +219,13 @@ const handleShowMedicalReportForm = async (item: ScheduleProps) => {
     return;
   }
 
-  await scheduleStore.show(item.publicId!);
-  await solicitationStore.show(item.PatientConsultation?.publicId!);
-  showMedicalReportForm.value = true;
+  loading.value = true;
+  try {
+    await scheduleStore.show(item.publicId!);
+    await solicitationStore.show(item.PatientConsultation?.publicId!);
+    showMedicalReportForm.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

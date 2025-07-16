@@ -38,7 +38,10 @@
       </div>
       <div class="d-flex flex-wrap align-center" style="gap: 1rem">
         <v-btn
-          v-if="solicitation.PatientConsultationReport"
+          v-if="
+            solicitation.PatientConsultationReport &&
+            solicitation.PatientConsultationReport.status === 'signed'
+          "
           class="text-none font-weight-bold"
           prepend-icon="mdi-file-document-edit"
           color="info"
@@ -48,6 +51,23 @@
         >
           Baixar Laudo
         </v-btn>
+        <v-chip
+          v-else-if="!solicitation.PatientConsultationReport"
+          variant="flat"
+          color="warning"
+        >
+          <strong> Aguardando laudo </strong>
+        </v-chip>
+        <v-chip
+          v-else-if="
+            solicitation.PatientConsultationReport &&
+            solicitation.PatientConsultationReport.status !== 'signed'
+          "
+          variant="flat"
+          color="grey"
+        >
+          <strong> Laudo aguardando assinatura </strong>
+        </v-chip>
         <div
           v-if="
             solicitation.status === 'open' ||
