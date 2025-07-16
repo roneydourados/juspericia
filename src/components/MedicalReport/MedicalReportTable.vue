@@ -71,13 +71,37 @@
         </v-col>
       </v-row>
     </div>
-    <pre>{{ $consultationReports }}</pre>
     <Table
       title="Laudos Médicos"
       :show-crud="false"
       :headers="headers"
       :items="$consultationReports"
     >
+      <template v-slot:item.reportId="{ item }">
+        <div class="d-flex flex-column">
+          <span v-if="!item.justifyId">{{ item.reportId }}</span>
+          <div v-else-if="item.justifyId">
+            <v-chip
+              label
+              color="warning"
+              variant="flat"
+              @click="handleReportCorrection(item)"
+            >
+              <strong>
+                {{ item.reportId }} - Solicitação de correção enviada
+              </strong>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Foi enviada uma solicitação de correção para este laudo. Clique
+                para ver a justificativa.
+              </v-tooltip>
+            </v-chip>
+          </div>
+        </div>
+      </template>
       <template v-slot:item.dateClose="{ item }">
         <span>{{ dayjs(item.dateClose).format("DD/MM/YYYY") }}</span>
       </template>
@@ -252,6 +276,29 @@
       será revertida, tem certeza que deseja cancelar assinatura atual ?
     </span>
   </Dialog>
+  <MedicalReportJustifies v-model="showJustificationCorrection" />
+  <!-- <Dialog
+    title="Justificativa de correção"
+    :dialog="showJustificationCorrection"
+    @confirm="showJustificationCorrection = false"
+    :show-cancel="false"
+    ok-text="OK"
+  >
+    <div class="d-flex flex-column">
+      <strong class="mb-2">Justificativa do advogado:</strong>
+      <span>
+        {{ selectedReport?.reasonCorrection }}
+      </span>
+      <strong class="mt-4">O que fazer ?</strong>
+      <strong class="mt-2">
+        Para corrigir clique em editar/corrigir
+        <v-icon icon="mdi-clock-edit-outline" size="20" start color="orange" />.
+        Se o laudo já foi assinado, clicar em cancelar assinatura
+        <v-icon icon="mdi-pencil-off-outline" size="20" color="danger" start />
+        antes.
+      </strong>
+    </div>
+  </Dialog> -->
 </template>
 
 <script setup lang="ts">
@@ -274,6 +321,7 @@ const showReportDetails = ref(false);
 const showReportForm = ref(false);
 const showSignDocument = ref(false);
 const showSignedCancel = ref(false);
+const showJustificationCorrection = ref(false);
 const signerToken = ref("");
 const selectedReport = ref<PatientConsultationReportListProps>();
 
@@ -286,7 +334,7 @@ const filters = ref({
 });
 
 const headers = ref([
-  { title: "Nº", key: "reportId" },
+  { title: "Laudo Nº", key: "reportId" },
   { title: "Solicitação Nº", key: "id" },
   { title: "Data consulta", key: "dateClose" },
   { title: "Benefício", key: "benefitType" },
@@ -527,6 +575,32 @@ const handleSetSignedCancel = async () => {
     console.error("Erro ao cancelar assinatura:", error);
   } finally {
     showSignedCancel.value = false;
+    loading.value = false;
+    await getReports();
+  }
+};
+
+const handleReportCorrection = async (
+  item: PatientConsultationReportListProps
+) => {
+  await consultationReport.show(item.reportPublicId!);
+  showJustificationCorrection.value = true;
+};
+
+const handleCorrectionReport = async () => {
+  if (!selectedReport.value) return;
+  loading.value = true;
+  try {
+    if (selectedReport.value.reportStatus === "signed") {
+      handleGetSignatureCancel(selectedReport.value);
+    }
+
+    handleEditCorrection(selectedReport.value);
+  } catch (error) {
+    console.error("Erro ao solicitar correção:", error);
+    push.error("Erro ao solicitar correção.");
+  } finally {
+    showJustificationCorrection.value = false;
     loading.value = false;
     await getReports();
   }

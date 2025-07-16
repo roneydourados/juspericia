@@ -314,7 +314,7 @@
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
             @click="showDateCorrection = true"
-            :disabled="!solicitation.isSolicitationCorrection"
+            :disabled="!solicitation.PatientConsultationReport"
           >
             Solicitar correção
           </v-btn>
@@ -466,6 +466,7 @@ const emit = defineEmits(["edit"]);
 const auth = useAuthStore();
 const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
+const consultationReport = usePatientConsultationReportStore();
 const rounter = useRouter();
 const fileStore = useFileStore();
 const zapSign = useZapsignStore();
@@ -541,14 +542,24 @@ const editItem = (item: SolicitationConsultationProps) => {
 
 const handleUpdateCorrection = async (motive: string) => {
   showDateCorrection.value = false;
+
+  if (!props.solicitation.PatientConsultationReport) {
+    push.warning("Laudo não encontrado!");
+    return;
+  }
+
   if (motive) {
     loading.value = true;
     try {
-      await storeConsultation.update({
-        id: props.solicitation.id,
-        reasonCorrection: motive,
-        dateCorrection: dayjs().format("YYYY-MM-DD"),
+      await consultationReport.addJustify({
+        justify: motive,
+        publicId: props.solicitation.PatientConsultationReport.publicId!,
       });
+      // await storeConsultation.update({
+      //   publicId: props.solicitation.publicId,
+      //   reasonCorrection: motive,
+      //   dateCorrection: dayjs().format("YYYY-MM-DD"),
+      // });
 
       await getSolicitations();
     } finally {

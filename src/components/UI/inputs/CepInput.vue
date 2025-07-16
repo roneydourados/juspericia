@@ -82,6 +82,7 @@ const dynamicLabel = computed(() =>
 
 const inputValue = ref();
 const loading = ref(false);
+const cepData = ref<CepAdderssProps>();
 const modelValue = defineModel({
   default: "",
 });
@@ -178,11 +179,31 @@ const getData = async () => {
     loading.value = true;
     try {
       try {
+        // const { data } = await useFetch<CepAdderssProps>(
+        //   "https://viacep.com.br/ws/" + value.value + "/json/"
+        // );
+
         const { data } = await useFetch<CepAdderssProps>(
-          "https://viacep.com.br/ws/" + value.value + "/json/"
+          `https://opencep.com/v1/${value.value}`
         );
 
-        emit("update:modelAddress", data.value);
+        if (data.value) {
+          cepData.value = {
+            cep: data.value.cep,
+            logradouro: data.value.logradouro,
+            complemento: data.value.complemento || "",
+            bairro: data.value.bairro,
+            localidade: data.value.localidade,
+            numero: "",
+            uf: data.value.uf,
+            ibge: data.value.ibge || "",
+            gia: data.value.gia || "",
+            ddd: data.value.ddd || "",
+            siafi: data.value.siafi || "",
+          };
+
+          emit("update:modelAddress", cepData.value);
+        }
       } catch (error) {
         console.log("🚀 ~ CEP DATA ~ error:", error);
         emit("update:modelAddress", {});

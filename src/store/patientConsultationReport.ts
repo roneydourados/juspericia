@@ -73,6 +73,16 @@ export const usePatientConsultationReportStore = defineStore(
       await api.put(`/patient-consultation-report/cancel-sign/${publicId}`);
     };
 
+    const addJustify = async (inut: { justify: string; publicId: string }) => {
+      const { justify, publicId } = inut;
+      const payload = {
+        justify,
+        publicId,
+      };
+
+      await api.post("/patient-consultation-report/justify", payload);
+    };
+
     return {
       $single,
       $all,
@@ -80,6 +90,7 @@ export const usePatientConsultationReportStore = defineStore(
       show,
       index,
       cancelSign,
+      addJustify,
     };
   }
 );

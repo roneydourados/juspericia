@@ -11,6 +11,16 @@ export interface PatientConsultationReportProps {
   Medic?: UserProps;
   PatientConsultation?: SolicitationConsultationProps;
   attachments?: FileProps[];
+  justifies?: PatientConsultationsReportJustifyProps[];
+}
+
+export interface PatientConsultationsReportJustifyProps {
+  id?: number;
+  userJustifyId?: number;
+  patientConsultationReportId?: number;
+  justify: string;
+  createdAt?: string;
+  user?: UserProps;
 }
 
 export interface PatientConsultationReportListProps {
@@ -32,4 +42,6 @@ export interface PatientConsultationReportListProps {
   reportId: number;
   signToken: string;
   signStatus: string;
+  reasonCorrection?: string;
+  justifyId?: number;
 }

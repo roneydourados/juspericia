@@ -41,6 +41,16 @@ const emit = defineEmits(["close"]);
 const show = defineModel<boolean>("show");
 const motive = ref("");
 
+watch(
+  show,
+  (val) => {
+    if (!val) {
+      motive.value = "";
+    }
+  },
+  { immediate: true }
+);
+
 const submitForm = () => {
   show.value = false;
   emit("close", motive.value);
