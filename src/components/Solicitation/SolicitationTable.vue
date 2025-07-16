@@ -219,7 +219,10 @@ const getConsultations = async () => {
   try {
     const filter = {
       ...modelFilters.value,
-      userId: modelFilters.value.lawyer?.id,
+      useId:
+        $currentUser.value?.profile?.type === "ADMIN"
+          ? modelFilters.value.lawyer?.id
+          : $currentUser.value?.id,
       benefitTypeId: modelFilters.value.benefitType?.id,
       patientId: modelFilters.value.patient?.id,
       reportPurposeId: modelFilters.value.reportPurpose?.id,
