@@ -38,6 +38,15 @@ export const usePatientConsultationReportStore = defineStore(
       patientConsultationReports.value = data;
     };
 
+    const update = async (payload: PatientConsultationReportProps) => {
+      const { data } = await api.put<PatientConsultationReportProps>(
+        "/patient-consultation-report",
+        payload
+      );
+
+      patientConsultationReport.value = data;
+    };
+
     const create = async (payload: PatientConsultationReportProps) => {
       const { data } = await api.post<PatientConsultationReportProps>(
         "/patient-consultation-report",
@@ -69,8 +78,14 @@ export const usePatientConsultationReportStore = defineStore(
       patientConsultationReport.value = data;
     };
 
-    const cancelSign = async (publicId: string) => {
-      await api.put(`/patient-consultation-report/cancel-sign/${publicId}`);
+    const cancelSign = async (input: { publicId: string; justify: string }) => {
+      const { publicId, justify } = input;
+
+      const payload = {
+        publicId,
+        justify,
+      };
+      await api.put("/patient-consultation-report/cancel-sign", payload);
     };
 
     const addJustify = async (inut: { justify: string; publicId: string }) => {
@@ -91,6 +106,7 @@ export const usePatientConsultationReportStore = defineStore(
       index,
       cancelSign,
       addJustify,
+      update,
     };
   }
 );

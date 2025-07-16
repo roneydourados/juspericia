@@ -527,6 +527,7 @@ const handleEditCorrection = async (
 ) => {
   loading.value = true;
   try {
+    await storeConsultation.show(item.publicId!);
     selectedReport.value = item;
     showReportForm.value = true;
   } finally {
@@ -573,7 +574,10 @@ const handleSetSignedCancel = async () => {
   if (!selectedReport.value) return;
   loading.value = true;
   try {
-    await consultationReport.cancelSign(selectedReport.value.reportPublicId!);
+    await consultationReport.cancelSign({
+      publicId: selectedReport.value.reportPublicId!,
+      justify: `Cancelamento de assinatura pelo usuário: ${$currentUser.value?.name}`,
+    });
   } catch (error) {
     console.error("Erro ao cancelar assinatura:", error);
   } finally {

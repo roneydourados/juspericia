@@ -16,6 +16,7 @@
             color="primary"
             size="small"
             @click="router.back()"
+            v-if="showVoltar"
           >
             Voltar
           </v-btn>
@@ -89,9 +90,15 @@
         <SolicitationDetailsDocuments />
         <v-card flat rounded="lg">
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
-            Motivo para correção
+            Motivos para correção
           </div>
-          <div v-html="$single?.reasonCorrection" />
+          <div
+            v-for="justify in $single?.PatientConsultationReport?.justifies"
+            :key="justify.id"
+            class="mb-2"
+          >
+            <strong> - {{ justify.justify }}</strong>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -99,11 +106,7 @@
       <v-col cols="12">
         <v-card flat rounded="lg">
           <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
-            Laudo médico
-          </div>
-
-          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
-            Descrição de laudo médico
+            Laudo médico atual
           </div>
           <div v-html="$single?.PatientConsultationReport?.content" />
         </v-card>
@@ -115,6 +118,13 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+
+defineProps({
+  showVoltar: {
+    type: Boolean,
+    default: true,
+  },
+});
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
 const authStore = useAuthStore();

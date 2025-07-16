@@ -1,8 +1,5 @@
 <template>
   <v-row dense>
-    <v-col cols="12" lg="8">
-      <SolicitationDetails />
-    </v-col>
     <v-col cols="12" lg="4">
       <v-card flat rounded="lg" height="100%">
         <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
@@ -105,6 +102,9 @@
         </FormCrud>
       </v-card>
     </v-col>
+    <v-col cols="12" lg="8">
+      <SolicitationDetails :show-voltar="false" />
+    </v-col>
     <Dialog
       title="Alterar conteúdo"
       :dialog="showAlterContent"
@@ -177,10 +177,19 @@ const handleSubmit = async () => {
   }
 
   try {
-    await patientConsultationReport.create({
-      content: model.value.content,
-      patientConsultationId: props.data.id,
-    });
+    if (props.data.reportPublicId) {
+      console.log("🚀 ~ vai atualizar:", props.data.reportPublicId);
+      await patientConsultationReport.update({
+        content: model.value.content,
+        patientConsultationId: props.data.id,
+        publicId: props.data.reportPublicId,
+      });
+    } else {
+      await patientConsultationReport.create({
+        content: model.value.content,
+        patientConsultationId: props.data.id,
+      });
+    }
 
     if ($consultationReport.value?.id && attachments.value.length > 0) {
       const payload = attachments.value.map((attachment) => ({
