@@ -627,7 +627,6 @@ const handleSetSignedCancel = async () => {
       $consultationReport.value.attachments &&
       $consultationReport.value.attachments.length > 0
     ) {
-      console.log("vai passar nos arquivos");
       for (const attachment of $consultationReport.value.attachments) {
         if (attachment.publicId) {
           await fileStore.removeAws(attachment.publicId);
