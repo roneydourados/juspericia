@@ -7,7 +7,7 @@
       :editor="editor"
     >
       <v-card flat rounded="lg">
-        <v-btn-toggle variant="outlined" divided>
+        <v-btn-toggle variant="outlined">
           <v-btn
             size="small"
             icon="mdi-format-bold"
@@ -30,8 +30,8 @@
       </v-card>
     </bubble-menu>
 
-    <v-row dense class="pa-2" no-gutters>
-      <v-col cols="12" lg="3">
+    <v-row class="pa-2">
+      <v-col cols="12">
         <v-btn-toggle variant="outlined" divided>
           <v-btn
             size="small"
@@ -73,14 +73,9 @@
           />
         </v-btn-toggle>
       </v-col>
-    </v-row>
-    <v-row dense class="pa-2" no-gutters>
       <v-col cols="12">
-        <v-card variant="flat" class="pa-4 border-thin">
-          <div
-            class="container"
-            :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }"
-          >
+        <v-card variant="flat" class="pa-0 border-thin">
+          <div :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }">
             <EditorContent :editor="editor" />
           </div>
         </v-card>

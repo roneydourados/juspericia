@@ -74,7 +74,9 @@
           </div>
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
-          <SolicitationDetailsOffice />
+          <SolicitationDetailsOffice
+            v-if="$currentUser?.profile?.type === 'ADMIN'"
+          />
         </v-card>
       </v-col>
       <v-col cols="12" lg="6">
@@ -115,8 +117,11 @@
 import dayjs from "dayjs";
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
+const authStore = useAuthStore();
 const zapSign = useZapsignStore();
+
 const $single = computed(() => storeConsultation.$single);
+const $currentUser = computed(() => authStore.$currentUser);
 
 const loading = ref(false);
 

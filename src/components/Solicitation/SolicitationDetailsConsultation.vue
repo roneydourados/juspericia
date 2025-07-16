@@ -37,7 +37,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row v-if="$currentUser?.profile?.type === 'ADMIN'" dense>
       <v-col cols="12" lg="4">
         <InfoLabel
           title="Valor"
@@ -86,9 +86,10 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
-const { amountFormated, formatTelephoneNumber, formatCPFOrCNPJ } = useUtils();
+const { amountFormated } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
+const authStore = useAuthStore();
 
+const $currentUser = computed(() => authStore.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 </script>

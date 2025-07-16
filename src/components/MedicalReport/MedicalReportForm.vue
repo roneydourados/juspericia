@@ -1,103 +1,110 @@
 <template>
-  <div>
-    <v-card flat rounded="lg">
-      <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
-        <v-card flat rounded="lg">
-          <v-row dense class="pa-4">
-            <v-col cols="12" lg="8">
-              <SelectSearchReportModel
-                v-model="model.reportModel"
-                label="Carregar Modelo"
-                @update:model-value="handleReportModel"
-              />
-            </v-col>
-
-            <v-col
-              cols="12"
-              lg="4"
-              class="d-flex align-center mt-n5"
-              style="gap: 0.5rem"
-            >
-              <v-btn
-                icon
-                variant="text"
-                class="text-none"
-                size="small"
-                @click="handleChatGpt"
-              >
-                <ChatGptIcon height="28" />
-                <v-tooltip
-                  activator="parent"
-                  location="top center"
-                  content-class="tooltip-background"
-                >
-                  Perguntar para o ChatGPT
-                </v-tooltip>
-              </v-btn>
-
-              <v-btn
-                variant="flat"
-                color="info"
-                prepend-icon="mdi-arrow-left"
-                class="text-none"
-                size="small"
-                @click="emit('close')"
-              >
-                Voltar
-              </v-btn>
-              <v-btn
-                color="primary"
-                prepend-icon="mdi-check"
-                type="submit"
-                size="small"
-                class="text-none"
-                variant="flat"
-              >
-                Salvar
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-card-text>
-            <RitchTextEditor v-model="model.content" />
-            <v-card flat class="mt-4">
-              <v-card-title class="mb-4">
-                <input
-                  type="file"
-                  @change="handleFileUpload"
-                  style="display: none"
-                  ref="fileInput"
-                  multiple
+  <v-row dense>
+    <v-col cols="12" lg="8">
+      <SolicitationDetails />
+    </v-col>
+    <v-col cols="12" lg="4">
+      <v-card flat rounded="lg" height="100%">
+        <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
+          <v-card flat rounded="lg">
+            <v-row dense class="pa-4">
+              <v-col cols="12">
+                <SelectSearchReportModel
+                  v-model="model.reportModel"
+                  label="Carregar Modelo"
+                  @update:model-value="handleReportModel"
                 />
-                <div class="d-flex justify-space-between flex-wrap w-100 px-2">
-                  <span> Anexos: </span>
+              </v-col>
+
+              <v-col
+                cols="12"
+                class="d-flex align-center justify-space-between"
+              >
+                <v-btn
+                  icon
+                  variant="text"
+                  class="text-none"
+                  size="small"
+                  @click="handleChatGpt"
+                >
+                  <ChatGptIcon height="28" />
+                  <v-tooltip
+                    activator="parent"
+                    location="top center"
+                    content-class="tooltip-background"
+                  >
+                    Perguntar para o ChatGPT
+                  </v-tooltip>
+                </v-btn>
+
+                <div class="d-flex flex-wrap" style="gap: 0.54rem">
                   <v-btn
-                    color="primary"
-                    flat
+                    variant="flat"
+                    color="info"
+                    prepend-icon="mdi-arrow-left"
                     class="text-none"
                     size="small"
-                    prepend-icon="mdi-paperclip"
-                    @click="($refs.fileInput as HTMLInputElement).click()"
+                    @click="emit('close')"
                   >
-                    Novo anexo
+                    Voltar
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    prepend-icon="mdi-check"
+                    type="submit"
+                    size="small"
+                    class="text-none"
+                    variant="flat"
+                  >
+                    Salvar
                   </v-btn>
                 </div>
-              </v-card-title>
-              <v-card-text>
-                <v-row dense v-for="item in attachments">
-                  <v-col cols="12">
-                    <AttachementCard
-                      :file-name="item.fileName!"
-                      @delete="handleDeleteAttachment(item)"
-                      :download-visible="false"
-                    />
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-card-text>
-        </v-card>
-      </FormCrud>
-    </v-card>
+              </v-col>
+            </v-row>
+            <v-card-text>
+              <RitchTextEditor v-model="model.content" />
+              <v-card flat class="mt-4">
+                <v-card-title class="mb-4">
+                  <input
+                    type="file"
+                    @change="handleFileUpload"
+                    style="display: none"
+                    ref="fileInput"
+                    multiple
+                  />
+                  <div
+                    class="d-flex justify-space-between flex-wrap w-100 px-2"
+                  >
+                    <span> Anexos: </span>
+                    <v-btn
+                      color="primary"
+                      flat
+                      class="text-none"
+                      size="small"
+                      prepend-icon="mdi-paperclip"
+                      @click="($refs.fileInput as HTMLInputElement).click()"
+                    >
+                      Novo anexo
+                    </v-btn>
+                  </div>
+                </v-card-title>
+                <v-card-text>
+                  <v-row dense v-for="item in attachments">
+                    <v-col cols="12">
+                      <AttachementCard
+                        :file-name="item.fileName!"
+                        @delete="handleDeleteAttachment(item)"
+                        :download-visible="false"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-card-text>
+          </v-card>
+        </FormCrud>
+      </v-card>
+    </v-col>
     <Dialog
       title="Alterar conteúdo"
       :dialog="showAlterContent"
@@ -108,7 +115,7 @@
       Já existe um conteúdo informado neste laudo, tem certeza que deseja
       alterá-lo?
     </Dialog>
-  </div>
+  </v-row>
 </template>
 
 <script setup lang="ts">
@@ -138,7 +145,7 @@ const attachments = ref<FileProps[]>([]);
 
 const $reportModel = computed(() => reportModelStore.$single);
 //const $sheduleConsultation = computed(() => scheduleStore.$single);
-//const $consultationSolicitation = computed(() => solicitationStore.$single);
+const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
 
 // onMounted(() => {

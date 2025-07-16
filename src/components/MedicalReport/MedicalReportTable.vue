@@ -71,6 +71,7 @@
         </v-col>
       </v-row>
     </div>
+
     <Table
       title="Laudos Médicos"
       :show-crud="false"
@@ -309,6 +310,7 @@ import dayjs from "dayjs";
 
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
+const storeConsultation = useSolicitationConsultationStore();
 const zapSign = useZapsignStore();
 
 const { formatCPFOrCNPJ } = useUtils();
@@ -508,7 +510,8 @@ const handleReportDetails = (item: PatientConsultationReportListProps) => {
   showReportDetails.value = true;
 };
 
-const handleNewReport = (item: PatientConsultationReportListProps) => {
+const handleNewReport = async (item: PatientConsultationReportListProps) => {
+  await storeConsultation.show(item.publicId!);
   selectedReport.value = item;
   showReportForm.value = true;
 };
@@ -585,24 +588,5 @@ const handleReportCorrection = async (
 ) => {
   await consultationReport.show(item.reportPublicId!);
   showJustificationCorrection.value = true;
-};
-
-const handleCorrectionReport = async () => {
-  if (!selectedReport.value) return;
-  loading.value = true;
-  try {
-    if (selectedReport.value.reportStatus === "signed") {
-      handleGetSignatureCancel(selectedReport.value);
-    }
-
-    handleEditCorrection(selectedReport.value);
-  } catch (error) {
-    console.error("Erro ao solicitar correção:", error);
-    push.error("Erro ao solicitar correção.");
-  } finally {
-    showJustificationCorrection.value = false;
-    loading.value = false;
-    await getReports();
-  }
 };
 </script>
