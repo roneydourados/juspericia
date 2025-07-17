@@ -72,7 +72,7 @@
                 </v-btn>
               </v-col>
             </v-row>
-            <div class="mb-4">
+            <div v-if="!$isDevelop" class="mb-4">
               <p class="text-center text-caption">
                 <span class="text-subtitle-1">
                   <span
@@ -85,7 +85,7 @@
                 </span>
               </p>
             </div>
-            <div>
+            <div v-if="!$isDevelop">
               <p class="text-center">
                 <span style="font-size: 1rem">
                   Não possui uma conta ?
@@ -112,6 +112,7 @@
 <script setup lang="ts">
 const auth = useAuthStore();
 const systemParametersStore = useSystemParametersStore();
+const config = useRuntimeConfig();
 const cloudFlareToken = ref("");
 const turnstile = ref();
 const rounter = useRouter();
@@ -133,6 +134,7 @@ onMounted(() => {
 });
 
 const $user = computed(() => auth.$currentUser);
+const $isDevelop = computed(() => config.public.develop);
 
 const submmitForm = async () => {
   isError.value = false;
