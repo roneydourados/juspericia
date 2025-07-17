@@ -456,6 +456,10 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
         await getReports();
 
         signerToken.value = $document.value?.signers[0]?.token ?? "";
+        console.log(
+          "🚀 ~ pdfMake.createPdf ~  $document.value:",
+          $document.value
+        );
         showSignDocument.value = !!signerToken.value;
       } catch (error) {
         console.error("Erro ao enviar documento para ZapSign:", error);

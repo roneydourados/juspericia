@@ -18,7 +18,7 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <ZapSignWidget :token="token" />
+        <ZapSignWidget :token="token" @signed-file-ready="handleDocAssinado" />
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -42,6 +42,12 @@ const token = defineModel("token", {
 
 const handleClose = () => {
   emit("close");
+  dialog.value = false;
+};
+
+const handleDocAssinado = () => {
+  console.log("Documento assinado");
+
   dialog.value = false;
 };
 </script>
