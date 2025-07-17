@@ -127,7 +127,7 @@ const { value } = useField<Object>(fieldName, validationRules, {
 const handleSearch = useDebounceFn(async () => {
   loadingSearch.value = true;
   try {
-    await servicePackage.index(search.value);
+    await servicePackage.index({ name: search.value, status: "active" });
   } finally {
     loadingSearch.value = false;
   }
