@@ -155,7 +155,7 @@ export default defineNuxtConfig({
     public: {
       zapSignUrl:
         process.env.ZAPSIGN_VERIFICAR_URL ??
-        "https://sandbox.app.zapsign.com.br/verificar",
+        "https://sandbox.app.zapsign.com.br",
       zapsignApiToken: process.env.ZAPSIGN_API_TOKEN ?? "",
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       appUrl: process.env.APP_URL,
