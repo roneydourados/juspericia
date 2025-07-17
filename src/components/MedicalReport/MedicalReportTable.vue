@@ -435,12 +435,11 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
 
       loading.value = true;
       try {
-        const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
-        console.log("🚀 ~ pdfMake.createPdf ~ fileName:", fileName);
+        //const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
         const payload = {
           fileBase64: base64,
-          fileName,
-          //fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
+          //fileName,
+          fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
           name: $currentUser.value.name as string,
           email: $currentUser.value.email as string,
           fileCategory: "medical-report",
@@ -457,7 +456,7 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
         await getReports();
 
         signerToken.value = $document.value?.signers[0]?.token ?? "";
-        showSignDocument.value = true;
+        showSignDocument.value = !!signerToken.value;
       } catch (error) {
         console.error("Erro ao enviar documento para ZapSign:", error);
         push.error("Erro ao enviar documento para ZapSign.");

@@ -27,7 +27,6 @@ const props = defineProps({
 });
 
 const widgetUrl = ref(`${config.public.zapSignUrl}/${props.token}`);
-
 /**
  * Listener dos eventos enviados pelo iframe Zapsign via postMessage
  */
