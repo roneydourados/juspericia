@@ -273,6 +273,7 @@
   <MedicSignDocument
     v-model:dialog="showSignDocument"
     v-model:token="signerToken"
+    v-model:report="selectedReport"
     @close="getReports"
   />
   <Dialog
@@ -332,7 +333,7 @@ const $consultationReports = computed(() => consultationReport.$all);
 const $consultationReport = computed(() => consultationReport.$single);
 const $document = computed(() => zapSign.$document);
 const $currentUser = computed(() => auth.$currentUser);
-const $solicitation = computed(() => storeConsultation.$single);
+//const $solicitation = computed(() => storeConsultation.$single);
 
 const loading = ref(false);
 const showReportDetails = ref(false);
@@ -364,6 +365,8 @@ const headers = ref([
 ]);
 
 const handleSignDocument = async (item: PatientConsultationReportListProps) => {
+  selectedReport.value = item;
+
   loading.value = true;
   try {
     if (!item.reportContent || !item.reportId) {
@@ -435,17 +438,16 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
 
       loading.value = true;
       try {
-        //const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
+        const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
         const payload = {
           fileBase64: base64,
-          //fileName,
-          fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
+          fileName,
+          //fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
           name: $currentUser.value.name as string,
           email: $currentUser.value.email as string,
           fileCategory: "medical-report",
           ownerId: item.reportId,
         };
-
         if (!item.signToken) {
           await zapSign.sendDocument(payload);
         } else {

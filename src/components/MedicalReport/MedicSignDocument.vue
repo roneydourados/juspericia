@@ -27,8 +27,14 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
+const zapsignStore = useZapsignStore();
+
 const { mobile } = useDisplay();
 const emit = defineEmits(["close"]);
+
+const report = defineModel<PatientConsultationReportListProps>("report", {
+  default: () => ({}),
+});
 
 const dialog = defineModel("dialog", {
   default: false,
@@ -45,9 +51,18 @@ const handleClose = () => {
   dialog.value = false;
 };
 
-const handleDocAssinado = () => {
-  console.log("Documento assinado");
+const handleDocAssinado = async () => {
+  try {
+    await zapsignStore.updateReportToSigned({
+      publicId: report.value.reportPublicId,
+      signStatus: "signed",
+    });
 
-  dialog.value = false;
+    console.log("foi enviado para api assinar o laudo");
+  } catch (error) {
+    console.error("Erro ao atualizar o laudo para assinado:", error);
+  } finally {
+    handleClose();
+  }
 };
 </script>
