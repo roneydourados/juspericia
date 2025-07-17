@@ -6,7 +6,11 @@
       @update:drawer="drawer = $event"
     />
 
-    <v-app-bar :color="$isDevelop ? 'red' : 'primary'" elevation="0">
+    <!-- <v-app-bar
+      :color="$isDevelop ? 'blue-grey-darken-3' : 'primary'"
+      elevation="0"
+    > -->
+    <v-app-bar color="primary" elevation="0">
       <template #title>
         <!-- <Logo height="40" color="#fff" /> -->
         <div class="d-flex align-center">
@@ -20,11 +24,13 @@
             </span>
           </div>
           <v-spacer v-if="$isDevelop" />
-          <h3 v-if="$isDevelop">AMBIENTE DE TESTES SEM VALIDADE</h3>
+          <div v-if="$isDevelop" class="text-h4 text-center w-100">
+            ( DEMONSTRAÇÃO )
+          </div>
         </div>
       </template>
 
-      <v-spacer v-if="!mobile" />
+      <!-- <v-spacer v-if="!mobile" /> -->
 
       <v-app-bar-nav-icon
         v-if="mobile"
