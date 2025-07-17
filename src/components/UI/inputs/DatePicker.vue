@@ -2,7 +2,7 @@
   <v-text-field
     v-model="inputValue"
     :label="dynamicLabel"
-    :error-messages="errorMessage"
+    :error-messages="meta.touched ? errorMessage : ''"
     :clearable="clearable"
     :disabled="disabled"
     persistent-hint
@@ -10,7 +10,7 @@
     density="compact"
     base-color="primary"
     color="primary"
-    @input="handleInputAndFormat"
+    @update:model-value="handleInputAndFormat"
     @blur="validateAndEmitOnBlur"
   >
     <template v-slot:prepend-inner>
@@ -53,15 +53,15 @@
 type ViewMode = "month" | "months" | "year";
 
 import dayjs from "dayjs";
-import "dayjs/locale/pt"; // Importe o locale português para dayjs
-import customParseFormat from "dayjs/plugin/customParseFormat"; // Plugin para formato de data
+import "dayjs/locale/pt";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
 import { v7 as uuid } from "uuid";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
-import { computed, ref, watch, onMounted, type PropType } from "vue"; // Importações explícitas
+import { computed, ref, watch, onMounted, type PropType } from "vue";
 
 const props = defineProps({
   label: { type: String, default: "" },
@@ -72,63 +72,46 @@ const props = defineProps({
   viewMode: { type: String as PropType<ViewMode>, default: "month" },
 });
 
-// USANDO DEFINE MODEL PARA O VALOR PRINCIPAL DO COMPONENTE
 const modelValue = defineModel<string | null>("modelValue", {
   default: null,
-  required: false, // Alterado para false: permite que o componente seja usado sem um v-model inicial
+  required: false,
 });
 
 const date = ref<Date | null>(null);
 const menu = ref(false);
-
-const inputValue = ref(""); // Para armazenar o valor conforme o usuário digita (DD/MM/YYYY)
-
+const inputValue = ref("");
 const fieldName = ref(uuid());
 
 const dynamicLabel = computed(() =>
   props.required ? `${props.label}*` : props.label
 );
 
-// Regras de validação com Zod
 const validationSchema = computed(() => {
-  let schema: zod.ZodTypeAny;
-
-  // A validação agora foca no formato YYYY-MM-DD que é o valor final
-  // e lida com o required separadamente.
-  schema = zod
+  let schema: zod.ZodTypeAny = zod
     .string()
-    .nullable() // Permite que o valor final seja null
+    .nullable()
     .refine((val) => {
-      // Se não for obrigatório e o valor for nulo/vazio, é válido.
-      if (!props.required && (val === null || val === "")) {
-        return true;
-      }
-      // Se for obrigatório e nulo/vazio, é inválido (min(1) ou checked no schema principal do Zod)
-      if (props.required && (val === null || val === "")) {
-        return false;
-      }
-      // Se tiver valor, valida se é uma data válida no formato YYYY-MM-DD
+      if (!props.required && (val === null || val === "")) return true;
+      if (props.required && (val === null || val === "")) return false;
       return dayjs(val, "YYYY-MM-DD", true).isValid();
-    }, "Data inválida."); // Mensagem genérica para data inválida
+    }, "Data inválida.");
 
   if (props.required) {
-    // Para o campo obrigatório, refine() para garantir que não seja null/vazio.
-    // Isso sobrepõe o .nullable() se for 'required'.
-    schema = schema.refine((val) => {
-      return val !== null && val !== "";
-    }, "Campo não pode ser vazio!");
+    schema = schema.refine(
+      (val) => val !== null && val !== "",
+      "Campo não pode ser vazio!"
+    );
   }
 
   return toTypedSchema(schema);
 });
 
-const { value, errorMessage, meta, handleChange, handleBlur } = useField<
-  string | null
->(fieldName, validationSchema, {
-  initialValue: modelValue.value, // Usa o valor do defineModel como initialValue
-});
+const { value, errorMessage, meta, handleChange } = useField<string | null>(
+  fieldName,
+  validationSchema,
+  { initialValue: modelValue.value }
+);
 
-// Sincroniza modelValue (YYYY-MM-DD) para inputValue (DD/MM/YYYY) na inicialização
 onMounted(() => {
   if (
     modelValue.value &&
@@ -136,58 +119,50 @@ onMounted(() => {
   ) {
     inputValue.value = dayjs(modelValue.value).format("DD/MM/YYYY");
     date.value = dayjs(modelValue.value).toDate();
-    // Importante: Força o useField a reconhecer o valor inicial como válido
-    handleChange(modelValue.value, true);
+    handleChange(modelValue.value, false);
   } else {
     inputValue.value = "";
     date.value = null;
     value.value = null;
-    // Força o useField a validar o estado inicial vazio/nulo
-    handleChange(null, true);
+    handleChange(null, false); // Não força validação imediata
   }
 });
 
-// Observa alterações em modelValue (a prop v-model) para atualizar inputValue (display)
-// Isso é importante se o valor mudar via date picker ou programaticamente de fora
 watch(modelValue, (newValue) => {
-  // Se o valor de modelValue mudar (externamente), atualizamos inputValue
   if (newValue && dayjs(newValue, "YYYY-MM-DD", true).isValid()) {
     inputValue.value = dayjs(newValue).format("DD/MM/YYYY");
     date.value = dayjs(newValue).toDate();
-  } else if (newValue === null || newValue === "") {
+  } else {
     inputValue.value = "";
     date.value = null;
   }
-  // Chame handleChange para revalidar com o novo valor que veio do pai
-  // Isso é crucial para que VeeValidate saiba que o valor mudou
-  handleChange(newValue); // Passe o valor final da API (YYYY-MM-DD)
+  handleChange(newValue);
 });
 
-// Centraliza a lógica de formatação e atualização ao digitar
-const handleInputAndFormat = (event: Event) => {
-  let inputVal = (event.target as HTMLInputElement).value;
-  inputVal = inputVal.replace(/\D/g, ""); // Remove tudo que não for número
+const handleInputAndFormat = (newVal: string) => {
+  // Atualiza diretamente o inputValue com o que o usuário digitou
+  inputValue.value = newVal;
 
+  const cleaned = newVal.replace(/\D/g, "");
   let formatted = "";
-  if (inputVal.length > 0) {
-    formatted = inputVal.slice(0, 2);
-    if (inputVal.length > 2) {
-      formatted += "/" + inputVal.slice(2, 4);
-    }
-    if (inputVal.length > 4) {
-      formatted += "/" + inputVal.slice(4, 8);
-    }
+
+  if (cleaned.length <= 2) {
+    formatted = cleaned;
+  } else if (cleaned.length <= 4) {
+    formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
+  } else {
+    formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(
+      4,
+      8
+    )}`;
   }
 
-  // Limita a 10 caracteres após a formatação (DD/MM/YYYY)
-  if (formatted.length > 10) {
-    formatted = formatted.slice(0, 10);
+  if (formatted !== inputValue.value) {
+    inputValue.value = formatted;
   }
-
-  inputValue.value = formatted; // Atualiza o v-model do text-field
 
   let apiValue: string | null = null;
-  // Tenta converter para o formato da API (YYYY-MM-DD) se a data estiver completa e válida no display
+
   if (
     formatted.length === 10 &&
     dayjs(formatted, "DD/MM/YYYY", true).isValid()
@@ -195,36 +170,26 @@ const handleInputAndFormat = (event: Event) => {
     apiValue = dayjs(formatted, "DD/MM/YYYY").format("YYYY-MM-DD");
   }
 
-  // Atualiza o valor do useField e defineModel
   value.value = apiValue;
   modelValue.value = apiValue;
 
-  // No @input, chamamos handleChange com o valor *final* (YYYY-MM-DD ou null)
-  // Isso permite que a validação do Zod atue sobre o valor correto em tempo real.
-  // No entanto, para validações que dependem do campo completo, o "on blur" ainda será mais efetivo.
-  handleChange(apiValue);
+  handleChange(apiValue); // Não força validação ainda
 };
 
-// Função para validar e emitir a data ao desfocar o campo (blur)
 const validateAndEmitOnBlur = () => {
   const inputVal = inputValue.value;
-
   let apiValue: string | null = null;
 
   if (inputVal.length === 10 && dayjs(inputVal, "DD/MM/YYYY", true).isValid()) {
     apiValue = dayjs(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
   } else if (!props.required && (!inputVal || inputVal.length === 0)) {
-    // Se não for obrigatório e o campo estiver vazio, é válido
     apiValue = null;
   }
-  // Se a data for incompleta ou inválida E for obrigatória, apiValue permanecerá null,
-  // e a validação do Zod cuidará da mensagem "Campo não pode ser vazio!".
 
   value.value = apiValue;
   modelValue.value = apiValue;
 
-  // Força a validação final no blur com o valor que o Zod espera
-  handleChange(apiValue, true); // O 'true' força a validação imediata
+  handleChange(apiValue, true); // Força validação final e marca como "touched"
 };
 
 const handleClickMenu = () => {
@@ -237,8 +202,6 @@ const handleClickMenu = () => {
     modelValue.value &&
     dayjs(modelValue.value, "YYYY-MM-DD", true).isValid()
   ) {
-    // Se inputValue está vazio/inválido, mas modelValue tem uma data válida da API
-    // tenta usar modelValue para abrir o date picker.
     date.value = dayjs(modelValue.value).toDate();
   } else {
     date.value = null;
@@ -248,252 +211,19 @@ const handleClickMenu = () => {
 
 const handleUpdateDatePickerData = (newDate: Date | null) => {
   if (newDate) {
-    const formattedDateForDisplay = dayjs(newDate).format("DD/MM/YYYY");
-    const formattedDateForApi = dayjs(newDate).format("YYYY-MM-DD");
+    const formattedDisplay = dayjs(newDate).format("DD/MM/YYYY");
+    const formattedApi = dayjs(newDate).format("YYYY-MM-DD");
 
-    inputValue.value = formattedDateForDisplay;
-    value.value = formattedDateForApi;
-    modelValue.value = formattedDateForApi; // Atualiza o defineModel
-
-    menu.value = false;
+    inputValue.value = formattedDisplay;
+    value.value = formattedApi;
+    modelValue.value = formattedApi;
   } else {
     inputValue.value = "";
     value.value = null;
     modelValue.value = null;
-    menu.value = false;
   }
-  handleChange(value.value); // Dispara validação do vee-validate com o valor do campo
+
+  handleChange(value.value);
+  menu.value = false;
 };
 </script>
-
-<!-- <template>
-  <v-text-field
-    v-model="inputValue"
-    :label="dynamicLabel"
-    :error-messages="errorMessage"
-    :clearable="clearable"
-    :disabled="disabled"
-    persistent-hint
-    variant="outlined"
-    density="compact"
-    base-color="primary"
-    color="primary"
-    maxlength="10"
-    @input="formatDateOnInput"
-    @blur="validateDateOnBlur"
-  >
-    <template v-slot:prepend-inner>
-      <v-menu v-model="menu" :close-on-content-click="false">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            variant="text"
-            icon
-            size="x-small"
-            v-bind="props"
-            @click="handleClickMenu"
-          >
-            <v-icon
-              icon="mdi-calendar-multiselect-outline"
-              size="20"
-              color="primary"
-            />
-          </v-btn>
-        </template>
-        <v-locale-provider locale="pt">
-          <v-date-picker
-            v-model="date"
-            elevation="8"
-            rounded="lg"
-            hide-actions
-            hide-title
-            hide-header
-            color="primary"
-            @update:model-value="handleUpdateDatePickerData($event)"
-            @click="emit('click:day', dayjs(date).format('YYYY-MM-DD'))"
-          />
-        </v-locale-provider>
-      </v-menu>
-    </template>
-  </v-text-field>
-</template>
-
-<script setup lang="ts">
-import dayjs from "dayjs";
-import { toTypedSchema } from "@vee-validate/zod";
-import * as zod from "zod";
-import { useField } from "vee-validate";
-import { uuidv7 as uuid } from "uuidv7";
-
-const props = defineProps({
-  label: {
-    type: String,
-    default: "",
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  clearable: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  min: {
-    type: Number,
-  },
-});
-
-const emit = defineEmits(["update:modelValue", "click:day", "blur"]);
-
-const date = ref(); // Armazena a data para o v-date-picker
-const menu = ref(false);
-const modelValue = defineModel({
-  default: "",
-});
-
-const inputValue = ref(""); // Para armazenar o valor conforme o usuário digita
-
-// const fieldName = computed(() => {
-//   return props.label || "datepicker";
-// });
-const fieldName = uuid(); // Gerar um ID único para o campo
-const dynamicLabel = computed(() =>
-  props.required ? `${props.label}*` : props.label
-);
-
-const validationRules = computed<MaybeRef>(() => {
-  if (props.required) {
-    return toTypedSchema(
-      zod
-        .string({
-          invalid_type_error: "Data inválida",
-          required_error: "Campo não pode ser vazio!",
-        })
-        .min(10, "Campo não pode ser vazio!")
-        .refine((val) => {
-          const date = new Date(val!);
-          const isValid = dayjs(date).isValid();
-          return isValid;
-        }, "Data inválida")
-    );
-  }
-
-  return toTypedSchema(
-    zod
-      .string({
-        invalid_type_error: "Data inválida",
-      })
-      .optional()
-      .nullish()
-      .refine((val) => {
-        if (!val) return true;
-
-        const date = new Date(val!);
-        const isValid = dayjs(date).isValid();
-        return isValid;
-      }, "Data inválida")
-  );
-});
-
-const { value, errorMessage } = useField<string>(fieldName, validationRules, {
-  syncVModel: true,
-  initialValue: modelValue.value,
-});
-
-// Sincroniza o valor inicial do modelValue com o inputValue
-onMounted(() => {
-  if (modelValue.value) {
-    inputValue.value = dayjs(modelValue.value, "YYYY-MM-DD").format(
-      "DD/MM/YYYY"
-    );
-  }
-});
-
-// Observa alterações em modelValue para atualizar inputValue
-watch(
-  () => modelValue.value,
-  (newValue) => {
-    if (newValue) {
-      inputValue.value = dayjs(newValue, "YYYY-MM-DD").format("DD/MM/YYYY");
-    }
-  }
-);
-
-const handleClickMenu = () => {
-  // Abre o menu do v-date-picker e tenta carregar a data selecionada
-  if (dayjs(value.value, "YYYY-MM-DD", true).isValid()) {
-    date.value = dayjs(value.value, "YYYY-MM-DD").toDate();
-  } else {
-    date.value = null; // Limpa a data se for inválida
-  }
-  menu.value = true;
-};
-
-const handleUpdateDatePickerData = (newDate: Date) => {
-  if (newDate) {
-    const formattedDate = dayjs(newDate).format("YYYY-MM-DD");
-    inputValue.value = dayjs(newDate).format("DD/MM/YYYY");
-    value.value = formattedDate;
-    emit("update:modelValue", formattedDate);
-    menu.value = false; // Fecha o menu
-  }
-};
-
-// Função para formatar a data conforme o usuário digita
-const formatDateOnInput = (event: any) => {
-  let inputVal = event.target.value.replace(/\D/g, ""); // Remove tudo que não for número
-
-  if (inputVal.length <= 2) {
-    event.target.value = inputVal; // Dia
-  } else if (inputVal.length <= 4) {
-    event.target.value = inputVal.slice(0, 2) + "/" + inputVal.slice(2); // Dia/Mês
-  } else {
-    event.target.value =
-      inputVal.slice(0, 2) +
-      "/" +
-      inputVal.slice(2, 4) +
-      "/" +
-      inputVal.slice(4, 8); // Dia/Mês/Ano
-  }
-
-  inputValue.value = event.target.value;
-
-  setValidDateApi(inputValue.value);
-};
-
-const setValidDateApi = (textDate: string) => {
-  const isValid = dayjs(textDate, "DD/MM/YYYY", true).isValid();
-  if (isValid) {
-    const formattedDate = dayjs(textDate, "DD/MM/YYYY").format("YYYY-MM-DD");
-    value.value = formattedDate;
-    emit("update:modelValue", formattedDate);
-  } else {
-    value.value = "";
-    emit("update:modelValue", "");
-  }
-};
-
-// Função para validar a data ao desfocar o campo (blur)
-const validateDateOnBlur = (event: any) => {
-  const inputVal = event.target.value;
-
-  // Somente valida se a data estiver completa (10 caracteres)
-  if (inputVal.length === 10) {
-    const isValid = dayjs(inputVal, "DD/MM/YYYY", true).isValid();
-    if (isValid) {
-      const formattedDate = dayjs(inputVal, "DD/MM/YYYY").format("YYYY-MM-DD");
-      value.value = formattedDate;
-      emit("blur", formattedDate);
-    } else {
-      value.value = "";
-      emit("update:modelValue", "");
-    }
-  } else {
-    value.value = ""; // Limpa o valor se a data ainda não estiver completa
-    emit("update:modelValue", "");
-  }
-};
-</script> -->
