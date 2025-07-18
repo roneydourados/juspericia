@@ -6,181 +6,215 @@
     @dialog="handleClose"
   >
     <FormCrud :on-submit="submitForm">
-      <v-row dense>
-        <v-col cols="12" lg="6">
-          <StringInput
-            v-model="model.name"
-            label="Nome"
-            placeholder="Nome"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <StringInput
-            v-model="model.email"
-            label="E-mail"
-            placeholder="E-mail"
-            required
-          />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="4">
-          <TelefoneInput
-            v-model="model.phone"
-            label="Telefone"
-            placeholder="Telefone"
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <StringInput
-            v-model="model.crm"
-            label="CRM"
-            placeholder="CRM"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <StatesSelectSearch
-            v-model="model.crmUf"
-            label="UF CRM"
-            placeholder="UF CRM"
-            required
-          />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="4">
-          <CPFInput
-            v-model="model.cpfCnpj"
-            label="CPF"
-            placeholder="CPF"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <PasswordInput
-            v-model="model.password"
-            label="Senha temporária"
-            placeholder="crie uma senha temporária"
-            :required="!model.id"
-            :strong="!!(model.id && model.id > 0 && model.password)"
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
+      <Tabs v-model="tab" :tabs="tabs">
+        <template #content>
+          <v-row v-if="tab === 1" dense class="py-4">
+            <v-col cols="12" lg="6">
+              <StringInput
+                v-model="model.name"
+                label="Nome"
+                placeholder="Nome"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="6">
+              <StringInput
+                v-model="model.email"
+                label="E-mail"
+                placeholder="E-mail"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <TelefoneInput
+                v-model="model.phone"
+                label="Telefone"
+                placeholder="Telefone"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.crm"
+                label="CRM"
+                placeholder="CRM"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StatesSelectSearch
+                v-model="model.crmUf"
+                label="UF CRM"
+                placeholder="UF CRM"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <CPFInput
+                v-model="model.cpfCnpj"
+                label="CPF"
+                placeholder="CPF"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <PasswordInput
+                v-model="model.password"
+                label="Senha temporária"
+                placeholder="crie uma senha temporária"
+                :required="!model.id"
+                :strong="!!(model.id && model.id > 0 && model.password)"
+              />
+            </v-col>
+          </v-row>
+          <v-row v-if="tab === 2" dense class="py-4">
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.bankName"
+                label="Banco"
+                placeholder="Banco"
+                :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.bankAgency"
+                label="Agência"
+                placeholder="Agência"
+                :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <TextInput
+                v-model="model.pixKey"
+                label="Chave Pix"
+                placeholder="Chave Pix"
+                :clearable="true"
+                rows="1"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.bankAccountNumber"
+                label="Nº Conta"
+                placeholder="999999"
+                :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <SelectInput
+                v-model="model.bankAccountType"
+                label="Tipo Conta"
+                placeholder="999999"
+                :clearable="true"
+                item-title="text"
+                item-value="value"
+                :items="[
+                  { text: 'Conta Corrente', value: 'CONTA_CORRENTE' },
+                  { text: 'Conta Poupança', value: 'CONTA_POUPANCA' },
+                ]"
+              />
+            </v-col>
+          </v-row>
+          <v-row v-if="tab === 3" dense class="py-4">
+            <v-col cols="12" lg="3">
+              <CepInput
+                label="Cep"
+                icon="mdi-map-marker-radius-outline"
+                :clearable="true"
+                v-model="model.cepAddress.cep"
+                v-model:model-address="model.cepAddress"
+              />
+            </v-col>
+            <v-col cols="12" lg="7">
+              <StringInput
+                label="Rua"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.logradouro"
+              />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <StringInput
+                label="Nº"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.numero"
+              />
+            </v-col>
+            <v-col cols="12" lg="5">
+              <StringInput
+                label="Bairro"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.bairro"
+              />
+            </v-col>
+            <v-col cols="12" lg="5">
+              <StringInput
+                label="Cidade"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.localidade"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <StatesSelectSearch v-model="model.cepAddress.uf" />
+            </v-col>
+            <v-col cols="12">
+              <StringInput
+                label="Complemento"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.complemento"
+              />
+            </v-col>
+          </v-row>
+          <v-row v-if="tab === 4" dense class="py-4">
+            <v-col cols="12" lg="2">
+              <TimeInput
+                v-model="model.medicHourStart"
+                label="Hora de início"
+                placeholder="08:00"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <TimeInput
+                v-model="model.medicHourEnd"
+                label="Hora de fim"
+                placeholder="20:00"
+                required
+              />
+            </v-col>
+          </v-row>
+          <v-row v-if="tab === 4" dense>
+            <v-col cols="12">
+              <strong>Dias da semana atendimento</strong>
+            </v-col>
+            <v-col cols="12" lg="2">
+              <v-checkbox v-model="model.seg" label="Seg" />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <v-checkbox v-model="model.ter" label="Ter" />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <v-checkbox v-model="model.qua" label="Qua" />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <v-checkbox v-model="model.qui" label="Qui" />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <v-checkbox v-model="model.sex" label="Sex" />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <v-checkbox v-model="model.sab" label="Sab" />
+            </v-col>
+          </v-row>
+        </template>
+      </Tabs>
+      <v-row dense class="px-8">
+        <v-col cols="12" class="d-flex justify-end py-4">
           <v-switch
             v-model="model.active"
             color="success"
             :label="model.active ? 'Ativo' : 'Inativo'"
             hide-details
           ></v-switch>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" lg="3">
-          <CepInput
-            label="Cep"
-            icon="mdi-map-marker-radius-outline"
-            :clearable="true"
-            v-model="model.cepAddress.cep"
-            v-model:model-address="model.cepAddress"
-          />
-        </v-col>
-        <v-col cols="12" lg="7">
-          <StringInput
-            label="Rua"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.logradouro"
-          />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <StringInput
-            label="Nº"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.numero"
-          />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="5">
-          <StringInput
-            label="Bairro"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.bairro"
-          />
-        </v-col>
-        <v-col cols="12" lg="5">
-          <StringInput
-            label="Cidade"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.localidade"
-          />
-        </v-col>
-        <v-col cols="12" md="2">
-          <StatesSelectSearch v-model="model.cepAddress.uf" />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12">
-          <StringInput
-            label="Complemento"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.complemento"
-          />
-        </v-col>
-      </v-row>
-
-      <div class="py-4">
-        <strong>Pametrização consulta</strong>
-      </div>
-      <v-row dense>
-        <v-col cols="12" lg="2">
-          <TimeInput
-            v-model="model.medicHourStart"
-            label="Hora de início"
-            placeholder="08:00"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <TimeInput
-            v-model="model.medicHourEnd"
-            label="Hora de fim"
-            placeholder="20:00"
-            required
-          />
-        </v-col>
-        <!-- <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
-          <IntegerInput
-            v-model="model.medicQueryInterval"
-            label="Intervalo entre consultas"
-            placeholder="15"
-            required
-          />
-          <strong>minutos</strong>
-        </v-col> -->
-      </v-row>
-      <v-row dense>
-        <v-col cols="12">
-          <strong>Dias da semana</strong>
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-checkbox v-model="model.seg" label="Seg" />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-checkbox v-model="model.ter" label="Ter" />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-checkbox v-model="model.qua" label="Qua" />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-checkbox v-model="model.qui" label="Qui" />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-checkbox v-model="model.sex" label="Sex" />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <v-checkbox label="Sab" v-model="model.sab" />
         </v-col>
       </v-row>
     </FormCrud>
@@ -214,7 +248,13 @@ const emit = defineEmits(["close"]);
 const { mobile } = useDisplay();
 
 const medicStore = useMedicStore();
-
+const tab = ref(1);
+const tabs = ref([
+  { title: "Dados Pessoais", icon: "mdi-account" },
+  { title: "Dados Bancários", icon: "mdi-bank" },
+  { title: "Endereço", icon: "mdi-map" },
+  { title: "Parâmetros de Consulta", icon: "mdi-cog" },
+]);
 const loading = ref(false);
 const model = ref({
   id: 0,
@@ -245,6 +285,11 @@ const model = ref({
   sex: false,
   sab: false,
   dom: false,
+  pixKey: "",
+  bankName: "",
+  bankAgency: "",
+  bankAccountNumber: "",
+  bankAccountType: "CONTA_CORRENTE",
 });
 
 const clearModel = () => {
@@ -277,6 +322,11 @@ const clearModel = () => {
     sex: false,
     sab: false,
     dom: false,
+    pixKey: "",
+    bankName: "",
+    bankAgency: "",
+    bankAccountNumber: "",
+    bankAccountType: "CONTA_CORRENTE",
   };
 };
 
@@ -320,6 +370,11 @@ const loadModel = () => {
     sex: props.data.sex ?? false,
     sab: props.data.sab ?? false,
     dom: props.data.dom ?? false,
+    pixKey: props.data.pixKey ?? "",
+    bankName: props.data.bankName ?? "",
+    bankAgency: props.data.bankAgency ?? "",
+    bankAccountNumber: props.data.bankAccountNumber ?? "",
+    bankAccountType: props.data.bankAccountType ?? "CONTA_CORRENTE",
   };
 };
 
@@ -367,6 +422,11 @@ const create = async () => {
     sex: model.value.sex,
     sab: model.value.sab,
     dom: model.value.dom,
+    pixKey: model.value.pixKey,
+    bankName: model.value.bankName,
+    bankAgency: model.value.bankAgency,
+    bankAccountNumber: model.value.bankAccountNumber,
+    bankAccountType: model.value.bankAccountType,
   });
 };
 
@@ -401,6 +461,11 @@ const update = async () => {
     sex: model.value.sex,
     sab: model.value.sab,
     dom: model.value.dom,
+    pixKey: model.value.pixKey,
+    bankName: model.value.bankName,
+    bankAgency: model.value.bankAgency,
+    bankAccountNumber: model.value.bankAccountNumber,
+    bankAccountType: model.value.bankAccountType,
   });
 };
 

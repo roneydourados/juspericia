@@ -36,6 +36,11 @@ export interface UserProps {
   dom?: boolean;
   comissionType?: string;
   comissionValue?: number;
+  pixKey?: string;
+  bankName?: string;
+  bankAgency?: string;
+  bankAccountNumber?: string;
+  bankAccountType?: string;
 }
 
 export interface UserProfileProps {

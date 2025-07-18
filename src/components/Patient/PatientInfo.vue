@@ -6,7 +6,7 @@
         variant="text"
         class="text-none"
         prepend-icon="mdi-arrow-left"
-        @click="$router.back()"
+        @click="router.back()"
       >
         Voltar
       </v-btn>
@@ -40,9 +40,9 @@
 
 <script setup lang="ts">
 const patientStore = usePatientStore();
-const fileStore = useFileStore();
+//const fileStore = useFileStore();
 //const storeConsultation = useSolicitationConsultationStore();
-//const rounter = useRouter();
+const router = useRouter();
 const itemSelected = ref<PatientProps>();
 const tab = ref(1);
 const showForm = ref(false);

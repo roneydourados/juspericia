@@ -6,104 +6,161 @@
     @dialog="handleClose"
   >
     <FormCrud ref="formCrudRef" :on-submit="submitForm">
+      <Tabs v-model="tab" :tabs="tabs">
+        <template #content>
+          <v-row v-if="tab === 1" dense>
+            <v-col cols="12" lg="6">
+              <StringInput
+                v-model="model.name"
+                label="Nome"
+                placeholder="Nome"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="6">
+              <StringInput
+                v-model="model.email"
+                label="E-mail"
+                placeholder="E-mail"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <TelefoneInput
+                v-model="model.phone"
+                label="Telefone"
+                placeholder="Telefone"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <CPFInput
+                v-model="model.cpfCnpj"
+                label="CPF"
+                placeholder="CPF"
+                required
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <PasswordInput
+                v-model="model.password"
+                label="Senha temporária"
+                placeholder="crie uma senha temporária"
+                :required="!model.id"
+                :strong="!!(model.id && model.id > 0 && model.password)"
+              />
+            </v-col>
+            <v-col cols="12" lg="6">
+              <SelectSearchProfileSeller v-model="model.profile" required />
+            </v-col>
+          </v-row>
+          <v-row v-if="tab === 2" dense>
+            <v-col cols="12">
+              <strong>Dados bancários</strong>
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.bankName"
+                label="Banco"
+                placeholder="Banco"
+                :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.bankAgency"
+                label="Agência"
+                placeholder="Agência"
+                :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <TextInput
+                v-model="model.pixKey"
+                label="Chave Pix"
+                placeholder="Chave Pix"
+                :clearable="true"
+                rows="1"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <StringInput
+                v-model="model.bankAccountNumber"
+                label="Nº Conta"
+                placeholder="999999"
+                :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12" lg="4">
+              <SelectInput
+                v-model="model.bankAccountType"
+                label="Tipo Conta"
+                placeholder="999999"
+                :clearable="true"
+                item-title="text"
+                item-value="value"
+                :items="[
+                  { text: 'Conta Corrente', value: 'CONTA_CORRENTE' },
+                  { text: 'Conta Poupança', value: 'CONTA_POUPANCA' },
+                ]"
+              />
+            </v-col>
+          </v-row>
+          <v-row v-if="tab === 3" dense>
+            <v-col cols="12">
+              <strong>Dados endereço</strong>
+            </v-col>
+            <v-col cols="12" lg="3">
+              <CepInput
+                label="Cep"
+                icon="mdi-map-marker-radius-outline"
+                :clearable="true"
+                v-model="model.cepAddress.cep"
+                v-model:model-address="model.cepAddress"
+              />
+            </v-col>
+            <v-col cols="12" lg="7">
+              <StringInput
+                label="Rua"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.logradouro"
+              />
+            </v-col>
+            <v-col cols="12" lg="2">
+              <StringInput
+                label="Nº"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.numero"
+              />
+            </v-col>
+            <v-col cols="12" lg="5">
+              <StringInput
+                label="Bairro"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.bairro"
+              />
+            </v-col>
+            <v-col cols="12" lg="5">
+              <StringInput
+                label="Cidade"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.localidade"
+              />
+            </v-col>
+            <v-col cols="12" md="2">
+              <StatesSelectSearch v-model="model.cepAddress.uf" />
+            </v-col>
+            <v-col cols="12">
+              <StringInput
+                label="Complemento"
+                :clearable="true"
+                v-model:model-value="model.cepAddress.complemento"
+              />
+            </v-col>
+          </v-row>
+        </template>
+      </Tabs>
       <v-row dense>
-        <v-col cols="12" lg="6">
-          <StringInput
-            v-model="model.name"
-            label="Nome"
-            placeholder="Nome"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <StringInput
-            v-model="model.email"
-            label="E-mail"
-            placeholder="E-mail"
-            required
-          />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="4">
-          <TelefoneInput
-            v-model="model.phone"
-            label="Telefone"
-            placeholder="Telefone"
-          />
-        </v-col>
-
-        <v-col cols="12" lg="4">
-          <CPFInput
-            v-model="model.cpfCnpj"
-            label="CPF"
-            placeholder="CPF"
-            required
-          />
-        </v-col>
-        <v-col cols="12" lg="4">
-          <PasswordInput
-            v-model="model.password"
-            label="Senha temporária"
-            placeholder="crie uma senha temporária"
-            :required="!model.id"
-            :strong="!!(model.id && model.id > 0 && model.password)"
-          />
-        </v-col>
-
-        <v-col cols="12" lg="3">
-          <CepInput
-            label="Cep"
-            icon="mdi-map-marker-radius-outline"
-            :clearable="true"
-            v-model="model.cepAddress.cep"
-            v-model:model-address="model.cepAddress"
-          />
-        </v-col>
-        <v-col cols="12" lg="7">
-          <StringInput
-            label="Rua"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.logradouro"
-          />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <StringInput
-            label="Nº"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.numero"
-          />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="5">
-          <StringInput
-            label="Bairro"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.bairro"
-          />
-        </v-col>
-        <v-col cols="12" lg="5">
-          <StringInput
-            label="Cidade"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.localidade"
-          />
-        </v-col>
-        <v-col cols="12" md="2">
-          <StatesSelectSearch v-model="model.cepAddress.uf" />
-        </v-col>
-        <v-col cols="12">
-          <StringInput
-            label="Complemento"
-            :clearable="true"
-            v-model:model-value="model.cepAddress.complemento"
-          />
-        </v-col>
-        <v-col cols="12" lg="6">
-          <SelectSearchProfileSeller v-model="model.profile" required />
-        </v-col>
-        <v-col cols="12" lg="3" class="d-flex justify-end">
+        <v-col cols="12" class="d-flex justify-end px-8">
           <v-switch
             v-model="model.active"
             color="success"
@@ -144,6 +201,12 @@ const { mobile } = useDisplay();
 
 const sellerStore = useSellerStore();
 const formCrudRef = ref();
+const tab = ref(1);
+const tabs = ref([
+  { title: "Dados Pessoais", icon: "mdi-account" },
+  { title: "Dados Bancários", icon: "mdi-bank" },
+  { title: "Endereço", icon: "mdi-map" },
+]);
 
 // const loading = ref(false);
 const model = ref({
@@ -164,6 +227,11 @@ const model = ref({
     numero: "",
   } as CepAdderssProps,
   profile: undefined as ProfileProps | undefined,
+  pixKey: "",
+  bankName: "",
+  bankAgency: "",
+  bankAccountNumber: "",
+  bankAccountType: "CONTA_CORRENTE",
 });
 
 const clearModel = () => {
@@ -185,6 +253,11 @@ const clearModel = () => {
       numero: "",
     },
     profile: undefined,
+    pixKey: "",
+    bankName: "",
+    bankAgency: "",
+    bankAccountNumber: "",
+    bankAccountType: "CONTA_CORRENTE",
   };
 };
 
@@ -215,6 +288,11 @@ const loadModel = () => {
       numero: props.data.UserAddress?.addressNumber ?? "",
     },
     profile: props.data.profile,
+    pixKey: props.data.pixKey ?? "",
+    bankName: props.data.bankName ?? "",
+    bankAgency: props.data.bankAgency ?? "",
+    bankAccountNumber: props.data.bankAccountNumber ?? "",
+    bankAccountType: props.data.bankAccountType ?? "CONTA_CORRENTE",
   };
 };
 
@@ -252,6 +330,11 @@ const create = async () => {
     },
     active: model.value.active,
     profileId: model.value.profile?.id,
+    pixKey: model.value.pixKey,
+    bankName: model.value.bankName,
+    bankAgency: model.value.bankAgency,
+    bankAccountNumber: model.value.bankAccountNumber,
+    bankAccountType: model.value.bankAccountType,
   });
 };
 
@@ -275,6 +358,11 @@ const update = async () => {
       addressZipcode: model.value.cepAddress.cep,
     },
     profileId: model.value.profile?.id,
+    pixKey: model.value.pixKey,
+    bankName: model.value.bankName,
+    bankAgency: model.value.bankAgency,
+    bankAccountNumber: model.value.bankAccountNumber,
+    bankAccountType: model.value.bankAccountType,
   });
 };
 
