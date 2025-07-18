@@ -334,7 +334,9 @@
             prepend-icon="mdi-file-document-refresh-outline"
             color="indigo"
             @click="showDateCorrection = true"
-            :disabled="!solicitation.PatientConsultationReport"
+            :disabled="
+              !solicitation.PatientConsultationReport || !$isEnableCorrection
+            "
           >
             Solicitar correção
           </v-btn>
@@ -469,7 +471,9 @@
     @confirm-sale="handleSaleItemForAsaas"
     @cancel="handleCancel"
   />
-  <!-- <pre>{{ props.solicitation }}</pre> -->
+  <!-- <pre>{{ props.solicitation.correctionQuantity }}</pre>
+  <pre>enabled: {{ $isEnableCorrection }}</pre>
+  <pre>{{ $systemParameters }}</pre> -->
 </template>
 
 <script setup lang="ts">
@@ -490,6 +494,7 @@ const consultationReport = usePatientConsultationReportStore();
 const rounter = useRouter();
 const fileStore = useFileStore();
 const zapSign = useZapsignStore();
+const systemParameters = useSystemParametersStore();
 // const transactionsStore = useTransactionsStore();
 
 const {
@@ -543,6 +548,24 @@ const $solicitationTotal = computed(() => {
 });
 
 const $paymentResponse = computed(() => asaas.$paymentReponse);
+const $systemParameters = computed(() => systemParameters.$parameters);
+const $isEnableCorrection = computed(() => {
+  return (
+    Number(props.solicitation.correctionQuantity ?? 0) <
+    Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
+  );
+  // if (
+  //   props.solicitation.correctionQuantity &&
+  //   props.solicitation.correctionQuantity > 0
+  // ) {
+  //   return (
+  //     props.solicitation.correctionQuantity <
+  //     Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
+  //   );
+  // }
+
+  // return false;
+});
 
 watch(
   () => props.solicitation.id,
@@ -571,15 +594,18 @@ const handleUpdateCorrection = async (motive: string) => {
   if (motive) {
     loading.value = true;
     try {
+      // adiciona a justificativa no laudo
       await consultationReport.addJustify({
         justify: motive,
         publicId: props.solicitation.PatientConsultationReport.publicId!,
       });
-      // await storeConsultation.update({
-      //   publicId: props.solicitation.publicId,
-      //   reasonCorrection: motive,
-      //   dateCorrection: dayjs().format("YYYY-MM-DD"),
-      // });
+
+      // incrementa a quantidade de correções
+      await storeConsultation.update({
+        publicId: props.solicitation.publicId,
+        correctionQuantity:
+          Number(props.solicitation.correctionQuantity ?? 0) + 1,
+      });
 
       await getSolicitations();
     } finally {

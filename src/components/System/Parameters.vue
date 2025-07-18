@@ -222,7 +222,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-
           <v-col cols="12" lg="4">
             <v-card flat rounded="lg" elevation="1" height="100%">
               <v-card-title>
@@ -240,6 +239,29 @@
                 </v-row>
                 <div>
                   Valor a ser embutido de taxa de antecipação para pagamentos
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" lg="4">
+            <v-card flat rounded="lg" elevation="1" height="100%">
+              <v-card-title>
+                <div class="font-weight-bold">Solicitações de consulta</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12" lg="6">
+                    <IntegerInput
+                      label="Qtde de correções por consulta"
+                      v-model="form.solicitationCorrectionQuantity"
+                    />
+                  </v-col>
+                </v-row>
+                <div>
+                  Quantidade máxia e vezes que o advogado pode solicitar uma
+                  correção por consulta
                 </div>
               </v-card-text>
             </v-card>
@@ -279,6 +301,7 @@ const form = ref({
   voucherMaxQuantityUse: "",
   voucherMaxQuantityDays: "",
   cardFeeInstallment: "",
+  solicitationCorrectionQuantity: "",
 });
 
 watch(
@@ -287,6 +310,8 @@ watch(
     if (newData) {
       form.value = {
         pointsPerIndication: newData.pointsPerIndication?.toString() ?? "",
+        solicitationCorrectionQuantity:
+          newData.solicitationCorrectionQuantity?.toString() ?? "",
         pointsExchange: newData.pointsExchange?.toString() ?? "",
         pointsExchangeValue: amountFormated(
           newData.pointsExchangeValue ?? 0,
@@ -342,6 +367,9 @@ const handleSubmit = async () => {
       voucherMaxQuantityUse: Number(form.value.voucherMaxQuantityUse ?? "0"),
       voucherMaxQuantityDays: Number(form.value.voucherMaxQuantityDays ?? "0"),
       cardFeeInstallment: Number(form.value.cardFeeInstallment ?? "0"),
+      solicitationCorrectionQuantity: Number(
+        form.value.solicitationCorrectionQuantity ?? "0"
+      ),
     });
   } catch (error) {
     console.error(error);

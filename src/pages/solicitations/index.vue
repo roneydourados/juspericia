@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 const { setSolicitationsFilters } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 const authStore = useAuthStore();
-
+const systemParameters = useSystemParametersStore();
 const loading = ref(false);
 const $currentUser = computed(() => authStore.$currentUser);
 
@@ -31,6 +31,7 @@ onMounted(async () => {
   try {
     setSolicitationsFilters(modelFilters.value);
     await storeConsultation.index(modelFilters.value);
+    await systemParameters.index();
   } finally {
     loading.value = false;
   }
