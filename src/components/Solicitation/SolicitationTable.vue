@@ -7,6 +7,7 @@
           <v-col
             v-if="
               $currentUser?.profile?.type === 'ADMIN' ||
+              $currentUser?.profile?.type === 'GERENTE' ||
               $currentUser?.profile?.type === 'VENDEDOR'
             "
             cols="12"

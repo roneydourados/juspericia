@@ -17,9 +17,9 @@
       :clearable="clearable"
       :disabled="disabled"
     >
-      <template #items="{ item, props }">
+      <template #item="{ item, props }">
         <v-list-item v-bind="props" :title="item.raw.name" density="compact">
-          <template #append>
+          <!-- <template #append>
             <v-btn
               v-if="$currentUser?.profile?.type === 'ADMIN'"
               icon="mdi-pencil"
@@ -27,7 +27,7 @@
               color="warning"
               @click="getEditItem(item.raw)"
             ></v-btn>
-          </template>
+          </template> -->
         </v-list-item>
       </template>
 

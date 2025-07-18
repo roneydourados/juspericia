@@ -16,13 +16,18 @@
       :clearable="clearable"
       :disabled="disabled"
     >
-      <template #items="{ item, props }">
-        <v-list-item
-          v-bind="props"
-          :title="item.raw.name"
-          :subtitle="item.raw.surname"
-          density="compact"
-        >
+      <template #item="{ item, props }">
+        <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+          <template #subtitle>
+            <div class="d-flex flex-column">
+              <div class="text-caption text-grey-darken-2">
+                {{ item.raw.name }} {{ item.raw.surname }}
+              </div>
+              <div class="text-caption text-grey-darken-2">
+                CPF: {{ formatCPFOrCNPJ(item.raw.cpf) }}
+              </div>
+            </div>
+          </template>
         </v-list-item>
       </template>
 
@@ -106,7 +111,7 @@ defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const patient = usePatientStore();
-
+const { formatCPFOrCNPJ } = useUtils();
 const search = ref("");
 const loadingSearch = ref(false);
 const showForm = ref(false);

@@ -16,7 +16,7 @@
     :clearable="clearable"
     :disabled="disabled"
   >
-    <template #items="{ item, props }">
+    <template #item="{ item, props }">
       <v-list-item v-bind="props" :title="item.raw.title" density="compact">
       </v-list-item>
     </template>

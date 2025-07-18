@@ -11,7 +11,7 @@
     :clearable="true"
     v-model="value"
   >
-    <template #items="{ props, item }">
+    <template #item="{ props, item }">
       <v-list-item
         v-bind="props"
         :title="String((item as any).raw.code)"

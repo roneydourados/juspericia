@@ -15,13 +15,18 @@
     :clearable="clearable"
     :disabled="disabled"
   >
-    <template #items="{ item, props }">
-      <v-list-item
-        v-bind="props"
-        :title="item.raw.name"
-        :subtitle="item.raw.officeName"
-        density="compact"
-      >
+    <template #item="{ item, props }">
+      <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+        <template #subtitle>
+          <div class="d-flex flex-column">
+            <div class="text-caption text-grey-darken-2">
+              {{ item.raw.email }}
+            </div>
+            <div class="text-caption text-grey-darken-2">
+              {{ formatCPFOrCNPJ(item.raw.cpfCnpj) }}
+            </div>
+          </div>
+        </template>
       </v-list-item>
     </template>
 
@@ -98,7 +103,7 @@ defineProps({
 const emit = defineEmits(["update:modelValue", "clear"]);
 
 const sellerStore = useSellerStore();
-
+const { formatCPFOrCNPJ } = useUtils();
 const search = ref("");
 const loadingSearch = ref(false);
 
