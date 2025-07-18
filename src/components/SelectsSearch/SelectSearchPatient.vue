@@ -17,15 +17,14 @@
       :disabled="disabled"
     >
       <template #item="{ item, props }">
-        <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+        <v-list-item
+          v-bind="props"
+          :title="`${item.raw.name} ${item.raw.surname}`"
+          density="compact"
+        >
           <template #subtitle>
-            <div class="d-flex flex-column">
-              <div class="text-caption text-grey-darken-2">
-                {{ item.raw.name }} {{ item.raw.surname }}
-              </div>
-              <div class="text-caption text-grey-darken-2">
-                CPF: {{ formatCPFOrCNPJ(item.raw.cpf) }}
-              </div>
+            <div class="text-caption text-grey-darken-2">
+              CPF: {{ formatCPFOrCNPJ(item.raw.cpf) }}
             </div>
           </template>
         </v-list-item>
