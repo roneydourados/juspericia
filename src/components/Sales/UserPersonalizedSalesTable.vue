@@ -81,6 +81,16 @@
         {{ getTransactionStatusDetails(item).label }}
       </v-chip>
     </template>
+    <template v-slot:item.packgeSaleValue="{ item }">
+      <span class="font-weight-bold">
+        {{
+          amountFormated(
+            Number(item.packgeSaleValue ?? 0) / (item.packgeQuantity ?? 1),
+            true
+          )
+        }}
+      </span>
+    </template>
     <template #item.actions="{ item }">
       <div class="d-flex align-center" style="gap: 0.5rem">
         <v-btn
@@ -117,7 +127,7 @@
             Cancelar compra
           </v-tooltip>
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           v-if="item.status === 'CONFIRMED'"
           variant="text"
           color="info"
@@ -132,7 +142,7 @@
           >
             Comprovante de pagamento
           </v-tooltip>
-        </v-btn>
+        </v-btn> -->
       </div>
     </template>
   </Table>
@@ -225,6 +235,9 @@ const headers = [
   { title: "Forma Pgto", key: "billingType" },
   { title: "Total", key: "value" },
   { title: "Status", key: "status" },
+  { title: "Vendedor", key: "Seller.name" },
+  { title: "Qtde Consultas", key: "packgeQuantity" },
+  { title: "Valor Consulta", key: "packgeSaleValue" },
   { title: "Ações", key: "actions" },
 ];
 
@@ -244,6 +257,7 @@ const getTransactions = async () => {
     await salesStore.getSalesUser({
       ...filters.value,
       userId: $currentUser.value!.id!,
+      saleType: "manual",
     });
   } catch (error) {
     console.error("Error fetching transactions:", error);

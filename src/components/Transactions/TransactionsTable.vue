@@ -81,6 +81,16 @@
         {{ amountFormated(item.total ?? 0, false) }}
       </span>
     </template>
+    <template v-slot:item.packgeSaleValue="{ item }">
+      <span class="font-weight-bold">
+        {{
+          amountFormated(
+            Number(item.packgeSaleValue ?? 0) / (item.packgeQuantity ?? 1),
+            true
+          )
+        }}
+      </span>
+    </template>
     <template v-slot:item.dateCreated="{ item }">
       <span class="font-weight-bold">
         {{ formatDate(item.dateCreated) }}
@@ -130,10 +140,10 @@
 import dayjs from "dayjs";
 
 const transactionsStore = useTransactionsStore();
-const auth = useAuthStore();
+//const auth = useAuthStore();
 const { amountFormated, formatDate } = useUtils();
 
-const $currentUser = computed(() => auth.$currentUser);
+//const $currentUser = computed(() => auth.$currentUser);
 const $transactions = computed(() => transactionsStore.$transactions);
 const $total = computed(() =>
   transactionsStore.$transactions.reduce(
@@ -172,6 +182,8 @@ const headers = [
   { title: "Total", key: "total" },
   { title: "Status", key: "status" },
   { title: "Vendedor", key: "seller" },
+  { title: "Qtde Consultas", key: "packgeQuantity" },
+  { title: "Valor Consulta", key: "packgeSaleValue" },
   { title: "Ações", key: "actions", sortable: false },
 ];
 

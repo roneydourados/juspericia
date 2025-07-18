@@ -17,7 +17,12 @@
         </v-col>
         <v-col
           cols="12"
-          :lg="$currentUser?.profile?.type === 'GERENTE' ? '6' : '12'"
+          :lg="
+            $currentUser?.profile?.type === 'GERENTE' ||
+            $currentUser?.profile?.type === 'ADMIN'
+              ? '6'
+              : '12'
+          "
         >
           <SelectSearchLawyer
             label="Cliente"
@@ -27,14 +32,20 @@
           />
         </v-col>
         <v-col
-          v-if="$currentUser?.profile?.type === 'GERENTE'"
+          v-if="
+            $currentUser?.profile?.type === 'GERENTE' ||
+            $currentUser?.profile?.type === 'ADMIN'
+          "
           cols="12"
           lg="6"
         >
           <SelectSearchSeller
             v-model="model.seller"
             clearable
-            :required="$currentUser?.profile?.type === 'GERENTE'"
+            :required="
+              $currentUser?.profile?.type === 'GERENTE' ||
+              $currentUser?.profile?.type === 'ADMIN'
+            "
           />
         </v-col>
         <v-col cols="12">
@@ -88,7 +99,10 @@
           <strong class="ml-2">{{ $packgeValueMedia }}</strong>
         </v-col>
         <v-col
-          v-if="$currentUser?.profile?.type === 'GERENTE'"
+          v-if="
+            $currentUser?.profile?.type === 'GERENTE' ||
+            $currentUser?.profile?.type === 'ADMIN'
+          "
           cols="12"
           lg="6"
         >

@@ -49,4 +49,6 @@ export interface TransactionProps {
   publicId: string;
   sellerId: number;
   seller: string;
+  packgeQuantity: number;
+  packgeSaleValue: number;
 }

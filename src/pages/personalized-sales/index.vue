@@ -17,6 +17,7 @@ onMounted(async () => {
     initialDate,
     finalDate,
     userId: $currentUser.value!.id!,
+    saleType: "manual",
   });
 });
 </script>

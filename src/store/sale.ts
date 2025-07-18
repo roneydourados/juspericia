@@ -27,14 +27,16 @@ export const useSaleStore = defineStore("sale", () => {
     initialDate: string;
     finalDate: string;
     status?: string;
+    saleType?: string;
   }) => {
-    const { userId, initialDate, finalDate, status } = input;
+    const { userId, initialDate, finalDate, status, saleType } = input;
     const config = {
       params: {
         userId,
         initialDate,
         finalDate,
         status,
+        saleType,
       },
     };
 
