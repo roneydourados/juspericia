@@ -18,7 +18,7 @@
         v-for="(item, index) in itemsMenu"
         :key="index"
         :prepend-icon="item.icon"
-        :value="item.id"
+        :value="item.to"
         :to="item.to"
         active-class="item-menu"
         @click="handleClick"

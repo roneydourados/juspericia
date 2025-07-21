@@ -47,6 +47,9 @@
             v-model="form.expirationDate"
             required
           />
+          <strong v-if="$dueDays > 0" class="ml-2">
+            Válido por {{ $dueDays }} Dias
+          </strong>
         </v-col>
         <v-col cols="12" lg="2">
           <IntegerInput
@@ -221,6 +224,7 @@ const { amountFormated } = useUtils();
 const consultationPackageStore = useServicePackageStore();
 const saltCredit = useUserCreditSaltStore();
 const vouchers = useVoucherStore();
+const sistemParametersStore = useSystemParametersStore();
 const show = defineModel({ default: false });
 const loading = ref(false);
 const selectedCredits = ref<UserCreditSalt[]>([]);
@@ -267,6 +271,10 @@ const tabs = computed(() => {
   ];
 });
 
+const $systemParameters = computed(() => {
+  return sistemParametersStore.$parameters;
+});
+
 const $packages = computed(() => {
   if (
     !consultationPackageStore.$all ||
@@ -311,6 +319,10 @@ const $totalSalts = computed(() => {
   return selectedCredits.value.reduce((total, credit) => {
     return total + Number(credit.salt ?? 0);
   }, 0);
+});
+
+const $dueDays = computed(() => {
+  return dayjs(form.value.expirationDate).diff(dayjs(), "day");
 });
 
 const loadForm = () => {
@@ -368,9 +380,69 @@ watch(
   { immediate: true }
 );
 
+const validations = () => {
+  //validação do desconto máximo
+  if (form.value.discountType === "percentage") {
+    if (
+      Number(form.value.discount ?? "0") >
+      Number($systemParameters.value?.voucherMaxDiscountPercentage ?? 0)
+    ) {
+      push.warning(
+        `O desconto máximo permitido em é de ${Number(
+          $systemParameters.value?.voucherMaxDiscountPercentage ?? 0
+        )}%`
+      );
+
+      return false;
+    }
+  } else if (form.value.discountType === "value") {
+    if (
+      Number(form.value.discount ?? "0") >
+      Number($systemParameters.value?.voucherMaxDiscountValue ?? 0)
+    ) {
+      push.warning(
+        `O desconto máximo permitido em valor é de ${Number(
+          $systemParameters.value?.voucherMaxDiscountValue ?? 0
+        )} R$`
+      );
+
+      return false;
+    }
+  }
+
+  // validação da quantidade de usos
+  if (
+    Number(form.value.useQuantity ?? "1") >
+    Number($systemParameters.value?.voucherMaxQuantityUse ?? 0)
+  ) {
+    push.warning(
+      `A quantidade máxima de usos não deve ultrapassar ${Number(
+        $systemParameters.value?.voucherMaxQuantityUse ?? 0
+      )}`
+    );
+    return false;
+  }
+
+  // validação da data de expiração
+  const dueDays = dayjs(form.value.expirationDate).diff(dayjs(), "day");
+
+  if (dueDays > Number($systemParameters.value?.voucherMaxQuantityDays ?? 0)) {
+    push.warning(
+      `A data de expiração não deve ultrapassar ${Number(
+        $systemParameters.value?.voucherMaxQuantityDays ?? 0
+      )} dias a partir de hoje`
+    );
+    return false;
+  }
+
+  return true;
+};
+
 const handleSubmit = async () => {
   loading.value = true;
   try {
+    if (!validations()) return;
+
     if (props.data.publicId) {
       await update();
     } else {

@@ -117,12 +117,12 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="3">
+    <!-- <v-col cols="12" lg="3">
       <v-card
         flat
         rounded="lg"
         min-height="200"
-        @click="handlClick('/admin/vouchers')"
+        @click="handlClick('/vouchers')"
         elevation="8"
       >
         <v-card-title class="d-flex justify-center py-4">
@@ -134,7 +134,7 @@
         </v-card-title>
         <v-card-text class="text-center"> Controle de Vouchers. </v-card-text>
       </v-card>
-    </v-col>
+    </v-col> -->
     <v-col cols="12" lg="3">
       <v-card
         flat

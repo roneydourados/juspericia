@@ -133,7 +133,7 @@
               comissionsSelecteds.length === 0 ||
               filters.status !== 'pending'
             "
-            @click="showPaidComissionDialog = true"
+            @click="handleShowQRCodePix"
           >
             <v-icon icon="mdi-check-all" start />
             Pagar selecionadas
@@ -224,7 +224,7 @@
       </v-btn>
     </template>
   </Table>
-  <Dialog
+  <!-- <Dialog
     title="Pagar comissão"
     :dialog="showPaidComissionDialog"
     @cancel="showPaidComissionDialog = false"
@@ -232,8 +232,7 @@
     :show-cancel="true"
   >
     <strong>Confirma o pagamento de todas as comssões selecionadas ?</strong>
-  </Dialog>
-
+  </Dialog> -->
   <Dialog
     title="Cancelar comissão"
     :dialog="showCancelComissionDialog"
@@ -245,6 +244,11 @@
   </Dialog>
   <DialogLoading :dialog="loading" />
   <ComissionDetails v-model="showComissionDetails" />
+  <QRCodePix
+    v-model="showQRCodePix"
+    :parameters="qrcodePixParameters"
+    @confirm="handlePaidComissions"
+  />
 </template>
 
 <script setup lang="ts">
@@ -270,8 +274,20 @@ const $totalSelected = computed(() => {
 });
 const showForm = ref(false);
 const loading = ref(false);
-
-const showPaidComissionDialog = ref(false);
+const showQRCodePix = ref(false);
+const qrcodePixParameters = ref<IQRCodeParameter>({
+  version: "01",
+  key: "",
+  city: "",
+  name: "",
+  value: 0,
+  transactionId: "",
+  message: "",
+  cep: "",
+  currency: 986,
+  countryCode: "BR",
+});
+//const showPaidComissionDialog = ref(false);
 const showCancelComissionDialog = ref(false);
 const showComissionDetails = ref(false);
 const comissionsSelecteds = ref([] as ComissionProps[]);
@@ -362,7 +378,7 @@ const handlePaidComissions = async () => {
   } catch (error) {
     console.error("Error paying comissions:", error);
   } finally {
-    showPaidComissionDialog.value = false;
+    //showPaidComissionDialog.value = false;
     loading.value = false;
   }
 };
@@ -396,5 +412,21 @@ const getComissionDetails = async (item: ComissionProps) => {
   } finally {
     loading.value = false;
   }
+};
+const handleShowQRCodePix = () => {
+  qrcodePixParameters.value = {
+    version: "01",
+    key: filters.value.user?.pixKey || "",
+    city: filters.value.user?.UserAddress?.addressCity || "",
+    name: filters.value.user?.name || "",
+    value:
+      Number($totalSelected.value.replace(",", ".").replace("R$", "").trim()) ||
+      0,
+    message: `Pagamento de comissão referente a ${formatDate(
+      comissionsSelecteds.value[0].comissionDate
+    )}`,
+  };
+
+  showQRCodePix.value = true;
 };
 </script>
