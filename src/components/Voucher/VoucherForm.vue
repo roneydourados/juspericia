@@ -205,6 +205,23 @@
       </v-row>
     </FormCrud>
     <DialogLoading :dialog="loading" />
+    <v-snackbar
+      v-model="showErrorAlert"
+      vertical
+      position="relative"
+      color="warning"
+      :timeout="5000"
+    >
+      <div class="text-subtitle-1 text-center pb-2">***VALIDAÇÕES***</div>
+      <div class="text-subtitle-1 pb-2">
+        {{ validationsText }}
+      </div>
+      <template #actions>
+        <v-btn color="white" variant="text" @click="showErrorAlert = false">
+          Fechar
+        </v-btn>
+      </template>
+    </v-snackbar>
   </DialogForm>
 </template>
 
@@ -227,8 +244,10 @@ const vouchers = useVoucherStore();
 const sistemParametersStore = useSystemParametersStore();
 const show = defineModel({ default: false });
 const loading = ref(false);
+const showErrorAlert = ref(false);
 const selectedCredits = ref<UserCreditSalt[]>([]);
 const tab = ref(1);
+const validationsText = ref("");
 const form = ref({
   voucherName: "",
   description: "",
@@ -387,11 +406,10 @@ const validations = () => {
       Number(form.value.discount ?? "0") >
       Number($systemParameters.value?.voucherMaxDiscountPercentage ?? 0)
     ) {
-      push.warning(
-        `O desconto máximo permitido em é de ${Number(
-          $systemParameters.value?.voucherMaxDiscountPercentage ?? 0
-        )}%`
-      );
+      validationsText.value = `O desconto máximo permitido em % é de ${amountFormated(
+        Number($systemParameters.value?.voucherMaxDiscountPercentage ?? 0),
+        false
+      )}%`;
 
       return false;
     }
@@ -400,11 +418,10 @@ const validations = () => {
       Number(form.value.discount ?? "0") >
       Number($systemParameters.value?.voucherMaxDiscountValue ?? 0)
     ) {
-      push.warning(
-        `O desconto máximo permitido em valor é de ${Number(
-          $systemParameters.value?.voucherMaxDiscountValue ?? 0
-        )} R$`
-      );
+      validationsText.value = `O desconto máximo permitido em valor é de ${amountFormated(
+        Number($systemParameters.value?.voucherMaxDiscountValue ?? 0),
+        true
+      )}`;
 
       return false;
     }
@@ -415,11 +432,10 @@ const validations = () => {
     Number(form.value.useQuantity ?? "1") >
     Number($systemParameters.value?.voucherMaxQuantityUse ?? 0)
   ) {
-    push.warning(
-      `A quantidade máxima de usos não deve ultrapassar ${Number(
-        $systemParameters.value?.voucherMaxQuantityUse ?? 0
-      )}`
-    );
+    validationsText.value = `A quantidade máxima de usos não deve ultrapassar ${Number(
+      $systemParameters.value?.voucherMaxQuantityUse ?? 0
+    )}`;
+
     return false;
   }
 
@@ -427,11 +443,10 @@ const validations = () => {
   const dueDays = dayjs(form.value.expirationDate).diff(dayjs(), "day");
 
   if (dueDays > Number($systemParameters.value?.voucherMaxQuantityDays ?? 0)) {
-    push.warning(
-      `A data de expiração não deve ultrapassar ${Number(
-        $systemParameters.value?.voucherMaxQuantityDays ?? 0
-      )} dias a partir de hoje`
-    );
+    validationsText.value = `A data de expiração não deve ultrapassar ${Number(
+      $systemParameters.value?.voucherMaxQuantityDays ?? 0
+    )} dias a partir de hoje`;
+
     return false;
   }
 
@@ -441,7 +456,10 @@ const validations = () => {
 const handleSubmit = async () => {
   loading.value = true;
   try {
-    if (!validations()) return;
+    if (!validations()) {
+      showErrorAlert.value = true;
+      return;
+    }
 
     if (props.data.publicId) {
       await update();
