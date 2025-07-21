@@ -217,13 +217,24 @@ const getQuantity = (status: string) => {
 
 const getConsultations = async () => {
   loading.value = true;
+
+  let userId: number | undefined;
+
+  // se for admin, gerente ou vendedor, busca pelo advogado selecionado
+  if (
+    $currentUser.value?.profile?.type === "ADMIN" ||
+    $currentUser.value?.profile?.type === "GERENTE" ||
+    $currentUser.value?.profile?.type === "VENDEDOR"
+  ) {
+    userId = modelFilters.value.lawyer?.id;
+  } else {
+    userId = $currentUser.value?.id;
+  }
+
   try {
     const filter = {
       ...modelFilters.value,
-      useId:
-        $currentUser.value?.profile?.type === "ADMIN"
-          ? modelFilters.value.lawyer?.id
-          : $currentUser.value?.id,
+      userId,
       benefitTypeId: modelFilters.value.benefitType?.id,
       patientId: modelFilters.value.patient?.id,
       reportPurposeId: modelFilters.value.reportPurpose?.id,

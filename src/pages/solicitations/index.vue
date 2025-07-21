@@ -22,7 +22,9 @@ onMounted(async () => {
     patient: undefined as PatientProps | undefined,
     reportPurpose: undefined as ReportPurposeProps | undefined,
     userId:
-      $currentUser.value?.profile?.type === "ADMIN"
+      $currentUser.value?.profile?.type === "ADMIN" ||
+      $currentUser.value?.profile?.type === "GERENTE" ||
+      $currentUser.value?.profile?.type === "VENDEDOR"
         ? undefined
         : $currentUser.value?.id,
   });

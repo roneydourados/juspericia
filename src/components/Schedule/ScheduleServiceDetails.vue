@@ -34,7 +34,7 @@ const emit = defineEmits(["start-query"]);
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
 const auth = useAuthStore();
-const router = useRouter();
+//const router = useRouter();
 
 const $single = computed(() => scheduleStore.$single);
 //const $solicitation = computed(() => solicitationStore.$single);
