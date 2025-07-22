@@ -15,6 +15,7 @@ export interface UserCreditSalt {
   saleId?: string;
   description?: string;
   saleValue?: number;
+  user?: UserProps;
 }
 
 export interface UserCreditLog {

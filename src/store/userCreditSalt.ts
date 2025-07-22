@@ -12,7 +12,7 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
 
   const index = async (input: {
     status?: string;
-    userId: number;
+    userId?: number;
     initialDate?: string;
     finalDate?: string;
     isSalt?: boolean;
@@ -35,6 +35,34 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     userCreditSalts.value = data;
   };
 
+  const indexAdmin = async (input: {
+    status?: string;
+    userId?: number;
+    initialDate?: string;
+    finalDate?: string;
+    isSalt?: boolean;
+    publicIdExclude?: string;
+  }) => {
+    const { status, initialDate, finalDate, isSalt, userId, publicIdExclude } =
+      input;
+    const config = {
+      params: {
+        userId,
+        status,
+        initialDate,
+        finalDate,
+        isSalt,
+        publicIdExclude,
+      },
+    };
+    const { data } = await api.get<UserCreditSaltResponseProps>(
+      "/user-credit-salt/admin",
+      config
+    );
+
+    userCreditSalts.value = data;
+  };
+
   const getUserCreditLog = async (publicId: string) => {
     const { data } = await api.get<UserCreditLog[]>(
       `/user-credit-salt/${publicId}`
@@ -43,31 +71,25 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     userCreditLog.value = data;
   };
 
-  // const create = async (payload: UserCreditSalt) => {
-  //   const { data } = await api.post<UserCreditSalt>(
-  //     "/user-credit-salt",
-  //     payload
-  //   );
+  const transferSalt = async (input: {
+    publicIdOrigin: string;
+    publicIdDestination: string;
+  }) => {
+    const { publicIdOrigin, publicIdDestination } = input;
 
-  //   userCreditSalt.value = data;
-  // };
+    const payload = {
+      publicIdOrigin,
+      publicIdDestination,
+    };
 
-  // const cancel = async (id: string) => {
-  //   await api.put(`/user-credit-salt/cancel/${id}`);
-  // };
-
-  // const show = async (id: string) => {
-  //   const { data } = await api.get<UserCreditSalt>(`/user-credit-salt/${id}`);
-
-  //   userCreditSalt.value = data;
-  // };
+    await api.put("/user-credit-salt/transfer-salt", payload);
+  };
 
   return {
+    indexAdmin,
     index,
-    // create,
-    // cancel,
-    // show,
     getUserCreditLog,
+    transferSalt,
     $credits,
     $userCreditLog,
   };
