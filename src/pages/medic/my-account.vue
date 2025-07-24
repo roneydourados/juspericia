@@ -19,8 +19,4 @@ onMounted(async () => {
     loading.value = false;
   }
 });
-
-// await useAsyncData(
-//   async () => await medicStore.show($currentUser.value?.publicId!)
-// );
 </script>

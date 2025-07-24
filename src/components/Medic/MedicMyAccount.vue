@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto" flat rounded="lg" max-width="1200" height="500">
+    <v-card class="mx-auto" flat rounded="lg" max-width="1200">
       <v-card-title>
         <HeaderPage title="Minha Conta" />
       </v-card-title>
@@ -45,11 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatCEP } from "@brazilian-utils/brazilian-utils";
 const medicStore = useMedicStore();
-const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
 const $single = computed(() => medicStore.$single);
-const $currentMedic = computed(() => medicStore.$single);
 
 const selectedItem = ref("Dados de acesso");
 const loading = ref(false);
@@ -86,10 +83,6 @@ const model = ref<UserMedicModelProps>({
   },
 });
 
-onMounted(() => {
-  loadModel();
-});
-
 const loadModel = () => {
   model.value = {
     id: $single.value?.id!,
@@ -102,16 +95,26 @@ const loadModel = () => {
     crmUf: $single.value?.crmUf ?? "",
     active: $single.value?.active ?? true,
     cepAddress: {
-      cep: $single.value?.Address?.addressZipcode ?? "",
-      logradouro: $single.value?.Address?.addressStreet ?? "",
-      complemento: $single.value?.Address?.addressComplement ?? "",
-      bairro: $single.value?.Address?.addressDistrict ?? "",
-      localidade: $single.value?.Address?.addressCity ?? "",
-      numero: $single.value?.Address?.addressNumber ?? "",
-      uf: $single.value?.Address?.addressState ?? "",
+      cep: $single.value?.UserAddress?.addressZipcode ?? "",
+      logradouro: $single.value?.UserAddress?.addressStreet ?? "",
+      complemento: $single.value?.UserAddress?.addressComplement ?? "",
+      bairro: $single.value?.UserAddress?.addressDistrict ?? "",
+      localidade: $single.value?.UserAddress?.addressCity ?? "",
+      numero: $single.value?.UserAddress?.addressNumber ?? "",
+      uf: $single.value?.UserAddress?.addressState ?? "",
     },
   };
 };
+
+watch(
+  () => $single.value,
+  () => {
+    if (!model.value.id) {
+      loadModel();
+    }
+  },
+  { immediate: true }
+);
 
 const handleMenuClick = (event: any) => {
   const item = event as { id: string; value: boolean };
@@ -131,7 +134,7 @@ const handleUpdate = async () => {
       active: model.value?.active,
       crm: model.value?.crm,
       crmUf: model.value?.crmUf,
-      Address: {
+      UserAddress: {
         addressCity: model.value.cepAddress.localidade,
         addressComplement: model.value.cepAddress.complemento,
         addressDistrict: model.value.cepAddress.bairro,
