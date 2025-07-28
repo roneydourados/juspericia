@@ -42,8 +42,8 @@
 <script setup lang="ts">
 type AlignProps = "title" | "center" | "end" | "start" | undefined;
 
-import { TabProps } from "@/app/types/Tab";
-import { PropType } from "vue";
+import type { TabProps } from "@/types/Tab";
+import type { PropType } from "vue";
 import { useDisplay } from "vuetify";
 
 defineProps({

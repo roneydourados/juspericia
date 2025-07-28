@@ -68,7 +68,7 @@ import { useField } from "vee-validate";
 import { uuidv7 } from "uuidv7";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { ReportPurposeProps } from "@/app/types/ReportPurpose";
+import type { ReportPurposeProps } from "@/types/ReportPurpose";
 import { useDebounceFn } from "@vueuse/core";
 
 defineProps({

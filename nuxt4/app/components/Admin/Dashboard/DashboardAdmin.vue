@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { TabProps } from "@/app/types/Tab";
+import type { TabProps } from "@/types/Tab";
 import dayjs from "dayjs";
 
 const tabRegion = ref(1);

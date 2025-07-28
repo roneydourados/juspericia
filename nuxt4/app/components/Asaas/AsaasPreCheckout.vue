@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { AssasPreCheckoutProps } from "@/app/types/assaas/Precheckout";
+import type { AssasPreCheckoutProps } from "@/types/assaas/Precheckout";
 
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();

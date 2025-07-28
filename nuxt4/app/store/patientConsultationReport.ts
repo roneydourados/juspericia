@@ -1,4 +1,3 @@
-//import { FileProps } from "@/app/types/File";
 import { defineStore } from "pinia";
 
 export const usePatientConsultationReportStore = defineStore(

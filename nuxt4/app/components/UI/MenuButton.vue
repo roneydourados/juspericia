@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { MenuButtonProps } from "@/app/types/MenuButton";
+import type { MenuButtonProps } from "@/types/MenuButton";
 
 // import { MenuButtonProps } from "@/interfaces";
 type VariantProps =

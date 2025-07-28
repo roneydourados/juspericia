@@ -69,7 +69,7 @@ import { useField } from "vee-validate";
 import { uuidv7 } from "uuidv7";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { BenefitTypeProps } from "@/app/types/BenefitType";
+import type { BenefitTypeProps } from "@/types/BenefitType";
 import { useDebounceFn } from "@vueuse/core";
 
 defineProps({
