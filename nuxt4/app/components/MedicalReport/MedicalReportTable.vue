@@ -315,7 +315,7 @@
 </template>
 
 <script setup lang="ts">
-import { pdfMakeFonts } from "@/app/utils/pdfMakeFonts";
+import { pdfMakeFonts } from "@/utils/pdfMakeFonts";
 import pdfMake from "pdfmake/build/pdfmake";
 import htmlToPdfmake from "html-to-pdfmake";
 import dayjs from "dayjs";
