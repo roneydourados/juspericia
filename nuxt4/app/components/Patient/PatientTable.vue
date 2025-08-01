@@ -58,7 +58,7 @@
               title="Advogado"
               icon="mdi-account-tie-outline"
               color-icon="blue"
-              :content="item.User.name"
+              :content="item.User?.name"
               :show-divider="true"
             />
           </v-col>
@@ -102,7 +102,7 @@
       <template v-slot:item.User.name="{ item }">
         <span style="cursor: pointer" class="d-flex align-center text-info">
           <v-icon icon="mdi-account-tie-outline" size="24" start />
-          <span>{{ item.User.name }}</span>
+          <span>{{ item.User?.name }}</span>
         </span>
       </template>
       <template v-slot:item.cpf="{ item }">

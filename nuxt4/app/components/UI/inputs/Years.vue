@@ -61,7 +61,10 @@ onMounted(() => {
 });
 
 const selectYear = () => {
-  emit("year", $years.value[yearIndex.value].year);
+  const selected = $years.value[yearIndex.value];
+  if (selected) {
+    emit("year", selected.year);
+  }
 };
 
 // Métodos para lidar com os cliques

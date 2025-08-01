@@ -98,8 +98,7 @@ const validationRules = computed<MaybeRef>(() => {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: textRequired,
-          required_error: textRequired,
+          error: textRequired,
         })
         .min(1, textRequired)
         .refine(

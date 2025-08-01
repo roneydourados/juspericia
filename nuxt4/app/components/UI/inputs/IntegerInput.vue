@@ -80,8 +80,7 @@ const validationRules = computed(() => {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: "Valor inválido",
-          required_error: "Campo não pode ser vazio!",
+          error: "Valor inválido",
         })
         .min(1, "Campo não pode ser vazio!")
         .refine(
@@ -120,7 +119,7 @@ const validationRules = computed(() => {
   return toTypedSchema(
     zod
       .string({
-        invalid_type_error: "Valor inválido",
+        error: "Valor inválido",
       })
       .nullish()
       .optional()

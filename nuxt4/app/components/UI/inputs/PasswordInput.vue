@@ -104,7 +104,7 @@ const validationRules = computed(() => {
 
   return (value: string) => {
     const result = schema.safeParse(value);
-    return result.success ? true : result.error.errors[0].message;
+    return result.success ? true : result.error.message;
   };
 });
 

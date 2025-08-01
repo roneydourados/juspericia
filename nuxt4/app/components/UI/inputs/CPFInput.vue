@@ -85,8 +85,7 @@ const validationRules = computed<MaybeRef>(() => {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: "O CPF deve ser válido!",
-          required_error: "O CPF deve ser válido!",
+          error: "O CPF deve ser válido!",
         })
         .min(1, "Campo não pode ser vazio!")
         .refine(
@@ -103,7 +102,7 @@ const validationRules = computed<MaybeRef>(() => {
   return toTypedSchema(
     zod
       .string({
-        invalid_type_error: "O CPF deve ser válido!",
+        error: "O CPF deve ser válido!",
       })
       .nullish()
       .optional()

@@ -106,7 +106,7 @@ const validationSchema = computed(() => {
   return toTypedSchema(schema);
 });
 
-const { value, errorMessage, meta, handleChange } = useField<string | null>(
+const { value, errorMessage, meta, handleChange } = useField(
   fieldName,
   validationSchema,
   { initialValue: modelValue.value }

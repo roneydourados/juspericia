@@ -126,8 +126,7 @@ const validationRules = computed<MaybeRef>(() => {
     return toTypedSchema(
       zod
         .string({
-          invalid_type_error: "Data inválida",
-          required_error: textRequired,
+          error: "Data inválida",
         })
         .min(10, "Data inválida")
         .refine((val) => {
@@ -142,7 +141,7 @@ const validationRules = computed<MaybeRef>(() => {
   return toTypedSchema(
     zod
       .string({
-        invalid_type_error: "Data inválida",
+        error: "Data inválida",
       })
       .optional()
       .nullish()

@@ -51,8 +51,7 @@ const fieldName = uuid();
 
 const validationRules = computed<MaybeRef>(() => {
   const base = zod.string({
-    invalid_type_error: textRequired,
-    required_error: textRequired,
+    error: textRequired,
   });
 
   const refined = base.min(1, textRequired).refine(
