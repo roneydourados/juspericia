@@ -2,30 +2,33 @@
   <v-navigation-drawer
     v-model="changeDrawer"
     @update:model-value="$emit('update:drawer', changeDrawer)"
-    :width="mobile ? '' : '300'"
+    :width="mobile ? '' : '370'"
     class="drawer-color"
   >
     <template v-slot:prepend>
       <v-list-item lines="two">
         <template #title>
-          <Logo />
+          <!-- <Logo /> -->
+          <div class="d-flex justify-center w-100">
+            <LogoSVG />
+          </div>
         </template>
       </v-list-item>
     </template>
 
-    <v-divider />
+    <!-- <v-divider /> -->
     <v-list density="compact" nav>
       <v-list-item
         v-for="(item, index) in itemsMenu"
         :key="index"
-        :prepend-icon="item.icon"
         :value="item.to"
         :to="item.to"
         active-class="item-menu"
         @click="handleClick"
       >
         <template #title>
-          <span style="font-size: 0.8rem; font-weight: 400">
+          <v-icon :icon="item.icon" start color="colorIcon" />
+          <span style="font-size: 0.9rem; color: #ffff">
             {{ item.title }}
           </span>
         </template>
@@ -120,6 +123,6 @@ const logout = async () => {
 }
 
 .drawer-color {
-  background: linear-gradient(to bottom, #1E3C98, #4D84D5) !important;
+  background: linear-gradient(to bottom, #1e3c98, #4d84d5) !important;
 }
 </style>

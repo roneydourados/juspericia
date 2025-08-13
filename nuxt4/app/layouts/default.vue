@@ -6,20 +6,10 @@
       @update:drawer="drawer = $event"
     />
 
-    <v-app-bar color="primary" elevation="0">
+    <v-app-bar elevation="0" class="toolbar-color">
       <template #title>
         <!-- <Logo height="40" color="#fff" /> -->
-        <div class="d-flex align-center">
-          <v-icon icon="mdi-account-circle-outline" start size="30" />
-          <div class="d-flex flex-column">
-            <span>
-              {{ $currentUser?.name }}
-            </span>
-            <span class="mt-n2">
-              {{ $currentUser?.profile?.profileName }}
-            </span>
-          </div>
-          <v-spacer v-if="$isDevelop" />
+        <div class="d-flex align-center text-white">
           <div v-if="$isDevelop" class="text-h4 text-center w-100">
             ( DEMONSTRAÇÃO )
           </div>
@@ -40,15 +30,17 @@
           class="d-flex align-center px-4"
           style="gap: 0.5rem"
         >
-          <v-btn
+          <Button
             class="text-none"
-            color="success"
+            color="colorIcon"
             size="small"
-            :variant="mobile ? 'text' : 'flat'"
-            prepend-icon="mdi-cash-plus"
+            :variant="mobile ? 'text' : 'outlined'"
             @click="router.push('/services-packages')"
           >
-            <span v-if="!mobile"> Comprar créditos </span>
+            <span v-if="!mobile" class="text-caption text-white">
+              Comprar créditos
+            </span>
+            <v-icon icon="mdi-cash-plus" color="colorIcon" end />
             <v-tooltip
               v-if="mobile"
               activator="parent"
@@ -57,17 +49,17 @@
             >
               Comprar créditos
             </v-tooltip>
-          </v-btn>
+          </Button>
 
-          <v-btn
+          <Button
             class="text-none"
-            color="info"
+            color="#2B4BAD"
             size="small"
             :variant="mobile ? 'text' : 'flat'"
-            prepend-icon="mdi-cart-plus"
             @click="handleNewSolicitation"
           >
-            <span v-if="!mobile"> Nova solicitação </span>
+            <span v-if="!mobile" class="text-caption"> Nova solicitação </span>
+            <v-icon icon="mdi-cart-plus" color="colorIcon" end />
             <v-tooltip
               v-if="mobile"
               activator="parent"
@@ -76,41 +68,37 @@
             >
               Nova solicitação
             </v-tooltip>
-          </v-btn>
+          </Button>
         </div>
-        <!-- <v-btn
-          :icon="
-            $currentTheme === MAIN_THEME
-              ? 'mdi-weather-sunny'
-              : 'mdi-weather-night'
-          "
-          variant="tonal"
-          size="small"
-          class="mr-4"
-          @click="toggleTheme"
-        >
-        </v-btn> -->
+        <v-icon
+          icon="mdi-account-circle-outline"
+          start
+          size="30"
+          color="white"
+        />
+        <div class="d-flex flex-column px-2 text-white">
+          <span>
+            {{ $currentUser?.name }}
+          </span>
+          <span class="mt-n2">
+            {{ $currentUser?.profile?.profileName }}
+          </span>
+        </div>
       </template>
     </v-app-bar>
 
     <v-main class="container d-flex justify-center">
       <div
-        class="w-100 pa-4"
+        class="w-100 pa-4 rounded-xl"
         style="background-color: rgb(var(--v-theme-background)) !important"
       >
         <slot />
         <SuportButton />
-        <!-- <SuportButton
-          v-if="
-            $currentUser?.profile?.type === 'ADVOGADO' ||
-            $currentUser?.profile?.type === 'MEDICO'
-          "
-        /> -->
       </div>
     </v-main>
     <v-footer app name="footer" height="30">
       <span class="text-caption">
-        &copy; Yenor Code - {{ new Date().getFullYear() }}
+        &copy; GaleCode - {{ new Date().getFullYear() }}
       </span>
       <v-spacer></v-spacer>
       <span class="text-caption font-weight-bold">v{{ $version }}</span>
@@ -174,4 +162,8 @@ const handleNewSolicitation = async () => {
 // };
 </script>
 
-<style scoped></style>
+<style scoped>
+.toolbar-color {
+  background: linear-gradient(to right, #1e3c98, #4d84d5) !important;
+}
+</style>

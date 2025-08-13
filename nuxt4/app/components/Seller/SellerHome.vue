@@ -1,34 +1,7 @@
 <template>
   <v-card variant="flat" class="mx-auto" color="transparent">
     <v-card class="ma-4" rounded="lg" variant="flat" color="transparent">
-      <v-card-item>
-        <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem">
-          Início
-        </div>
-        <v-card-title class="text-body-2 d-flex align-center">
-          <v-icon color="primary" icon="mdi-calendar" start />
-
-          <span class="text-medium-emphasis font-weight-bold">
-            {{ $now }}
-          </span>
-
-          <v-spacer></v-spacer>
-        </v-card-title>
-
-        <div class="py-2">
-          <div class="d-flex align-center" style="gap: 0.5rem">
-            Olá Bem vindo(a) de volta,
-            <strong> {{ $currentUser?.name }}</strong>
-          </div>
-
-          <div class="font-weight-light text-medium-emphasis mt-2">
-            Selecione um das opções abaixo para continuar.
-          </div>
-        </div>
-      </v-card-item>
-
-      <v-divider></v-divider>
-
+      <HomeStart />
       <v-row dense class="pa-4 mt-12">
         <v-col cols="12" lg="3">
           <v-card

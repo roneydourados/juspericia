@@ -14,6 +14,8 @@ export const MainThemeColors = {
   itemInternalMenu: "#000",
   tooltipColor: "#E3F2FD",
   tooltipTextColor: "#424242",
+  colorIcon: "#C7D82F",
+  darkText: "#1A1E4E",
 };
 
 const MainDarkThemeColors = {
@@ -30,6 +32,8 @@ const MainDarkThemeColors = {
   itemInternalMenu: "#ffffff",
   tooltipColor: "#E3F2FD",
   tooltipTextColor: "#424242",
+  colorIcon: "#C7D82F",
+  darkText: "#1A1E4E",
 };
 
 export const MAIN_THEME = "mainTheme";

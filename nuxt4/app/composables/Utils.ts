@@ -321,6 +321,40 @@ export const useUtils = () => {
     return `${diaDaSemana}, ${dia} de ${mes} de ${ano}`;
   };
 
+  const formatDateExtensoObjeto = (date: Date) => {
+    const diasDaSemana = [
+      "Domingo",
+      "Segunda-Feira",
+      "Terça-Feira",
+      "Quarta-Feira",
+      "Quinta-Feira",
+      "Sexta-Feira",
+      "Sábado",
+    ];
+
+    const mesesDoAno = [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+    ];
+
+    const diaDaSemana = diasDaSemana[date.getDay()];
+    const dia = date.getDate();
+    const mes = mesesDoAno[date.getMonth()];
+    const ano = date.getFullYear();
+
+    return { diaDaSemana, dia, mes, ano };
+  };
+
   const whatsappUrl = (phone: string, message: string, isMobile: boolean) => {
     let url = "";
 
@@ -356,5 +390,6 @@ export const useUtils = () => {
     solicitationStatusColor,
     formatDateExtenso,
     whatsappUrl,
+    formatDateExtensoObjeto,
   };
 };
