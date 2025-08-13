@@ -1,6 +1,18 @@
 <template>
-  <div>
-    <v-carousel v-model="monthIndex" hide-delimiters height="50">
+  <div class="d-flex align-center w-100" style="gap: 0.5rem">
+    <v-card rounded="xl" color="primary" height="45">
+      <v-card-text class="mt-n1">
+        <v-icon icon="mdi-calendar" start size="22" color="colorIcon" />
+        <span class="text-white text-subtitle-2"> Mês </span>
+      </v-card-text>
+    </v-card>
+    <v-carousel
+      v-model="monthIndex"
+      hide-delimiters
+      height="50"
+      style="width: 12%"
+      class="mt-1"
+    >
       <template v-slot:prev="{ props }">
         <v-btn
           size="x-small"
@@ -18,9 +30,9 @@
         />
       </template>
       <v-carousel-item v-for="item in $months" :key="item.monthIndex">
-        <v-card flat class="pa-2" rounded="lg" color="background">
+        <v-card class="pa-2" rounded="xl" variant="outlined" color="grey">
           <div dense class="d-flex align-center justify-center">
-            <strong style="font-size: 1rem" class="mt-1">
+            <strong class="mt-1 text-subtitle-2 text-darkText">
               {{ item.month }}
             </strong>
           </div>
@@ -49,7 +61,10 @@ onMounted(() => {
 });
 
 const selectMonth = () => {
-  emit("month", $months.value[monthIndex.value].monthIndex);
+  const selectedMonth = $months.value[monthIndex.value];
+  if (selectedMonth) {
+    emit("month", selectedMonth.monthIndex);
+  }
 };
 
 // Métodos para lidar com os cliques

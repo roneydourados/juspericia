@@ -1,6 +1,11 @@
 <template>
   <div class="d-flex flex-column flex-wrap">
-    <span class="font-weight-bold text-subtitle-1"> {{ title }} </span>
+    <span
+      class="font-weight-bold text-primary"
+      :style="`font-size: ${fontSize}`"
+    >
+      {{ title }}
+    </span>
   </div>
 </template>
 
@@ -9,6 +14,10 @@ defineProps({
   title: {
     type: String,
     default: "",
+  },
+  fontSize: {
+    type: String,
+    default: "1rem",
   },
 });
 </script>

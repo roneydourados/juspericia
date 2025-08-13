@@ -37,30 +37,31 @@
             />
           </v-col>
           <v-col cols="1">
-            <v-btn
-              color="info"
+            <Button
+              color="primary"
               size="small"
               variant="flat"
               class="text-none"
               @click="getConsultations"
             >
-              <v-icon icon="mdi-filter" />
-              Filtrar
-            </v-btn>
+              <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+              <span class="text-caption"> Filtrar </span>
+            </Button>
           </v-col>
         </v-row>
       </div>
       <div class="d-flex aling-center" style="gap: 0.5rem">
-        <v-btn
+        <Button
           class="text-none"
           color="primary"
           size="small"
+          variant="outlined"
           flat
-          prepend-icon="mdi-filter-cog-outline"
           @click="showFilters = !showFilters"
         >
-          Mais filtros
-        </v-btn>
+          <v-icon icon="mdi-filter-cog-outline" color="colorIcon" start />
+          <span class="text-caption"> Mais filtros </span>
+        </Button>
       </div>
     </v-card-title>
     <v-tabs

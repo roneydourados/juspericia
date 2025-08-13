@@ -1,107 +1,52 @@
 <template>
   <div>
     <v-card flat rounded="lg">
-      <v-card-title>
-        <HeaderPage title="Minhas Indicações" />
-        <span class="text-grey">
-          Indique juspericia e receba prêmios mais pontos
-        </span>
-        <v-divider class="mt-2" />
+      <v-card-title class="d-flex justify-space-between pa-4">
+        <HeaderPage title="Minhas Indicações" font-size="1.5rem" />
+        <Button
+          color="primary"
+          variant="flat"
+          class="text-none"
+          @click="newItem"
+        >
+          <v-icon icon="mdi-account-network-outline" color="colorIcon" start />
+          <span class="text-caption"> Indicar cliente </span>
+        </Button>
       </v-card-title>
       <v-card-text>
-        <v-card flat rounded="lg">
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" lg="4">
-                <v-btn
-                  color="info"
-                  prepend-icon="mdi-account-network-outline"
-                  variant="flat"
-                  class="text-none"
-                  @click="newItem"
-                >
-                  Indicar cliente
-                </v-btn>
-              </v-col>
-            </v-row>
-            <v-row dense class="mt-4">
-              <v-col cols="12" lg="3">
-                <v-sheet border="md opacity-12" class="text-body-2 mx-auto">
-                  <v-card rounded="lg" height="100%" flat>
-                    <v-card-title class="d-flex align-center">
-                      <v-icon
-                        icon="mdi-calendar"
-                        start
-                        size="25"
-                        color="info"
-                      />
-                      <span class="text-grey text-subtitle-1"> Mês </span>
-                    </v-card-title>
-                    <v-card-text class="pa-4">
-                      <Months @month="handleChangeMonth($event)" />
-                    </v-card-text>
-                  </v-card>
-                </v-sheet>
-              </v-col>
+        <div class="d-flex justify-space-between">
+          <Months @month="handleChangeMonth($event)" />
 
-              <v-col
-                cols="12"
-                lg="9"
-                class="d-flex align-center justify-end"
-                style="gap: 1rem"
-              >
-                <v-card
-                  rounded="lg"
-                  flat
-                  height="100%"
-                  width="30%"
-                  variant="outlined"
-                >
-                  <v-card-title class="d-flex align-center">
-                    <v-icon
-                      icon="mdi-arrange-send-backward"
-                      start
-                      size="25"
-                      color="info"
-                    />
-                    <span class="text-grey text-subtitle-1"> Indicações </span>
-                  </v-card-title>
-                  <v-card-text class="d-flex align-center justify-center">
-                    <v-chip label color="info" variant="flat">
-                      <span class="text-h6 font-weight-bold">
-                        {{ $totals.totalIndications }}
-                      </span>
-                    </v-chip>
-                  </v-card-text>
-                </v-card>
-                <v-card
-                  rounded="lg"
-                  flat
-                  variant="outlined"
-                  height="100%"
-                  width="30%"
-                >
-                  <v-card-title class="d-flex align-center">
-                    <v-icon
-                      icon="mdi-arrange-send-to-back"
-                      start
-                      size="25"
-                      color="success"
-                    />
-                    <span class="text-grey text-subtitle-1"> Pontos </span>
-                  </v-card-title>
-                  <v-card-text class="d-flex align-center justify-center">
-                    <v-chip label color="success" variant="flat">
-                      <span class="text-h6 font-weight-bold">
-                        {{ $totals.totalPoints }}
-                      </span>
-                    </v-chip>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
+          <div class="d-flex align-center" style="gap: 0.5rem">
+            <v-card variant="outlined" rounded="xl">
+              <v-card-title>
+                <div class="d-flex" style="gap: 1rem">
+                  <span class="text-darkText text-subtitle-1">
+                    Indicações
+                  </span>
+                  <v-chip color="primary" variant="flat">
+                    <span class="text-subtitle-1 font-weight-bold">
+                      {{ $totals.totalIndications }}
+                    </span>
+                  </v-chip>
+                </div>
+              </v-card-title>
+            </v-card>
+
+            <v-card variant="outlined" rounded="xl">
+              <v-card-title>
+                <div class="d-flex" style="gap: 1rem">
+                  <span class="text-darkText text-subtitle-1"> Pontos </span>
+                  <v-chip color="green" variant="flat">
+                    <span class="text-subtitle-1 font-weight-bold">
+                      {{ $totals.totalPoints }}
+                    </span>
+                  </v-chip>
+                </div>
+              </v-card-title>
+            </v-card>
+          </div>
+        </div>
         <div class="py-4">
           <Table
             title="Lista de indicações"

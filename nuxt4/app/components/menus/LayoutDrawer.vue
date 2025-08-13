@@ -27,10 +27,14 @@
         @click="handleClick"
       >
         <template #title>
-          <v-icon :icon="item.icon" start color="colorIcon" />
-          <span style="font-size: 0.9rem; color: #ffff">
-            {{ item.title }}
-          </span>
+          <div class="d-flex ma-3">
+            <v-icon :icon="item.icon" start color="colorIcon" />
+            <span style="font-size: 0.9rem; color: #ffff">
+              {{ item.title }}
+            </span>
+          </div>
+
+          <!-- <v-divider :thickness="1" class="mt-2" /> -->
         </template>
       </v-list-item>
     </v-list>
@@ -38,16 +42,16 @@
     <template v-slot:append>
       <v-divider />
 
-      <div class="pa-2">
-        <v-btn
-          color="primary"
+      <div class="d-flex justify-center pa-2">
+        <Button
+          color="white"
           class="text-none mb-12"
           variant="flat"
-          block
           @click="logout"
         >
-          Sair
-        </v-btn>
+          <span class="text-caption text-primary"> Sair </span>
+          <v-icon icon="mdi-close-circle" end color="primary" />
+        </Button>
       </div>
     </template>
   </v-navigation-drawer>

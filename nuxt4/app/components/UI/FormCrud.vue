@@ -3,7 +3,7 @@
     <slot />
     <div class="d-flex align-center pa-4 w-100" v-if="showSubmitButton">
       <v-spacer></v-spacer>
-      <v-btn
+      <Button
         color="success"
         variant="flat"
         size="small"
@@ -11,12 +11,12 @@
         :disabled="loading"
       >
         <div v-if="!loading" class="d-flex align-center">
-          <v-icon icon="mdi-check" />
-          <span style="font-size: 0.9rem" class="ml-2">
+          <v-icon icon="mdi-check" start />
+          <span class="text-caption">
             {{ buttonLabel }}
           </span>
         </div>
-      </v-btn>
+      </Button>
       <slot name="button" />
     </div>
     <DialogLoading :dialog="loading" />

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card flat rounded="lg">
+    <v-card flat rounded="xl" elevation="0">
       <Table
         title="Top 10 solicitações concluídas"
         :headers="headers"

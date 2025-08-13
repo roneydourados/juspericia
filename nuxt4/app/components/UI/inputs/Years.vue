@@ -6,7 +6,7 @@
         <v-btn
           size="x-small"
           icon="mdi-chevron-left"
-          variant="tonal"
+          variant="text"
           @click="handlePrevClick(props)"
         />
       </template>
@@ -14,16 +14,18 @@
         <v-btn
           size="x-small"
           icon="mdi-chevron-right"
-          variant="tonal"
+          variant="text"
           @click="handleNextClick(props)"
         />
       </template>
       <v-carousel-item v-for="item in $years" :key="item.year">
-        <v-sheet height="100%">
+        <v-card variant="outlined" rounded="xl" height="100%" color="grey">
           <div class="d-flex fill-height justify-center align-center">
-            <strong style="font-size: 1rem">{{ item.year }}</strong>
+            <strong style="font-size: 1rem" class="text-black">{{
+              item.year
+            }}</strong>
           </div>
-        </v-sheet>
+        </v-card>
       </v-carousel-item>
     </v-carousel>
   </div>

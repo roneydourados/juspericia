@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="lg" class="pa-2">
+  <v-card flat rounded="xl" elevation="0" class="pa-2">
     <Chart
       :series="chartConfig.series"
       :chart-options="chartConfig.chartOptions"

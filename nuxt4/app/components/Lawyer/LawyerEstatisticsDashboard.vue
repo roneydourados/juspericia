@@ -1,11 +1,10 @@
 <template>
   <div>
-    <v-card flat class="mb-2 pa-2" rounded="lg">
+    <v-card flat class="mb-2 pa-2" rounded="lg" color="transparent">
       <v-card-title>
         <v-row dense align="center">
           <v-col cols="12" lg="10" class="d-flex align-center">
-            <v-icon icon="mdi-view-dashboard-outline" start />
-            <HeaderPage title="Estatísticas" />
+            <HeaderPage title="Estatísticas" font-size="1.5rem" />
           </v-col>
           <v-col cols="12" lg="2">
             <Years @year="handleYear($event)" />
@@ -35,7 +34,7 @@
           title="Consultas abertas"
           icon="mdi-file-clock-outline"
           :value="$solicitationOpen.toString()"
-          icon-color="success"
+          icon-color="primary"
         />
       </v-col>
       <v-col cols="12" lg="4">
@@ -43,7 +42,7 @@
           title="Consultas agendadas"
           icon="mdi-file-check-outline"
           :value="$solicitationScheduled.toString()"
-          icon-color="info"
+          icon-color="primary"
         />
       </v-col>
       <v-col cols="12" lg="4">
@@ -51,7 +50,7 @@
           title="Consultas concluídas"
           icon="mdi-calendar-month-outline"
           :value="$solicitationClose.toString()"
-          icon-color="orange"
+          icon-color="primary"
         />
       </v-col>
     </v-row>
