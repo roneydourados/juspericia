@@ -4,7 +4,7 @@
     :loading="loading"
     class="mx-auto my-12"
     max-width="95%"
-    rounded="lg"
+    rounded="xl"
     elevation="8"
   >
     <template v-slot:loader="{ isActive }">
@@ -16,29 +16,51 @@
       ></v-progress-linear>
     </template>
 
-    <v-img height="250" src="@/assets/images/package.avif" cover />
+    <v-card flat>
+      <v-card-text>
+        <v-img
+          height="250"
+          src="@/assets/images/package.avif"
+          cover
+          rounded="xl"
+        />
+      </v-card-text>
+    </v-card>
 
     <v-card-item>
       <v-card-title>
         <span
-          class="text-justify d-flex align-center"
+          class="d-flex align-center justify-space-between"
           style="white-space: pre-line"
         >
-          <v-icon color="error" icon="mdi-fire-circle" size="small" start />
-          {{ item.name }}
+          <span
+            class="font-weight-bold text-primary text-truncate"
+            style="
+              font-size: 1.5rem;
+              max-width: 80%;
+              display: inline-block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            "
+          >
+            {{ item.name }}
+          </span>
+
+          <v-avatar size="30" color="primary">
+            <v-icon color="white" icon="mdi-fire-circle" size="small" />
+          </v-avatar>
         </span>
-        <div>Expira em {{ item.dueDays }} dias a contar da data da compra</div>
+        <div class="text-caption text-primary">
+          Expira em {{ item.dueDays }} dias a contar da data da compra
+        </div>
       </v-card-title>
-
-      <!-- <v-card-subtitle>
-        <span class="me-1">Mais simples</span>
-
-        <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
-      </v-card-subtitle> -->
     </v-card-item>
 
     <v-card-text>
-      <p class="text-justify" style="white-space: pre-line">
+      <p
+        class="text-justify text-darkText text-subtitle-2"
+        style="white-space: pre-line"
+      >
         {{ item.description }}
       </p>
     </v-card-text>

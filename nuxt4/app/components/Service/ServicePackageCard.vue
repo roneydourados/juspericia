@@ -4,7 +4,7 @@
     :loading="loading"
     class="mx-auto my-12"
     max-width="95%"
-    rounded="lg"
+    rounded="xl"
     elevation="8"
   >
     <template v-slot:loader="{ isActive }">
@@ -16,46 +16,63 @@
       ></v-progress-linear>
     </template>
 
-    <v-img height="250" src="@/assets/images/package.avif" cover></v-img>
+    <v-card flat>
+      <v-card-text>
+        <v-img
+          height="250"
+          src="@/assets/images/package.avif"
+          cover
+          rounded="xl"
+        />
+      </v-card-text>
+    </v-card>
 
     <v-card-item>
       <v-card-title>
-        <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
-
-        {{ item.name }}
+        <span
+          class="d-flex align-center justify-space-between"
+          style="white-space: pre-line"
+        >
+          <span
+            class="font-weight-bold text-primary text-truncate"
+            style="
+              font-size: 1.5rem;
+              max-width: 80%;
+              display: inline-block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            "
+          >
+            {{ item.name }}
+          </span>
+          <v-avatar size="30" color="primary">
+            <v-icon color="white" icon="mdi-fire-circle" size="small" />
+          </v-avatar>
+        </span>
       </v-card-title>
-      <strong>
-        Expira em {{ item.dueDays }} dias a contar da data da compra
-      </strong>
     </v-card-item>
-
     <v-card-text>
-      <div>
+      <p
+        class="text-justify text-darkText text-subtitle-2"
+        style="white-space: pre-line"
+      >
         {{ item.description }}
-      </div>
+      </p>
     </v-card-text>
-
-    <v-divider class="mx-4 mb-1"></v-divider>
-
-    <v-card-title>Preço</v-card-title>
-
-    <div class="px-4 mb-2">
-      <v-chip color="deep-purple-lighten-2" label>
-        <strong style="font-size: 1rem">
-          R$ {{ amountFormated(item.value ?? 0, false) }}
-        </strong>
+    <div class="d-flex justify-space-between px-4 mb-4">
+      <v-chip color="grey" size="x-large">
+        <div
+          style="font-size: 1.3rem"
+          class="text-black text-grey-darken-2 font-weight-bold"
+        >
+          {{ amountFormated(item.value ?? 0, true) }}
+        </div>
       </v-chip>
+      <Button @click="handleGetItemSale" size="large">
+        <span>COMPRAR</span>
+        <v-icon icon="mdi-cart-outline" end color="colorIcon" />
+      </Button>
     </div>
-
-    <v-card-actions>
-      <v-btn
-        color="deep-purple-lighten-2"
-        text="Comprar"
-        block
-        variant="flat"
-        @click="handleGetItemSale"
-      />
-    </v-card-actions>
   </v-card>
   <AsaasPreCheckout
     v-model:show="showSale"

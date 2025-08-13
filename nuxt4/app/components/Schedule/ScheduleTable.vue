@@ -2,9 +2,10 @@
   <div>
     <v-row dense>
       <v-col cols="12" lg="8">
-        <v-card flat rounded="lg">
+        <v-card color="transparent" elevation="0">
           <v-card-title class="d-flex flex-column py-8" style="gap: 0.5rem">
-            <span class="text-h5 font-weight-bold"> Horários agendados </span>
+            <HeaderPage title="Horários agendados" font-size="1.5rem" />
+
             <span class="text-grey-darken-1">{{ formattedDate }}</span>
             <v-row dense v-if="$currentUser?.profile?.type === 'ADMIN'">
               <v-col cols="12" lg="6">
@@ -31,9 +32,8 @@
           </v-card-subtitle>
           <v-cad-text>
             <div class="w-100 px-4">
-              <v-list density="compact">
+              <v-list density="compact" rounded="xl">
                 <v-list-subheader>Consultas</v-list-subheader>
-
                 <v-list-item
                   v-for="item in $shedules"
                   :key="item.id"
@@ -136,8 +136,8 @@
             hide-actions
             hide-title
             hide-header
-            elevation="8"
-            rounded="lg"
+            elevation="0"
+            rounded="xl"
             color="primary"
             @update:model-value="getSchedules"
           />

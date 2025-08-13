@@ -46,14 +46,10 @@
           lg="4"
           :key="consultation.id"
         >
-          <v-card rounded="lg" flat>
-            <v-card-title>
-              <PackageCard
-                :item="consultation"
-                @update-status="search = 'active'"
-              />
-            </v-card-title>
-          </v-card>
+          <PackageCard
+            :item="consultation"
+            @update-status="search = 'active'"
+          />
         </v-col>
       </v-row>
     </v-card-text>
