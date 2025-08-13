@@ -4,6 +4,7 @@
       :headers="headers"
       :items="$all"
       title="Pacientes"
+      font-size="1.5rem"
       @add="showForm = true"
       @search="handleSearch($event)"
       :items-per-page="mobile ? 3 : 6"

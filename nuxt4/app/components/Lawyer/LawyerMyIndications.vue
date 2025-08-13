@@ -50,6 +50,7 @@
         <div class="py-4">
           <Table
             title="Lista de indicações"
+            font-size="1.5rem"
             :items="$all"
             :headers="headers"
             :items-per-page="5"

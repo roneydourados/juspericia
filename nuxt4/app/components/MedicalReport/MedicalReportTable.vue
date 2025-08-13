@@ -74,6 +74,7 @@
 
     <Table
       title="Laudos Médicos"
+      font-size="1.5rem"
       :show-crud="false"
       :headers="headers"
       :items="$consultationReports"

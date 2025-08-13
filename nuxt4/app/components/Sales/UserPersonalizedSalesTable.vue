@@ -2,6 +2,7 @@
   <!-- <pre>{{ $sales }}</pre> -->
   <Table
     title="Minhas compras personalizadas"
+    font-size="1.5rem"
     :headers="headers"
     :items="$sales"
     class="elevation-1"

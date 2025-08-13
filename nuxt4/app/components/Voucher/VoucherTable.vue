@@ -2,6 +2,7 @@
   <div>
     <Table
       title="Vouchers"
+      font-size="1.5rem"
       :headers="headers"
       :items="vounchers"
       :showCrud="false"

@@ -1,6 +1,7 @@
 <template>
   <Table
     title="Transações"
+    font-size="1.5rem"
     :headers="headers"
     :items="$transactions"
     class="elevation-1"

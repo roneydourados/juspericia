@@ -1,6 +1,7 @@
 <template>
   <Table
     title="Controle de comissões"
+    font-size="1.5rem"
     :items="$all"
     :headers="headers"
     @add="showForm = true"

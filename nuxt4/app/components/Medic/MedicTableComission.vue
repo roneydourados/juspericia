@@ -2,6 +2,7 @@
   <div>
     <Table
       title="Gestão de comissão consulta médica"
+      font-size="1.5rem"
       :items="$all"
       :headers="headers"
       @search="handleSearch($event)"

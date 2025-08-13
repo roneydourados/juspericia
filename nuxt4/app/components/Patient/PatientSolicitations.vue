@@ -5,6 +5,7 @@
         :headers="headers"
         :items="$solicitations"
         title="Solicitações de consulta"
+        font-size="1.5rem"
         :show-crud="false"
       >
         <template v-slot:item.dateOpen="{ item }">

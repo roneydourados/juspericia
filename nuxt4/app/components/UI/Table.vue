@@ -2,7 +2,7 @@
   <v-card class="mx-auto pa-4" flat elevation="0" rounded="lg">
     <v-row dense v-if="title">
       <v-col cols="12" class="mb-4">
-        <HeaderPage :title="title" />
+        <HeaderPage :title="title" :font-size="fontSize" />
       </v-col>
     </v-row>
     <v-row v-if="showCrud" dense align="center">
@@ -187,6 +187,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false,
+  },
+  fontSize: {
+    type: String,
+    default: "1rem",
   },
 });
 const { mobile } = useDisplay();

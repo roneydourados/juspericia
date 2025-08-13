@@ -81,6 +81,7 @@
         <div class="py-4">
           <Table
             title="Compras"
+            font-size="1.5rem"
             :headers="headers"
             :items="$salts?.credits"
             :show-crud="false"

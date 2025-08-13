@@ -9,7 +9,8 @@
     <v-card>
       <v-card-text>
         <Table
-          title="Justificativas cadastras "
+          title="Justificativas cadastras"
+          font-size="1.5rem"
           :headers="headers"
           :items="$single?.justifies"
           :show-crud="false"

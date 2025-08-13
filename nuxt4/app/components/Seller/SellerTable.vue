@@ -2,6 +2,7 @@
   <div>
     <Table
       title="Vendedores cadastrados"
+      font-size="1.5rem"
       :items="$all"
       :headers="headers"
       @search="handleSearch($event)"
