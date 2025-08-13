@@ -3,6 +3,7 @@
     v-model="changeDrawer"
     @update:model-value="$emit('update:drawer', changeDrawer)"
     :width="mobile ? '' : '300'"
+    class="drawer-color"
   >
     <template v-slot:prepend>
       <v-list-item lines="two">
@@ -116,5 +117,9 @@ const logout = async () => {
 .item-menu {
   background-color: rgb(var(--v-theme-primary)) !important;
   color: rgb(var(--v-theme-itemMenu)) !important;
+}
+
+.drawer-color {
+  background: linear-gradient(to bottom, #1E3C98, #4D84D5) !important;
 }
 </style>

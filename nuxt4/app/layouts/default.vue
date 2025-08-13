@@ -6,10 +6,6 @@
       @update:drawer="drawer = $event"
     />
 
-    <!-- <v-app-bar
-      :color="$isDevelop ? 'blue-grey-darken-3' : 'primary'"
-      elevation="0"
-    > -->
     <v-app-bar color="primary" elevation="0">
       <template #title>
         <!-- <Logo height="40" color="#fff" /> -->
@@ -177,3 +173,5 @@ const handleNewSolicitation = async () => {
 //   storeTheme.getTheme();
 // };
 </script>
+
+<style scoped></style>
