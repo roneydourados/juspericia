@@ -10,43 +10,49 @@
         <v-text-field
           v-model="search"
           density="compact"
-          prepend-inner-icon="mdi-magnify"
-          variant="solo-filled"
+          variant="outlined"
           flat
           hide-details
           single-line
-          rounded="lg"
+          rounded="xl"
+          base-color="tooltipTextColor"
+          color="tooltipTextColor"
           @update:model-value="handleSearch"
           style="font-size: 1.4rem"
           :loading="loading"
         >
+          <template #prepend-inner>
+            <v-icon icon="mdi-magnify" color="darkText" />
+          </template>
           <template #label>
-            <span> Digite algo para efetuar consulta... </span>
+            <span class="text-darkText">
+              Digite algo para efetuar consulta...
+            </span>
           </template>
         </v-text-field>
       </v-col>
       <v-col cols="12" lg="2">
         <div class="d-flex align-center" style="gap: 0.5rem">
-          <v-btn
-            variant="flat"
-            color="info"
+          <Button
+            variant="outlined"
+            color="grey"
             class="text-none"
             size="small"
             @click="router.back()"
           >
-            <v-icon icon="mdi-arrow-left"> </v-icon>
-            Voltar
-          </v-btn>
-          <v-btn
+            <v-icon icon="mdi-arrow-left" color="darkText" />
+            <span class="text-darkText text-caption"> Voltar </span>
+          </Button>
+          <Button
             variant="flat"
             color="primary"
             class="text-none"
             size="small"
             @click="$emit('add')"
           >
-            <v-icon icon="mdi-plus"> </v-icon>
-            Novo
-          </v-btn>
+            <v-icon icon="mdi-plus" color="colorIcon" />
+            <span class="text-white text-caption"> Novo </span>
+          </Button>
           <slot name="button" />
         </div>
       </v-col>

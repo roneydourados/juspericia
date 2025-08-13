@@ -9,8 +9,9 @@
     type="time"
     variant="outlined"
     density="compact"
-    base-color="primary"
-    color="primary"
+    rounded="xl"
+    base-color="tooltipTextColor"
+    color="tooltipTextColor"
     :prepend-inner-icon="icon"
   />
 </template>

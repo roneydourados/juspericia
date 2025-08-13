@@ -5,24 +5,29 @@
       <v-row dense class="pa-4 mt-12">
         <v-col cols="12" lg="3">
           <v-card
-            elevation="4"
-            rounded="lg"
+            elevation="12"
+            rounded="xl"
             class="pa-4"
             height="100%"
             @click="handleClickService('/schedules')"
           >
             <div class="d-flex flex-column align-center">
-              <v-icon
-                icon="mdi-clipboard-account-outline"
-                size="60"
-                color="primary"
-              />
-              <v-card-title class="text-h6">
-                <span class="text-info font-weight-bold text-h6">
+              <v-avatar size="60" color="colorIcon">
+                <v-icon
+                  icon="mdi-clipboard-account-outline"
+                  size="32"
+                  color="white"
+                />
+              </v-avatar>
+              <v-card-title>
+                <span
+                  class="font-weight-bold text-primary"
+                  style="font-size: 1.2rem"
+                >
                   Agendamentos
                 </span>
               </v-card-title>
-              <p class="text-subtitle-1">
+              <p class="text-subtitle-2 text-darkText text-center">
                 Começe por aqui, verifique os agendamentos feitos para você.
               </p>
             </div>
@@ -31,24 +36,29 @@
 
         <v-col cols="12" lg="3">
           <v-card
-            elevation="4"
-            rounded="lg"
+            elevation="12"
+            rounded="xl"
             class="pa-4"
             height="100%"
             @click="handleClickService('/medical-report')"
           >
             <div class="d-flex flex-column align-center">
-              <v-icon
-                icon="mdi-hospital-box-outline"
-                size="60"
-                color="primary"
-              />
-              <v-card-title class="text-h6">
-                <span class="text-info font-weight-bold text-h6">
+              <v-avatar size="60" color="colorIcon">
+                <v-icon
+                  icon="mdi-hospital-box-outline"
+                  size="32"
+                  color="white"
+                />
+              </v-avatar>
+              <v-card-title>
+                <span
+                  class="font-weight-bold text-primary"
+                  style="font-size: 1.2rem"
+                >
                   Laudos médicos
                 </span>
               </v-card-title>
-              <p class="text-subtitle-1">
+              <p class="text-subtitle-2 text-darkText text-center">
                 Verifique os laudos médicos emitidos por você.
               </p>
             </div>
@@ -57,24 +67,29 @@
 
         <v-col cols="12" lg="3">
           <v-card
-            elevation="4"
-            rounded="lg"
+            elevation="12"
+            rounded="xl"
             class="pa-4"
             height="100%"
             @click="handleClickService('/medic/my-account')"
           >
             <div class="d-flex flex-column align-center">
-              <v-icon
-                icon="mdi-card-account-details-outline"
-                size="60"
-                color="primary"
-              />
-              <v-card-title class="text-h6">
-                <span class="text-info font-weight-bold text-h6">
-                  Minha conta
+              <v-avatar size="60" color="colorIcon">
+                <v-icon
+                  icon="mdi-card-account-details-outline"
+                  size="32"
+                  color="white"
+                />
+              </v-avatar>
+              <v-card-title>
+                <span
+                  class="font-weight-bold text-primary"
+                  style="font-size: 1.2rem"
+                >
+                  Minha Conta
                 </span>
               </v-card-title>
-              <p class="text-subtitle-1">
+              <p class="text-subtitle-2 text-darkText text-center">
                 Verifique seus dados pessoais e/ou de acesso.
               </p>
             </div>

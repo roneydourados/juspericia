@@ -1,6 +1,6 @@
 <template>
-  <v-row dense justify="center" align="center">
-    <v-col cols="12" lg="4">
+  <v-row dense align="center">
+    <v-col cols="12" lg="3">
       <v-card rounded="lg" flat color="transparent">
         <v-card-title>
           <v-row dense class="pa-8" justify="center">
@@ -60,7 +60,7 @@
             </v-row>
             <v-row dense justify="center">
               <v-col cols="12" class="ma-6">
-                <v-btn
+                <Button
                   block
                   variant="flat"
                   class="text-none"
@@ -69,7 +69,7 @@
                   type="submit"
                 >
                   Acessar
-                </v-btn>
+                </Button>
               </v-col>
             </v-row>
             <div v-if="!$isDevelop" class="mb-4">
@@ -103,7 +103,7 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="8">
+    <v-col cols="12" lg="9">
       <div class="background-image" />
     </v-col>
   </v-row>

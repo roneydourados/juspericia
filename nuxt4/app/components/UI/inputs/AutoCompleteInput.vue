@@ -10,8 +10,9 @@
     density="compact"
     :prepend-inner-icon="icon"
     hide-no-data
-    base-color="primary"
-    color="primary"
+    rounded="xl"
+    base-color="tooltipTextColor"
+    color="tooltipTextColor"
     :chips="chips"
     :return-object="returnObject"
     :clearable="clearable"

@@ -13,8 +13,9 @@
     autocomplete="section-blue one-time-code"
     variant="outlined"
     density="compact"
-    base-color="primary"
-    color="primary"
+    rounded="xl"
+    base-color="tooltipTextColor"
+    color="tooltipTextColor"
   />
 </template>
 
