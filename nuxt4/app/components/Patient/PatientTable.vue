@@ -17,7 +17,7 @@
               font-size-content="1.2"
               title="Nome"
               icon="mdi-account-outline"
-              color-icon="info"
+              color-icon="colorIcon"
               :content="`${item.name} ${item.surname}`"
               :show-divider="true"
               @click="handlePatientInfo(item.publicId)"
@@ -29,7 +29,7 @@
             <InfoLabel
               title="CPF"
               icon="mdi-clipboard-account-outline"
-              color-icon="info"
+              color-icon="colorIcon"
               font-size="1"
               font-size-content="1.2"
               :content="formatCPF(item.cpf)"
@@ -66,7 +66,7 @@
       </template>
       <template #mobileActions="{ item }">
         <v-btn
-          color="orange"
+          color="colorIcon"
           variant="flat"
           size="small"
           prepend-icon="mdi-pencil-outline"
@@ -92,7 +92,12 @@
           class="d-flex align-center text-info"
           @click="handlePatientInfo(item.publicId)"
         >
-          <v-icon icon="mdi-account-outline" size="24" start />
+          <v-icon
+            icon="mdi-account-outline"
+            size="24"
+            start
+            color="colorIcon"
+          />
           <div class="d-flex align-center" style="gap: 0.3rem">
             <span>{{ item.name }}</span>
             <span>{{ item.surname }}</span>
@@ -101,7 +106,12 @@
       </template>
       <template v-slot:item.User.name="{ item }">
         <span style="cursor: pointer" class="d-flex align-center text-info">
-          <v-icon icon="mdi-account-tie-outline" size="24" start />
+          <v-icon
+            icon="mdi-account-tie-outline"
+            size="24"
+            start
+            color="colorIcon"
+          />
           <span>{{ item.User?.name }}</span>
         </span>
       </template>
@@ -110,7 +120,7 @@
           <v-icon
             icon="mdi-clipboard-account-outline"
             size="24"
-            color="info"
+            color="colorIcon"
             start
           />
           <span>{{ formatCPF(item.cpf) }}</span>
@@ -118,7 +128,7 @@
       </template>
       <template v-slot:item.phone="{ item }">
         <span class="d-flex align-center">
-          <v-icon icon="mdi-whatsapp" size="24" color="green" start />
+          <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
           <span>
             {{ formatTelephoneNumber(item.phone ?? "") }}
           </span>
@@ -127,7 +137,7 @@
       <template v-slot:item.actions="{ item }">
         <v-btn
           icon
-          color="orange"
+          color="colorIcon"
           variant="text"
           size="small"
           @click="handleEdit(item)"
@@ -143,7 +153,7 @@
         </v-btn>
         <v-btn
           icon
-          color="error"
+          color="red"
           variant="text"
           size="small"
           @click="getItemDelete(item)"

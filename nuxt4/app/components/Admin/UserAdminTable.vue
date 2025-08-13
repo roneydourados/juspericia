@@ -14,13 +14,18 @@
           class="d-flex align-center text-info"
           @click="getItemEdit(item)"
         >
-          <v-icon icon="mdi-account-outline" size="24" start />
+          <v-icon
+            icon="mdi-account-outline"
+            size="24"
+            start
+            color="colorIcon"
+          />
           <span>{{ item.name }}</span>
         </span>
       </template>
       <template v-slot:item.phone="{ item }">
         <span class="d-flex align-center">
-          <v-icon icon="mdi-whatsapp" size="24" color="green" start />
+          <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
           <span>
             {{
               item.phone ? formatTelephoneNumber(item.phone) : "Não informado"
@@ -30,7 +35,7 @@
       </template>
       <template v-slot:item.email="{ item }">
         <span class="d-flex align-center">
-          <v-icon icon="mdi-email-outline" size="24" color="warning" start />
+          <v-icon icon="mdi-email-outline" size="24" color="colorIcon" start />
           <span>
             {{ item.email }}
           </span>
@@ -41,7 +46,7 @@
           <v-icon
             :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
             size="24"
-            :color="item.active ? 'green' : 'error'"
+            :color="item.active ? 'colorIcon' : 'red'"
             start
           />
         </span>
@@ -49,7 +54,7 @@
       <template v-slot:item.actions="{ item }">
         <v-btn
           icon
-          color="orange"
+          color="colorIcon"
           variant="text"
           size="small"
           @click="getItemEdit(item)"
@@ -65,7 +70,7 @@
         </v-btn>
         <v-btn
           icon
-          color="error"
+          color="red"
           variant="text"
           size="small"
           @click="getItemDelete(item)"
@@ -82,7 +87,7 @@
       </template>
       <template #mobileActions="{ item }">
         <v-btn
-          color="orange"
+          color="colorIcon"
           variant="flat"
           size="small"
           prepend-icon="mdi-pencil-outline"
@@ -92,7 +97,7 @@
           Editar
         </v-btn>
         <v-btn
-          color="error"
+          color="red"
           variant="flat"
           size="small"
           class="text-none text-white"
@@ -110,7 +115,7 @@
               font-size-content="1.2"
               title="Nome"
               icon="mdi-account-outline"
-              color-icon="info"
+              color-icon="colorIcon"
               :content="`${item.name} ${item.name}`"
               :show-divider="true"
             />
@@ -123,7 +128,7 @@
               font-size-content="1.2"
               title="Whatsapp"
               icon="mdi-whatsapp"
-              color-icon="green"
+              color-icon="colorIcon"
               :content="formatTelephoneNumber(item.phone ?? '')"
               :show-divider="true"
             />
@@ -136,7 +141,7 @@
               font-size-content="1.2"
               title="E-mail"
               icon="mdi-email-outline"
-              color-icon="warning"
+              color-icon="colorIcon"
               :content="item.email"
               :show-divider="true"
             />
@@ -149,7 +154,7 @@
               font-size-content="1.2"
               title="Status"
               :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
-              :color-icon="item.active ? 'green' : 'error'"
+              :color-icon="item.active ? 'colorIcon' : 'red'"
               :content="item.active ? 'Ativo' : 'Inativo'"
               :show-divider="true"
             />

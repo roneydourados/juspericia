@@ -1,15 +1,13 @@
 <template>
-  <v-card flat>
+  <v-card flat elevation="0" class="mt-4">
     <v-card-text class="py-12">
-      <v-row>
-        <v-col cols="12" lg="3">
+      <v-row dense>
+        <v-col cols="12" lg="4" class="d-flex" style="gap: 0.5rem">
           <DatePicker
             v-model="filters.initialDate"
             label="Data inicial"
             clearable
           />
-        </v-col>
-        <v-col cols="12" lg="3">
           <DatePicker
             v-model="filters.finalDate"
             label="Data final"
@@ -42,15 +40,15 @@
             ]"
             @update:model-value="handleFilter"
           />
-          <v-btn
+          <Button
             variant="flat"
             color="primary"
             class="text-none"
             @click="handleFilter"
           >
-            <v-icon icon="mdi-filter-outline"> </v-icon>
-            Filtrar
-          </v-btn>
+            <v-icon icon="mdi-filter-outline" start color="colorIcon" />
+            <span class="text-caption"> Filtrar </span>
+          </Button>
         </v-col>
       </v-row>
     </v-card-text>

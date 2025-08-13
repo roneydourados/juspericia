@@ -2,64 +2,72 @@
   <div>
     <v-card flat rounded="lg">
       <v-card-title>
-        <HeaderPage title="Meus saldos" />
+        <HeaderPage title="Meus saldos" font-size="1.5rem" />
       </v-card-title>
       <v-card-text>
         <v-row dense>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="2" rounded="lg">
-              <v-card-title class="text-subtitle-2">
-                Saldo Créditos
+            <v-card flat elevation="8" rounded="xl">
+              <v-card-title>
+                <div class="text-subtitle-2 d-flex justify-space-between px-4">
+                  <span class="text-primary"> Saldo Créditos </span>
+                  <v-icon
+                    icon="mdi-calendar-clock-outline"
+                    size="30"
+                    color="primary"
+                  />
+                </div>
               </v-card-title>
               <v-card-text class="d-flex align-center justify-space-between">
-                <v-icon icon="mdi-cash-100" size="25" color="success" />
-                <div class="d-flex">
-                  <span class="text-grey-darken-1" style="font-size: 1.2rem">
-                    R$
-                  </span>
-                  <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{ amountFormated($salts?.totals?.total ?? 0, false) }}
-                  </span>
+                <div
+                  class="d-flex text-primary font-weight-bold px-4"
+                  style="font-size: 1.5rem"
+                >
+                  {{ amountFormated($salts?.totals?.total ?? 0, true) }}
                 </div>
               </v-card-text>
             </v-card>
           </v-col>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="2" rounded="lg">
-              <v-card-title class="text-subtitle-2">
-                Total pendente
+            <v-card flat elevation="8" rounded="xl">
+              <v-card-title>
+                <div class="text-subtitle-2 d-flex justify-space-between px-4">
+                  <span class="text-primary">Total Pendente </span>
+                  <v-icon
+                    icon="mdi-calendar-clock-outline"
+                    size="30"
+                    color="primary"
+                  />
+                </div>
               </v-card-title>
               <v-card-text class="d-flex align-center justify-space-between">
-                <v-icon icon="mdi-currency-usd" size="25" color="info" />
-                <div class="d-flex">
-                  <span class="text-grey-darken-1" style="font-size: 1.2rem">
-                    R$
-                  </span>
-                  <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{
-                      amountFormated($salts?.totals?.totalPending ?? 0, false)
-                    }}
-                  </span>
+                <div
+                  class="d-flex text-primary font-weight-bold px-4"
+                  style="font-size: 1.5rem"
+                >
+                  {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
                 </div>
               </v-card-text>
             </v-card>
           </v-col>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="2" rounded="lg">
-              <v-card-title class="text-subtitle-2">
-                Total expirado
+            <v-card flat elevation="8" rounded="xl">
+              <v-card-title>
+                <div class="text-subtitle-2 d-flex justify-space-between px-4">
+                  <span class="text-primary">Total expirado</span>
+                  <v-icon
+                    icon="mdi-calendar-clock-outline"
+                    size="30"
+                    color="primary"
+                  />
+                </div>
               </v-card-title>
               <v-card-text class="d-flex align-center justify-space-between">
-                <v-icon icon="mdi-currency-usd-off" size="25" color="warning" />
-                <div class="d-flex">
-                  <span class="text-grey-darken-1" style="font-size: 1.2rem">
-                    R$
-                  </span>
-                  <span class="font-weight-bold ml-2" style="font-size: 1.2rem">
-                    {{
-                      amountFormated($salts?.totals?.totalExpired ?? 0, false)
-                    }}
-                  </span>
+                <div
+                  class="d-flex text-primary font-weight-bold px-4"
+                  style="font-size: 1.5rem"
+                >
+                  {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
                 </div>
               </v-card-text>
             </v-card>
@@ -71,7 +79,6 @@
           </v-col>
         </v-row>
         <div class="py-4">
-          <!-- <pre>{{ $salts?.credits }}</pre> -->
           <Table
             title="Compras"
             :headers="headers"
