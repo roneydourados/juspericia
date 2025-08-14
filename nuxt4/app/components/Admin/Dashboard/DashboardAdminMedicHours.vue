@@ -1,5 +1,5 @@
 <template>
-  <Card elevation="4">
+  <Card>
     <template #title>
       <span> Horas trabalhadas dos médicos </span>
     </template>

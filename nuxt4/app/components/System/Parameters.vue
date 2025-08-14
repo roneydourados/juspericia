@@ -1,12 +1,15 @@
 <template>
-  <v-card flat>
+  <v-card flat color="transparent">
     <v-card-text class="pa-4">
       <FormCrud :show-submit-button="false" :on-submit="handleSubmit">
         <div
           class="d-flex flex-wrap align-center justify-space-between pa-4 w-100"
         >
-          <div class="d-flex flex-wrap align-center">
-            <v-icon icon="mdi-cog-outline" color="#3F51B5" size="30" start />
+          <div class="d-flex flex-wrap align-center" style="gap: 0.5rem">
+            <!-- <v-icon icon="mdi-cog-outline" color="#3F51B5" size="30" start /> -->
+            <v-avatar size="30" color="colorIcon">
+              <v-icon icon="mdi-cog-outline" color="white" />
+            </v-avatar>
             <span class="text-h6"> Parametrizações </span>
           </div>
           <div class="d-flex flex-wrap align-center" style="gap: 1rem">
@@ -29,37 +32,11 @@
               <v-icon icon="mdi-check" start color="colorIcon" />
               <span class="text-caption"> Salvar </span>
             </Button>
-
-            <!-- <v-btn
-              variant="flat"
-              color="info"
-              class="text-none"
-              size="small"
-              @click="router.back()"
-            >
-              <v-icon icon="mdi-arrow-left"> </v-icon>
-              Voltar
-            </v-btn>
-
-            <v-btn
-              color="primary"
-              variant="flat"
-              size="small"
-              type="submit"
-              :disabled="loading"
-              class="text-none"
-            >
-              <div v-if="!loading" class="d-flex align-center">
-                <v-icon icon="mdi-check" />
-                <span style="font-size: 0.9rem" class="ml-2"> Salvar </span>
-              </div>
-            </v-btn> -->
           </div>
         </div>
-
         <v-row>
           <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
+            <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Pontos por indicação</div>
                 <v-divider class="mt-2"></v-divider>
@@ -111,33 +88,8 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <!-- <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
-              <v-card-title>
-                <div class="font-weight-bold">Valor comissão médica padrão</div>
-                <v-divider class="mt-2"></v-divider>
-              </v-card-title>
-              <v-card-text class="py-4">
-                <CurrencyInput
-                  label="Valor R$"
-                  v-model="form.comission"
-                  required
-                />
-                <div>
-                  Valor padrão da comissão médica será de
-                  <strong>{{
-                    amountFormated(Number(form.comission), true)
-                  }}</strong>
-                  para consultas realizadas. Este valor será preenchido
-                  automaticamente no cadastro de médicos, porém será possível
-                  alterar, pois cada médico pode receber valor de comissão
-                  diferente.
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col> -->
           <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
+            <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">
                   Prazo em dias para expirar créditos
@@ -182,7 +134,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
+            <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Whatsapp do suporte</div>
                 <v-divider class="mt-2"></v-divider>
@@ -204,7 +156,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
+            <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Parametrizações de voucher</div>
                 <v-divider class="mt-2"></v-divider>
@@ -243,7 +195,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
+            <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Taxas de antecipações</div>
                 <v-divider class="mt-2"></v-divider>
@@ -265,7 +217,7 @@
           </v-col>
 
           <v-col cols="12" lg="4">
-            <v-card flat rounded="lg" elevation="1" height="100%">
+            <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Solicitações de consulta</div>
                 <v-divider class="mt-2"></v-divider>

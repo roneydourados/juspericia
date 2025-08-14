@@ -6,18 +6,14 @@
       @update:drawer="drawer = $event"
     />
 
-    <v-app-bar elevation="0" class="toolbar-color">
+    <v-app-bar elevation="0" class="toolbar-color" border="0">
       <template #title>
-        <!-- <Logo height="40" color="#fff" /> -->
         <div class="d-flex align-center text-white">
           <div v-if="$isDevelop" class="text-h4 text-center w-100">
             ( DEMONSTRAÇÃO )
           </div>
         </div>
       </template>
-
-      <!-- <v-spacer v-if="!mobile" /> -->
-
       <v-app-bar-nav-icon
         v-if="mobile"
         variant="text"
@@ -70,26 +66,22 @@
             </v-tooltip>
           </Button>
         </div>
-        <v-icon
-          icon="mdi-account-circle-outline"
-          start
-          size="30"
-          color="white"
-        />
-        <div class="d-flex flex-column px-2 text-white">
+        <v-avatar size="40" color="black" variant="tonal">
+          <v-icon icon="mdi-account-outline" color="white" />
+        </v-avatar>
+        <div v-if="!mobile" class="d-flex flex-column px-2 text-white">
           <span>
             {{ $currentUser?.name }}
           </span>
-          <span class="mt-n2">
+          <span class="">
             {{ $currentUser?.profile?.profileName }}
           </span>
         </div>
       </template>
     </v-app-bar>
-
     <v-main class="container d-flex justify-center">
       <div
-        class="w-100 pa-4 rounded-xl"
+        class="w-100 pa-4"
         style="background-color: rgb(var(--v-theme-background)) !important"
       >
         <slot />

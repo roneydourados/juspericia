@@ -67,52 +67,61 @@
     <v-tabs
       v-model="tab"
       :grow="mobile"
+      color="grey-darken-2"
       @update:model-value="handleChangeTable"
     >
       <v-tab value="open" class="text-none">
-        <v-icon icon="mdi-file-clock-outline" size="24" start />
+        <v-icon
+          icon="mdi-file-clock-outline"
+          size="24"
+          start
+          color="colorIcon"
+        />
         <span v-if="!mobile"> Abertas </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("open") }})
         </span>
       </v-tab>
       <v-tab value="payment_pending" class="text-none">
-        <v-icon icon="mdi-cash-clock" size="24" start />
+        <v-icon icon="mdi-cash-clock" size="24" start color="colorIcon" />
         <span v-if="!mobile"> Pendente de pagamento </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("payment_pending") }})
         </span>
       </v-tab>
       <v-tab value="paid" class="text-none">
-        <v-icon icon="mdi-cash-check" size="24" start />
+        <v-icon icon="mdi-cash-check" size="24" start color="colorIcon" />
         <span v-if="!mobile"> Paga </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("paid") }})
         </span>
       </v-tab>
       <v-tab value="scheduled" class="text-none">
-        <v-icon icon="mdi-clock-check-outline" size="24" start />
+        <v-icon
+          icon="mdi-clock-check-outline"
+          size="24"
+          start
+          color="colorIcon"
+        />
         <span v-if="!mobile"> Agendado </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("scheduled") }})
         </span>
       </v-tab>
-      <!-- <v-tab value="in_progress" class="text-none">
-        <v-icon icon="mdi-clock-start" size="24" start />
-        <span v-if="!mobile"> Em andamento </span>
-        <span class="text-info font-weight-bold">
-          ({{ getQuantity("in_progress") }})
-        </span>
-      </v-tab> -->
       <v-tab value="canceled" class="text-none">
-        <v-icon icon="mdi-cancel" size="24" start />
+        <v-icon icon="mdi-cancel" size="24" start color="colorIcon" />
         <span v-if="!mobile">Canceladas </span>
         <span class="text-info font-weight-bold">
           ({{ getQuantity("canceled") }})
         </span>
       </v-tab>
       <v-tab value="finished" class="text-none">
-        <v-icon icon="mdi-calendar-month-outline" size="24" start />
+        <v-icon
+          icon="mdi-calendar-month-outline"
+          size="24"
+          color="colorIcon"
+          start
+        />
         <span v-if="!mobile">Finalizadas </span>
         <span class="text-info font-weight-bold"
           >({{ getQuantity("finished") }})</span

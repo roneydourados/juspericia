@@ -1,24 +1,20 @@
 <template>
-  <div>
-    <v-card flat rounded="xl" elevation="0">
-      <Table
-        title="Top 10 solicitações concluídas"
-        :headers="headers"
-        :items="$estatistics?.laywerSolicitationsTop10Finished"
-        :items-per-page="10"
-        :showCrud="false"
-      >
-        <template #item.dateOpen="{ item }">
-          {{ item.dateOpen ? dayjs(item.dateOpen).format("DD/MM/YYYY") : "-" }}
-        </template>
-        <template #item.dateClose="{ item }">
-          {{
-            item.dateClose ? dayjs(item.dateClose).format("DD/MM/YYYY") : "-"
-          }}
-        </template>
-      </Table>
-    </v-card>
-  </div>
+  <v-card flat rounded="xl" elevation="0">
+    <Table
+      title="Top 10 solicitações concluídas"
+      :headers="headers"
+      :items="$estatistics?.laywerSolicitationsTop10Finished"
+      :items-per-page="10"
+      :showCrud="false"
+    >
+      <template #item.dateOpen="{ item }">
+        {{ item.dateOpen ? dayjs(item.dateOpen).format("DD/MM/YYYY") : "-" }}
+      </template>
+      <template #item.dateClose="{ item }">
+        {{ item.dateClose ? dayjs(item.dateClose).format("DD/MM/YYYY") : "-" }}
+      </template>
+    </Table>
+  </v-card>
 </template>
 
 <script setup lang="ts">

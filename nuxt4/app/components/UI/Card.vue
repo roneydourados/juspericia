@@ -1,7 +1,8 @@
 <template>
   <div>
     <v-card
-      rounded="lg"
+      variant="flat"
+      rounded="xl"
       :width="width"
       :height="height"
       :elevation="elevation"

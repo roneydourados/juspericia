@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="lg">
+  <v-card flat rounded="lg" color="transparent">
     <v-card-title
       class="d-flex flex-wrap align-center justify-space-between pa-4"
       style="gap: 1rem"

@@ -4,6 +4,7 @@
     @update:model-value="$emit('update:drawer', changeDrawer)"
     :width="mobile ? '' : '370'"
     class="drawer-color"
+    border="0"
   >
     <template v-slot:prepend>
       <v-list-item lines="two">
@@ -40,8 +41,6 @@
     </v-list>
 
     <template v-slot:append>
-      <v-divider />
-
       <div class="d-flex justify-center pa-2">
         <Button
           color="white"
@@ -49,7 +48,7 @@
           variant="flat"
           @click="logout"
         >
-          <span class="text-caption text-primary"> Sair </span>
+          <span class="text-primary"> Sair </span>
           <v-icon icon="mdi-close-circle" end color="primary" />
         </Button>
       </div>

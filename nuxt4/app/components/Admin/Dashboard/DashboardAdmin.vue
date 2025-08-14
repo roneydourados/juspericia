@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="lg">
+  <v-card flat rounded="lg" color="transparent">
     <v-card-title class="pa-4 mb-8">
       <Tabs
         v-model="tabRegion"
@@ -62,18 +62,22 @@ const tabsDate = ref<TabProps[]>([
   {
     title: "Hoje",
     icon: "mdi-check-decagram-outline",
+    colorIcon: "colorIcon",
   },
   {
     title: "Semana",
     icon: "mdi-chart-line-variant",
+    colorIcon: "colorIcon",
   },
   {
     title: "Mês",
     icon: "mdi-calendar-month-outline",
+    colorIcon: "colorIcon",
   },
   {
     title: "Ano",
     icon: "mdi-chart-bell-curve-cumulative",
+    colorIcon: "colorIcon",
   },
 ]);
 
@@ -81,26 +85,32 @@ const tabsRegion = ref<TabProps[]>([
   {
     title: "Todos",
     icon: "mdi-poll",
+    colorIcon: "colorIcon",
   },
   {
     title: "Norte",
     icon: "mdi-chart-arc",
+    colorIcon: "colorIcon",
   },
   {
     title: "Nordeste",
     icon: "mdi-chart-donut",
+    colorIcon: "colorIcon",
   },
   {
     title: "Centro-Oeste",
     icon: "mdi-chart-sankey",
+    colorIcon: "colorIcon",
   },
   {
     title: "Sul",
     icon: "mdi-chart-bell-curve",
+    colorIcon: "colorIcon",
   },
   {
     title: "Sudeste",
     icon: "mdi-chart-multiline",
+    colorIcon: "colorIcon",
   },
 ]);
 

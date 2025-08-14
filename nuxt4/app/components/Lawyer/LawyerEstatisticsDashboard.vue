@@ -11,11 +11,6 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <!-- <v-row dense>
-        <v-col cols="12">
-          <Tabs v-model="tab" :tabs="tabs" @update:model-value="handleTab" />
-        </v-col>
-      </v-row> -->
     </v-card>
     <v-row dense>
       <v-col cols="12" lg="4">
@@ -56,10 +51,10 @@
     </v-row>
     <v-row dense>
       <v-col cols="12" lg="6">
-        <LawyerEstatisticsDashboardSolicitationBenefitType />
+        <LawyerEstatisticsDashboardReportPropuseChart />
       </v-col>
       <v-col cols="12" lg="6">
-        <LawyerEstatisticsDashboardReportPropuseChart />
+        <LawyerEstatisticsDashboardSolicitationBenefitType />
       </v-col>
     </v-row>
     <v-row dense>

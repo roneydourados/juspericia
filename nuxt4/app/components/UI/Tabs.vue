@@ -1,7 +1,7 @@
 <template>
   <v-tabs
     v-model="tab"
-    color="primary"
+    color="grey-darken-2"
     :grow="mobile"
     :align-tabs="alignTabs"
     @update:model-value="$emit('update:modelValue', $event)"
@@ -16,6 +16,7 @@
         :icon="tabitem.icon"
         :size="mobile ? '30' : '20'"
         :start="!mobile"
+        :color="tabitem.colorIcon || ''"
       />
       <div class="d-flex align-center">
         <span v-if="!mobile" class="text-subtitle-2">
