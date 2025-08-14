@@ -66,17 +66,17 @@
             </v-tooltip>
           </Button>
         </div>
-        <v-avatar size="40" color="black" variant="tonal">
-          <v-icon icon="mdi-account-outline" color="white" />
-        </v-avatar>
-        <div v-if="!mobile" class="d-flex flex-column px-2 text-white">
-          <span>
+        <div v-if="!mobile" class="d-flex flex-column px-6 text-white">
+          <span class="font-weight-bold">
             {{ $currentUser?.name }}
           </span>
           <span class="">
             {{ $currentUser?.profile?.profileName }}
           </span>
         </div>
+        <v-avatar size="40" color="black" variant="tonal" class="mr-2">
+          <v-icon icon="mdi-account-outline" color="white" />
+        </v-avatar>
       </template>
     </v-app-bar>
     <v-main class="container d-flex justify-center">

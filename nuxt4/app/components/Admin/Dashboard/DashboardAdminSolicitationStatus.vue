@@ -28,12 +28,20 @@ const chartData = computed(() => {
         height: "480",
         type: "donut",
       },
-      theme: {
-        palette: "palette3",
-      },
+      // theme: {
+      //   palette: "palette4",
+      // },
       stroke: {
         show: false,
       },
+      colors: [
+        "#2196F3",
+        "#3F51B5",
+        "#009688",
+        "#775DD0",
+        "#FF9800",
+        "#546E7A",
+      ],
       labels: $dash.value?.solicitationConsultationStatus.map(
         (item) => item.status
       ),

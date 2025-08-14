@@ -12,7 +12,7 @@
         align-tabs="center"
         @update:model-value="handleDateChange"
       />
-      <DashboardAdminFilters v-model:filters="modelFilters" />
+      <!-- <DashboardAdminFilters v-model:filters="modelFilters" /> -->
       <v-divider></v-divider>
     </v-card-title>
     <v-card-text>
