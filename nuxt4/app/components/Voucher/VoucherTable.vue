@@ -55,36 +55,36 @@
             class="d-flex flex-wrap align-center mb-4"
             style="gap: 0.5rem"
           >
-            <v-btn
-              color="primary"
-              variant="flat"
-              size="small"
-              class="text-none"
-              @click="getVouchers"
-            >
-              <v-icon icon="mdi-filter" start />
-              Filtrar
-            </v-btn>
-            <v-btn
-              variant="flat"
+            <Button
+              variant="outlined"
               color="info"
               class="text-none"
               size="small"
               @click="router.back()"
             >
-              <v-icon icon="mdi-arrow-left"> </v-icon>
-              Voltar
-            </v-btn>
-            <v-btn
+              <v-icon icon="mdi-arrow-left" start color="colorIcon" />
+              <span class="text-caption"> Voltar </span>
+            </Button>
+            <Button
               variant="flat"
               color="primary"
               class="text-none"
               size="small"
               @click="hanelNewVoucher"
             >
-              <v-icon icon="mdi-plus"> </v-icon>
-              Novo
-            </v-btn>
+              <v-icon icon="mdi-plus" start color="colorIcon" />
+              <span class="text-caption"> Novo </span>
+            </Button>
+            <Button
+              color="primary"
+              variant="flat"
+              size="small"
+              class="text-none"
+              @click="getVouchers"
+            >
+              <v-icon icon="mdi-filter-outline" start color="colorIcon" />
+              <span class="text-caption"> Filtrar </span>
+            </Button>
           </v-col>
         </v-row>
       </template>

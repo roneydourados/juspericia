@@ -2,7 +2,7 @@
   <v-card flat rounded="lg" color="transparent" class="px-6">
     <v-card-title class="mb-12 d-flex align-center justify-space-between">
       <div class="d-flex flex-column w-100">
-        <HeaderPage title="Solicitações" />
+        <HeaderPage title="Solicitações" font-size="1.5rem" />
         <v-row class="mt-4" dense>
           <v-col
             v-if="

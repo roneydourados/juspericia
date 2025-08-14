@@ -41,36 +41,30 @@
           />
         </v-col>
         <v-col cols="12" lg="3" class="d-flex flex-wrap" style="gap: 0.5rem">
-          <v-btn
+          <Button
             color="primary"
             variant="flat"
             size="small"
             class="text-none"
             @click="getTransactions"
           >
-            <v-icon icon="mdi-filter" start />
-            Filtrar
-          </v-btn>
-          <v-btn
-            color="green"
+            <v-icon icon="mdi-filter-outline" start color="colorIcon" />
+            <span class="text-caption"> Filtrar </span>
+          </Button>
+          <Button
+            color="primary"
             variant="flat"
             size="small"
             class="text-none"
             @click="showFormTransaction = true"
           >
-            <v-icon icon="mdi-plus" start />
-            Nova transação
-          </v-btn>
+            <v-icon icon="mdi-plus" start color="colorIcon" />
+            <span class="text-caption"> Nova transação </span>
+          </Button>
         </v-col>
       </v-row>
       <div class="d-flex justify-end w-100 py-6">
-        <v-chip
-          label
-          color="blue"
-          text-color="white"
-          class="ma-2"
-          variant="flat"
-        >
+        <v-chip color="blue" text-color="white" class="ma-2" variant="flat">
           <span class="text-subtitle-1 font-weight-bold">
             Total: {{ amountFormated($total ?? 0, true) }}
           </span>

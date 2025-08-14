@@ -1,11 +1,80 @@
 <template>
   <div>
     <v-card flat rounded="lg">
-      <v-card-title>
-        <HeaderPage title="Meus saldos" />
+      <v-card-title class="mb-4">
+        <HeaderPage title="Saldo de créditos" font-size="1.5rem" />
       </v-card-title>
       <v-card-text>
         <v-row dense>
+          <v-col cols="12" lg="3">
+            <v-card flat elevation="8" rounded="xl">
+              <v-card-title>
+                <div class="text-subtitle-2 d-flex justify-space-between px-4">
+                  <span class="text-primary"> Saldo Créditos </span>
+                  <v-icon
+                    icon="mdi-calendar-clock-outline"
+                    size="30"
+                    color="primary"
+                  />
+                </div>
+              </v-card-title>
+              <v-card-text class="d-flex align-center justify-space-between">
+                <div
+                  class="d-flex text-primary font-weight-bold px-4"
+                  style="font-size: 1.5rem"
+                >
+                  {{ amountFormated($salts?.totals?.total ?? 0, true) }}
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" lg="3">
+            <v-card flat elevation="8" rounded="xl">
+              <v-card-title>
+                <div class="text-subtitle-2 d-flex justify-space-between px-4">
+                  <span class="text-primary">Total Pendente </span>
+                  <v-icon
+                    icon="mdi-calendar-clock-outline"
+                    size="30"
+                    color="primary"
+                  />
+                </div>
+              </v-card-title>
+              <v-card-text class="d-flex align-center justify-space-between">
+                <div
+                  class="d-flex text-primary font-weight-bold px-4"
+                  style="font-size: 1.5rem"
+                >
+                  {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" lg="3">
+            <v-card flat elevation="8" rounded="xl">
+              <v-card-title>
+                <div class="text-subtitle-2 d-flex justify-space-between px-4">
+                  <span class="text-primary">Total expirado</span>
+                  <v-icon
+                    icon="mdi-calendar-clock-outline"
+                    size="30"
+                    color="primary"
+                  />
+                </div>
+              </v-card-title>
+              <v-card-text class="d-flex align-center justify-space-between">
+                <div
+                  class="d-flex text-primary font-weight-bold px-4"
+                  style="font-size: 1.5rem"
+                >
+                  {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <!-- <v-row dense>
           <v-col cols="12" lg="3">
             <v-card flat elevation="2" rounded="lg">
               <v-card-title class="text-subtitle-2">
@@ -64,21 +133,21 @@
               </v-card-text>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row dense class="py-4">
           <v-col cols="12" lg="10">
             <AdminCreditSaltsFilters v-model="filters" />
           </v-col>
           <v-col cols="12" lg="2">
-            <v-btn
+            <Button
               variant="flat"
               color="primary"
               class="text-none mt-4"
               @click="handleFilter"
             >
-              <v-icon icon="mdi-filter-outline"> </v-icon>
-              Filtrar
-            </v-btn>
+              <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+              <span class="text-caption"> Filtrar </span>
+            </Button>
           </v-col>
         </v-row>
         <div class="py-4">
@@ -91,7 +160,7 @@
             :show-crud="false"
           >
             <template #item.status="{ item }">
-              <v-chip label :color="getStatusName(item).color">
+              <v-chip :color="getStatusName(item).color">
                 <v-icon
                   :color="getStatusName(item).color"
                   :icon="getStatusName(item).icon"

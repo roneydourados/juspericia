@@ -51,15 +51,14 @@
           <StringInput v-model="benefitTypeName" label="Tipo Benefócio" />
         </v-col>
         <v-col col="12" lg="2">
-          <v-btn
+          <Button
             color="primary"
-            variant="flat"
-            class="text-none"
+            variant="outlined"
             size="small"
             @click="handleAddBenefitType(benefitTypeName)"
           >
-            Adicionar
-          </v-btn>
+            <span class="text-caption"> Adicionar </span>
+          </Button>
         </v-col>
         <v-col
           v-for="(benefit, index) in model.benefitTypes"

@@ -54,7 +54,7 @@
         <v-col cols="1">
           <v-btn
             icon
-            color="info"
+            color="primary"
             size="small"
             variant="flat"
             @click="getReports"

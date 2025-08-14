@@ -23,25 +23,20 @@
         </template>
       </v-text-field>
       <div class="d-flex align-center" style="gap: 0.5rem">
-        <v-btn
-          variant="flat"
-          color="info"
+        <Button
+          variant="outlined"
+          color="grey"
           class="text-none"
           size="small"
           @click="router.back()"
         >
-          <v-icon icon="mdi-arrow-left"> </v-icon>
-          Voltar
-        </v-btn>
-        <v-btn
-          prepend-icon="mdi-plus"
-          class="text-none"
-          size="small"
-          color="primary"
-          @click="showForm = true"
-        >
-          Novo
-        </v-btn>
+          <v-icon icon="mdi-arrow-left" start color="darkText" />
+          <span class="text-caption text-darkText"> Voltar </span>
+        </Button>
+        <Button color="primary" @click="showForm = true" size="small">
+          <v-icon icon="mdi-plus" start color="colorIcon" />
+          <span class="text-caption"> Novo </span>
+        </Button>
       </div>
     </v-card-title>
     <v-card-text>

@@ -1,7 +1,7 @@
 <template>
   <v-card flat>
     <v-card-text>
-      <v-row>
+      <v-row dense>
         <v-col cols="12" lg="2">
           <DatePicker
             v-model="filters.initialDate"

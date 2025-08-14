@@ -10,7 +10,27 @@
             <span class="text-h6"> Parametrizações </span>
           </div>
           <div class="d-flex flex-wrap align-center" style="gap: 1rem">
-            <v-btn
+            <Button
+              variant="outlined"
+              color="grey"
+              class="text-none"
+              size="small"
+              @click="router.back()"
+            >
+              <v-icon icon="mdi-arrow-left" start color="darkText" />
+              <span class="text-caption text-darkText"> Voltar </span>
+            </Button>
+            <Button
+              color="primary"
+              type="submit"
+              size="small"
+              :disabled="loading"
+            >
+              <v-icon icon="mdi-check" start color="colorIcon" />
+              <span class="text-caption"> Salvar </span>
+            </Button>
+
+            <!-- <v-btn
               variant="flat"
               color="info"
               class="text-none"
@@ -33,7 +53,7 @@
                 <v-icon icon="mdi-check" />
                 <span style="font-size: 0.9rem" class="ml-2"> Salvar </span>
               </div>
-            </v-btn>
+            </v-btn> -->
           </div>
         </div>
 

@@ -49,7 +49,7 @@
     </v-col>
     <v-col cols="12" lg="3">
       <DashboardCard
-        title="Qtde 40 dias última consulta"
+        title="40 dias última consulta"
         icon="mdi-file-document-edit-outline"
         :value="$dash?.client40DaysSolicitation.toString()"
         icon-color="info"

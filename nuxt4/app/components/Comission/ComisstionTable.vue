@@ -75,7 +75,7 @@
             <v-card-text>
               <div class="d-flex flex-column align-center" style="gap: 0.5rem">
                 <h3>Total:</h3>
-                <v-chip label color="blue" class="text-none" variant="flat">
+                <v-chip color="blue" class="text-none" variant="flat">
                   <div style="font-size: 1rem">
                     {{ $total }}
                   </div>
@@ -89,7 +89,7 @@
             <v-card-text>
               <div class="d-flex flex-column align-center" style="gap: 0.5rem">
                 <h3>Total selecionado:</h3>
-                <v-chip label color="blue" class="text-none" variant="flat">
+                <v-chip color="blue" class="text-none" variant="flat">
                   <div style="font-size: 1rem">
                     {{ $totalSelected }}
                   </div>
@@ -104,27 +104,28 @@
           class="d-flex flex-wrap align-center justify-end mb-4"
           style="gap: 0.5rem"
         >
-          <v-btn
-            color="blue"
-            variant="flat"
-            size="small"
+          <Button
+            variant="outlined"
+            color="grey"
             class="text-none"
+            size="small"
             @click="router.back()"
           >
-            <v-icon icon="mdi-arrow-left" start />
-            Voltar
-          </v-btn>
-          <v-btn
+            <v-icon icon="mdi-arrow-left" start color="darkText" />
+            <span class="text-caption text-darkText"> Voltar </span>
+          </Button>
+          <Button
             color="primary"
             variant="flat"
             size="small"
             class="text-none"
             @click="handleGetComissions"
           >
-            <v-icon icon="mdi-filter-outline" start />
-            Filtrar comissões
-          </v-btn>
-          <v-btn
+            <v-icon icon="mdi-filter-outline" start color="colorIcon" />
+            <span class="text-caption"> Filtrar </span>
+          </Button>
+
+          <Button
             color="green"
             variant="flat"
             size="small"
@@ -137,9 +138,9 @@
             @click="handleShowQRCodePix"
           >
             <v-icon icon="mdi-check-all" start />
-            Pagar selecionadas
-          </v-btn>
-          <v-btn
+            <span class="text-caption"> Pagar selecionadas </span>
+          </Button>
+          <Button
             color="red"
             variant="flat"
             size="small"
@@ -148,8 +149,8 @@
             @click="showCancelComissionDialog = true"
           >
             <v-icon icon="mdi-cancel" start />
-            Cancelar selecionadas
-          </v-btn>
+            <span class="text-caption"> Cancelar selecionadas </span>
+          </Button>
         </v-col>
       </v-row>
     </template>

@@ -22,25 +22,26 @@
           <span> Digite algo para efetuar consulta... </span>
         </template>
       </v-text-field>
-      <v-btn
-        variant="flat"
-        color="info"
+      <Button
+        variant="outlined"
+        color="grey"
         class="text-none"
         size="small"
         @click="router.back()"
       >
-        <v-icon icon="mdi-arrow-left"> </v-icon>
-        Voltar
-      </v-btn>
-      <v-btn
-        prepend-icon="mdi-plus"
-        class="text-none"
-        size="small"
+        <v-icon icon="mdi-arrow-left" start color="darkText" />
+        <span class="text-caption text-darkText"> Voltar </span>
+      </Button>
+      <Button
         color="primary"
+        variant="flat"
+        size="small"
+        class="text-none"
         @click="showForm = true"
       >
-        Novo
-      </v-btn>
+        <v-icon icon="mdi-plus" start color="colorIcon" />
+        <span class="text-caption"> Novo </span>
+      </Button>
     </v-card-title>
     <v-card-text class="pa-4">
       <v-row dense>

@@ -1,13 +1,44 @@
 <template>
   <div>
     <v-card flat rounded="lg">
-      <v-card-title>
-        <HeaderPage title="Indicações" />
-        <span class="text-grey"> Indicações realizadas </span>
-        <v-divider class="mt-2" />
+      <v-card-title class="mb-4">
+        <HeaderPage title="Indicações" font-size="1.5rem" />
       </v-card-title>
       <v-card-text>
-        <v-card flat rounded="lg">
+        <div class="d-flex justify-space-between">
+          <Months @month="handleChangeMonth($event)" />
+
+          <div class="d-flex align-center" style="gap: 0.5rem">
+            <v-card variant="outlined" rounded="xl">
+              <v-card-title>
+                <div class="d-flex" style="gap: 1rem">
+                  <span class="text-darkText text-subtitle-1">
+                    Indicações
+                  </span>
+                  <v-chip color="primary" variant="flat">
+                    <span class="text-subtitle-1 font-weight-bold">
+                      {{ $totals.totalIndications }}
+                    </span>
+                  </v-chip>
+                </div>
+              </v-card-title>
+            </v-card>
+
+            <v-card variant="outlined" rounded="xl">
+              <v-card-title>
+                <div class="d-flex" style="gap: 1rem">
+                  <span class="text-darkText text-subtitle-1"> Pontos </span>
+                  <v-chip color="green" variant="flat">
+                    <span class="text-subtitle-1 font-weight-bold">
+                      {{ $totals.totalPoints }}
+                    </span>
+                  </v-chip>
+                </div>
+              </v-card-title>
+            </v-card>
+          </div>
+        </div>
+        <!-- <v-card flat rounded="lg">
           <v-card-text>
             <v-row dense class="mt-4">
               <v-col cols="12" lg="3">
@@ -86,11 +117,10 @@
               </v-col>
             </v-row>
           </v-card-text>
-        </v-card>
+        </v-card> -->
         <div class="py-4">
           <Table
             title="Lista de indicações"
-            font-size="1.5rem"
             :items="$all"
             :headers="headers"
             :items-per-page="5"
@@ -128,7 +158,7 @@
             <template v-slot:item.actions="{ item }">
               <v-btn
                 icon
-                color="orange"
+                color="colorIcon"
                 variant="text"
                 size="small"
                 @click="getItemEdit(item)"
@@ -145,7 +175,7 @@
               </v-btn>
               <v-btn
                 icon
-                color="error"
+                color="red"
                 variant="text"
                 size="small"
                 @click="getItemDelete(item)"
