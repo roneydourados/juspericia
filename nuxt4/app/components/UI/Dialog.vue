@@ -22,19 +22,20 @@
 
       <v-card-actions class="pa-6">
         <v-spacer />
-        <v-btn
+        <Button
           class="text-none"
-          variant="flat"
+          variant="outlined"
           size="small"
           v-if="showCancel"
           color="error"
           @click="$emit('cancel')"
         >
           <v-icon icon="mdi-close" />
-
-          {{ cancelText }}
-        </v-btn>
-        <v-btn
+          <span style="font-size: 0.7rem">
+            {{ cancelText }}
+          </span>
+        </Button>
+        <Button
           class="text-none"
           size="small"
           variant="flat"
@@ -42,10 +43,11 @@
           :disabled="okDisabled"
           @click="$emit('confirm')"
         >
-          <v-icon icon="mdi-check" />
-
-          {{ okText }}
-        </v-btn>
+          <v-icon icon="mdi-check" color="colorIcon" start />
+          <span style="font-size: 0.7rem">
+            {{ okText }}
+          </span>
+        </Button>
       </v-card-actions>
     </v-card>
   </v-dialog>

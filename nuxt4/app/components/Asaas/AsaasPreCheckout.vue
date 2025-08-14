@@ -46,16 +46,16 @@
           is-upper-case
           :disabled="$disableVoucher"
         />
-        <v-btn
+        <Button
           size="small"
-          variant="flat"
-          color="success"
+          variant="outlined"
+          color="primary"
           class="text-none ml-2"
           @click="getVoucher"
           :disabled="!model.voucherDesconto"
         >
-          Aplicar
-        </v-btn>
+          <span class="text-caption"> Aplicar </span>
+        </Button>
       </v-col>
       <v-col v-if="$voucher && !isInvalidvoucher" cols="12" class="mt-n6">
         <div>{{ $voucher?.description }}</div>
