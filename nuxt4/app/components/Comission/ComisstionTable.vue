@@ -425,7 +425,7 @@ const handleShowQRCodePix = () => {
       Number($totalSelected.value.replace(",", ".").replace("R$", "").trim()) ||
       0,
     message: `Pagamento de comissão referente a ${formatDate(
-      comissionsSelecteds.value[0].comissionDate
+      comissionsSelecteds.value?.[0]?.comissionDate
     )}`,
   };
 

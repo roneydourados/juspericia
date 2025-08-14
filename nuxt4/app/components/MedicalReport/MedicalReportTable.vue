@@ -1,7 +1,7 @@
 <template>
   <div v-if="!showReportForm">
     <div class="d-flex flex-column w-100">
-      <HeaderPage title="Gestão de laudos" />
+      <HeaderPage title="Gestão de laudos" font-size="1.5rem" />
       <v-row class="mt-4" dense>
         <v-col cols="12" lg="3">
           <SelectSearchPatient
