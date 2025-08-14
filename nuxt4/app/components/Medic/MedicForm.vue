@@ -214,7 +214,7 @@
             color="success"
             :label="model.active ? 'Ativo' : 'Inativo'"
             hide-details
-          ></v-switch>
+          />
         </v-col>
       </v-row>
     </FormCrud>

@@ -9,17 +9,16 @@
           <span style="font-size: 1.5rem">Detalhes</span>
         </v-col>
         <v-col cols="12" lg="1">
-          <v-btn
-            class="text-none"
-            prepend-icon="mdi-arrow-left"
-            flat
+          <Button
             color="primary"
             size="small"
+            variant="outlined"
             @click="router.back()"
             v-if="showVoltar"
           >
-            Voltar
-          </v-btn>
+            <v-icon icon="mdi-arrow-left" color="colorIcon" start />
+            <span class="text-caption"> Voltar </span>
+          </Button>
         </v-col>
       </v-row>
     </v-card-title>
@@ -41,7 +40,7 @@
               font-size-content="1.1"
               :content="`${dayjs($single.Schedule[0]?.scheduleDate).format(
                 'DD/MM/YYYY'
-              )} as ${$single.Schedule[0].scheduleHour}`"
+              )} as ${$single?.Schedule?.[0]?.scheduleHour}`"
               :show-divider="false"
             />
           </div>
@@ -63,19 +62,20 @@
                   : 'Laudo médico Pendente Assinatura'
               }`"
             />
-            <v-btn
+            <Button
               v-if="
                 $single?.PatientConsultationReport &&
                 $single?.PatientConsultationReport?.status === 'signed'
               "
               class="text-none font-weight-bold"
-              prepend-icon="mdi-file-document-edit"
               @click="handleDownloadSignedFile($single)"
-              variant="text"
               size="small"
+              variant="outlined"
+              color="white"
             >
-              Baixar Laudo
-            </v-btn>
+              <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
+              <span class="text-caption"> Baixar Laudo </span>
+            </Button>
           </div>
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
@@ -118,7 +118,22 @@
         "
         cols="12"
       >
-        <v-btn
+        <Button
+          v-if="
+            $single?.PatientConsultationReport &&
+            $single?.PatientConsultationReport?.status === 'signed'
+          "
+          class="text-none font-weight-bold"
+          @click="handleDownloadSignedFile($single)"
+          size="small"
+          variant="outlined"
+          color="primary"
+        >
+          <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
+          <span class="text-caption"> Baixar Laudo </span>
+        </Button>
+
+        <!-- <v-btn
           class="text-none font-weight-bold"
           prepend-icon="mdi-file-document-edit"
           @click="handleDownloadSignedFile($single)"
@@ -127,7 +142,7 @@
           size="small"
         >
           Baixar Laudo
-        </v-btn>
+        </v-btn> -->
       </v-col>
       <v-col cols="12">
         <SolicitationDetailsMedicReportVinculado :data="$single" />

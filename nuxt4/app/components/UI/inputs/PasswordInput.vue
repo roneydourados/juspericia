@@ -23,7 +23,6 @@
 </template>
 
 <script lang="ts" setup>
-import { z } from "zod";
 import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 
@@ -82,30 +81,31 @@ const showPassword = ref(false);
 const fieldName = uuidv7();
 
 const validationRules = computed(() => {
-  let schema = z.string();
-
-  if (props.required) {
-    schema = schema.min(1, "Campo não pode ser vazio!");
-  }
-
-  if (props.min) {
-    schema = schema.min(props.min, `Mínimo de ${props.min} caracteres.`);
-  }
-
-  if (props.strong) {
-    schema = schema
-      .min(8, "Mínimo de 8 caracteres.")
-      .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula.")
-      .regex(/[0-9]/, "A senha deve conter pelo menos um número.")
-      .regex(
-        /[^A-Za-z0-9]/,
-        "A senha deve conter pelo menos um caractere especial (!@&$)."
-      );
-  }
-
   return (value: string) => {
-    const result = schema.safeParse(value);
-    return result.success ? true : result.error.message;
+    if (props.required && (!value || value.length === 0)) {
+      return "Campo não pode ser vazio!";
+    }
+
+    if (props.min && value.length < props.min) {
+      return `Mínimo de ${props.min} caracteres.`;
+    }
+
+    if (props.strong) {
+      if (value.length < 8) {
+        return "Mínimo de 8 caracteres.";
+      }
+      if (!/[A-Z]/.test(value)) {
+        return "A senha deve conter pelo menos uma letra maiúscula.";
+      }
+      if (!/[0-9]/.test(value)) {
+        return "A senha deve conter pelo menos um número.";
+      }
+      if (!/[^A-Za-z0-9]/.test(value)) {
+        return "A senha deve conter pelo menos um caractere especial (!@&$).";
+      }
+    }
+
+    return true;
   };
 });
 

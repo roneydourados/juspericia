@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center">
+  <div class="d-flex flex-column">
     <AutoCompleteInput
       v-model="value"
       v-model:search="search"
@@ -38,19 +38,11 @@
         </div>
       </template>
     </AutoCompleteInput>
-    <div v-if="showNewButton" class="mt-n6 ml-2">
-      <v-tooltip text="Novo" content-class="tooltip-background">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            v-bind="props"
-            icon="mdi-plus"
-            size="x-small"
-            color="info"
-            flat
-            @click="showForm = true"
-          />
-        </template>
-      </v-tooltip>
+    <div v-if="showNewButton" class="mt-n3">
+      <Button size="small" color="info" variant="text" @click="showForm = true">
+        <v-icon icon="mdi-plus" size="22" start />
+        <span class="font-weight-bold text-caption">Novo Paciente</span>
+      </Button>
     </div>
     <PatientForm
       :show="showForm"

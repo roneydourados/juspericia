@@ -1,51 +1,47 @@
 <template>
-  <AutoCompleteInput
-    v-model="value"
-    v-model:search="search"
-    :label="label"
-    placeholder="Digite algo para pesquisar..."
-    item-title="profileName"
-    return-object
-    :required="required"
-    icon="mdi-magnify"
-    :items="$all"
-    :loading="loadingSearch"
-    @update:model-value="$emit('update:modelValue', $event)"
-    @click:clear="$emit('clear')"
-    :clearable="clearable"
-    :disabled="disabled"
-  >
-    <template #item="{ item, props }">
-      <v-list-item
-        v-bind="props"
-        :title="item.raw.profileName"
-        :subtitle="item.raw.type"
-        density="compact"
-      >
-      </v-list-item>
-    </template>
-
-    <template #selection="{ item }">
-      <div class="d-flex align-center">
-        <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.profileName }}
-        </span>
-      </div>
-    </template>
-  </AutoCompleteInput>
-
-  <div v-if="showNewButton" cols="12" lg="2">
-    <v-tooltip text="Novo" content-class="tooltip-background">
-      <template v-slot:activator="{ props }">
-        <v-btn
+  <div class="d-flex flex-column">
+    <AutoCompleteInput
+      v-model="value"
+      v-model:search="search"
+      :label="label"
+      placeholder="Digite algo para pesquisar..."
+      item-title="profileName"
+      return-object
+      :required="required"
+      icon="mdi-magnify"
+      :items="$all"
+      :loading="loadingSearch"
+      @update:model-value="$emit('update:modelValue', $event)"
+      @click:clear="$emit('clear')"
+      :clearable="clearable"
+      :disabled="disabled"
+    >
+      <template #item="{ item, props }">
+        <v-list-item
           v-bind="props"
-          icon="mdi-plus"
-          size="x-small"
-          color="info"
-          flat
-        />
+          :title="item.raw.profileName"
+          :subtitle="item.raw.type"
+          density="compact"
+        >
+        </v-list-item>
       </template>
-    </v-tooltip>
+
+      <template #selection="{ item }">
+        <div class="d-flex align-center">
+          <span class="ml-2 d-inline-block text-truncate">
+            {{ item.raw.profileName }}
+          </span>
+        </div>
+      </template>
+    </AutoCompleteInput>
+
+    <div v-if="showNewButton" class="mt-n3">
+      <Button size="small" color="info" variant="text" @click="showForm = true">
+        <v-icon icon="mdi-plus" size="22" start />
+        <span class="font-weight-bold text-caption">Novo Vendedor</span>
+      </Button>
+    </div>
+    <SellerForm :show="showForm" width="800" title="Vendedor" />
   </div>
 </template>
 
@@ -101,6 +97,7 @@ const profileSellerStore = useProfileStore();
 
 const search = ref("");
 const loadingSearch = ref(false);
+const showForm = ref(false);
 
 const $all = computed(() => profileSellerStore.$profileSellers);
 

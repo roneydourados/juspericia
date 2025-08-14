@@ -104,7 +104,18 @@
               />
               <div class="d-flex justify-space-between flex-wrap w-100 px-2">
                 <strong> Documentos: </strong>
-                <v-btn
+                <Button
+                  class="text-none font-weight-bold"
+                  @click="($refs.fileInput as HTMLInputElement).click()"
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                >
+                  <v-icon icon="mdi-paperclip" color="colorIcon" start />
+                  <span class="text-caption"> Novo documento </span>
+                </Button>
+
+                <!-- <v-btn
                   color="primary"
                   flat
                   class="text-none"
@@ -113,7 +124,7 @@
                   @click="($refs.fileInput as HTMLInputElement).click()"
                 >
                   Novo documento
-                </v-btn>
+                </v-btn> -->
               </div>
             </div>
             <div v-for="item in form.files" class="w-100 mt-4">
@@ -139,7 +150,29 @@
             </v-switch>
             <v-divider class="mt-4" />
             <div class="d-flex mt-4" style="gap: 0.5rem">
-              <v-btn
+              <Button
+                class="text-none font-weight-bold"
+                size="small"
+                color="primary"
+                type="submit"
+                :disabled="!form.factsRealityConfirm"
+              >
+                <v-icon icon="mdi-paperclip" color="colorIcon" start />
+                <span class="text-caption"> Enviar </span>
+              </Button>
+
+              <Button
+                class="text-none font-weight-bold"
+                @click="handleClose"
+                size="small"
+                color="red"
+                type="submit"
+              >
+                <v-icon icon="mdi-cancel" color="white" start />
+                <span class="text-caption"> Enviar </span>
+              </Button>
+
+              <!-- <v-btn
                 prepend-icon="mdi-check"
                 color="primary"
                 class="text-none"
@@ -149,8 +182,8 @@
                 :disabled="!form.factsRealityConfirm"
               >
                 Enviar
-              </v-btn>
-              <v-btn
+              </v-btn> -->
+              <!-- <v-btn
                 prepend-icon="mdi-cancel"
                 class="text-none"
                 size="small"
@@ -159,7 +192,7 @@
                 @click="handleClose"
               >
                 Cancelar
-              </v-btn>
+              </v-btn> -->
             </div>
           </v-col>
         </v-row>
@@ -428,7 +461,7 @@ const handleFileUpload = (event: Event) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const exists = form.value.files.some(
-        (attachment) => attachment.fileName === file.name
+        (attachment) => attachment.fileName === (file?.name ?? "")
       );
       if (exists) {
         // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
@@ -437,7 +470,7 @@ const handleFileUpload = (event: Event) => {
       form.value.files.push({
         fileCategory: "solicitation-consultation",
         fileData: file,
-        fileName: file.name,
+        fileName: file?.name ?? "unnamed_file",
       });
     }
   } catch (error) {

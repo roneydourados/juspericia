@@ -14,11 +14,11 @@
     >
       <v-icon
         :icon="tabitem.icon"
-        :size="mobile ? '30' : '24'"
+        :size="mobile ? '30' : '20'"
         :start="!mobile"
       />
       <div class="d-flex align-center">
-        <span v-if="!mobile">
+        <span v-if="!mobile" class="text-subtitle-2">
           {{ tabitem.title }}
         </span>
 
@@ -29,7 +29,7 @@
 
   <v-tabs-window v-model="tab">
     <v-tabs-window-item
-      v-for="index in tabs.length"
+      v-for="(tabitem, index) in tabs"
       :key="index"
       :value="index + 1"
       class="pa-4"
