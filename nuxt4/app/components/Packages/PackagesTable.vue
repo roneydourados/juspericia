@@ -24,8 +24,8 @@
           size="small"
           @click="router.back()"
         >
-          <v-icon icon="mdi-arrow-left" start color="darkText" />
-          <span class="text-caption text-darkText"> Voltar </span>
+          <v-icon icon="mdi-arrow-left" color="darkText" />
+          <span class="text-darkText text-caption"> Voltar </span>
         </Button>
         <Button color="primary" @click="showForm = true" size="small">
           <v-icon icon="mdi-plus" start color="colorIcon" />

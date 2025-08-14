@@ -1,11 +1,8 @@
 <template>
   <Card>
-    <template #title>
-      <span> Aviliações dos médicos </span>
-    </template>
     <template #content>
       <Table
-        title=""
+        title="Aviliações dos médicos"
         :headers="headers"
         :items="$dash?.medicRate"
         :showCrud="false"
@@ -14,7 +11,7 @@
           <InfoLabel
             :content="item.medic"
             :show-divider="false"
-            font-size="1"
+            font-size="0.8"
           />
         </template>
         <template v-slot:item.rate="{ item }">

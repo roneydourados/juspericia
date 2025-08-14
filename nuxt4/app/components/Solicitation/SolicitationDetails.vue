@@ -10,14 +10,15 @@
         </v-col>
         <v-col cols="12" lg="1">
           <Button
-            color="primary"
-            size="small"
             variant="outlined"
+            color="grey"
+            class="text-none"
+            size="small"
             @click="router.back()"
             v-if="showVoltar"
           >
-            <v-icon icon="mdi-arrow-left" color="colorIcon" start />
-            <span class="text-caption"> Voltar </span>
+            <v-icon icon="mdi-arrow-left" color="darkText" start />
+            <span class="text-darkText text-caption"> Voltar </span>
           </Button>
         </v-col>
       </v-row>

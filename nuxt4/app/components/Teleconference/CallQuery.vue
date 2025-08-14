@@ -2,25 +2,25 @@
   <v-card flat class="pa-4 py-4">
     <!-- <div ref="root" /> -->
     <v-card-actions class="d-flex justify-end px-12">
-      <v-btn
+      <Button
+        variant="outlined"
+        color="grey"
         class="text-none"
-        variant="flat"
-        color="primary"
+        size="small"
         @click="handleClose"
       >
-        <v-icon icon="mdi-arrow-left" start />
-        <strong>Voltar</strong>
-      </v-btn>
-
-      <v-btn
+        <v-icon icon="mdi-arrow-left" color="darkText" start />
+        <span class="text-darkText text-caption"> Voltar </span>
+      </Button>
+      <Button
         class="text-none"
         variant="flat"
         color="success"
         @click="handleClose"
       >
         <v-icon icon="mdi-contain-end" start />
-        <strong>Finalizar consulta</strong>
-      </v-btn>
+        <strong class="text-caption">Finalizar consulta</strong>
+      </Button>
     </v-card-actions>
   </v-card>
   <DialogLoading :dialog="loading" />

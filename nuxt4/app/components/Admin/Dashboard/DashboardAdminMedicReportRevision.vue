@@ -1,12 +1,14 @@
 <template>
   <Card>
-    <template #title>
-      <span> Revisão de laudo médico </span>
-    </template>
     <template #content>
-      <Table title="" :headers="headers" :items="$medics" :showCrud="false">
+      <Table
+        title="Revisão de laudo médico"
+        :headers="headers"
+        :items="$medics"
+        :showCrud="false"
+      >
         <template v-slot:item.name="{ item }">
-          <InfoLabel :title="item.name" :show-divider="false" font-size="1" />
+          <InfoLabel :title="item.name" :show-divider="false" font-size="0.8" />
         </template>
         <template v-slot:item.value="{ item }">
           <div class="d-flex align-center">

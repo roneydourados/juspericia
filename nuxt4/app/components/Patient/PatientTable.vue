@@ -90,7 +90,7 @@
       <template v-slot:item.name="{ item }">
         <span
           style="cursor: pointer"
-          class="d-flex align-center text-info"
+          class="d-flex align-center"
           @click="handlePatientInfo(item.publicId)"
         >
           <v-icon
@@ -106,7 +106,7 @@
         </span>
       </template>
       <template v-slot:item.User.name="{ item }">
-        <span style="cursor: pointer" class="d-flex align-center text-info">
+        <span style="cursor: pointer" class="d-flex align-center">
           <v-icon
             icon="mdi-account-tie-outline"
             size="24"

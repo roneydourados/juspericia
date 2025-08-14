@@ -38,6 +38,7 @@ body {
 .v-data-table,
 .v-data-table-virtual {
   background: transparent !important;
+  color: #002c9b !important;
 }
 .v-data-table .v-data-table__wrapper,
 .v-data-table-virtual .v-data-table__wrapper {

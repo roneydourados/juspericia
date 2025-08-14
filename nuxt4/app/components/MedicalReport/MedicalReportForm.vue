@@ -36,17 +36,17 @@
 
                 <div class="d-flex flex-wrap" style="gap: 0.54rem">
                   <Button
-                    variant="flat"
-                    color="primary"
+                    variant="outlined"
+                    color="grey"
+                    class="text-none"
                     size="small"
                     @click="emit('close')"
                   >
-                    <v-icon icon="mdi-arrow-left" color="colorIcon" />
-                    <span class="text-caption"> Voltar </span>
+                    <v-icon icon="mdi-arrow-left" color="darkText" />
+                    <span class="text-darkText text-caption"> Voltar </span>
                   </Button>
                   <Button
                     color="primary"
-                    prepend-icon="mdi-check"
                     type="submit"
                     size="small"
                     class="text-none"
@@ -73,16 +73,15 @@
                     class="d-flex justify-space-between flex-wrap w-100 px-2"
                   >
                     <span> Anexos: </span>
-                    <v-btn
+                    <Button
+                      variant="outlined"
                       color="primary"
-                      flat
-                      class="text-none"
                       size="small"
-                      prepend-icon="mdi-paperclip"
                       @click="($refs.fileInput as HTMLInputElement).click()"
                     >
-                      Novo anexo
-                    </v-btn>
+                      <v-icon icon="mdi-paperclip" color="colorIcon" />
+                      <span class="text-caption"> Novo Anexo </span>
+                    </Button>
                   </div>
                 </v-card-title>
                 <v-card-text>

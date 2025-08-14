@@ -122,12 +122,11 @@
       <template v-slot:item.reportStatus="{ item }">
         <v-chip
           :color="getReportStatusColor(item.reportStatus).color"
-          label
           variant="flat"
           @click="handleShowConsultationRoom(item)"
         >
           <v-icon :icon="getReportStatusColor(item.reportStatus).icon" start />
-          <strong style="font-size: 0.8rem">
+          <strong style="font-size: 0.7rem">
             {{
               item.reportStatus === "empty"
                 ? "Sem laudo (clique para consulta)"
@@ -291,28 +290,6 @@
     </span>
   </Dialog>
   <MedicalReportJustifies v-model="showJustificationCorrection" />
-  <!-- <Dialog
-    title="Justificativa de correção"
-    :dialog="showJustificationCorrection"
-    @confirm="showJustificationCorrection = false"
-    :show-cancel="false"
-    ok-text="OK"
-  >
-    <div class="d-flex flex-column">
-      <strong class="mb-2">Justificativa do advogado:</strong>
-      <span>
-        {{ selectedReport?.reasonCorrection }}
-      </span>
-      <strong class="mt-4">O que fazer ?</strong>
-      <strong class="mt-2">
-        Para corrigir clique em editar/corrigir
-        <v-icon icon="mdi-clock-edit-outline" size="20" start color="orange" />.
-        Se o laudo já foi assinado, clicar em cancelar assinatura
-        <v-icon icon="mdi-pencil-off-outline" size="20" color="danger" start />
-        antes.
-      </strong>
-    </div>
-  </Dialog> -->
 </template>
 
 <script setup lang="ts">

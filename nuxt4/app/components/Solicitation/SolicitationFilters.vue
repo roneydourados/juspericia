@@ -9,26 +9,26 @@
     >
       <v-card flat>
         <v-card-title class="d-flex align-center" style="gap: 0.5rem">
-          <v-btn
-            variant="flat"
-            color="info"
+          <Button
+            variant="outlined"
+            color="grey"
             class="text-none"
             size="small"
             @click="drawer = false"
           >
-            <v-icon icon="mdi-arrow-left"> </v-icon>
-            Voltar
-          </v-btn>
-          <v-btn
+            <v-icon icon="mdi-arrow-left" color="darkText" start />
+            <span class="text-darkText text-caption"> Voltar </span>
+          </Button>
+          <Button
             variant="flat"
             color="primary"
             class="text-none"
             size="small"
             @click="filter"
           >
-            <v-icon icon="mdi-filter-outline"> </v-icon>
-            Filtrar
-          </v-btn>
+            <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+            <span class="text-caption"> Filtrar </span>
+          </Button>
         </v-card-title>
         <v-card-text class="py-8">
           <v-row dense>

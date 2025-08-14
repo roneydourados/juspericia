@@ -18,37 +18,37 @@
               class="d-flex align-center"
               style="gap: 0.5rem"
             >
-              <v-btn
-                variant="flat"
-                color="info"
-                prepend-icon="mdi-arrow-left"
-                @click="$emit('close')"
+              <Button
+                variant="outlined"
+                color="grey"
                 class="text-none"
                 size="small"
+                @click="emit('close')"
               >
-                Voltar
-              </v-btn>
+                <v-icon icon="mdi-arrow-left" color="darkText" start />
+                <span class="text-darkText text-caption"> Voltar </span>
+              </Button>
 
-              <v-btn
-                color="info"
-                prepend-icon="mdi-printer"
+              <Button
+                color="primary"
                 size="small"
                 variant="flat"
                 class="text-none"
                 @click="handlePDF"
               >
-                Imprimir
-              </v-btn>
-              <v-btn
+                <v-icon icon="mdi-printer" color="colorIcon" start />
+                <span class="text-caption"> Imprimir </span>
+              </Button>
+              <Button
                 color="primary"
-                prepend-icon="mdi-check"
                 type="submit"
                 size="small"
                 class="text-none"
                 variant="flat"
               >
-                Salvar
-              </v-btn>
+                <v-icon icon="mdi-check" color="colorIcon" start />
+                <span class="text-caption"> Salvar </span>
+              </Button>
             </v-col>
           </v-row>
         </v-card-title>
