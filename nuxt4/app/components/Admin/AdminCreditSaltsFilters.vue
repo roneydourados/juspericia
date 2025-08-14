@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card flat color="transparent">
     <v-card-text>
       <v-row dense>
         <v-col cols="12" lg="2">
