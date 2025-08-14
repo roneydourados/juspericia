@@ -1,6 +1,6 @@
 <template>
   <v-row dense align="center">
-    <v-col cols="12" lg="3">
+    <v-col cols="12" :lg="mobile ? '12' : '3'">
       <v-card rounded="lg" flat color="transparent">
         <v-card-title>
           <v-row dense class="pa-8" justify="center">
@@ -103,16 +103,18 @@
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="9">
+    <v-col v-if="!mobile" cols="12" lg="9">
       <div class="background-image" />
     </v-col>
   </v-row>
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
 const auth = useAuthStore();
 const systemParametersStore = useSystemParametersStore();
 const config = useRuntimeConfig();
+const { mobile } = useDisplay();
 const cloudFlareToken = ref("");
 const turnstile = ref();
 const rounter = useRouter();
