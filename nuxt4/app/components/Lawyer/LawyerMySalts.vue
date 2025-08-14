@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-card flat rounded="lg">
+    <v-card flat rounded="lg" color="transparent">
       <v-card-title>
         <HeaderPage title="Meus saldos" font-size="1.5rem" />
       </v-card-title>
       <v-card-text>
         <v-row dense>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl">
+            <v-card flat elevation="8" rounded="xl" color="transparent">
               <v-card-title>
                 <div class="text-subtitle-2 d-flex justify-space-between px-4">
                   <span class="text-primary"> Saldo Créditos </span>
@@ -87,7 +87,7 @@
             :show-crud="false"
           >
             <template #item.status="{ item }">
-              <v-chip label :color="getStatusName(item).color">
+              <v-chip :color="getStatusName(item).color">
                 <v-icon
                   :color="getStatusName(item).color"
                   :icon="getStatusName(item).icon"

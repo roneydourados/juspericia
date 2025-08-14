@@ -73,7 +73,9 @@
         variant="flat"
         :color="getTransactionStatusDetails(item).color"
       >
-        {{ getTransactionStatusDetails(item).label }}
+        <span class="text-caption">
+          {{ getTransactionStatusDetails(item).label }}
+        </span>
       </v-chip>
     </template>
     <template v-slot:item.packgeSaleValue="{ item }">

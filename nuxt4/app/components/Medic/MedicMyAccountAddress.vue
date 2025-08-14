@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="lg">
+  <v-card flat rounded="lg" color="transparent">
     <v-card-title>
       <span class="text-subtitle-1"> Dados de endereço </span>
     </v-card-title>

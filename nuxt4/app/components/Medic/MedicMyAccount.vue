@@ -1,11 +1,17 @@
 <template>
   <div>
-    <v-card class="mx-auto" flat rounded="lg" max-width="1200">
+    <v-card
+      class="mx-auto"
+      flat
+      rounded="lg"
+      max-width="1200"
+      color="transparent"
+    >
       <v-card-title>
         <HeaderPage title="Minha Conta" />
       </v-card-title>
       <v-card-text class="px-6">
-        <v-row dende>
+        <v-row dense>
           <v-col cols="12" lg="3">
             <v-list @click:select="handleMenuClick($event)">
               <v-list-item
@@ -154,5 +160,10 @@ const handleUpdate = async () => {
 .selected-item {
   background-color: rgb(var(--v-theme-backMenu)) !important;
   color: rgb(var(--v-theme-itemInternalMenu)) !important;
+}
+
+.v-list,
+.v-list-item {
+  background: transparent !important;
 }
 </style>

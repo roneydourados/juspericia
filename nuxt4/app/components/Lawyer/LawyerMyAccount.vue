@@ -1,19 +1,26 @@
 <template>
   <div>
-    <v-card class="mx-auto" flat rounded="lg" max-width="1200" height="500">
+    <v-card
+      class="mx-auto"
+      flat
+      rounded="lg"
+      max-width="1200"
+      height="500"
+      color="transparent"
+    >
       <v-card-title>
         <HeaderPage title="Minha Conta" />
       </v-card-title>
       <v-card-text class="px-6">
-        <v-row dende>
+        <v-row dense>
           <v-col cols="12" lg="3">
-            <v-list @click:select="handleMenuClick($event)">
+            <v-list color="transparent" @click:select="handleMenuClick($event)">
               <v-list-item
                 v-for="(item, i) in itemsList"
                 :key="i"
                 :value="item.title"
                 :class="{ 'selected-item': selectedItem === item.title }"
-                color="primary"
+                color="transparent"
               >
                 <template v-slot:prepend>
                   <v-icon :icon="item.icon"></v-icon>
@@ -191,5 +198,10 @@ const handleUpdate = async () => {
 .selected-item {
   background-color: rgb(var(--v-theme-backMenu)) !important;
   color: rgb(var(--v-theme-itemInternalMenu)) !important;
+}
+
+.v-list,
+.v-list-item {
+  background: transparent !important;
 }
 </style>

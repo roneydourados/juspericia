@@ -33,16 +33,24 @@ body {
 
 .v-toolbar {
   z-index: 100 !important;
-  /* colocar esta classe assim o v-app
-   Não fica por cima das notificações do 
-   notivue
-   */
 }
 
-/* .v-text-field .v-label {
-  font-weight: 400;
-} */
+.v-data-table,
+.v-data-table-virtual {
+  background: transparent !important;
+}
+.v-data-table .v-data-table__wrapper,
+.v-data-table-virtual .v-data-table__wrapper {
+  background: transparent !important;
+}
+.v-data-table thead,
+.v-data-table-virtual thead,
+.v-data-table .v-data-table-header,
+.v-data-table-virtual .v-data-table-header {
+  background: transparent !important;
+}
 
-/* .v-field__input {
-  font-weight: 500;
-} */
+.v-data-table__th,
+.v-data-table-header__th {
+  background: transparent !important;
+}

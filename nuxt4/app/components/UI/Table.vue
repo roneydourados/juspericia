@@ -1,5 +1,11 @@
 <template>
-  <v-card class="mx-auto pa-4" flat elevation="0" rounded="lg">
+  <v-card
+    class="mx-auto pa-4"
+    flat
+    elevation="0"
+    rounded="lg"
+    color="transparent"
+  >
     <v-row dense v-if="title">
       <v-col cols="12" class="mb-4">
         <HeaderPage :title="title" :font-size="fontSize" />
@@ -60,67 +66,70 @@
     <v-row align="center">
       <slot name="filters" />
     </v-row>
+    <v-card-text>
+      <v-data-table
+        v-if="!isVirtual"
+        v-model="value"
+        v-model:page="page"
+        :item-value="itemValue"
+        :headers="headers"
+        :items="items"
+        :items-per-page="itemsPerPage"
+        :show-select="showSelect"
+        return-object
+        :loading="loading"
+        sticky
+        fixed-header
+        :hide-default-header="hideDfaultHeader"
+        no-data-text="Nenhum dado encontrado"
+        loading-text="Buscando dados aguarde..."
+        select-strategy="all"
+        @update:model-value="$emit('update:modelValue', $event)"
+        color="transparent"
+      >
+        <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+          <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+          <slot v-else :name="name" v-bind="slotProps" />
+        </template>
 
-    <v-data-table
-      v-if="!isVirtual"
-      v-model="value"
-      v-model:page="page"
-      :item-value="itemValue"
-      :headers="headers"
-      :items="items"
-      :items-per-page="itemsPerPage"
-      :show-select="showSelect"
-      return-object
-      :loading="loading"
-      sticky
-      fixed-header
-      :hide-default-header="hideDfaultHeader"
-      no-data-text="Nenhum dado encontrado"
-      loading-text="Buscando dados aguarde..."
-      select-strategy="all"
-      @update:model-value="$emit('update:modelValue', $event)"
-    >
-      <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
-        <slot v-if="slotProps" :name="name" v-bind="slotProps" />
-        <slot v-else :name="name" v-bind="slotProps" />
-      </template>
-
-      <template v-slot:bottom>
-        <v-pagination
-          v-model="page"
-          :length="pageCount"
-          rounded="circle"
-          color="primary"
-          density="comfortable"
-        />
-      </template>
-      <template v-slot:top>
-        <slot name="top-table" />
-      </template>
-    </v-data-table>
-    <v-data-table-virtual
-      v-else
-      v-model="value"
-      :item-value="itemValue"
-      :headers="headers"
-      :items="items"
-      no-data-text="Nenhum dado encontrado"
-      :show-select="showSelect"
-      :hide-default-header="hideDfaultHeader"
-      return-object
-      :height="`${mobile ? '' : height}`"
-      fixed-header
-      sticky
-      :loading="loading"
-      loading-text="Buscando dados aguarde..."
-      select-strategy="all"
-      @update:model-value="$emit('update:modelValue', $event)"
-    >
-      <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
-        <slot v-if="slotProps" :name="name" v-bind="slotProps" />
-        <slot v-else :name="name" v-bind="slotProps" />
-      </template>
-    </v-data-table-virtual>
+        <template v-slot:bottom>
+          <v-pagination
+            v-model="page"
+            :length="pageCount"
+            rounded="circle"
+            color="primary"
+            density="comfortable"
+          />
+        </template>
+        <template v-slot:top>
+          <slot name="top-table" />
+        </template>
+      </v-data-table>
+      <v-data-table-virtual
+        v-else
+        v-model="value"
+        :item-value="itemValue"
+        :headers="headers"
+        :items="items"
+        no-data-text="Nenhum dado encontrado"
+        :show-select="showSelect"
+        :hide-default-header="hideDfaultHeader"
+        return-object
+        :height="`${mobile ? '' : height}`"
+        fixed-header
+        sticky
+        :loading="loading"
+        loading-text="Buscando dados aguarde..."
+        select-strategy="all"
+        @update:model-value="$emit('update:modelValue', $event)"
+        color="transparent"
+      >
+        <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+          <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+          <slot v-else :name="name" v-bind="slotProps" />
+        </template>
+      </v-data-table-virtual>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -220,3 +229,25 @@ const { value } = useField(fieldName, validationRules, {
   syncVModel: true,
 });
 </script>
+
+<!-- <style>
+.v-data-table,
+.v-data-table-virtual {
+  background: transparent !important;
+}
+.v-data-table .v-data-table__wrapper,
+.v-data-table-virtual .v-data-table__wrapper {
+  background: transparent !important;
+}
+.v-data-table thead,
+.v-data-table-virtual thead,
+.v-data-table .v-data-table-header,
+.v-data-table-virtual .v-data-table-header {
+  background: transparent !important;
+}
+
+.v-data-table__th,
+.v-data-table-header__th {
+  background: transparent !important;
+}
+</style> -->

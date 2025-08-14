@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card flat rounded="lg">
+    <v-card flat rounded="lg" color="transparent">
       <v-card-title class="d-flex justify-space-between pa-4">
         <HeaderPage title="Minhas Indicações" font-size="1.5rem" />
         <Button

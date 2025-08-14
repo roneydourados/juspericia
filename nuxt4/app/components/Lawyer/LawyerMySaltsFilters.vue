@@ -1,5 +1,5 @@
 <template>
-  <v-card flat elevation="0" class="mt-4">
+  <v-card flat elevation="0" class="mt-4" color="transparent">
     <v-card-text class="py-12">
       <v-row dense>
         <v-col cols="12" lg="4" class="d-flex" style="gap: 0.5rem">
