@@ -35,17 +35,16 @@
                 </v-btn>
 
                 <div class="d-flex flex-wrap" style="gap: 0.54rem">
-                  <v-btn
+                  <Button
                     variant="flat"
-                    color="info"
-                    prepend-icon="mdi-arrow-left"
-                    class="text-none"
+                    color="primary"
                     size="small"
                     @click="emit('close')"
                   >
-                    Voltar
-                  </v-btn>
-                  <v-btn
+                    <v-icon icon="mdi-arrow-left" color="colorIcon" />
+                    <span class="text-caption"> Voltar </span>
+                  </Button>
+                  <Button
                     color="primary"
                     prepend-icon="mdi-check"
                     type="submit"
@@ -53,8 +52,9 @@
                     class="text-none"
                     variant="flat"
                   >
-                    Salvar
-                  </v-btn>
+                    <v-icon icon="mdi-check" color="colorIcon" />
+                    <span class="text-caption"> Salvar </span>
+                  </Button>
                 </div>
               </v-col>
             </v-row>
@@ -259,7 +259,7 @@ const handleFileUpload = (event: Event) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const exists = attachments.value.some(
-        (attachment) => attachment.fileName === file.name
+        (attachment) => attachment.fileName === (file?.name ?? "")
       );
       if (exists) {
         // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
@@ -268,7 +268,7 @@ const handleFileUpload = (event: Event) => {
       attachments.value.push({
         fileCategory: "medical-report",
         fileData: file,
-        fileName: file.name,
+        fileName: file?.name ?? "",
       });
     }
   } catch (error) {
@@ -299,12 +299,6 @@ const handleDeleteAttachment = async () => {
     loading.value = false;
   }
 };
-
-// const handleDeleteAttachment = (item: FileProps) => {
-//   attachments.value = attachments.value.filter(
-//     (attachment) => attachment !== item
-//   );
-// };
 
 const getFileDelete = (item: FileProps) => {
   selectedFile.value = item;

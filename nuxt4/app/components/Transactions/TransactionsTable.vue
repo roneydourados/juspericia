@@ -98,21 +98,23 @@
         variant="flat"
         :color="getTransactionStatusDetails(item).color"
       >
-        {{ getTransactionStatusDetails(item).label }}
+        <span class="text-caption">
+          {{ getTransactionStatusDetails(item).label }}
+        </span>
       </v-chip>
     </template>
     <template #item.actions="{ item }">
-      <v-btn
+      <Button
         v-if="item.status === 'PENDING'"
-        variant="flat"
-        color="error"
+        variant="outlined"
+        color="red"
         size="small"
         class="text-none"
         @click="getTransactionCancel(item.publicId)"
       >
         <v-icon icon="mdi-cancel" start />
         <span class="text-caption">Cancelar</span>
-      </v-btn>
+      </Button>
     </template>
   </Table>
   <DialogLoading :dialog="loading" />
