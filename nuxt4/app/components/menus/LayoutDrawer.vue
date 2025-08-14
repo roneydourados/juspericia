@@ -27,7 +27,7 @@
         @click="handleClick"
       >
         <template #title>
-          <div class="d-flex ma-3">
+          <div class="d-flex align-center ma-3">
             <v-icon :icon="item.icon" start color="colorIcon" />
             <span style="font-size: 0.9rem; color: #ffff">
               {{ item.title }}
