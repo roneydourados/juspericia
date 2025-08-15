@@ -226,15 +226,6 @@
       </v-btn>
     </template>
   </Table>
-  <!-- <Dialog
-    title="Pagar comissão"
-    :dialog="showPaidComissionDialog"
-    @cancel="showPaidComissionDialog = false"
-    @confirm="handlePaidComissions"
-    :show-cancel="true"
-  >
-    <strong>Confirma o pagamento de todas as comssões selecionadas ?</strong>
-  </Dialog> -->
   <Dialog
     title="Cancelar comissão"
     :dialog="showCancelComissionDialog"
@@ -255,7 +246,6 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-import SelectSearchMedic from "../SelectsSearch/SelectSearchMedic.vue";
 
 const comission = useComissionStore();
 const router = useRouter();
