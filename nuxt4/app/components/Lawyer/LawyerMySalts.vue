@@ -7,7 +7,12 @@
       <v-card-text>
         <v-row dense>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl" color="transparent">
+            <LawyerMySaltsTotalsCard
+              :value="$salts?.totals?.total"
+              title="Saldo Créditos"
+              color="#c8e040"
+            />
+            <!-- <v-card flat elevation="8" rounded="xl" color="transparent">
               <v-card-title>
                 <div class="text-subtitle-2 d-flex justify-space-between px-4">
                   <span class="text-primary"> Saldo Créditos </span>
@@ -26,10 +31,15 @@
                   {{ amountFormated($salts?.totals?.total ?? 0, true) }}
                 </div>
               </v-card-text>
-            </v-card>
+            </v-card> -->
           </v-col>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl">
+            <LawyerMySaltsTotalsCard
+              :value="$salts?.totals?.totalPending"
+              title="Total Pendente"
+              color="#0F91C3"
+            />
+            <!-- <v-card flat elevation="8" rounded="xl">
               <v-card-title>
                 <div class="text-subtitle-2 d-flex justify-space-between px-4">
                   <span class="text-primary">Total Pendente </span>
@@ -48,10 +58,16 @@
                   {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
                 </div>
               </v-card-text>
-            </v-card>
+            </v-card> -->
           </v-col>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl">
+            <LawyerMySaltsTotalsCard
+              :value="$salts?.totals?.totalExpired"
+              title="Total expirado"
+              color="#F6BF0C"
+            />
+
+            <!-- <v-card flat elevation="8" rounded="xl">
               <v-card-title>
                 <div class="text-subtitle-2 d-flex justify-space-between px-4">
                   <span class="text-primary">Total expirado</span>
@@ -70,7 +86,7 @@
                   {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
                 </div>
               </v-card-text>
-            </v-card>
+            </v-card> -->
           </v-col>
         </v-row>
         <v-row dense>
