@@ -5,6 +5,7 @@
         title="Pendente"
         color="#c8e040"
         icon="mdi-currency-usd"
+        icon-color="warning"
       >
         <div
           class="mt-4 text-primary"
@@ -19,6 +20,7 @@
         title="Total Pendente"
         color="#0F91C3"
         icon="mdi-currency-usd"
+        icon-color="success"
       >
         <div
           class="mt-4 text-primary"

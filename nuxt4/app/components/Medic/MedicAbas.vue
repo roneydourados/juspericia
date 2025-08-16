@@ -1,11 +1,14 @@
 <template>
-  <v-card>
-    <v-tabs v-model="tab" bg-color="primary">
-      <v-tab value="medic" class="text-none">Médicos</v-tab>
-      <v-tab value="comission" class="text-none">Comissão consulta</v-tab>
-    </v-tabs>
-
+  <v-card variant="flat" rounded="xl" elevation="8">
     <v-card-text>
+      <v-tabs v-model="tab" color="primary">
+        <v-tab value="medic" class="text-none">
+          <span class="font-weight-bold text-primary"> Médicos </span>
+        </v-tab>
+        <v-tab value="comission" class="text-none">
+          <span class="font-weight-bold text-primary"> Comissão consulta </span>
+        </v-tab>
+      </v-tabs>
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="medic">
           <MedicTable />

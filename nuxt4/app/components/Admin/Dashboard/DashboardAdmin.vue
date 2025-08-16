@@ -9,11 +9,8 @@
       <Tabs
         v-model="tabDate"
         :tabs="tabsDate"
-        align-tabs="center"
         @update:model-value="handleDateChange"
       />
-      <!-- <DashboardAdminFilters v-model:filters="modelFilters" /> -->
-      <v-divider></v-divider>
     </v-card-title>
     <v-card-text class="px-12">
       <v-row dense>
@@ -61,22 +58,22 @@ const dash = useUserAdminStore();
 const tabsDate = ref<TabProps[]>([
   {
     title: "Hoje",
-    icon: "mdi-check-decagram-outline",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Semana",
-    icon: "mdi-chart-line-variant",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Mês",
-    icon: "mdi-calendar-month-outline",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Ano",
-    icon: "mdi-chart-bell-curve-cumulative",
+    icon: "",
     colorIcon: "colorIcon",
   },
 ]);
@@ -84,32 +81,32 @@ const tabsDate = ref<TabProps[]>([
 const tabsRegion = ref<TabProps[]>([
   {
     title: "Todos",
-    icon: "mdi-poll",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Norte",
-    icon: "mdi-chart-arc",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Nordeste",
-    icon: "mdi-chart-donut",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Centro-Oeste",
-    icon: "mdi-chart-sankey",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Sul",
-    icon: "mdi-chart-bell-curve",
+    icon: "",
     colorIcon: "colorIcon",
   },
   {
     title: "Sudeste",
-    icon: "mdi-chart-multiline",
+    icon: "",
     colorIcon: "colorIcon",
   },
 ]);

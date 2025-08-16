@@ -1,5 +1,5 @@
 <template>
-  <v-row dense>
+  <v-row>
     <v-col cols="12" class="pa-6">
       <HeaderPage title="Administração" font-size="1.5rem" />
     </v-col>
@@ -11,12 +11,12 @@
         height="100%"
         @click="handlClick('/admin/medics')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon icon="mdi-stethoscope" size="32" color="white" />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Cadastro de médicos. Cadastrar/Administrar médicos parceiros que
             serão prestadores de atendimento via telemedicina.
           </p>
@@ -31,12 +31,12 @@
         height="100%"
         @click="handlClick('/admin/admins')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon icon="mdi-shield-account" size="32" color="white" />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Usuários administradores. Gestão dos usuários com acesso total as
             funcionalidades do sistema.
           </p>
@@ -51,12 +51,12 @@
         height="100%"
         @click="handlClick('/admin/sellers')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon icon="mdi-account-tie-outline" size="32" color="white" />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Usuários vendedores. Gestão dos usuários vendedores.
           </p>
         </div>
@@ -70,12 +70,12 @@
         height="100%"
         @click="handlClick('/admin/queries')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon icon="mdi-file-find-outline" size="32" color="white" />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Consultas. Cadastro das consultas oferecidas pela plataforma
           </p>
         </div>
@@ -89,8 +89,8 @@
         height="100%"
         @click="handlClick('/admin/packages')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon
               icon="mdi-package-variant-closed-plus"
               size="32"
@@ -98,7 +98,7 @@
             />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Cadastro de pacote de consultas. Gestão de pacotes de consultas
             possibilita a venda de consultas em lote e com preço mais acessível
             ao escritório.
@@ -114,8 +114,8 @@
         height="100%"
         @click="handlClick('/admin/report-models')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon
               icon="mdi-file-chart-check-outline"
               size="32"
@@ -123,7 +123,7 @@
             />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Modelos de laudo. Deixar modelos de laudo médico pré-cadastrados
             para serem utilizados como base no lançamento de um laudo final.
           </p>
@@ -138,12 +138,12 @@
         height="100%"
         @click="handlClick('/admin/parameters')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon icon="mdi-cog-outline" size="32" color="white" />
           </v-avatar>
 
-          <p class="text-subtitle-2 text-darkText text-center">
+          <p class="text-subtitle-2 text-darkText px-6">
             Parametrizações. Configurações gerais do sistema.
           </p>
         </div>
@@ -157,8 +157,8 @@
         height="100%"
         @click="handlClick('/admin/comissions')"
       >
-        <div class="d-flex flex-column align-center">
-          <v-avatar size="60" color="colorIcon" class="mb-2">
+        <div class="d-flex flex-column">
+          <v-avatar size="60" color="colorIcon" class="mb-2 ml-4">
             <v-icon
               icon="mdi-briefcase-account-outline"
               size="32"
