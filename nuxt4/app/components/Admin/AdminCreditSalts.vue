@@ -7,70 +7,46 @@
       <v-card-text>
         <v-row dense>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl">
-              <v-card-title>
-                <div class="text-subtitle-2 d-flex justify-space-between px-4">
-                  <span class="text-primary"> Saldo Créditos </span>
-                  <v-icon
-                    icon="mdi-calendar-clock-outline"
-                    size="30"
-                    color="primary"
-                  />
-                </div>
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <div
-                  class="d-flex text-primary font-weight-bold px-4"
-                  style="font-size: 1.5rem"
-                >
-                  {{ amountFormated($salts?.totals?.total ?? 0, true) }}
-                </div>
-              </v-card-text>
-            </v-card>
+            <CardLeftBorderColor
+              title="Saldo Créditos"
+              color="#c8e040"
+              icon="mdi-calendar-month"
+            >
+              <div
+                class="mt-4 text-primary"
+                style="font-size: 1.88rem; font-weight: 600"
+              >
+                {{ amountFormated($salts?.totals?.total ?? 0, true) }}
+              </div>
+            </CardLeftBorderColor>
           </v-col>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl">
-              <v-card-title>
-                <div class="text-subtitle-2 d-flex justify-space-between px-4">
-                  <span class="text-primary">Total Pendente </span>
-                  <v-icon
-                    icon="mdi-calendar-clock-outline"
-                    size="30"
-                    color="primary"
-                  />
-                </div>
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <div
-                  class="d-flex text-primary font-weight-bold px-4"
-                  style="font-size: 1.5rem"
-                >
-                  {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
-                </div>
-              </v-card-text>
-            </v-card>
+            <CardLeftBorderColor
+              title="Total Pendente"
+              color="#0F91C3"
+              icon="mdi-calendar-month"
+            >
+              <div
+                class="mt-4 text-primary"
+                style="font-size: 1.88rem; font-weight: 600"
+              >
+                {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
+              </div>
+            </CardLeftBorderColor>
           </v-col>
           <v-col cols="12" lg="3">
-            <v-card flat elevation="8" rounded="xl">
-              <v-card-title>
-                <div class="text-subtitle-2 d-flex justify-space-between px-4">
-                  <span class="text-primary">Total expirado</span>
-                  <v-icon
-                    icon="mdi-calendar-clock-outline"
-                    size="30"
-                    color="primary"
-                  />
-                </div>
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <div
-                  class="d-flex text-primary font-weight-bold px-4"
-                  style="font-size: 1.5rem"
-                >
-                  {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
-                </div>
-              </v-card-text>
-            </v-card>
+            <CardLeftBorderColor
+              title="Total expirado"
+              color="#F6BF0C"
+              icon="mdi-calendar-month"
+            >
+              <div
+                class="mt-4 text-primary"
+                style="font-size: 1.88rem; font-weight: 600"
+              >
+                {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
+              </div>
+            </CardLeftBorderColor>
           </v-col>
         </v-row>
         <v-row dense class="py-4">
