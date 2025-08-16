@@ -173,7 +173,7 @@
           <span class="text-caption text-primary"> cancelar </span>
         </Button>
         <Button
-          color="primary"
+          color="grey"
           size="small"
           variant="outlined"
           @click="editItem(solicitation)"
