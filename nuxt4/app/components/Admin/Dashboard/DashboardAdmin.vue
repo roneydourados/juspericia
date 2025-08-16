@@ -15,7 +15,7 @@
       <!-- <DashboardAdminFilters v-model:filters="modelFilters" /> -->
       <v-divider></v-divider>
     </v-card-title>
-    <v-card-text>
+    <v-card-text class="px-12">
       <v-row dense>
         <v-col cols="12">
           <DashboardAdminCards />
@@ -24,7 +24,7 @@
           <DahsboardAdminYearbBillingChart />
         </v-col>
       </v-row>
-      <v-row dense no-gutters>
+      <v-row>
         <v-col cols="12" lg="6">
           <DashboardAdminPaymentFormChart />
         </v-col>
@@ -32,7 +32,7 @@
           <DashboardAdminSolicitationStatus />
         </v-col>
       </v-row>
-      <v-row dense>
+      <v-row>
         <v-col cols="12" lg="4">
           <DashboardAdminMedicHours />
         </v-col>

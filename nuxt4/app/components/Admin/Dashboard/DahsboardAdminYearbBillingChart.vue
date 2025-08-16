@@ -1,5 +1,5 @@
 <template>
-  <Card flat rounded="lg" class="pa-4">
+  <Card flat rounded="lg">
     <template #title>
       <span> Faturamento - {{ currentYear }} </span>
     </template>

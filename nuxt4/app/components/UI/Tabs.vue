@@ -64,3 +64,29 @@ const { mobile } = useDisplay();
 
 const tab = defineModel<Number>();
 </script>
+
+<style scoped>
+.v-tab {
+  color: #1e3c98 !important;
+  font-weight: 800;
+  margin-right: 4px;
+  background-color: #f7f7f7 !important;
+  border-radius: 2.5rem !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.v-tab--selected .v-btn {
+  border-radius: 2rem !important;
+}
+
+.v-tab--selected {
+  background-color: #1e3c98 !important;
+  border-radius: 2.5rem !important;
+}
+
+.v-tab.v-tab--selected {
+  background-color: #1e3c98 !important;
+  color: #fff !important;
+}
+</style>

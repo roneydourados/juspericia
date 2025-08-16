@@ -1,218 +1,175 @@
 <template>
-  <div>
-    <v-card flat rounded="lg" color="transparent">
-      <v-card-title>
-        <HeaderPage title="Meus saldos" font-size="1.5rem" />
-      </v-card-title>
-      <v-card-text>
-        <v-row dense>
-          <v-col cols="12" lg="3">
-            <LawyerMySaltsTotalsCard
-              :value="$salts?.totals?.total"
-              title="Saldo Créditos"
-              color="#c8e040"
-            />
-            <!-- <v-card flat elevation="8" rounded="xl" color="transparent">
-              <v-card-title>
-                <div class="text-subtitle-2 d-flex justify-space-between px-4">
-                  <span class="text-primary"> Saldo Créditos </span>
-                  <v-icon
-                    icon="mdi-calendar-clock-outline"
-                    size="30"
-                    color="primary"
-                  />
-                </div>
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <div
-                  class="d-flex text-primary font-weight-bold px-4"
-                  style="font-size: 1.5rem"
-                >
-                  {{ amountFormated($salts?.totals?.total ?? 0, true) }}
-                </div>
-              </v-card-text>
-            </v-card> -->
-          </v-col>
-          <v-col cols="12" lg="3">
-            <LawyerMySaltsTotalsCard
-              :value="$salts?.totals?.totalPending"
-              title="Total Pendente"
-              color="#0F91C3"
-            />
-            <!-- <v-card flat elevation="8" rounded="xl">
-              <v-card-title>
-                <div class="text-subtitle-2 d-flex justify-space-between px-4">
-                  <span class="text-primary">Total Pendente </span>
-                  <v-icon
-                    icon="mdi-calendar-clock-outline"
-                    size="30"
-                    color="primary"
-                  />
-                </div>
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <div
-                  class="d-flex text-primary font-weight-bold px-4"
-                  style="font-size: 1.5rem"
-                >
-                  {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
-                </div>
-              </v-card-text>
-            </v-card> -->
-          </v-col>
-          <v-col cols="12" lg="3">
-            <LawyerMySaltsTotalsCard
-              :value="$salts?.totals?.totalExpired"
-              title="Total expirado"
-              color="#F6BF0C"
-            />
-
-            <!-- <v-card flat elevation="8" rounded="xl">
-              <v-card-title>
-                <div class="text-subtitle-2 d-flex justify-space-between px-4">
-                  <span class="text-primary">Total expirado</span>
-                  <v-icon
-                    icon="mdi-calendar-clock-outline"
-                    size="30"
-                    color="primary"
-                  />
-                </div>
-              </v-card-title>
-              <v-card-text class="d-flex align-center justify-space-between">
-                <div
-                  class="d-flex text-primary font-weight-bold px-4"
-                  style="font-size: 1.5rem"
-                >
-                  {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
-                </div>
-              </v-card-text>
-            </v-card> -->
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <LawyerMySaltsFilters v-model="reloadFilters" />
-          </v-col>
-        </v-row>
-        <div class="py-4">
-          <Table
-            title="Compras"
-            font-size="1.5rem"
-            :headers="headers"
-            :items="$salts?.credits"
-            :show-crud="false"
+  <v-card flat rounded="lg" color="transparent">
+    <v-card-title>
+      <HeaderPage title="Meus saldos" font-size="1.5rem" />
+    </v-card-title>
+    <v-card-text>
+      <v-row>
+        <v-col cols="12" lg="3">
+          <CardLeftBorderColor
+            title="Saldo Créditos"
+            color="#c8e040"
+            icon="mdi-calendar-month"
           >
-            <template #item.status="{ item }">
-              <v-chip :color="getStatusName(item).color">
-                <v-icon
-                  :color="getStatusName(item).color"
-                  :icon="getStatusName(item).icon"
-                  size="20"
-                  start
-                />
-                {{ getStatusName(item).text }}
-              </v-chip>
-            </template>
-            <template #item.dateCreated="{ item }">
-              <strong>
-                {{ dayjs(item.dateCreated).format("DD/MM/YYYY") }}
-              </strong>
-            </template>
-            <template #item.value="{ item }">
-              <strong>{{ amountFormated(item.value, true) }}</strong>
-            </template>
-            <template #item.salt="{ item }">
-              <strong>{{ amountFormated(item.salt, true) }}</strong>
-            </template>
-            <template #item.solicitationConsultationValue="{ item }">
-              <strong>{{
-                amountFormated(item.solicitationConsultationValue, true)
-              }}</strong>
-            </template>
+            <div
+              class="mt-4 text-primary"
+              style="font-size: 1.88rem; font-weight: 600"
+            >
+              {{ amountFormated($salts?.totals?.total ?? 0, true) }}
+            </div>
+          </CardLeftBorderColor>
+        </v-col>
+        <v-col cols="12" lg="3">
+          <CardLeftBorderColor
+            title="Total Pendente"
+            color="#0F91C3"
+            icon="mdi-calendar-month"
+          >
+            <div
+              class="mt-4 text-primary"
+              style="font-size: 1.88rem; font-weight: 600"
+            >
+              {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
+            </div>
+          </CardLeftBorderColor>
+        </v-col>
+        <v-col cols="12" lg="3">
+          <CardLeftBorderColor
+            title="Total expirado"
+            color="#F6BF0C"
+            icon="mdi-calendar-month"
+          >
+            <div
+              class="mt-4 text-primary"
+              style="font-size: 1.88rem; font-weight: 600"
+            >
+              {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
+            </div>
+          </CardLeftBorderColor>
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col cols="12">
+          <LawyerMySaltsFilters v-model="reloadFilters" />
+        </v-col>
+      </v-row>
+      <div class="py-4">
+        <Table
+          title="Compras"
+          font-size="1.5rem"
+          :headers="headers"
+          :items="$salts?.credits"
+          :show-crud="false"
+        >
+          <template #item.status="{ item }">
+            <v-chip :color="getStatusName(item).color">
+              <v-icon
+                :color="getStatusName(item).color"
+                :icon="getStatusName(item).icon"
+                size="20"
+                start
+              />
+              {{ getStatusName(item).text }}
+            </v-chip>
+          </template>
+          <template #item.dateCreated="{ item }">
+            <strong>
+              {{ dayjs(item.dateCreated).format("DD/MM/YYYY") }}
+            </strong>
+          </template>
+          <template #item.value="{ item }">
+            <strong>{{ amountFormated(item.value, true) }}</strong>
+          </template>
+          <template #item.salt="{ item }">
+            <strong>{{ amountFormated(item.salt, true) }}</strong>
+          </template>
+          <template #item.solicitationConsultationValue="{ item }">
+            <strong>{{
+              amountFormated(item.solicitationConsultationValue, true)
+            }}</strong>
+          </template>
 
-            <template #item.expireDate="{ item }">
-              <strong>
-                {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
-              </strong>
-            </template>
-            <template #item.createdAt="{ item }">
-              <strong>{{ dayjs(item.createdAt).format("DD/MM/YYYY") }}</strong>
-            </template>
-            <template #item.actions="{ item }">
-              <v-btn
-                variant="text"
-                color="info"
-                icon
-                @click="handleDetails(item)"
+          <template #item.expireDate="{ item }">
+            <strong>
+              {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
+            </strong>
+          </template>
+          <template #item.createdAt="{ item }">
+            <strong>{{ dayjs(item.createdAt).format("DD/MM/YYYY") }}</strong>
+          </template>
+          <template #item.actions="{ item }">
+            <v-btn
+              variant="text"
+              color="info"
+              icon
+              @click="handleDetails(item)"
+            >
+              <v-icon icon="mdi-dots-vertical"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
               >
-                <v-icon icon="mdi-dots-vertical"></v-icon>
-                <v-tooltip
-                  activator="parent"
-                  location="top center"
-                  content-class="tooltip-background"
-                >
-                  Detalhes
-                </v-tooltip>
-              </v-btn>
-              <v-btn
-                v-if="item.status === 'PENDING'"
-                variant="text"
-                color="success"
-                icon
-                @click="handlePaid(item)"
+                Detalhes
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="item.status === 'PENDING'"
+              variant="text"
+              color="success"
+              icon
+              @click="handlePaid(item)"
+            >
+              <v-icon icon="mdi-cash-multiple"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
               >
-                <v-icon icon="mdi-cash-multiple"></v-icon>
-                <v-tooltip
-                  activator="parent"
-                  location="top center"
-                  content-class="tooltip-background"
-                >
-                  Efetuar pagamento
-                </v-tooltip>
-              </v-btn>
-              <v-btn
-                v-if="item.status === 'CONFIRMED'"
-                variant="text"
-                color="info"
-                icon
-                @click="handleReceipt(item)"
+                Efetuar pagamento
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="item.status === 'CONFIRMED'"
+              variant="text"
+              color="info"
+              icon
+              @click="handleReceipt(item)"
+            >
+              <v-icon icon="mdi-file-multiple"></v-icon>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
               >
-                <v-icon icon="mdi-file-multiple"></v-icon>
-                <v-tooltip
-                  activator="parent"
-                  location="top center"
-                  content-class="tooltip-background"
-                >
-                  Comprovante de pagamento
-                </v-tooltip>
-              </v-btn>
-            </template>
-          </Table>
-        </div>
-      </v-card-text>
-    </v-card>
-    <LawyerMySaltsDetails v-model="showDetails" />
-    <v-snackbar
-      v-model="showErrorAlert"
-      vertical
-      color="warning"
-      :timeout="10000"
-    >
-      <div class="text-subtitle-1 pb-2">Saldo de crédito estava expirado</div>
-      <div class="text-subtitle-1 pb-2">
-        Não foi possível gerar cobrança deste saldo, pois o mesmo estava
-        expirado. Acesse a sessão de pacotes efetue uma nova compra ou entre em
-        contato com nossa equipe de vendas. Não se preocupe, não será gerada
-        nenhuma cobrança adicional para você. ESTE SALDO DE CRÉDITO FOI REMOVIDO
-        DA SUA CONTA.
+                Comprovante de pagamento
+              </v-tooltip>
+            </v-btn>
+          </template>
+        </Table>
       </div>
-      <template #actions>
-        <v-btn color="white" variant="text" @click="showErrorAlert = false">
-          Fechar
-        </v-btn>
-      </template>
-    </v-snackbar>
-  </div>
+    </v-card-text>
+  </v-card>
+  <LawyerMySaltsDetails v-model="showDetails" />
+  <v-snackbar
+    v-model="showErrorAlert"
+    vertical
+    color="warning"
+    :timeout="10000"
+  >
+    <div class="text-subtitle-1 pb-2">Saldo de crédito estava expirado</div>
+    <div class="text-subtitle-1 pb-2">
+      Não foi possível gerar cobrança deste saldo, pois o mesmo estava expirado.
+      Acesse a sessão de pacotes efetue uma nova compra ou entre em contato com
+      nossa equipe de vendas. Não se preocupe, não será gerada nenhuma cobrança
+      adicional para você. ESTE SALDO DE CRÉDITO FOI REMOVIDO DA SUA CONTA.
+    </div>
+    <template #actions>
+      <v-btn color="white" variant="text" @click="showErrorAlert = false">
+        Fechar
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script setup lang="ts">

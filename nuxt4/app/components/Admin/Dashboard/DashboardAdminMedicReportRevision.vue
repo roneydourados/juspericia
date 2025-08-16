@@ -8,20 +8,16 @@
         :showCrud="false"
       >
         <template v-slot:item.name="{ item }">
-          <InfoLabel :title="item.name" :show-divider="false" font-size="0.8" />
+          <span>{{ item.name }}</span>
         </template>
         <template v-slot:item.value="{ item }">
           <div class="d-flex align-center">
-            <InfoLabel
-              :title="item.value.toString()"
-              :show-divider="false"
-              font-size="1"
-            />
+            <span>{{ item.value }}</span>
             <v-progress-linear
               v-model="item.value"
               :color="item.color"
               height="14"
-            ></v-progress-linear>
+            />
           </div>
         </template>
       </Table>

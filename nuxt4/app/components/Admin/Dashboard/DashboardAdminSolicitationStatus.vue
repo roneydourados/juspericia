@@ -1,5 +1,5 @@
 <template>
-  <Card class="pa-4">
+  <Card>
     <template #title>
       <span> Solicitações por status </span>
     </template>

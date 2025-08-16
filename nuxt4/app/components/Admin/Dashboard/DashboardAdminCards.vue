@@ -1,6 +1,34 @@
 <template>
   <v-row dense>
-    <v-col cols="12" lg="3">
+    <v-col cols="12" lg="6">
+      <CardLeftBorderColor
+        title="Pendente"
+        color="#c8e040"
+        icon="mdi-currency-usd"
+      >
+        <div
+          class="mt-4 text-primary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
+          {{ amountFormated($dash?.totalPending ?? 0, true) }}
+        </div>
+      </CardLeftBorderColor>
+    </v-col>
+    <v-col cols="12" lg="6">
+      <CardLeftBorderColor
+        title="Total Pendente"
+        color="#0F91C3"
+        icon="mdi-currency-usd"
+      >
+        <div
+          class="mt-4 text-primary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
+          {{ amountFormated($dash?.totalConfirmed ?? 0, true) }}
+        </div>
+      </CardLeftBorderColor>
+    </v-col>
+    <!-- <v-col cols="12" lg="3">
       <DashboardCard
         title="Pendente"
         icon="mdi-currency-usd"
@@ -17,61 +45,60 @@
         icon-color="success"
         elevation="4"
       />
+    </v-col> -->
+    <v-col cols="12" lg="3">
+      <CardLeftBorderColor title="Novos Clientes" color="#FFF">
+        <div
+          class="mt-4 text-primary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
+          {{ $dash?.newClients ? $dash?.newClients.toString() : "0" }}
+        </div>
+      </CardLeftBorderColor>
     </v-col>
     <v-col cols="12" lg="3">
-      <DashboardCard
-        title="Novos clientes"
+      <CardLeftBorderColor
+        title="Total de Clientes"
+        color="#FFF"
         icon="mdi-account-group-outline"
-        :value="$dash?.newClients ? $dash?.newClients.toString() : '0'"
-        icon-color="info"
-        elevation="4"
-      />
+      >
+        <div
+          class="mt-4 text-primary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
+          {{ $dash?.totalClients ? $dash?.totalClients.toString() : "0" }}
+        </div>
+      </CardLeftBorderColor>
     </v-col>
     <v-col cols="12" lg="3">
-      <DashboardCard
-        title="Total de clientes"
-        icon="mdi-account-group-outline"
-        :value="$dash?.totalClients ? $dash?.totalClients.toString() : '0'"
-        icon-color="success"
-        elevation="4"
-      />
-    </v-col>
-  </v-row>
-  <v-row dense>
-    <v-col cols="12" lg="3">
-      <DashboardCard
+      <CardLeftBorderColor
         title="Qtde Pacotes a vencer"
+        color="#FFF"
         icon="mdi-package-variant"
-        :value="$dash?.credisToExpire.toString()"
-        icon-color="success"
-        elevation="4"
-      />
+      >
+        <div
+          class="mt-4 text-primary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
+          {{ $dash?.credisToExpire.toString() }}
+        </div>
+      </CardLeftBorderColor>
     </v-col>
     <v-col cols="12" lg="3">
-      <DashboardCard
+      <CardLeftBorderColor
         title="40 dias última consulta"
-        icon="mdi-file-document-edit-outline"
-        :value="$dash?.client40DaysSolicitation.toString()"
-        icon-color="info"
-        elevation="4"
-      />
+        color="#FFF"
+        icon="mdi-calendar-month"
+      >
+        <div
+          class="mt-4 text-primary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
+          {{ $dash?.client40DaysSolicitation.toString() }}
+        </div>
+      </CardLeftBorderColor>
     </v-col>
   </v-row>
-  <!-- <DashboardAdminPendentSales
-    :show="showPendentSales"
-    @close="showPendentSales = false"
-    width="900"
-  />
-  <DashboardAdminPackageDue
-    :show="showPackageDue"
-    @close="showPackageDue = false"
-    width="900"
-  />
-  <DashboardAdminClientsLastQuery
-    :show="showClientsLastQuery"
-    @close="showClientsLastQuery = false"
-    width="900"
-  /> -->
 </template>
 
 <script setup lang="ts">
