@@ -1,6 +1,8 @@
 <template>
-  <HomeStart />
-  <CardMenu :cardItems="cardItems" />
+  <div class="pa-12">
+    <HomeStart />
+    <CardMenu :cardItems="cardItems" />
+  </div>
 </template>
 
 <script setup lang="ts">
