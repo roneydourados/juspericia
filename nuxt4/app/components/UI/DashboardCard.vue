@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <v-card
-      rounded="xl"
-      flat
-      class="pa-4"
-      :elevation="elevation"
-      @click="$emit('click')"
-    >
-      <v-card-text class="d-flex align-center justify-space-between pa-4">
-        <span class="text-subtitle-1 text-primary">
-          {{ title }}
-        </span>
-        <div class="d-flex align-center" style="gap: 0.5rem">
-          <v-icon :icon="icon" start size="30" :color="iconColor" />
-          <span class="text-h5 font-weight-bold text-primary">{{ value }}</span>
-        </div>
-      </v-card-text>
-    </v-card>
-  </div>
+  <v-card
+    rounded="xl"
+    flat
+    class="pa-4"
+    :elevation="elevation"
+    @click="$emit('click')"
+  >
+    <v-card-text class="d-flex align-center justify-space-between pa-4">
+      <span class="text-subtitle-1 text-primary">
+        {{ title }}
+      </span>
+      <div class="d-flex align-center" style="gap: 0.5rem">
+        <v-icon :icon="icon" start size="30" :color="iconColor" />
+        <span class="text-h5 font-weight-bold text-primary">{{ value }}</span>
+      </div>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">

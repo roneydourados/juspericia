@@ -1,5 +1,8 @@
 <template>
-  <v-card flat rounded="xl" elevation="0" class="pa-2">
+  <v-card flat rounded="xl" elevation="6" class="pa-2">
+    <div class="pa-4">
+      <HeaderPage title="Solicitações" />
+    </div>
     <Chart
       :series="chartConfig.series"
       :chart-options="chartConfig.chartOptions"
@@ -51,13 +54,13 @@ const chartConfig = computed(() => {
         curve: "smooth",
       },
 
-      title: {
-        text: "Solicitações",
-        align: "left",
-        style: {
-          color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
-        },
-      },
+      // title: {
+      //   text: "Solicitações",
+      //   align: "left",
+      //   style: {
+      //     color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
+      //   },
+      // },
 
       labels: $estatistics.value?.laywerSolicitations.map(
         (solicitation) => solicitation.month

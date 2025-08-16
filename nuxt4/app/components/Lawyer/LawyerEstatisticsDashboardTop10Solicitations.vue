@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="xl" elevation="0">
+  <v-card flat rounded="xl" elevation="6">
     <Table
       title="Top 10 solicitações concluídas"
       :headers="headers"

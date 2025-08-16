@@ -65,7 +65,7 @@
       </v-row>
       <div class="d-flex align-center py-6" style="gap: 0.5rem">
         <span>Total:</span>
-        <strong style="font-size: 1rem">{{
+        <strong style="font-size: 1.2rem">{{
           amountFormated($total ?? 0, true)
         }}</strong>
       </div>

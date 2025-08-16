@@ -4,6 +4,7 @@
     title="Detalhes"
     @dialog="show = false"
     :width="mobile ? '100%' : '80%'"
+    border-color="#c8e040"
   >
     <v-card flat>
       <v-card-text>

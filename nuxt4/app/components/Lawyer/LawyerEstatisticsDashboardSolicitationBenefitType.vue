@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-card flat rounded="xl" elevation="6" class="pa-2">
     <Table
       title="Solicitações por tipo de benefício"
       :headers="headers"
@@ -24,7 +24,7 @@
         </div>
       </template>
     </Table>
-  </div>
+  </v-card>
 </template>
 
 <script setup lang="ts">

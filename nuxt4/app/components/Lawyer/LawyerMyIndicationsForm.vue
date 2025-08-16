@@ -3,11 +3,12 @@
     title="Indicação de cliente"
     :show="show"
     @dialog="show = false"
-    :width="mobile ? '100%' : '50%'"
+    :width="mobile ? '100%' : '25%'"
+    border-color="#c8e040"
   >
     <FormCrud :on-submit="handleSubmit">
       <v-row dense>
-        <v-col cols="12" lg="6">
+        <v-col cols="12">
           <StringInput
             v-model="form.name"
             label="Nome"
@@ -16,7 +17,7 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="6">
+        <v-col cols="12">
           <StringInput
             v-model="form.email"
             label="E-mail"
@@ -26,7 +27,7 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="6">
+        <v-col cols="12">
           <TelefoneInput
             v-model="form.whatsapp"
             label="Whatsapp"

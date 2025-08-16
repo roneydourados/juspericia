@@ -7,6 +7,7 @@
           size="x-small"
           icon="mdi-chevron-left"
           variant="text"
+          color="primary"
           @click="handlePrevClick(props)"
         />
       </template>
@@ -15,15 +16,16 @@
           size="x-small"
           icon="mdi-chevron-right"
           variant="text"
+          color="primary"
           @click="handleNextClick(props)"
         />
       </template>
       <v-carousel-item v-for="item in $years" :key="item.year">
         <v-card variant="outlined" rounded="xl" height="100%" color="grey">
           <div class="d-flex fill-height justify-center align-center">
-            <strong style="font-size: 1rem" class="text-black">{{
-              item.year
-            }}</strong>
+            <strong style="font-size: 0.8rem" class="text-primary">
+              {{ item.year }}
+            </strong>
           </div>
         </v-card>
       </v-carousel-item>

@@ -1,5 +1,8 @@
 <template>
-  <v-card flat rounded="xl" elevation="0" class="pa-2">
+  <v-card flat rounded="xl" elevation="6" class="pa-2">
+    <div class="pa-4">
+      <HeaderPage title="Solicitações por finalidade" />
+    </div>
     <Chart
       :series="chartConfig.series"
       :chart-options="chartConfig.chartOptions"
@@ -37,13 +40,13 @@ const chartConfig = computed(() => {
       dataLabels: {
         enabled: false,
       },
-      title: {
-        text: "Solicitações por finalidade",
-        align: "left",
-        style: {
-          color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
-        },
-      },
+      // title: {
+      //   text: "Solicitações por finalidade",
+      //   align: "left",
+      //   style: {
+      //     color: $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "",
+      //   },
+      // },
       legend: {
         labels: {
           colors: $estatistics.value?.laywerSolicitationsReportPropurse.map(
