@@ -176,6 +176,7 @@
     :dialog="showDelete"
     @cancel="showDelete = false"
     @confirm="handleDeleteItem"
+    icon="mdi-information-outline"
     show-cancel
   >
     <span>Apagar {{ selected?.name }} ? </span>

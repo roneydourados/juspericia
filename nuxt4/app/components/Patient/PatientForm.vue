@@ -4,6 +4,7 @@
     :title="title"
     :width="mobile ? '' : width"
     @dialog="handleClose"
+    border-color="#c8e040"
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>

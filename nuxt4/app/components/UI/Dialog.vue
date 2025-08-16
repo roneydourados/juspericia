@@ -5,24 +5,32 @@
     max-width="500"
     transition="dialog-top-transition"
   >
-    <v-card rounded="lg">
+    <v-card
+      rounded="xl"
+      :style="`border-top: 6px solid ${borderColor}`"
+      class="px-4"
+    >
       <v-card-title class="pa-4">
-        <InfoLabel
-          :title="title"
-          :icon="icon"
-          :color-icon="color"
-          :show-divider="true"
-          font-size="1"
-        />
+        <div class="d-flex align-center justify-space-between">
+          <div class="d-flex align-center">
+            <v-icon :icon="icon" color="amber" size="24" start />
+            <strong class="text-primary">{{ title }}</strong>
+          </div>
+          <v-btn color="primary" icon variant="text" @click="$emit('cancel')">
+            <v-icon icon="mdi-close" />
+          </v-btn>
+        </div>
+
+        <v-divider class="mt-8" />
       </v-card-title>
 
-      <v-card-text>
+      <v-card-text class="text-primary">
         <slot />
       </v-card-text>
 
       <v-card-actions class="pa-6">
         <v-spacer />
-        <Button
+        <!-- <Button
           class="text-none"
           variant="outlined"
           size="small"
@@ -34,7 +42,7 @@
           <span style="font-size: 0.7rem">
             {{ cancelText }}
           </span>
-        </Button>
+        </Button> -->
         <Button
           class="text-none"
           size="small"
@@ -44,7 +52,7 @@
           @click="$emit('confirm')"
         >
           <v-icon icon="mdi-check" color="colorIcon" start />
-          <span style="font-size: 0.7rem">
+          <span style="font-size: 0.8rem">
             {{ okText }}
           </span>
         </Button>
@@ -63,6 +71,7 @@ defineProps({
   okText: { type: String, default: "Confirma" },
   cancelText: { type: String, default: "Cancela" },
   okDisabled: { type: Boolean, default: false },
+  borderColor: { type: String, default: "#F6BF0C" },
 });
 
 defineEmits(["confirm", "cancel"]);

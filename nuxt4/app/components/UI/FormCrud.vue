@@ -1,8 +1,10 @@
 <template>
   <form ref="formRef" @submit.prevent="onSubmit">
     <slot />
-    <div class="d-flex align-center pa-4 w-100" v-if="showSubmitButton">
-      <v-spacer></v-spacer>
+    <div
+      class="d-flex justify-center align-center pa-4 w-100"
+      v-if="showSubmitButton"
+    >
       <Button
         color="primary"
         variant="flat"

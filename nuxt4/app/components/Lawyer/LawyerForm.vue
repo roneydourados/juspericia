@@ -4,6 +4,7 @@
     :title="title"
     :width="mobile ? '' : width"
     @dialog="handleClose"
+    border-color="#c8e040"
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>
@@ -185,13 +186,14 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12" lg="4">
+        <v-col cols="12">
           <v-switch
             v-model="model.active"
             color="success"
             :label="model.active ? 'Ativo' : 'Inativo'"
             hide-details
-          ></v-switch>
+          />
+          <v-divider></v-divider>
         </v-col>
       </v-row>
     </FormCrud>
