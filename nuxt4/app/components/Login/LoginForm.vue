@@ -1,7 +1,7 @@
 <template>
   <v-row dense align="center">
     <v-col cols="12" :lg="mobile ? '12' : '3'">
-      <v-card rounded="lg" flat color="transparent">
+      <v-card rounded="lg" flat color="transparent" class="text-primary">
         <v-card-title>
           <v-row dense class="pa-8" justify="center">
             <v-col cols="12">
@@ -23,6 +23,8 @@
                   placeholder="informe seu e-mail"
                   icon="mdi-email-outline"
                   required
+                  base-color="primary"
+                  color="primary"
                 />
               </v-col>
             </v-row>
@@ -34,6 +36,8 @@
                   placeholder="informe sua senha"
                   icon="mdi-form-textbox-password"
                   required
+                  base-color="primary"
+                  color="primary"
                 />
               </v-col>
             </v-row>
@@ -60,15 +64,9 @@
             </v-row>
             <v-row dense justify="center">
               <v-col cols="12" class="ma-6">
-                <Button
-                  block
-                  variant="flat"
-                  class="text-none"
-                  prepend-icon="mdi-login"
-                  color="primary"
-                  type="submit"
-                >
-                  Acessar
+                <Button variant="flat" color="colorIcon" type="submit">
+                  <v-icon icon="mdi-login" start color="primary" />
+                  <span class="text-primary"> Acessar </span>
                 </Button>
               </v-col>
             </v-row>
@@ -104,7 +102,18 @@
       </v-card>
     </v-col>
     <v-col v-if="!mobile" cols="12" lg="9">
-      <div class="background-image" />
+      <div
+        class="background-image d-flex flex-column align-center justify-center"
+        style="color: #fff"
+      >
+        <div style="margin-top: 34rem; font-size: 2.19rem">
+          Laudos médicos <strong style="font-size: 2.19rem">rápidos, </strong>
+        </div>
+        <div style="font-size: 2.19rem">
+          <strong style="font-size: 2.19rem">seguros</strong> e
+          <strong style="font-size: 2.19rem">sem burocracia</strong>
+        </div>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -182,7 +191,7 @@ const submmitForm = async () => {
 
 <style scoped>
 .background-image {
-  background-image: url("@/assets/images/juspericialogin.jpg");
+  background-image: url("@/assets/images/login.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
