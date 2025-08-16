@@ -4,7 +4,7 @@
       <v-col cols="12" lg="8">
         <v-card color="transparent" elevation="0">
           <v-card-title class="d-flex flex-column py-8" style="gap: 0.5rem">
-            <HeaderPage title="Horários agendados" font-size="1.5rem" />
+            <HeaderPage title="Horários agendados" font-size="1.8rem" />
 
             <span class="text-grey-darken-1">{{ formattedDate }}</span>
             <v-row dense v-if="$currentUser?.profile?.type === 'ADMIN'">

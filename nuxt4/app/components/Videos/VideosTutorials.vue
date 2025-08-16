@@ -1,7 +1,7 @@
 <template>
   <v-row dense class="pa-6">
     <v-col cols="12" class="mb-4">
-      <HeaderPage title="Vídeos / tutoriais" font-size="1.5rem" />
+      <HeaderPage title="Vídeos / tutoriais" font-size="1.8rem" />
     </v-col>
     <v-col v-for="item in 15" cols="12" lg="4" :key="item">
       <v-card rounded="xl" elevation="8" class="mx-auto">

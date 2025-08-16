@@ -2,7 +2,7 @@
   <div class="pa-12">
     <v-row>
       <v-col cols="12" class="pa-6">
-        <HeaderPage title="Administração" font-size="1.5rem" />
+        <HeaderPage title="Administração" font-size="1.8rem" />
       </v-col>
       <v-col cols="12" lg="3">
         <v-card

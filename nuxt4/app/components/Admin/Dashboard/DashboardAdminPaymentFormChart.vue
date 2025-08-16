@@ -1,7 +1,9 @@
 <template>
-  <Card>
+  <Card elevation="6">
     <template #title>
-      <span> Faturamento por forma de pagamento </span>
+      <div class="pa-4">
+        <HeaderPage title="Faturamento por forma de pagamento" />
+      </div>
     </template>
     <template #content>
       <Chart

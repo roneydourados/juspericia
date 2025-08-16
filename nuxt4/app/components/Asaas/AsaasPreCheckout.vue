@@ -5,6 +5,7 @@
     @cancel="handleCancel"
     @confirm="handleConfirm"
     show-cancel
+    icon="mdi-information-outline"
   >
     <div class="d-flex flex-column">
       <span>confirma a compra de {{ model.name }} ? </span>

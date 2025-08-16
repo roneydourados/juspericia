@@ -74,6 +74,9 @@
           {{ amountFormated($solicitationTotalPaidSalt, true) }}
         </div>
       </v-col>
+      <v-col cols="12">
+        <v-divider />
+      </v-col>
     </v-row>
     <v-row class="pa-4">
       <v-col

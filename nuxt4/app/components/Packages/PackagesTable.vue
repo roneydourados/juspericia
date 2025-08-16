@@ -1,7 +1,7 @@
 <template>
   <v-card flat rounded="lg" color="transparent">
     <v-card-title class="d-flex flex-column pa-4" style="gap: 1rem">
-      <HeaderPage title="Cadastro de pacote de consultas" font-size="1.5rem" />
+      <HeaderPage title="Cadastro de pacote de consultas" font-size="1.8rem" />
       <div class="d-flex flex-wrap mt-4" style="gap: 1rem">
         <SelectInput
           v-model="search"

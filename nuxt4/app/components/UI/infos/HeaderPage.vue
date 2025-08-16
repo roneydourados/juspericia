@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex flex-column flex-wrap">
     <span
-      class="font-weight-bold text-primary"
-      :style="`font-size: ${fontSize}`"
+      class="text-primary"
+      :style="`font-size: ${fontSize}; font-weight: 600`"
     >
       {{ title }}
     </span>

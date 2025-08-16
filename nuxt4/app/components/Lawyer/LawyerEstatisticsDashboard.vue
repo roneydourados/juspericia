@@ -4,7 +4,7 @@
       <v-card-title>
         <v-row dense align="center">
           <v-col cols="12" lg="10" class="d-flex align-center">
-            <HeaderPage title="Estatísticas" font-size="1.5rem" />
+            <HeaderPage title="Estatísticas" font-size="1.8rem" />
           </v-col>
           <v-col cols="12" lg="2">
             <Years @year="handleYear($event)" />

@@ -9,13 +9,29 @@
     <FormCrud :on-submit="submitForm">
       <v-row dense class="text-primary">
         <v-col cols="12" class="d-flex justify-center">
-          <span style="font-weight: 500">Antecipar em</span>
+          <span style="font-weight: 600">Antecipar em</span>
         </v-col>
         <v-col cols="12" class="d-flex justify-center">
-          <v-radio-group v-model="antecipationValue" inline>
-            <v-radio label="24hrs" :value="data.valueAntecipation24"></v-radio>
-            <v-radio label="48hrs" :value="data.valueAntecipation48"></v-radio>
-            <v-radio label="72hrs" :value="data.valueAntecipation72"></v-radio>
+          <v-radio-group
+            v-model="antecipationValue"
+            inline
+            class="d-flex justify-center"
+          >
+            <v-radio label="24hrs" :value="data.valueAntecipation24">
+              <template #label>
+                <strong style="font-size: 1rem">24hs</strong>
+              </template>
+            </v-radio>
+            <v-radio label="48hrs" :value="data.valueAntecipation48">
+              <template #label>
+                <strong style="font-size: 1rem">48hs</strong>
+              </template>
+            </v-radio>
+            <v-radio label="72hrs" :value="data.valueAntecipation72">
+              <template #label>
+                <strong style="font-size: 1rem">72hs</strong>
+              </template>
+            </v-radio>
           </v-radio-group>
         </v-col>
         <v-col cols="12" class="d-flex justify-center">

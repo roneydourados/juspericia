@@ -1,7 +1,9 @@
 <template>
-  <Card>
+  <Card elevation="6">
     <template #title>
-      <span> Solicitações por status </span>
+      <div class="pa-4">
+        <HeaderPage title="Solicitações por status" />
+      </div>
     </template>
     <template #content>
       <Chart

@@ -71,7 +71,7 @@
 
     <div class="d-flex justify-space-between text-primary px-4 mb-2">
       <v-chip variant="tonal" color="grey">
-        <span style="font-size: 1rem; font-weight: 500" class="text-primary">
+        <span style="font-size: 1rem; font-weight: 600" class="text-primary">
           R$ {{ amountFormated(item.value ?? 0, false) }}
         </span>
       </v-chip>
@@ -84,15 +84,30 @@
       v-if="item.status === 'active'"
       class="d-flex flex-wrap justify-center pa-4"
     >
-      <Button color="grey" variant="outlined" @click="handleShowHistory">
+      <Button
+        color="grey"
+        variant="outlined"
+        size="small"
+        @click="handleShowHistory"
+      >
         <v-icon icon="mdi-weather-cloudy-clock" color="primary" start />
         <span class="text-caption text-primary"> Histórico </span>
       </Button>
-      <Button color="grey" variant="outlined" @click="showForm = true">
+      <Button
+        color="grey"
+        size="small"
+        variant="outlined"
+        @click="showForm = true"
+      >
         <v-icon icon="mdi-pencil-outline" color="colorIcon" start />
         <span class="text-caption text-primary"> Editar </span>
       </Button>
-      <Button color="grey" variant="outlined" @click="showDelete = true">
+      <Button
+        color="grey"
+        size="small"
+        variant="outlined"
+        @click="showDelete = true"
+      >
         <v-icon icon="mdi-delete-outline" color="red" start />
         <span class="text-caption text-primary"> Apagar </span>
       </Button>

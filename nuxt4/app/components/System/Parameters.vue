@@ -6,7 +6,7 @@
           class="d-flex flex-wrap align-center justify-space-between pa-4 w-100"
         >
           <div class="d-flex flex-wrap align-center" style="gap: 0.5rem">
-            <HeaderPage title="Parametrizações" font-size="1.5rem" />
+            <HeaderPage title="Parametrizações" font-size="1.8rem" />
           </div>
           <div class="d-flex flex-wrap align-center" style="gap: 1rem">
             <Button

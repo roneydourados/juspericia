@@ -1,7 +1,9 @@
 <template>
-  <Card flat rounded="lg">
+  <Card flat rounded="lg" elevation="6">
     <template #title>
-      <span> Faturamento - {{ currentYear }} </span>
+      <div class="pa-4">
+        <HeaderPage :title="`Faturamento - ${currentYear}`" />
+      </div>
     </template>
     <template #content>
       <Chart

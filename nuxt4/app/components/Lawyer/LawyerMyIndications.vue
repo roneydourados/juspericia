@@ -2,7 +2,7 @@
   <div>
     <v-card flat rounded="lg" color="transparent">
       <v-card-title class="d-flex justify-space-between pa-4">
-        <HeaderPage title="Minhas Indicações" font-size="1.5rem" />
+        <HeaderPage title="Minhas Indicações" font-size="1.8rem" />
         <Button
           color="primary"
           variant="flat"
@@ -50,7 +50,7 @@
         <div class="py-4">
           <Table
             title="Lista de indicações"
-            font-size="1.5rem"
+            font-size="1rem"
             :items="$all"
             :headers="headers"
             :items-per-page="5"

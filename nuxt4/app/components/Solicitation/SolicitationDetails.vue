@@ -1,6 +1,6 @@
 <template>
   <div class="pa-6">
-    <HeaderPage title="Detalhes Solicitação" font-size="1.5rem" />
+    <HeaderPage title="Detalhes Solicitação" font-size="1.8rem" />
   </div>
   <v-card flat rounded="xl" elevation="6" class="pa-4">
     <v-card-title>

@@ -1,7 +1,7 @@
 <template>
   <v-card flat rounded="lg" color="transparent">
     <v-card-title>
-      <HeaderPage title="Meus saldos" font-size="1.5rem" />
+      <HeaderPage title="Meus saldos" font-size="1.8rem" />
     </v-card-title>
     <v-card-text>
       <v-row>

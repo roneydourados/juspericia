@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="!showForm" flat rounded="lg">
     <v-card-title class="d-flex flex-column pa-4" style="gap: 1rem">
-      <HeaderPage title="Modelos de laudos" font-size="1.5rem" />
+      <HeaderPage title="Modelos de laudos" font-size="1.8rem" />
       <div class="d-flex flex-wrap mt-4" style="gap: 1rem">
         <StringInput
           v-model="search"

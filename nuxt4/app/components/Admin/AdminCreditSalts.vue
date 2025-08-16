@@ -2,7 +2,7 @@
   <div>
     <v-card flat rounded="lg" color="transparent">
       <v-card-title class="mb-4">
-        <HeaderPage title="Saldo de créditos" font-size="1.5rem" />
+        <HeaderPage title="Saldo de créditos" font-size="1.8rem" />
       </v-card-title>
       <v-card-text>
         <v-row dense>

@@ -2,7 +2,7 @@
   <div>
     <v-card color="transparent" flat rounded="lg">
       <v-card-title class="mb-4">
-        <HeaderPage title="Indicações" font-size="1.5rem" />
+        <HeaderPage title="Indicações" font-size="1.8rem" />
       </v-card-title>
       <v-card-text>
         <div class="d-flex justify-space-between">

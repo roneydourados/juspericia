@@ -62,8 +62,8 @@
     <div class="d-flex justify-space-between px-4 mb-4">
       <v-chip color="grey" size="x-large">
         <div
-          style="font-size: 1.3rem"
-          class="text-black text-grey-darken-2 font-weight-bold"
+          style="font-size: 1.3rem; font-weight: 600"
+          class="text-black text-primary"
         >
           {{ amountFormated(item.value ?? 0, true) }}
         </div>

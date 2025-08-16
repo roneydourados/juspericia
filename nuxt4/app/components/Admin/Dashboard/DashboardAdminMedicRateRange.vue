@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card elevation="6">
     <template #content>
       <Table
         title="Aviliações dos médicos"
