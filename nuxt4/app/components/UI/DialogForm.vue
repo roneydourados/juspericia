@@ -5,7 +5,7 @@
     :model-value="show"
     :width="mobile ? '' : width"
   >
-    <v-card rounded="lg">
+    <v-card rounded="xl" :style="`border-top: 6px solid ${borderColor}`">
       <v-toolbar density="default" color="background">
         <v-toolbar-title>
           <span
@@ -13,7 +13,7 @@
           >
             <slot name="title-preppend" />
             <v-icon v-if="icon" :icon="icon" start />
-            <p class="ml-2">
+            <p class="ml-2 text-primary font-weight-bold">
               {{ title }}
             </p>
           </span>
@@ -55,6 +55,10 @@ defineProps({
   width: {
     type: String,
     default: "",
+  },
+  borderColor: {
+    type: String,
+    default: "#fff",
   },
 });
 const { mobile } = useDisplay();

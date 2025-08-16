@@ -43,6 +43,4 @@ defineProps({
     default: "6",
   },
 });
-
-const { amountFormated } = useUtils();
 </script>

@@ -15,6 +15,7 @@ export const MainThemeColors = {
   tooltipColor: "#E3F2FD",
   tooltipTextColor: "#424242",
   colorIcon: "#C7D82F",
+  greenLime: "#c8e040",
   darkText: "#1A1E4E",
 };
 
@@ -34,6 +35,7 @@ const MainDarkThemeColors = {
   tooltipTextColor: "#424242",
   colorIcon: "#C7D82F",
   darkText: "#1A1E4E",
+  greenLime: "#c8e040",
 };
 
 export const MAIN_THEME = "mainTheme";

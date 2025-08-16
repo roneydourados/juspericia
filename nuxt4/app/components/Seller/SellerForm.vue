@@ -5,10 +5,30 @@
     :width="mobile ? '' : width"
     @dialog="handleClose"
   >
-    <FormCrud ref="formCrudRef" :on-submit="submitForm">
-      <Tabs v-model="tab" :tabs="tabs">
-        <template #content>
-          <v-row v-if="tab === 1" dense>
+    <FormCrud
+      ref="formCrudRef"
+      :on-submit="submitForm"
+      :show-submit-button="false"
+    >
+      <v-tabs v-model="tab" color="primary">
+        <v-tab value="personalData" class="text-none">
+          <span class="text-primary" style="font-weight: 500">
+            Dados Pessoais
+          </span>
+        </v-tab>
+        <v-tab value="bankData" class="text-none">
+          <span class="text-primary" style="font-weight: 500">
+            Dados Bancários
+          </span>
+        </v-tab>
+        <v-tab value="address" class="text-none">
+          <span class="text-primary" style="font-weight: 500"> Endereço </span>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-window v-model="tab" class="mt-4">
+        <v-tabs-window-item value="personalData">
+          <v-row dense>
+            <v-col cols="12"> </v-col>
             <v-col cols="12" lg="6">
               <StringInput
                 v-model="model.name"
@@ -53,10 +73,10 @@
               <SelectSearchProfileSeller v-model="model.profile" required />
             </v-col>
           </v-row>
-          <v-row v-if="tab === 2" dense>
-            <v-col cols="12">
-              <strong>Dados bancários</strong>
-            </v-col>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="bankData">
+          <v-row dense>
+            <v-col cols="12"> </v-col>
             <v-col cols="12" lg="4">
               <StringInput
                 v-model="model.bankName"
@@ -105,10 +125,10 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="tab === 3" dense>
-            <v-col cols="12">
-              <strong>Dados endereço</strong>
-            </v-col>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="address">
+          <v-row dense>
+            <v-col cols="12"> </v-col>
             <v-col cols="12" lg="3">
               <CepInput
                 label="Cep"
@@ -157,9 +177,28 @@
               />
             </v-col>
           </v-row>
-        </template>
-      </Tabs>
-      <v-row dense>
+        </v-tabs-window-item>
+      </v-tabs-window>
+      <v-row dense class="px-8">
+        <v-col cols="12" lg="2">
+          <v-switch
+            v-model="model.active"
+            color="success"
+            :label="model.active ? 'Ativo' : 'Inativo'"
+            hide-details
+          />
+        </v-col>
+        <v-col cols="12" lg="10" class="d-flex justify-end">
+          <Button color="primary" variant="flat" size="small" type="submit">
+            <div class="d-flex align-center">
+              <v-icon icon="mdi-check" start />
+              <span class="text-caption"> Salvar </span>
+            </div>
+          </Button>
+        </v-col>
+      </v-row>
+
+      <!-- <v-row dense>
         <v-col cols="12" class="d-flex justify-end px-8">
           <v-switch
             v-model="model.active"
@@ -168,7 +207,7 @@
             hide-details
           ></v-switch>
         </v-col>
-      </v-row>
+      </v-row> -->
     </FormCrud>
   </DialogForm>
   <!-- <DialogLoading :dialog="loading" /> -->

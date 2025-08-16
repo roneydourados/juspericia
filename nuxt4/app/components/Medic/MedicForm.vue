@@ -5,10 +5,30 @@
     :width="mobile ? '' : width"
     @dialog="handleClose"
   >
-    <FormCrud :on-submit="submitForm">
-      <Tabs v-model="tab" :tabs="tabs">
-        <template #content>
-          <v-row v-if="tab === 1" dense class="py-4">
+    <FormCrud :on-submit="submitForm" :show-submit-button="false">
+      <v-tabs v-model="tab" color="primary">
+        <v-tab value="personalData" class="text-none">
+          <span class="text-primary" style="font-weight: 500">
+            Dados Pessoais
+          </span>
+        </v-tab>
+        <v-tab value="bankData" class="text-none">
+          <span class="text-primary" style="font-weight: 500">
+            Dados Bancários
+          </span>
+        </v-tab>
+        <v-tab value="address" class="text-none">
+          <span class="text-primary" style="font-weight: 500"> Endereço </span>
+        </v-tab>
+        <v-tab value="parameters" class="text-none">
+          <span class="text-primary" style="font-weight: 500">
+            Parâmetros de Consulta
+          </span>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-window v-model="tab" class="mt-4">
+        <v-tabs-window-item value="personalData">
+          <v-row dense class="py-4">
             <v-col cols="12" lg="6">
               <StringInput
                 v-model="model.name"
@@ -66,7 +86,9 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="tab === 2" dense class="py-4">
+        </v-tabs-window-item>
+        <v-tabs-window-item value="bankData">
+          <v-row dense class="py-4">
             <v-col cols="12" lg="4">
               <StringInput
                 v-model="model.bankName"
@@ -115,7 +137,9 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="tab === 3" dense class="py-4">
+        </v-tabs-window-item>
+        <v-tabs-window-item value="address">
+          <v-row dense class="py-4">
             <v-col cols="12" lg="3">
               <CepInput
                 label="Cep"
@@ -164,7 +188,9 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="tab === 4" dense class="py-4">
+        </v-tabs-window-item>
+        <v-tabs-window-item value="parameters">
+          <v-row dense class="py-4">
             <v-col cols="12" lg="2">
               <TimeInput
                 v-model="model.medicHourStart"
@@ -182,7 +208,7 @@
               />
             </v-col>
           </v-row>
-          <v-row v-if="tab === 4" dense>
+          <v-row dense>
             <v-col cols="12">
               <strong>Dias da semana atendimento</strong>
             </v-col>
@@ -205,16 +231,31 @@
               <v-checkbox v-model="model.sab" label="Sab" />
             </v-col>
           </v-row>
-        </template>
-      </Tabs>
+        </v-tabs-window-item>
+      </v-tabs-window>
+
       <v-row dense class="px-8">
-        <v-col cols="12" class="d-flex justify-end py-4">
+        <v-col cols="12" lg="2">
           <v-switch
             v-model="model.active"
             color="success"
             :label="model.active ? 'Ativo' : 'Inativo'"
             hide-details
           />
+        </v-col>
+        <v-col cols="12" lg="10" class="d-flex justify-end">
+          <Button
+            color="primary"
+            variant="flat"
+            size="small"
+            type="submit"
+            :disabled="loading"
+          >
+            <div v-if="!loading" class="d-flex align-center">
+              <v-icon icon="mdi-check" start />
+              <span class="text-caption"> Salvar </span>
+            </div>
+          </Button>
         </v-col>
       </v-row>
     </FormCrud>
@@ -248,7 +289,7 @@ const emit = defineEmits(["close"]);
 const { mobile } = useDisplay();
 
 const medicStore = useMedicStore();
-const tab = ref(1);
+const tab = ref("personalData");
 const tabs = ref([
   { title: "Dados Pessoais", icon: "mdi-account" },
   { title: "Dados Bancários", icon: "mdi-bank" },
