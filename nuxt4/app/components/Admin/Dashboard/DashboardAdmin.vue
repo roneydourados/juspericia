@@ -1,6 +1,10 @@
 <template>
+  <div class="pa-6 px-12">
+    <HeaderPage title="Dashboard de Vendas" font-size="1.8rem" />
+  </div>
+
   <v-card flat rounded="lg" color="transparent">
-    <v-card-title class="pa-4 mb-8">
+    <v-card-title class="pa-4 mb-8 px-12">
       <Tabs
         v-model="tabRegion"
         :tabs="tabsRegion"
