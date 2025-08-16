@@ -30,7 +30,7 @@
 
       <v-card-actions class="pa-6">
         <v-spacer />
-        <!-- <Button
+        <Button
           class="text-none"
           variant="outlined"
           size="small"
@@ -39,10 +39,10 @@
           @click="$emit('cancel')"
         >
           <v-icon icon="mdi-close" />
-          <span style="font-size: 0.7rem">
+          <span style="font-size: 0.7rem; font-weight: 500">
             {{ cancelText }}
           </span>
-        </Button> -->
+        </Button>
         <Button
           class="text-none"
           size="small"
@@ -52,7 +52,7 @@
           @click="$emit('confirm')"
         >
           <v-icon icon="mdi-check" color="colorIcon" start />
-          <span style="font-size: 0.8rem">
+          <span style="font-size: 0.7rem; font-weight: 500">
             {{ okText }}
           </span>
         </Button>

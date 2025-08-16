@@ -1,12 +1,15 @@
 <template>
-  <v-card flat rounded="lg" class="pa-4">
+  <div class="pa-6">
+    <HeaderPage title="Detalhes Solicitação" font-size="1.5rem" />
+  </div>
+  <v-card flat rounded="xl" elevation="6" class="pa-4">
     <v-card-title>
       <v-row dense>
         <v-col cols="12" lg="11">
           <span style="font-size: 1.5rem" class="mr-2 font-weight-bold">
             #{{ $single?.id }}
           </span>
-          <span style="font-size: 1.5rem">Detalhes</span>
+          <span style="font-size: 1.5rem; font-weight: 500">Detalhes</span>
         </v-col>
         <v-col cols="12" lg="1">
           <Button

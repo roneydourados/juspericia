@@ -111,10 +111,7 @@
         <span v-else class="ml-2">(Sem juros)</span>
       </div>
     </div>
-    <!-- <pre>{{ $paymentSimulation }}</pre>
-    <pre>{{ $systemParameters }}</pre> -->
-    <!-- <FormDebug v-model="model" /> -->
-    <!-- <FormDebug v-model="$voucher" /> -->
+
     <DialogLoading :dialog="loading" />
   </Dialog>
 </template>

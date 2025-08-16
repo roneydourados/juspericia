@@ -4,19 +4,21 @@
     :title="title"
     :width="mobile ? '' : width"
     @dialog="handleClose"
+    border-color="#c8e040"
   >
     <FormCrud :on-submit="submitForm">
-      <v-row dense>
-        <v-col cols="12">
-          <v-radio-group
-            label="Antecipar em"
-            v-model="antecipationValue"
-            inline
-          >
+      <v-row dense class="text-primary">
+        <v-col cols="12" class="d-flex justify-center">
+          <span style="font-weight: 500">Antecipar em</span>
+        </v-col>
+        <v-col cols="12" class="d-flex justify-center">
+          <v-radio-group v-model="antecipationValue" inline>
             <v-radio label="24hrs" :value="data.valueAntecipation24"></v-radio>
             <v-radio label="48hrs" :value="data.valueAntecipation48"></v-radio>
             <v-radio label="72hrs" :value="data.valueAntecipation72"></v-radio>
           </v-radio-group>
+        </v-col>
+        <v-col cols="12" class="d-flex justify-center">
           <strong style="font-size: 1.2rem">
             Valor: {{ amountFormated(antecipationValue ?? 0, false) }}
           </strong>

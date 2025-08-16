@@ -315,6 +315,9 @@
             </div>
           </v-chip>
         </v-col>
+        <v-col cols="12">
+          <v-divider />
+        </v-col>
       </v-row>
     </v-card-text>
     <v-card-actions

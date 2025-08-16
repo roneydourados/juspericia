@@ -1,8 +1,8 @@
 <template>
-  <v-card flat rounded="lg" class="pa-6">
-    <v-card-title class="d-flex align-center justify-space-between pa-4">
-      <strong style="font-size: 1.2rem">Solicitação de consulta</strong>
-    </v-card-title>
+  <div class="pa-6">
+    <HeaderPage title="Solicitação de consulta" font-size="1.5rem" />
+  </div>
+  <v-card flat rounded="xl" elevation="6" class="pa-6">
     <v-card-text>
       <FormCrud :on-submit="submitForm" :show-submit-button="false">
         <v-row dense>
@@ -157,19 +157,23 @@
                 type="submit"
                 :disabled="!form.factsRealityConfirm"
               >
-                <v-icon icon="mdi-paperclip" color="colorIcon" start />
+                <v-icon
+                  icon="mdi-cloud-arrow-up-outline"
+                  color="colorIcon"
+                  start
+                />
                 <span class="text-caption"> Enviar </span>
               </Button>
 
               <Button
-                class="text-none font-weight-bold"
                 @click="handleClose"
                 size="small"
-                color="red"
+                color="grey"
                 type="submit"
+                variant="outlined"
               >
-                <v-icon icon="mdi-cancel" color="white" start />
-                <span class="text-caption"> Enviar </span>
+                <v-icon icon="mdi-cancel" color="red" start />
+                <span class="text-caption text-primary"> Cancelar </span>
               </Button>
 
               <!-- <v-btn
