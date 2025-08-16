@@ -1,5 +1,12 @@
 <template>
-  <v-card v-if="!showTeleMedicine" flat elevation="2" rounded="lg">
+  <v-card
+    v-if="!showTeleMedicine"
+    flat
+    elevation="6"
+    rounded="xl"
+    style="border-top: 6px solid #c8e040"
+    class="text-primary"
+  >
     <v-card-title
       class="d-flex align-center justify-space-between pa-6"
       style="gap: 1rem; font-size: 1rem"
@@ -29,13 +36,6 @@
             as
             {{ solicitation.Schedule?.[0]?.scheduleHour }}
           </strong>
-
-          <div v-if="$currentUser?.profile?.type === 'ADMIN'">
-            Dr(a):
-            <strong>
-              {{ solicitation.Schedule?.[0]?.Medic?.name }}
-            </strong>
-          </div>
         </div>
       </div>
       <div class="d-flex flex-wrap align-center" style="gap: 1rem">
@@ -56,9 +56,9 @@
         <v-chip
           v-else-if="!solicitation.PatientConsultationReport"
           variant="flat"
-          color="warning"
+          color="#F6BF0C"
         >
-          <strong> Aguardando laudo </strong>
+          <span class="text-white text-caption"> Aguardando laudo </span>
         </v-chip>
         <v-chip
           v-else-if="
@@ -68,7 +68,9 @@
           variant="flat"
           color="grey"
         >
-          <strong> Laudo aguardando assinatura </strong>
+          <span class="text-white text-caption">
+            Laudo aguardando assinatura
+          </span>
         </v-chip>
         <div
           v-if="
@@ -80,25 +82,23 @@
           style="gap: 0.5rem"
         >
           <Button
-            class="text-none text-white"
-            color="info"
+            color="grey"
             variant="outlined"
             size="small"
             @click="handleMountModelPrececkout(solicitation)"
           >
-            <v-icon icon="mdi-credit-card-outline" color="colorIcon" start />
-            <span class="text-caption"> Pagar </span>
+            <v-icon icon="mdi-credit-card-outline" color="primary" start />
+            <span class="text-caption text-primary"> Pagar </span>
           </Button>
           <Button
             v-if="!solicitation.sale?.saleId"
-            class="text-none text-white"
-            color="success"
+            color="grey"
             variant="outlined"
             size="small"
             @click="handleUseCreditSalt"
           >
-            <v-icon icon="mdi-cash-multiple" color="colorIcon" start />
-            <span class="text-caption"> Utilizar Saldo </span>
+            <v-icon icon="mdi-currency-usd" color="primary" start />
+            <span class="text-caption text-primary"> Utilizar Saldo </span>
           </Button>
         </div>
         <Button
@@ -109,13 +109,13 @@
             $currentUser?.profile?.type === 'ADVOGADO'
           "
           class="text-none text-white"
-          color="primary"
+          color="grey"
           variant="outlined"
           size="small"
           @click="handleReceipt(solicitation)"
         >
           <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
-          <span class="text-caption"> Recibo </span>
+          <span class="text-caption text-primary"> Recibo </span>
         </Button>
 
         <Button
@@ -123,45 +123,44 @@
             solicitation.sale && solicitation.status === 'payment_pending'
           "
           class="text-none text-white"
-          color="info"
+          color="grey"
           variant="outlined"
           size="small"
           @click="handleReloadPayment(solicitation)"
         >
-          <v-icon icon="mdi-credit-card-outline" color="colorIcon" start />
-          <span class="text-caption"> Pagar </span>
+          <v-icon icon="mdi-credit-card-outline" color="primary" start />
+          <span class="text-caption text-primary"> Pagar </span>
         </Button>
         <Button
           v-if="
             solicitation.status === 'scheduled' && solicitation.isTelemedicine
           "
-          color="info"
+          color="grey"
           size="small"
-          variant="flat"
-          class="text-none text-white"
+          variant="outlined"
           @click="handleQuery(solicitation)"
         >
-          <v-icon icon="mdi-video-outline" start />
-          <span class="text-caption"> Consulta </span>
+          <v-icon icon="mdi-video-outline" start color="colorIcon" />
+          <span class="text-caption text-primary"> Consulta </span>
         </Button>
         <Button
           v-if="
             solicitation.status === 'paid' ||
             solicitation.status === 'scheduled'
           "
-          :color="solicitation.status === 'paid' ? 'success' : 'warning'"
+          color="grey"
           size="small"
           variant="outlined"
           @click="handleSchedule(solicitation)"
         >
-          <v-icon icon="mdi-calendar-clock" start />
-          <span class="text-caption">
+          <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
+          <span class="text-caption text-primary">
             {{ solicitation.status === "paid" ? "Agendar" : "Reagendar" }}
           </span>
         </Button>
 
         <Button
-          color="red"
+          color="grey"
           size="small"
           variant="outlined"
           @click="getItemCancel(solicitation)"
@@ -171,7 +170,7 @@
           "
         >
           <v-icon icon="mdi-cancel" start color="red" />
-          <span class="text-caption"> cancelar </span>
+          <span class="text-caption text-primary"> cancelar </span>
         </Button>
         <Button
           color="primary"
@@ -194,129 +193,129 @@
       </div>
     </v-card-title>
     <v-card-text class="px-8">
-      <v-row dense>
-        <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Solicitado:</span>
-          <span class="font-weight-bold">
-            {{ dayjs(solicitation.dateOpen).format("DD/MM/YYYY") }}
-          </span>
+      <v-row>
+        <v-col v-if="solicitation.proccessNumber" cols="12">
+          <v-chip
+            class="d-flex justify-center"
+            style="width: 100%; gap: 0.5rem"
+            label
+            color="grey"
+          >
+            <span class="text-primary">Nº Processo:</span>
+            <span class="font-weight-bold text-primary">
+              {{ solicitation.proccessNumber }}
+            </span>
+          </v-chip>
         </v-col>
-        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Solicitante:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.Patient?.User?.name }}
-          </span>
-        </v-col>
-        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Finalidade:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.ReportPurpose?.name }}
-            {{
-              solicitation.processSituation
-                ? solicitation.processSituation === "PD"
-                  ? "Processo distribuido"
-                  : "Processo andamento"
-                : ""
-            }}
-          </span>
-        </v-col>
-        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Nº Processo:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.proccessNumber }}
-          </span>
-        </v-col>
-      </v-row>
-      <v-row v-if="$currentUser?.profile?.type !== 'MEDICO'" dense>
-        <v-col cols="12" lg="2" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Valor:</span>
-          <span class="font-weight-bold">{{
-            amountFormated(solicitation.consultationValue ?? 0, true)
-          }}</span>
-        </v-col>
-        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Valor atencipação:</span>
-          <span class="font-weight-bold">
-            {{ amountFormated(solicitation.antecipationValue ?? 0, true) }}
-          </span>
-        </v-col>
-        <v-col cols="12" lg="3" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Tipo benefício:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.BenefitType?.name }}
-          </span>
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Paciente:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.Patient?.name }}
-            {{ solicitation.Patient?.surname }}
-          </span>
-        </v-col>
-        <!-- <v-col
-          v-if="solicitation.Medic"
-          cols="12"
-          lg="6"
-          class="d-flex align-center"
-          style="gap: 0.5rem"
-        >
-          <span>Médico:</span>
-          <span class="font-weight-bold">{{ solicitation.Medic?.name }}</span>
-          <span>CRM:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.Medic?.crm }}/{{ solicitation.Medic?.crmUf }}
-          </span>
-        </v-col> -->
-      </v-row>
-      <v-row dense>
-        <v-col
-          cols="12"
-          lg="10"
-          class="d-flex align-center"
-          style="gap: 0.5rem"
-        >
-          <span>Data limite para solicitar correção:</span>
-          <span class="font-weight-bold">
-            {{ dayjs(solicitation.deadline).format("DD/MM/YYYY") }}
-          </span>
 
-          <span>Data de solicitação de correção:</span>
-          <span class="font-weight-bold">
-            {{
-              solicitation.dateCorrection
-                ? dayjs(solicitation.dateCorrection).format("DD/MM/YYYY")
-                : "Não solicitado"
-            }}
-          </span>
-          <span>Data de solicitação de atencipação:</span>
-          <span class="font-weight-bold">
-            {{
-              solicitation.dateAntecipation
-                ? dayjs(solicitation.dateAntecipation).format("DD/MM/YYYY")
-                : "Não solicitado"
-            }}
-          </span>
+        <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Solicitante:</span>
+            <span class="font-weight-bold">
+              {{ solicitation.Patient?.User?.name }}
+            </span>
+          </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Paciente:</span>
+            <span class="font-weight-bold">
+              {{ solicitation.Patient?.name }}
+              {{ solicitation.Patient?.surname }}
+            </span>
+          </div>
+        </v-col>
+        <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Finalidade:</span>
+            <span class="font-weight-bold">
+              {{ solicitation.ReportPurpose?.name }}
+              {{
+                solicitation.processSituation
+                  ? solicitation.processSituation === "PD"
+                    ? "Processo distribuido"
+                    : "Processo andamento"
+                  : ""
+              }}
+            </span>
+          </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Tipo benefício:</span>
+            <span class="font-weight-bold">
+              {{ solicitation.BenefitType?.name }}
+            </span>
+          </div>
+        </v-col>
+        <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Valor:</span>
+            <span class="font-weight-bold">{{
+              amountFormated(solicitation.consultationValue ?? 0, true)
+            }}</span>
+          </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Valor atencipação:</span>
+            <span class="font-weight-bold">
+              {{ amountFormated(solicitation.antecipationValue ?? 0, true) }}
+            </span>
+          </div>
+        </v-col>
+        <v-col cols="12">
+          <v-divider></v-divider>
+        </v-col>
+        <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Solicitado:</span>
+            <span class="font-weight-bold">
+              {{ dayjs(solicitation.dateOpen).format("DD/MM/YYYY") }}
+            </span>
+          </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Data limite para solicitar correção:</span>
+            <span class="font-weight-bold">
+              {{ dayjs(solicitation.deadline).format("DD/MM/YYYY") }}
+            </span>
+          </div>
+        </v-col>
+        <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Data de solicitação de correção:</span>
+            <span class="font-weight-bold">
+              {{
+                solicitation.dateCorrection
+                  ? dayjs(solicitation.dateCorrection).format("DD/MM/YYYY")
+                  : "Não solicitado"
+              }}
+            </span>
+          </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Data de solicitação de atencipação:</span>
+            <span class="font-weight-bold">
+              {{
+                solicitation.dateAntecipation
+                  ? dayjs(solicitation.dateAntecipation).format("DD/MM/YYYY")
+                  : "Não solicitado"
+              }}
+            </span>
+          </div>
         </v-col>
         <v-col
           v-if="$currentUser?.profile?.type !== 'MEDICO'"
           cols="12"
-          lg="2"
-          class="d-flex flex-column"
+          lg="4"
+          class="d-flex justify-end"
         >
-          <div class="d-flex align-center justify-end" style="gap: 0.5rem">
-            <span class="text-grey-darken-1">Total:</span>
-            <span
-              class="font-weight-bold text-blue-darken-3"
-              style="font-size: 1.3rem"
-            >
-              {{ amountFormated($solicitationTotal, true) }}
-            </span>
-          </div>
+          <v-chip color="grey" class="pa-6" label rounded="xl">
+            <div class="d-flex align-center" style="gap: 0.5rem">
+              <span class="text-primary">Total:</span>
+              <span
+                class="font-weight-bold text-primary"
+                style="font-size: 1.3rem"
+              >
+                {{ amountFormated($solicitationTotal, true) }}
+              </span>
+            </div>
+          </v-chip>
         </v-col>
       </v-row>
-      <v-divider class="mt-2" />
     </v-card-text>
     <v-card-actions
       v-if="$currentUser?.profile?.type !== 'MEDICO'"
@@ -324,23 +323,30 @@
     >
       <v-row dense align="center">
         <v-col v-if="solicitation.status === 'finished'" cols="12" lg="2">
-          <v-btn
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-file-document-refresh-outline"
-            color="indigo"
+          <Button
+            variant="text"
+            color="grey"
             @click="showDateCorrection = true"
             :disabled="
               !solicitation.PatientConsultationReport || !$isEnableCorrection
             "
           >
-            Solicitar correção
-          </v-btn>
+            <v-icon
+              icon="mdi-file-document-refresh-outline"
+              start
+              color="colorIcon"
+            />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Solicitar correção
+            </span>
+          </Button>
         </v-col>
         <v-col cols="12" lg="2">
-          <v-btn
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-calendar-clock-outline"
-            color="info"
+          <Button
+            variant="text"
             :disabled="
               !!solicitation.dateAntecipation ||
               solicitation.status === 'canceled' ||
@@ -348,41 +354,59 @@
             "
             @click="getItemAntecipation(solicitation)"
           >
-            Solicitar antecipação
-          </v-btn>
+            <v-icon icon="mdi-calendar-clock-outline" start color="colorIcon" />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Solicitar antecipação
+            </span>
+          </Button>
         </v-col>
         <v-col cols="12" lg="2">
-          <v-btn
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-dots-vertical"
-            color="pink"
+          <Button
+            variant="text"
             @click="handleDetailsClick(solicitation.publicId!)"
           >
-            Visualizar detalhes
-          </v-btn>
+            <v-icon icon="mdi-dots-vertical" start color="colorIcon" />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Visualizar detalhes
+            </span>
+          </Button>
         </v-col>
         <v-col cols="12" lg="3">
-          <v-btn
+          <Button
             v-if="solicitation.status === 'finished'"
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-cash-multiple"
-            color="success"
+            variant="text"
             @click="showTipValue = true"
             :disabled="Number(solicitation.tipValue) > 0"
           >
-            Dar Gorjeta
-          </v-btn>
+            <v-icon icon="mdi-currency-usd" start color="colorIcon" />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Dar Gorjeta
+            </span>
+          </Button>
         </v-col>
         <v-col cols="12" lg="3" class="d-flex flex-wrap align-center px-4">
-          <v-btn
+          <Button
             v-if="solicitation.rate === 0 && solicitation.status === 'finished'"
-            class="text-none font-weight-bold"
-            prepend-icon="mdi-star"
-            color="orange-darken-1"
+            variant="text"
             @click="solicitation.rate = 1"
           >
-            Avaliar solicitação
-          </v-btn>
+            <v-icon icon="mdi-star" start color="colorIcon" />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Avaliar solicitação
+            </span>
+          </Button>
           <div v-if="solicitation.rate ?? 0 > 0" class="text-center">
             <v-rating
               v-model="solicitation.rate"
@@ -391,16 +415,20 @@
               :readonly="!isRate"
               :size="24"
             />
-            <v-btn
+            <Button
               v-if="isRate"
-              class="text-none font-weight-bold"
-              prepend-icon="mdi-check"
-              color="orange-darken-1"
+              class="ml-2"
               variant="text"
               @click="handleUpdateRate(solicitation.rate ?? 0)"
             >
-              Enviar avaliação
-            </v-btn>
+              <v-icon icon="mdi-check" start color="colorIcon" />
+              <span
+                class="text-primary"
+                style="font-weight: 500; font-size: 0.8rem"
+              >
+                Enviar avaliação
+              </span>
+            </Button>
           </div>
         </v-col>
       </v-row>
@@ -466,9 +494,6 @@
     @confirm-sale="handleSaleItemForAsaas"
     @cancel="handleCancel"
   />
-  <!-- <pre>{{ props.solicitation.correctionQuantity }}</pre>
-  <pre>enabled: {{ $isEnableCorrection }}</pre>
-  <pre>{{ $systemParameters }}</pre> -->
 </template>
 
 <script setup lang="ts">
