@@ -4,6 +4,7 @@
     :show="show"
     @dialog="handleCancel"
     :width="mobile ? '100%' : '40%'"
+    borderColor="#c8e040"
   >
     <FormCrud :on-submit="handleConfirm">
       <v-row dense class="mt-">

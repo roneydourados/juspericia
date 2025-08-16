@@ -47,7 +47,7 @@
           </span>
 
           <v-avatar size="30" color="primary">
-            <v-icon color="white" icon="mdi-fire-circle" size="small" />
+            <v-icon color="colorIcon" icon="mdi-fire-circle" size="small" />
           </v-avatar>
         </span>
         <div class="text-caption text-primary">
@@ -69,53 +69,39 @@
 
     <v-card-title>Preço</v-card-title>
 
-    <div class="d-flex justify-space-between px-4 mb-2">
-      <v-chip color="deep-purple-lighten-2" label>
-        <strong style="font-size: 1rem">
+    <div class="d-flex justify-space-between text-primary px-4 mb-2">
+      <v-chip variant="tonal" color="grey">
+        <span style="font-size: 1rem; font-weight: 500" class="text-primary">
           R$ {{ amountFormated(item.value ?? 0, false) }}
-        </strong>
+        </span>
       </v-chip>
-      <strong>Atende {{ item.packageQuantity }} consultas</strong>
+      <span style="font-weight: 500">
+        Atende {{ item.packageQuantity }} consultas
+      </span>
     </div>
 
     <v-card-actions
       v-if="item.status === 'active'"
-      class="d-flex flex-wrap justify-end"
+      class="d-flex flex-wrap justify-center pa-4"
     >
-      <v-btn
-        color="info"
-        class="text-none"
-        prepend-icon="mdi-weather-cloudy-clock"
-        @click="handleShowHistory"
-      >
-        Histórico
-      </v-btn>
-      <v-btn
-        color="warning"
-        class="text-none"
-        prepend-icon="mdi-pencil-outline"
-        @click="showForm = true"
-      >
-        Editar
-      </v-btn>
-      <v-btn
-        color="error"
-        class="text-none"
-        prepend-icon="mdi-delete-outline"
-        @click="showDelete = true"
-      >
-        Apagar
-      </v-btn>
+      <Button color="grey" variant="outlined" @click="handleShowHistory">
+        <v-icon icon="mdi-weather-cloudy-clock" color="primary" start />
+        <span class="text-caption text-primary"> Histórico </span>
+      </Button>
+      <Button color="grey" variant="outlined" @click="showForm = true">
+        <v-icon icon="mdi-pencil-outline" color="colorIcon" start />
+        <span class="text-caption text-primary"> Editar </span>
+      </Button>
+      <Button color="grey" variant="outlined" @click="showDelete = true">
+        <v-icon icon="mdi-delete-outline" color="red" start />
+        <span class="text-caption text-primary"> Apagar </span>
+      </Button>
     </v-card-actions>
-    <v-card-actions v-else class="d-flex flex-wrap justify-end">
-      <v-btn
-        color="info"
-        class="text-none"
-        prepend-icon="mdi-reload-alert"
-        @click="showRecover = true"
-      >
-        Recuperar
-      </v-btn>
+    <v-card-actions v-else class="d-flex flex-wrap justify-center">
+      <Button color="grey" variant="outlined" @click="showRecover = true">
+        <v-icon icon="mdi-reload-alert" color="colorIcon" start />
+        <span class="text-caption text-primary"> Recuperar </span>
+      </Button>
     </v-card-actions>
   </v-card>
   <Dialog

@@ -1,17 +1,13 @@
 <template>
-  <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="50%">
-    <v-card rounded="lg">
-      <v-toolbar>
-        <v-toolbar-title>
-          <div class="text-subtitle-1 font-weight-bold">Detalhes do laudo</div>
-        </v-toolbar-title>
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon @click="dialog = false" variant="text">
-          <v-icon icon="mdi-close" />
-        </v-btn>
-      </v-toolbar>
+  <DialogForm
+    title="Detalhes  do Laudo"
+    :show="dialog"
+    @dialog="dialog = false"
+    ok-text="OK"
+    :width="mobile ? '100%' : '50%'"
+    border-color="#002c9b"
+  >
+    <v-card rounded="lg" flat>
       <v-card-text>
         <v-row dense>
           <v-col cols="12">
@@ -75,15 +71,16 @@
       </v-card-text>
     </v-card>
     <DialogLoading :dialog="loading" />
-  </v-dialog>
+  </DialogForm>
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 const fileStore = useFileStore();
 const consultationReport = usePatientConsultationReportStore();
 const { formatCPFOrCNPJ } = useUtils();
+const { mobile } = useDisplay();
 
 const dialog = defineModel({
   default: false,

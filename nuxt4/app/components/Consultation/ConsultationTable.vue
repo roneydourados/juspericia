@@ -1,48 +1,40 @@
 <template>
   <v-card flat rounded="lg">
-    <v-card-title
-      class="d-flex flex-wrap align-center justify-space-between pa-4"
-      style="gap: 1rem"
-    >
-      <strong style="font-size: 1.2rem">Cadastro de consultas</strong>
-      <v-text-field
-        v-model="search"
-        density="compact"
-        prepend-inner-icon="mdi-magnify"
-        variant="solo-filled"
-        flat
-        hide-details
-        single-line
-        rounded="lg"
-        style="font-size: 1.4rem"
-        @update:model-value="handleSearch(search)"
-        :loading="loading"
-      >
-        <template #label>
-          <span> Digite algo para efetuar consulta... </span>
-        </template>
-      </v-text-field>
-      <Button
-        variant="outlined"
-        color="grey"
-        class="text-none"
-        size="small"
-        @click="router.back()"
-      >
-        <v-icon icon="mdi-arrow-left" color="darkText" />
-        <span class="text-darkText text-caption"> Voltar </span>
-      </Button>
-      <Button
-        color="primary"
-        variant="flat"
-        size="small"
-        class="text-none"
-        @click="showForm = true"
-      >
-        <v-icon icon="mdi-plus" start color="colorIcon" />
-        <span class="text-caption"> Novo </span>
-      </Button>
+    <v-card-title class="d-flex flex-column pa-4" style="gap: 1rem">
+      <HeaderPage title="Cadastro de consultas" font-size="1.5rem" />
+      <div class="d-flex flex-wrap mt-4" style="gap: 1rem">
+        <StringInput
+          v-model="search"
+          density="compact"
+          prepend-inner-icon="mdi-magnify"
+          flat
+          hide-details
+          single-line
+          style="font-size: 1.4rem"
+          @update:model-value="handleSearch(search)"
+          :loading="loading"
+          placeholder="Digite algo para pesquisar..."
+        />
+
+        <div class="d-flex" style="gap: 0.5rem">
+          <Button
+            variant="outlined"
+            color="grey"
+            class="text-none"
+            size="small"
+            @click="router.back()"
+          >
+            <v-icon icon="mdi-arrow-left" color="darkText" />
+            <span class="text-darkText text-caption"> Voltar </span>
+          </Button>
+          <Button color="primary" @click="showForm = true" size="small">
+            <v-icon icon="mdi-plus" start color="colorIcon" />
+            <span class="text-caption"> Novo </span>
+          </Button>
+        </div>
+      </div>
     </v-card-title>
+
     <v-card-text class="pa-4">
       <v-row dense>
         <v-col
@@ -51,60 +43,83 @@
           lg="4"
           :key="consultation.id"
         >
-          <v-card rounded="lg" flat elevation="4">
+          <v-card rounded="xl" variant="flat" elevation="6">
             <v-card-title>
               <v-row dense>
-                <v-col cols="12" class="d-flex" style="gap: 0.5rem">
-                  <strong>Título:</strong>
-                  <span class="text-truncate">
-                    {{ consultation.consultationName }}
-                  </span>
+                <v-col cols="12" class="d-flex flex-column text-primary pa-8">
+                  <div class="d-flex" style="gap: 0.5rem">
+                    <strong class="">Título:</strong>
+                    <span class="text-truncate">
+                      {{ consultation.consultationName }}
+                    </span>
+                  </div>
+                  <v-divider class="mt-8" />
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col cols="12" lg="4">
-                  <InfoLabel
-                    font-size="0.9"
-                    font-size-content="1"
-                    title="Preço"
-                    icon="mdi-cash"
-                    color-icon="green"
-                    :content="amountFormated(consultation.value ?? 0, false)"
-                    :show-divider="true"
-                  />
+                <v-col
+                  cols="12"
+                  lg="6"
+                  class="d-flex flex-column px-8"
+                  style="gap: 0.2rem"
+                >
+                  <div class="d-flex align-center" style="gap: 0.5rem">
+                    <v-avatar color="greenLime" variant="outlined" size="25">
+                      <v-icon
+                        icon="mdi-currency-usd"
+                        color="colorIcon"
+                        size="15"
+                      />
+                    </v-avatar>
+                    <span>Preço Crédito</span>
+                  </div>
+                  <strong style="font-size: 1.2rem" class="text-primary">
+                    {{ amountFormated(consultation.value ?? 0, false) }}
+                  </strong>
                 </v-col>
-                <v-col cols="12" lg="4">
-                  <InfoLabel
-                    font-size="0.9"
-                    font-size-content="1"
-                    title="Preço Crédito"
-                    icon="mdi-cash"
-                    color-icon="info"
-                    :content="
-                      amountFormated(consultation.valueCredit ?? 0, false)
-                    "
-                    :show-divider="true"
-                  />
+                <v-col
+                  cols="12"
+                  lg="6"
+                  class="d-flex flex-column px-8"
+                  style="gap: 0.2rem"
+                >
+                  <div class="d-flex align-center" style="gap: 0.5rem">
+                    <v-avatar color="primary" variant="outlined" size="25">
+                      <v-icon
+                        icon="mdi-currency-usd"
+                        color="primary"
+                        size="15"
+                      />
+                    </v-avatar>
+                    <span>Preço Crédito</span>
+                  </div>
+                  <strong style="font-size: 1.2rem" class="text-primary">
+                    {{ amountFormated(consultation.valueCredit ?? 0, false) }}
+                  </strong>
                 </v-col>
               </v-row>
             </v-card-title>
-            <v-card-actions class="d-flex justify-end">
-              <v-btn
-                color="warning"
+            <v-card-actions class="d-flex justify-center">
+              <Button
+                color="grey"
                 class="text-none"
-                prepend-icon="mdi-pencil-outline"
+                variant="outlined"
+                size="small"
                 @click="editItem(consultation)"
               >
-                Editar
-              </v-btn>
-              <v-btn
-                color="error"
+                <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
+                <span class="text-primary text-caption"> Editar </span>
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                color="grey"
                 class="text-none"
-                prepend-icon="mdi-delete-outline"
                 @click="deleteItem(consultation)"
               >
-                Apagar
-              </v-btn>
+                <v-icon icon="mdi-delete-outline" start color="red" />
+                <span class="text-primary text-caption"> Apagar </span>
+              </Button>
             </v-card-actions>
           </v-card>
         </v-col>

@@ -6,11 +6,7 @@
           class="d-flex flex-wrap align-center justify-space-between pa-4 w-100"
         >
           <div class="d-flex flex-wrap align-center" style="gap: 0.5rem">
-            <!-- <v-icon icon="mdi-cog-outline" color="#3F51B5" size="30" start /> -->
-            <v-avatar size="30" color="colorIcon">
-              <v-icon icon="mdi-cog-outline" color="white" />
-            </v-avatar>
-            <span class="text-h6"> Parametrizações </span>
+            <HeaderPage title="Parametrizações" font-size="1.5rem" />
           </div>
           <div class="d-flex flex-wrap align-center" style="gap: 1rem">
             <Button

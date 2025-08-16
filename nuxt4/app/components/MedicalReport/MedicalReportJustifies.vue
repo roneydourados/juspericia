@@ -1,29 +1,26 @@
 <template>
   <DialogForm
-    title="Justificativas"
+    title="Justificativas cadastradas"
     :show="show"
     @dialog="show = false"
     ok-text="OK"
     :width="mobile ? '100%' : '70%'"
+    border-color="#002c9b"
   >
-    <v-card>
-      <v-card-text>
-        <Table
-          title="Justificativas cadastras"
-          font-size="1.5rem"
-          :headers="headers"
-          :items="$single?.justifies"
-          :show-crud="false"
-        >
-          <template v-slot:item.createdAt="{ item }">
-            {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
-          </template>
-          <template v-slot:item.user.name="{ item }">
-            <strong>{{ item.user.name }}</strong>
-          </template>
-        </Table>
-      </v-card-text>
-    </v-card>
+    <Table
+      title=""
+      font-size="1.5rem"
+      :headers="headers"
+      :items="$single?.justifies"
+      :show-crud="false"
+    >
+      <template v-slot:item.createdAt="{ item }">
+        {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
+      </template>
+      <template v-slot:item.user.name="{ item }">
+        <strong>{{ item.user.name }}</strong>
+      </template>
+    </Table>
   </DialogForm>
 </template>
 

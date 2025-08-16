@@ -4,8 +4,13 @@
     :title="title"
     :width="mobile ? '' : width"
     @dialog="handleClose"
+    border-color="#c8e040"
   >
-    <FormCrud :on-submit="handleSubmit">
+    <FormCrud
+      :on-submit="handleSubmit"
+      :show-submit-button="false"
+      class="px-2"
+    >
       <v-row dense>
         <v-col cols="12">
           <StringInput
@@ -75,9 +80,17 @@
               size="x-small"
               @click="handleDeleteBenefitType(index)"
             >
-              <v-icon icon="mdi-delete" color="error" />
+              <v-icon icon="mdi-delete-outline" color="error" />
             </v-btn>
           </div>
+        </v-col>
+        <v-col cols="12" class="d-flex justify-center">
+          <Button color="primary" variant="flat" size="small" type="submit">
+            <div class="d-flex align-center">
+              <v-icon icon="mdi-check" start />
+              <span class="text-caption"> Salvar </span>
+            </div>
+          </Button>
         </v-col>
       </v-row>
     </FormCrud>

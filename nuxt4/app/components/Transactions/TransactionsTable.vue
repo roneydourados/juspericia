@@ -63,12 +63,11 @@
           </Button>
         </v-col>
       </v-row>
-      <div class="d-flex justify-end w-100 py-6">
-        <v-chip color="blue" text-color="white" class="ma-2" variant="flat">
-          <span class="text-subtitle-1 font-weight-bold">
-            Total: {{ amountFormated($total ?? 0, true) }}
-          </span>
-        </v-chip>
+      <div class="d-flex align-center py-6" style="gap: 0.5rem">
+        <span>Total:</span>
+        <strong style="font-size: 1rem">{{
+          amountFormated($total ?? 0, true)
+        }}</strong>
       </div>
     </template>
     <template v-slot:item.total="{ item }">

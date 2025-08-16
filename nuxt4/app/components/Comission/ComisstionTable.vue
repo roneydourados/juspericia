@@ -70,33 +70,23 @@
         </v-col>
       </v-row>
       <v-row dense class="py-4">
-        <v-col cols="12" lg="2">
-          <v-card rounded="lg">
-            <v-card-text>
-              <div class="d-flex flex-column align-center" style="gap: 0.5rem">
-                <h3>Total:</h3>
-                <v-chip color="blue" class="text-none" variant="flat">
-                  <div style="font-size: 1rem">
-                    {{ $total }}
-                  </div>
-                </v-chip>
-              </div>
-            </v-card-text>
-          </v-card>
+        <v-col
+          cols="12"
+          lg="2"
+          class="d-flex align-center text-primary"
+          style="gap: 0.5rem"
+        >
+          <span>Total:</span>
+          <strong style="font-size: 1rem">{{ $total }}</strong>
         </v-col>
-        <v-col cols="12" lg="2">
-          <v-card rounded="lg">
-            <v-card-text>
-              <div class="d-flex flex-column align-center" style="gap: 0.5rem">
-                <h3>Total selecionado:</h3>
-                <v-chip color="blue" class="text-none" variant="flat">
-                  <div style="font-size: 1rem">
-                    {{ $totalSelected }}
-                  </div>
-                </v-chip>
-              </div>
-            </v-card-text>
-          </v-card>
+        <v-col
+          cols="12"
+          lg="2"
+          class="d-flex align-center text-primary"
+          style="gap: 0.5rem"
+        >
+          <span>Total Selecionado:</span>
+          <strong style="font-size: 1rem">{{ $totalSelected }}</strong>
         </v-col>
         <v-col
           cols="12"
