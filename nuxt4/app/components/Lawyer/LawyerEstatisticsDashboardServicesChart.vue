@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="xl" elevation="6" class="pa-2">
+  <CardBlur height="450">
     <div class="pa-4">
       <HeaderPage title="Solicitações" />
     </div>
@@ -7,7 +7,7 @@
       :series="chartConfig.series"
       :chart-options="chartConfig.chartOptions"
     />
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

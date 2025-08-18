@@ -2,7 +2,7 @@
   <div>
     <v-card flat class="mb-2 pa-2" rounded="lg" color="transparent">
       <v-card-title>
-        <v-row dense align="center">
+        <v-row align="center">
           <v-col cols="12" lg="11" class="d-flex align-center">
             <HeaderPage title="Estatísticas" font-size="1.8rem" />
           </v-col>
@@ -12,7 +12,7 @@
         </v-row>
       </v-card-title>
     </v-card>
-    <v-row dense>
+    <v-row>
       <v-col cols="12" lg="4">
         <LawyerEstatisticsDashboardServicesChart />
       </v-col>
@@ -23,7 +23,7 @@
         <LawyerEstatisticsDashboardInvestmentChart />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row>
       <v-col cols="12" lg="4">
         <DashboardCard
           title="Consultas abertas"
@@ -52,7 +52,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row>
       <v-col cols="12" lg="6">
         <LawyerEstatisticsDashboardReportPropuseChart />
       </v-col>
@@ -60,7 +60,7 @@
         <LawyerEstatisticsDashboardSolicitationBenefitType />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row>
       <v-col cols="12">
         <LawyerEstatisticsDashboardTop10Solicitations />
       </v-col>

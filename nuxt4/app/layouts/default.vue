@@ -66,7 +66,10 @@
             </v-tooltip>
           </Button>
         </div>
-        <div v-if="!mobile" class="d-flex flex-column px-6 text-white">
+        <div
+          v-if="!mobile"
+          class="d-flex flex-column align-end px-6 text-white"
+        >
           <span class="font-weight-bold">
             {{ $currentUser?.name }}
           </span>

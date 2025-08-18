@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="xl" elevation="6" class="pa-2">
+  <CardBlur height="100%">
     <div class="pa-4">
       <HeaderPage title="Solicitações por finalidade" />
     </div>
@@ -8,7 +8,7 @@
       :chart-options="chartConfig.chartOptions"
       :height="chartConfig.chartOptions.chart.height"
     />
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">
@@ -28,7 +28,7 @@ const chartConfig = computed(() => {
     ),
     chartOptions: {
       chart: {
-        type: "donut",
+        type: "pie",
         height: "400",
       },
       theme: {

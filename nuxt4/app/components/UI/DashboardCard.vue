@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    rounded="xl"
-    flat
-    class="pa-4"
-    :elevation="elevation"
-    @click="$emit('click')"
-  >
+  <CardBlur class="pa-4" @click="$emit('click')" height="100">
     <v-card-text class="d-flex align-center justify-space-between pa-4">
       <span class="text-subtitle-1 text-primary">
         {{ title }}
@@ -15,7 +9,7 @@
         <span class="text-h5 font-weight-bold text-primary">{{ value }}</span>
       </div>
     </v-card-text>
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

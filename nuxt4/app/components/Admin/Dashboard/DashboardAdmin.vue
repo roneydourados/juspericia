@@ -2,7 +2,6 @@
   <div class="pa-6 px-12">
     <HeaderPage title="Dashboard de Vendas" font-size="1.8rem" />
   </div>
-
   <v-card flat rounded="lg" color="transparent">
     <v-card-title class="pa-4 mb-8 px-12">
       <Tabs
@@ -17,7 +16,7 @@
       />
     </v-card-title>
     <v-card-text class="px-12">
-      <v-row dense>
+      <v-row>
         <v-col cols="12">
           <DashboardAdminCards />
         </v-col>

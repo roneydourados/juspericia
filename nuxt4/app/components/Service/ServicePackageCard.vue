@@ -1,11 +1,9 @@
 <template>
-  <v-card
+  <CardBlur
     :disabled="loading"
     :loading="loading"
     class="mx-auto my-12"
-    max-width="95%"
-    rounded="xl"
-    elevation="8"
+    height="500"
   >
     <template v-slot:loader="{ isActive }">
       <v-progress-linear
@@ -73,7 +71,7 @@
         <v-icon icon="mdi-cart-outline" end color="colorIcon" />
       </Button>
     </div>
-  </v-card>
+  </CardBlur>
   <AsaasPreCheckout
     v-model:show="showSale"
     v-model="modelPrececkout"

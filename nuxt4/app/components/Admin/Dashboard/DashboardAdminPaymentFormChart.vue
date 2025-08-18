@@ -1,5 +1,5 @@
 <template>
-  <Card elevation="6">
+  <CardBlur>
     <template #title>
       <div class="pa-4">
         <HeaderPage title="Faturamento por forma de pagamento" />
@@ -13,7 +13,7 @@
         :series="chartData.series"
       />
     </template>
-  </Card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">
@@ -26,7 +26,7 @@ const chartData = computed(() => {
     chartOptions: {
       chart: {
         height: "480",
-        type: "donut",
+        type: "pie",
       },
       theme: {
         palette: "palette1",

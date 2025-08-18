@@ -1,5 +1,5 @@
 <template>
-  <Card flat rounded="lg" elevation="6">
+  <CardBlur>
     <template #title>
       <div class="pa-4">
         <HeaderPage :title="`Faturamento - ${currentYear}`" />
@@ -13,7 +13,7 @@
         :series="chartData.series"
       />
     </template>
-  </Card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

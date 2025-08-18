@@ -1,5 +1,5 @@
 <template>
-  <Card elevation="6">
+  <CardBlur height="100%">
     <template #content>
       <Table
         title="Revisão de laudo médico"
@@ -22,7 +22,7 @@
         </template>
       </Table>
     </template>
-  </Card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <Card elevation="6">
+  <CardBlur height="100%">
     <template #content>
       <Table
         title="Horas trabalhadas dos médicos"
@@ -8,7 +8,7 @@
         :showCrud="false"
       />
     </template>
-  </Card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

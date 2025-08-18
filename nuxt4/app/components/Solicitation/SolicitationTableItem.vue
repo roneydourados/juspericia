@@ -1,11 +1,9 @@
 <template>
-  <v-card
+  <CardBlur
     v-if="!showTeleMedicine"
-    flat
-    elevation="6"
-    rounded="xl"
     style="border-top: 6px solid #c8e040"
     class="text-primary"
+    height="360"
   >
     <v-card-title
       class="d-flex align-center justify-space-between pa-6"
@@ -451,7 +449,7 @@
         </v-col>
       </v-row>
     </v-card-text>
-  </v-card>
+  </CardBlur>
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"

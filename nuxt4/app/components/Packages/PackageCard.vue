@@ -1,12 +1,5 @@
 <template>
-  <v-card
-    :disabled="loading"
-    :loading="loading"
-    class="mx-auto my-12"
-    max-width="95%"
-    rounded="xl"
-    elevation="8"
-  >
+  <CardBlur :disabled="loading" :loading="loading" class="mx-auto" height="620">
     <template v-slot:loader="{ isActive }">
       <v-progress-linear
         :active="isActive"
@@ -118,7 +111,7 @@
         <span class="text-caption text-primary"> Recuperar </span>
       </Button>
     </v-card-actions>
-  </v-card>
+  </CardBlur>
   <Dialog
     title="CONFIRME"
     :dialog="showDelete"

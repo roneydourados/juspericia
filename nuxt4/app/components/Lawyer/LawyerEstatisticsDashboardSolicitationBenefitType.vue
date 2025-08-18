@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="xl" elevation="6" class="pa-2">
+  <CardBlur height="100%">
     <Table
       title="Solicitações por tipo de benefício"
       :headers="headers"
@@ -24,7 +24,7 @@
         </div>
       </template>
     </Table>
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

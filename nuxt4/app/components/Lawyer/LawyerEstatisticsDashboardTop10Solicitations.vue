@@ -1,5 +1,5 @@
 <template>
-  <v-card flat rounded="xl" elevation="6">
+  <CardBlur>
     <Table
       title="Top 10 solicitações concluídas"
       :headers="headers"
@@ -14,7 +14,7 @@
         {{ item.dateClose ? dayjs(item.dateClose).format("DD/MM/YYYY") : "-" }}
       </template>
     </Table>
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

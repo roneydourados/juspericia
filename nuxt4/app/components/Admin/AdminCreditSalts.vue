@@ -5,7 +5,7 @@
         <HeaderPage title="Saldo de créditos" font-size="1.8rem" />
       </v-card-title>
       <v-card-text>
-        <v-row dense>
+        <v-row>
           <v-col cols="12" lg="3">
             <CardLeftBorderColor
               title="Saldo Créditos"

@@ -33,7 +33,7 @@
       </div>
     </v-card-title>
     <v-card-text class="pa-4">
-      <v-row dense>
+      <v-row>
         <v-col
           v-for="consultation in $all"
           cols="12"
