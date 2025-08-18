@@ -38,10 +38,10 @@
         </div>
       </v-col>
       <v-col v-for="consultation in $all" cols="12" lg="3">
-        <CardBlur>
+        <CardBlur height="100%">
           <template #content>
-            <v-row dense>
-              <v-col cols="12" class="d-flex flex-column text-primary pa-8">
+            <v-row>
+              <v-col cols="12" class="d-flex flex-column text-primary">
                 <div class="d-flex" style="gap: 0.5rem">
                   <strong class="">Título:</strong>
                   <span class="text-truncate">
@@ -51,22 +51,22 @@
                 <v-divider class="mt-8" />
               </v-col>
             </v-row>
-            <v-row dense>
+            <v-row>
               <v-col
                 cols="12"
-                lg="6"
-                class="d-flex flex-column px-8"
+                lg="4"
+                class="d-flex flex-column"
                 style="gap: 0.2rem"
               >
                 <div class="d-flex align-center" style="gap: 0.5rem">
-                  <v-avatar color="greenLime" variant="outlined" size="25">
+                  <v-avatar color="greenLime" variant="outlined" size="20">
                     <v-icon
                       icon="mdi-currency-usd"
                       color="colorIcon"
                       size="15"
                     />
                   </v-avatar>
-                  <span>Preço Crédito</span>
+                  <span>Preço</span>
                 </div>
                 <strong style="font-size: 1.2rem" class="text-primary">
                   {{ amountFormated(consultation.value ?? 0, false) }}
@@ -74,12 +74,12 @@
               </v-col>
               <v-col
                 cols="12"
-                lg="6"
+                lg="8"
                 class="d-flex flex-column px-8"
                 style="gap: 0.2rem"
               >
                 <div class="d-flex align-center" style="gap: 0.5rem">
-                  <v-avatar color="primary" variant="outlined" size="25">
+                  <v-avatar color="primary" variant="outlined" size="20">
                     <v-icon icon="mdi-currency-usd" color="primary" size="15" />
                   </v-avatar>
                   <span>Preço Crédito</span>

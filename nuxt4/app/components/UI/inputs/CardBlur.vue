@@ -26,7 +26,6 @@ defineProps({
 .custom-card {
   width: 280px;
   padding: 2rem 1rem;
-  text-align: center;
 
   /* sombra com blur */
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);

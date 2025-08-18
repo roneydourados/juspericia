@@ -1,5 +1,5 @@
 <template>
-  <CardBlur>
+  <CardBlur height="100%">
     <template #title>
       <div class="pa-4">
         <HeaderPage title="Solicitações por status" />

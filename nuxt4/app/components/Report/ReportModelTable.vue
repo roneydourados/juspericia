@@ -38,7 +38,7 @@
         </div>
       </v-col>
       <v-col v-for="report in $all" cols="12" lg="3" :key="report.id">
-        <CardBlur>
+        <CardBlur height="100%">
           <template #content>
             <v-row class="text-primary pa-6">
               <v-col cols="12" style="gap: 0.2rem">

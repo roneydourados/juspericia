@@ -1,5 +1,5 @@
 <template>
-  <v-row dense>
+  <v-row>
     <v-col cols="12" lg="6">
       <CardLeftBorderColor
         title="Pendente"
@@ -8,7 +8,7 @@
         icon-color="warning"
       >
         <div
-          class="mt-4 text-primary"
+          class="text-primary w-100"
           style="font-size: 1.88rem; font-weight: 600"
         >
           {{ amountFormated($dash?.totalPending ?? 0, true) }}
@@ -22,10 +22,7 @@
         icon="mdi-currency-usd"
         icon-color="success"
       >
-        <div
-          class="mt-4 text-primary"
-          style="font-size: 1.88rem; font-weight: 600"
-        >
+        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
           {{ amountFormated($dash?.totalConfirmed ?? 0, true) }}
         </div>
       </CardLeftBorderColor>
@@ -50,10 +47,7 @@
     </v-col> -->
     <v-col cols="12" lg="3">
       <CardLeftBorderColor title="Novos Clientes" color="#FFF">
-        <div
-          class="mt-4 text-primary"
-          style="font-size: 1.88rem; font-weight: 600"
-        >
+        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
           {{ $dash?.newClients ? $dash?.newClients.toString() : "0" }}
         </div>
       </CardLeftBorderColor>
@@ -64,10 +58,7 @@
         color="#FFF"
         icon="mdi-account-group-outline"
       >
-        <div
-          class="mt-4 text-primary"
-          style="font-size: 1.88rem; font-weight: 600"
-        >
+        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
           {{ $dash?.totalClients ? $dash?.totalClients.toString() : "0" }}
         </div>
       </CardLeftBorderColor>
@@ -78,10 +69,7 @@
         color="#FFF"
         icon="mdi-package-variant"
       >
-        <div
-          class="mt-4 text-primary"
-          style="font-size: 1.88rem; font-weight: 600"
-        >
+        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
           {{ $dash?.credisToExpire.toString() }}
         </div>
       </CardLeftBorderColor>
@@ -92,10 +80,7 @@
         color="#FFF"
         icon="mdi-calendar-month"
       >
-        <div
-          class="mt-4 text-primary"
-          style="font-size: 1.88rem; font-weight: 600"
-        >
+        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
           {{ $dash?.client40DaysSolicitation.toString() }}
         </div>
       </CardLeftBorderColor>

@@ -7,7 +7,6 @@
           <v-icon :icon="icon" />
         </v-avatar>
       </div>
-
       <slot />
     </div>
   </CardBlur>
