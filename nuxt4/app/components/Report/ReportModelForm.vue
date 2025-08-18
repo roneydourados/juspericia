@@ -2,7 +2,7 @@
   <div class="pa-8">
     <HeaderPage title="Modelo de Laudo" font-size="1.5rem" />
   </div>
-  <v-card flat rounded="xl" elevation="8" width="95%" style="margin: 0 auto">
+  <CardBlur style="margin: 0 auto">
     <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
       <v-card flat rounded="lg">
         <v-card-title>
@@ -60,7 +60,7 @@
         </v-card-text>
       </v-card>
     </FormCrud>
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">

@@ -2,8 +2,8 @@
   <div class="pa-6">
     <HeaderPage title="Solicitação de consulta" font-size="1.8rem" />
   </div>
-  <v-card flat rounded="xl" elevation="6" class="pa-6">
-    <v-card-text>
+  <CardBlur flat rounded="xl" elevation="6" class="pa-6">
+    <template #content>
       <FormCrud :on-submit="submitForm" :show-submit-button="false">
         <v-row dense>
           <v-col cols="12" lg="6">
@@ -201,7 +201,7 @@
           </v-col>
         </v-row>
       </FormCrud>
-    </v-card-text>
+    </template>
     <DialogLoading :dialog="loading" />
     <Dialog
       title="Confirmação"
@@ -215,7 +215,7 @@
         <strong>{{ selectedFile?.fileName }}</strong> ?
       </span>
     </Dialog>
-  </v-card>
+  </CardBlur>
 </template>
 <script setup lang="ts">
 import dayjs from "dayjs";

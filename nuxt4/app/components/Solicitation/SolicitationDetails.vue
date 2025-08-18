@@ -2,7 +2,7 @@
   <div class="pa-6">
     <HeaderPage title="Detalhes Solicitação" font-size="1.8rem" />
   </div>
-  <v-card flat rounded="xl" elevation="6" class="pa-4">
+  <CardBlur class="pa-4">
     <v-card-title>
       <v-row dense>
         <v-col cols="12" lg="11">
@@ -153,7 +153,7 @@
       </v-col>
     </v-row>
     <DialogLoading :dialog="loading" />
-  </v-card>
+  </CardBlur>
 </template>
 
 <script setup lang="ts">
