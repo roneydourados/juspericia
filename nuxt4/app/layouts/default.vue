@@ -8,18 +8,18 @@
 
     <v-app-bar elevation="0" class="toolbar-color" border="0">
       <template #title>
+        <v-app-bar-nav-icon
+          v-if="mobile"
+          variant="text"
+          color="white"
+          @click.stop="drawer = !drawer"
+        />
         <div class="d-flex align-center text-white">
-          <div v-if="$isDevelop" class="text-h4 text-center w-100">
+          <div v-if="$isDevelop && !mobile" class="text-h4 text-center w-100">
             ( DEMONSTRAÇÃO )
           </div>
         </div>
       </template>
-      <v-app-bar-nav-icon
-        v-if="mobile"
-        variant="text"
-        color="white"
-        @click.stop="drawer = !drawer"
-      />
       <template v-slot:append>
         <div
           v-if="$currentUser?.profile?.type === 'ADVOGADO'"

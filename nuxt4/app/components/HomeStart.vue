@@ -1,8 +1,8 @@
 <template>
-  <v-card variant="flat" class="mx-auto" color="transparent">
+  <v-card variant="flat" color="transparent">
     <v-card-item>
-      <div class="d-flex justify-space-between">
-        <div class="d-flex" style="gap: 2rem">
+      <div class="d-flex flex-wrap justify-space-between">
+        <div class="d-flex flex-wrap" style="gap: 2rem">
           <div
             class="text-primary"
             style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem"
