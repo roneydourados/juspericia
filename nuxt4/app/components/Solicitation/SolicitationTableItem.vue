@@ -3,7 +3,7 @@
     v-if="!showTeleMedicine"
     style="border-top: 6px solid #c8e040"
     class="text-primary"
-    height="360"
+    height="400"
   >
     <v-card-title
       class="d-flex align-center justify-space-between pa-6"
@@ -270,6 +270,16 @@
             <span>Data limite para solicitar correção:</span>
             <span class="font-weight-bold">
               {{ dayjs(solicitation.deadline).format("DD/MM/YYYY") }}
+            </span>
+          </div>
+
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Especialidade médica:</span>
+            <span class="font-weight-bold">
+              {{
+                solicitation.medicalSpecialty?.medicalSpecialty ??
+                "Não informado"
+              }}
             </span>
           </div>
         </v-col>

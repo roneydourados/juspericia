@@ -44,6 +44,12 @@
               show-new-Button
             />
           </v-col>
+          <v-col cols="12" lg="6">
+            <SelectSearchMedicalSpecialty
+              v-model="form.medicalSpecialty"
+              required
+            />
+          </v-col>
         </v-row>
         <v-row
           v-if="form.reportPurpose?.name?.toLowerCase() === 'judicial'"
@@ -262,6 +268,7 @@ const form = ref({
   content: "",
   factsRealityConfirm: false,
   files: [] as FileProps[],
+  medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
 });
 
 const filters = ref(getSolicitationsFilters());
@@ -292,6 +299,7 @@ const clearModel = () => {
     content: "",
     factsRealityConfirm: false,
     files: [],
+    medicalSpecialty: undefined,
   };
 };
 
@@ -307,6 +315,7 @@ const loadModel = () => {
     factsRealityConfirm: false,
     files: props.data.files as FileProps[],
     benefitTypeId: props.data.benefitTypeId ?? 0,
+    medicalSpecialty: props.data.medicalSpecialty,
   };
 };
 
@@ -359,6 +368,7 @@ const create = async () => {
       dateOpen: dayjs().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
       valueCredit: form.value.consultation?.valueCredit ?? 0,
+      medicalSpecialtyId: form.value.medicalSpecialty?.id,
     });
 
     if ($single.value?.id && form.value.files && form.value.files.length > 0) {
@@ -394,6 +404,7 @@ const update = async () => {
         : undefined,
       dateOpen: dayjs().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
+      medicalSpecialtyId: form.value.medicalSpecialty?.id,
     });
 
     if ($single.value?.id && form.value.files && form.value.files.length > 0) {

@@ -45,6 +45,8 @@ export interface SolicitationConsultationProps {
   sale?: SaleProps;
   files?: FileProps[];
   correctionQuantity?: number;
+  medicalSpecialtyId?: number;
+  medicalSpecialty?: MedicalSpecialtyProps;
 }
 
 export interface SolicitationConsultationFilterProps {
