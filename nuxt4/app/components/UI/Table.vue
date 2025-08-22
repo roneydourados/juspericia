@@ -86,6 +86,7 @@
         select-strategy="all"
         @update:model-value="$emit('update:modelValue', $event)"
         color="transparent"
+        :mobile="mobile"
       >
         <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
           <slot v-if="slotProps" :name="name" v-bind="slotProps" />
@@ -123,6 +124,7 @@
         select-strategy="all"
         @update:model-value="$emit('update:modelValue', $event)"
         color="transparent"
+        :mobile="mobile"
       >
         <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
           <slot v-if="slotProps" :name="name" v-bind="slotProps" />
@@ -200,6 +202,10 @@ const props = defineProps({
   fontSize: {
     type: String,
     default: "1rem",
+  },
+  mobile: {
+    type: Boolean,
+    default: false,
   },
 });
 const { mobile } = useDisplay();

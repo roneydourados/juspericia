@@ -67,9 +67,9 @@ const itemsMenu = ref([
     text: "Gestão de comissões. Controle de comissões dos médicos e vendedores.",
   },
   {
-    to: "/admin/medics",
-    icon: "mdi-stethoscope",
-    text: "Cadastro de médicos. Cadastrar/Administrar médicos parceiros que serão prestadores de atendimento via telemedicina.",
+    to: "/admin/medical-specialty",
+    icon: "mdi-medical-bag",
+    text: "Cadastro de especialidades médicas. Cadastrar/Administrar especialidades médicas.",
   },
 ]);
 </script>

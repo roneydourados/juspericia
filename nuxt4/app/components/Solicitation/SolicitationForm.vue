@@ -23,12 +23,6 @@
               label="Tipo de benefício"
               required
             />
-            <!-- <SelectSearchBenefitType
-              v-model="form.benefitType"
-              required
-              :clearable="true"
-              show-new-button
-            /> -->
           </v-col>
           <v-col cols="12" lg="3">
             <SelectSearchReportPurpose

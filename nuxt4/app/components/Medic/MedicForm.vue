@@ -85,6 +85,9 @@
                 :strong="!!(model.id && model.id > 0 && model.password)"
               />
             </v-col>
+            <v-col cols="12" lg="8">
+              <SelectSearchMedicalSpecialty v-model="model.medicalSpecialty" />
+            </v-col>
           </v-row>
         </v-tabs-window-item>
         <v-tabs-window-item value="bankData">
@@ -331,6 +334,7 @@ const model = ref({
   bankAgency: "",
   bankAccountNumber: "",
   bankAccountType: "CONTA_CORRENTE",
+  medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
 });
 
 const clearModel = () => {
@@ -368,6 +372,7 @@ const clearModel = () => {
     bankAgency: "",
     bankAccountNumber: "",
     bankAccountType: "CONTA_CORRENTE",
+    medicalSpecialty: undefined,
   };
 };
 
@@ -416,6 +421,7 @@ const loadModel = () => {
     bankAgency: props.data.bankAgency ?? "",
     bankAccountNumber: props.data.bankAccountNumber ?? "",
     bankAccountType: props.data.bankAccountType ?? "CONTA_CORRENTE",
+    medicalSpecialty: props.data.medicalSpecialty,
   };
 };
 
@@ -468,6 +474,7 @@ const create = async () => {
     bankAgency: model.value.bankAgency,
     bankAccountNumber: model.value.bankAccountNumber,
     bankAccountType: model.value.bankAccountType,
+    medicalSpecialtyId: model.value.medicalSpecialty?.id,
   });
 };
 
@@ -507,6 +514,7 @@ const update = async () => {
     bankAgency: model.value.bankAgency,
     bankAccountNumber: model.value.bankAccountNumber,
     bankAccountType: model.value.bankAccountType,
+    medicalSpecialtyId: model.value.medicalSpecialty?.id,
   });
 };
 

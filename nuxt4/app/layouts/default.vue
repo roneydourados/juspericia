@@ -14,11 +14,11 @@
           color="white"
           @click.stop="drawer = !drawer"
         />
-        <div class="d-flex align-center text-white">
+        <!-- <div class="d-flex align-center text-white">
           <div v-if="$isDevelop && !mobile" class="text-h4 text-center w-100">
             ( DEMONSTRAÇÃO )
           </div>
-        </div>
+        </div> -->
       </template>
       <template v-slot:append>
         <div

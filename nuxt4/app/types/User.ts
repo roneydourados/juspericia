@@ -41,6 +41,8 @@ export interface UserProps {
   bankAgency?: string;
   bankAccountNumber?: string;
   bankAccountType?: string;
+  medicalSpecialtyId?: number;
+  medicalSpecialty?: MedicalSpecialtyProps;
 }
 
 export interface UserProfileProps {
