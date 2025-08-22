@@ -25,7 +25,7 @@
         </v-col>
         <v-col cols="12" lg="2">
           <SelectInput
-            label="Satus"
+            label="Status"
             v-model="filters.status"
             :items="statusSale"
             item-title="label"
