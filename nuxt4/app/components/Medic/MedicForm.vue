@@ -86,7 +86,10 @@
               />
             </v-col>
             <v-col cols="12" lg="8">
-              <SelectSearchMedicalSpecialty v-model="model.medicalSpecialty" />
+              <SelectSearchMedicalSpecialty
+                v-model="model.medicalSpecialty"
+                required
+              />
             </v-col>
           </v-row>
         </v-tabs-window-item>
