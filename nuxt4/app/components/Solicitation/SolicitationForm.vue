@@ -2,7 +2,7 @@
   <div class="pa-6">
     <HeaderPage title="Solicitação de consulta" font-size="1.8rem" />
   </div>
-  <CardBlur flat rounded="xl" elevation="6" class="pa-6">
+  <CardBlur class="pa-6" :hover="false">
     <template #content>
       <FormCrud :on-submit="submitForm" :show-submit-button="false">
         <v-row dense>

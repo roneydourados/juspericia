@@ -4,6 +4,7 @@
     style="border-top: 6px solid #c8e040"
     class="text-primary"
     height="400"
+    :hover="false"
   >
     <v-card-title
       class="d-flex align-center justify-space-between pa-6"

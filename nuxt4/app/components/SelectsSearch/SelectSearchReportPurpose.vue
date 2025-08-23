@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex" style="gap: 0.5rem">
+  <div class="d-flex flex-column">
     <AutoCompleteInput
       v-model="value"
       v-model:search="search"
@@ -19,15 +19,6 @@
     >
       <template #item="{ item, props }">
         <v-list-item v-bind="props" :title="item.raw.name" density="compact">
-          <!-- <template #append>
-            <v-btn
-              v-if="$currentUser?.profile?.type === 'ADMIN'"
-              icon="mdi-pencil"
-              variant="text"
-              color="warning"
-              @click="getEditItem(item.raw)"
-            ></v-btn>
-          </template> -->
         </v-list-item>
       </template>
 
@@ -39,19 +30,14 @@
         </div>
       </template>
     </AutoCompleteInput>
-    <div v-if="showNewButton && $currentUser?.profile?.type === 'ADMIN'">
-      <v-tooltip text="Novo" content-class="tooltip-background">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            v-bind="props"
-            icon="mdi-plus"
-            size="x-small"
-            color="info"
-            flat
-            @click="showForm = true"
-          />
-        </template>
-      </v-tooltip>
+    <div
+      v-if="showNewButton && $currentUser?.profile?.type === 'ADMIN'"
+      class="mt-n4"
+    >
+      <Button size="small" color="info" variant="text" @click="showForm = true">
+        <v-icon icon="mdi-plus" size="22" start />
+        <span class="text-caption">Cadastrar finalidade</span>
+      </Button>
     </div>
   </div>
   <ReportPurposeForm

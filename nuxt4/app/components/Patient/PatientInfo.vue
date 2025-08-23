@@ -1,23 +1,28 @@
 <template>
-  <v-card max-width="1200" class="mx-auto">
-    <v-toolbar color="primary" title="Dados do paciente" class="px-4">
+  <CardBlur :hover="false">
+    <HeaderPage title="Dados do paciente" font-size="1.2rem" />
+    <v-toolbar color="#fff" class="px-4">
       <v-spacer />
-      <v-btn
-        variant="text"
+      <Button
+        variant="outlined"
+        color="grey"
         class="text-none"
-        prepend-icon="mdi-arrow-left"
+        size="small"
         @click="router.back()"
       >
-        Voltar
-      </v-btn>
-      <v-btn
-        variant="text"
-        class="text-none"
-        prepend-icon="mdi-pencil-outline"
+        <v-icon icon="mdi-arrow-left" color="darkText" start />
+        <span class="text-darkText text-caption"> Voltar </span>
+      </Button>
+      <Button
+        variant="outlined"
+        class="text-none ml-2"
         @click="handleGetEditItem"
+        size="small"
+        color="grey"
       >
-        Editar
-      </v-btn>
+        <v-icon icon="mdi-pencil-outline" color="colorIcon" start />
+        <span class="text-caption text-primary"> Editar </span>
+      </Button>
     </v-toolbar>
 
     <Tabs v-model="tab" :tabs="tabs" @update:model-value="handleTab">
@@ -27,7 +32,7 @@
         <PatientFiles v-if="tab === 3" />
       </template>
     </Tabs>
-  </v-card>
+  </CardBlur>
   <PatientForm
     :show="showForm"
     title="Paciente"

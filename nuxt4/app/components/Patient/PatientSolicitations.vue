@@ -4,7 +4,7 @@
       <Table
         :headers="headers"
         :items="$solicitations"
-        title="Solicitações de consulta"
+        title=""
         font-size="1.5rem"
         :show-crud="false"
       >
@@ -33,9 +33,8 @@
             :color="solicitationStatusColor(item.status)"
             text-color="white"
             size="small"
-            label
           >
-            <span class="font-weight-bold">
+            <span class="text-caption">
               {{ solicitationStatusName(item.status) }}
             </span>
           </v-chip>

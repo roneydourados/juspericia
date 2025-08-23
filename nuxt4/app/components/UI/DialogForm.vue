@@ -58,7 +58,7 @@ defineProps({
   },
   borderColor: {
     type: String,
-    default: "#fff",
+    default: "#C7D82F",
   },
 });
 const { mobile } = useDisplay();

@@ -2,7 +2,7 @@
   <div class="pa-6">
     <HeaderPage title="Detalhes Solicitação" font-size="1.8rem" />
   </div>
-  <CardBlur class="pa-4">
+  <CardBlur class="pa-4" :hover="false">
     <v-card-title>
       <v-row dense>
         <v-col cols="12" lg="11">

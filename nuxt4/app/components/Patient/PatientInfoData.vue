@@ -1,11 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row dense class="mb-4">
-      <v-col cols="12">
-        <strong style="font-size: 1rem">Dados cadastrais</strong>
-      </v-col>
-    </v-row>
-    <v-row dense>
+    <v-row dense class="text-primary">
       <v-col cols="12" lg="3">
         <InfoLabel
           font-size="0.9"
@@ -69,7 +64,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row dense class="text-primary">
       <v-col cols="12" lg="3">
         <InfoLabel
           title="CPF"
@@ -117,12 +112,12 @@
         />
       </v-col>
     </v-row>
-    <v-row dense class="mb-4 mt-4">
+    <v-row dense class="mb-4 mt-4 text-primary">
       <v-col cols="12">
         <strong style="font-size: 1rem">Dados endereço</strong>
       </v-col>
     </v-row>
-    <v-row dense>
+    <v-row dense class="text-primary">
       <v-col cols="12" lg="1">
         <InfoLabel
           title="Cep"

@@ -1,5 +1,11 @@
 <template>
-  <v-card class="custom-card" rounded="xl" :height="height" width="100%">
+  <v-card 
+    class="custom-card" 
+    :class="{ 'hover-enabled': hover }" 
+    rounded="xl" 
+    :height="height" 
+    width="100%"
+  >
     <slot />
     <v-card-title>
       <slot name="title" />
@@ -19,6 +25,10 @@ defineProps({
     type: String,
     default: undefined,
   },
+  hover: {
+    type: Boolean,
+    default: true,
+  },
 });
 </script>
 
@@ -33,7 +43,7 @@ defineProps({
 
   transition: all 0.3s ease;
 }
-.custom-card:hover {
+.custom-card.hover-enabled:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }

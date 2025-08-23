@@ -1,7 +1,6 @@
 <template>
   <v-card flat>
-    <v-card-title>
-      <h3>Anexos/Documentos</h3>
+    <v-card-text>
       <input
         multiple
         type="file"
@@ -9,18 +8,15 @@
         style="display: none"
         ref="fileInput"
       />
-      <v-btn
-        variant="flat"
-        color="info"
-        class="text-none"
+      <Button
+        variant="outlined"
+        color="grey"
         size="small"
         @click="($refs.fileInput as HTMLInputElement).click()"
       >
-        <v-icon icon="mdi-attachment" start />
-        Novo anexo
-      </v-btn>
-    </v-card-title>
-    <v-card-text>
+        <v-icon icon="mdi-attachment" color="colorIcon" start />
+        <span class="text-caption text-primary"> Novo anexo </span>
+      </Button>
       <div v-for="item in fileList" class="w-100 mt-4">
         <AttachementCard
           :file-name="item.fileName!"
@@ -79,7 +75,7 @@ const handleFileUpload = async (event: Event) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const exists = fileList.value.some(
-        (attachment) => attachment.fileName === file.name
+        (attachment) => attachment.fileName === file?.name
       );
       if (exists) {
         // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
@@ -89,7 +85,7 @@ const handleFileUpload = async (event: Event) => {
         fileCategory: "patient",
         ownerId: $patient.value?.id!,
         fileData: file,
-        fileName: file.name,
+        fileName: file?.name,
       });
     }
 

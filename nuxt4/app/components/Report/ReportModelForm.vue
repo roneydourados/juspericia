@@ -2,7 +2,7 @@
   <div class="pa-8">
     <HeaderPage title="Modelo de Laudo" font-size="1.5rem" />
   </div>
-  <CardBlur style="margin: 0 auto">
+  <CardBlur style="margin: 0 auto" :hover="false">
     <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
       <v-card flat rounded="lg">
         <v-card-title>
