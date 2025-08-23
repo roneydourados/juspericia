@@ -69,6 +69,14 @@
                   <span class="text-primary"> Acessar </span>
                 </Button>
               </v-col>
+              <v-col cols="12">
+                <div class="text-caption">Compatibilidade</div>
+                <v-icon icon="mdi-google-chrome" />
+                <v-icon icon="mdi-firefox" />
+                <v-icon icon="mdi-opera" />
+                <v-icon icon="mdi-microsoft-edge" />
+                <v-icon icon="mdi-apple-safari" />
+              </v-col>
             </v-row>
             <div v-if="!$isDevelop" class="mb-4">
               <p class="text-center text-caption">
