@@ -50,7 +50,7 @@
           </v-col>
         </v-row>
 
-        <div class="py-4">
+        <div v-if="!mobile" class="py-4">
           <Table
             title="Lista de indicações"
             font-size="1rem"
@@ -126,6 +126,11 @@
             </template>
           </Table>
         </div>
+        <LawyerMyIndicationsTableMobile
+          v-else
+          @edit="getItemEdit($event)"
+          @delete="getItemDelete($event)"
+        />
       </v-card-text>
     </v-card>
     <LawyerMyIndicationsForm v-model="showForm" :data="selected" />
@@ -147,6 +152,9 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { useDisplay } from "vuetify";
+
+const { mobile } = useDisplay();
 
 const indicationStore = useUserIndicationStore();
 
