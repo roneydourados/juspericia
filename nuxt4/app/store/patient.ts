@@ -5,7 +5,7 @@ export const usePatientStore = defineStore("patient", () => {
 
   const patient = ref<PatientProps>();
   const patients = ref<PatientProps[]>([]);
-  const solicitations = ref<SolicitationConsultationList[]>([]);
+  const solicitations = ref<SolicitationConsultationProps[]>([]);
   const $solicitations = computed(() => solicitations.value);
   const $single = computed(() => patient.value);
   const $all = computed(() => patients.value);
@@ -29,7 +29,7 @@ export const usePatientStore = defineStore("patient", () => {
   };
 
   const getSolicitations = async (publicId: string) => {
-    const { data } = await api.get<SolicitationConsultationList[]>(
+    const { data } = await api.get<SolicitationConsultationProps[]>(
       `/patient/solicitations/${publicId}`
     );
 

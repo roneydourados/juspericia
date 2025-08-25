@@ -1,192 +1,115 @@
 <template>
-  <div>
-    <Table
-      :headers="headers"
-      :items="$all"
-      title="Pacientes"
-      font-size="1.5rem"
-      @add="showForm = true"
-      @search="handleSearch($event)"
-      :items-per-page="mobile ? 3 : 6"
-      :loading="loading"
-    >
-      <template #mobileContent="{ item }: any">
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="Nome"
-              icon="mdi-account-outline"
-              color-icon="colorIcon"
-              :content="`${item.name} ${item.surname}`"
-              :show-divider="true"
-              @click="handlePatientInfo(item.publicId)"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              title="CPF"
-              icon="mdi-clipboard-account-outline"
-              color-icon="colorIcon"
-              font-size="1"
-              font-size-content="1.2"
-              :content="formatCPF(item.cpf)"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="Whatsapp"
-              icon="mdi-whatsapp"
-              color-icon="green"
-              :content="formatTelephoneNumber(item.phone ?? '')"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
-        <v-row dense>
-          <v-col cols="12">
-            <InfoLabel
-              font-size="1"
-              font-size-content="1.2"
-              title="Advogado"
-              icon="mdi-account-tie-outline"
-              color-icon="blue"
-              :content="item.User?.name"
-              :show-divider="true"
-            />
-          </v-col>
-        </v-row>
-      </template>
-      <template #mobileActions="{ item }">
-        <v-btn
+  <Table
+    v-if="!mobile"
+    :headers="headers"
+    :items="$all"
+    title="Pacientes"
+    font-size="1.5rem"
+    @add="showForm = true"
+    @search="handleSearch($event)"
+    :items-per-page="mobile ? 3 : 6"
+    :loading="loading"
+  >
+    <template v-slot:item.name="{ item }">
+      <span
+        style="cursor: pointer"
+        class="d-flex align-center"
+        @click="handlePatientInfo(item.publicId)"
+      >
+        <v-icon icon="mdi-account-outline" size="24" start color="colorIcon" />
+        <div class="d-flex align-center" style="gap: 0.3rem">
+          <span>{{ item.name }}</span>
+          <span>{{ item.surname }}</span>
+        </div>
+      </span>
+    </template>
+    <template v-slot:item.User.name="{ item }">
+      <span style="cursor: pointer" class="d-flex align-center">
+        <v-icon
+          icon="mdi-account-tie-outline"
+          size="24"
+          start
           color="colorIcon"
-          variant="flat"
-          size="small"
-          prepend-icon="mdi-pencil-outline"
-          @click="handleEdit(item as PatientProps)"
-          class="text-none text-white"
+        />
+        <span>{{ item.User?.name }}</span>
+      </span>
+    </template>
+    <template v-slot:item.cpf="{ item }">
+      <span class="d-flex align-center">
+        <v-icon
+          icon="mdi-clipboard-account-outline"
+          size="24"
+          color="colorIcon"
+          start
+        />
+        <span>{{ formatCPF(item.cpf) }}</span>
+      </span>
+    </template>
+    <template v-slot:item.phone="{ item }">
+      <span class="d-flex align-center">
+        <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
+        <span>
+          {{ formatTelephoneNumber(item.phone ?? "") }}
+        </span>
+      </span>
+    </template>
+    <template v-slot:item.actions="{ item }">
+      <v-btn
+        icon
+        color="colorIcon"
+        variant="text"
+        size="small"
+        @click="handleEdit(item)"
+      >
+        <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top center"
+          content-class="tooltip-background"
         >
           Editar
-        </v-btn>
-        <v-btn
-          color="error"
-          variant="flat"
-          size="small"
-          class="text-none text-white"
-          prepend-icon="mdi-delete-outline"
-          @click="getItemDelete(item as PatientProps)"
+        </v-tooltip>
+      </v-btn>
+      <v-btn
+        icon
+        color="red"
+        variant="text"
+        size="small"
+        @click="getItemDelete(item)"
+      >
+        <v-icon icon="mdi-delete-outline" size="20"></v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top center"
+          content-class="tooltip-background"
         >
           Apagar
-        </v-btn>
-      </template>
-      <template v-slot:item.name="{ item }">
-        <span
-          style="cursor: pointer"
-          class="d-flex align-center"
-          @click="handlePatientInfo(item.publicId)"
-        >
-          <v-icon
-            icon="mdi-account-outline"
-            size="24"
-            start
-            color="colorIcon"
-          />
-          <div class="d-flex align-center" style="gap: 0.3rem">
-            <span>{{ item.name }}</span>
-            <span>{{ item.surname }}</span>
-          </div>
-        </span>
-      </template>
-      <template v-slot:item.User.name="{ item }">
-        <span style="cursor: pointer" class="d-flex align-center">
-          <v-icon
-            icon="mdi-account-tie-outline"
-            size="24"
-            start
-            color="colorIcon"
-          />
-          <span>{{ item.User?.name }}</span>
-        </span>
-      </template>
-      <template v-slot:item.cpf="{ item }">
-        <span class="d-flex align-center">
-          <v-icon
-            icon="mdi-clipboard-account-outline"
-            size="24"
-            color="colorIcon"
-            start
-          />
-          <span>{{ formatCPF(item.cpf) }}</span>
-        </span>
-      </template>
-      <template v-slot:item.phone="{ item }">
-        <span class="d-flex align-center">
-          <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
-          <span>
-            {{ formatTelephoneNumber(item.phone ?? "") }}
-          </span>
-        </span>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-btn
-          icon
-          color="colorIcon"
-          variant="text"
-          size="small"
-          @click="handleEdit(item)"
-        >
-          <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Editar
-          </v-tooltip>
-        </v-btn>
-        <v-btn
-          icon
-          color="red"
-          variant="text"
-          size="small"
-          @click="getItemDelete(item)"
-        >
-          <v-icon icon="mdi-delete-outline" size="20"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Apagar
-          </v-tooltip>
-        </v-btn>
-      </template>
-    </Table>
-    <PatientForm
-      :show="showForm"
-      title="Dados do Paciente"
-      @close="handleCloseForm"
-      :data="itemSelected"
-      width="800"
-    />
-    <Dialog
-      title="CONFIRME"
-      :dialog="showDelete"
-      @cancel="showDelete = false"
-      @confirm="handleDeleteItem"
-      show-cancel
-    >
-      <span>Apagar {{ itemSelected?.name }} ? </span>
-    </Dialog>
-  </div>
+        </v-tooltip>
+      </v-btn>
+    </template>
+  </Table>
+  <PatientTableMobile
+    v-else
+    @edit="handleEdit($event)"
+    @delete="getItemDelete($event)"
+    @info="handlePatientInfo($event)"
+  />
+  <PatientForm
+    :show="showForm"
+    title="Dados do Paciente"
+    @close="handleCloseForm"
+    :data="itemSelected"
+    width="800"
+  />
+  <Dialog
+    title="CONFIRME"
+    :dialog="showDelete"
+    @cancel="showDelete = false"
+    @confirm="handleDeleteItem"
+    show-cancel
+  >
+    <span>Apagar {{ itemSelected?.name }} ? </span>
+  </Dialog>
 </template>
 
 <script setup lang="ts">

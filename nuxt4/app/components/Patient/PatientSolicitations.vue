@@ -2,6 +2,7 @@
   <v-card flat>
     <v-card-title>
       <Table
+        v-if="!mobile"
         :headers="headers"
         :items="$solicitations"
         title=""
@@ -61,13 +62,18 @@
           </v-btn>
         </template>
       </Table>
+      <PatientSolicitationsTableMobile v-else />
     </v-card-title>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { useDisplay } from "vuetify";
+
 const patientStore = usePatientStore();
+
+const { mobile } = useDisplay();
 const { amountFormated, solicitationStatusName, solicitationStatusColor } =
   useUtils();
 
