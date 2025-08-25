@@ -1,76 +1,73 @@
 <template>
-  <CardBlur
-    :disabled="loading"
-    :loading="loading"
-    class="mx-auto my-12"
-    height="500"
-  >
-    <template v-slot:loader="{ isActive }">
-      <v-progress-linear
-        :active="isActive"
-        color="deep-purple"
-        height="4"
-        indeterminate
-      ></v-progress-linear>
+  <CardBlur :disabled="loading" :loading="loading" height="480">
+    <!-- <template #title>
+      <template v-slot:loader="{ isActive }">
+        <v-progress-linear
+          :active="isActive"
+          color="deep-purple"
+          height="4"
+          indeterminate
+        ></v-progress-linear>
+      </template>
+    </template> -->
+    <template #title>
+      <v-img
+        height="250"
+        src="@/assets/images/package.avif"
+        cover
+        rounded="xl"
+      />
     </template>
 
-    <v-card flat>
-      <v-card-text>
-        <v-img
-          height="250"
-          src="@/assets/images/package.avif"
-          cover
-          rounded="xl"
-        />
-      </v-card-text>
-    </v-card>
-
-    <v-card-item>
-      <v-card-title>
+    <template #content>
+      <span
+        class="d-flex align-center justify-space-between"
+        style="white-space: pre-line"
+      >
         <span
-          class="d-flex align-center justify-space-between"
-          style="white-space: pre-line"
+          class="font-weight-bold text-primary text-truncate"
+          :style="`
+            font-size: ${mobile ? '0.8rem' : '1.5rem'};
+            max-width: 80%;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            `"
         >
-          <span
-            class="font-weight-bold text-primary text-truncate"
-            style="
-              font-size: 1.5rem;
-              max-width: 80%;
-              display: inline-block;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            "
-          >
-            {{ item.name }}
-          </span>
-          <v-avatar size="30" color="primary">
-            <v-icon color="white" icon="mdi-fire-circle" size="small" />
-          </v-avatar>
+          {{ item.name }}
         </span>
-      </v-card-title>
-    </v-card-item>
-    <v-card-text>
+        <v-avatar size="20" color="primary">
+          <v-icon color="white" icon="mdi-fire-circle" size="x-small" />
+        </v-avatar>
+      </span>
       <p
-        class="text-justify text-darkText text-subtitle-2"
+        class="text-darkText text-subtitle-2 mt-2"
         style="white-space: pre-line"
       >
         {{ item.description }}
       </p>
-    </v-card-text>
-    <div class="d-flex justify-space-between px-4 mb-4">
-      <v-chip color="grey" size="x-large">
-        <div
-          style="font-size: 1.3rem; font-weight: 600"
-          class="text-black text-primary"
-        >
-          {{ amountFormated(item.value ?? 0, true) }}
-        </div>
-      </v-chip>
-      <Button @click="handleGetItemSale" size="large">
-        <span>COMPRAR</span>
-        <v-icon icon="mdi-cart-outline" end color="colorIcon" />
-      </Button>
-    </div>
+
+      <v-row dense class="mt-4">
+        <v-col cols="6">
+          <v-chip color="grey" size="x-large">
+            <div
+              :style="`font-size: ${
+                mobile ? '0.8rem' : '1.3rem;'
+              }  font-weight: 600`"
+              class="text-black text-primary"
+            >
+              {{ amountFormated(item.value ?? 0, true) }}
+            </div>
+          </v-chip>
+        </v-col>
+        <v-col cols="6">
+          <Button @click="handleGetItemSale" size="large">
+            <span :class="`${mobile ? 'text-caption' : ''}`">COMPRAR</span>
+            <v-icon icon="mdi-cart-outline" end color="colorIcon" />
+          </Button>
+        </v-col>
+      </v-row>
+    </template>
   </CardBlur>
   <AsaasPreCheckout
     v-model:show="showSale"
@@ -82,7 +79,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 const props = defineProps({
   item: {
     type: Object as PropType<ServicePackagesProps>,
@@ -91,6 +88,7 @@ const props = defineProps({
 });
 
 const { amountFormated } = useUtils();
+const { mobile } = useDisplay();
 const asaas = useAsaasStore();
 const voucherStore = useVoucherStore();
 const auth = useAuthStore();
