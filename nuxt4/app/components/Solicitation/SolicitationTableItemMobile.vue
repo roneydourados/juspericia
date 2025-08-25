@@ -354,7 +354,7 @@ const modelPrececkout = ref({
   packgeQuantity: 1,
 });
 
-const itemsPerPage = ref(2);
+const itemsPerPage = ref(10);
 const page = ref(1);
 
 const $currentUser = computed(() => auth.$currentUser);

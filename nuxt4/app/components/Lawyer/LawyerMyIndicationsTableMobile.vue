@@ -18,9 +18,6 @@
     :hover="false"
     style="border-top: 3px solid #c8e040"
   >
-    <!-- <template #title>
-      <pre>{{ item }}</pre>
-    </template> -->
     <template #content>
       <div class="d-flex flex-column">
         <div class="d-flex align-center" style="gap: 0.5rem">
@@ -77,7 +74,7 @@ const indicationStore = useUserIndicationStore();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => indicationStore.$all);
 
-const itemsPerPage = ref(2);
+const itemsPerPage = ref(10);
 const page = ref(1);
 
 const paginatedItems = computed(() => {

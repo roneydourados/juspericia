@@ -53,7 +53,7 @@
           <LawyerMySaltsFilters v-model="reloadFilters" />
         </v-col>
       </v-row>
-      <div class="py-4">
+      <div v-if="!mobile" class="py-4">
         <Table
           title="Compras"
           font-size="1.5rem"
@@ -148,9 +148,16 @@
           </template>
         </Table>
       </div>
+      <LawyerMySaltsTableMobile
+        v-if="mobile"
+        @details="handleDetails($event)"
+        @paid="handlePaid($event)"
+        @receipt="handleReceipt($event)"
+      />
     </v-card-text>
   </v-card>
   <LawyerMySaltsDetails v-model="showDetails" />
+  <LawyerMySaltsDetailsMobileItem v-model="showDetailsMobile" />
   <v-snackbar
     v-model="showErrorAlert"
     vertical
@@ -174,11 +181,15 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { useDisplay } from "vuetify";
 
 const saltCredit = useUserCreditSaltStore();
 const asaas = useAsaasStore();
+
+const { mobile } = useDisplay();
 const { amountFormated } = useUtils();
 const showDetails = ref(false);
+const showDetailsMobile = ref(false);
 const reloadFilters = ref(false);
 const showErrorAlert = ref(false);
 
@@ -240,7 +251,8 @@ const getStatusName = (item: UserCreditSalt) => {
 
 const handleDetails = async (item: UserCreditSalt) => {
   await saltCredit.getUserCreditLog(item.publicId!);
-  showDetails.value = true;
+  showDetails.value = !mobile.value;
+  showDetailsMobile.value = mobile.value;
 };
 
 const handlePaid = async (item: UserCreditSalt) => {
