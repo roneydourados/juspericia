@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card flat rounded="lg" color="transparent">
-      <v-card-title class="d-flex justify-space-between pa-4">
+      <v-card-title class="d-flex flex-wrap justify-space-between pa-4">
         <HeaderPage title="Minhas Indicações" font-size="1.8rem" />
         <Button
           color="primary"
@@ -14,13 +14,14 @@
         </Button>
       </v-card-title>
       <v-card-text>
-        <div class="d-flex justify-space-between">
-          <Months @month="handleChangeMonth($event)" />
-
-          <div class="d-flex align-center" style="gap: 0.5rem">
+        <v-row dense>
+          <v-col cols="12" lg="8">
+            <Months @month="handleChangeMonth($event)" />
+          </v-col>
+          <v-col cols="12" lg="2">
             <v-card variant="outlined" rounded="xl">
               <v-card-title>
-                <div class="d-flex" style="gap: 1rem">
+                <div class="d-flex justify-space-between">
                   <span class="text-darkText text-subtitle-1">
                     Indicações
                   </span>
@@ -32,10 +33,11 @@
                 </div>
               </v-card-title>
             </v-card>
-
+          </v-col>
+          <v-col cols="12" lg="2">
             <v-card variant="outlined" rounded="xl">
               <v-card-title>
-                <div class="d-flex" style="gap: 1rem">
+                <div class="d-flex justify-space-between">
                   <span class="text-darkText text-subtitle-1"> Pontos </span>
                   <v-chip color="green" variant="flat">
                     <span class="text-subtitle-1 font-weight-bold">
@@ -45,8 +47,9 @@
                 </div>
               </v-card-title>
             </v-card>
-          </div>
-        </div>
+          </v-col>
+        </v-row>
+
         <div class="py-4">
           <Table
             title="Lista de indicações"
