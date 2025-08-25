@@ -1,6 +1,37 @@
 <template>
-  <!-- <pre>{{ $sales }}</pre> -->
+  <v-row dense>
+    <v-col cols="12" lg="2">
+      <DatePicker v-model="filters.initialDate" label="Data inicial" />
+    </v-col>
+    <v-col cols="12" lg="2">
+      <DatePicker v-model="filters.finalDate" label="Data final" />
+    </v-col>
+    <v-col cols="12" lg="2">
+      <Button
+        color="primary"
+        variant="flat"
+        size="small"
+        class="text-none"
+        @click="getTransactions"
+      >
+        <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+        <span class="text-caption"> Filtrar </span>
+      </Button>
+    </v-col>
+    <v-col
+      cols="12"
+      class="d-flex align-center w-100 py-6 justify-end"
+      style="gap: 0.5rem"
+    >
+      <span class="text-subtitle-1 font-weight-bold"> Total: </span>
+      <span style="font-weight: 700; font-size: 1.2rem">
+        {{ amountFormated($total ?? 0, true) }}
+      </span>
+    </v-col>
+  </v-row>
+
   <Table
+    v-if="!mobile"
     title="Minhas compras personalizadas"
     font-size="1.5rem"
     :headers="headers"
@@ -10,42 +41,7 @@
     :show-crud="false"
     :items-per-page="30"
   >
-    <template v-slot:top-table>
-      <v-row desnse>
-        <v-col cols="12" lg="2">
-          <DatePicker
-            v-model="filters.initialDate"
-            label="Data inicial"
-            class="mb-4"
-          />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <DatePicker
-            v-model="filters.finalDate"
-            label="Data final"
-            class="mb-4"
-          />
-        </v-col>
-        <v-col cols="12" lg="2">
-          <Button
-            color="primary"
-            variant="flat"
-            size="small"
-            class="text-none"
-            @click="getTransactions"
-          >
-            <v-icon icon="mdi-filter-outline" color="colorIcon" start />
-            <span class="text-caption"> Filtrar </span>
-          </Button>
-        </v-col>
-      </v-row>
-      <div class="d-flex align-center w-100 py-6" style="gap: 0.5rem">
-        <span class="text-subtitle-1 font-weight-bold"> Total: </span>
-        <span style="font-weight: 700; font-size: 1.2rem">
-          {{ amountFormated($total ?? 0, true) }}
-        </span>
-      </div>
-    </template>
+    <template v-slot:top-table> </template>
     <template v-slot:item.value="{ item }">
       <span class="font-weight-bold">
         {{ amountFormated(item.value ?? 0, true) }}
@@ -123,25 +119,14 @@
             Cancelar compra
           </v-tooltip>
         </v-btn>
-        <!-- <v-btn
-          v-if="item.status === 'CONFIRMED'"
-          variant="text"
-          color="info"
-          icon
-          @click="handleReceipt(item)"
-        >
-          <v-icon icon="mdi-file-multiple"></v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Comprovante de pagamento
-          </v-tooltip>
-        </v-btn> -->
       </div>
     </template>
   </Table>
+  <UserPersonalizedSalesTableMobile
+    v-else
+    @cancel-transaction="getTransactionCancel($event)"
+    @pre-checkout="hanelMountModelPrececkout($event)"
+  />
   <DialogLoading :dialog="loading" />
   <AsaasPreCheckout
     v-model:show="showPrececkout"
@@ -156,7 +141,7 @@
     @confirm="handleCancelItem"
     show-cancel
   >
-    <span>Conforma o cancelamento da compra ? </span>
+    <span>Confirma o cancelamento da compra ? </span>
   </Dialog>
   <v-snackbar
     v-model="showErrorAlert"
@@ -182,12 +167,13 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 const salesStore = useSaleStore();
 const auth = useAuthStore();
 const asaas = useAsaasStore();
 const transactionsStore = useTransactionsStore();
 const { amountFormated, formatDate } = useUtils();
+const { mobile } = useDisplay();
 
 const $sales = computed(() => salesStore.$all);
 const $currentUser = computed(() => auth.$currentUser);
