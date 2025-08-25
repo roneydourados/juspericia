@@ -1,6 +1,20 @@
 <template>
   <div>
     <v-row dense>
+      <v-col v-if="mobile" cols="12" lg="4">
+        <v-locale-provider locale="pt">
+          <v-date-picker
+            v-model="model.date"
+            hide-actions
+            hide-title
+            hide-header
+            elevation="0"
+            rounded="xl"
+            color="primary"
+            @update:model-value="getSchedules"
+          />
+        </v-locale-provider>
+      </v-col>
       <v-col cols="12" lg="8">
         <v-card color="transparent" elevation="0">
           <v-card-title class="d-flex flex-column py-8" style="gap: 0.5rem">
@@ -129,7 +143,7 @@
           </v-cad-text>
         </v-card>
       </v-col>
-      <v-col cols="12" lg="4">
+      <v-col v-if="!mobile" cols="12" lg="4">
         <v-locale-provider locale="pt">
           <v-date-picker
             v-model="model.date"
@@ -155,11 +169,12 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
 const { getInitials } = useUtils();
+const { mobile } = useDisplay();
 
 const serviceDetails = ref(false);
 const showMedicalReportForm = ref(false);

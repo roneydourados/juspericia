@@ -196,7 +196,10 @@
             </span>
           </Button>
         </div>
-        <div class="d-flex justify-end">
+        <div
+          v-if="$currentUser?.profile?.type === 'ADVOGADO'"
+          class="d-flex justify-end"
+        >
           <Button
             v-if="item.rate === 0 && item.status === 'finished'"
             variant="text"

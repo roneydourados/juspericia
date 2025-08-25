@@ -2,76 +2,73 @@
   <CardBlur
     v-if="!showTeleMedicine"
     style="border-top: 6px solid #c8e040"
-    class="text-primary"
-    height="420"
+    class="text-primary mt-2 mb-2"
     :hover="false"
   >
-    <v-card-title
-      class="d-flex align-center justify-space-between pa-6"
-      style="gap: 1rem; font-size: 1rem"
-    >
-      <div class="d-flex align-center" style="gap: 1rem">
-        <div
-          @click="handleDetailsClick(solicitation.publicId!)"
-          class="text-truncate font-weight-bold"
-          v-ripple
-          style="cursor: pointer"
-        >
-          #{{ solicitation.id }} - Solicitação
-          {{ solicitation.Consultation?.consultationName }}
+    <template #title style="gap: 1rem; font-size: 1rem">
+      <div class="d-flex align-center justify-space-between pa-6">
+        <div class="d-flex align-center" style="gap: 1rem">
+          <div
+            @click="handleDetailsClick(solicitation.publicId!)"
+            class="text-truncate font-weight-bold"
+            v-ripple
+            style="cursor: pointer"
+          >
+            #{{ solicitation.id }} - Solicitação
+            {{ solicitation.Consultation?.consultationName }}
+          </div>
+          <div
+            class="d-flex align-center flex-wrap text-deep-purple"
+            style="gap: 0.5rem"
+            v-if="solicitation.Schedule && solicitation.Schedule.length > 0"
+          >
+            <span> Agendado: </span>
+            <strong>
+              {{
+                dayjs(solicitation.Schedule?.[0]?.scheduleDate).format(
+                  "DD/MM/YYYY"
+                )
+              }}
+              as
+              {{ solicitation.Schedule?.[0]?.scheduleHour }}
+            </strong>
+          </div>
         </div>
-        <div
-          class="d-flex align-center flex-wrap text-deep-purple"
-          style="gap: 0.5rem"
-          v-if="solicitation.Schedule && solicitation.Schedule.length > 0"
-        >
-          <span> Agendado: </span>
-          <strong>
-            {{
-              dayjs(solicitation.Schedule?.[0]?.scheduleDate).format(
-                "DD/MM/YYYY"
-              )
-            }}
-            as
-            {{ solicitation.Schedule?.[0]?.scheduleHour }}
-          </strong>
-        </div>
-      </div>
-      <div class="d-flex flex-wrap align-center" style="gap: 1rem">
-        <Button
-          v-if="
-            solicitation.PatientConsultationReport &&
-            solicitation.PatientConsultationReport.status === 'signed'
-          "
-          class="text-none font-weight-bold"
-          color="info"
-          @click="handleDownloadSignedFile(solicitation)"
-          variant="outlined"
-          size="small"
-        >
-          <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
-          <span class="text-caption"> Baixar Laudo </span>
-        </Button>
-        <v-chip
-          v-else-if="!solicitation.PatientConsultationReport"
-          variant="flat"
-          color="#F6BF0C"
-        >
-          <span class="text-white text-caption"> Aguardando laudo </span>
-        </v-chip>
-        <v-chip
-          v-else-if="
-            solicitation.PatientConsultationReport &&
-            solicitation.PatientConsultationReport.status !== 'signed'
-          "
-          variant="flat"
-          color="grey"
-        >
-          <span class="text-white text-caption">
-            Laudo aguardando assinatura
-          </span>
-        </v-chip>
-        <!-- <div
+        <div class="d-flex flex-wrap align-center" style="gap: 1rem">
+          <Button
+            v-if="
+              solicitation.PatientConsultationReport &&
+              solicitation.PatientConsultationReport.status === 'signed'
+            "
+            class="text-none font-weight-bold"
+            color="info"
+            @click="handleDownloadSignedFile(solicitation)"
+            variant="outlined"
+            size="small"
+          >
+            <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
+            <span class="text-caption"> Baixar Laudo </span>
+          </Button>
+          <v-chip
+            v-else-if="!solicitation.PatientConsultationReport"
+            variant="flat"
+            color="#F6BF0C"
+          >
+            <span class="text-white text-caption"> Aguardando laudo </span>
+          </v-chip>
+          <v-chip
+            v-else-if="
+              solicitation.PatientConsultationReport &&
+              solicitation.PatientConsultationReport.status !== 'signed'
+            "
+            variant="flat"
+            color="grey"
+          >
+            <span class="text-white text-caption">
+              Laudo aguardando assinatura
+            </span>
+          </v-chip>
+          <!-- <div
           v-if="
             solicitation.status === 'open' ||
             (solicitation.status === 'payment_pending' &&
@@ -100,102 +97,105 @@
             <span class="text-caption text-primary"> Utilizar Saldo </span>
           </Button>
         </div> -->
-        <Button
-          v-if="
-            solicitation.status === 'open' ||
-            solicitation.status === 'payment_pending'
-          "
-          class="text-none text-white"
-          color="grey"
-          variant="outlined"
-          size="small"
-          @click="
-            solicitation.sale
-              ? handleReloadPayment(solicitation)
-              : handleMountModelPrececkout(solicitation)
-          "
-        >
-          <v-icon icon="mdi-credit-card-outline" color="primary" start />
-          <span class="text-caption text-primary"> Pagar </span>
-        </Button>
-        <Button
-          v-else-if="
-            solicitation.status !== 'open' &&
-            solicitation.status !== 'canceled' &&
-            solicitation.status !== 'payment_pending' &&
-            $currentUser?.profile?.type === 'ADVOGADO'
-          "
-          class="text-none text-white"
-          color="grey"
-          variant="outlined"
-          size="small"
-          @click="handleReceipt(solicitation)"
-        >
-          <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
-          <span class="text-caption text-primary"> Recibo </span>
-        </Button>
-        <Button
-          v-if="
-            solicitation.status === 'scheduled' && solicitation.isTelemedicine
-          "
-          color="grey"
-          size="small"
-          variant="outlined"
-          @click="handleQuery(solicitation)"
-        >
-          <v-icon icon="mdi-video-outline" start color="colorIcon" />
-          <span class="text-caption text-primary"> Consulta </span>
-        </Button>
-        <Button
-          v-if="
-            solicitation.status === 'paid' ||
-            solicitation.status === 'scheduled'
-          "
-          color="grey"
-          size="small"
-          variant="outlined"
-          @click="handleSchedule(solicitation)"
-        >
-          <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
-          <span class="text-caption text-primary">
-            {{ solicitation.status === "paid" ? "Agendar" : "Reagendar" }}
-          </span>
-        </Button>
-
-        <Button
-          color="grey"
-          size="small"
-          variant="outlined"
-          @click="getItemCancel(solicitation)"
-          :disabled="
-            solicitation.status !== 'open' &&
-            solicitation.status !== 'payment_pending'
-          "
-        >
-          <v-icon icon="mdi-cancel" start color="red" />
-          <span class="text-caption text-primary"> cancelar </span>
-        </Button>
-        <Button
-          color="grey"
-          size="small"
-          variant="outlined"
-          @click="editItem(solicitation)"
-          :disabled="solicitation.status !== 'open'"
-        >
-          <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
-          <span class="text-caption text-darkText"> Editar</span>
-        </Button>
-        <v-chip :color="solicitationStatusColor(solicitation.status ?? 'open')">
-          <div class="d-flex" style="gap: 0.5rem">
-            <span>Status: </span>
-            <span class="font-weight-bold">
-              {{ solicitationStatusName(solicitation.status ?? "open") }}
+          <Button
+            v-if="
+              solicitation.status === 'open' ||
+              solicitation.status === 'payment_pending'
+            "
+            class="text-none text-white"
+            color="grey"
+            variant="outlined"
+            size="small"
+            @click="
+              solicitation.sale
+                ? handleReloadPayment(solicitation)
+                : handleMountModelPrececkout(solicitation)
+            "
+          >
+            <v-icon icon="mdi-credit-card-outline" color="primary" start />
+            <span class="text-caption text-primary"> Pagar </span>
+          </Button>
+          <Button
+            v-else-if="
+              solicitation.status !== 'open' &&
+              solicitation.status !== 'canceled' &&
+              solicitation.status !== 'payment_pending' &&
+              $currentUser?.profile?.type === 'ADVOGADO'
+            "
+            class="text-none text-white"
+            color="grey"
+            variant="outlined"
+            size="small"
+            @click="handleReceipt(solicitation)"
+          >
+            <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
+            <span class="text-caption text-primary"> Recibo </span>
+          </Button>
+          <Button
+            v-if="
+              solicitation.status === 'scheduled' && solicitation.isTelemedicine
+            "
+            color="grey"
+            size="small"
+            variant="outlined"
+            @click="handleQuery(solicitation)"
+          >
+            <v-icon icon="mdi-video-outline" start color="colorIcon" />
+            <span class="text-caption text-primary"> Consulta </span>
+          </Button>
+          <Button
+            v-if="
+              solicitation.status === 'paid' ||
+              solicitation.status === 'scheduled'
+            "
+            color="grey"
+            size="small"
+            variant="outlined"
+            @click="handleSchedule(solicitation)"
+          >
+            <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
+            <span class="text-caption text-primary">
+              {{ solicitation.status === "paid" ? "Agendar" : "Reagendar" }}
             </span>
-          </div>
-        </v-chip>
+          </Button>
+
+          <Button
+            color="grey"
+            size="small"
+            variant="outlined"
+            @click="getItemCancel(solicitation)"
+            :disabled="
+              solicitation.status !== 'open' &&
+              solicitation.status !== 'payment_pending'
+            "
+          >
+            <v-icon icon="mdi-cancel" start color="red" />
+            <span class="text-caption text-primary"> cancelar </span>
+          </Button>
+          <Button
+            color="grey"
+            size="small"
+            variant="outlined"
+            @click="editItem(solicitation)"
+            :disabled="solicitation.status !== 'open'"
+          >
+            <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
+            <span class="text-caption text-darkText"> Editar</span>
+          </Button>
+          <v-chip
+            :color="solicitationStatusColor(solicitation.status ?? 'open')"
+          >
+            <div class="d-flex" style="gap: 0.5rem">
+              <span>Status: </span>
+              <span class="font-weight-bold">
+                {{ solicitationStatusName(solicitation.status ?? "open") }}
+              </span>
+            </div>
+          </v-chip>
+        </div>
       </div>
-    </v-card-title>
-    <v-card-text class="px-8">
+    </template>
+    <template #content class="px-8">
       <v-row>
         <v-col v-if="solicitation.proccessNumber" cols="12">
           <v-chip
@@ -332,8 +332,23 @@
           <v-divider />
         </v-col>
       </v-row>
-    </v-card-text>
-    <v-card-actions
+      <v-row v-if="solicitation.files?.length ?? 0 > 0">
+        <v-col cols="12" class="pa-4"><strong>Anexos / laudos</strong></v-col>
+        <v-col
+          cols="12"
+          v-for="item in solicitation.files"
+          :key="item.publicId"
+        >
+          <AttachementCard
+            :file-name="item.fileName!"
+            @download="handleDownloadFile(item.publicId!)"
+            :delete-visible="false"
+          />
+        </v-col>
+      </v-row>
+    </template>
+    <template
+      #actions
       v-if="$currentUser?.profile?.type !== 'MEDICO'"
       class="px-8"
     >
@@ -409,7 +424,12 @@
             </span>
           </Button>
         </v-col>
-        <v-col cols="12" lg="3" class="d-flex flex-wrap align-center px-4">
+        <v-col
+          v-if="$currentUser?.profile?.type === 'ADVOGADO'"
+          cols="12"
+          lg="3"
+          class="d-flex flex-wrap align-center px-4"
+        >
           <Button
             v-if="solicitation.rate === 0 && solicitation.status === 'finished'"
             variant="text"
@@ -443,22 +463,7 @@
           </div>
         </v-col>
       </v-row>
-    </v-card-actions>
-    <v-card-text v-if="solicitation.files?.length ?? 0 > 0">
-      <v-divider />
-      <v-row>
-        <v-col cols="12" class="pa-4"><strong>Anexos / laudos</strong></v-col>
-      </v-row>
-      <v-row dense v-for="item in solicitation.files">
-        <v-col cols="12">
-          <AttachementCard
-            :file-name="item.fileName!"
-            @download="handleDownloadFile(item.publicId!)"
-            :delete-visible="false"
-          />
-        </v-col>
-      </v-row>
-    </v-card-text>
+    </template>
   </CardBlur>
   <SolicitationCorrectionForm
     title="Solicitação de correção"
