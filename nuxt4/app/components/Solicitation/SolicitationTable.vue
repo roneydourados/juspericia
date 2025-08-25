@@ -149,7 +149,7 @@
     </v-row>
 
     <Table
-      v-if="$all?.consultations && $all?.consultations.length > 0"
+      v-if="$all?.consultations && $all?.consultations.length > 0 && !mobile"
       title=""
       :items="$all?.consultations"
       hide-dfault-header
@@ -158,17 +158,13 @@
       :items-per-page="10"
     >
       <template v-slot:item.status="{ item }">
-        <div v-if="!mobile" class="py-8">
-          <SolicitationTableItem
-            :solicitation="item"
-            @edit="getItemEdit($event)"
-          />
-        </div>
-        <SolicitationTableItemMobile v-else :solicitation="item" />
+        <SolicitationTableItem
+          :solicitation="item"
+          @edit="getItemEdit($event)"
+        />
       </template>
     </Table>
-
-    <EmptyContent head-line="Sem solicitações" v-else />
+    <SolicitationTableItemMobile v-else @edit="getItemEdit($event)" />
   </div>
   <SolicitationFilters
     v-model:drawer="showFilters"

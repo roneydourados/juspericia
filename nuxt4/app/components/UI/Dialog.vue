@@ -2,13 +2,14 @@
   <v-dialog
     :model-value="dialog"
     persistent
-    max-width="500"
+    :max-width="mobile ? '' : '500'"
     transition="dialog-top-transition"
+    width="100%"
   >
     <v-card
       rounded="xl"
       :style="`border-top: 6px solid ${borderColor}`"
-      class="px-4"
+      :class="mobile ? 'px-0' : 'px-4'"
     >
       <v-card-title class="pa-4">
         <div class="d-flex align-center justify-space-between">
@@ -62,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
 defineProps({
   dialog: { type: Boolean, default: false },
   title: { type: String, default: "" },
@@ -73,6 +75,8 @@ defineProps({
   okDisabled: { type: Boolean, default: false },
   borderColor: { type: String, default: "#F6BF0C" },
 });
+
+const { mobile } = useDisplay();
 
 defineEmits(["confirm", "cancel"]);
 </script>

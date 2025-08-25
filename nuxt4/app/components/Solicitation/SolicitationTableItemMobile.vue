@@ -1,69 +1,247 @@
 <template>
-  <v-list lines="two">
-    <v-list-subheader> #{{ solicitation.id }} - Solicitação</v-list-subheader>
-    <v-list-item :key="solicitation.id">
-      <template #title>
+  <div class="d-flex justify-end align-center mb-2">
+    <v-pagination
+      v-model="page"
+      :length="pageCount"
+      color="primary"
+      rounded="circle"
+      density="comfortable"
+    />
+    <span class="text-caption text-primary">
+      Pg. {{ page }} de {{ pageCount }}
+    </span>
+  </div>
+  <CardBlur
+    v-for="item in paginatedItems"
+    :key="item.id"
+    class="mb-2 text-primary"
+    :hover="false"
+    style="border-top: 3px solid #c8e040"
+  >
+    <template #title>
+      <div
+        @click="handleDetailsClick(item.publicId!)"
+        class="text-truncate font-weight-bold"
+        v-ripple
+        style="cursor: pointer"
+      >
+        #{{ item.id }} - Solicitação
+        {{ item.Consultation?.consultationName }}
+      </div>
+      <div class="d-flex align-center justify-space-between">
         <span class="text-caption">
-          {{ solicitation.Patient?.name }}
+          {{ item.Patient?.name }} {{ item.Patient?.surname }}
         </span>
-      </template>
-      <template #subtitle>
-        <div class="d-flex w-100">
+        <span style="font-size: 0.75rem; font-weight: 700">
+          Valor:
+          {{
+            amountFormated(
+              Number(item.consultationValue ?? 0) +
+                Number(item.antecipationValue ?? 0),
+              true
+            )
+          }}
+        </span>
+      </div>
+    </template>
+    <template #content>
+      <div class="d-flex justify-space-between w-100">
+        <div class="text-caption">
+          Tipo:
           <span class="text-caption">
-            Tipo: {{ solicitation.Consultation?.consultationName }}
+            {{ item.Consultation?.consultationName }}
           </span>
         </div>
-      </template>
-      <template v-slot:append>
-        <div
-          v-if="
-            solicitation.status === 'open' ||
-            (solicitation.status === 'payment_pending' &&
-              $currentUser?.profile?.type === 'ADVOGADO')
-          "
-          class="d-flex align-center"
-          style="gap: 0.5rem"
-        >
+        <span class="text-caption">
+          Finalidade:
+          <span class="text-caption">
+            {{ item.ReportPurpose?.name }}
+            {{
+              item.processSituation
+                ? item.processSituation === "PD"
+                  ? "Processo distribuido"
+                  : "Processo andamento"
+                : ""
+            }}
+          </span>
+        </span>
+      </div>
+      <div class="d-flex justify-space-between w-100">
+        <div class="text-caption">
+          Atencipar:
+          <span class="text-caption">
+            {{
+              item.dateAntecipation
+                ? dayjs(item.dateAntecipation).format("DD/MM/YYYY")
+                : "Não solicitado"
+            }}
+          </span>
+        </div>
+        <span class="text-caption">
+          Vlr:
+          <span class="text-caption">
+            {{ amountFormated(item.antecipationValue ?? 0, true) }}
+          </span>
+        </span>
+      </div>
+    </template>
+    <template #actions>
+      <div class="d-flex flex-column w-100">
+        <div class="d-flex w-100">
           <Button
+            v-if="
+              item.PatientConsultationReport &&
+              item.PatientConsultationReport.status === 'signed'
+            "
+            class="text-none font-weight-bold"
+            color="info"
+            @click="handleDownloadSignedFile(item)"
+            variant="text"
+            size="small"
+          >
+            <v-icon icon="mdi-file-document-edit" color="colorIcon" />
+            <span class="text-caption"> Baixar Laudo </span>
+          </Button>
+          <Button
+            v-if="item.status === 'open' || item.status === 'payment_pending'"
+            class="text-none text-white"
             color="grey"
             variant="text"
             size="small"
-            @click="handleMountModelPrececkout(solicitation)"
+            @click="
+              item.sale
+                ? handleReloadPayment(item)
+                : handleMountModelPrececkout(item)
+            "
           >
-            <v-icon icon="mdi-credit-card-outline" color="primary" start />
+            <v-icon icon="mdi-credit-card-outline" color="primary" />
             <span class="text-caption text-primary"> Pagar </span>
           </Button>
+          <Button
+            v-if="item.status === 'scheduled' && item.isTelemedicine"
+            color="grey"
+            size="small"
+            variant="text"
+            @click="handleQuery(item)"
+          >
+            <v-icon icon="mdi-video-outline" color="colorIcon" />
+            <span class="text-caption text-primary"> Consulta </span>
+          </Button>
+          <Button
+            v-if="item.status === 'paid' || item.status === 'scheduled'"
+            color="grey"
+            size="small"
+            variant="text"
+            @click="handleSchedule(item)"
+          >
+            <v-icon icon="mdi-calendar-clock" color="colorIcon" />
+            <span class="text-caption text-primary">
+              {{ item.status === "paid" ? "Agendar" : "Reagendar" }}
+            </span>
+          </Button>
+          <Button
+            color="grey"
+            size="small"
+            variant="text"
+            @click="getItemCancel(item)"
+            :disabled="
+              item.status !== 'open' && item.status !== 'payment_pending'
+            "
+          >
+            <v-icon icon="mdi-cancel" color="red" />
+            <span class="text-caption text-primary"> cancelar </span>
+          </Button>
+          <Button
+            color="grey"
+            size="small"
+            variant="text"
+            @click="editItem(item)"
+            :disabled="item.status !== 'open'"
+          >
+            <v-icon icon="mdi-pencil-outline" color="colorIcon" />
+            <span class="text-caption text-darkText"> Editar</span>
+          </Button>
         </div>
-        <Button
-          v-if="
-            solicitation.status === 'scheduled' && solicitation.isTelemedicine
-          "
-          color="grey"
-          size="small"
-          variant="text"
-          @click="handleQuery(solicitation)"
-        >
-          <v-icon icon="mdi-video-outline" start color="colorIcon" />
-          <span class="text-caption text-primary"> Consulta </span>
-        </Button>
-        <Button
-          v-if="
-            solicitation.status === 'paid' ||
-            solicitation.status === 'scheduled'
-          "
-          color="grey"
-          size="small"
-          variant="text"
-          @click="handleSchedule(solicitation)"
-        >
-          <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
-          <span class="text-caption text-primary">
-            {{ solicitation.status === "paid" ? "Agendar" : "Reagendar" }}
-          </span>
-        </Button>
-      </template>
-    </v-list-item>
-  </v-list>
+        <div class="d-flex w-100">
+          <Button
+            v-if="item.status === 'finished'"
+            variant="text"
+            color="grey"
+            @click="getShowCorrection(item)"
+            :disabled="
+              !item.PatientConsultationReport || !isEnableCorrection(item)
+            "
+          >
+            <v-icon
+              icon="mdi-file-document-refresh-outline"
+              color="colorIcon"
+            />
+            <span class="text-primary text-caption"> Solicitar correção </span>
+          </Button>
+          <Button
+            variant="text"
+            :disabled="
+              !!item.dateAntecipation ||
+              item.status === 'canceled' ||
+              item.status === 'finished'
+            "
+            @click="getItemAntecipation(item)"
+          >
+            <v-icon icon="mdi-calendar-clock-outline" color="colorIcon" />
+            <span
+              class="text-primary text-caption"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Solicitar antecipação
+            </span>
+          </Button>
+        </div>
+        <div class="d-flex justify-end">
+          <Button
+            v-if="item.rate === 0 && item.status === 'finished'"
+            variant="text"
+            @click="handleClickRate(item)"
+          >
+            <v-icon icon="mdi-star" start color="colorIcon" />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Avaliar solicitação
+            </span>
+          </Button>
+          <div v-if="item.rate ?? 0 > 0" class="d-flex align-center">
+            <v-rating
+              v-model="item.rate"
+              active-color="colorIcon"
+              color="colorIcon"
+              :readonly="!isRate"
+              :size="24"
+            />
+            <Button
+              v-if="isRate"
+              class="ml-2"
+              variant="text"
+              @click="handleUpdateRate(item)"
+            >
+              <span class="text-primary text-caption"> Enviar </span>
+              <v-icon icon="mdi-check" end color="colorIcon" />
+            </Button>
+          </div>
+        </div>
+        <div v-if="item.status === 'finished'" class="d-flex justify-end">
+          <Button
+            variant="text"
+            @click="handleGetTipTap(item)"
+            :disabled="Number(item.tipValue) > 0"
+          >
+            <v-icon icon="mdi-currency-usd" start color="colorIcon" />
+            <span class="text-primary text-caption"> Dar Gorjeta </span>
+          </Button>
+        </div>
+      </div>
+    </template>
+  </CardBlur>
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"
@@ -98,11 +276,10 @@
   >
     Tem certeza que deseja cancelar a consulta?
   </Dialog>
-  <UserCreditSaltForm v-model="showSaltCredit" :solicitation="solicitation" />
-  <SolicitationPaymentReciptSalt
+  <!-- <SolicitationPaymentReciptSalt
     v-model="showRecipt"
     :solicitation="solicitation"
-  />
+  /> -->
   <AsaasPreCheckout
     v-model:show="showSale"
     v-model="modelPrececkout"
@@ -114,12 +291,12 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 
-const props = defineProps({
-  solicitation: {
-    type: Object as PropType<SolicitationConsultationProps>,
-    default: () => {},
-  },
-});
+// const props = defineProps({
+//   solicitation: {
+//     type: Object as PropType<SolicitationConsultationProps>,
+//     default: () => {},
+//   },
+// });
 
 const emit = defineEmits(["edit"]);
 const auth = useAuthStore();
@@ -135,13 +312,13 @@ const systemParameters = useSystemParametersStore();
 const {
   amountFormated,
   getSolicitationsFilters,
-  solicitationStatusName,
-  solicitationStatusColor,
+  //solicitationStatusName,
+  //solicitationStatusColor,
 } = useUtils();
 const saltCredit = useUserCreditSaltStore();
 const router = useRouter();
 const selected = ref<SolicitationConsultationProps>();
-const showTeleMedicine = ref(false);
+//const showTeleMedicine = ref(false);
 const showSaltCredit = ref(false);
 const isRate = ref(false);
 const showDateCorrection = ref(false);
@@ -150,7 +327,7 @@ const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
 const showSale = ref(false);
-const showRecipt = ref(false);
+//const showRecipt = ref(false);
 const showSolicitationSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
 
@@ -174,45 +351,34 @@ const modelPrececkout = ref({
   packgeQuantity: 1,
 });
 
+const itemsPerPage = ref(2);
+const page = ref(1);
+
 const $currentUser = computed(() => auth.$currentUser);
-const $solicitationTotal = computed(() => {
-  return (
-    Number(props.solicitation.consultationValue ?? 0) +
-    Number(props.solicitation.antecipationValue ?? 0)
-  );
-});
 
 const $all = computed(() => storeConsultation.$all?.consultations);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $systemParameters = computed(() => systemParameters.$parameters);
-const $isEnableCorrection = computed(() => {
-  return (
-    Number(props.solicitation.correctionQuantity ?? 0) <
-    Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
-  );
-  // if (
-  //   props.solicitation.correctionQuantity &&
-  //   props.solicitation.correctionQuantity > 0
-  // ) {
-  //   return (
-  //     props.solicitation.correctionQuantity <
-  //     Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
-  //   );
-  // }
 
-  // return false;
+const paginatedItems = computed(() => {
+  const all = $all.value || [];
+  const start = (page.value - 1) * itemsPerPage.value;
+  return all.slice(start, start + itemsPerPage.value);
 });
-
-watch(
-  () => props.solicitation.id,
-  () => {
-    isRate.value = Number(props.solicitation.rate ?? 0) <= 0;
-  },
-  { immediate: true }
-);
+const pageCount = computed(() => {
+  const all = $all.value || [];
+  return Math.ceil(all.length / itemsPerPage.value);
+});
 
 const handleDetailsClick = async (id: string) => {
   await rounter.push(`/solicitations/${id}`);
+};
+
+const isEnableCorrection = (item: SolicitationConsultationProps) => {
+  return (
+    Number(item.correctionQuantity ?? 0) <
+    Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
+  );
 };
 
 const editItem = (item: SolicitationConsultationProps) => {
@@ -222,7 +388,7 @@ const editItem = (item: SolicitationConsultationProps) => {
 const handleUpdateCorrection = async (motive: string) => {
   showDateCorrection.value = false;
 
-  if (!props.solicitation.PatientConsultationReport) {
+  if (!selected.value?.PatientConsultationReport || !selected.value) {
     push.warning("Laudo não encontrado!");
     return;
   }
@@ -233,16 +399,16 @@ const handleUpdateCorrection = async (motive: string) => {
       // adiciona a justificativa no laudo
       await consultationReport.addJustify({
         justify: motive,
-        publicId: props.solicitation.PatientConsultationReport.publicId!,
+        publicId: selected.value.PatientConsultationReport.publicId!,
       });
 
       // incrementa a quantidade de correções
       await storeConsultation.update({
-        publicId: props.solicitation.publicId,
-        correctionQuantity:
-          Number(props.solicitation.correctionQuantity ?? 0) + 1,
+        publicId: selected.value.publicId,
+        correctionQuantity: Number(selected.value.correctionQuantity ?? 0) + 1,
       });
 
+      selected.value = undefined;
       await getSolicitations();
     } finally {
       loading.value = false;
@@ -251,16 +417,19 @@ const handleUpdateCorrection = async (motive: string) => {
 };
 
 const handleUpdateAntecipation = async (value: number) => {
+  if (!selected.value) return;
+
   showDateAntecipation.value = false;
   if (value) {
     loading.value = true;
     try {
       await storeConsultation.update({
-        id: props.solicitation.id,
+        id: selected.value.id,
         dateAntecipation: dayjs().format("YYYY-MM-DD"),
         antecipationValue: value,
       });
 
+      selected.value = undefined;
       await getSolicitations();
     } finally {
       loading.value = false;
@@ -269,14 +438,17 @@ const handleUpdateAntecipation = async (value: number) => {
 };
 
 const handleTipValue = async (value: number) => {
+  if (!selected.value) return;
+
   if (value && value > 0) {
     loading.value = true;
     try {
       await storeConsultation.update({
-        id: props.solicitation.id,
+        id: selected.value.id,
         tipValue: value,
       });
 
+      selected.value = undefined;
       await getSolicitations();
     } finally {
       loading.value = false;
@@ -284,12 +456,12 @@ const handleTipValue = async (value: number) => {
   }
 };
 
-const handleUpdateRate = async (rate: number) => {
+const handleUpdateRate = async (item: SolicitationConsultationProps) => {
   loading.value = true;
   try {
     await storeConsultation.update({
-      publicId: props.solicitation.publicId,
-      rate,
+      publicId: item.publicId,
+      rate: item.rate ?? 0,
     });
     isRate.value = false;
   } finally {
@@ -356,6 +528,9 @@ const handleMountModelPrececkout = async (
       await asaas.deletePayment(item.sale.saleId);
     }
   }
+  const total =
+    Number(item.consultationValue ?? 0) + Number(item.antecipationValue ?? 0);
+
   showSale.value = true;
   modelPrececkout.value = {
     name: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
@@ -365,15 +540,15 @@ const handleMountModelPrececkout = async (
     discountValue: undefined,
     discountType: undefined,
     installmentCount: 1,
-    itemValue: $solicitationTotal.value,
-    totalValue: $solicitationTotal.value,
+    itemValue: total,
+    totalValue: total,
     category: "solicitation",
-    totalBruteValue: $solicitationTotal.value,
+    totalBruteValue: total,
     packageId: undefined,
     voucherDesconto: "",
     voucherId: undefined,
     publicSaleId: "",
-    packgeSaleValue: $solicitationTotal.value, // valor do pacote, no caso é uma solicitação única
+    packgeSaleValue: total, // valor do pacote, no caso é uma solicitação única
     packgeQuantity: 1, //atende apenas uma solicitação
   };
 };
@@ -382,8 +557,9 @@ const handleSaleItemForAsaas = async () => {
   showSale.value = false;
   loading.value = true;
   try {
-    if (!props.solicitation) {
+    if (!selected.value) {
       push.warning("Solicitação não encontrada!");
+      return;
     }
 
     if (
@@ -412,7 +588,7 @@ const handleSaleItemForAsaas = async () => {
         publicSaleId: modelPrececkout.value.publicSaleId,
         packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
         packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
-        solicitationId: props.solicitation.id,
+        solicitationId: selected.value.id,
       });
     } else {
       const payload = {
@@ -434,7 +610,7 @@ const handleSaleItemForAsaas = async () => {
         publicSaleId: modelPrececkout.value.publicSaleId,
         packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
         packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
-        solicitationId: props.solicitation.id,
+        solicitationId: selected.value.id,
       };
 
       await asaas.createPayment(payload);
@@ -443,6 +619,7 @@ const handleSaleItemForAsaas = async () => {
     if ($paymentResponse.value?.data?.invoiceUrl) {
       window.open($paymentResponse.value.data.invoiceUrl, "_blank");
     }
+    selected.value = undefined;
   } catch (error) {
     push.error("Erro ao finalizar pagamento");
     console.log("🚀 ~ handleSaleItem ~ error:", error);
@@ -495,33 +672,33 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
   }
 };
 
-const handleReceipt = (item: SolicitationConsultationProps) => {
-  // se cair aqiu é porque foi pago com saldo em créditos
-  if (!item.sale && item.status === "paid") {
-    showRecipt.value = true;
-    return;
-  }
+// const handleReceipt = (item: SolicitationConsultationProps) => {
+//   // se cair aqiu é porque foi pago com saldo em créditos
+//   if (!item.sale && item.status === "paid") {
+//     showRecipt.value = true;
+//     return;
+//   }
 
-  //se não tem venda então não fazer nada no asaas
-  if (!item.sale) {
-    push.warning("Pagamento não encontrado");
-    return;
-  }
+//   //se não tem venda então não fazer nada no asaas
+//   if (!item.sale) {
+//     push.warning("Pagamento não encontrado");
+//     return;
+//   }
 
-  const popupWidth = 800;
-  const popupHeight = 600;
-  const screenWidth = window.screen.width;
-  const screenHeight = window.screen.height;
+//   const popupWidth = 800;
+//   const popupHeight = 600;
+//   const screenWidth = window.screen.width;
+//   const screenHeight = window.screen.height;
 
-  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-  const popupTop = Math.round((screenHeight - popupHeight) / 2);
+//   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+//   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-  window.open(
-    item.sale.transactionReceiptUrl,
-    "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-  );
-};
+//   window.open(
+//     item.sale.transactionReceiptUrl,
+//     "_blank",
+//     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+//   );
+// };
 
 const handleUseCreditSalt = async () => {
   loading.value = true;
@@ -633,5 +810,20 @@ const handleDownloadSignedFile = async (
   } finally {
     loading.value = false;
   }
+};
+
+const handleClickRate = (item: SolicitationConsultationProps) => {
+  item.rate = 1;
+  isRate.value = true;
+};
+
+const getShowCorrection = (item: SolicitationConsultationProps) => {
+  showDateCorrection.value = true;
+  selected.value = item;
+};
+
+const handleGetTipTap = (item: SolicitationConsultationProps) => {
+  selected.value = item;
+  showTipValue.value = true;
 };
 </script>

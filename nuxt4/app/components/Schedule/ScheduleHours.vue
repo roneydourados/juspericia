@@ -1,5 +1,5 @@
 <template>
-  <v-row dense class="px-4">
+  <v-row dense justify="center">
     <v-col
       cols="3"
       lg="1"
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 const props = defineProps({
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
@@ -38,6 +38,7 @@ const props = defineProps({
   },
 });
 
+const { mobile } = useDisplay();
 //const systemParametersStore = useSystemParametersStore();
 //const scheduleStore = useScheduleStore();
 
@@ -87,6 +88,7 @@ const setBlockHour = (selectedHour: HourProps) => {
 
   if (
     index !== -1 &&
+    hoursSelected.value[index] &&
     hoursSelected.value[index].patientConsultationId === props.solicitation.id
   ) {
     hoursSelected.value[index].isSelected = true;

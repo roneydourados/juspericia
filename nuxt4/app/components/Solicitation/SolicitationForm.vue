@@ -1,8 +1,11 @@
 <template>
   <div class="pa-6">
-    <HeaderPage title="Solicitação de consulta" font-size="1.8rem" />
+    <HeaderPage
+      title="Solicitação de consulta"
+      :font-size="mobile ? '1rem' : '1.8rem'"
+    />
   </div>
-  <CardBlur class="pa-6" :hover="false">
+  <CardBlur :class="mobile ? 'pa-0' : 'pa-6'" :hover="false">
     <template #content>
       <FormCrud :on-submit="submitForm" :show-submit-button="false">
         <v-row dense>
@@ -90,7 +93,7 @@
         </v-row>
         <v-row dense>
           <v-col cols="12">
-            <span class="text-h6 font-weight-bold">
+            <span class="text-subtitle-2 text-lg-h6">
               Descrição da realidade dos fatos
             </span>
             <RitchTextEditor height="10" v-model="form.content" />
@@ -142,7 +145,7 @@
               hide-details
             >
               <template #label>
-                <span>
+                <span class="text-caption text-lg-subtitle-1">
                   Confirmo que as informações acima descritas, correspondem à
                   realidade dos fatos
                 </span>
@@ -219,6 +222,7 @@
 </template>
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
   show: {
@@ -237,7 +241,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close"]);
 const { /*amountFormated,*/ getSolicitationsFilters } = useUtils();
-//const { mobile } = useDisplay();
+const { mobile } = useDisplay();
 const router = useRouter();
 
 const storeConsultation = useSolicitationConsultationStore();

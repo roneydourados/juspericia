@@ -71,7 +71,7 @@
             Laudo aguardando assinatura
           </span>
         </v-chip>
-        <div
+        <!-- <div
           v-if="
             solicitation.status === 'open' ||
             (solicitation.status === 'payment_pending' &&
@@ -99,7 +99,25 @@
             <v-icon icon="mdi-currency-usd" color="primary" start />
             <span class="text-caption text-primary"> Utilizar Saldo </span>
           </Button>
-        </div>
+        </div> -->
+        <Button
+          v-if="
+            solicitation.status === 'open' ||
+            solicitation.status === 'payment_pending'
+          "
+          class="text-none text-white"
+          color="grey"
+          variant="outlined"
+          size="small"
+          @click="
+            solicitation.sale
+              ? handleReloadPayment(solicitation)
+              : handleMountModelPrececkout(solicitation)
+          "
+        >
+          <v-icon icon="mdi-credit-card-outline" color="primary" start />
+          <span class="text-caption text-primary"> Pagar </span>
+        </Button>
         <Button
           v-else-if="
             solicitation.status !== 'open' &&
@@ -115,20 +133,6 @@
         >
           <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
           <span class="text-caption text-primary"> Recibo </span>
-        </Button>
-
-        <Button
-          v-else-if="
-            solicitation.sale && solicitation.status === 'payment_pending'
-          "
-          class="text-none text-white"
-          color="grey"
-          variant="outlined"
-          size="small"
-          @click="handleReloadPayment(solicitation)"
-        >
-          <v-icon icon="mdi-credit-card-outline" color="primary" start />
-          <span class="text-caption text-primary"> Pagar </span>
         </Button>
         <Button
           v-if="
