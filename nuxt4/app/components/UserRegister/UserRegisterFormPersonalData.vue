@@ -62,19 +62,14 @@
     </v-row>
     <v-row>
       <v-col cols="12" class="d-flex justify-space-between">
-        <v-btn
-          color="primary"
-          variant="flat"
-          class="text-none"
-          @click="router.push('/')"
-        >
-          <v-icon icon="mdi-login" start />
-          Voltar para login
-        </v-btn>
-        <v-btn type="submit" color="primary" variant="tonal" class="text-none">
-          Próximo
-          <v-icon icon="mdi-chevron-right" end />
-        </v-btn>
+        <Button color="grey" variant="outlined" @click="router.push('/')">
+          <v-icon icon="mdi-login" start color="colorIcon" />
+          <span class="text-caption text-primary"> Voltar para login </span>
+        </Button>
+        <Button color="primary" variant="flat" type="submit">
+          <span class="text-caption text-white"> Próximo </span>
+          <v-icon icon="mdi-chevron-right" end color="colorIcon" />
+        </Button>
       </v-col>
     </v-row>
   </FormCrud>

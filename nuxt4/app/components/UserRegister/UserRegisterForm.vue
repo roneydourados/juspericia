@@ -1,5 +1,10 @@
 <template>
-  <v-card class="mx-auto py-8" flat :width="mobile ? '100%' : '900'">
+  <CardBlur
+    :hover="false"
+    class="mx-auto py-8"
+    flat
+    :width="mobile ? '100%' : '900'"
+  >
     <v-card-title>
       <v-row class="px-4">
         <v-col cols="12" lg="6" class="d-flex flex-column">
@@ -49,7 +54,7 @@
         </v-card>
       </template>
     </v-stepper>
-  </v-card>
+  </CardBlur>
   <Dialog
     title="Confirme cadastro na plataforma"
     :dialog="confirmRegister"

@@ -1,58 +1,71 @@
 <template>
-  <v-card flat rounded="lg" color="transparent" class="px-6">
-    <v-card-title class="mb-12 d-flex align-center justify-space-between">
-      <div class="d-flex flex-column w-100">
+  <div :class="mobile ? 'px-0' : 'px-4'">
+    <v-row>
+      <v-col cols="12">
         <HeaderPage title="Solicitações" font-size="1.8rem" />
-        <v-row class="mt-4" dense>
-          <v-col
-            v-if="
-              $currentUser?.profile?.type === 'ADMIN' ||
-              $currentUser?.profile?.type === 'GERENTE' ||
-              $currentUser?.profile?.type === 'VENDEDOR'
-            "
-            cols="12"
-            lg="3"
-          >
-            <SelectSearchLawyer
-              label="Escritório/Advogado"
-              v-model="modelFilters.lawyer"
-              @update:model-value="getConsultations"
-              clearable
-            />
-          </v-col>
-          <v-col cols="12" lg="2">
-            <DatePicker
-              v-model="modelFilters.initialDateSolicitation"
-              label="Data inicial"
-              outlined
-              dense
-            />
-          </v-col>
-          <v-col cols="12" lg="2">
-            <DatePicker
-              v-model="modelFilters.finalDateSolicitation"
-              label="Data final"
-              outlined
-              dense
-            />
-          </v-col>
-          <v-col cols="1">
-            <Button
-              color="primary"
-              size="small"
-              variant="flat"
-              class="text-none"
-              @click="getConsultations"
-            >
-              <v-icon icon="mdi-filter-outline" color="colorIcon" start />
-              <span class="text-caption"> Filtrar </span>
-            </Button>
-          </v-col>
-        </v-row>
-      </div>
-      <div class="d-flex aling-center" style="gap: 0.5rem">
+      </v-col>
+    </v-row>
+    <v-row class="mt-4" dense>
+      <v-col
+        v-if="
+          $currentUser?.profile?.type === 'ADMIN' ||
+          $currentUser?.profile?.type === 'GERENTE' ||
+          $currentUser?.profile?.type === 'VENDEDOR'
+        "
+        cols="12"
+        lg="3"
+      >
+        <SelectSearchLawyer
+          label="Escritório/Advogado"
+          v-model="modelFilters.lawyer"
+          @update:model-value="getConsultations"
+          clearable
+        />
+      </v-col>
+      <v-col cols="12" lg="2">
+        <DatePicker
+          v-model="modelFilters.initialDateSolicitation"
+          label="Data inicial"
+          outlined
+          dense
+        />
+      </v-col>
+      <v-col cols="12" lg="2">
+        <DatePicker
+          v-model="modelFilters.finalDateSolicitation"
+          label="Data final"
+          outlined
+          dense
+        />
+      </v-col>
+      <v-col v-if="mobile" cols="12">
+        <SelectInput
+          label="Status"
+          v-model="modelFilters.status"
+          item-title="text"
+          item-value="value"
+          :items="[
+            { text: 'Abertas', value: 'open' },
+            { text: 'Finalizada', value: 'finished' },
+            { text: 'Cancelada', value: 'canceled' },
+            { text: 'Paga', value: 'paid' },
+            { text: 'Agendada', value: 'scheduled' },
+            { text: 'Pendente de pagamento', value: 'payment_pending' },
+          ]"
+          @update:model-value="getConsultations"
+        />
+      </v-col>
+      <v-col cols="12" lg="3" class="d-flex" style="gap: 0.5rem">
         <Button
-          class="text-none"
+          color="primary"
+          size="small"
+          variant="flat"
+          @click="getConsultations"
+        >
+          <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+          <span class="text-caption"> Filtrar </span>
+        </Button>
+        <Button
           color="primary"
           size="small"
           variant="outlined"
@@ -62,98 +75,107 @@
           <v-icon icon="mdi-filter-cog-outline" color="colorIcon" start />
           <span class="text-caption"> Mais filtros </span>
         </Button>
-      </div>
-    </v-card-title>
-    <v-tabs
-      v-model="tab"
-      :grow="mobile"
-      color="grey-darken-2"
-      @update:model-value="handleChangeTable"
-    >
-      <v-tab value="open" class="text-none">
-        <v-icon icon="mdi-file-clock-outline" size="24" start color="primary" />
-        <span v-if="!mobile" class="text-primary"> Abertas </span>
-        <span class="text-info" style="font-weight: 500">
-          ({{ getQuantity("open") }})
-        </span>
-      </v-tab>
-      <v-tab value="payment_pending" class="text-none">
-        <v-icon icon="mdi-cash-clock" size="24" start color="primary" />
-        <span v-if="!mobile" class="text-primary"> Pendente de pagamento </span>
-        <span class="text-info" style="font-weight: 500">
-          ({{ getQuantity("payment_pending") }})
-        </span>
-      </v-tab>
-      <v-tab value="paid" class="text-none">
-        <v-icon icon="mdi-currency-usd" size="24" start color="primary" />
-        <span v-if="!mobile" class="text-primary"> Paga </span>
-        <span class="text-info" style="font-weight: 500">
-          ({{ getQuantity("paid") }})
-        </span>
-      </v-tab>
-      <v-tab value="scheduled" class="text-none">
-        <v-icon
-          icon="mdi-clock-check-outline"
-          size="24"
-          start
-          color="primary"
-        />
-        <span v-if="!mobile" class="text-primary"> Agendado </span>
-        <span class="text-info" style="font-weight: 500">
-          ({{ getQuantity("scheduled") }})
-        </span>
-      </v-tab>
-      <v-tab value="canceled" class="text-none">
-        <v-icon icon="mdi-cancel" size="24" start color="primary" />
-        <span v-if="!mobile" class="text-primary">Canceladas </span>
-        <span class="text-info" style="font-weight: 500">
-          ({{ getQuantity("canceled") }})
-        </span>
-      </v-tab>
-      <v-tab value="finished" class="text-none">
-        <v-icon
-          icon="mdi-calendar-month-outline"
-          size="24"
-          color="primary"
-          start
-        />
-        <span v-if="!mobile" class="text-primary">Finalizadas </span>
-        <span class="text-info" style="font-weight: 500">
-          ({{ getQuantity("finished") }})
-        </span>
-      </v-tab>
-    </v-tabs>
-    <v-divider />
-    <v-card-text>
-      <div v-if="$all?.consultations && $all?.consultations.length > 0">
-        <Table
-          title=""
-          :items="$all?.consultations"
-          hide-dfault-header
-          :headers="headers"
-          :showCrud="false"
-          :items-per-page="10"
+      </v-col>
+    </v-row>
+    <v-row v-if="!mobile">
+      <v-col cols="12">
+        <v-tabs
+          v-model="tab"
+          :grow="mobile"
+          color="grey-darken-2"
+          @update:model-value="handleChangeTable"
         >
-          <template v-slot:item.status="{ item }">
-            <div class="py-8">
-              <SolicitationTableItem
-                :solicitation="item"
-                @edit="getItemEdit($event)"
-              />
-            </div>
-          </template>
-        </Table>
-      </div>
-      <EmptyContent head-line="Sem solicitações" v-else />
-    </v-card-text>
-  </v-card>
+          <v-tab value="open" class="text-none">
+            <v-icon
+              icon="mdi-file-clock-outline"
+              size="24"
+              start
+              color="primary"
+            />
+            <span v-if="!mobile" class="text-primary"> Abertas </span>
+            <span class="text-info" style="font-weight: 500">
+              ({{ getQuantity("open") }})
+            </span>
+          </v-tab>
+          <v-tab value="payment_pending" class="text-none">
+            <v-icon icon="mdi-cash-clock" size="24" start color="primary" />
+            <span v-if="!mobile" class="text-primary">
+              Pendente de pagamento
+            </span>
+            <span class="text-info" style="font-weight: 500">
+              ({{ getQuantity("payment_pending") }})
+            </span>
+          </v-tab>
+          <v-tab value="paid" class="text-none">
+            <v-icon icon="mdi-currency-usd" size="24" start color="primary" />
+            <span v-if="!mobile" class="text-primary"> Paga </span>
+            <span class="text-info" style="font-weight: 500">
+              ({{ getQuantity("paid") }})
+            </span>
+          </v-tab>
+          <v-tab value="scheduled" class="text-none">
+            <v-icon
+              icon="mdi-clock-check-outline"
+              size="24"
+              start
+              color="primary"
+            />
+            <span v-if="!mobile" class="text-primary"> Agendado </span>
+            <span class="text-info" style="font-weight: 500">
+              ({{ getQuantity("scheduled") }})
+            </span>
+          </v-tab>
+          <v-tab value="canceled" class="text-none">
+            <v-icon icon="mdi-cancel" size="24" start color="primary" />
+            <span v-if="!mobile" class="text-primary">Canceladas </span>
+            <span class="text-info" style="font-weight: 500">
+              ({{ getQuantity("canceled") }})
+            </span>
+          </v-tab>
+          <v-tab value="finished" class="text-none">
+            <v-icon
+              icon="mdi-calendar-month-outline"
+              size="24"
+              color="primary"
+              start
+            />
+            <span v-if="!mobile" class="text-primary">Finalizadas </span>
+            <span class="text-info" style="font-weight: 500">
+              ({{ getQuantity("finished") }})
+            </span>
+          </v-tab>
+        </v-tabs>
+      </v-col>
+    </v-row>
+
+    <Table
+      v-if="$all?.consultations && $all?.consultations.length > 0"
+      title=""
+      :items="$all?.consultations"
+      hide-dfault-header
+      :headers="headers"
+      :showCrud="false"
+      :items-per-page="10"
+    >
+      <template v-slot:item.status="{ item }">
+        <div v-if="!mobile" class="py-8">
+          <SolicitationTableItem
+            :solicitation="item"
+            @edit="getItemEdit($event)"
+          />
+        </div>
+        <SolicitationTableItemMobile v-else :solicitation="item" />
+      </template>
+    </Table>
+
+    <EmptyContent head-line="Sem solicitações" v-else />
+  </div>
   <SolicitationFilters
     v-model:drawer="showFilters"
     v-model:filters="modelFilters"
     @update:model-value="getConsultations"
   />
   <DialogLoading :dialog="loading" />
-  <!-- <pre>{{ modelFilters }}</pre> -->
 </template>
 
 <script setup lang="ts">

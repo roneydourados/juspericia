@@ -58,19 +58,19 @@
     </v-row>
     <v-row>
       <v-col cols="12" class="d-flex justify-space-between">
-        <v-btn
+        <Button color="grey" variant="outlined" @click="emit('prev')">
+          <v-icon icon="mdi-chevron-left" start color="colorIcon" />
+          <span class="text-caption"> Anterior </span>
+        </Button>
+        <Button
+          :disabled="$invalidPasword || !terms"
+          type="submit"
           color="primary"
-          variant="tonal"
-          class="text-none"
-          @click="emit('prev')"
+          variant="flat"
         >
-          <v-icon icon="mdi-chevron-left" start />
-          Anterior
-        </v-btn>
-        <v-btn type="submit" color="primary" variant="tonal" class="text-none">
-          Registrar
-          <v-icon icon="mdi-account" end />
-        </v-btn>
+          <span class="text-caption"> Registrar </span>
+          <v-icon icon="mdi-account" end color="colorIcon" />
+        </Button>
       </v-col>
     </v-row>
     <v-row>

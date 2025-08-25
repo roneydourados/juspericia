@@ -69,6 +69,31 @@
                   <span class="text-primary"> Acessar </span>
                 </Button>
               </v-col>
+            </v-row>
+            <div v-if="!$isDevelop" class="mb-4">
+              <div class="text-center text-caption">
+                <span
+                  @click="rounter.push('/forgot-password')"
+                  class="text-caption text-blue"
+                  style="cursor: pointer"
+                >
+                  Esqueci minha senha
+                </span>
+              </div>
+            </div>
+            <div v-if="!$isDevelop" class="mt-n4">
+              <div class="text-center">
+                Não possui uma conta ?
+                <span
+                  @click="rounter.push('/register')"
+                  style="cursor: pointer"
+                  class="text-caption text-blue"
+                >
+                  Cadastrar
+                </span>
+              </div>
+            </div>
+            <v-row dense class="mt-4">
               <v-col cols="12">
                 <div class="text-caption">Compatibilidade</div>
                 <v-icon icon="mdi-google-chrome" />
@@ -78,33 +103,6 @@
                 <v-icon icon="mdi-apple-safari" />
               </v-col>
             </v-row>
-            <div v-if="!$isDevelop" class="mb-4">
-              <p class="text-center text-caption">
-                <span class="text-subtitle-1">
-                  <span
-                    @click="rounter.push('/forgot-password')"
-                    class="font-weight-bold text-blue"
-                    style="cursor: pointer; font-size: 1rem"
-                  >
-                    Esqueci minha senha
-                  </span>
-                </span>
-              </p>
-            </div>
-            <div v-if="!$isDevelop">
-              <p class="text-center">
-                <span style="font-size: 1rem">
-                  Não possui uma conta ?
-                  <span
-                    @click="rounter.push('/register')"
-                    class="font-weight-bold text-blue"
-                    style="cursor: pointer; font-size: 1rem"
-                  >
-                    Cadastrar
-                  </span>
-                </span>
-              </p>
-            </div>
           </FormCrud>
         </v-card-text>
       </v-card>
