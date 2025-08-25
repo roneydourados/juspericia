@@ -6,7 +6,7 @@
     :hover="false"
   >
     <template #title style="gap: 1rem; font-size: 1rem">
-      <div class="d-flex align-center justify-space-between pa-6">
+      <div class="d-flex align-center justify-space-between">
         <div class="d-flex align-center" style="gap: 1rem">
           <div
             @click="handleDetailsClick(solicitation.publicId!)"
