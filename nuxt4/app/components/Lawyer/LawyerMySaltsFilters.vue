@@ -2,12 +2,14 @@
   <v-card flat elevation="0" class="mt-4" color="transparent">
     <v-card-text class="py-12">
       <v-row dense>
-        <v-col cols="12" lg="4" class="d-flex flex-wrap" style="gap: 0.5rem">
+        <v-col cols="12" lg="2">
           <DatePicker
             v-model="filters.initialDate"
             label="Data inicial"
             clearable
           />
+        </v-col>
+        <v-col cols="12" lg="2">
           <DatePicker
             v-model="filters.finalDate"
             label="Data final"

@@ -3,25 +3,28 @@
     <Table
       title="Solicitações por tipo de benefício"
       :headers="headers"
-      :items="$temTeste"
+      :items="$all"
       :showCrud="false"
     >
       <template v-slot:item.name="{ item }">
-        <InfoLabel :title="item.name" :show-divider="false" font-size="1" />
-      </template>
-      <template v-slot:item.value="{ item }">
-        <div class="d-flex align-center">
-          <InfoLabel
-            :title="item.value.toString()"
-            :show-divider="false"
-            font-size="1"
-          />
-          <v-progress-linear
-            v-model="item.value"
-            :color="item.color"
-            height="14"
-          ></v-progress-linear>
-        </div>
+        <v-list density="compact">
+          <v-list-item>
+            <template v-slot:title>
+              <v-row>
+                <v-col cols="12" lg="9">
+                  <span>{{ item.name }}</span>
+                </v-col>
+                <v-col cols="12" lg="3">
+                  <v-progress-linear
+                    v-model="item.value"
+                    :color="item.color"
+                    height="14"
+                  />
+                </v-col>
+              </v-row>
+            </template>
+          </v-list-item>
+        </v-list>
       </template>
     </Table>
   </CardBlur>
@@ -32,7 +35,7 @@ const userLawyer = useUserLawyerStore();
 const $estatistics = computed(() => userLawyer.$estatistics);
 const { generateRandomColor } = useUtils();
 
-const $temTeste = computed(() => {
+const $all = computed(() => {
   return $estatistics.value?.laywerSolicitationsBenefitType.map((item) => {
     return {
       name: item.benefitType,
@@ -44,12 +47,12 @@ const $temTeste = computed(() => {
 
 const headers = [
   {
-    title: "Tipo de benefício",
+    title: "",
     key: "name",
   },
-  {
-    title: "Qtde",
-    key: "value",
-  },
+  // {
+  //   title: "Qtde",
+  //   key: "value",
+  // },
 ];
 </script>

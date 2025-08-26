@@ -48,11 +48,7 @@
           </CardLeftBorderColor>
         </v-col>
       </v-row>
-      <v-row dense>
-        <v-col cols="12">
-          <LawyerMySaltsFilters v-model="reloadFilters" />
-        </v-col>
-      </v-row>
+      <LawyerMySaltsFilters v-model="reloadFilters" />
       <div v-if="!mobile" class="py-4">
         <Table
           title="Compras"

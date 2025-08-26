@@ -1,13 +1,19 @@
 <template>
   <v-card flat rounded="lg">
-    <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
+    <div
+      class="font-weight-bold mb-4 mt-4 text-primary"
+      :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
+    >
       {{
         data?.PatientConsultationReport?.status === "signed"
           ? "Laudo médico atual"
           : "Laudo médico (assinatura pendente)"
       }}
     </div>
-    <div v-html="data?.PatientConsultationReport?.content" />
+    <div
+      v-html="data?.PatientConsultationReport?.content"
+      class="text-primary"
+    />
     <div
       v-if="
         data?.PatientConsultationReport?.attachments &&
@@ -15,7 +21,7 @@
       "
       class="mt-4"
     >
-      <strong>Anexos</strong>
+      <strong class="text-primary">Anexos</strong>
     </div>
     <v-row>
       <v-col
@@ -36,6 +42,9 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+const { mobile } = useDisplay();
+
 defineProps({
   data: {
     type: Object as PropType<SolicitationConsultationProps>,

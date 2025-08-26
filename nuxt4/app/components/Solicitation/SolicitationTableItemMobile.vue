@@ -188,12 +188,15 @@
             @click="getItemAntecipation(item)"
           >
             <v-icon icon="mdi-calendar-clock-outline" color="colorIcon" />
-            <span
-              class="text-primary text-caption"
-              style="font-weight: 500; font-size: 0.8rem"
-            >
+            <span class="text-primary text-caption">
               Solicitar antecipação
             </span>
+          </Button>
+        </div>
+        <div class="d-flex w-100">
+          <Button variant="text" @click="handleDetailsClick(item.publicId!)">
+            <v-icon icon="mdi-dots-vertical" start color="colorIcon" />
+            <span class="text-primary text-caption"> Visualizar detalhes </span>
           </Button>
         </div>
         <div

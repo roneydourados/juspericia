@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="font-weight-bold mb-4 mt-4"
-      style="font-size: 1.2rem; font-weight: 700"
+      class="font-weight-bold mb-4 mt-4 text-primary"
+      :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       Documentos/Anexos
     </div>
@@ -32,6 +32,9 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+const { mobile } = useDisplay();
+
 const storeConsultation = useSolicitationConsultationStore();
 const fileStore = useFileStore();
 const $single = computed(() => storeConsultation.$single);

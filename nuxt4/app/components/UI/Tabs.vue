@@ -14,12 +14,12 @@
       <v-icon
         v-if="tabitem.icon"
         :icon="tabitem.icon"
-        :size="mobile ? '30' : '20'"
+        size="20"
         :start="!mobile"
         :color="tabitem.colorIcon || ''"
       />
       <div class="d-flex align-center">
-        <span class="text-body-2">
+        <span class="text-caption text-lg-body-2">
           {{ tabitem.title }}
         </span>
 

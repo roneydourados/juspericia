@@ -1,31 +1,40 @@
 <template>
   <div class="pa-6">
-    <HeaderPage title="Detalhes Solicitação" font-size="1.8rem" />
+    <HeaderPage
+      title="Detalhes Solicitação"
+      :font-size="mobile ? '1.2rem' : '1.8rem'"
+    />
   </div>
-  <CardBlur class="pa-4" :hover="false">
-    <v-card-title>
-      <v-row dense>
-        <v-col cols="12" lg="11">
-          <span style="font-size: 1.5rem" class="mr-2 font-weight-bold">
-            #{{ $single?.id }}
-          </span>
-          <span style="font-size: 1.5rem; font-weight: 500">Detalhes</span>
-        </v-col>
-        <v-col cols="12" lg="1">
-          <Button
-            variant="outlined"
-            color="grey"
-            class="text-none"
-            size="small"
-            @click="router.back()"
-            v-if="showVoltar"
-          >
-            <v-icon icon="mdi-arrow-left" color="darkText" start />
-            <span class="text-darkText text-caption"> Voltar </span>
-          </Button>
-        </v-col>
-      </v-row>
-    </v-card-title>
+  <CardBlur :hover="false">
+    <v-row dense>
+      <v-col cols="10" class="px-4">
+        <span
+          :style="`${mobile ? 'font-size: 1rem' : 'font-size: 1.5rem'}`"
+          class="font-weight-bold text-primary"
+        >
+          #{{ $single?.id }}
+        </span>
+        <span
+          :style="`${mobile ? 'font-size: 1rem' : 'font-size: 1.5rem'}`"
+          class="text-primary"
+        >
+          Detalhes
+        </span>
+      </v-col>
+      <v-col cols="12" lg="2" class="d-flex justify-end">
+        <Button
+          variant="outlined"
+          color="grey"
+          :class="mobile ? 'text-none mt-n9' : 'text-none'"
+          size="small"
+          @click="router.back()"
+          v-if="showVoltar"
+        >
+          <v-icon icon="mdi-arrow-left" color="darkText" start />
+          <span class="text-darkText text-caption"> Voltar </span>
+        </Button>
+      </v-col>
+    </v-row>
     <v-row dense class="px-4">
       <v-divider />
       <v-col cols="12" lg="6">
@@ -40,8 +49,8 @@
           >
             <InfoLabel
               title="Teleconsulta agendada para"
-              font-size="1.1"
-              font-size-content="1.1"
+              :font-size="mobile ? '0.73' : '1.1'"
+              :font-size-content="mobile ? '0.73' : '1.1'"
               :content="`${dayjs($single.Schedule[0]?.scheduleDate).format(
                 'DD/MM/YYYY'
               )} as ${$single?.Schedule?.[0]?.scheduleHour}`"
@@ -50,14 +59,14 @@
           </div>
           <div
             v-else-if="$single?.status === 'finished'"
-            class="d-flex bg-green-darken-1 pa-2 rounded-lg"
+            class="d-flex flex-wrap bg-green-darken-1 pa-2 rounded-lg"
           >
             <InfoLabel
               :title="`Solicitação finalizada em ${dayjs(
                 $single?.dateClose
               ).format('DD/MM/YYYY')}`"
-              font-size="1.1"
-              font-size-content="1.1"
+              :font-size="mobile ? '0.73' : '1.1'"
+              :font-size-content="mobile ? '0.73' : '1.1'"
               :show-divider="false"
               :content="`${
                 $single?.PatientConsultationReport &&
@@ -74,10 +83,14 @@
               class="text-none font-weight-bold"
               @click="handleDownloadSignedFile($single)"
               size="small"
-              variant="outlined"
+              :variant="mobile ? 'text' : 'outlined'"
               color="white"
             >
-              <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
+              <v-icon
+                icon="mdi-file-document-edit"
+                color="colorIcon"
+                :start="!mobile"
+              />
               <span class="text-caption"> Baixar Laudo </span>
             </Button>
           </div>
@@ -90,20 +103,26 @@
       </v-col>
       <v-col cols="12" lg="6">
         <v-card flat rounded="lg">
-          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
+          <div
+            class="font-weight-bold mb-4 mt-4 text-primary"
+            :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
+          >
             Descrição dos fatos
           </div>
-          <div v-html="$single?.content" />
+          <div v-html="$single?.content" class="text-primary" />
         </v-card>
         <SolicitationDetailsDocuments />
         <v-card flat rounded="lg">
-          <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
+          <div
+            class="font-weight-bold mb-4 mt-4 text-primary"
+            :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
+          >
             Motivos para correção
           </div>
           <div
             v-for="justify in $single?.PatientConsultationReport?.justifies"
             :key="justify.id"
-            class="mb-2"
+            class="mb-2 text-primary"
           >
             <strong> - {{ justify.justify }}</strong>
           </div>
@@ -136,29 +155,18 @@
           <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
           <span class="text-caption"> Baixar Laudo </span>
         </Button>
-
-        <!-- <v-btn
-          class="text-none font-weight-bold"
-          prepend-icon="mdi-file-document-edit"
-          @click="handleDownloadSignedFile($single)"
-          variant="flat"
-          color="success"
-          size="small"
-        >
-          Baixar Laudo
-        </v-btn> -->
       </v-col>
       <v-col cols="12">
         <SolicitationDetailsMedicReportVinculado :data="$single" />
       </v-col>
     </v-row>
-    <DialogLoading :dialog="loading" />
   </CardBlur>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 defineProps({
   showVoltar: {
     type: Boolean,
@@ -171,9 +179,10 @@ defineProps({
 });
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
-
 const authStore = useAuthStore();
 const zapSign = useZapsignStore();
+
+const { mobile } = useDisplay();
 
 const $single = computed(() => storeConsultation.$single);
 const $currentUser = computed(() => authStore.$currentUser);
