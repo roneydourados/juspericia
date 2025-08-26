@@ -18,7 +18,7 @@
             </p>
           </span>
         </v-toolbar-title>
-        <v-spacer />
+        <v-spacer v-if="!mobile" />
         <v-btn icon @click="$emit('dialog')" variant="text">
           <v-icon icon="mdi-close" />
         </v-btn>

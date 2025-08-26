@@ -46,7 +46,7 @@
           </v-card-subtitle>
           <v-cad-text>
             <div class="w-100 px-4">
-              <v-list density="compact" rounded="xl">
+              <v-list density="compact" rounded="xl" lines="three">
                 <v-list-subheader>Consultas</v-list-subheader>
                 <v-list-item
                   v-for="item in $shedules"
@@ -102,39 +102,41 @@
                     </v-btn>
                   </template>
                   <v-list-item-title>
-                    <span>{{ item.title }}</span>
+                    <!-- <span>{{ item.title }}</span> -->
+                    <div class="text-caption text-lg-subtitle-2">
+                      Paciente:
+                      {{ item.PatientConsultation?.Patient?.name }}
+                      {{ item.PatientConsultation?.Patient?.surname }}
+                    </div>
                   </v-list-item-title>
                   <v-list-item-subtitle>
-                    <div class="d-flex w-100" style="gap: 0.5rem">
+                    <div class="d-flex flex-column">
+                      <div class="d-flex w-100" style="gap: 0.5rem">
+                        <span style="font-size: 0.8rem">
+                          {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} ás
+                          {{ item.scheduleHour }}
+                        </span>
+                      </div>
+                      <div class="d-flex w-100" style="gap: 0.5rem">
+                        <span style="font-size: 0.8rem">
+                          Benfício:
+                          {{ item.PatientConsultation?.BenefitType?.name }}
+                        </span>
+                      </div>
                       <span style="font-size: 0.8rem">
-                        Paciente:
-                        {{ item.PatientConsultation?.Patient?.name }}
-                        {{ item.PatientConsultation?.Patient?.surname }}
-                      </span>
-                      <span style="font-size: 0.8rem">
-                        {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} ás
-                        {{ item.scheduleHour }}
-                      </span>
-                    </div>
-                    <div class="d-flex w-100" style="gap: 0.5rem">
-                      <span style="font-size: 0.8rem">
-                        Benefício
-                        {{ item.PatientConsultation?.BenefitType?.name }}
-                      </span>
-                      <span style="font-size: 0.8rem">
-                        Finalidade
+                        Finalidade:
                         {{ item.PatientConsultation?.ReportPurpose?.name }}
                       </span>
-                    </div>
-                    <div
-                      v-if="$currentUser?.profile?.type === 'ADMIN'"
-                      class="d-flex w-100"
-                      style="gap: 0.5rem"
-                    >
-                      <span style="font-size: 0.8rem">
-                        Dr(a)
-                        {{ item.Medic?.name }}
-                      </span>
+                      <div
+                        v-if="$currentUser?.profile?.type === 'ADMIN'"
+                        class="d-flex w-100"
+                        style="gap: 0.5rem"
+                      >
+                        <span style="font-size: 0.8rem">
+                          Dr(a)
+                          {{ item.Medic?.name }}
+                        </span>
+                      </div>
                     </div>
                   </v-list-item-subtitle>
                 </v-list-item>

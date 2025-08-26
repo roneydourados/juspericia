@@ -34,7 +34,6 @@
             clearable
           />
         </v-col>
-
         <v-col cols="12" lg="2">
           <DatePicker
             v-model="filters.initialDate"
@@ -51,23 +50,16 @@
             dense
           />
         </v-col>
-        <v-col cols="1">
-          <v-btn
-            icon
+        <v-col cols="12" lg="2">
+          <Button
             color="primary"
             size="small"
             variant="flat"
             @click="getReports"
           >
-            <v-icon icon="mdi-reload" />
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
-            >
-              Atualizar dados
-            </v-tooltip>
-          </v-btn>
+            <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+            <span class="text-caption">Filtrar</span>
+          </Button>
         </v-col>
       </v-row>
     </div>
@@ -78,6 +70,7 @@
       :show-crud="false"
       :headers="headers"
       :items="$consultationReports"
+      v-if="!mobile"
     >
       <template v-slot:item.reportId="{ item }">
         <div class="d-flex flex-column">
@@ -262,6 +255,15 @@
         </div>
       </template>
     </Table>
+    <MedicalReportTableMobile
+      v-else
+      @details="handleReportDetails($event)"
+      @new="handleNewReport($event)"
+      @sign="handleSignDocument($event)"
+      @download-sign="handleDownloadSignedFile($event)"
+      @cancel-sign="handleGetSignatureCancel($event)"
+      @edit-correction="handleEditCorrection($event)"
+    />
     <DialogLoading :dialog="loading" />
     <MedicalReportDetails v-model="showReportDetails" :data="selectedReport" />
   </div>
@@ -298,7 +300,9 @@ import pdfMake from "pdfmake/build/pdfmake";
 import htmlToPdfmake from "html-to-pdfmake";
 import dayjs from "dayjs";
 import { uuidv7 } from "uuidv7";
+import { useDisplay } from "vuetify";
 
+const { mobile } = useDisplay();
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
 const storeConsultation = useSolicitationConsultationStore();
