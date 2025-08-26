@@ -13,7 +13,7 @@
       <v-card-text class="px-6">
         <v-row dense>
           <v-col cols="12" lg="3">
-            <v-list @click:select="handleMenuClick($event)">
+            <v-list v-if="!mobile" @click:select="handleMenuClick($event)">
               <v-list-item
                 v-for="(item, i) in itemsList"
                 :key="i"
@@ -30,6 +30,22 @@
                 </template>
               </v-list-item>
             </v-list>
+            <v-tabs v-else>
+              <v-tab
+                v-for="(item, i) in itemsList"
+                :key="i"
+                :value="item.title"
+                @click="selectedItem = item.title"
+                color="primary"
+                density="compact"
+                grow
+              >
+                <v-icon :icon="item.icon" class="mr-2"></v-icon>
+                <span class="text-caption">
+                  {{ item.title }}
+                </span>
+              </v-tab>
+            </v-tabs>
           </v-col>
           <v-col cols="12" lg="9">
             <MedicMyAccountAddress
@@ -51,6 +67,9 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+
+const { mobile } = useDisplay();
 const medicStore = useMedicStore();
 const $single = computed(() => medicStore.$single);
 

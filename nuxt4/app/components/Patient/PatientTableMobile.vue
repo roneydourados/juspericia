@@ -11,12 +11,50 @@
       Pg. {{ page }} de {{ pageCount }}
     </span>
   </div>
+  <v-row dense>
+    <v-col cols="12">
+      <StringInput
+        v-model="search"
+        placeholder="Digite algo para efetuar consulta"
+        clearable
+        dense
+        rounded
+        class="w-100"
+        @update:model-value="emit('search', search)"
+      />
+    </v-col>
+    <v-col cols="12" lg="2" class="d-flex justify-end mt-n6 mb-4">
+      <div class="d-flex align-center" style="gap: 0.5rem">
+        <Button
+          variant="outlined"
+          color="grey"
+          class="text-none"
+          size="small"
+          @click="router.back()"
+        >
+          <v-icon icon="mdi-arrow-left" color="darkText" />
+          <span class="text-darkText text-caption"> Voltar </span>
+        </Button>
+        <Button
+          variant="flat"
+          color="primary"
+          class="text-none"
+          size="small"
+          @click="$emit('add')"
+        >
+          <v-icon icon="mdi-plus" color="colorIcon" />
+          <span class="text-white text-caption"> Novo </span>
+        </Button>
+      </div>
+    </v-col>
+  </v-row>
   <CardBlur
     v-for="item in paginatedItems"
     :key="item.id"
     class="mb-2 text-primary"
     :hover="false"
     style="border-top: 3px solid #c8e040"
+    height="225"
   >
     <template #title>
       <div>Dados do Paciente</div>
@@ -98,14 +136,15 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(["edit", "delete", "info"]);
+const emit = defineEmits(["edit", "delete", "search", "add", "info"]);
 const patientStore = usePatientStore();
 const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
+const router = useRouter();
 const $all = computed(() => patientStore.$all);
 
 const itemsPerPage = ref(10);
 const page = ref(1);
-
+const search = ref("");
 const paginatedItems = computed(() => {
   const all = $all.value || [];
   const start = (page.value - 1) * itemsPerPage.value;

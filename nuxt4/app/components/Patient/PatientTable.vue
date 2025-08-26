@@ -93,6 +93,8 @@
     @edit="handleEdit($event)"
     @delete="getItemDelete($event)"
     @info="handlePatientInfo($event)"
+    @add="showForm = true"
+    @search="handleSearch($event)"
   />
   <PatientForm
     :show="showForm"
