@@ -6,6 +6,7 @@
     @confirm="handleConfirm"
     show-cancel
     icon="mdi-information-outline"
+    :fullscreen="mobile"
   >
     <div class="d-flex flex-column">
       <span>confirma a compra de {{ model.name }} ? </span>
@@ -120,7 +121,9 @@
 <script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
 import type { AssasPreCheckoutProps } from "@/types/assaas/Precheckout";
+import { useDisplay } from "vuetify";
 
+const { mobile } = useDisplay();
 const { amountFormated } = useUtils();
 const asaas = useAsaasStore();
 const voucherStore = useVoucherStore();

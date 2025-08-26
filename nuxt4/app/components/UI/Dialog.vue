@@ -5,6 +5,7 @@
     :max-width="mobile ? '' : '500'"
     transition="dialog-top-transition"
     width="100%"
+    :fullscreen="fullscreen"
   >
     <v-card
       rounded="xl"
@@ -74,6 +75,7 @@ defineProps({
   cancelText: { type: String, default: "Cancela" },
   okDisabled: { type: Boolean, default: false },
   borderColor: { type: String, default: "#F6BF0C" },
+  fullscreen: { type: Boolean, default: false },
 });
 
 const { mobile } = useDisplay();

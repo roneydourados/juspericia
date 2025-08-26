@@ -4,6 +4,7 @@
     transition="dialog-top-transition"
     :model-value="show"
     :width="mobile ? '' : width"
+    :fullscreen="mobile"
   >
     <v-card rounded="xl" :style="`border-top: 6px solid ${borderColor}`">
       <v-toolbar density="default" color="background">
