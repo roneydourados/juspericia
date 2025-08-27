@@ -211,7 +211,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-
           <v-col cols="12" lg="4">
             <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
@@ -234,6 +233,38 @@
               </v-card-text>
             </v-card>
           </v-col>
+
+          <v-col cols="12" lg="4">
+            <v-card rounded="xl" height="100%" variant="flat">
+              <v-card-title>
+                <div class="font-weight-bold">Token de integração com CRM</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12">
+                    <StringInput label="Nome CRM" v-model="form.crmTokenName" />
+                  </v-col>
+                  <v-col cols="12">
+                    <TextInput label="Token" v-model="form.crmToken" rows="8" />
+                  </v-col>
+                  <v-col cols="12">
+                    <strong
+                      >Expira em:
+                      {{
+                        dayjs(form.crmTokenExpiration).format(
+                          "DD/MM/YYYY HH:mm:ss"
+                        )
+                      }}</strong
+                    >
+                  </v-col>
+                </v-row>
+                <div class="mt-4">
+                  Informe aqui o token gerado no seu sistema de CRM
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </FormCrud>
     </v-card-text>
@@ -241,6 +272,7 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from "dayjs";
 const props = defineProps({
   data: {
     type: Object as PropType<SystemParametersProps>,
@@ -270,6 +302,9 @@ const form = ref({
   voucherMaxQuantityDays: "",
   cardFeeInstallment: "",
   solicitationCorrectionQuantity: "",
+  crmTokenName: "",
+  crmToken: "",
+  crmTokenExpiration: "",
 });
 
 watch(
@@ -307,6 +342,9 @@ watch(
           newData.cardFeeInstallment ?? 0,
           false
         ),
+        crmTokenName: newData.crmTokenName ?? "",
+        crmToken: newData.crmToken ?? "",
+        crmTokenExpiration: newData.crmTokenExpiration ?? "",
       };
     }
   },
@@ -338,6 +376,9 @@ const handleSubmit = async () => {
       solicitationCorrectionQuantity: Number(
         form.value.solicitationCorrectionQuantity ?? "0"
       ),
+      crmTokenName: form.value.crmTokenName ?? "",
+      crmToken: form.value.crmToken ?? "",
+      crmTokenExpiration: form.value.crmTokenExpiration ?? "",
     });
   } catch (error) {
     console.error(error);
