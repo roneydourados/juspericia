@@ -68,6 +68,21 @@
               Laudo aguardando assinatura
             </span>
           </v-chip>
+          <Button
+            v-if="
+              solicitation.status === 'open' ||
+              (solicitation.status === 'payment_pending' &&
+                $currentUser?.profile?.type === 'ADVOGADO' &&
+                !solicitation.sale?.saleId)
+            "
+            color="grey"
+            variant="outlined"
+            size="small"
+            @click="handleUseCreditSalt"
+          >
+            <v-icon icon="mdi-currency-usd" color="primary" start />
+            <span class="text-caption text-primary"> Utilizar Saldo </span>
+          </Button>
           <!-- <div
           v-if="
             solicitation.status === 'open' ||
@@ -115,7 +130,7 @@
             <v-icon icon="mdi-credit-card-outline" color="primary" start />
             <span class="text-caption text-primary"> Pagar </span>
           </Button>
-          <Button
+          <!-- <Button
             v-else-if="
               solicitation.status !== 'open' &&
               solicitation.status !== 'canceled' &&
@@ -130,7 +145,7 @@
           >
             <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
             <span class="text-caption text-primary"> Recibo </span>
-          </Button>
+          </Button> -->
           <Button
             v-if="
               solicitation.status === 'scheduled' && solicitation.isTelemedicine
@@ -499,7 +514,11 @@
   >
     Tem certeza que deseja cancelar a consulta?
   </Dialog>
-  <UserCreditSaltForm v-model="showSaltCredit" :solicitation="solicitation" />
+  <UserCreditSaltForm
+    v-model="showSaltCredit"
+    :solicitation="solicitation"
+    @close="emit('refresh')"
+  />
   <SolicitationPaymentReciptSalt
     v-model="showRecipt"
     :solicitation="solicitation"
@@ -522,7 +541,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["edit"]);
+const emit = defineEmits(["edit", "refresh"]);
 const auth = useAuthStore();
 const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();

@@ -118,6 +118,21 @@
             <span class="text-caption text-primary"> Pagar </span>
           </Button>
           <Button
+            v-if="
+              item.status === 'open' ||
+              (item.status === 'payment_pending' &&
+                $currentUser?.profile?.type === 'ADVOGADO' &&
+                !item.sale?.saleId)
+            "
+            color="grey"
+            variant="text"
+            size="small"
+            @click="handleUseCreditSalt(item)"
+          >
+            <v-icon icon="mdi-currency-usd" color="primary" start />
+            <span class="text-caption text-primary"> Utilizar Saldo </span>
+          </Button>
+          <Button
             v-if="item.status === 'scheduled' && item.isTelemedicine"
             color="grey"
             size="small"
@@ -248,6 +263,11 @@
       </div>
     </template>
   </CardBlur>
+  <UserCreditSaltForm
+    v-model="showSaltCredit"
+    :solicitation="selected"
+    @close="handleUseCreditFormClose"
+  />
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"
@@ -304,13 +324,13 @@ import dayjs from "dayjs";
 //   },
 // });
 
-const emit = defineEmits(["edit"]);
+const emit = defineEmits(["edit", "refresh"]);
 const auth = useAuthStore();
 const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const consultationReport = usePatientConsultationReportStore();
 const rounter = useRouter();
-const fileStore = useFileStore();
+//const fileStore = useFileStore();
 const zapSign = useZapsignStore();
 const systemParameters = useSystemParametersStore();
 // const transactionsStore = useTransactionsStore();
@@ -706,9 +726,10 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
 //   );
 // };
 
-const handleUseCreditSalt = async () => {
+const handleUseCreditSalt = async (item: SolicitationConsultationProps) => {
   loading.value = true;
   try {
+    selected.value = item;
     const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
     const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
     await saltCredit.index({
@@ -726,35 +747,6 @@ const handleUseCreditSalt = async () => {
 
 const handleQuery = async (item: SolicitationConsultationProps) => {
   await router.push(`/teleconference/${item.publicId}`);
-};
-
-const handleDownloadFile = async (publicId: string) => {
-  loading.value = true;
-  try {
-    const { file, fileName } = await fileStore.downloadAws(publicId);
-
-    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
-    const url = window.URL.createObjectURL(file);
-
-    // Cria um link temporário
-    const link = document.createElement("a");
-    link.href = url;
-
-    // Define o nome do arquivo
-    link.download = fileName;
-
-    // Adiciona e clica no link
-    document.body.appendChild(link);
-    link.click();
-
-    // Remove o link temporário
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.log("🚀 ~ handleDownloadFile ~ error:", error);
-  } finally {
-    loading.value = false;
-  }
 };
 
 const handleCancel = () => {
@@ -831,5 +823,10 @@ const getShowCorrection = (item: SolicitationConsultationProps) => {
 const handleGetTipTap = (item: SolicitationConsultationProps) => {
   selected.value = item;
   showTipValue.value = true;
+};
+
+const handleUseCreditFormClose = () => {
+  emit("refresh");
+  selected.value = undefined;
 };
 </script>

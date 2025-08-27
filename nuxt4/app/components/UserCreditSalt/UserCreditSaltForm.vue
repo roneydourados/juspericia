@@ -3,7 +3,7 @@
     :show="show"
     title="Saldo em créditos"
     :width="mobile ? '' : '800'"
-    @dialog="show = false"
+    @dialog="handleClose"
     border-color="#c8e040"
   >
     <v-row class="mb-8 px-4">
@@ -126,6 +126,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["close"]);
+
 const { mobile } = useDisplay();
 const { amountFormated } = useUtils();
 const saltCredit = useUserCreditSaltStore();
@@ -149,21 +151,11 @@ const $totals = computed(() => {
 });
 
 const handleSubmit = async () => {
-  show.value = false;
   confirm.value = false;
   loading.value = true;
   try {
-    const filters = {
-      status: "open",
-      initialDateSolicitation: dayjs().startOf("year").format("YYYY-MM-DD"),
-      finalDateSolicitation: dayjs().endOf("year").format("YYYY-MM-DD"),
-      benefitType: undefined as BenefitTypeProps | undefined,
-      patient: undefined as PatientProps | undefined,
-      reportPurpose: undefined as ReportPurposeProps | undefined,
-    } as SolicitationConsultationFilterProps;
-
-    await solicitationStore.paidUseSalt(props.solicitation);
-    await solicitationStore.index(filters);
+    await solicitationStore.paidUseSalt(props.solicitation.publicId!);
+    handleClose();
   } catch (error) {
     push.error("Erro ao realizar pagamento");
   } finally {
@@ -176,5 +168,10 @@ const handleUseSalt = () => {
     return push.error("Saldo insuficiente para pagamento");
   }
   confirm.value = true;
+};
+
+const handleClose = () => {
+  show.value = false;
+  emit("close");
 };
 </script>

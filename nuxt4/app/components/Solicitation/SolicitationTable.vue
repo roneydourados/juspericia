@@ -161,10 +161,15 @@
         <SolicitationTableItem
           :solicitation="item"
           @edit="getItemEdit($event)"
+          @refresh="getConsultations"
         />
       </template>
     </Table>
-    <SolicitationTableItemMobile v-else @edit="getItemEdit($event)" />
+    <SolicitationTableItemMobile
+      v-else
+      @edit="getItemEdit($event)"
+      @refresh="getConsultations"
+    />
   </div>
   <SolicitationFilters
     v-model:drawer="showFilters"
