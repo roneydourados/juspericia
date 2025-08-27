@@ -1,6 +1,21 @@
 <template>
   <div>
+    <div v-if="!mobile" class="d-flex justify-end">
+      <Button
+        color="grey"
+        variant="outlined"
+        size="small"
+        class="text-none"
+        @click="showUpdateComissions = true"
+      >
+        <v-icon icon="mdi-reload" size="20" start color="colorIcon"></v-icon>
+        <span class="text-caption text-primary">
+          Atualizar valores comissão
+        </span>
+      </Button>
+    </div>
     <Table
+      v-if="!mobile"
       title="Gestão de comissão consulta médica"
       font-size="1.5rem"
       :items="$all"
@@ -10,25 +25,6 @@
       :loading="loading"
       :show-crud="false"
     >
-      <template #top-table>
-        <div class="d-flex justify-end">
-          <Button
-            color="primary"
-            variant="flat"
-            size="small"
-            class="text-none"
-            @click="showUpdateComissions = true"
-          >
-            <v-icon
-              icon="mdi-reload"
-              size="20"
-              start
-              color="colorIcon"
-            ></v-icon>
-            <span class="text-caption"> Atualizar valores comissão </span>
-          </Button>
-        </div>
-      </template>
       <template v-slot:item.name="{ item }">
         <span
           style="cursor: pointer"
@@ -81,7 +77,6 @@
           />
         </div>
       </template>
-
       <template v-slot:item.active="{ item }">
         <span class="d-flex align-center">
           <v-icon
@@ -93,6 +88,11 @@
         </span>
       </template>
     </Table>
+
+    <MedicTableComissionMobile
+      v-else
+      @update-comission="showUpdateComissions = true"
+    />
   </div>
 
   <MedicForm
@@ -117,7 +117,10 @@
 
 <script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
+import { useDisplay } from "vuetify";
 const medicStore = useMedicStore();
+
+const { mobile } = useDisplay();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => medicStore.$all);
 
