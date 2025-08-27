@@ -1,123 +1,108 @@
 <template>
-  <div class="pa-12">
-    <v-row>
-      <v-col cols="12" class="pa-6">
-        <HeaderPage title="Cadastro de consultas" font-size="1.8rem" />
-      </v-col>
-      <v-col cols="12">
-        <div class="d-flex flex-wrap mt-4 px-6" style="gap: 1rem">
-          <StringInput
-            v-model="search"
-            density="compact"
-            prepend-inner-icon="mdi-magnify"
-            flat
-            hide-details
-            single-line
-            style="font-size: 1.4rem"
-            @update:model-value="handleSearch(search)"
-            :loading="loading"
-            placeholder="Digite algo para pesquisar..."
-          />
-
-          <div class="d-flex" style="gap: 0.5rem">
+  <v-row>
+    <v-col cols="12" class="pa-6">
+      <HeaderPage title="Cadastro de consultas" font-size="1.8rem" />
+    </v-col>
+    <v-col cols="12" lg="8">
+      <StringInput
+        v-model="search"
+        density="compact"
+        prepend-inner-icon="mdi-magnify"
+        flat
+        hide-details
+        single-line
+        style="font-size: 1.4rem"
+        @update:model-value="handleSearch(search)"
+        :loading="loading"
+        placeholder="Digite algo para pesquisar..."
+      />
+    </v-col>
+    <v-col cols="12" lg="2" class="d-flex flex-wrap" style="gap: 0.5rem">
+      <Button
+        variant="outlined"
+        color="grey"
+        class="text-none"
+        size="small"
+        @click="router.back()"
+      >
+        <v-icon icon="mdi-arrow-left" color="darkText" />
+        <span class="text-darkText text-caption"> Voltar </span>
+      </Button>
+      <Button color="primary" @click="showForm = true" size="small">
+        <v-icon icon="mdi-plus" start color="colorIcon" />
+        <span class="text-caption"> Novo </span>
+      </Button>
+    </v-col>
+    <v-col v-for="consultation in $all" cols="12" lg="3">
+      <CardBlur height="100%">
+        <template #content>
+          <v-row>
+            <v-col cols="12" class="d-flex flex-column text-primary">
+              <!-- <div class="d-flex" style="gap: 0.5rem">
+                <strong class="">Título:</strong>
+                <strong class="text-truncate">
+                  {{ consultation.consultationName }}
+                </strong>
+              </div> -->
+              <strong class="text-truncate">
+                {{ consultation.consultationName }}
+              </strong>
+              <v-divider class="mt-8" />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6" class="d-flex flex-column" style="gap: 0.2rem">
+              <div class="d-flex align-center" style="gap: 0.5rem">
+                <v-avatar color="greenLime" variant="outlined" size="20">
+                  <v-icon icon="mdi-currency-usd" color="colorIcon" size="15" />
+                </v-avatar>
+                <span>Preço</span>
+              </div>
+              <strong style="font-size: 1.2rem" class="text-primary">
+                {{ amountFormated(consultation.value ?? 0, false) }}
+              </strong>
+            </v-col>
+            <v-col cols="6" class="d-flex flex-column" style="gap: 0.2rem">
+              <div class="d-flex align-center" style="gap: 0.5rem">
+                <v-avatar color="primary" variant="outlined" size="20">
+                  <v-icon icon="mdi-currency-usd" color="primary" size="15" />
+                </v-avatar>
+                <span>Preço Crédito</span>
+              </div>
+              <strong style="font-size: 1.2rem" class="text-primary">
+                {{ amountFormated(consultation.valueCredit ?? 0, false) }}
+              </strong>
+            </v-col>
+          </v-row>
+        </template>
+        <template #actions>
+          <div class="d-flex justify-center w-100" style="gap: 0.5rem">
             <Button
-              variant="outlined"
               color="grey"
               class="text-none"
+              variant="outlined"
               size="small"
-              @click="router.back()"
+              @click="editItem(consultation)"
             >
-              <v-icon icon="mdi-arrow-left" color="darkText" />
-              <span class="text-darkText text-caption"> Voltar </span>
+              <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
+              <span class="text-primary text-caption"> Editar </span>
             </Button>
-            <Button color="primary" @click="showForm = true" size="small">
-              <v-icon icon="mdi-plus" start color="colorIcon" />
-              <span class="text-caption"> Novo </span>
+            <Button
+              variant="outlined"
+              size="small"
+              color="grey"
+              class="text-none"
+              @click="deleteItem(consultation)"
+            >
+              <v-icon icon="mdi-delete-outline" start color="red" />
+              <span class="text-primary text-caption"> Apagar </span>
             </Button>
           </div>
-        </div>
-      </v-col>
-      <v-col v-for="consultation in $all" cols="12" lg="3">
-        <CardBlur height="100%">
-          <template #content>
-            <v-row>
-              <v-col cols="12" class="d-flex flex-column text-primary">
-                <div class="d-flex" style="gap: 0.5rem">
-                  <strong class="">Título:</strong>
-                  <span class="text-truncate">
-                    {{ consultation.consultationName }}
-                  </span>
-                </div>
-                <v-divider class="mt-8" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="12"
-                lg="4"
-                class="d-flex flex-column"
-                style="gap: 0.2rem"
-              >
-                <div class="d-flex align-center" style="gap: 0.5rem">
-                  <v-avatar color="greenLime" variant="outlined" size="20">
-                    <v-icon
-                      icon="mdi-currency-usd"
-                      color="colorIcon"
-                      size="15"
-                    />
-                  </v-avatar>
-                  <span>Preço</span>
-                </div>
-                <strong style="font-size: 1.2rem" class="text-primary">
-                  {{ amountFormated(consultation.value ?? 0, false) }}
-                </strong>
-              </v-col>
-              <v-col
-                cols="12"
-                lg="8"
-                class="d-flex flex-column px-8"
-                style="gap: 0.2rem"
-              >
-                <div class="d-flex align-center" style="gap: 0.5rem">
-                  <v-avatar color="primary" variant="outlined" size="20">
-                    <v-icon icon="mdi-currency-usd" color="primary" size="15" />
-                  </v-avatar>
-                  <span>Preço Crédito</span>
-                </div>
-                <strong style="font-size: 1.2rem" class="text-primary">
-                  {{ amountFormated(consultation.valueCredit ?? 0, false) }}
-                </strong>
-              </v-col>
-            </v-row>
-          </template>
-          <template #actions>
-            <div class="d-flex justify-center w-100" style="gap: 0.5rem">
-              <Button
-                color="grey"
-                class="text-none"
-                variant="outlined"
-                size="small"
-                @click="editItem(consultation)"
-              >
-                <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
-                <span class="text-primary text-caption"> Editar </span>
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                color="grey"
-                class="text-none"
-                @click="deleteItem(consultation)"
-              >
-                <v-icon icon="mdi-delete-outline" start color="red" />
-                <span class="text-primary text-caption"> Apagar </span>
-              </Button>
-            </div>
-          </template>
-        </CardBlur>
-      </v-col>
-    </v-row>
-  </div>
+        </template>
+      </CardBlur>
+    </v-col>
+  </v-row>
+
   <ConsultationForm
     title="Consulta"
     :show="showForm"

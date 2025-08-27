@@ -4,50 +4,50 @@
       <v-col cols="12" class="pa-6">
         <HeaderPage title="Modelos de Laudos" font-size="1.8rem" />
       </v-col>
-      <v-col cols="12">
-        <div class="d-flex flex-wrap mt-4 px-6" style="gap: 1rem">
-          <StringInput
-            v-model="search"
-            density="compact"
-            prepend-inner-icon="mdi-magnify"
-            flat
-            hide-details
-            single-line
-            style="font-size: 1.4rem"
-            @update:model-value="handleSearch(search)"
-            :loading="loading"
-            placeholder="Digite algo para pesquisar..."
-          />
-
-          <div class="d-flex" style="gap: 0.5rem">
-            <Button
-              variant="outlined"
-              color="grey"
-              class="text-none"
-              size="small"
-              @click="router.back()"
-            >
-              <v-icon icon="mdi-arrow-left" color="darkText" />
-              <span class="text-darkText text-caption"> Voltar </span>
-            </Button>
-            <Button color="primary" @click="showForm = true" size="small">
-              <v-icon icon="mdi-plus" start color="colorIcon" />
-              <span class="text-caption"> Novo </span>
-            </Button>
-          </div>
-        </div>
+      <v-col cols="12" lg="10">
+        <StringInput
+          v-model="search"
+          density="compact"
+          prepend-inner-icon="mdi-magnify"
+          flat
+          hide-details
+          single-line
+          style="font-size: 1.4rem"
+          @update:model-value="handleSearch(search)"
+          :loading="loading"
+          placeholder="Digite algo para pesquisar..."
+        />
+      </v-col>
+      <v-col cols="12" lg="2" class="d-flex flex-wrap" style="gap: 0.5rem">
+        <Button
+          variant="outlined"
+          color="grey"
+          class="text-none"
+          size="small"
+          @click="router.back()"
+        >
+          <v-icon icon="mdi-arrow-left" color="darkText" />
+          <span class="text-darkText text-caption"> Voltar </span>
+        </Button>
+        <Button color="primary" @click="showForm = true" size="small">
+          <v-icon icon="mdi-plus" start color="colorIcon" />
+          <span class="text-caption"> Novo </span>
+        </Button>
       </v-col>
       <v-col v-for="report in $all" cols="12" lg="3" :key="report.id">
-        <CardBlur height="100%">
+        <CardBlur>
           <template #content>
             <v-row class="text-primary pa-6">
               <v-col cols="12" style="gap: 0.2rem">
-                <div class="d-flex align-center w-100" style="gap: 0.5rem">
+                <strong>
+                  {{ report.title }}
+                </strong>
+                <!-- <div class="d-flex align-center w-100" style="gap: 0.5rem">
                   <strong>Modelo:</strong>
                   <span>
                     {{ report.title }}
                   </span>
-                </div>
+                </div> -->
               </v-col>
             </v-row>
           </template>

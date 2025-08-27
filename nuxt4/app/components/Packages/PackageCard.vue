@@ -1,5 +1,5 @@
 <template>
-  <CardBlur :disabled="loading" :loading="loading" class="mx-auto" height="620">
+  <CardBlur :disabled="loading" :loading="loading" class="mx-auto" height="650">
     <template v-slot:loader="{ isActive }">
       <v-progress-linear
         :active="isActive"
@@ -75,7 +75,7 @@
 
     <v-card-actions
       v-if="item.status === 'active'"
-      class="d-flex flex-wrap justify-center pa-4"
+      class="d-flex justify-center pa-4"
     >
       <Button
         color="grey"
