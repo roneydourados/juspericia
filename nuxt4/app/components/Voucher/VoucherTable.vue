@@ -1,93 +1,92 @@
 <template>
-  <div>
+  <div class="mt-12 px-4">
+    <v-row dense>
+      <v-col
+        cols="12"
+        lg="3"
+        class="d-flex align-center mt-n5"
+        style="gap: 0.5rem"
+      >
+        <DatePicker
+          v-model="filters.initialDate"
+          label="Data Inicial"
+          variant="outlined"
+          color="primary"
+          hide-details
+        />
+        <DatePicker
+          v-model="filters.finalDate"
+          label="Data Final"
+          variant="outlined"
+          color="primary"
+          hide-details
+        />
+      </v-col>
+      <v-col cols="12" lg="3">
+        <SelectSearchLawyer label="Cliente" v-model="filters.user" />
+      </v-col>
+      <v-col cols="12" lg="2">
+        <SelectInput
+          label="Status"
+          v-model="filters.status"
+          item-title="text"
+          item-value="value"
+          :items="[
+            {
+              text: 'Ativo',
+              value: 'active',
+            },
+            { text: 'Inativo', value: 'deleted' },
+          ]"
+          @update:model-value="getVouchers"
+        />
+      </v-col>
+      <v-col
+        cols="12"
+        lg="4"
+        class="d-flex flex-wrap align-center mb-4"
+        style="gap: 0.5rem"
+      >
+        <Button
+          variant="outlined"
+          color="info"
+          class="text-none"
+          size="small"
+          @click="router.back()"
+        >
+          <v-icon icon="mdi-arrow-left" start color="colorIcon" />
+          <span class="text-caption"> Voltar </span>
+        </Button>
+        <Button
+          variant="flat"
+          color="primary"
+          class="text-none"
+          size="small"
+          @click="hanelNewVoucher"
+        >
+          <v-icon icon="mdi-plus" start color="colorIcon" />
+          <span class="text-caption"> Novo </span>
+        </Button>
+        <Button
+          color="primary"
+          variant="flat"
+          size="small"
+          class="text-none"
+          @click="getVouchers"
+        >
+          <v-icon icon="mdi-filter-outline" start color="colorIcon" />
+          <span class="text-caption"> Filtrar </span>
+        </Button>
+      </v-col>
+    </v-row>
     <Table
+      v-if="!mobile"
       title="Vouchers"
       font-size="1.5rem"
       :headers="headers"
       :items="vounchers"
       :showCrud="false"
     >
-      <template v-slot:top-table>
-        <v-row dense class="mt-4">
-          <v-col
-            cols="12"
-            lg="3"
-            class="d-flex align-center mt-n5"
-            style="gap: 0.5rem"
-          >
-            <DatePicker
-              v-model="filters.initialDate"
-              label="Data Inicial"
-              variant="outlined"
-              color="primary"
-              hide-details
-            />
-            <DatePicker
-              v-model="filters.finalDate"
-              label="Data Final"
-              variant="outlined"
-              color="primary"
-              hide-details
-            />
-          </v-col>
-          <v-col cols="12" lg="3">
-            <SelectSearchLawyer label="Cliente" v-model="filters.user" />
-          </v-col>
-          <v-col cols="12" lg="2">
-            <SelectInput
-              label="Status"
-              v-model="filters.status"
-              item-title="text"
-              item-value="value"
-              :items="[
-                {
-                  text: 'Ativo',
-                  value: 'active',
-                },
-                { text: 'Inativo', value: 'deleted' },
-              ]"
-              @update:model-value="getVouchers"
-            />
-          </v-col>
-          <v-col
-            cols="12"
-            lg="4"
-            class="d-flex flex-wrap align-center mb-4"
-            style="gap: 0.5rem"
-          >
-            <Button
-              variant="outlined"
-              color="info"
-              class="text-none"
-              size="small"
-              @click="router.back()"
-            >
-              <v-icon icon="mdi-arrow-left" start color="colorIcon" />
-              <span class="text-caption"> Voltar </span>
-            </Button>
-            <Button
-              variant="flat"
-              color="primary"
-              class="text-none"
-              size="small"
-              @click="hanelNewVoucher"
-            >
-              <v-icon icon="mdi-plus" start color="colorIcon" />
-              <span class="text-caption"> Novo </span>
-            </Button>
-            <Button
-              color="primary"
-              variant="flat"
-              size="small"
-              class="text-none"
-              @click="getVouchers"
-            >
-              <v-icon icon="mdi-filter-outline" start color="colorIcon" />
-              <span class="text-caption"> Filtrar </span>
-            </Button>
-          </v-col>
-        </v-row>
-      </template>
       <template v-slot:item.voucherName="{ item }">
         <v-chip
           color="success"
@@ -154,6 +153,11 @@
         </v-btn>
       </template>
     </Table>
+    <VoucherTableMobile
+      v-else
+      @edit="getItemEdit($event)"
+      @delete="getItemDelete($event)"
+    />
     <VoucherForm v-model="showForm" :data="selected" />
     <DialogLoading :dialog="loading" />
     <Dialog
@@ -170,7 +174,9 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { useDisplay } from "vuetify";
 
+const { mobile } = useDisplay();
 const { amountFormated } = useUtils();
 const voucher = useVoucherStore();
 const consultationPackageStore = useServicePackageStore();
