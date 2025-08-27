@@ -68,6 +68,7 @@ const filters = ref({
   initialDate: "",
   finalDate: "",
   status: "CONFIRMED",
+  isSalt: false,
 });
 
 watch(
@@ -83,7 +84,10 @@ watch(
 const handleFilter = async () => {
   loading.value = true;
   try {
-    await saltCredit.index(filters.value);
+    await saltCredit.index({
+      ...filters.value,
+      isSalt: filters.value.status !== "FINISHED",
+    });
   } finally {
     loading.value = false;
   }

@@ -45,7 +45,7 @@ import * as zod from "zod";
 // Props
 const props = defineProps({
   type: { type: String, default: "" },
-  label: { type: String, default: "Pacote de Serviço" },
+  label: { type: String, default: "Saldo destino" },
   cleareable: { type: Boolean, default: false },
   required: { type: Boolean, default: false },
   clearable: { type: Boolean, default: false },

@@ -74,7 +74,10 @@
             :show-crud="false"
           >
             <template #item.status="{ item }">
-              <v-chip :color="getStatusName(item).color">
+              <v-chip
+                :color="getStatusName(item).color"
+                @click="getItemUpdateExpireAt(item)"
+              >
                 <v-icon
                   :color="getStatusName(item).color"
                   :icon="getStatusName(item).icon"
@@ -157,6 +160,15 @@
       </template>
     </v-snackbar>
     <DialogLoading :dialog="loading" />
+    <Dialog
+      title="Atualizar Data de expiração crédito"
+      :dialog="showUpdateExpireAt"
+      @cancel="showUpdateExpireAt = false"
+      @confirm="handleUpdateExpireAt"
+      show-cancel
+    >
+      <DatePicker label="Nova data" v-model="newExpireAt" />
+    </Dialog>
   </div>
 </template>
 
@@ -169,7 +181,9 @@ const { amountFormated } = useUtils();
 const showFormSaltTransfer = ref(false);
 const loading = ref(false);
 const showErrorAlert = ref(false);
+const showUpdateExpireAt = ref(false);
 const selectedUserCreditSalt = ref<UserCreditSalt>();
+const newExpireAt = ref("");
 const filters = ref({
   initialDate: "",
   finalDate: "",
@@ -259,5 +273,27 @@ const handleFilter = async () => {
 const handleCloseFormTrasnfer = async () => {
   selectedUserCreditSalt.value = undefined;
   await handleFilter();
+};
+
+const getItemUpdateExpireAt = (item: UserCreditSalt) => {
+  selectedUserCreditSalt.value = item;
+  showUpdateExpireAt.value = true;
+};
+
+const handleUpdateExpireAt = async () => {
+  if (!selectedUserCreditSalt.value) return;
+
+  loading.value = true;
+  try {
+    await saltCredit.updateExpireAt({
+      publicId: selectedUserCreditSalt.value.publicId!,
+      newExpireAt: newExpireAt.value,
+    });
+
+    await handleFilter();
+  } finally {
+    loading.value = false;
+    showUpdateExpireAt.value = false;
+  }
 };
 </script>

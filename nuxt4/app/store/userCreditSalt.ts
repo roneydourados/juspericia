@@ -84,6 +84,13 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     await api.put("/user-credit-salt/transfer-salt", payload);
   };
 
+  const updateExpireAt = async (input: {
+    publicId: string;
+    newExpireAt: string;
+  }) => {
+    await api.put("/user-credit-salt/update-expireat", input);
+  };
+
   return {
     indexAdmin,
     index,
@@ -91,5 +98,6 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     transferSalt,
     $credits,
     $userCreditLog,
+    updateExpireAt,
   };
 });
