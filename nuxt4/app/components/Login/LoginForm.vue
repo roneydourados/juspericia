@@ -64,7 +64,12 @@
             </v-row>
             <v-row dense justify="center">
               <v-col cols="12" class="ma-6">
-                <Button variant="flat" color="colorIcon" type="submit">
+                <Button
+                  variant="flat"
+                  color="colorIcon"
+                  type="submit"
+                  :disabled="disabledButtons"
+                >
                   <v-icon icon="mdi-login" start color="primary" />
                   <span class="text-primary"> Acessar </span>
                 </Button>
@@ -133,7 +138,7 @@ const { mobile } = useDisplay();
 const cloudFlareToken = ref("");
 const turnstile = ref();
 const rounter = useRouter();
-const loading = ref(false);
+const disabledButtons = ref(false);
 const isError = ref(false);
 
 const form = ref({
@@ -149,6 +154,19 @@ onMounted(() => {
     saveCredentials: localStorage.getItem("saveCredentials") === "true",
   };
 });
+
+// Watch para monitorar o token do Turnstile
+watch(
+  cloudFlareToken,
+  (newToken) => {
+    // Se o token estiver vazio, desabilita os botões
+    // Se o token tiver valor, habilita os botões
+    disabledButtons.value = !newToken || newToken.trim() === "";
+  },
+  {
+    immediate: true,
+  }
+);
 
 const $user = computed(() => auth.$currentUser);
 const $isDevelop = computed(() => config.public.develop);

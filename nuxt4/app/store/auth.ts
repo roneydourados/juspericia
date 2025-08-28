@@ -92,6 +92,10 @@ export const useAuthStore = defineStore("auth", () => {
     await api.post("/auth/consent-terms", { tokenCapcha });
   };
 
+  const revokeConset = async (publicId: string) => {
+    await api.post(`/auth/revoke-consent/${publicId}`);
+  };
+
   return {
     $currentUser,
     login,
@@ -103,5 +107,6 @@ export const useAuthStore = defineStore("auth", () => {
     forgotPasswordLink,
     resetPassword,
     consentTerms,
+    revokeConset,
   };
 });

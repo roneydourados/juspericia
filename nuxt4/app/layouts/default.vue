@@ -14,11 +14,6 @@
           color="white"
           @click.stop="drawer = !drawer"
         />
-        <!-- <div class="d-flex align-center text-white">
-          <div v-if="$isDevelop && !mobile" class="text-h4 text-center w-100">
-            ( DEMONSTRAÇÃO )
-          </div>
-        </div> -->
       </template>
       <template v-slot:append>
         <div
@@ -77,9 +72,69 @@
             {{ $currentUser?.profile?.profileName }}
           </span>
         </div>
-        <v-avatar size="40" color="black" variant="tonal" class="mr-2">
+        <!-- <v-avatar
+          size="40"
+          color="black"
+          variant="tonal"
+          class="mr-2"
+          @click="menuAvatar = true"
+        >
           <v-icon icon="mdi-account-outline" color="white" />
-        </v-avatar>
+        </v-avatar> -->
+        <div
+          :class="
+            mobile ? 'd-flex align-center px-2' : 'px-2 d-flex align-center'
+          "
+          style="gap: 1rem"
+        >
+          <v-menu rounded>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                icon
+                v-bind="props"
+                color="darkgreen"
+                variant="tonal"
+                size="small"
+              >
+                <v-avatar>
+                  <v-icon icon="mdi-account-outline" color="white" />
+                </v-avatar>
+              </v-btn>
+            </template>
+            <v-card min-width="200" color="surface" rounded="xl">
+              <v-card-text>
+                <div class="mx-auto text-center">
+                  <v-avatar color="primary" variant="tonal" size="50">
+                    <v-icon icon="mdi-account-outline" color="primary" />
+                  </v-avatar>
+                  <h3 class="mt-2">{{ $currentUser?.name }}</h3>
+                  <p class="text-caption text-grey-darken-1 mt-1">
+                    {{ $currentUser?.email }}
+                  </p>
+                  <v-divider class="my-3"></v-divider>
+                  <v-btn
+                    block
+                    class="text-none"
+                    variant="text"
+                    @click="handleLogout"
+                  >
+                    <v-icon class="mr-2">mdi-logout</v-icon>
+                    Sair
+                  </v-btn>
+                  <v-btn
+                    block
+                    class="text-none"
+                    variant="text"
+                    @click="handleRevokeConsent"
+                  >
+                    <v-icon class="mr-2" icon="mdi-file-rotate-right-outline" />
+                    Revogar termos de uso
+                  </v-btn>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </div>
       </template>
     </v-app-bar>
     <v-main class="container d-flex justify-center">
@@ -119,7 +174,7 @@ const auth = useAuthStore();
 //const { getInitials } = useUtils();
 
 const drawer = ref(true);
-
+const menuAvatar = ref(false);
 // const $currentScreen = computed(() => screen.$currentScreen);
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
@@ -146,6 +201,41 @@ const closeDrawer = () => {
 
 const handleNewSolicitation = async () => {
   await router.push("/solicitations/new");
+};
+
+const handleLogout = () => {
+  auth.logout();
+  router.push("/");
+};
+
+const handleRevokeConsent = async () => {
+  push.info({
+    title: "Revogar consentimento",
+    message:
+      "Tem certeza que deseja revogar o consentimento aos termos de uso?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Revogar termos de uso",
+          variant: "primary",
+          handler: async () => {
+            await auth.revokeConset($currentUser.value?.userConsent?.publicId!);
+            auth.logout();
+            router.push("/");
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 
 // const toggleTheme = () => {

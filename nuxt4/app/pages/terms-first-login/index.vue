@@ -198,7 +198,7 @@
         color="grey"
         size="small"
         :loading="loading"
-        :disabled="loading"
+        :disabled="disabledButtons"
       >
         <v-icon icon="mdi-close" color="colorIcon" start />
         <span class="text-primary text-caption">
@@ -211,7 +211,7 @@
         color="red"
         size="small"
         :loading="loading"
-        :disabled="loading"
+        :disabled="disabledButtons"
       >
         <v-icon icon="mdi-close" color="red" start />
         <span class="text-primary text-caption"> Não concordo </span>
@@ -235,25 +235,40 @@ const cloudFlareToken = ref("");
 const auth = useAuthStore();
 const router = useRouter();
 const loading = ref(false);
-
+const disabledButtons = ref(true); // Inicialmente desabilitado até o Turnstile carregar
 const $currentUser = computed(() => auth.$currentUser);
+
+// Watch para monitorar o token do Turnstile
+watch(
+  cloudFlareToken,
+  (newToken) => {
+    // Se o token estiver vazio, desabilita os botões
+    // Se o token tiver valor, habilita os botões
+    disabledButtons.value = !newToken || newToken.trim() === "";
+  },
+  {
+    immediate: true,
+  }
+);
 
 const handleAccpetTerms = async () => {
   if (!$currentUser.value) return;
 
   loading.value = true;
+  disabledButtons.value = true;
   try {
     await auth.consentTerms(cloudFlareToken.value);
     await auth.verifyUser($currentUser.value.publicId!);
-    
+
     // Aguarda a próxima atualização do DOM para garantir que o estado foi atualizado
     await nextTick();
-    
+
     router.push("/");
   } catch (error) {
     console.log(error);
   } finally {
     loading.value = false;
+    disabledButtons.value = false;
   }
 };
 
