@@ -3,24 +3,28 @@ export default defineNuxtRouteMiddleware((to) => {
   //const screen = useScreenStore();
   const stoken = localStorage.getItem("token");
 
+  // Rotas que não precisam de verificação de permissão
+  const existsFreeRoute =
+    to.path.includes("/activate-account/") ||
+    to.path.includes("/activate-account/success") ||
+    to.path.includes("/activate-account/error") ||
+    to.path.includes("/activate-account/error/") ||
+    to.path.includes("/forgot-password") ||
+    to.path.includes("/forgot-password/renew") ||
+    to.path.includes("/forgot-password/renew/") ||
+    to.path.includes("/terms") ||
+    to.path.includes("/register") ||
+    to.path.startsWith("/teleconference") ||
+    to.path.startsWith("/consent-terms") ||
+    to.path.startsWith("/terms-first-login");
+
+  if (existsFreeRoute) {
+    return;
+  }
+
   if (auth.$currentUser && stoken) {
-    // if (to.path.includes("/activate-account/success")) {
-    //   return;
-    // }
-
-    // const userRoute = auth.$currentUser.Profile.ProfileRoute?.find(
-    //   (route) => route.to === to.path && route.visible === true
-    // );
-
-    // const isValidRoute = userRoute ? true : false;
-
-    // if (to.path !== "/profile" && !isValidRoute) {
-    //   return navigateTo("/");
-    // }
-
     try {
       //se esta tudo ok com token então verificar se a rota acessada é liberada para o usário
-
       const userRoute = auth.$currentUser.profile?.routes?.find((route) => {
         let pathUrl = "";
         if (Object.keys(to.params).length > 0) {

@@ -20,7 +20,7 @@ export interface AuthProps {
   cpfCnpj?: string;
   name?: string;
   email?: string;
-
+  userConsent?: UserConsentProps;
   profile?: Profile;
 }
 

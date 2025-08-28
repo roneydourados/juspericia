@@ -15,6 +15,8 @@ export default defineNuxtRouteMiddleware((to) => {
     to.path.includes("/terms") ||
     to.path.includes("/register") ||
     to.path.startsWith("/teleconference");
+  // to.path.startsWith("/consent-terms") ||
+  // to.path.startsWith("/terms-first-login");
 
   if (existsFreeRoute) {
     return;
@@ -35,6 +37,18 @@ export default defineNuxtRouteMiddleware((to) => {
         localStorage.removeItem("token");
         return navigateTo("/");
       }
+
+      if (
+        !auth.$currentUser?.userConsent &&
+        !to.path.startsWith("/consent-terms")
+      ) {
+        return navigateTo("/consent-terms");
+      }
+
+      // // Se o usuário está em /consent-terms mas já tem consentimento, redirecionar
+      // if (auth.$currentUser?.consent && to.path.startsWith("/consent-terms")) {
+      //   return navigateTo("/");
+      // }
 
       if (to.path === "/") {
         if (auth.$currentUser?.profile?.type === "ADMIN") {

@@ -7,6 +7,8 @@
     :prepend-icon="prependIcon"
     :append-icon="appendIcon"
     :rounded="rounded"
+    :disabled="disabled"
+    :loading="loading"
     @click="emit('click')"
   >
     <slot />
@@ -47,6 +49,14 @@ defineProps({
   rounded: {
     type: String,
     default: "xl",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 

@@ -9,13 +9,16 @@ export const useAuthStore = defineStore("auth", () => {
   const { api } = useAxios();
 
   const currentUser = ref<AuthProps | null>(null);
+  const userUpdateTrigger = ref(0); // Trigger para forçar reatividade
 
   const $currentUser = computed(() => {
+    // Força a reatividade quando userUpdateTrigger muda
+    userUpdateTrigger.value;
+
     const sUser = localStorage.getItem("user");
 
     if (sUser) {
       const user = JSON.parse(sUser);
-
       currentUser.value = user;
     }
 
@@ -35,24 +38,29 @@ export const useAuthStore = defineStore("auth", () => {
       currentUser.value = resp.data;
 
       localStorage.setItem("user", JSON.stringify(resp.data));
+      userUpdateTrigger.value++; // Força atualização do computed
     }
   };
 
-  const verifyUser = async (id: number) => {
-    const resp = await api.get<AuthProps>(`/auth/verify-user/${id}`);
+  const verifyUser = async (id: string) => {
+    const resp = await api.post<AuthProps>(`/auth/verify-user/${id}`);
 
     if (resp.data.token) {
-      localStorage.removeItem("token");
-      localStorage.setItem("token", JSON.stringify(resp.data.token));
-
       currentUser.value = resp.data;
 
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.setItem("token", JSON.stringify(resp.data.token));
       localStorage.setItem("user", JSON.stringify(resp.data));
+      userUpdateTrigger.value++; // Força atualização do computed
     }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    currentUser.value = null;
+    userUpdateTrigger.value++; // Força atualização do computed
   };
 
   //efetuar cadastro/registro de um novo usuário
@@ -80,6 +88,10 @@ export const useAuthStore = defineStore("auth", () => {
     await api.post(`/auth/renew-password/${token}`, payload);
   };
 
+  const consentTerms = async (tokenCapcha: string) => {
+    await api.post("/auth/consent-terms", { tokenCapcha });
+  };
+
   return {
     $currentUser,
     login,
@@ -90,5 +102,6 @@ export const useAuthStore = defineStore("auth", () => {
     forgotActiveLink,
     forgotPasswordLink,
     resetPassword,
+    consentTerms,
   };
 });

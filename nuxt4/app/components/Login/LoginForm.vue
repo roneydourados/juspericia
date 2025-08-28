@@ -174,6 +174,11 @@ const submmitForm = async () => {
       localStorage.setItem("saveCredentials", "false");
     }
 
+    if (!$user?.value?.userConsent) {
+      console.log("consent", $user?.value);
+      return navigateTo("/consent-terms");
+    }
+
     if ($user?.value?.profile?.type === "ADMIN") {
       return navigateTo("/admin/home");
     } else if ($user?.value?.profile?.type === "ADVOGADO") {
