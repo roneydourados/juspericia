@@ -74,10 +74,7 @@
             :show-crud="false"
           >
             <template #item.status="{ item }">
-              <v-chip
-                :color="getStatusName(item).color"
-                @click="getItemUpdateExpireAt(item)"
-              >
+              <v-chip :color="getStatusName(item).color">
                 <v-icon
                   :color="getStatusName(item).color"
                   :icon="getStatusName(item).icon"
@@ -113,6 +110,22 @@
               <strong>{{ dayjs(item.createdAt).format("DD/MM/YYYY") }}</strong>
             </template>
             <template #item.actions="{ item }">
+              <v-btn
+                variant="text"
+                color="info"
+                icon
+                @click="getItemUpdateExpireAt(item)"
+                :disabled="dayjs(item.expireDate).isAfter(dayjs())"
+              >
+                <v-icon icon="mdi-calendar-month"></v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Ajustar data de expiração
+                </v-tooltip>
+              </v-btn>
               <v-btn
                 variant="text"
                 color="info"
