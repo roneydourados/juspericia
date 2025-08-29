@@ -198,7 +198,7 @@
               </v-card-title>
               <v-card-text class="py-4">
                 <v-row dense>
-                  <v-col cols="12" lg="6">
+                  <v-col cols="12" lg="8">
                     <CurrencyInput
                       label="Taxa cartão de crédito parcelado (%)"
                       v-model="form.cardFeeInstallment"
@@ -233,7 +233,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-
           <v-col cols="12" lg="4">
             <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
@@ -261,6 +260,29 @@
                 </v-row>
                 <div class="mt-4">
                   Informe aqui o token gerado no seu sistema de CRM
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" lg="4">
+            <v-card rounded="xl" height="100%" variant="flat">
+              <v-card-title>
+                <div class="font-weight-bold">Saldo mínimo de crédito</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12" lg="8">
+                    <CurrencyInput
+                      label="Saldo mínimo de crédito"
+                      v-model="form.minValueSaltCredits"
+                    />
+                  </v-col>
+                </v-row>
+                <div class="py-8">
+                  Parametrize um valor mínimo de saldo de crédito que um cliente
+                  deve possuir, para que seja automaticamente gerada uma nova
+                  oportunidade de venda no CRM.
                 </div>
               </v-card-text>
             </v-card>
@@ -305,6 +327,7 @@ const form = ref({
   crmTokenName: "",
   crmToken: "",
   crmTokenExpiration: "",
+  minValueSaltCredits: "",
 });
 
 watch(
@@ -345,6 +368,10 @@ watch(
         crmTokenName: newData.crmTokenName ?? "",
         crmToken: newData.crmToken ?? "",
         crmTokenExpiration: newData.crmTokenExpiration ?? "",
+        minValueSaltCredits: amountFormated(
+          newData.minValueSaltCredits ?? 0,
+          false
+        ),
       };
     }
   },
@@ -379,6 +406,7 @@ const handleSubmit = async () => {
       crmTokenName: form.value.crmTokenName ?? "",
       crmToken: form.value.crmToken ?? "",
       crmTokenExpiration: form.value.crmTokenExpiration ?? "",
+      minValueSaltCredits: Number(form.value.minValueSaltCredits ?? "0"),
     });
   } catch (error) {
     console.error(error);

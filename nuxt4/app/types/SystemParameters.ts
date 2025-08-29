@@ -21,4 +21,5 @@ export interface SystemParametersProps {
   crmTokenName?: string;
   crmToken?: string;
   crmTokenExpiration?: string;
+  minValueSaltCredits?: number;
 }
