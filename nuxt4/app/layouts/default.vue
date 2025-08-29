@@ -222,6 +222,8 @@ const handleRevokeConsent = async () => {
         {
           label: "Revogar termos de uso",
           variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
           handler: async () => {
             await auth.revokeConset($currentUser.value?.userConsent?.publicId!);
             auth.logout();
@@ -231,6 +233,8 @@ const handleRevokeConsent = async () => {
         {
           label: "Cancelar",
           variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
           handler: () => {},
         },
       ],

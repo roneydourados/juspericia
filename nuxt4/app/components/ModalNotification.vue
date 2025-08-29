@@ -9,7 +9,7 @@
       <v-card flat rounded="xl" style="border-top: 6px solid #c7d82f">
         <v-card-title class="d-flex justify-space-between align-center">
           <div class="d-flex">
-            <v-icon icon="mdi-alert-outline" color="error" start />
+            <v-icon icon="mdi-chat-question-outline" color="colorIcon" start />
             <div :id="titleId" class="font-weight-bold text-primary">
               {{ item.title }}
             </div>
@@ -45,7 +45,10 @@
             </span>
           </Button>
         </v-card-actions>
-        <v-card-actions v-else-if="item.props?.actions" class="justify-end">
+        <v-card-actions
+          v-else-if="item.props?.actions"
+          class="justify-end px-4"
+        >
           <Button
             v-for="(action, index) in item.props.actions"
             :key="index"
@@ -56,7 +59,13 @@
             size="small"
             class="text-none"
           >
-            <span style="font-size: 0.7rem; font-weight: 700">
+            <v-icon
+              v-if="action.icon"
+              :icon="action.icon"
+              :color="action.iconColor"
+              start
+            />
+            <span style="font-size: 0.7rem; font-weight: 500; color: #002c9b">
               {{ action.label }}
             </span>
           </Button>
@@ -130,15 +139,15 @@ const getButtonColor = (variant) => {
   }
 };
 
-const getButtonVariant = (variant) => {
-  switch (variant) {
-    case "primary":
-    case "danger":
-    case "success":
-      return "flat";
-    case "secondary":
-    default:
-      return "outlined";
-  }
-};
+// const getButtonVariant = (variant) => {
+//   switch (variant) {
+//     case "primary":
+//     case "danger":
+//     case "success":
+//       return "flat";
+//     case "secondary":
+//     default:
+//       return "outlined";
+//   }
+// };
 </script>
