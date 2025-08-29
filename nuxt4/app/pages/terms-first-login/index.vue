@@ -224,6 +224,8 @@
 </template>
 
 <script setup lang="ts">
+//import type { IpInfo } from "~/composables/useIpInfo";
+
 definePageMeta({
   title: "Termos de Serviço",
   description: "Termos de Serviço",
@@ -237,6 +239,7 @@ const router = useRouter();
 const loading = ref(false);
 const disabledButtons = ref(true); // Inicialmente desabilitado até o Turnstile carregar
 const $currentUser = computed(() => auth.$currentUser);
+const { getIpInfo } = useIpInfo();
 
 // Watch para monitorar o token do Turnstile
 watch(
@@ -257,7 +260,13 @@ const handleAccpetTerms = async () => {
   loading.value = true;
   disabledButtons.value = true;
   try {
-    await auth.consentTerms(cloudFlareToken.value);
+    // Captura informações de IP
+    const ipInfo: IpInfo = await getIpInfo();
+
+    console.log("Informações de IP capturadas:", ipInfo);
+
+    // Envia os dados para o back-end incluindo as informações de IP
+    await auth.consentTerms(cloudFlareToken.value, ipInfo);
     await auth.verifyUser($currentUser.value.publicId!);
 
     // Aguarda a próxima atualização do DOM para garantir que o estado foi atualizado

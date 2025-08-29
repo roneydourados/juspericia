@@ -88,8 +88,16 @@ export const useAuthStore = defineStore("auth", () => {
     await api.post(`/auth/renew-password/${token}`, payload);
   };
 
-  const consentTerms = async (tokenCapcha: string) => {
-    await api.post("/auth/consent-terms", { tokenCapcha });
+  const consentTerms = async (tokenCapcha: string, ipInfo?: any) => {
+    const payload: any = { tokenCapcha };
+
+    // Adiciona informações de IP se fornecidas
+    if (ipInfo) {
+      payload.ipAddress = ipInfo.externalIp || ipInfo.internalIp;
+      payload.externalIp = ipInfo.externalIp;
+    }
+
+    await api.post("/auth/consent-terms", payload);
   };
 
   const revokeConset = async (publicId: string) => {
