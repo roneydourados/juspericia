@@ -190,7 +190,7 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="4">
+          <v-col cols="12" lg="4" class="d-flex flex-column">
             <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Taxas de antecipações</div>
@@ -210,8 +210,30 @@
                 </div>
               </v-card-text>
             </v-card>
+
+            <v-card rounded="xl" height="100%" variant="flat">
+              <v-card-title>
+                <div class="font-weight-bold">%Saldo mínimo de crédito</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12" lg="8">
+                    <CurrencyInput
+                      label="%Saldo mínimo de crédito"
+                      v-model="form.minValueSaltCredits"
+                    />
+                  </v-col>
+                </v-row>
+                <div class="py-8">
+                  Parametrize um valor mínimo de saldo de crédito que um cliente
+                  deve possuir, para que seja automaticamente gerada uma nova
+                  oportunidade de venda no CRM.
+                </div>
+              </v-card-text>
+            </v-card>
           </v-col>
-          <v-col cols="12" lg="4">
+          <v-col cols="12" lg="4" class="d-flex flex-column">
             <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Solicitações de consulta</div>
@@ -229,6 +251,26 @@
                 <div>
                   Quantidade máxia e vezes que o advogado pode solicitar uma
                   correção por consulta
+                </div>
+              </v-card-text>
+            </v-card>
+
+            <v-card rounded="xl" height="100%" variant="flat">
+              <v-card-title>
+                <div class="font-weight-bold">Especialidade padrão</div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12">
+                    <SelectSearchMedicalSpecialty
+                      v-model="form.medicalSpecialty"
+                    />
+                  </v-col>
+                </v-row>
+                <div>
+                  Especialidade médica padrão a ser considerada quando criada
+                  uma nova solicitação
                 </div>
               </v-card-text>
             </v-card>
@@ -264,29 +306,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" lg="4">
-            <v-card rounded="xl" height="100%" variant="flat">
-              <v-card-title>
-                <div class="font-weight-bold">Saldo mínimo de crédito</div>
-                <v-divider class="mt-2"></v-divider>
-              </v-card-title>
-              <v-card-text class="py-4">
-                <v-row dense>
-                  <v-col cols="12" lg="8">
-                    <CurrencyInput
-                      label="Saldo mínimo de crédito"
-                      v-model="form.minValueSaltCredits"
-                    />
-                  </v-col>
-                </v-row>
-                <div class="py-8">
-                  Parametrize um valor mínimo de saldo de crédito que um cliente
-                  deve possuir, para que seja automaticamente gerada uma nova
-                  oportunidade de venda no CRM.
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col>
         </v-row>
       </FormCrud>
     </v-card-text>
@@ -295,6 +314,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+
 const props = defineProps({
   data: {
     type: Object as PropType<SystemParametersProps>,
@@ -328,6 +348,7 @@ const form = ref({
   crmToken: "",
   crmTokenExpiration: "",
   minValueSaltCredits: "",
+  medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
 });
 
 watch(
@@ -372,6 +393,7 @@ watch(
           newData.minValueSaltCredits ?? 0,
           false
         ),
+        medicalSpecialty: newData.medicalSpecialty,
       };
     }
   },
@@ -407,6 +429,7 @@ const handleSubmit = async () => {
       crmToken: form.value.crmToken ?? "",
       crmTokenExpiration: form.value.crmTokenExpiration ?? "",
       minValueSaltCredits: Number(form.value.minValueSaltCredits ?? "0"),
+      medicalSpecialtyIdDefault: form.value.medicalSpecialty?.id,
     });
   } catch (error) {
     console.error(error);

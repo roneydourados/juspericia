@@ -4,11 +4,9 @@ export const useScheduleStore = defineStore("schedule", () => {
   const { api } = useAxios();
   const schedule = ref<ScheduleProps>();
   const schedules = ref<ScheduleListProps>();
-  const schedulesForMedics = ref<ScheduleProps[]>([]);
 
   const $single = computed(() => schedule.value);
   const $all = computed(() => schedules.value);
-  const $schedulesForMedics = computed(() => schedulesForMedics.value);
 
   const create = async (payload: ScheduleProps) => {
     const { data } = await api.post<ScheduleProps>("/schedule", payload);
@@ -29,30 +27,59 @@ export const useScheduleStore = defineStore("schedule", () => {
     schedule.value = data;
   };
 
-  const index = async (filters: ScheduleProps) => {
-    const { medicId, scheduleDate, patientId } = filters;
+  const index = async (input: {
+    medicId?: number;
+    initialDate: string;
+    finalDate: string;
+    patientId?: number;
+    status?: string;
+    patientConsultationId?: number;
+  }) => {
+    const {
+      medicId,
+      initialDate,
+      finalDate,
+      patientId,
+      status,
+      patientConsultationId,
+    } = input;
     const config = {
       params: {
         medicId,
         patientId,
-        scheduleDate,
+        initialDate,
+        finalDate,
+        status,
+        patientConsultationId,
       },
     };
     const { data } = await api.get<ScheduleListProps>("/schedule", config);
     schedules.value = data;
   };
 
-  const indexForMedic = async (filters: ScheduleProps) => {
-    const { medicId, scheduleDate, patientId } = filters;
+  const indexForMedic = async (input: {
+    initialDate: string;
+    finalDate: string;
+    patientId?: number;
+    status?: string;
+    patientConsultationId?: number;
+  }) => {
+    const { initialDate, finalDate, patientId, status, patientConsultationId } =
+      input;
     const config = {
       params: {
-        medicId,
         patientId,
-        scheduleDate,
+        initialDate,
+        finalDate,
+        status,
+        patientConsultationId,
       },
     };
-    const { data } = await api.get<ScheduleProps[]>("/schedule-medic", config);
-    schedulesForMedics.value = data;
+    const { data } = await api.get<ScheduleListProps>(
+      "/schedule-medic",
+      config
+    );
+    schedules.value = data;
   };
 
   const clear = () => {
@@ -75,7 +102,6 @@ export const useScheduleStore = defineStore("schedule", () => {
   return {
     $all,
     $single,
-    $schedulesForMedics,
     create,
     update,
     destroy,

@@ -11,6 +11,9 @@
     <template v-slot:item.medicalSpecialty="{ item }">
       <strong>{{ item.medicalSpecialty }}</strong>
     </template>
+    <template v-slot:item.value="{ item }">
+      {{ amountFormated(item.value, true) }}
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-btn
         icon
@@ -66,7 +69,7 @@
 import { useDebounceFn } from "@vueuse/core";
 
 const storeMedicalSpecialty = useMedicalSpecialtyStore();
-
+const { amountFormated } = useUtils();
 const $all = computed(() => storeMedicalSpecialty.$all?.medicalSpecialtys);
 
 const selected = ref<MedicalSpecialtyProps>();
@@ -77,6 +80,10 @@ const headers = ref([
   {
     title: "Especialidade",
     key: "medicalSpecialty",
+  },
+  {
+    title: "Valor",
+    key: "value",
   },
   {
     title: "Ações",

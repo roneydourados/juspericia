@@ -10,7 +10,10 @@
         <v-col cols="12">
           <StringInput label="Especialidade" v-model="model.medicalSpecialty" />
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" lg="6">
+          <CurrencyInput label="Valor" v-model="model.value" />
+        </v-col>
+        <v-col cols="12" lg="6">
           <SelectInput
             label="Status"
             v-model="model.status"
@@ -40,14 +43,17 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
+const { amountFormated } = useUtils();
 const storeMedicalSpecialty = useMedicalSpecialtyStore();
 const show = defineModel("show", {
   default: false,
 });
 
-const model = ref<MedicalSpecialtyProps>({
+const model = ref({
+  publicId: "",
   status: "active",
   medicalSpecialty: "",
+  value: "",
 });
 
 watchEffect(() => {
@@ -63,6 +69,7 @@ const loadModel = () => {
     publicId: props.data.publicId ?? "",
     medicalSpecialty: props.data.medicalSpecialty ?? "",
     status: props.data.status ?? "active",
+    value: amountFormated(props.data.value ?? 0, false),
   };
 };
 
@@ -70,15 +77,23 @@ const clearModel = () => {
   model.value = {
     status: "active",
     medicalSpecialty: "",
+    value: "",
+    publicId: "",
   };
 };
 
 const submit = async () => {
   try {
     if (props.data.id) {
-      await storeMedicalSpecialty.update(model.value);
+      await storeMedicalSpecialty.update({
+        ...model.value,
+        value: Number(model.value.value ?? "0"),
+      });
     } else {
-      await storeMedicalSpecialty.store(model.value);
+      await storeMedicalSpecialty.store({
+        ...model.value,
+        value: Number(model.value.value ?? "0"),
+      });
     }
 
     await storeMedicalSpecialty.index("");

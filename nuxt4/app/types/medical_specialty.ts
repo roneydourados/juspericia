@@ -3,6 +3,7 @@ export interface MedicalSpecialtyProps {
   publicId?: string;
   medicalSpecialty: string;
   status: string;
+  value: number;
 }
 
 export interface MedicalSpecialtyListResponse {

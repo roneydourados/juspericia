@@ -22,4 +22,6 @@ export interface SystemParametersProps {
   crmToken?: string;
   crmTokenExpiration?: string;
   minValueSaltCredits?: number;
+  medicalSpecialty?: MedicalSpecialtyProps;
+  medicalSpecialtyIdDefault?: number;
 }

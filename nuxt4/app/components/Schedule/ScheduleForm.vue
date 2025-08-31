@@ -131,8 +131,8 @@ const hours = ref<HourProps[]>([]);
 const hour = ref<HourProps>({});
 
 const model = ref({
-  medic: undefined as UserProps | undefined,
   scheduleDate: dayjs().format("YYYY-MM-DD"),
+  medic: undefined as UserProps | undefined,
 });
 
 const $schedules = computed(() => scheduleStore.$all);
@@ -148,7 +148,8 @@ watch(
     if (value) {
       await scheduleStore.index({
         patientConsultationId: props.solicitation.id,
-        scheduleDate: model.value.scheduleDate,
+        initialDate: model.value.scheduleDate,
+        finalDate: model.value.scheduleDate,
       });
       timeSlots();
     }
@@ -241,44 +242,6 @@ const timeSlots = async () => {
         Number($systemParameters.value?.medicQueryInterval ?? 15)
     );
   }
-
-  // while (start <= end) {
-  //   const isSelected = $schedules.value?.schedules.some(
-  //     (s) =>
-  //       s.scheduleDate === model.value.scheduleDate &&
-  //       s.scheduleHour ===
-  //         start.toLocaleTimeString([], {
-  //           hour: "2-digit",
-  //           minute: "2-digit",
-  //         })
-  //   );
-
-  //   const filter = $schedules.value?.schedules.find(
-  //     (s) =>
-  //       s.scheduleDate === model.value.scheduleDate &&
-  //       s.scheduleHour ===
-  //         start.toLocaleTimeString([], {
-  //           hour: "2-digit",
-  //           minute: "2-digit",
-  //         })
-  //   );
-
-  //   const solicitationId = isSelected ? filter?.id : props.solicitation.id;
-
-  //   hours.value.push({
-  //     scheduleHour: start.toLocaleTimeString([], {
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //     }),
-  //     patientConsultationId: solicitationId,
-  //     scheduleDate: model.value.scheduleDate,
-  //     isSelected,
-  //   });
-  //   start.setMinutes(
-  //     start.getMinutes() +
-  //       Number($systemParameters.value?.medicQueryInterval ?? 15)
-  //   );
-  // }
 };
 
 const submitForm = async () => {
@@ -303,11 +266,6 @@ const submitForm = async () => {
   }
 };
 
-// const handleEnabledDisabledHours = async () => {
-//   await getSchedules();
-//   timeSlots();
-// };
-
 const handleDialog = () => {
   show.value = false;
   model.value = {
@@ -320,9 +278,9 @@ const handleDialog = () => {
 
 const getSchedules = async () => {
   await scheduleStore.index({
-    //medicId: model.value.medic?.id,
     patientConsultationId: props.solicitation.id,
-    scheduleDate: model.value.scheduleDate,
+    initialDate: model.value.scheduleDate,
+    finalDate: model.value.scheduleDate,
   });
 };
 

@@ -47,11 +47,44 @@
               show-new-Button
             />
           </v-col>
-          <v-col cols="12" lg="6">
+          <v-col cols="12" lg="3">
             <SelectSearchMedicalSpecialty
+              v-if="form.selectOtherSpecialty"
               v-model="form.medicalSpecialty"
               required
             />
+            <v-chip
+              v-else
+              class="w-100"
+              variant="outlined"
+              size="large"
+              color="grey"
+            >
+              <div class="w-100 d-flex flex-column pa-1">
+                <div class="text-caption text-primary">
+                  Especialidade médica
+                </div>
+                <div class="w-100">
+                  {{ form.medicalSpecialty?.medicalSpecialty }}
+                </div>
+              </div>
+            </v-chip>
+          </v-col>
+          <v-col cols="12" lg="3">
+            <Button
+              variant="outlined"
+              color="grey"
+              @click="form.selectOtherSpecialty = !form.selectOtherSpecialty"
+            >
+              <v-icon icon="mdi-medical-bag" color="colorIcon" />
+              <span class="text-caption text-primary">
+                {{
+                  form.selectOtherSpecialty
+                    ? "Voltar padrão"
+                    : "Selecionar outra especialidade"
+                }}
+              </span>
+            </Button>
           </v-col>
         </v-row>
         <v-row
@@ -245,6 +278,7 @@ const { mobile } = useDisplay();
 const router = useRouter();
 
 const storeConsultation = useSolicitationConsultationStore();
+const sistemParametersStore = useSystemParametersStore();
 const fileStore = useFileStore();
 
 const loading = ref(false);
@@ -273,11 +307,13 @@ const form = ref({
   factsRealityConfirm: false,
   files: [] as FileProps[],
   medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
+  selectOtherSpecialty: false,
 });
 
 const filters = ref(getSolicitationsFilters());
 
 const $single = computed(() => storeConsultation.$single);
+const $systemParameters = computed(() => sistemParametersStore.$parameters);
 
 onMounted(() => {
   if (props.data.id && props.show) {
@@ -303,7 +339,8 @@ const clearModel = () => {
     content: "",
     factsRealityConfirm: false,
     files: [],
-    medicalSpecialty: undefined,
+    medicalSpecialty: $systemParameters.value?.medicalSpecialty,
+    selectOtherSpecialty: false,
   };
 };
 
@@ -320,6 +357,7 @@ const loadModel = () => {
     files: props.data.files as FileProps[],
     benefitTypeId: props.data.benefitTypeId ?? 0,
     medicalSpecialty: props.data.medicalSpecialty,
+    selectOtherSpecialty: false,
   };
 };
 
