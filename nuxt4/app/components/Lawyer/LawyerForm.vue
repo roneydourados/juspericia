@@ -196,6 +196,7 @@
           <v-divider></v-divider>
         </v-col>
       </v-row>
+      <pre>{{ props.data }}</pre>
     </FormCrud>
   </DialogForm>
 </template>

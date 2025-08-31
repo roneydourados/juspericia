@@ -11,7 +11,7 @@ const loading = ref(false);
 onMounted(async () => {
   loading.value = true;
   try {
-    await saltCredit.index({ status: "CONFIRMED" });
+    await saltCredit.index({ status: "CONFIRMED", isSalt: true });
   } finally {
     loading.value = false;
   }

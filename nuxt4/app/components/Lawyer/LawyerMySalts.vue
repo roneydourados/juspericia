@@ -84,7 +84,6 @@
               amountFormated(item.solicitationConsultationValue, true)
             }}</strong>
           </template>
-
           <template #item.expireDate="{ item }">
             <strong>
               {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
@@ -222,6 +221,12 @@ const getStatusName = (item: UserCreditSalt) => {
         color: dayjs(item.expireDate).isBefore(currentDate)
           ? "warning"
           : "success",
+        icon: "mdi-check-circle-outline",
+      };
+    case "FINISHED":
+      return {
+        text: "Finalizada",
+        color: "success",
         icon: "mdi-check-circle-outline",
       };
     case "PENDING":
