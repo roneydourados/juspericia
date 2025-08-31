@@ -43,7 +43,7 @@ export const useMedicalSpecialtyStore = defineStore("medicalSpecialty", () => {
 
   const update = async (payload: MedicalSpecialtyProps) => {
     const { data } = await api.put<MedicalSpecialtySingleResponse>(
-      `/medical-specialty/${payload.publicId}`,
+      "/medical-specialty",
       payload
     );
 
