@@ -87,4 +87,5 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Intervalo de data no agendamento
 [x] - No Agendamento dar possibilidade de ver Solicitação
 [ ] - No histórico de uso de crédito informar mais detalhes referente a solcitação utilizada
+[ ] - Ao estornar uma solcitação, devolver o valor de crédito de cliente para o saldo
 ```
