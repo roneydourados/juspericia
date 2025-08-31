@@ -77,12 +77,13 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 ```bash
 [x] - Colocar campo de preço na especialidade médica
 [x] - Aparecer as compras de pacotes de clientes em transações
-[ ] - Editar advogado não esta carregando as informações de endereço ao editar
+[x] - Editar advogado não esta carregando as informações de endereço ao editar
 [x] - Cadastrar cliente novo, já gerar também oportunidade no nectar
 [x] - Calcular em percentual o valor de saldo minimo
-[ ] - Solicitação caso não tenha crédito não selecionar especialidade
+[x] - Solicitação caso não tenha crédito não selecionar especialidade
+[x] - Solicitação calcular o valor somando com valor da especialidade
 [x] - Parametrizar qual especidade que sera clínico geral por padrão
-[ ] - Meus saldos não esta aparecendo corretamente, quando o saldo é zerado tem que ir para finalizado
+[x] - Meus saldos não esta aparecendo corretamente, quando o saldo é zerado tem que ir para finalizado
 [x] - Intervalo de data no agendamento
 [x] - No Agendamento dar possibilidade de ver Solicitação
 [ ] - No histórico de uso de crédito informar mais detalhes referente a solcitação utilizada

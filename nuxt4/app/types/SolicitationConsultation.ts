@@ -47,6 +47,7 @@ export interface SolicitationConsultationProps {
   correctionQuantity?: number;
   medicalSpecialtyId?: number;
   medicalSpecialty?: MedicalSpecialtyProps;
+  medicalSpecialtyValue?: number;
 }
 
 export interface SolicitationConsultationFilterProps {

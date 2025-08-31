@@ -36,3 +36,7 @@ export interface UserCreditSaltResponseProps {
   };
   credits: UserCreditSalt[];
 }
+
+export interface UserCreditTotalSaltProps {
+  totalSalt: number;
+}

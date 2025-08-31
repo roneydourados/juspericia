@@ -5,9 +5,11 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
 
   const userCreditSalts = ref<UserCreditSaltResponseProps>();
   const userCreditLog = ref<UserCreditLog[]>([]);
+  const userCreditTotalSalt = ref<UserCreditTotalSaltProps>();
 
   const $credits = computed(() => userCreditSalts.value);
   const $userCreditLog = computed(() => userCreditLog.value);
+  const $userCreditTotalSalt = computed(() => userCreditTotalSalt.value);
 
   const index = async (input: {
     status?: string;
@@ -91,6 +93,14 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     await api.put("/user-credit-salt/update-expireat", input);
   };
 
+  const getTotalSalt = async (publicId: string) => {
+    const { data } = await api.get<UserCreditTotalSaltProps>(
+      `/user-credit-salt/total/${publicId}`
+    );
+
+    userCreditTotalSalt.value = data;
+  };
+
   return {
     indexAdmin,
     index,
@@ -98,6 +108,8 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     transferSalt,
     $credits,
     $userCreditLog,
+    $userCreditTotalSalt,
     updateExpireAt,
+    getTotalSalt,
   };
 });

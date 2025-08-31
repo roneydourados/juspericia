@@ -21,6 +21,9 @@
         :title="item.raw.medicalSpecialty"
         density="compact"
       >
+        <span class="text-caption text-primary">
+          {{ amountFormated(item.raw.value ?? 0, true) }}
+        </span>
       </v-list-item>
     </template>
 
@@ -28,6 +31,9 @@
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
           {{ item.raw.medicalSpecialty }}
+          <span class="text-caption text-primary">
+            {{ amountFormated(item.raw.value ?? 0, true) }}
+          </span>
         </span>
       </div>
     </template>
@@ -97,7 +103,7 @@ defineProps({
 const emit = defineEmits(["update:modelValue", "clear"]);
 
 const storeMedicalSpecialty = useMedicalSpecialtyStore();
-
+const { amountFormated } = useUtils();
 const search = ref("");
 const loadingSearch = ref(false);
 

@@ -28,23 +28,13 @@
         #{{ item.id }} - Solicitação
         {{ item.Consultation?.consultationName }}
       </div>
+    </template>
+    <template #content>
       <div class="d-flex align-center justify-space-between">
         <span class="text-caption">
           {{ item.Patient?.name }} {{ item.Patient?.surname }}
         </span>
-        <span style="font-size: 0.75rem; font-weight: 700">
-          Valor:
-          {{
-            amountFormated(
-              Number(item.consultationValue ?? 0) +
-                Number(item.antecipationValue ?? 0),
-              true
-            )
-          }}
-        </span>
       </div>
-    </template>
-    <template #content>
       <div class="d-flex justify-space-between w-100">
         <div class="text-caption">
           Tipo:
@@ -66,6 +56,28 @@
           </span>
         </span>
       </div>
+
+      <div class="d-flex justify-space-between w-100">
+        <div class="text-caption">Especialidade médica:</div>
+        <span class="text-caption">
+          {{ item.medicalSpecialty?.medicalSpecialty ?? "Não informado" }}
+        </span>
+      </div>
+      <div class="d-flex justify-space-between w-100">
+        <div class="text-caption">Valor solicitação:</div>
+        <span class="text-caption">
+          Vlr:
+          <span class="text-caption">
+            {{ amountFormated(item.consultationValue ?? 0, true) }}
+          </span>
+        </span>
+      </div>
+      <div class="d-flex justify-space-between w-100">
+        <div class="text-caption">Especialidade médica Valor:</div>
+        <span class="text-caption">
+          {{ amountFormated(item.medicalSpecialty?.value ?? 0, true) }}
+        </span>
+      </div>
       <div class="d-flex justify-space-between w-100">
         <div class="text-caption">
           Atencipar:
@@ -82,6 +94,12 @@
           <span class="text-caption">
             {{ amountFormated(item.antecipationValue ?? 0, true) }}
           </span>
+        </span>
+      </div>
+      <div class="d-flex align-center justify-space-between">
+        <span style="font-size: 0.75rem; font-weight: 700"> Total </span>
+        <span style="font-size: 0.75rem; font-weight: 700">
+          {{ getSolicitationTotal(item) }}
         </span>
       </div>
     </template>
@@ -823,6 +841,15 @@ const getShowCorrection = (item: SolicitationConsultationProps) => {
 const handleGetTipTap = (item: SolicitationConsultationProps) => {
   selected.value = item;
   showTipValue.value = true;
+};
+
+const getSolicitationTotal = (item: SolicitationConsultationProps) => {
+  return amountFormated(
+    Number(item.consultationValue ?? 0) +
+      Number(item.antecipationValue ?? 0) +
+      Number(item.medicalSpecialtyValue ?? 0),
+    true
+  );
 };
 
 const handleUseCreditFormClose = () => {

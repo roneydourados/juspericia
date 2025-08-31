@@ -75,6 +75,7 @@
               variant="outlined"
               color="grey"
               @click="form.selectOtherSpecialty = !form.selectOtherSpecialty"
+              :disabled="!$isSelectMedicalSpecialty"
             >
               <v-icon icon="mdi-medical-bag" color="colorIcon" />
               <span class="text-caption text-primary">
@@ -277,6 +278,7 @@ const { /*amountFormated,*/ getSolicitationsFilters } = useUtils();
 const { mobile } = useDisplay();
 const router = useRouter();
 
+const saltCredit = useUserCreditSaltStore();
 const storeConsultation = useSolicitationConsultationStore();
 const sistemParametersStore = useSystemParametersStore();
 const fileStore = useFileStore();
@@ -314,6 +316,17 @@ const filters = ref(getSolicitationsFilters());
 
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
+const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
+const $isSelectMedicalSpecialty = computed(() => {
+  if (!form.value.consultation) return false;
+
+  return (
+    form.value.consultation &&
+    Number($userCreditTotalSalt.value?.totalSalt ?? 0) >=
+      Number(form.value.consultation.valueCredit ?? 0) +
+        Number(form.value.medicalSpecialty?.value ?? 0)
+  );
+});
 
 onMounted(() => {
   if (props.data.id && props.show) {
@@ -411,6 +424,7 @@ const create = async () => {
       consultationValue: form.value.consultation?.value ?? 0,
       valueCredit: form.value.consultation?.valueCredit ?? 0,
       medicalSpecialtyId: form.value.medicalSpecialty?.id,
+      medicalSpecialtyValue: form.value.medicalSpecialty?.value,
     });
 
     if ($single.value?.id && form.value.files && form.value.files.length > 0) {
@@ -447,6 +461,7 @@ const update = async () => {
       dateOpen: dayjs().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
       medicalSpecialtyId: form.value.medicalSpecialty?.id,
+      medicalSpecialtyValue: form.value.medicalSpecialty?.value,
     });
 
     if ($single.value?.id && form.value.files && form.value.files.length > 0) {

@@ -101,7 +101,7 @@
     title="Dados do Paciente"
     @close="handleCloseForm"
     :data="itemSelected"
-    width="800"
+    width="60%"
   />
   <Dialog
     title="CONFIRME"

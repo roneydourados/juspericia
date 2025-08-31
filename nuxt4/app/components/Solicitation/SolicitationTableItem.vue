@@ -302,6 +302,14 @@
               }}
             </span>
           </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Especialidade médica Valor:</span>
+            <span class="font-weight-bold">
+              {{
+                amountFormated(solicitation.medicalSpecialty?.value ?? 0, true)
+              }}
+            </span>
+          </div>
         </v-col>
         <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
           <div class="d-flex" style="gap: 0.5rem">
@@ -598,7 +606,8 @@ const $currentUser = computed(() => auth.$currentUser);
 const $solicitationTotal = computed(() => {
   return (
     Number(props.solicitation.consultationValue ?? 0) +
-    Number(props.solicitation.antecipationValue ?? 0)
+    Number(props.solicitation.antecipationValue ?? 0) +
+    Number(props.solicitation.medicalSpecialtyValue ?? 0)
   );
 });
 
