@@ -347,6 +347,7 @@ const create = async () => {
     oabUf: model.value.oabUf,
     officeName: model.value.officeName,
     active: model.value.active,
+    officePersonType: model.value.officePersonType,
     UserAddress: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,
@@ -375,6 +376,7 @@ const update = async () => {
     officeName: model.value.officeName,
     officeEmail: model.value.officeEmail,
     officePhone: model.value.officePhone,
+    officePersonType: model.value.officePersonType,
     UserAddress: {
       addressCity: model.value.cepAddress.localidade,
       addressComplement: model.value.cepAddress.complemento,

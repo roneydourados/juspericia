@@ -76,4 +76,6 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 ```bash
 [ ] - Colocar campo de preço na especialidade médica
+[ ] - Aparecer as compras de pacotes de clientes em transações
+[ ] - Editar advogado não esta carregando as informações ao editar
 ```
