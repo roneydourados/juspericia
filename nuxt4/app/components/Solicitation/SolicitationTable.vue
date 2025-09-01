@@ -166,10 +166,13 @@
       </template>
     </Table>
     <SolicitationTableItemMobile
-      v-else
+      v-else-if="
+        $all?.consultations && $all?.consultations.length > 0 && mobile
+      "
       @edit="getItemEdit($event)"
       @refresh="getConsultations"
     />
+    <EmptyContent v-if="$all?.consultations.length === 0" />
   </div>
   <SolicitationFilters
     v-model:drawer="showFilters"
