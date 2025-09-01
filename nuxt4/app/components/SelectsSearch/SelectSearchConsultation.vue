@@ -21,6 +21,9 @@
         :title="item.raw.consultationName"
         density="compact"
       >
+        <span class="text-caption text-primary">
+          {{ amountFormated(item.raw.value ?? 0, true) }}
+        </span>
       </v-list-item>
     </template>
 
@@ -28,6 +31,9 @@
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
           {{ item.raw.consultationName }}
+        </span>
+        <span class="text-caption text-primary ml-2">
+          {{ amountFormated(item.raw.value ?? 0, true) }}
         </span>
       </div>
     </template>
@@ -95,7 +101,7 @@ defineProps({
   },
 });
 
-//const { amountFormated } = useUtils();
+const { amountFormated } = useUtils();
 
 const emit = defineEmits(["update:modelValue"]);
 

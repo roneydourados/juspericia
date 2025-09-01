@@ -130,7 +130,7 @@
             </v-card>
           </v-col> -->
           <v-col cols="12" lg="4">
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">Whatsapp do suporte</div>
                 <v-divider class="mt-2"></v-divider>
@@ -147,6 +147,37 @@
                   suporte via whatsapp, quando usuário clicar em suporte sistema
                   vai efetuar algumas perguntas padrão e redirecionar para
                   whatsapp web usando este número.
+                </div>
+              </v-card-text>
+            </v-card>
+
+            <v-card rounded="xl" variant="flat">
+              <v-card-title>
+                <div class="font-weight-bold">
+                  Limites para solicitar revisão de laudo
+                </div>
+                <v-divider class="mt-2"></v-divider>
+              </v-card-title>
+              <v-card-text class="py-4">
+                <v-row dense>
+                  <v-col cols="12" lg="6">
+                    <IntegerInput
+                      label="Quantidade máxima de dias"
+                      v-model="form.medicalReportRevisionMaxDays"
+                    />
+                  </v-col>
+                  <v-col cols="12" lg="6">
+                    <IntegerInput
+                      label="Quantidade máxima de vezes"
+                      v-model="form.medicalReportRevisionMaxCount"
+                    />
+                  </v-col>
+                </v-row>
+
+                <div>
+                  Defina quantidade máxima em dias que o advogado pode solicitar
+                  uma revisão de laudo e a quantiadade de vezes que isso será
+                  permitido.
                 </div>
               </v-card-text>
             </v-card>
@@ -349,6 +380,8 @@ const form = ref({
   crmTokenExpiration: "",
   minValueSaltCredits: "",
   medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
+  medicalReportRevisionMaxCount: "1",
+  medicalReportRevisionMaxDays: "7",
 });
 
 watch(
@@ -394,6 +427,10 @@ watch(
           false
         ),
         medicalSpecialty: newData.medicalSpecialty,
+        medicalReportRevisionMaxCount:
+          newData.medicalReportRevisionMaxCount?.toString() ?? "",
+        medicalReportRevisionMaxDays:
+          newData.medicalReportRevisionMaxDays?.toString() ?? "",
       };
     }
   },
@@ -430,6 +467,12 @@ const handleSubmit = async () => {
       crmTokenExpiration: form.value.crmTokenExpiration ?? "",
       minValueSaltCredits: Number(form.value.minValueSaltCredits ?? "0"),
       medicalSpecialtyIdDefault: form.value.medicalSpecialty?.id,
+      medicalReportRevisionMaxCount: Number(
+        form.value.medicalReportRevisionMaxCount ?? "1"
+      ),
+      medicalReportRevisionMaxDays: Number(
+        form.value.medicalReportRevisionMaxDays ?? "7"
+      ),
     });
   } catch (error) {
     console.error(error);

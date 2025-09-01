@@ -24,4 +24,6 @@ export interface SystemParametersProps {
   minValueSaltCredits?: number;
   medicalSpecialty?: MedicalSpecialtyProps;
   medicalSpecialtyIdDefault?: number;
+  medicalReportRevisionMaxCount?: number;
+  medicalReportRevisionMaxDays?: number;
 }

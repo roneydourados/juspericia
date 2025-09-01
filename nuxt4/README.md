@@ -90,6 +90,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Ao estornar uma solcitação, devolver o valor de crédito de cliente para o saldo
 [x] - Formulário para atuialização de termos e condições de uso
 [ ] - Recriar tela de controle de crédito do lado administrador
-[ ] - Criar um parametro para identificar quantidade de dias que pode solicitar uma correção de laudo
-[ ] - Criar um parametro para identificar quantidade de vezes que pode solicitar uma correção de laudo
+[x] - Criar um parametro para identificar quantidade de dias que pode solicitar uma correção de laudo
+[x] - Criar um parametro para identificar quantidade de vezes que pode solicitar uma correção de laudo
+[ ] - Validar parametros de limite para solicitação de correção de laudo
 ```
