@@ -20,16 +20,14 @@
         </CardBlur>
       </v-col>
     </v-row>
+    <AdminTermsForm v-model:show="showTermsForm" />
   </div>
 </template>
 
 <script setup lang="ts">
 const router = useRouter();
-
-const handlClick = async (route: string) => {
-  await router.push(route);
-};
-
+const termsStore = useTermsStore();
+const showTermsForm = ref(false);
 const itemsMenu = ref([
   {
     to: "/admin/medics",
@@ -71,5 +69,21 @@ const itemsMenu = ref([
     icon: "mdi-medical-bag",
     text: "Cadastro de especialidades médicas. Cadastrar/Administrar especialidades médicas.",
   },
+  {
+    to: "showTerms",
+    icon: "mdi-file-document-multiple-outline",
+    text: "Atualizar dados de termos e condições de uso do sistema.",
+  },
 ]);
+
+const handlClick = async (route: string) => {
+  switch (route) {
+    case "showTerms":
+      await termsStore.getLastTerm();
+      showTermsForm.value = true;
+      break;
+    default:
+      await router.push(route);
+  }
+};
 </script>

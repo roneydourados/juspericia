@@ -4,7 +4,7 @@
     transition="dialog-top-transition"
     :model-value="show"
     :width="mobile ? '' : width"
-    :fullscreen="mobile"
+    :fullscreen="mobile || fullscreen"
   >
     <v-card rounded="xl" :style="`border-top: 6px solid ${borderColor}`">
       <v-toolbar density="default" color="background">
@@ -60,6 +60,10 @@ defineProps({
   borderColor: {
     type: String,
     default: "#C7D82F",
+  },
+  fullscreen: {
+    type: Boolean,
+    default: false,
   },
 });
 const { mobile } = useDisplay();
