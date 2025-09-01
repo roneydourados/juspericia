@@ -18,7 +18,7 @@
             >
               <template #item.createdAt="{ item }">
                 <strong style="font-size: 0.8rem">
-                  {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
+                  {{ item.createdAt }}
                 </strong>
               </template>
               <template #item.history="{ item }">
@@ -28,7 +28,7 @@
               </template>
               <template #item.type="{ item }">
                 <strong style="font-size: 0.8rem">
-                  {{ item.type === "D" ? "Débito" : "Crédito" }}
+                  {{ item.type }}
                 </strong>
               </template>
               <template #item.value="{ item }">
@@ -36,27 +36,42 @@
                   {{ amountFormated(item.value, false) }}
                 </strong>
               </template>
+              <template #item.solicitationId="{ item }">
+                <Button
+                  v-if="item.solicitationId"
+                  variant="outlined"
+                  color="grey"
+                  @click="getSolicitationDetails(item.consultationPublicId)"
+                >
+                  <strong style="font-size: 0.8rem" class="text-primary">
+                    {{ item.solicitationId }}
+                  </strong>
+                </Button>
+                <span v-else> Sem solicitação </span>
+              </template>
             </Table>
           </v-col>
         </v-row>
       </v-card-text>
     </v-card>
+    <LawyerMySaltsDetailsSolicitation v-model="showSolicitation" />
   </DialogForm>
 </template>
 
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
-import dayjs from "dayjs";
 const show = defineModel({
   default: false,
 });
 
 const saltCredit = useUserCreditSaltStore();
+const storeConsultation = useSolicitationConsultationStore();
 const { amountFormated } = useUtils();
 const { mobile } = useDisplay();
 
 const $single = computed(() => saltCredit.$userCreditLog);
+const showSolicitation = ref(false);
 const headers = ref([
   {
     title: "Data",
@@ -75,5 +90,20 @@ const headers = ref([
     title: "Valor",
     key: "value",
   },
+  {
+    title: "Nº Solicitação",
+    key: "solicitationId",
+    width: "12%",
+  },
+  {
+    title: "Solicitação Status",
+    key: "solicitationStatus",
+    width: "15%",
+  },
 ]);
+
+const getSolicitationDetails = async (publicId: string) => {
+  await storeConsultation.show(publicId);
+  showSolicitation.value = true;
+};
 </script>

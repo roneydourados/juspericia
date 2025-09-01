@@ -181,7 +181,8 @@
             @click="getItemCancel(solicitation)"
             :disabled="
               solicitation.status !== 'open' &&
-              solicitation.status !== 'payment_pending'
+              solicitation.status !== 'payment_pending' &&
+              solicitation.status !== 'paid'
             "
           >
             <v-icon icon="mdi-cancel" start color="red" />

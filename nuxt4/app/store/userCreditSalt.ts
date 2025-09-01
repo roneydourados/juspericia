@@ -4,7 +4,7 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
   const { api } = useAxios();
 
   const userCreditSalts = ref<UserCreditSaltResponseProps>();
-  const userCreditLog = ref<UserCreditLog[]>([]);
+  const userCreditLog = ref<any[]>([]);
   const userCreditTotalSalt = ref<UserCreditTotalSaltProps>();
 
   const $credits = computed(() => userCreditSalts.value);
@@ -65,9 +65,7 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
   };
 
   const getUserCreditLog = async (publicId: string) => {
-    const { data } = await api.get<UserCreditLog[]>(
-      `/user-credit-salt/${publicId}`
-    );
+    const { data } = await api.get<any[]>(`/user-credit-salt/${publicId}`);
 
     userCreditLog.value = data;
   };
