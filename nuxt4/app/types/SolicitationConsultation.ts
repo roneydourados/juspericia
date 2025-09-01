@@ -48,6 +48,7 @@ export interface SolicitationConsultationProps {
   medicalSpecialtyId?: number;
   medicalSpecialty?: MedicalSpecialtyProps;
   medicalSpecialtyValue?: number;
+  antecipationHours?: number;
 }
 
 export interface SolicitationConsultationFilterProps {

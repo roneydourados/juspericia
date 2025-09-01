@@ -333,6 +333,12 @@
               }}
             </span>
           </div>
+          <div class="d-flex" style="gap: 0.5rem">
+            <span>Valor de atencipação:</span>
+            <span class="font-weight-bold">
+              {{ amountFormated(solicitation.antecipationValue ?? 0, true) }}
+            </span>
+          </div>
         </v-col>
         <v-col
           v-if="$currentUser?.profile?.type !== 'MEDICO'"
@@ -679,15 +685,16 @@ const handleUpdateCorrection = async (motive: string) => {
   }
 };
 
-const handleUpdateAntecipation = async (value: number) => {
+const handleUpdateAntecipation = async (item: any) => {
   showDateAntecipation.value = false;
-  if (value) {
+  if (item.value && item.antecipationHours) {
     loading.value = true;
     try {
-      await storeConsultation.update({
-        id: props.solicitation.id,
+      await storeConsultation.solicitationSetAntecipation({
+        publicId: props.solicitation.publicId,
         dateAntecipation: dayjs().format("YYYY-MM-DD"),
-        antecipationValue: value,
+        antecipationValue: item.value,
+        antecipationHours: item.antecipationHours,
       });
 
       await getSolicitations();
@@ -702,7 +709,7 @@ const handleTipValue = async (value: number) => {
     loading.value = true;
     try {
       await storeConsultation.update({
-        id: props.solicitation.id,
+        publicId: props.solicitation.publicId,
         tipValue: value,
       });
 

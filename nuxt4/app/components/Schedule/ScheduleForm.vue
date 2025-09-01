@@ -146,11 +146,13 @@ watch(
   () => show.value,
   async (value) => {
     if (value) {
-      await scheduleStore.index({
-        patientConsultationId: props.solicitation.id,
-        initialDate: model.value.scheduleDate,
-        finalDate: model.value.scheduleDate,
-      });
+      await getSchedules();
+      // await scheduleStore.index({
+      //   patientConsultationId: props.solicitation.id,
+      //   initialDate: model.value.scheduleDate,
+      //   finalDate: model.value.scheduleDate,
+      //   medicalSpecialtyId: props.solicitation.medicalSpecialtyId,
+      // });
       timeSlots();
     }
   }
@@ -281,6 +283,7 @@ const getSchedules = async () => {
     patientConsultationId: props.solicitation.id,
     initialDate: model.value.scheduleDate,
     finalDate: model.value.scheduleDate,
+    medicalSpecialtyId: props.solicitation.medicalSpecialtyId,
   });
 };
 

@@ -66,7 +66,6 @@
       <div class="d-flex justify-space-between w-100">
         <div class="text-caption">Valor solicitação:</div>
         <span class="text-caption">
-          Vlr:
           <span class="text-caption">
             {{ amountFormated(item.consultationValue ?? 0, true) }}
           </span>
@@ -90,7 +89,6 @@
           </span>
         </div>
         <span class="text-caption">
-          Vlr:
           <span class="text-caption">
             {{ amountFormated(item.antecipationValue ?? 0, true) }}
           </span>

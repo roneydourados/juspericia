@@ -16,6 +16,7 @@
             v-model="antecipationValue"
             inline
             class="d-flex justify-center"
+            @update:model-value="handleGetAntecipationDays(Number($event ?? 0))"
           >
             <v-radio label="24hrs" :value="data.valueAntecipation24">
               <template #label>
@@ -47,7 +48,7 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: "",
@@ -67,11 +68,15 @@ const { amountFormated } = useUtils();
 
 const emit = defineEmits(["close"]);
 const show = defineModel<boolean>("show");
-const antecipationValue = ref(0);
+const antecipationValue = ref(props.data.valueAntecipation24 ?? 0);
+const antecipationHours = ref(24);
 
 const submitForm = () => {
   show.value = false;
-  emit("close", antecipationValue.value);
+  emit("close", {
+    value: antecipationValue.value,
+    antecipationHours: antecipationHours.value,
+  });
   antecipationValue.value = 0;
 };
 
@@ -79,5 +84,15 @@ const handleClose = () => {
   show.value = false;
   antecipationValue.value = 0;
   emit("close");
+};
+
+const handleGetAntecipationDays = (value: number) => {
+  if (value === props.data.valueAntecipation24) {
+    antecipationHours.value = 24;
+  } else if (value === props.data.valueAntecipation48) {
+    antecipationHours.value = 48;
+  } else if (value === props.data.valueAntecipation72) {
+    antecipationHours.value = 72;
+  }
 };
 </script>

@@ -125,7 +125,7 @@
               </v-tooltip>
             </v-btn>
             <v-btn
-              v-if="item.status === 'CONFIRMED'"
+              v-if="item.transactionReceiptUrl"
               variant="text"
               color="info"
               icon
@@ -226,7 +226,7 @@ const getStatusName = (item: UserCreditSalt) => {
     case "FINISHED":
       return {
         text: "Finalizada",
-        color: "success",
+        color: "blue",
         icon: "mdi-check-circle-outline",
       };
     case "PENDING":

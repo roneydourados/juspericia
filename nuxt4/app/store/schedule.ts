@@ -34,6 +34,7 @@ export const useScheduleStore = defineStore("schedule", () => {
     patientId?: number;
     status?: string;
     patientConsultationId?: number;
+    medicalSpecialtyId?: number;
   }) => {
     const {
       medicId,
@@ -42,6 +43,7 @@ export const useScheduleStore = defineStore("schedule", () => {
       patientId,
       status,
       patientConsultationId,
+      medicalSpecialtyId,
     } = input;
     const config = {
       params: {
@@ -51,6 +53,7 @@ export const useScheduleStore = defineStore("schedule", () => {
         finalDate,
         status,
         patientConsultationId,
+        medicalSpecialtyId,
       },
     };
     const { data } = await api.get<ScheduleListProps>("/schedule", config);
