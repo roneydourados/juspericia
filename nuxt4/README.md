@@ -86,7 +86,8 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Meus saldos não esta aparecendo corretamente, quando o saldo é zerado tem que ir para finalizado
 [x] - Intervalo de data no agendamento
 [x] - No Agendamento dar possibilidade de ver Solicitação
-[ ] - No histórico de uso de crédito informar mais detalhes referente a solcitação utilizada
-[ ] - Ao estornar uma solcitação, devolver o valor de crédito de cliente para o saldo
+[x] - No histórico de uso de crédito informar mais detalhes referente a solcitação utilizada
+[x] - Ao estornar uma solcitação, devolver o valor de crédito de cliente para o saldo
 [x] - Formulário para atuialização de termos e condições de uso
+[ ] - Recriar tela de controle de crédito do lado administrador
 ```
