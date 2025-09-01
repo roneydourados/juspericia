@@ -116,8 +116,8 @@ export const useUtils = () => {
     const formattedName = hasSpace ? name : `${name} `;
     const [firstName, lastName] = formattedName.split(" ");
 
-    return `${firstName.charAt(0).toUpperCase()}${lastName
-      .charAt(0)
+    return `${firstName?.charAt(0).toUpperCase()}${lastName
+      ?.charAt(0)
       .toUpperCase()}`;
   };
 
