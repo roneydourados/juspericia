@@ -69,7 +69,7 @@ const loadModel = () => {
     publicId: props.data.publicId ?? "",
     medicalSpecialty: props.data.medicalSpecialty ?? "",
     status: props.data.status ?? "active",
-    value: amountFormated(props.data.value ?? 0, false),
+    value: String(props.data.value ?? 0),
   };
 };
 

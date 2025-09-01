@@ -164,6 +164,7 @@ const headers = ref([
   {
     title: "Ações",
     key: "actions",
+    width: "10%",
   },
 ]);
 
