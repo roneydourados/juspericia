@@ -168,7 +168,7 @@
                   </v-col>
                   <v-col cols="12" lg="6">
                     <IntegerInput
-                      label="Quantidade máxima de vezes"
+                      label="Quantidade de revisões"
                       v-model="form.medicalReportRevisionMaxCount"
                     />
                   </v-col>
