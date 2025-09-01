@@ -9,7 +9,7 @@
       <template #content>
         <v-row dense>
           <v-col cols="12">
-            <RitchTextEditor v-model="model.content" />
+            <RitchTextEditor v-model="model.content" height="40" />
           </v-col>
         </v-row>
       </template>

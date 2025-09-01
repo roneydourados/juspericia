@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="editor">
+  <v-card v-if="editor" elevation="0">
     <bubble-menu
       class="d-flex align-center"
       style="gap: 0.5rem"
@@ -74,7 +74,7 @@
         </v-btn-toggle>
       </v-col>
       <v-col cols="12">
-        <v-card variant="flat" class="pa-0 border-thin">
+        <v-card variant="flat" class="pa-0 border-thin" rounded="lg">
           <div :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }">
             <EditorContent :editor="editor" />
           </div>
