@@ -15,6 +15,7 @@ export default defineNuxtRouteMiddleware((to) => {
     to.path.includes("/terms") ||
     to.path.includes("/register") ||
     to.path.startsWith("/teleconference") ||
+    to.path.startsWith("/room") ||
     to.path.startsWith("/consent-terms") ||
     to.path.startsWith("/terms-first-login");
 

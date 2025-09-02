@@ -1,6 +1,6 @@
 <template>
   <v-card flat class="pa-4 py-4">
-    <!-- <div ref="root" /> -->
+    <div ref="root" />
     <v-card-actions class="d-flex justify-end px-12">
       <Button
         variant="outlined"
@@ -27,22 +27,23 @@
 </template>
 
 <script setup lang="ts">
-// import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 //import dayjs from "dayjs";
 const route = useRoute();
 const router = useRouter();
 const storeConsultation = useSolicitationConsultationStore();
+const queryRoomStore = useQueryRoomStore();
 //const scheduleStore = useScheduleStore();
 const auth = useAuthStore();
 
 //const config = useRuntimeConfig();
 
-// const $single = computed(() => storeConsultation.$single);
+const $solicitation = computed(() => storeConsultation.$single);
 // const $currentUser = computed(() => auth.$currentUser);
 
 // const id = String(route.params.id);
-//const root = ref();
-// const zp = ref<ZegoUIKitPrebuilt>();
+const root = ref();
+const zp = ref<ZegoUIKitPrebuilt>();
 const loading = ref(false);
 
 const isFinishSolicitation = ref(false);

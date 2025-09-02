@@ -11,4 +11,6 @@ export interface QueryRoomLinkValidateResponse {
   valid: boolean;
   roomId: string;
   tokenKit: string;
+  userId: string;
+  url: string;
 }

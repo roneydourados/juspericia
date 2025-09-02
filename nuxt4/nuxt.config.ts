@@ -136,8 +136,6 @@ export default defineNuxtConfig({
       pass: process.env.MAIL_PASS ?? "",
     },
     tokenSecret: process.env.JWT_SECRET ?? "",
-    zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
-    zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
     asaasApikey: process.env.ASAAS_API_KEY ?? "",
     asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
     turnstile: {
@@ -152,6 +150,8 @@ export default defineNuxtConfig({
       appUrl: process.env.APP_URL,
       version: process.env.VERSION ?? "",
       develop: process.env.DEVELOP === "true" ? true : false,
+      zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
+      zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
     },
   },
 });
