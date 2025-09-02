@@ -334,9 +334,9 @@
             </span>
           </div>
           <div class="d-flex" style="gap: 0.5rem">
-            <span>Valor de atencipação:</span>
+            <span>Antecipar em:</span>
             <span class="font-weight-bold">
-              {{ amountFormated(solicitation.antecipationValue ?? 0, true) }}
+              {{ solicitation.antecipationHours }}hs
             </span>
           </div>
         </v-col>
@@ -621,21 +621,24 @@ const $solicitationTotal = computed(() => {
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $systemParameters = computed(() => systemParameters.$parameters);
 const $isEnableCorrection = computed(() => {
-  return (
-    Number(props.solicitation.correctionQuantity ?? 0) <
-    Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
-  );
-  // if (
-  //   props.solicitation.correctionQuantity &&
-  //   props.solicitation.correctionQuantity > 0
-  // ) {
-  //   return (
-  //     props.solicitation.correctionQuantity <
-  //     Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
-  //   );
-  // }
+  if (
+    props.solicitation.PatientConsultationReport &&
+    props.solicitation.PatientConsultationReport.reportDate
+  ) {
+    const daysPassed =
+      dayjs().diff(
+        dayjs(props.solicitation.PatientConsultationReport.reportDate),
+        "days"
+      ) <= Number($systemParameters.value?.medicalReportRevisionMaxDays ?? 0);
 
-  // return false;
+    return (
+      daysPassed &&
+      Number(props.solicitation.correctionQuantity ?? 0) <
+        Number($systemParameters.value?.medicalReportRevisionMaxCount ?? 0)
+    );
+  }
+
+  return false;
 });
 
 watch(

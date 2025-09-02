@@ -56,6 +56,12 @@
           </span>
         </span>
       </div>
+      <div class="d-flex justify-space-between w-100">
+        <span class="text-caption">Antecipar em:</span>
+        <span class="font-weight-bold" style="font-size: 0.8rem">
+          {{ item.antecipationHours }}hs
+        </span>
+      </div>
 
       <div class="d-flex justify-space-between w-100">
         <div class="text-caption">Especialidade médica:</div>
@@ -79,14 +85,14 @@
       </div>
       <div class="d-flex justify-space-between w-100">
         <div class="text-caption">
-          Atencipar:
-          <span class="text-caption">
+          Atencipação:
+          <!-- <span class="text-caption">
             {{
               item.dateAntecipation
                 ? dayjs(item.dateAntecipation).format("DD/MM/YYYY")
                 : "Não solicitado"
             }}
-          </span>
+          </span> -->
         </div>
         <span class="text-caption">
           <span class="text-caption">
@@ -417,10 +423,22 @@ const handleDetailsClick = async (id: string) => {
 };
 
 const isEnableCorrection = (item: SolicitationConsultationProps) => {
-  return (
-    Number(item.correctionQuantity ?? 0) <
-    Number($systemParameters.value?.solicitationCorrectionQuantity ?? 0)
-  );
+  if (
+    item.PatientConsultationReport &&
+    item.PatientConsultationReport.reportDate
+  ) {
+    const daysPassed =
+      dayjs().diff(dayjs(item.PatientConsultationReport.reportDate), "days") <=
+      Number($systemParameters.value?.medicalReportRevisionMaxDays);
+
+    return (
+      daysPassed &&
+      Number(item.correctionQuantity ?? 0) <
+        Number($systemParameters.value?.medicalReportRevisionMaxCount ?? 0)
+    );
+  }
+
+  return false;
 };
 
 const editItem = (item: SolicitationConsultationProps) => {

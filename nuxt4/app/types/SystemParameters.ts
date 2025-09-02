@@ -17,7 +17,6 @@ export interface SystemParametersProps {
   voucherMaxQuantityDays?: number;
   cardFeeInstallment?: number;
   ticketFeeInstallment?: number;
-  solicitationCorrectionQuantity?: number;
   crmTokenName?: string;
   crmToken?: string;
   crmTokenExpiration?: string;

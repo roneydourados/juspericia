@@ -29,7 +29,6 @@
         </v-btn-toggle>
       </v-card>
     </bubble-menu>
-
     <v-row class="pa-2">
       <v-col cols="12">
         <v-btn-toggle variant="outlined" divided>
@@ -76,7 +75,7 @@
       <v-col cols="12">
         <v-card variant="flat" class="pa-0 border-thin" rounded="lg">
           <div :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }">
-            <EditorContent :editor="editor" />
+            <EditorContent :editor="editor" class="pa-2" />
           </div>
         </v-card>
       </v-col>
@@ -250,6 +249,6 @@ watch(
 
 .tiptap:focus {
   outline: none;
-  background-color: #f0f0f0; /* Light gray color */
+  /*background-color: #f0f0f0; */
 }
 </style>

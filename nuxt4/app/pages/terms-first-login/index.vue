@@ -189,11 +189,7 @@
       </section>
     </v-card-text>
     <v-card-text>
-      <form autocomplete="off">
-        <!-- Hidden input to prevent autofill -->
-        <input autocomplete="false" name="hidden" type="text" style="display:none;">
-        <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
-      </form>
+      <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
     </v-card-text>
     <v-card-actions class="d-flex px-4">
       <Button

@@ -267,27 +267,6 @@
           <v-col cols="12" lg="4" class="d-flex flex-column">
             <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
-                <div class="font-weight-bold">Solicitações de consulta</div>
-                <v-divider class="mt-2"></v-divider>
-              </v-card-title>
-              <v-card-text class="py-4">
-                <v-row dense>
-                  <v-col cols="12" lg="6">
-                    <IntegerInput
-                      label="Qtde de correções por consulta"
-                      v-model="form.solicitationCorrectionQuantity"
-                    />
-                  </v-col>
-                </v-row>
-                <div>
-                  Quantidade máxia e vezes que o advogado pode solicitar uma
-                  correção por consulta
-                </div>
-              </v-card-text>
-            </v-card>
-
-            <v-card rounded="xl" height="100%" variant="flat">
-              <v-card-title>
                 <div class="font-weight-bold">Especialidade padrão</div>
                 <v-divider class="mt-2"></v-divider>
               </v-card-title>
@@ -374,7 +353,6 @@ const form = ref({
   voucherMaxQuantityUse: "",
   voucherMaxQuantityDays: "",
   cardFeeInstallment: "",
-  solicitationCorrectionQuantity: "",
   crmTokenName: "",
   crmToken: "",
   crmTokenExpiration: "",
@@ -390,8 +368,6 @@ watch(
     if (newData) {
       form.value = {
         pointsPerIndication: newData.pointsPerIndication?.toString() ?? "",
-        solicitationCorrectionQuantity:
-          newData.solicitationCorrectionQuantity?.toString() ?? "",
         pointsExchange: newData.pointsExchange?.toString() ?? "",
         pointsExchangeValue: amountFormated(
           newData.pointsExchangeValue ?? 0,
@@ -459,9 +435,6 @@ const handleSubmit = async () => {
       voucherMaxQuantityUse: Number(form.value.voucherMaxQuantityUse ?? "0"),
       voucherMaxQuantityDays: Number(form.value.voucherMaxQuantityDays ?? "0"),
       cardFeeInstallment: Number(form.value.cardFeeInstallment ?? "0"),
-      solicitationCorrectionQuantity: Number(
-        form.value.solicitationCorrectionQuantity ?? "0"
-      ),
       crmTokenName: form.value.crmTokenName ?? "",
       crmToken: form.value.crmToken ?? "",
       crmTokenExpiration: form.value.crmTokenExpiration ?? "",

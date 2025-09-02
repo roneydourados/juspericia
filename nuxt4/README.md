@@ -92,5 +92,5 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [ ] - Recriar tela de controle de crédito do lado administrador
 [x] - Criar um parametro para identificar quantidade de dias que pode solicitar uma correção de laudo
 [x] - Criar um parametro para identificar quantidade de vezes que pode solicitar uma correção de laudo
-[ ] - Validar parametros de limite para solicitação de correção de laudo
+[x] - Validar parametros de limite para solicitação de correção de laudo
 ```
