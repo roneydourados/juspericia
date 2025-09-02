@@ -1,5 +1,4 @@
 <template>
-  <pre>{{ $validadeRoom }}</pre>
   <v-container class="pa-4">
     <div ref="container" class="w-full h-[80vh] rounded-xl shadow-md" />
   </v-container>
@@ -78,36 +77,34 @@ const joinRoom = () => {
     );
 
     kit.value = ZegoUIKitPrebuilt.create(tokenZegoRoomKit);
+    //kit.value.setLanguage("en-US");
 
-    kit.value.joinRoom({
-      container: container.value,
-      scenario: {
-        mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1, modifique o parâmetro aqui para [ZegoUIKitPrebuilt.OneONoneCall].
-      },
-      showPreJoinView: true,
-      preJoinViewConfig: {
-        title: "Juntar-se à chamada",
-      },
-      onLeaveRoom: handleClose,
-      showLeaveRoomConfirmDialog: false,
-    });
     kit.value.joinRoom({
       container: container.value,
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1
       },
+      sharedLinks: [
+        {
+          name: "Junte-se à chamada",
+          url: $validadeRoom.value.url,
+        },
+      ],
       showPreJoinView: true,
       preJoinViewConfig: {
-        title: "Juntar-se à chamada",
+        title: "Informe seu nome",
+      },
+      videoScreenConfig: {
+        objectFit: "contain",
       },
       turnOnCameraWhenJoining: true,
       turnOnMicrophoneWhenJoining: true,
       showTextChat: true,
       showUserList: false,
       maxUsers: 2,
-      onLeaveRoom: handleClose,
       showLeaveRoomConfirmDialog: false,
       // Callbacks para eventos
+      onLeaveRoom: handleClose,
       onJoinRoom: () => {
         console.log("Usuário entrou na sala");
       },

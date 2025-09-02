@@ -58,7 +58,7 @@ import "dayjs/locale/pt";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
-import { v7 as uuid } from "uuid";
+import { uuidv7 as uuid } from "uuidv7";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useField } from "vee-validate";
