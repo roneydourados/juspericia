@@ -101,10 +101,7 @@
             variant="text"
             @click="handleReportDetails(item)"
           >
-            <v-icon
-              icon="mdi-file-document-arrow-right-outline"
-              color="colorIcon"
-            />
+            <v-icon icon="mdi-file-document-arrow-right-outline" color="info" />
             <v-tooltip
               activator="parent"
               location="top center"

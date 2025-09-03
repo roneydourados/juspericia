@@ -95,4 +95,5 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Validar parametros de limite para solicitação de correção de laudo
 [] - Analisar o reagendar se apaga os angandamentos anteriores
 [] - Ver possibilidade de deixar apenas um agendamento por solicitação
+[] - Ver porque esta dando um erro ao editar o laudo, quando o mesmo possuir anexos
 ```
