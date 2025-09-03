@@ -47,6 +47,33 @@ onMounted(async () => {
   try {
     await queryRoomStore.validate(token);
     joinRoom();
+
+    // Adicionar event listeners para detectar fechamento da aba
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      handleClose();
+    };
+
+    const handleUnload = () => {
+      handleClose();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        handleClose();
+      }
+    };
+
+    // Registrar os event listeners
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Limpar event listeners quando o componente for desmontado
+    onUnmounted(() => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    });
   } catch (error) {
     console.error("Erro ao validar a sala:", error);
   } finally {
@@ -59,7 +86,7 @@ onUnmounted(async () => {
     kit.value.destroy();
   }
 
-  handleClose();
+  await handleClose();
 });
 
 const joinRoom = () => {
@@ -126,12 +153,30 @@ const joinRoom = () => {
   }
 };
 
-const handleClose = () => {
-  // Close the current browser window/tab
-  window.close();
-  // Fallback for browsers that block window.close()
-  if (window.opener) {
-    window.opener = null;
+let isClosing = false;
+
+const handleClose = async () => {
+  // Evitar múltiplas execuções
+  if (isClosing) return;
+  isClosing = true;
+
+  try {
+    // Destruir o kit do Zego primeiro
+    if (kit.value) {
+      kit.value.destroy();
+      kit.value = undefined;
+    }
+
+    await queryRoomStore.closeRoom(token);
+
+    // Close the current browser window/tab
+    window.close();
+    // Fallback for browsers that block window.close()
+    if (window.opener) {
+      window.opener = null;
+    }
+  } catch (error) {
+    console.error("Erro ao fechar a sala:", error);
   }
 };
 </script>

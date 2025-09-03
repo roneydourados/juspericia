@@ -113,56 +113,52 @@
               Detalhes do laudo gerado
             </v-tooltip>
           </v-btn>
+          <div v-else-if="item.status === 'active'" class="d-flex">
+            <v-btn
+              color="primary"
+              icon
+              variant="text"
+              @click="handleFinalizeSchedule(item)"
+            >
+              <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Finalizar atendiento
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              color="purple-darken-2"
+              icon
+              variant="text"
+              @click="handleServiceDetails(item)"
+            >
+              <v-icon icon="mdi-stethoscope" size="20" color="purple" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Iniciar teleatendimento
+              </v-tooltip>
+            </v-btn>
+          </div>
           <v-btn
-            v-else-if="item.status === 'active'"
+            v-else-if="item.status === 'completed'"
             color="primary"
             icon
             variant="text"
-            @click="handleFinalizeSchedule(item)"
+            @click="handleShowMedicalReportForm(item)"
           >
-            <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
+            <v-icon icon="mdi-file-document-edit-outline" color="colorIcon" />
             <v-tooltip
               activator="parent"
               location="top center"
               content-class="tooltip-background"
             >
-              Finalizar atendiento
-            </v-tooltip>
-          </v-btn>
-          <v-btn
-            v-else
-            color="purple-darken-2"
-            icon
-            variant="text"
-            @click="
-              item.PatientConsultation?.status === 'scheduled'
-                ? handleServiceDetails(item)
-                : handleShowMedicalReportForm(item)
-            "
-          >
-            <v-icon
-              :icon="
-                item.PatientConsultation?.status === 'scheduled'
-                  ? 'mdi-stethoscope'
-                  : 'mdi-file-document-edit-outline'
-              "
-              size="25"
-              :color="
-                item.PatientConsultation?.status === 'scheduled'
-                  ? 'purple-darken-2'
-                  : 'info'
-              "
-            />
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
-            >
-              {{
-                item.PatientConsultation?.status === "scheduled"
-                  ? "Iniciar consulta"
-                  : "Redigir laudo"
-              }}
+              Escrever laudo
             </v-tooltip>
           </v-btn>
         </template>
