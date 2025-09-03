@@ -30,7 +30,7 @@ const route = useRoute();
 const config = useRuntimeConfig();
 const queryRoomStore = useQueryRoomStore();
 const loading = ref(false);
-const isHandleClose = ref(false);
+
 const container = ref<HTMLDivElement>();
 const kit = ref<ZegoUIKitPrebuilt>();
 
@@ -59,17 +59,7 @@ onUnmounted(async () => {
     kit.value.destroy();
   }
 
-  //se o usuário não clicou em finalizar chamada
-  if (!isHandleClose.value) {
-    await handleClose();
-  }
-
-  // Close the current browser window/tab
-  window.close();
-  // Fallback for browsers that block window.close()
-  if (window.opener) {
-    window.opener = null;
-  }
+  handleClose();
 });
 
 const joinRoom = () => {
@@ -136,19 +126,12 @@ const joinRoom = () => {
   }
 };
 
-const handleClose = async () => {
-  try {
-    await queryRoomStore.closeRoom(token);
-
-    // Close the current browser window/tab
-    window.close();
-    // Fallback for browsers that block window.close()
-    if (window.opener) {
-      window.opener = null;
-    }
-    isHandleClose.value = true;
-  } catch (error) {
-    console.error("Erro ao fechar a sala:", error);
+const handleClose = () => {
+  // Close the current browser window/tab
+  window.close();
+  // Fallback for browsers that block window.close()
+  if (window.opener) {
+    window.opener = null;
   }
 };
 </script>

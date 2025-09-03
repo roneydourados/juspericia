@@ -23,6 +23,19 @@
           <DatePicker label="Data inicial" v-model="model.initialDate" />
           <DatePicker label="Data final" v-model="model.finalDate" />
         </v-col>
+        <v-col cols="12" lg="2">
+          <SelectInput
+            label="Status"
+            v-model="model.status"
+            item-title="title"
+            item-value="value"
+            :items="[
+              { title: 'Ativo', value: 'active' },
+              { title: 'Concluído', value: 'completed' },
+            ]"
+            @update:model-value="getSchedules"
+          />
+        </v-col>
 
         <v-col cols="12" lg="2">
           <Button color="primary" @click="getSchedules" size="small">
@@ -79,7 +92,10 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn
-            v-if="item.status === 'completed'"
+            v-if="
+              item.status === 'completed' &&
+              item.PatientConsultation?.PatientConsultationReport
+            "
             color="primary"
             icon
             variant="text"
@@ -95,6 +111,22 @@
               content-class="tooltip-background"
             >
               Detalhes do laudo gerado
+            </v-tooltip>
+          </v-btn>
+          <v-btn
+            v-else-if="item.status === 'active'"
+            color="primary"
+            icon
+            variant="text"
+            @click="handleFinalizeSchedule(item)"
+          >
+            <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Finalizar atendiento
             </v-tooltip>
           </v-btn>
           <v-btn
@@ -150,13 +182,13 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { useDisplay } from "vuetify";
+//import { useDisplay } from "vuetify";
 const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
 const consultationReport = usePatientConsultationReportStore();
 
-const { getInitials } = useUtils();
+//const { getInitials } = useUtils();
 const router = useRouter();
 // const { mobile } = useDisplay();
 
@@ -168,6 +200,7 @@ const model = reactive({
   patient: undefined as PatientProps | undefined,
   initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
+  status: "active",
 });
 const loading = ref(false);
 const showReportDetails = ref(false);
@@ -247,12 +280,14 @@ const getSchedules = async () => {
         finalDate: model.finalDate,
         patientId: model.patient?.id,
         medicId: model.medic?.id,
+        status: model.status,
       });
     } else {
       await scheduleStore.indexForMedic({
         initialDate: model.initialDate,
         finalDate: model.finalDate,
         patientId: model.patient?.id,
+        status: model.status,
       });
     }
   } finally {
@@ -305,7 +340,10 @@ const handleServiceDetails = async (item: ScheduleProps) => {
 };
 
 const handleShowMedicalReportForm = async (item: ScheduleProps) => {
-  if (item.status === "completed") {
+  if (
+    item.status === "completed" &&
+    item.PatientConsultation?.PatientConsultationReport
+  ) {
     push.warning(
       "Consulta já finalizada, con laudo médico informado, acesse módulo de laudos para mais detalhes"
     );
@@ -341,5 +379,52 @@ const handleReportDetails = async (item: ScheduleProps) => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleFinalizeSchedule = async (item: ScheduleProps) => {
+  push.info({
+    title: "Finalizar atendimento",
+    message: "Confirma finalizar o atendimento?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Finalizar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            try {
+              //finalizar agenda
+              await scheduleStore.finalizeSchedule(item.patientConsultationId!);
+
+              //setar finalizado para solicitação, deixando pronta para digitação de laudo
+              const payload = {
+                publicId: item.PatientConsultation?.publicId,
+                isTelemedicine: false,
+                status: "finished",
+                dateClose: dayjs().format("YYYY-MM-DD"),
+              };
+
+              //desativar teleconsulta
+              await solicitationStore.update(payload);
+            } catch (error) {
+              console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 </script>
