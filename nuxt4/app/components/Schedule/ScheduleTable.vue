@@ -267,7 +267,7 @@ onMounted(async () => {
 });
 
 const getSchedules = async () => {
-  //if (!model.date) return;
+  // if (!model.date) return;
   loading.value = true;
   try {
     if ($currentUser.value?.profile?.type !== "MEDICO") {

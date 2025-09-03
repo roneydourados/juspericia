@@ -193,7 +193,7 @@ const submmitForm = async () => {
     }
 
     if (!$user?.value?.userConsent) {
-      console.log("consent", $user?.value);
+      //console.log("consent", $user?.value);
       return navigateTo("/consent-terms");
     }
 
