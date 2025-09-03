@@ -93,4 +93,6 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Criar um parametro para identificar quantidade de dias que pode solicitar uma correção de laudo
 [x] - Criar um parametro para identificar quantidade de vezes que pode solicitar uma correção de laudo
 [x] - Validar parametros de limite para solicitação de correção de laudo
+[] - Analisar o reagendar se apaga os angandamentos anteriores
+[] - Ver possibilidade de deixar apenas um agendamento por solicitação
 ```
