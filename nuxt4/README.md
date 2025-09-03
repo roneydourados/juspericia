@@ -96,4 +96,5 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Analisar o reagendar se apaga os angandamentos anteriores
 [] - Ver possibilidade de deixar apenas um agendamento por solicitação
 [] - Ver porque esta dando um erro ao editar o laudo, quando o mesmo possuir anexos
+[] - No editor de texto ter a opção de trocar a fonte, tamanho e cor do texto
 ```
