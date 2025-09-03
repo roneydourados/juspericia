@@ -265,6 +265,10 @@ const formattedDate = computed(() => {
   return `${diaSemana}, ${dia} de ${mes} de ${ano}`;
 });
 
+onMounted(async () => {
+  await getSchedules();
+});
+
 const getSchedules = async () => {
   if (!model.date) return;
 
@@ -407,6 +411,7 @@ const handleFinalizeSchedule = async (item: ScheduleProps) => {
 
               //desativar teleconsulta
               await solicitationStore.update(payload);
+              await getSchedules();
             } catch (error) {
               console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
             }

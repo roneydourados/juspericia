@@ -47,33 +47,6 @@ onMounted(async () => {
   try {
     await queryRoomStore.validate(token);
     joinRoom();
-
-    // Adicionar event listeners para detectar fechamento da aba
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      handleClose();
-    };
-
-    const handleUnload = () => {
-      handleClose();
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        handleClose();
-      }
-    };
-
-    // Registrar os event listeners
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("unload", handleUnload);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    // Limpar event listeners quando o componente for desmontado
-    onUnmounted(() => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("unload", handleUnload);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    });
   } catch (error) {
     console.error("Erro ao validar a sala:", error);
   } finally {
@@ -81,12 +54,18 @@ onMounted(async () => {
   }
 });
 
-onUnmounted(async () => {
+// onUnmounted(async () => {
+//   if (kit.value) {
+//     kit.value.destroy();
+//   }
+// });
+
+onBeforeUnmount(async () => {
+  await handleClose();
+
   if (kit.value) {
     kit.value.destroy();
   }
-
-  await handleClose();
 });
 
 const joinRoom = () => {
