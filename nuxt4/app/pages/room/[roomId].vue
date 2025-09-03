@@ -1,6 +1,6 @@
 <template>
-  <v-container v-if="$validadeRoom?.valid" class="pa-4">
-    <div ref="container" class="rounded-xl shadow-md" />
+  <v-container v-if="$validadeRoom?.valid" class="pa-2 fill-height">
+    <div ref="container" class="video-container rounded-xl shadow-md" />
   </v-container>
   <v-empty-state
     v-else
@@ -101,7 +101,7 @@ const joinRoom = () => {
         title: "Informe seu nome",
       },
       videoScreenConfig: {
-        objectFit: "fill",
+        objectFit: "contain",
       },
       turnOnCameraWhenJoining: true,
       turnOnMicrophoneWhenJoining: true,
@@ -135,3 +135,40 @@ const handleClose = async () => {
   }
 };
 </script>
+
+<style scoped>
+.video-container {
+  width: 100%;
+  height: calc(100vh - 120px); /* Altura da viewport menos padding e margens */
+  max-height: 80vh;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+/* Garantir que o conteúdo do Zego se ajuste ao container */
+.video-container :deep(.zego-uikit-prebuilt-call) {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.video-container :deep(.zego-uikit-prebuilt-call > div) {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Ajustar vídeos para caber no container */
+.video-container :deep(video) {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Container responsivo */
+@media (max-width: 768px) {
+  .video-container {
+    height: calc(100vh - 80px);
+    max-height: 85vh;
+    min-height: 300px;
+  }
+}
+</style>
