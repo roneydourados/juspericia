@@ -1,5 +1,8 @@
 <template>
-  <v-container v-if="$validadeRoom?.valid" class="pa-2 fill-height">
+  <v-container
+    v-if="$validadeRoom?.valid"
+    class="pa-2 pa-sm-2 pa-xs-1 fill-height"
+  >
     <div ref="container" class="video-container rounded-xl shadow-md" />
   </v-container>
   <v-empty-state
@@ -27,6 +30,7 @@ const route = useRoute();
 const config = useRuntimeConfig();
 const queryRoomStore = useQueryRoomStore();
 const loading = ref(false);
+const isHandleClose = ref(false);
 const container = ref<HTMLDivElement>();
 const kit = ref<ZegoUIKitPrebuilt>();
 
@@ -50,9 +54,21 @@ onMounted(async () => {
   }
 });
 
-onUnmounted(() => {
+onUnmounted(async () => {
   if (kit.value) {
     kit.value.destroy();
+  }
+
+  //se o usuário não clicou em finalizar chamada
+  if (!isHandleClose.value) {
+    await handleClose();
+  }
+
+  // Close the current browser window/tab
+  window.close();
+  // Fallback for browsers that block window.close()
+  if (window.opener) {
+    window.opener = null;
   }
 });
 
@@ -123,13 +139,14 @@ const joinRoom = () => {
 const handleClose = async () => {
   try {
     await queryRoomStore.closeRoom(token);
-    console.log("🚀 ~ handleClose ~ token:", token);
+
     // Close the current browser window/tab
     window.close();
     // Fallback for browsers that block window.close()
     if (window.opener) {
       window.opener = null;
     }
+    isHandleClose.value = true;
   } catch (error) {
     console.error("Erro ao fechar a sala:", error);
   }
@@ -166,9 +183,98 @@ const handleClose = async () => {
 /* Container responsivo */
 @media (max-width: 768px) {
   .video-container {
-    height: calc(100vh - 80px);
-    max-height: 85vh;
-    min-height: 300px;
+    height: calc(100vh - 60px);
+    max-height: 90vh;
+    min-height: 250px;
+  }
+
+  /* Garantir que os controles sejam visíveis em mobile */
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar) {
+    position: fixed !important;
+    bottom: 10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 1000 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 25px !important;
+    padding: 8px 16px !important;
+  }
+
+  /* Ajustar botões dos controles */
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar button) {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin: 0 4px !important;
+  }
+
+  /* Garantir que o vídeo não sobreponha os controles */
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-video-view) {
+    padding-bottom: 80px !important;
+  }
+}
+
+/* Estilos específicos para telas muito pequenas */
+@media (max-width: 480px) {
+  .video-container {
+    height: calc(100vh - 40px);
+    max-height: 95vh;
+    min-height: 200px;
+  }
+
+  /* Ajustar controles para telas muito pequenas */
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar) {
+    bottom: 5px !important;
+    padding: 6px 12px !important;
+  }
+
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar button) {
+    min-width: 40px !important;
+    min-height: 40px !important;
+    margin: 0 2px !important;
+  }
+}
+
+/* Ajustes para orientação landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .video-container {
+    height: calc(100vh - 20px);
+    max-height: 98vh;
+  }
+
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar) {
+    bottom: 5px !important;
+    padding: 4px 8px !important;
+  }
+
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar button) {
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+}
+
+/* Garantir que elementos de UI sejam sempre visíveis */
+.video-container :deep(.zego-uikit-prebuilt-call) {
+  position: relative !important;
+}
+
+.video-container
+  :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-header) {
+  z-index: 999 !important;
+}
+
+/* Ajustar área de toque para melhor usabilidade mobile */
+@media (max-width: 768px) {
+  .video-container
+    :deep(.zego-uikit-prebuilt-call .zego-uikit-prebuilt-call-toolbar button) {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 }
 </style>
