@@ -1,7 +1,13 @@
 <template>
-  <v-container class="pa-4">
-    <div ref="container" class="w-full h-[80vh] rounded-xl shadow-md" />
+  <v-container v-if="$validadeRoom?.valid" class="pa-4">
+    <div ref="container" class="rounded-xl shadow-md" />
   </v-container>
+  <v-empty-state
+    v-else
+    headline="Sala Fechada/Expirada"
+    title="Sala inválida"
+    text="Não é mais possível acessar esta sala de teleconferência"
+  />
   <v-overlay :model-value="loading" class="align-center justify-center">
     <v-progress-circular color="primary" size="64" indeterminate />
   </v-overlay>
@@ -95,7 +101,7 @@ const joinRoom = () => {
         title: "Informe seu nome",
       },
       videoScreenConfig: {
-        objectFit: "contain",
+        objectFit: "fill",
       },
       turnOnCameraWhenJoining: true,
       turnOnMicrophoneWhenJoining: true,
@@ -114,5 +120,18 @@ const joinRoom = () => {
   }
 };
 
-const handleClose = () => {};
+const handleClose = async () => {
+  try {
+    await queryRoomStore.closeRoom(token);
+    console.log("🚀 ~ handleClose ~ token:", token);
+    // Close the current browser window/tab
+    window.close();
+    // Fallback for browsers that block window.close()
+    if (window.opener) {
+      window.opener = null;
+    }
+  } catch (error) {
+    console.error("Erro ao fechar a sala:", error);
+  }
+};
 </script>

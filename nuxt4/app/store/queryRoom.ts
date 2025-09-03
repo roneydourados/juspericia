@@ -8,9 +8,11 @@ export const useQueryRoomStore = defineStore("queryRoom", () => {
   const $createdRoomLink = computed(() => createRoomLinkResponse.value);
   const $validadeRoomLink = computed(() => validadeRoomLinkResponse.value);
 
-  const createRoomLink = async (input: { solicitationId: number }) => {
+  const createRoomLink = async (input: { scheduleId: number }) => {
+    const { scheduleId } = input;
+
     const payload = {
-      solicitationId: input.solicitationId,
+      scheduleId,
     };
 
     const { data } = await api.post<QueryRoomLinkCreateResponse>(

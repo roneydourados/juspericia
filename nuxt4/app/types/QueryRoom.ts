@@ -2,7 +2,6 @@ export interface QueryRoomLinkCreateResponse {
   url: string;
   token: string;
   roomId: string;
-  tokenKit: string;
   userCreateId: number;
   solicitationId: number;
 }

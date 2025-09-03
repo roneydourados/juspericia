@@ -49,7 +49,8 @@ const handleQueryStart = async () => {
   if (
     !$single.value ||
     !$single.value.PatientConsultation ||
-    !$single.value.PatientConsultation.id
+    !$single.value.PatientConsultation.id ||
+    !$single.value.id
   ) {
     push.warning("Consulta não encontrada.");
     dialog.value = false;
@@ -60,21 +61,21 @@ const handleQueryStart = async () => {
   loading.value = true;
   try {
     // enviar que a solicitação está em consulta telemedicine true
-    // await solicitationStore.update({
-    //   publicId: $single.value.PatientConsultation.publicId,
-    //   isTelemedicine: true,
-    //   medicId: $user.value?.id,
-    //   dateClose: dayjs().format("YYYY-MM-DD"), // vai ficar como data da consulta até que seja finalizada pela tela de laudos ao clicar em digitar laudo
-    // });
+    await solicitationStore.update({
+      publicId: $single.value.PatientConsultation.publicId,
+      isTelemedicine: true,
+      medicId: $user.value?.id,
+      dateClose: dayjs().format("YYYY-MM-DD"), // vai ficar como data da consulta até que seja finalizada pela tela de laudos ao clicar em digitar laudo
+    });
 
-    // atualizar a agenda para start
-    // await scheduleStore.startSchedule(
-    //   $single.value.PatientConsultation.id!,
-    //   $user.value?.id!
-    // );
+    //atualizar a agenda para start
+    await scheduleStore.startSchedule(
+      $single.value.PatientConsultation.id,
+      $user.value?.id!
+    );
 
     await queryRoomStore.createRoomLink({
-      solicitationId: $single.value.PatientConsultation.id,
+      scheduleId: $single.value.id,
     });
 
     // Aqui vai abrir a tela para conversação de vídeo criada no back-end
@@ -82,6 +83,7 @@ const handleQueryStart = async () => {
     if ($roomLink.value && $roomLink.value.url) {
       window.open($roomLink.value.url, "_blank");
     }
+
     // window.open(
     //   `/teleconference/${$single.value?.PatientConsultation.publicId}`,
     //   "_blank"
