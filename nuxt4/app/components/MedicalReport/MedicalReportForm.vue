@@ -142,7 +142,7 @@ const reportModelStore = useReportModelStore();
 //const scheduleStore = useScheduleStore();
 const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
-//const solicitationStore = useSolicitationConsultationStore();
+const solicitationStore = useSolicitationConsultationStore();
 
 const showAlterContent = ref(false);
 
@@ -152,13 +152,14 @@ const model = ref({
   content: "",
   reportModel: undefined as ReportModelProps | undefined,
 });
+
 const showDelete = ref(false);
 const loading = ref(false);
 const selectedFile = ref<FileProps>();
 const attachments = ref<FileProps[]>([]);
 
 const $reportModel = computed(() => reportModelStore.$single);
-//const $consultationSolicitation = computed(() => solicitationStore.$single);
+const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
 
 watch(
@@ -174,7 +175,7 @@ watch(
 );
 
 const handleSubmit = async () => {
-  if (!props.data.id) {
+  if (!$consultationSolicitation.value || !$consultationSolicitation.value.id) {
     console.error("Patient consultation ID is required.");
     return;
   }
@@ -183,23 +184,17 @@ const handleSubmit = async () => {
     if (props.data.reportPublicId) {
       await patientConsultationReport.update({
         content: model.value.content,
-        patientConsultationId: props.data.id,
+        //patientConsultationId: props.data.id,
         publicId: props.data.reportPublicId,
       });
     } else {
       await patientConsultationReport.create({
         content: model.value.content,
-        patientConsultationId: props.data.id,
+        patientConsultationId: $consultationSolicitation.value.id,
       });
     }
 
     if ($consultationReport.value?.id && attachments.value.length > 0) {
-      // const payload = attachments.value.map((attachment) => ({
-      //   ...attachment,
-      //   ownerId: $consultationReport.value?.id,
-      //   fileCategory: "medical-report",
-      // }));
-
       const payload: FileProps[] = attachments.value
         .filter(
           (

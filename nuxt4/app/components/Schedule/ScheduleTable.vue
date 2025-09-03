@@ -172,7 +172,7 @@
     v-model="serviceDetails"
     @start-query="getSchedules"
   />
-  <MedicalReport v-model="showMedicalReportForm" />
+  <MedicalReport v-model="showMedicalReportForm" @close="getSchedules" />
   <MedicalReportDetails v-model="showReportDetails" />
 </template>
 
@@ -270,8 +270,7 @@ onMounted(async () => {
 });
 
 const getSchedules = async () => {
-  if (!model.date) return;
-
+  //if (!model.date) return;
   loading.value = true;
   try {
     if ($currentUser.value?.profile?.type !== "MEDICO") {

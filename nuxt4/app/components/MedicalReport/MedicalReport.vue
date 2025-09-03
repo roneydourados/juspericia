@@ -4,7 +4,7 @@
       <div class="pa-6 font-weight-bold" style="font-size: 1.2rem">
         Dados laudo médico
       </div>
-      <MedicalReportForm @close="dialog = false" />
+      <MedicalReportForm @close="handleClose" />
       <!-- <v-row dense>
         <v-col cols="12" lg="6">
           <div class="pa-6 font-weight-bold" style="font-size: 1.2rem">
@@ -24,5 +24,11 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(["close"]);
 const dialog = defineModel({ default: false });
+
+const handleClose = () => {
+  emit("close");
+  dialog.value = false;
+};
 </script>
