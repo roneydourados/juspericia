@@ -319,6 +319,11 @@ const editorContent = defineModel({
 //********WATCHS*********
 //Watches: insira aqui os watches do componente.
 //Ex. watch(count, (newValue, oldValue) => { console.log(newValue, oldValue) })
+watch(editorContent, (newValue) => {
+  if (editor.value && newValue !== editor.value.getHTML()) {
+    editor.value.commands.setContent(newValue);
+  }
+});
 //********WATCHS*********
 
 //********COMPUTEDS*********

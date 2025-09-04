@@ -97,4 +97,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Ver possibilidade de deixar apenas um agendamento por solicitação
 [] - Ver porque esta dando um erro ao editar o laudo, quando o mesmo possuir anexos
 [] - No editor de texto ter a opção de trocar a fonte, tamanho e cor do texto
+[] - Criar uma coluna de comissão para médico específica para especialidade
+[] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
+[] - Para comissão de especialista, somar mais o valor da especialidade do mesmo
 ```
