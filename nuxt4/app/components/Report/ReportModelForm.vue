@@ -57,7 +57,7 @@
         </v-card-title>
         <v-card-text>
           <TextEditor v-model="model.content" />
-          <div v-html="model.content" />
+          <!-- <div v-html="model.content" /> -->
         </v-card-text>
       </v-card>
     </FormCrud>
