@@ -52,7 +52,13 @@
       </span>
     </v-card-subtitle>
     <v-cad-text>
-      <Table title="" :headers="headers" :items="$shedules" :show-crud="false">
+      <Table
+        v-if="!mobile"
+        title=""
+        :headers="headers"
+        :items="$shedules"
+        :show-crud="false"
+      >
         <template v-slot:item.PatientConsultation.Patient="{ item }">
           {{ item.PatientConsultation?.Patient?.name }}
         </template>
@@ -160,6 +166,13 @@
           </v-btn>
         </template>
       </Table>
+      <ScheduleTableMobile
+        v-else
+        @medical-report-form="handleShowMedicalReportForm($event)"
+        @service-details="handleServiceDetails($event)"
+        @finish="handleFinalizeSchedule($event)"
+        @report-details="handleReportDetails($event)"
+      />
     </v-cad-text>
   </v-card>
 
@@ -175,7 +188,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-//import { useDisplay } from "vuetify";
+import { useDisplay } from "vuetify";
 const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
@@ -183,7 +196,7 @@ const consultationReport = usePatientConsultationReportStore();
 
 //const { getInitials } = useUtils();
 const router = useRouter();
-// const { mobile } = useDisplay();
+const { mobile } = useDisplay();
 
 const serviceDetails = ref(false);
 const showMedicalReportForm = ref(false);

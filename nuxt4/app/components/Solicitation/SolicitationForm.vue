@@ -131,8 +131,6 @@
               Descrição da realidade dos fatos
             </span>
             <TextEditor v-model="form.content" />
-            <!-- <div v-html="form.content" /> -->
-            <!-- <RitchTextEditor height="10" v-model="form.content" /> -->
             <div class="d-flex flex-column mt-4">
               <input
                 type="file"
