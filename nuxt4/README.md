@@ -93,11 +93,12 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Criar um parametro para identificar quantidade de dias que pode solicitar uma correção de laudo
 [x] - Criar um parametro para identificar quantidade de vezes que pode solicitar uma correção de laudo
 [x] - Validar parametros de limite para solicitação de correção de laudo
-[] - Analisar o reagendar se apaga os angandamentos anteriores
-[] - Ver possibilidade de deixar apenas um agendamento por solicitação
-[] - Ver porque esta dando um erro ao editar o laudo, quando o mesmo possuir anexos
-[] - No editor de texto ter a opção de trocar a fonte, tamanho e cor do texto
-[] - Criar uma coluna de comissão para médico específica para especialidade
+[x] - Analisar o reagendar se apaga os angandamentos anteriores
+[x] - Ver possibilidade de deixar apenas um agendamento por solicitação
+[x] - No editor de texto ter a opção de trocar a fonte, tamanho e cor do texto
+[x] - Criar uma coluna de comissão para médico específica para especialidade
 [] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
 [] - Para comissão de especialista, somar mais o valor da especialidade do mesmo
+[] - Disponibilizar o link da consulta na solicitação quando o médico gerar
+[] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente e soma mais o valor da especialidade
 ```

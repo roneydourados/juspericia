@@ -43,6 +43,8 @@ export interface UserProps {
   bankAccountType?: string;
   medicalSpecialtyId?: number;
   medicalSpecialty?: MedicalSpecialtyProps;
+  medicalSpecialtyComission?: number;
+  medicalSpecialtyComissionType?: number;
 }
 
 export interface UserProfileProps {

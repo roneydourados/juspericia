@@ -40,6 +40,10 @@
           <span>{{ item.name }}</span>
         </span>
       </template>
+      <template v-slot:item.medicalSpecialty.medicalSpecialty="{ item }">
+        <v-icon icon="mdi-medical-bag" start color="colorIcon" />
+        <strong>{{ item.medicalSpecialty.medicalSpecialty }}</strong>
+      </template>
       <template v-slot:item.phone="{ item }">
         <span class="d-flex align-center">
           <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
@@ -67,6 +71,25 @@
           />
           <SelectInput
             v-model="item.comissionType"
+            :items="consultationValueTypes"
+            label="Tipo comissão"
+            :hide-details="true"
+            item-title="label"
+            item-value="value"
+            class="mt-n6"
+            style="width: 8rem"
+          />
+        </div>
+      </template>
+      <template v-slot:item.medicalSpecialtyComission="{ item }">
+        <div class="d-flex align-center mt-6" style="gap: 0.5rem">
+          <CurrencyInput
+            v-model="item.medicalSpecialtyComission"
+            label="Valor comissão"
+            style="width: 6rem"
+          />
+          <SelectInput
+            v-model="item.medicalSpecialtyComissionType"
             :items="consultationValueTypes"
             label="Tipo comissão"
             :hide-details="true"
@@ -144,14 +167,14 @@ const headers = ref([
     title: "Nome",
     key: "name",
   },
-  {
-    title: "Telefone",
-    key: "phone",
-  },
-  {
-    title: "Email",
-    key: "email",
-  },
+  // {
+  //   title: "Telefone",
+  //   key: "phone",
+  // },
+  // {
+  //   title: "Email",
+  //   key: "email",
+  // },
   {
     title: "Ativo",
     key: "active",
@@ -160,10 +183,14 @@ const headers = ref([
     title: "Comissão consulta",
     key: "comissionValue",
   },
-  // {
-  //   title: "Ações",
-  //   key: "actions",
-  // },
+  {
+    title: "Especialidade",
+    key: "medicalSpecialty.medicalSpecialty",
+  },
+  {
+    title: "Comissão especialidade",
+    key: "medicalSpecialtyComission",
+  },
 ]);
 
 const handleSearch = useDebounceFn(
