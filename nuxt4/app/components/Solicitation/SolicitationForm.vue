@@ -130,7 +130,9 @@
             <span class="text-subtitle-2 text-lg-h6">
               Descrição da realidade dos fatos
             </span>
-            <RitchTextEditor height="10" v-model="form.content" />
+            <TextEditor v-model="form.content" />
+            <!-- <div v-html="form.content" /> -->
+            <!-- <RitchTextEditor height="10" v-model="form.content" /> -->
             <div class="d-flex flex-column mt-4">
               <input
                 type="file"

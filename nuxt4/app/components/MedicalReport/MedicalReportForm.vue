@@ -1,6 +1,6 @@
 <template>
   <v-row dense>
-    <v-col cols="12" lg="6">
+    <v-col cols="12">
       <v-card flat rounded="lg" height="100%">
         <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
           <v-card flat rounded="lg">
@@ -59,8 +59,8 @@
               </v-col>
             </v-row>
             <v-card-text>
-              <RitchTextEditor v-model="model.content" />
-              <v-card flat class="mt-4">
+              <TextEditor v-model="model.content" />
+              <!-- <v-card flat class="mt-4">
                 <v-card-title class="mb-4">
                   <input
                     type="file"
@@ -95,13 +95,13 @@
                     </v-col>
                   </v-row>
                 </v-card-text>
-              </v-card>
+              </v-card> -->
             </v-card-text>
           </v-card>
         </FormCrud>
       </v-card>
     </v-col>
-    <v-col cols="12" lg="6">
+    <v-col cols="12">
       <SolicitationDetails :show-voltar="false" :show-report="false" />
     </v-col>
     <Dialog
