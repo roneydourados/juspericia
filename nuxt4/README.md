@@ -106,4 +106,5 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Aguardando laudo aparecer somente quando fechar
 [] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade
 [] - Mostrar valor na solicitação com desconto
+[] - Ver possibilidade de unificar vários PDFS em um só
 ```
