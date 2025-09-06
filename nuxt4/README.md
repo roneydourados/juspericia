@@ -104,4 +104,6 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - No agendamento da solicitação, só liberar para aparecer a data do agendamento 4 dias para frente
 [] - Remover reagendar pra advogado
 [] - Aguardando laudo aparecer somente quando fechar
+[] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade
+[] - Mostrar valor na solicitação com desconto
 ```
