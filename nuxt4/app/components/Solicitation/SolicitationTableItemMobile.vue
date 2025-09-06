@@ -165,7 +165,7 @@
             <span class="text-caption text-primary"> Consulta </span>
           </Button>
           <Button
-            v-if="item.status === 'paid' || item.status === 'scheduled'"
+            v-if="item.status === 'paid'"
             color="grey"
             size="small"
             variant="text"
@@ -175,6 +175,19 @@
             <span class="text-caption text-primary">
               {{ item.status === "paid" ? "Agendar" : "Reagendar" }}
             </span>
+          </Button>
+          <Button
+            v-if="
+              (item.status === 'paid' || item.status === 'scheduled') &&
+              $currentUser?.profile?.type === 'ADMIN'
+            "
+            color="grey"
+            size="small"
+            variant="text"
+            @click="handleSchedule(item)"
+          >
+            <v-icon icon="mdi-calendar-clock" color="colorIcon" />
+            <span class="text-caption text-primary"> Reagendar </span>
           </Button>
           <Button
             color="grey"

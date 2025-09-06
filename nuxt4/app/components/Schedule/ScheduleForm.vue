@@ -83,6 +83,7 @@
             v-model="model.scheduleDate"
             label="Agendar para o dia"
             required
+            :min="minDate"
             @click:day="clickDay($event)"
             @update:model-value="datePickerModelValue($event)"
           />
@@ -126,6 +127,7 @@ const emit = defineEmits(["scheduled"]);
 const show = defineModel<boolean>({ default: false });
 const scheduleStore = useScheduleStore();
 const systemParametersStore = useSystemParametersStore();
+const authStore = useAuthStore();
 const { mobile } = useDisplay();
 const hours = ref<HourProps[]>([]);
 const hour = ref<HourProps>({});
@@ -135,10 +137,23 @@ const model = ref({
   medic: undefined as UserProps | undefined,
 });
 
+const $currentUser = computed(() => authStore.$currentUser);
 const $schedules = computed(() => scheduleStore.$all);
 const $systemParameters = computed(() => systemParametersStore.$parameters);
+
+const minDate = computed(() => {
+  if ($currentUser.value?.profile?.type === "ADVOGADO") {
+    return dayjs().add(5, "days").format("YYYY-MM-DD");
+  }
+  return dayjs().format("YYYY-MM-DD");
+});
 onMounted(async () => {
   await systemParametersStore.index();
+
+  if ($currentUser.value?.profile?.type === "ADVOGADO") {
+    model.value.scheduleDate = dayjs().add(4, "days").format("YYYY-MM-DD");
+  }
+
   timeSlots();
 });
 

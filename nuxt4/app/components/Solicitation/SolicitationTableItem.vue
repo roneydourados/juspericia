@@ -50,7 +50,10 @@
             <span class="text-caption"> Baixar Laudo </span>
           </Button>
           <v-chip
-            v-else-if="!solicitation.PatientConsultationReport"
+            v-else-if="
+              !solicitation.PatientConsultationReport &&
+              solicitation.status === 'finished'
+            "
             variant="flat"
             color="#F6BF0C"
           >
@@ -159,9 +162,20 @@
             <span class="text-caption text-primary"> Consulta </span>
           </Button>
           <Button
-            v-if="
-              solicitation.status === 'paid' ||
-              solicitation.status === 'scheduled'
+            v-if="solicitation.status === 'paid'"
+            color="grey"
+            size="small"
+            variant="outlined"
+            @click="handleSchedule(solicitation)"
+          >
+            <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
+            <span class="text-caption text-primary"> Agendar </span>
+          </Button>
+          <Button
+            v-else-if="
+              (solicitation.status === 'scheduled' ||
+                solicitation.status === 'paid') &&
+              $currentUser?.profile?.type === 'ADMIN'
             "
             color="grey"
             size="small"
@@ -169,9 +183,7 @@
             @click="handleSchedule(solicitation)"
           >
             <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
-            <span class="text-caption text-primary">
-              {{ solicitation.status === "paid" ? "Agendar" : "Reagendar" }}
-            </span>
+            <span class="text-caption text-primary"> Reagendar </span>
           </Button>
 
           <Button
@@ -267,7 +279,12 @@
           <div class="d-flex" style="gap: 0.5rem">
             <span>Valor:</span>
             <span class="font-weight-bold">{{
-              amountFormated(solicitation.consultationValue ?? 0, true)
+              amountFormated(
+                solicitation.valueCredit
+                  ? Number(solicitation.valueCredit ?? 0)
+                  : Number(solicitation.consultationValue ?? 0),
+                true
+              )
             }}</span>
           </div>
           <div class="d-flex" style="gap: 0.5rem">
@@ -611,8 +628,11 @@ const modelPrececkout = ref({
 
 const $currentUser = computed(() => auth.$currentUser);
 const $solicitationTotal = computed(() => {
+  const value = props.solicitation.valueCredit
+    ? Number(props.solicitation.valueCredit ?? 0)
+    : Number(props.solicitation.consultationValue ?? 0);
   return (
-    Number(props.solicitation.consultationValue ?? 0) +
+    value +
     Number(props.solicitation.antecipationValue ?? 0) +
     Number(props.solicitation.medicalSpecialtyValue ?? 0)
   );

@@ -101,10 +101,10 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Para comissão de especialista, somar mais o valor da especialidade do mesmo
 [] - Disponibilizar o link da consulta na solicitação quando o médico gerar
 [] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente e soma mais o valor da especialidade
-[] - No agendamento da solicitação, só liberar para aparecer a data do agendamento 4 dias para frente
-[] - Remover reagendar pra advogado
-[] - Aguardando laudo aparecer somente quando fechar
+[x] - No agendamento da solicitação, só liberar para aparecer a data do agendamento 4 dias para frente
+[x] - Remover reagendar pra advogado
+[x] - Aguardando laudo aparecer somente quando fechar
 [] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade
-[] - Mostrar valor na solicitação com desconto
+[x] - Mostrar valor na solicitação com desconto
 [] - Ver possibilidade de unificar vários PDFS em um só
 ```
