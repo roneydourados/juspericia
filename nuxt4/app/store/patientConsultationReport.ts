@@ -83,6 +83,14 @@ export const usePatientConsultationReportStore = defineStore(
       await api.post("/patient-consultation-report/justify", payload);
     };
 
+    const getPdfBase64 = async (publicId: string) => {
+      const { data } = await api.get<{ pdfBase64: string }>(
+        `/patient-consultation-report/${publicId}/pdf-base64`
+      );
+
+      return data;
+    };
+
     return {
       $single,
       $all,
@@ -92,6 +100,7 @@ export const usePatientConsultationReportStore = defineStore(
       cancelSign,
       addJustify,
       update,
+      getPdfBase64,
     };
   }
 );
