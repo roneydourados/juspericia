@@ -21,9 +21,9 @@
         :title="item.raw.consultationName"
         density="compact"
       >
-        <span class="text-caption text-primary">
+        <!-- <span class="text-caption text-primary">
           {{ amountFormated(item.raw.value ?? 0, true) }}
-        </span>
+        </span> -->
       </v-list-item>
     </template>
 
@@ -32,9 +32,9 @@
         <span class="ml-2 d-inline-block text-truncate">
           {{ item.raw.consultationName }}
         </span>
-        <span class="text-caption text-primary ml-2">
+        <!-- <span class="text-caption text-primary ml-2">
           {{ amountFormated(item.raw.value ?? 0, true) }}
-        </span>
+        </span> -->
       </div>
     </template>
   </AutoCompleteInput>
