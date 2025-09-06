@@ -194,23 +194,23 @@ const handleSubmit = async () => {
       });
     }
 
-    if ($consultationReport.value?.id && attachments.value.length > 0) {
-      const payload: FileProps[] = attachments.value
-        .filter(
-          (
-            attachment
-          ): attachment is Omit<FileProps, "publicId"> | FileProps => {
-            return !attachment.publicId;
-          }
-        )
-        .map((attachment) => ({
-          ...attachment,
-          ownerId: $consultationReport.value?.id,
-          fileCategory: "medical-report",
-        }));
+    // if ($consultationReport.value?.id && attachments.value.length > 0) {
+    //   const payload: FileProps[] = attachments.value
+    //     .filter(
+    //       (
+    //         attachment
+    //       ): attachment is Omit<FileProps, "publicId"> | FileProps => {
+    //         return !attachment.publicId;
+    //       }
+    //     )
+    //     .map((attachment) => ({
+    //       ...attachment,
+    //       ownerId: $consultationReport.value?.id,
+    //       fileCategory: "medical-report",
+    //     }));
 
-      await fileStore.uploadManyAws(payload);
-    }
+    //   await fileStore.uploadManyAws(payload);
+    // }
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {
