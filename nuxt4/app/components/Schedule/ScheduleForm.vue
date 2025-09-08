@@ -163,7 +163,6 @@ watch(
 
       if ($currentUser.value?.profile?.type === "ADVOGADO") {
         model.value.scheduleDate = dayjs().add(4, "days").format("YYYY-MM-DD");
-        console.log("🚀 ~ model.value.scheduleDate:", model.value.scheduleDate);
       }
 
       await getSchedules();
@@ -178,18 +177,44 @@ const generateAvailableTimeSlots = async () => {
   hours.value = [];
   hour.value = {};
 
-  // Obtém o dia da semana (1 = Segunda, 2 = Terça, ..., 7 = Domingo)
+  // Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado) - padrão JavaScript
   const dayOfWeek = dayjs(model.value.scheduleDate).day();
-  const adjustedDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek; // Ajusta domingo de 0 para 7
+
+  // Debug logs detalhados
+  console.log('=== DEBUG GENERATEAVAILABLETIMESLOTS ===');
+  console.log('Data selecionada:', model.value.scheduleDate);
+  console.log('Dia da semana (0-6):', dayOfWeek);
+  console.log('Especialidade da solicitação (ID):', props.solicitation.medicalSpecialtyId);
+  console.log('Especialidade da solicitação (string):', props.solicitation.medicalSpecialtyId?.toString());
+  console.log('Total de dados disponíveis:', $doctorScheduleAvailableDays.value?.length || 0);
+  console.log('Dados completos ($doctorScheduleAvailableDays):', JSON.stringify($doctorScheduleAvailableDays.value, null, 2));
+
+  // Verifica se há dados para este dia da semana
+  const schedulesForThisDay = $doctorScheduleAvailableDays.value?.filter(
+    (schedule: any) => schedule.dayOfWeek === dayOfWeek
+  ) ?? [];
+  console.log(`Horários disponíveis para o dia ${dayOfWeek}:`, schedulesForThisDay.length);
+  
+  // Verifica se há dados para esta especialidade
+  const schedulesForThisSpecialty = $doctorScheduleAvailableDays.value?.filter(
+    (schedule: any) => schedule.specialtyId === props.solicitation.medicalSpecialtyId?.toString()
+  ) ?? [];
+  console.log(`Horários disponíveis para especialidade ${props.solicitation.medicalSpecialtyId}:`, schedulesForThisSpecialty.length);
 
   // Filtra os horários disponíveis para o dia da semana selecionado e especialidade da solicitação
-  const availableSchedules =
-    $doctorScheduleAvailableDays.value?.filter(
-      (schedule: any) =>
-        schedule.dayOfWeek === adjustedDayOfWeek &&
-        schedule.specialtyId ===
-          props.solicitation.medicalSpecialtyId?.toString()
-    ) ?? [];
+  const availableSchedules = $doctorScheduleAvailableDays.value?.filter(
+    (schedule: any) => {
+      const dayMatch = schedule.dayOfWeek === dayOfWeek;
+      const specialtyMatch = schedule.specialtyId === props.solicitation.medicalSpecialtyId?.toString();
+      console.log(`Schedule ID ${schedule.id}: dayMatch=${dayMatch}, specialtyMatch=${specialtyMatch}`, schedule);
+      return dayMatch && specialtyMatch;
+    }
+  ) ?? [];
+
+  console.log('=== RESULTADO DO FILTRO ===');
+  console.log('Horários filtrados encontrados:', availableSchedules.length);
+  console.log('Detalhes dos horários filtrados:', availableSchedules);
+  console.log('================================');
 
   // Para cada horário disponível, gera os slots de tempo
   for (const schedule of availableSchedules) {
@@ -228,7 +253,7 @@ const generateAvailableTimeSlots = async () => {
       const availableMedicsAtThisHour =
         $doctorScheduleAvailableDays.value?.filter(
           (doctorSchedule: any) =>
-            doctorSchedule.dayOfWeek === adjustedDayOfWeek &&
+            doctorSchedule.dayOfWeek === dayOfWeek &&
             doctorSchedule.specialtyId ===
               props.solicitation.medicalSpecialtyId?.toString() &&
             doctorSchedule.startTime <= hourStr &&
