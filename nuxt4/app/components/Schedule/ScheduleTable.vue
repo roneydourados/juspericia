@@ -222,6 +222,10 @@ const headers = computed(() => {
         key: "scheduleDate",
       },
       {
+        title: "Especialidade",
+        key: "PatientConsultation.medicalSpecialty.medicalSpecialty",
+      },
+      {
         title: "Status",
         key: "status",
       },
