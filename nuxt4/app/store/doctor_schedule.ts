@@ -4,7 +4,10 @@ export const useDoctorScheduleStore = defineStore("doctor_schedule", () => {
   const { api } = useAxios();
 
   const doctorSchedules = ref<DoctorScheduleProps[]>([]);
+  const availableDaysSchedule = ref<DoctorScheduleProps[]>([]);
+
   const $all = computed(() => doctorSchedules.value);
+  const $availableDaysSchedule = computed(() => availableDaysSchedule.value);
 
   const index = async (userId: string) => {
     const config = {
@@ -28,11 +31,26 @@ export const useDoctorScheduleStore = defineStore("doctor_schedule", () => {
     await api.delete(`/doctor-schedules/${publicId}`);
   };
 
+  const availableDays = async (userId?: string) => {
+    const config = {
+      params: {
+        userId,
+      },
+    };
+    const { data } = await api.get<DoctorScheduleProps[]>(
+      "/doctor-schedules/available-days",
+      config
+    );
+
+    availableDaysSchedule.value = data;
+  };
+
   return {
     $all,
-    doctorSchedules,
+    $availableDaysSchedule,
     index,
     create,
     destroy,
+    availableDays,
   };
 });

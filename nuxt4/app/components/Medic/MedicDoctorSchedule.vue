@@ -92,7 +92,8 @@
           </strong>
         </template>
         <template v-slot:item.specialty="{ item }">
-          {{ item.specialty.medicalSpecialty }}
+          <v-icon icon="mdi-medical-bag" start color="colorIcon" />
+          <strong>{{ item.specialty.medicalSpecialty }}</strong>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn
@@ -108,7 +109,6 @@
       </Table>
     </v-col>
   </v-row>
-
   <DialogLoading :dialog="loading" />
 </template>
 
@@ -117,6 +117,10 @@ import dayjs from "dayjs";
 const doctorScheduleStore = useDoctorScheduleStore();
 
 const $all = computed(() => doctorScheduleStore.$all);
+// const $availableDaysSchedule = computed(
+//   () => doctorScheduleStore.$availableDaysSchedule
+// );
+
 const form = ref();
 const loading = ref(false);
 const model = ref({
@@ -201,6 +205,7 @@ const getSchedules = async () => {
     }
 
     await doctorScheduleStore.index(String(model.value.doctor.id));
+    //await doctorScheduleStore.availableDays();
   } catch (error) {
   } finally {
     loading.value = false;

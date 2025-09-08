@@ -20,11 +20,11 @@
         <v-tab value="address" class="text-none">
           <span class="text-primary" style="font-weight: 500"> Endereço </span>
         </v-tab>
-        <v-tab value="parameters" class="text-none">
+        <!-- <v-tab value="parameters" class="text-none">
           <span class="text-primary" style="font-weight: 500">
             Parâmetros de Consulta
           </span>
-        </v-tab>
+        </v-tab> -->
       </v-tabs>
       <v-tabs-window v-model="tab" class="mt-4">
         <v-tabs-window-item value="personalData">
