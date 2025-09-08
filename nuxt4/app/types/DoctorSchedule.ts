@@ -7,4 +7,6 @@ export interface DoctorScheduleProps {
   startTime?: string;
   endTime?: string;
   specialty?: MedicalSpecialtyProps;
+  quantity?: number;
+  dayOfWeekLabel?: string;
 }

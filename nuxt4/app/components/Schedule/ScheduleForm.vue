@@ -18,11 +18,22 @@
             {{ dayjs(solicitation.dateOpen).format("DD/MM/YYYY") }}
           </span>
         </v-col>
-        <v-col cols="12" lg="4" class="d-flex align-center" style="gap: 0.5rem">
-          <span>Tipo benefício:</span>
-          <span class="font-weight-bold">
-            {{ solicitation.BenefitType?.name }}
-          </span>
+        <v-col cols="12" lg="4" class="d-flex flex-column">
+          <div class="d-flex align-center" style="gap: 0.5rem">
+            <span>Tipo benefício:</span>
+            <span class="font-weight-bold">
+              {{ solicitation.BenefitType?.name }}
+            </span>
+          </div>
+          <div class="d-flex align-center" style="gap: 0.5rem">
+            <span>Especialidade médica:</span>
+            <span class="font-weight-bold">
+              {{
+                solicitation.medicalSpecialty?.medicalSpecialty ??
+                "Não informado"
+              }}
+            </span>
+          </div>
         </v-col>
       </v-row>
       <v-row dense>
@@ -98,7 +109,7 @@
           />
         </v-col>
       </v-row>
-      <!-- <pre>{{ $doctorScheduleAvailableDays }}</pre> -->
+      <pre>{{ $doctorScheduleAvailableDays }}</pre>
     </FormCrud>
   </DialogForm>
 </template>
@@ -181,40 +192,66 @@ const generateAvailableTimeSlots = async () => {
   const dayOfWeek = dayjs(model.value.scheduleDate).day();
 
   // Debug logs detalhados
-  console.log('=== DEBUG GENERATEAVAILABLETIMESLOTS ===');
-  console.log('Data selecionada:', model.value.scheduleDate);
-  console.log('Dia da semana (0-6):', dayOfWeek);
-  console.log('Especialidade da solicitação (ID):', props.solicitation.medicalSpecialtyId);
-  console.log('Especialidade da solicitação (string):', props.solicitation.medicalSpecialtyId?.toString());
-  console.log('Total de dados disponíveis:', $doctorScheduleAvailableDays.value?.length || 0);
-  console.log('Dados completos ($doctorScheduleAvailableDays):', JSON.stringify($doctorScheduleAvailableDays.value, null, 2));
+  console.log("=== DEBUG GENERATEAVAILABLETIMESLOTS ===");
+  console.log("Data selecionada:", model.value.scheduleDate);
+  console.log("Dia da semana (0-6):", dayOfWeek);
+  console.log(
+    "Especialidade da solicitação (ID):",
+    props.solicitation.medicalSpecialtyId
+  );
+  console.log(
+    "Especialidade da solicitação (string):",
+    props.solicitation.medicalSpecialtyId?.toString()
+  );
+  console.log(
+    "Total de dados disponíveis:",
+    $doctorScheduleAvailableDays.value?.length || 0
+  );
+  console.log(
+    "Dados completos ($doctorScheduleAvailableDays):",
+    JSON.stringify($doctorScheduleAvailableDays.value, null, 2)
+  );
 
   // Verifica se há dados para este dia da semana
-  const schedulesForThisDay = $doctorScheduleAvailableDays.value?.filter(
-    (schedule: any) => schedule.dayOfWeek === dayOfWeek
-  ) ?? [];
-  console.log(`Horários disponíveis para o dia ${dayOfWeek}:`, schedulesForThisDay.length);
-  
+  const schedulesForThisDay =
+    $doctorScheduleAvailableDays.value?.filter(
+      (schedule: any) => schedule.dayOfWeek === dayOfWeek
+    ) ?? [];
+  console.log(
+    `Horários disponíveis para o dia ${dayOfWeek}:`,
+    schedulesForThisDay.length
+  );
+
   // Verifica se há dados para esta especialidade
-  const schedulesForThisSpecialty = $doctorScheduleAvailableDays.value?.filter(
-    (schedule: any) => schedule.specialtyId === props.solicitation.medicalSpecialtyId?.toString()
-  ) ?? [];
-  console.log(`Horários disponíveis para especialidade ${props.solicitation.medicalSpecialtyId}:`, schedulesForThisSpecialty.length);
+  const schedulesForThisSpecialty =
+    $doctorScheduleAvailableDays.value?.filter(
+      (schedule: any) =>
+        schedule.specialtyId ===
+        props.solicitation.medicalSpecialtyId?.toString()
+    ) ?? [];
+  console.log(
+    `Horários disponíveis para especialidade ${props.solicitation.medicalSpecialtyId}:`,
+    schedulesForThisSpecialty.length
+  );
 
   // Filtra os horários disponíveis para o dia da semana selecionado e especialidade da solicitação
-  const availableSchedules = $doctorScheduleAvailableDays.value?.filter(
-    (schedule: any) => {
+  const availableSchedules =
+    $doctorScheduleAvailableDays.value?.filter((schedule: any) => {
       const dayMatch = schedule.dayOfWeek === dayOfWeek;
-      const specialtyMatch = schedule.specialtyId === props.solicitation.medicalSpecialtyId?.toString();
-      console.log(`Schedule ID ${schedule.id}: dayMatch=${dayMatch}, specialtyMatch=${specialtyMatch}`, schedule);
+      const specialtyMatch =
+        schedule.specialtyId ===
+        props.solicitation.medicalSpecialtyId?.toString();
+      console.log(
+        `Schedule ID ${schedule.id}: dayMatch=${dayMatch}, specialtyMatch=${specialtyMatch}`,
+        schedule
+      );
       return dayMatch && specialtyMatch;
-    }
-  ) ?? [];
+    }) ?? [];
 
-  console.log('=== RESULTADO DO FILTRO ===');
-  console.log('Horários filtrados encontrados:', availableSchedules.length);
-  console.log('Detalhes dos horários filtrados:', availableSchedules);
-  console.log('================================');
+  console.log("=== RESULTADO DO FILTRO ===");
+  console.log("Horários filtrados encontrados:", availableSchedules.length);
+  console.log("Detalhes dos horários filtrados:", availableSchedules);
+  console.log("================================");
 
   // Para cada horário disponível, gera os slots de tempo
   for (const schedule of availableSchedules) {

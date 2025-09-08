@@ -153,36 +153,8 @@ const headers = ref([
     key: "actions",
   },
 ]);
-const daysOfWeekList = [
-  {
-    label: "Domingo",
-    value: 0,
-  },
-  {
-    label: "Segunda-feira",
-    value: 1,
-  },
-  {
-    label: "Terça-feira",
-    value: 2,
-  },
-  {
-    label: "Quarta-feira",
-    value: 3,
-  },
-  {
-    label: "Quinta-feira",
-    value: 4,
-  },
-  {
-    label: "Sexta-feira",
-    value: 5,
-  },
-  {
-    label: "Sábado",
-    value: 6,
-  },
-];
+
+const daysOfWeekList = ref(daysOfWeekObjectArray);
 
 const clearForm = () => {
   model.value = {
@@ -193,7 +165,9 @@ const clearForm = () => {
 };
 
 const getWeekDay = (day: number) => {
-  return daysOfWeekList.find((item) => item.value === day)?.label;
+  return daysOfWeekList.value.find(
+    (item: { label: string; value: number }) => item.value === day
+  )?.label;
 };
 
 const getSchedules = async () => {
