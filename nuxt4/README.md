@@ -89,7 +89,6 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - No histórico de uso de crédito informar mais detalhes referente a solcitação utilizada
 [x] - Ao estornar uma solcitação, devolver o valor de crédito de cliente para o saldo
 [x] - Formulário para atuialização de termos e condições de uso
-[ ] - Recriar tela de controle de crédito do lado administrador
 [x] - Criar um parametro para identificar quantidade de dias que pode solicitar uma correção de laudo
 [x] - Criar um parametro para identificar quantidade de vezes que pode solicitar uma correção de laudo
 [x] - Validar parametros de limite para solicitação de correção de laudo
@@ -97,15 +96,21 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Ver possibilidade de deixar apenas um agendamento por solicitação
 [x] - No editor de texto ter a opção de trocar a fonte, tamanho e cor do texto
 [x] - Criar uma coluna de comissão para médico específica para especialidade
-[] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
-[] - Para comissão de especialista, somar mais o valor da especialidade do mesmo
-[] - Disponibilizar o link da consulta na solicitação quando o médico gerar
-[] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente e soma mais o valor da especialidade
 [x] - No agendamento da solicitação, só liberar para aparecer a data do agendamento 4 dias para frente
 [x] - Remover reagendar pra advogado
 [x] - Aguardando laudo aparecer somente quando fechar
 [x] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade
 [x] - Mostrar valor na solicitação com desconto
 [x] - Gerar PDF do laudo com todas as fontes e formatações de acordo com o que foi criado
+[] - Recriar tela de controle de crédito do lado administrador
+[] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
+[] - Para comissão de especialista, somar mais o valor da especialidade do mesmo
+[] - Disponibilizar o link da consulta na solicitação quando o médico gerar
+[] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente e soma mais o valor da especialidade
+[] - Refazer a a configuração de agenda, deve ser separado por especialidade, dia da semana, e cada dia/especialidade pode ter vários intervalos de horário
 [] - Ver possibilidade de unificar vários PDFS em um só
+[] - Teleconsulta, ver possibilidade de escolher microfone/configurar
+[] - Teleconsulta, parametro para salvar gravação da teleconsulta
+[] - Tela do médico no agendamento, ter um botão para definir que o paciente não compareceu
+[] - Tela de médico ter opção de baixar o vídeo salvo da teleconsulta
 ```

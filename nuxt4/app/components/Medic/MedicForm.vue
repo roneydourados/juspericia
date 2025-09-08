@@ -195,7 +195,7 @@
             </v-col>
           </v-row>
         </v-tabs-window-item>
-        <v-tabs-window-item value="parameters">
+        <!-- <v-tabs-window-item value="parameters">
           <v-row dense class="py-4">
             <v-col cols="12" lg="2">
               <TimeInput
@@ -237,7 +237,7 @@
               <v-checkbox v-model="model.sab" label="Sab" />
             </v-col>
           </v-row>
-        </v-tabs-window-item>
+        </v-tabs-window-item> -->
       </v-tabs-window>
 
       <v-row dense class="px-8">

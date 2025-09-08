@@ -45,6 +45,7 @@ export interface UserProps {
   medicalSpecialty?: MedicalSpecialtyProps;
   medicalSpecialtyComission?: number;
   medicalSpecialtyComissionType?: number;
+  doctorSchedules?: DoctorScheduleProps[];
 }
 
 export interface UserProfileProps {

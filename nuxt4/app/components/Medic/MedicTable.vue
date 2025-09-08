@@ -20,7 +20,7 @@
         <span>{{ item.name }}</span>
       </span>
 
-      <div class="d-flex flex-wrap" style="gap: 0.5rem">
+      <!-- <div class="d-flex flex-wrap" style="gap: 0.5rem">
         <div>Atendimento:</div>
         <div v-if="item.seg" class="font-weight-bold">Seg</div>
         <div v-if="item.ter" class="font-weight-bold">Ter</div>
@@ -30,7 +30,7 @@
         <div v-if="item.sab" class="font-weight-bold">Sab</div>
         <div v-if="item.dom" class="font-weight-bold">Dom</div>
         <div>Das: {{ item.medicHourStart }} até {{ item.medicHourEnd }}</div>
-      </div>
+      </div> -->
     </template>
     <template v-slot:item.phone="{ item }">
       <span class="d-flex align-center">
