@@ -103,11 +103,11 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Mostrar valor na solicitação com desconto
 [x] - Gerar PDF do laudo com todas as fontes e formatações de acordo com o que foi criado
 [] - Recriar tela de controle de crédito do lado administrador
-[] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
+[x] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
 [] - Para comissão de especialista, somar mais o valor da especialidade do mesmo
 [] - Disponibilizar o link da consulta na solicitação quando o médico gerar
 [] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente e soma mais o valor da especialidade
-[] - Refazer a a configuração de agenda, deve ser separado por especialidade, dia da semana, e cada dia/especialidade pode ter vários intervalos de horário
+[x] - Refazer a a configuração de agenda, deve ser separado por especialidade, dia da semana, e cada dia/especialidade pode ter vários intervalos de horário
 [] - Ver possibilidade de unificar vários PDFS em um só
 [] - Teleconsulta, ver possibilidade de escolher microfone/configurar
 [] - Teleconsulta, parametro para salvar gravação da teleconsulta

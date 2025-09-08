@@ -1,6 +1,6 @@
 <template>
   <v-row class="px-8 pa-8">
-    <v-col cols="12">
+    <!-- <v-col cols="12">
       <HeaderPage title="Parametrização de agenda" font-size="1.5rem" />
     </v-col>
     <v-col cols="12" lg="4">
@@ -11,14 +11,20 @@
     </v-col>
     <v-col cols="12">
       <v-divider />
-    </v-col>
+    </v-col> -->
     <v-col cols="12">
       <HeaderPage title="Configurar agendamento" font-size="1rem" />
     </v-col>
     <v-col cols="12">
       <FormCrud ref="form" :on-submit="addSchedule" :showSubmitButton="false">
         <v-row dense>
-          <v-col cols="12" lg="2">
+          <v-col cols="12" lg="5">
+            <SelectSearchMedic
+              v-model="model.doctor"
+              @update:modelValue="getSchedules"
+            />
+          </v-col>
+          <v-col cols="12" lg="3">
             <SelectInput
               v-model="model.dayOfWeek"
               :items="daysOfWeekList"
@@ -44,7 +50,7 @@
               required
             />
           </v-col>
-          <v-col cols="12" lg="3">
+          <v-col cols="12" lg="4">
             <SelectSearchMedicalSpecialty
               v-model="model.medicalSpecialty"
               required
@@ -73,10 +79,12 @@
         :items="$all"
         :headers="headers"
         :show-crud="false"
+        :group-by="groupBy"
+        is-virtual
       >
         <template v-slot:item.dayOfWeek="{ item }">
           <strong>
-            {{ getWeekDay(item.dayOfWeek) }}
+            {{ item.dayOfWeekLabel }}
           </strong>
         </template>
         <template v-slot:item.startTime="{ item }">
@@ -131,26 +139,36 @@ const model = ref({
   dayOfWeek: dayjs().day(),
 });
 
+const groupBy = ref([{ key: "dayOfWeekLabel" }]);
 const headers = ref([
   {
     title: "Dia da semana",
-    key: "dayOfWeek",
+    sortable: false,
+    key: "data-table-group",
+    value: "data-table-group",
   },
+
   {
-    title: "Início",
-    key: "startTime",
-  },
-  {
-    title: "Fim",
-    key: "endTime",
-  },
-  {
-    title: "Especialidade",
-    key: "specialty",
-  },
-  {
-    title: "Ações",
-    key: "actions",
+    title: "Horários",
+    align: "center",
+    children: [
+      {
+        title: "Início",
+        key: "startTime",
+      },
+      {
+        title: "Fim",
+        key: "endTime",
+      },
+      {
+        title: "Especialidade",
+        key: "specialty",
+      },
+      {
+        title: "Ações",
+        key: "actions",
+      },
+    ],
   },
 ]);
 

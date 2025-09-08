@@ -25,15 +25,6 @@
               {{ solicitation.BenefitType?.name }}
             </span>
           </div>
-          <div class="d-flex align-center" style="gap: 0.5rem">
-            <span>Especialidade médica:</span>
-            <span class="font-weight-bold">
-              {{
-                solicitation.medicalSpecialty?.medicalSpecialty ??
-                "Não informado"
-              }}
-            </span>
-          </div>
         </v-col>
       </v-row>
       <v-row dense>
@@ -79,12 +70,23 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12" class="d-flex align-center" style="gap: 0.5rem">
+        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
           <span>Paciente:</span>
           <span class="font-weight-bold">
             {{ solicitation.Patient?.name }}
             {{ solicitation.Patient?.surname }}
           </span>
+        </v-col>
+        <v-col cols="12" lg="6" class="d-flex align-center" style="gap: 0.5rem">
+          <div class="d-flex align-center" style="gap: 0.5rem">
+            <span>Especialidade:</span>
+            <span class="font-weight-bold">
+              {{
+                solicitation.medicalSpecialty?.medicalSpecialty ??
+                "Não informado"
+              }}
+            </span>
+          </div>
         </v-col>
       </v-row>
       <v-divider class="mt-2" :thickness="2" />
@@ -109,7 +111,7 @@
           />
         </v-col>
       </v-row>
-      <pre>{{ $doctorScheduleAvailableDays }}</pre>
+      <!-- <pre>{{ $doctorScheduleAvailableDays }}</pre> -->
     </FormCrud>
   </DialogForm>
 </template>
@@ -286,16 +288,19 @@ const generateAvailableTimeSlots = async () => {
 
       const solicitationId = isSelected ? filter?.id : props.solicitation.id;
 
-      // Conta quantos médicos estão disponíveis nesse horário específico para esta especialidade
-      const availableMedicsAtThisHour =
-        $doctorScheduleAvailableDays.value?.filter(
-          (doctorSchedule: any) =>
-            doctorSchedule.dayOfWeek === dayOfWeek &&
-            doctorSchedule.specialtyId ===
-              props.solicitation.medicalSpecialtyId?.toString() &&
-            doctorSchedule.startTime <= hourStr &&
-            doctorSchedule.endTime > hourStr
-        ).length ?? 0;
+      // Busca o horário específico e usa o campo quantity para saber quantos médicos estão disponíveis
+      const scheduleForThisHour = $doctorScheduleAvailableDays.value?.find(
+        (doctorSchedule: any) =>
+          doctorSchedule.dayOfWeek === dayOfWeek &&
+          doctorSchedule.specialtyId ===
+            props.solicitation.medicalSpecialtyId?.toString() &&
+          doctorSchedule.startTime <= hourStr &&
+          doctorSchedule.endTime > hourStr
+      );
+
+      const availableMedicsAtThisHour = Number(
+        scheduleForThisHour?.quantity ?? 0
+      );
 
       // ❌ Se já tiver agendamentos ≥ médicos disponíveis, bloqueia
       const isDisabled =

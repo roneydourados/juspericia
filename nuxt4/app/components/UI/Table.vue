@@ -78,6 +78,7 @@
         :show-select="showSelect"
         return-object
         :loading="loading"
+        :group-by="groupBy"
         sticky
         fixed-header
         :hide-default-header="hideDfaultHeader"
@@ -125,6 +126,7 @@
         @update:model-value="$emit('update:modelValue', $event)"
         color="transparent"
         :mobile="mobile"
+        :group-by="groupBy"
       >
         <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
           <slot v-if="slotProps" :name="name" v-bind="slotProps" />
@@ -206,6 +208,10 @@ const props = defineProps({
   mobile: {
     type: Boolean,
     default: false,
+  },
+  groupBy: {
+    type: Array as PropType<{ key: string; order: "asc" | "desc" }[]>,
+    default: () => undefined,
   },
 });
 
