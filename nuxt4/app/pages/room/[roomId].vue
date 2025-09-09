@@ -17,7 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import {
+  ZegoUIKitPrebuilt,
+  ScenarioModel,
+  LiveRole,
+} from "@zegocloud/zego-uikit-prebuilt";
 
 definePageMeta({
   title: "Teleconferência online",
@@ -99,8 +103,22 @@ const joinRoom = () => {
 
     kit.value.joinRoom({
       container: container.value,
+      turnOnMicrophoneWhenJoining: true,
+      turnOnCameraWhenJoining: true,
+      showMyCameraToggleButton: true,
+      showMyMicrophoneToggleButton: true,
+      showAudioVideoSettingsButton: true,
+      showScreenSharingButton: true,
+      showTextChat: true,
+      showUserList: true,
+      maxUsers: 2,
+      layout: "Auto",
+      showLayoutButton: false,
       scenario: {
-        mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1
+        mode: "OneONoneCall" as ScenarioModel,
+        config: {
+          role: "Host" as LiveRole,
+        },
       },
       sharedLinks: [
         {
@@ -108,19 +126,22 @@ const joinRoom = () => {
           url: $validadeRoom.value.url,
         },
       ],
-      showPreJoinView: true,
-      preJoinViewConfig: {
-        title: "Informe seu nome",
-      },
-      videoScreenConfig: {
-        objectFit: "contain",
-      },
-      turnOnCameraWhenJoining: true,
-      turnOnMicrophoneWhenJoining: true,
-      showTextChat: true,
-      showUserList: false,
-      maxUsers: 2,
-      showLeaveRoomConfirmDialog: false,
+      // scenario: {
+      //   mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1
+      // },
+      // showPreJoinView: true,
+      // preJoinViewConfig: {
+      //   title: "Informe seu nome",
+      // },
+      // videoScreenConfig: {
+      //   objectFit: "contain",
+      // },
+      // turnOnCameraWhenJoining: true,
+      // turnOnMicrophoneWhenJoining: true,
+      // showTextChat: true,
+      // showUserList: false,
+      // maxUsers: 2,
+      // showLeaveRoomConfirmDialog: false,
       // Callbacks para eventos
       onLeaveRoom: handleClose,
       onJoinRoom: () => {
