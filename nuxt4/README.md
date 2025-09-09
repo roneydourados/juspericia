@@ -109,6 +109,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Validar listagem da agenda pelo tipo de especialidade do médico
 [x] - Refazer a a configuração de agenda, deve ser separado por especialidade, dia da semana, e cada dia/especialidade pode ter vários intervalos de horário
 [] - Ver possibilidade de unificar vários PDFS em um só
+[x] - Visualizar PDF sem precisar fazer download e abrir
 [x] - Teleconsulta, ver possibilidade de escolher microfone/configurar
 [] - Teleconsulta, parametro para salvar gravação da teleconsulta
 [] - Tela do médico no agendamento, ter um botão para definir que o paciente não compareceu

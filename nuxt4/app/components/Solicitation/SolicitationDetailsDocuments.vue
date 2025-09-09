@@ -12,10 +12,33 @@
         download-visible
         :delete-visible="$single?.status === 'open'"
         @download="handleDownloadFile(item.publicId!, item.fileName!)"
+        @view="handleViewPdf(item)"
         @delete="getFileDelete(item)"
       />
     </div>
     <DialogLoading :dialog="loading" />
+
+    <!-- Dialog para visualizar PDF -->
+    <DialogForm
+      title="Detalhes documento"
+      :show="showPdfDialog"
+      @dialog="showPdfDialog = false"
+    >
+      <v-card>
+        <v-card-title class="d-flex justify-space-between align-center">
+          <span>Visualizar PDF: {{ currentPdfName }}</span>
+        </v-card-title>
+        <v-card-text class="pa-0">
+          <iframe
+            v-if="pdfUrl"
+            :src="pdfUrl"
+            width="100%"
+            height="600px"
+            frameborder="0"
+          ></iframe>
+        </v-card-text>
+      </v-card>
+    </DialogForm>
     <Dialog
       title="Confirmação"
       :dialog="showDelete"
@@ -42,6 +65,11 @@ const $single = computed(() => storeConsultation.$single);
 const loading = ref(false);
 const showDelete = ref(false);
 const itemSelected = ref<FileProps>();
+
+// Estados para o dialog de PDF
+const showPdfDialog = ref(false);
+const pdfUrl = ref("");
+const currentPdfName = ref("");
 
 const handleDownloadFile = async (publicId: string, fileName: string) => {
   loading.value = true;
@@ -91,5 +119,41 @@ const handleDeleteFile = async () => {
     itemSelected.value = undefined;
     showDelete.value = false;
   }
+};
+
+// Novo método para visualizar PDF
+const handleViewPdf = async (file: FileProps) => {
+  try {
+    loading.value = true;
+
+    // Verifica se é um arquivo PDF
+    const isPdf = file.fileName?.toLowerCase().endsWith(".pdf");
+    if (!isPdf) {
+      console.log("Este arquivo não é um PDF");
+      return;
+    }
+
+    const response = await fileStore.downloadAws(file.publicId!);
+    const blob = new Blob([response.file], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+
+    pdfUrl.value = url;
+    currentPdfName.value = file.fileName || "Documento";
+    showPdfDialog.value = true;
+  } catch (error) {
+    console.error("Erro ao visualizar PDF:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Método para fechar o dialog e limpar recursos
+const closePdfDialog = () => {
+  showPdfDialog.value = false;
+  if (pdfUrl.value) {
+    URL.revokeObjectURL(pdfUrl.value);
+    pdfUrl.value = "";
+  }
+  currentPdfName.value = "";
 };
 </script>

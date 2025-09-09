@@ -29,6 +29,22 @@
           </v-tooltip>
         </v-btn>
         <v-btn
+          v-if="viewVisible && isPdfFile"
+          icon
+          color="success"
+          variant="text"
+          @click="emit('view')"
+        >
+          <v-icon icon="mdi-file-eye-outline" />
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Visualizar PDF
+          </v-tooltip>
+        </v-btn>
+        <v-btn
           v-if="downloadVisible"
           icon
           color="info"
@@ -51,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+const props = defineProps({
   fileName: {
     type: String,
     required: true,
@@ -64,8 +80,18 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  viewVisible: {
+    type: Boolean,
+    default: true,
+  },
 });
-const emit = defineEmits(["delete", "download"]);
+
+const emit = defineEmits(["delete", "download", "view"]);
+
+// Computed para verificar se é um arquivo PDF
+const isPdfFile = computed(() => {
+  return props.fileName?.toLowerCase().endsWith(".pdf") || false;
+});
 </script>
 
 <style scoped></style>

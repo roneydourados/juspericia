@@ -138,6 +138,7 @@
                 style="display: none"
                 ref="fileInput"
                 multiple
+                accept=".pdf"
               />
               <div class="d-flex justify-space-between flex-wrap w-100 px-2">
                 <strong> Documentos: </strong>
@@ -151,17 +152,6 @@
                   <v-icon icon="mdi-paperclip" color="colorIcon" start />
                   <span class="text-caption"> Novo documento </span>
                 </Button>
-
-                <!-- <v-btn
-                  color="primary"
-                  flat
-                  class="text-none"
-                  size="small"
-                  prepend-icon="mdi-paperclip"
-                  @click="($refs.fileInput as HTMLInputElement).click()"
-                >
-                  Novo documento
-                </v-btn> -->
               </div>
             </div>
             <div v-for="item in form.files" class="w-100 mt-4">

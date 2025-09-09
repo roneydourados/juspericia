@@ -126,23 +126,6 @@ const joinRoom = () => {
           url: $validadeRoom.value.url,
         },
       ],
-      // scenario: {
-      //   mode: ZegoUIKitPrebuilt.OneONoneCall, // Para implementar chamadas 1-a-1
-      // },
-      // showPreJoinView: true,
-      // preJoinViewConfig: {
-      //   title: "Informe seu nome",
-      // },
-      // videoScreenConfig: {
-      //   objectFit: "contain",
-      // },
-      // turnOnCameraWhenJoining: true,
-      // turnOnMicrophoneWhenJoining: true,
-      // showTextChat: true,
-      // showUserList: false,
-      // maxUsers: 2,
-      // showLeaveRoomConfirmDialog: false,
-      // Callbacks para eventos
       onLeaveRoom: handleClose,
       onJoinRoom: () => {
         console.log("Usuário entrou na sala");
