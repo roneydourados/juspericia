@@ -121,6 +121,21 @@
               color="primary"
               icon
               variant="text"
+              @click="handleCancelSchedule(item.publicId)"
+            >
+              <v-icon icon="mdi-account-off-outline" color="red" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Paciente não compareceu a consulta
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              color="primary"
+              icon
+              variant="text"
               @click="handleFinalizeSchedule(item)"
             >
               <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
@@ -427,6 +442,45 @@ const handleFinalizeSchedule = async (item: ScheduleProps) => {
               await getSchedules();
             } catch (error) {
               console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+};
+
+const handleCancelSchedule = async (publicId: string) => {
+  push.info({
+    title: "Cancelar atendimento",
+    message: "Confirma o cancelamento do atendimento?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await scheduleStore.cancelSchedule(publicId);
+              await getSchedules();
+            } catch (error) {
+              console.log("🚀 ~ handleCancelSchedule ~ error:", error);
+            } finally {
+              loading.value = false;
             }
           },
         },

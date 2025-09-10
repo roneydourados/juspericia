@@ -102,6 +102,10 @@ export const useScheduleStore = defineStore("schedule", () => {
     await api.put(`/schedule/finalize/${consultationId}`);
   };
 
+  const cancelSchedule = async (publicId: string) => {
+    await api.put(`/schedule/cancel/${publicId}`);
+  };
+
   return {
     $all,
     $single,
@@ -114,5 +118,6 @@ export const useScheduleStore = defineStore("schedule", () => {
     indexForMedic,
     startSchedule,
     finalizeSchedule,
+    cancelSchedule,
   };
 });
