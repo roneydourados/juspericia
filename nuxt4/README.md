@@ -112,6 +112,6 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Visualizar PDF sem precisar fazer download e abrir
 [x] - Teleconsulta, ver possibilidade de escolher microfone/configurar
 [] - Teleconsulta, parametro para salvar gravação da teleconsulta
-[] - Tela do médico no agendamento, ter um botão para definir que o paciente não compareceu
+[x] - Tela do médico no agendamento, ter um botão para definir que o paciente não compareceu
 [] - Tela de médico ter opção de baixar o vídeo salvo da teleconsulta
 ```
