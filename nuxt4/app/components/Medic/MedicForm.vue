@@ -80,7 +80,7 @@
               <PasswordInput
                 v-model="model.password"
                 label="Senha temporária"
-                placeholder="crie uma senha temporária"
+                placeholder="crie uma senha temporária mínimo 6 digitos"
                 :required="!model.id"
                 :strong="!!(model.id && model.id > 0 && model.password)"
               />
@@ -195,51 +195,7 @@
             </v-col>
           </v-row>
         </v-tabs-window-item>
-        <!-- <v-tabs-window-item value="parameters">
-          <v-row dense class="py-4">
-            <v-col cols="12" lg="2">
-              <TimeInput
-                v-model="model.medicHourStart"
-                label="Hora de início"
-                placeholder="08:00"
-                required
-              />
-            </v-col>
-            <v-col cols="12" lg="2">
-              <TimeInput
-                v-model="model.medicHourEnd"
-                label="Hora de fim"
-                placeholder="20:00"
-                required
-              />
-            </v-col>
-          </v-row>
-          <v-row dense>
-            <v-col cols="12">
-              <strong>Dias da semana atendimento</strong>
-            </v-col>
-            <v-col cols="12" lg="2">
-              <v-checkbox v-model="model.seg" label="Seg" />
-            </v-col>
-            <v-col cols="12" lg="2">
-              <v-checkbox v-model="model.ter" label="Ter" />
-            </v-col>
-            <v-col cols="12" lg="2">
-              <v-checkbox v-model="model.qua" label="Qua" />
-            </v-col>
-            <v-col cols="12" lg="2">
-              <v-checkbox v-model="model.qui" label="Qui" />
-            </v-col>
-            <v-col cols="12" lg="2">
-              <v-checkbox v-model="model.sex" label="Sex" />
-            </v-col>
-            <v-col cols="12" lg="2">
-              <v-checkbox v-model="model.sab" label="Sab" />
-            </v-col>
-          </v-row>
-        </v-tabs-window-item> -->
       </v-tabs-window>
-
       <v-row dense class="px-8">
         <v-col cols="12" lg="2">
           <v-switch
@@ -296,12 +252,12 @@ const { mobile } = useDisplay();
 
 const medicStore = useMedicStore();
 const tab = ref("personalData");
-const tabs = ref([
-  { title: "Dados Pessoais", icon: "mdi-account" },
-  { title: "Dados Bancários", icon: "mdi-bank" },
-  { title: "Endereço", icon: "mdi-map" },
-  { title: "Parâmetros de Consulta", icon: "mdi-cog" },
-]);
+// const tabs = ref([
+//   { title: "Dados Pessoais", icon: "mdi-account" },
+//   { title: "Dados Bancários", icon: "mdi-bank" },
+//   { title: "Endereço", icon: "mdi-map" },
+//   { title: "Parâmetros de Consulta", icon: "mdi-cog" },
+// ]);
 const loading = ref(false);
 const model = ref({
   id: 0,
