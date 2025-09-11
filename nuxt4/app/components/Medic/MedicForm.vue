@@ -82,7 +82,6 @@
                 label="Senha temporária"
                 placeholder="crie uma senha temporária mínimo 6 digitos"
                 :required="!model.id"
-                :strong="!!(model.id && model.id > 0 && model.password)"
               />
             </v-col>
             <v-col cols="12" lg="8">
