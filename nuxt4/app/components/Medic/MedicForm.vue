@@ -439,6 +439,8 @@ const submitForm = async () => {
 
     await medicStore.index("");
     handleClose();
+  } catch (error) {
+    console.log(error);
   } finally {
     loading.value = false;
   }
@@ -522,7 +524,7 @@ const update = async () => {
 };
 
 const handleClose = () => {
-  emit("close");
   clearModel();
+  emit("close");
 };
 </script>
