@@ -110,21 +110,22 @@
                 :clearable="true"
               />
             </v-col>
-            <v-col cols="12" lg="4">
-              <TextInput
-                v-model="model.pixKey"
-                label="Chave Pix"
-                placeholder="Chave Pix"
-                :clearable="true"
-                rows="1"
-              />
-            </v-col>
+
             <v-col cols="12" lg="4">
               <StringInput
                 v-model="model.bankAccountNumber"
                 label="Nº Conta"
                 placeholder="999999"
                 :clearable="true"
+              />
+            </v-col>
+            <v-col cols="12">
+              <TextInput
+                v-model="model.pixKey"
+                label="Chave Pix"
+                placeholder="Chave Pix"
+                :clearable="true"
+                rows="2"
               />
             </v-col>
             <v-col cols="12" lg="4">

@@ -114,5 +114,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Teleconsulta, parametro para salvar gravação da teleconsulta
 [x] - Tela do médico no agendamento, ter um botão para definir que o paciente não compareceu
 [] - Tela de médico ter opção de baixar o vídeo salvo da teleconsulta
-[] - Melhorar tela de cadastro de médico, campo de chave pix muito pequeno
+[x] - Melhorar tela de cadastro de médico, campo de chave pix muito pequeno
+[x] - Correção selecionar outra especialidade no cadastro de solicitação
+
 ```

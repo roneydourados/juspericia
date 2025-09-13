@@ -14,7 +14,7 @@
               v-model="form.consultation"
               required
               :clearable="true"
-              @update:model-value="form.benefitTypeId = undefined"
+              @update:model-value="handleUpdateConsultation"
             />
           </v-col>
           <v-col cols="12" lg="3">
@@ -72,19 +72,26 @@
           </v-col>
           <v-col cols="12" lg="3">
             <Button
+              v-if="!form.selectOtherSpecialty"
               variant="outlined"
               color="grey"
-              @click="form.selectOtherSpecialty = !form.selectOtherSpecialty"
-              :disabled="!$isSelectMedicalSpecialty"
+              @click="handleSelectOtherSpecialty"
+              :disabled="$isSelectMedicalSpecialty"
             >
               <v-icon icon="mdi-medical-bag" color="colorIcon" />
               <span class="text-caption text-primary">
-                {{
-                  form.selectOtherSpecialty
-                    ? "Voltar padrão"
-                    : "Selecionar outra especialidade"
-                }}
+                Selecionar outra especialidade
               </span>
+            </Button>
+            <Button
+              v-else
+              variant="outlined"
+              color="grey"
+              @click="handleDefaultMedicalSpecialty"
+              :disabled="$isSelectMedicalSpecialty"
+            >
+              <v-icon icon="mdi-medical-bag" color="colorIcon" />
+              <span class="text-caption text-primary"> Voltar padrão </span>
             </Button>
           </v-col>
         </v-row>
@@ -308,16 +315,16 @@ const filters = ref(getSolicitationsFilters());
 const $currentUser = computed(() => authStore.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
-const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
+//const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
 const $isSelectMedicalSpecialty = computed(() => {
-  if (!form.value.consultation) return false;
+  if (!form.value.consultation) return true;
 
-  return (
-    form.value.consultation &&
-    Number($userCreditTotalSalt.value?.totalSalt ?? 0) >=
-      Number(form.value.consultation.valueCredit ?? 0) +
-        Number(form.value.medicalSpecialty?.value ?? 0)
-  );
+  // return (
+  //   form.value.consultation &&
+  //   Number($userCreditTotalSalt.value?.totalSalt ?? 0) >=
+  //     Number(form.value.consultation.valueCredit ?? 0) +
+  //       Number(form.value.medicalSpecialty?.value ?? 0)
+  // );
 });
 
 onMounted(async () => {
@@ -544,5 +551,20 @@ const handleFileUpload = (event: Event) => {
 const getFileDelete = (item: FileProps) => {
   selectedFile.value = item;
   showDelete.value = true;
+};
+
+const handleUpdateConsultation = () => {
+  form.value.benefitTypeId = undefined;
+  handleDefaultMedicalSpecialty();
+};
+
+const handleSelectOtherSpecialty = () => {
+  //form.value.medicalSpecialty = undefined;
+  form.value.selectOtherSpecialty = true;
+};
+
+const handleDefaultMedicalSpecialty = () => {
+  form.value.medicalSpecialty = $systemParameters.value?.medicalSpecialty;
+  form.value.selectOtherSpecialty = false;
 };
 </script>
