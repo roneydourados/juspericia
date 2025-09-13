@@ -77,7 +77,11 @@ watch(
 );
 
 onMounted(async () => {
-  await termsStore.getLastTerm();
+  if ($currentUser.value?.profile?.type !== "MEDICO") {
+    await termsStore.getLastTerm("terms_of_use");
+  } else {
+    await termsStore.getLastTerm("medical_service_contract");
+  }
 });
 
 const handleAccpetTerms = async () => {
@@ -89,10 +93,14 @@ const handleAccpetTerms = async () => {
     // Captura informações de IP
     const ipInfo: IpInfo = await getIpInfo();
 
-    console.log("Informações de IP capturadas:", ipInfo);
+    let consentType = "terms_of_use";
+
+    if ($currentUser.value?.profile?.type === "MEDICO") {
+      consentType = "medical_service_contract";
+    }
 
     // Envia os dados para o back-end incluindo as informações de IP
-    await auth.consentTerms(cloudFlareToken.value, ipInfo);
+    await auth.consentTerms(cloudFlareToken.value, consentType, ipInfo);
     await auth.verifyUser($currentUser.value.publicId!);
 
     // Aguarda a próxima atualização do DOM para garantir que o estado foi atualizado

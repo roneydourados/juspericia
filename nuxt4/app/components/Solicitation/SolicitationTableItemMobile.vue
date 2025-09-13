@@ -80,7 +80,7 @@
       <div class="d-flex justify-space-between w-100">
         <div class="text-caption">Especialidade médica Valor:</div>
         <span class="text-caption">
-          {{ amountFormated(item.medicalSpecialty?.value ?? 0, true) }}
+          {{ amountFormated(item.medicalSpecialtyValue ?? 0, true) }}
         </span>
       </div>
       <div class="d-flex justify-space-between w-100">

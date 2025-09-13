@@ -79,7 +79,7 @@ const itemsMenu = ref([
 const handlClick = async (route: string) => {
   switch (route) {
     case "showTerms":
-      await termsStore.getLastTerm();
+      await termsStore.getLastTerm("terms_of_use");
       showTermsForm.value = true;
       break;
     default:

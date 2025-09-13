@@ -240,7 +240,6 @@ const getQuantity = (status: string) => {
   });
 
   if (quantity) {
-    console.log("🚀 ~ getQuantity dentro do if:", quantity);
     return quantity.total;
   }
 

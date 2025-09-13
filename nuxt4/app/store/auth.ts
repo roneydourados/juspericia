@@ -88,8 +88,12 @@ export const useAuthStore = defineStore("auth", () => {
     await api.post(`/auth/renew-password/${token}`, payload);
   };
 
-  const consentTerms = async (tokenCapcha: string, ipInfo?: any) => {
-    const payload: any = { tokenCapcha };
+  const consentTerms = async (
+    tokenCapcha: string,
+    consentType: string,
+    ipInfo?: any
+  ) => {
+    const payload: any = { tokenCapcha, consentType };
 
     // Adiciona informações de IP se fornecidas
     if (ipInfo) {

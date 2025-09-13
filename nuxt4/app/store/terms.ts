@@ -13,13 +13,20 @@ export const useTermsStore = defineStore("terms", () => {
     termsList.value = data;
   };
 
-  const getLastTerm = async () => {
-    const { data } = await api.get<TermsProps>("/terms/last");
+  const getLastTerm = async (category: string) => {
+    const config = {
+      params: {
+        category,
+      },
+    };
+
+    const { data } = await api.get<TermsProps>("/terms/last", config);
+
     terms.value = data;
   };
 
-  const store = async ({ content }: TermsProps) => {
-    await api.post("/terms", { content });
+  const store = async ({ content, category }: TermsProps) => {
+    await api.post("/terms", { content, category });
   };
 
   return {

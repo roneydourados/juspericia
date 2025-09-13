@@ -71,22 +71,6 @@
               Laudo aguardando assinatura
             </span>
           </v-chip>
-          <!-- <Button
-            v-if="
-              solicitation.status === 'open' ||
-              (solicitation.status === 'payment_pending' &&
-                $currentUser?.profile?.type === 'ADVOGADO' &&
-                !solicitation.sale?.saleId)
-            "
-            color="grey"
-            variant="outlined"
-            size="small"
-            @click="handleUseCreditSalt"
-          >
-            <v-icon icon="mdi-currency-usd" color="primary" start />
-            <span class="text-caption text-primary"> Utilizar Saldo </span>
-          </Button> -->
-
           <Button
             v-if="
               solicitation.status === 'open' ||
@@ -296,7 +280,7 @@
             <span>Especialidade médica Valor:</span>
             <span class="font-weight-bold">
               {{
-                amountFormated(solicitation.medicalSpecialty?.value ?? 0, true)
+                amountFormated(solicitation.medicalSpecialtyValue ?? 0, true)
               }}
             </span>
           </div>

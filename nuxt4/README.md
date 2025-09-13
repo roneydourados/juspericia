@@ -99,7 +99,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - No agendamento da solicitação, só liberar para aparecer a data do agendamento 4 dias para frente
 [x] - Remover reagendar pra advogado
 [x] - Aguardando laudo aparecer somente quando fechar
-[x] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade
+[x] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade-
 [x] - Mostrar valor na solicitação com desconto
 [x] - Gerar PDF do laudo com todas as fontes e formatações de acordo com o que foi criado
 [] - Recriar tela de controle de crédito do lado administrador
@@ -108,7 +108,6 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente pegar do parametro de comissão especialidade
 [x] - Validar listagem da agenda pelo tipo de especialidade do médico
 [x] - Refazer a a configuração de agenda, deve ser separado por especialidade, dia da semana, e cada dia/especialidade pode ter vários intervalos de horário
-[] - Ver possibilidade de unificar vários PDFS em um só
 [x] - Visualizar PDF sem precisar fazer download e abrir
 [x] - Teleconsulta, ver possibilidade de escolher microfone/configurar
 [] - Teleconsulta, parametro para salvar gravação da teleconsulta
@@ -120,5 +119,13 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - utilizar saldo remover
 [x] - Indicação nao esta respeitando os parametros
 [x] - Currency input nao aceitou valor zerado
+
+[x] - ajustar barra de rolagem na tela de detalhes solicitação na consulta
+[x] - Cadastro de termos de uso diferente para médico
+[x] - ao abrir a tela de parametrização se o valor vem zerado esta dando erro no campo de pontos
+[x] - Criar novo método para cadastrar mais de um termo de uso
+[x] - Para o médico aparecer o termo de uso de prestação de serviço e não o que esta aparecendo atualmente
+
+[] - Melhoria na interface de acordo com a imagem que desgin mandou
 
 ```

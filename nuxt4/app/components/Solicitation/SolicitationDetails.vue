@@ -5,7 +5,7 @@
       :font-size="mobile ? '1.2rem' : '1.8rem'"
     />
   </div>
-  <CardBlur :hover="false">
+  <CardBlur :hover="false" style="max-height: calc(100vh - 120px); overflow-y: auto;">
     <v-row dense>
       <v-col cols="10" class="px-4">
         <span

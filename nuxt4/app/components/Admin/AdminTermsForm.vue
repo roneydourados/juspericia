@@ -8,6 +8,16 @@
     <CardBlur :hover="false" height="100%">
       <template #content>
         <v-row dense>
+          <v-col cols="12" lg="6">
+            <SelectInput
+              label="Tipo de termo"
+              :items="categoryTermsList"
+              v-model="model.category"
+              item-title="title"
+              item-value="value"
+              @update:modelValue="getLastTerm"
+            />
+          </v-col>
           <v-col cols="12">
             <TextEditor v-model="model.content" height="40" />
           </v-col>
@@ -22,6 +32,7 @@
         </div>
       </template>
     </CardBlur>
+    <DialogLoading :dialog="loading" />
   </DialogForm>
 </template>
 
@@ -34,15 +45,39 @@ const show = defineModel("show", {
   default: false,
 });
 
+const loading = ref(false);
+
 const model = ref({
   content: "",
+  category: "terms_of_use",
 });
+
+const categoryTermsList = ref([
+  {
+    title: "Termos de uso",
+    value: "terms_of_use",
+  },
+  {
+    title: "Manual de conduta",
+    value: "conduct_manual",
+  },
+  {
+    title: "Contrato de prestação de serviço médico",
+    value: "medical_service_contract",
+  },
+]);
 
 watch(
   $single,
   (newValue) => {
     if (newValue) {
-      model.value.content = newValue.content;
+      model.value = {
+        content: newValue.content,
+        category: newValue.category,
+      };
+    } else {
+      model.value.content = "";
+      model.value.category = "terms_of_use";
     }
   },
   {
@@ -51,11 +86,22 @@ watch(
 );
 
 const handleSubmit = async () => {
-  show.value = false;
+  // show.value = false;
   try {
     await termsStore.store(model.value);
   } catch (error) {
     console.log("🚀 ~ handleSubmit terms ~ error:", error);
+  }
+};
+
+const getLastTerm = async () => {
+  loading.value = true;
+  try {
+    await termsStore.getLastTerm(model.value.category);
+  } catch (error) {
+    console.log("🚀 ~ getLastTerm ~ error:", error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>

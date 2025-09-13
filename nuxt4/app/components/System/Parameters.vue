@@ -378,7 +378,7 @@ watch(
         pointsPerIndication: newData.pointsPerIndication?.toString() ?? "",
         pointsExchange: newData.pointsExchange?.toString() ?? "",
         pointsExchangeValue: amountFormated(
-          newData.pointsExchangeValue ?? 0,
+          Number(newData.pointsExchangeValue ?? 0),
           false
         ),
         daysPointsExpire: newData.daysPointsExpire?.toString() ?? "",
