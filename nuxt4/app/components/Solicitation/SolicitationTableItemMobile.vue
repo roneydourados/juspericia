@@ -84,16 +84,7 @@
         </span>
       </div>
       <div class="d-flex justify-space-between w-100">
-        <div class="text-caption">
-          Atencipação:
-          <!-- <span class="text-caption">
-            {{
-              item.dateAntecipation
-                ? dayjs(item.dateAntecipation).format("DD/MM/YYYY")
-                : "Não solicitado"
-            }}
-          </span> -->
-        </div>
+        <div class="text-caption">Atencipação:</div>
         <span class="text-caption">
           <span class="text-caption">
             {{ amountFormated(item.antecipationValue ?? 0, true) }}
@@ -229,17 +220,29 @@
             <span class="text-primary text-caption"> Solicitar correção </span>
           </Button>
           <Button
-            variant="text"
-            :disabled="
-              !!item.dateAntecipation ||
-              item.status === 'canceled' ||
-              item.status === 'finished'
+            v-if="
+              !item.dateAntecipation &&
+              (item.status === 'open' || item.status === 'paid')
             "
+            variant="text"
             @click="getItemAntecipation(item)"
           >
             <v-icon icon="mdi-calendar-clock-outline" color="colorIcon" />
             <span class="text-primary text-caption">
               Solicitar antecipação
+            </span>
+          </Button>
+          <Button
+            v-else-if="
+              item.dateAntecipation &&
+              (item.status === 'open' || item.status === 'paid')
+            "
+            variant="text"
+            @click="handleCancelAntecipation(item.publicId!)"
+          >
+            <v-icon icon="mdi-close" start color="red" />
+            <span class="text-primary text-caption">
+              Cancelar antecipação
             </span>
           </Button>
         </div>
@@ -884,5 +887,44 @@ const getSolicitationTotal = (item: SolicitationConsultationProps) => {
 const handleUseCreditFormClose = () => {
   emit("refresh");
   selected.value = undefined;
+};
+
+const handleCancelAntecipation = async (publicId: string) => {
+  push.info({
+    title: "Cancelar antecipação",
+    message: "Tem certeza que deseja cancelar antecipação ?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await storeConsultation.solicitationCancelAntecipation(publicId);
+              await getSolicitations();
+            } catch (error) {
+              push.error("Erro ao cancelar antecipação");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 </script>

@@ -233,7 +233,6 @@ const handleChangeTable = async () => {
 };
 
 const getQuantity = (status: string) => {
-  console.log("🚀 ~ getQuantity ~ status:", status);
   if (!$all.value || !$all.value.totals) return 0;
 
   const quantity = $all.value?.totals.find((item) => {
@@ -244,8 +243,6 @@ const getQuantity = (status: string) => {
     console.log("🚀 ~ getQuantity dentro do if:", quantity);
     return quantity.total;
   }
-
-  console.log("🚀 ~ getQuantity ~ fora do if:", quantity);
 
   return 0;
 };

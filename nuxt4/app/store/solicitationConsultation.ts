@@ -79,7 +79,12 @@ export const useSolicitationConsultationStore = defineStore(
     ) => {
       await api.put("/solicitation-consultation/antecipation", payload);
     };
-    //"/solicitation-consultation/antecipation"
+
+    const solicitationCancelAntecipation = async (publicId: string) => {
+      await api.put(
+        `/solicitation-consultation/antecipation-cancel/${publicId}`
+      );
+    };
 
     return {
       $single,
@@ -91,6 +96,7 @@ export const useSolicitationConsultationStore = defineStore(
       show,
       paidUseSalt,
       solicitationSetAntecipation,
+      solicitationCancelAntecipation,
     };
   }
 );

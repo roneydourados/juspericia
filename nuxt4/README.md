@@ -116,5 +116,9 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Tela de médico ter opção de baixar o vídeo salvo da teleconsulta
 [x] - Melhorar tela de cadastro de médico, campo de chave pix muito pequeno
 [x] - Correção selecionar outra especialidade no cadastro de solicitação
+[x] - possibilidade de remover antecipação
+[x] - utilizar saldo remover
+[x] - Indicação nao esta respeitando os parametros
+[x] - Currency input nao aceitou valor zerado
 
 ```

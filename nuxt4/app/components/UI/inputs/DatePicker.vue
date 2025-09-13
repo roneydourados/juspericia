@@ -99,10 +99,18 @@ const validationSchema = computed(() => {
     }, "Data inválida.")
     .refine((val) => {
       if (!val || !props.min) return true;
+      
       const selectedDate = dayjs(val, "YYYY-MM-DD");
       const minDate = dayjs(props.min, "YYYY-MM-DD");
-      return selectedDate.isAfter(minDate) || selectedDate.isSame(minDate, 'day');
-    }, "Data deve ser posterior à data mínima permitida.");
+      
+      // Verifica se as datas são válidas antes de comparar
+      if (!selectedDate.isValid() || !minDate.isValid()) {
+        return false;
+      }
+      
+      // Compara apenas as datas (ignora horário) - deve ser maior ou igual à data mínima
+      return selectedDate.isAfter(minDate, 'day') || selectedDate.isSame(minDate, 'day');
+    }, "Data deve ser posterior ou igual à data mínima permitida.");
 
   if (props.required) {
     schema = schema.refine(

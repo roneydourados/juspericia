@@ -71,7 +71,7 @@
               Laudo aguardando assinatura
             </span>
           </v-chip>
-          <Button
+          <!-- <Button
             v-if="
               solicitation.status === 'open' ||
               (solicitation.status === 'payment_pending' &&
@@ -85,36 +85,8 @@
           >
             <v-icon icon="mdi-currency-usd" color="primary" start />
             <span class="text-caption text-primary"> Utilizar Saldo </span>
-          </Button>
-          <!-- <div
-          v-if="
-            solicitation.status === 'open' ||
-            (solicitation.status === 'payment_pending' &&
-              $currentUser?.profile?.type === 'ADVOGADO')
-          "
-          class="d-flex align-center"
-          style="gap: 0.5rem"
-        >
-          <Button
-            color="grey"
-            variant="outlined"
-            size="small"
-            @click="handleMountModelPrececkout(solicitation)"
-          >
-            <v-icon icon="mdi-credit-card-outline" color="primary" start />
-            <span class="text-caption text-primary"> Pagar </span>
-          </Button>
-          <Button
-            v-if="!solicitation.sale?.saleId"
-            color="grey"
-            variant="outlined"
-            size="small"
-            @click="handleUseCreditSalt"
-          >
-            <v-icon icon="mdi-currency-usd" color="primary" start />
-            <span class="text-caption text-primary"> Utilizar Saldo </span>
-          </Button>
-        </div> -->
+          </Button> -->
+
           <Button
             v-if="
               solicitation.status === 'open' ||
@@ -424,12 +396,11 @@
         </v-col>
         <v-col cols="12" lg="2">
           <Button
-            variant="text"
-            :disabled="
-              !!solicitation.dateAntecipation ||
-              solicitation.status === 'canceled' ||
-              solicitation.status === 'finished'
+            v-if="
+              !solicitation.dateAntecipation &&
+              (solicitation.status === 'open' || solicitation.status === 'paid')
             "
+            variant="text"
             @click="getItemAntecipation(solicitation)"
           >
             <v-icon icon="mdi-calendar-clock-outline" start color="colorIcon" />
@@ -438,6 +409,22 @@
               style="font-weight: 500; font-size: 0.8rem"
             >
               Solicitar antecipação
+            </span>
+          </Button>
+          <Button
+            v-else-if="
+              solicitation.dateAntecipation &&
+              (solicitation.status === 'open' || solicitation.status === 'paid')
+            "
+            variant="text"
+            @click="handleCancelAntecipation(solicitation.publicId!)"
+          >
+            <v-icon icon="mdi-close" start color="red" />
+            <span
+              class="text-primary"
+              style="font-weight: 500; font-size: 0.8rem"
+            >
+              Cancelar antecipação
             </span>
           </Button>
         </v-col>
@@ -725,6 +712,45 @@ const handleUpdateAntecipation = async (item: any) => {
       loading.value = false;
     }
   }
+};
+
+const handleCancelAntecipation = async (publicId: string) => {
+  push.info({
+    title: "Cancelar antecipação",
+    message: "Tem certeza que deseja cancelar antecipação ?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await storeConsultation.solicitationCancelAntecipation(publicId);
+              await getSolicitations();
+            } catch (error) {
+              push.error("Erro ao cancelar antecipação");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 
 const handleTipValue = async (value: number) => {

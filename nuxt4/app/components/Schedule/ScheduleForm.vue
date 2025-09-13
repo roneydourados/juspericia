@@ -96,7 +96,11 @@
             v-model="model.scheduleDate"
             label="Agendar para o dia"
             required
-            :min="minDate"
+            :min="
+              $currentUser?.profile?.type === 'ADVOGADO'
+                ? minDate
+                : dayjs().format('YYYY-MM-DD')
+            "
             @click:day="clickDay($event)"
             @update:model-value="datePickerModelValue($event)"
           />
@@ -175,7 +179,7 @@ watch(
       await doctorScheduleStore.availableDays();
 
       if ($currentUser.value?.profile?.type === "ADVOGADO") {
-        model.value.scheduleDate = dayjs().add(4, "days").format("YYYY-MM-DD");
+        model.value.scheduleDate = dayjs().add(5, "days").format("YYYY-MM-DD");
       }
 
       await getSchedules();

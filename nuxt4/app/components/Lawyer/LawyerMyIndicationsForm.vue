@@ -56,6 +56,7 @@ const props = defineProps({
 const { mobile } = useDisplay();
 
 const indicationStore = useUserIndicationStore();
+const systemParametersStore = useSystemParametersStore();
 
 const loading = ref(false);
 
@@ -70,14 +71,18 @@ const form = ref({
   status: "PENDING",
 });
 
+const $systemParameters = computed(() => systemParametersStore.$parameters);
+
 watch(
   () => show.value,
-  (value) => {
+  async (value) => {
     if (value && props.data) {
       loadModel();
     } else {
       clearModel();
     }
+
+    await systemParametersStore.index();
   }
 );
 
@@ -127,8 +132,10 @@ const create = async () => {
     name: form.value.name,
     whatsapp: form.value.whatsapp,
     status: "PENDING",
-    points: 10,
-    expiredAt,
+    points: $systemParameters.value?.pointsPerIndication ?? 0,
+    expiredAt: dayjs()
+      .add($systemParameters.value?.daysPointsExpire ?? 1, "day")
+      .format("YYYY-MM-DD"),
   });
 };
 
@@ -137,8 +144,6 @@ const update = async () => {
     email: form.value.email,
     name: form.value.name,
     whatsapp: form.value.whatsapp,
-    //status: "PENDING",
-    //points: 10,
   });
 };
 </script>

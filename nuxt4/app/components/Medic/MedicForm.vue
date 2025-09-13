@@ -119,13 +119,13 @@
                 :clearable="true"
               />
             </v-col>
-            <v-col cols="12">
+            <v-col cols="12" lg="8">
               <TextInput
                 v-model="model.pixKey"
                 label="Chave Pix"
                 placeholder="Chave Pix"
                 :clearable="true"
-                rows="2"
+                rows="1"
               />
             </v-col>
             <v-col cols="12" lg="4">

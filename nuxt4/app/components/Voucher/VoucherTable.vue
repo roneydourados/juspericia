@@ -140,7 +140,6 @@
           variant="text"
           size="small"
           @click="getItemDelete(item)"
-          :disabled="getItemStatus(item).status !== 'Ativo'"
         >
           <v-icon icon="mdi-delete-outline" size="20"></v-icon>
           <v-tooltip
@@ -201,7 +200,7 @@ const headers = [
   { title: "Qtde liberada", key: "useQuantity" },
   { title: "Qtde Utilizada", key: "voucherUseCount" },
   { title: "Status", key: "status" },
-  { title: "Ações", key: "actions" },
+  { title: "Ações", key: "actions", width: "10%" },
 ];
 
 const vounchers = computed(() => voucher.$all);

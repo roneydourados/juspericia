@@ -218,6 +218,14 @@
                 <div>
                   Definição de limites para os vouchers que serão gerados
                 </div>
+                <div class="w-100 mt-4">
+                  <IntegerInput
+                    label="Intervalo entre consultas (minutos)"
+                    v-model="form.medicQueryInterval"
+                    required
+                  />
+                </div>
+                <div>Intervalo em minutos entre as consultas médicas</div>
               </v-card-text>
             </v-card>
           </v-col>

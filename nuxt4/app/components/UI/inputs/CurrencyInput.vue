@@ -170,7 +170,7 @@ const inputFormated = (event: string) => {
 
   numeralValue.value = Number(asValue) / 100;
 
-  if (numeralValue.value <= 0 || isNaN(numeralValue.value)) {
+  if (isNaN(numeralValue.value) || numeralValue.value < 0) {
     inputValue.value = "";
     numeralValue.value = 0;
     value.value = "";
