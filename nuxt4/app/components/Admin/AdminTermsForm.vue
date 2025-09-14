@@ -5,7 +5,7 @@
     @dialog="show = false"
     width="80%"
   >
-    <CardBlur :hover="false" height="100%">
+    <CardBlur :hover="false">
       <template #content>
         <v-row dense>
           <v-col cols="12" lg="6">
@@ -26,7 +26,7 @@
           </v-col>
 
           <v-col cols="12">
-            <TextEditor v-model="model.content" height="40" />
+            <TextEditor v-model="model.content" height="30" />
           </v-col>
         </v-row>
       </template>
