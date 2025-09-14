@@ -30,9 +30,6 @@
           </v-col>
         </v-row>
       </template>
-      <template #actions>
-        <div class="d-flex justify-end w-100"></div>
-      </template>
     </CardBlur>
     <DialogLoading :dialog="loading" />
     <v-snackbar
