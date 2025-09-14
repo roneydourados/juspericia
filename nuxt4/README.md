@@ -102,30 +102,28 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Ao gerar o laudo, quando for clinico geral não mostrar nada, caso contrário mostrar a especialidade-
 [x] - Mostrar valor na solicitação com desconto
 [x] - Gerar PDF do laudo com todas as fontes e formatações de acordo com o que foi criado
-[] - Recriar tela de controle de crédito do lado administrador
 [x] - Para o médico especialista, só aparecer os agendamentos para sua especialidade e para a especialidade
-[] - Disponibilizar o link da consulta na solicitação quando o médico gerar
 [x] - Revisar regras de negócio para pagamento de comissão dos médicos, quando é especialista o valor é diferente pegar do parametro de comissão especialidade
 [x] - Validar listagem da agenda pelo tipo de especialidade do médico
 [x] - Refazer a a configuração de agenda, deve ser separado por especialidade, dia da semana, e cada dia/especialidade pode ter vários intervalos de horário
 [x] - Visualizar PDF sem precisar fazer download e abrir
 [x] - Teleconsulta, ver possibilidade de escolher microfone/configurar
-[] - Teleconsulta, parametro para salvar gravação da teleconsulta
 [x] - Tela do médico no agendamento, ter um botão para definir que o paciente não compareceu
-[] - Tela de médico ter opção de baixar o vídeo salvo da teleconsulta
 [x] - Melhorar tela de cadastro de médico, campo de chave pix muito pequeno
 [x] - Correção selecionar outra especialidade no cadastro de solicitação
 [x] - possibilidade de remover antecipação
 [x] - utilizar saldo remover
 [x] - Indicação nao esta respeitando os parametros
 [x] - Currency input nao aceitou valor zerado
-
 [x] - ajustar barra de rolagem na tela de detalhes solicitação na consulta
 [x] - Cadastro de termos de uso diferente para médico
 [x] - ao abrir a tela de parametrização se o valor vem zerado esta dando erro no campo de pontos
 [x] - Criar novo método para cadastrar mais de um termo de uso
 [x] - Para o médico aparecer o termo de uso de prestação de serviço e não o que esta aparecendo atualmente
 
+[] - Recriar tela de controle de crédito do lado administrador
+[] - Disponibilizar o link da consulta na solicitação quando o médico gerar
+[] - Teleconsulta, parametro para salvar gravação da teleconsulta
 [] - Melhoria na interface de acordo com a imagem que desgin mandou
 
 ```
