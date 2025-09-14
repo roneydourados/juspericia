@@ -2,8 +2,8 @@
   <DialogForm
     :show="show"
     title="Termos e condições de uso do sistema"
-    fullscreen
     @dialog="show = false"
+    width="80%"
   >
     <CardBlur :hover="false" height="100%">
       <template #content>
@@ -18,21 +18,46 @@
               @update:modelValue="getLastTerm"
             />
           </v-col>
+          <v-col cols="12" lg="6" class="d-flex justify-end">
+            <Button @click="handleSubmit" variant="outlined">
+              <v-icon icon="mdi-check" start color="colorIcon" />
+              Salvar
+            </Button>
+          </v-col>
+
           <v-col cols="12">
             <TextEditor v-model="model.content" height="40" />
           </v-col>
         </v-row>
       </template>
       <template #actions>
-        <div class="d-flex justify-end w-100">
-          <Button @click="handleSubmit" variant="outlined">
-            <v-icon icon="mdi-check" start color="colorIcon" />
-            Salvar
-          </Button>
-        </div>
+        <div class="d-flex justify-end w-100"></div>
       </template>
     </CardBlur>
     <DialogLoading :dialog="loading" />
+    <v-snackbar
+      v-model="showSaveAlert"
+      vertical
+      color="success"
+      :timeout="2000"
+      position="relative"
+    >
+      <div class="text-subtitle-1 pb-2">Dados salvos com sucesso!</div>
+      <div class="text-subtitle-1 pb-2">
+        Dados do termo foi salvo para sair da tela clique no X do canto superior
+        direito para fechar esta tela.
+      </div>
+      <template #actions>
+        <v-btn
+          color="white"
+          variant="text"
+          @click="showSaveAlert = false"
+          class="text-none"
+        >
+          Fechar
+        </v-btn>
+      </template>
+    </v-snackbar>
   </DialogForm>
 </template>
 
@@ -46,7 +71,7 @@ const show = defineModel("show", {
 });
 
 const loading = ref(false);
-
+const showSaveAlert = ref(false);
 const model = ref({
   content: "",
   category: "terms_of_use",
@@ -77,7 +102,6 @@ watch(
       };
     } else {
       model.value.content = "";
-      model.value.category = "terms_of_use";
     }
   },
   {
@@ -89,6 +113,7 @@ const handleSubmit = async () => {
   // show.value = false;
   try {
     await termsStore.store(model.value);
+    showSaveAlert.value = true;
   } catch (error) {
     console.log("🚀 ~ handleSubmit terms ~ error:", error);
   }

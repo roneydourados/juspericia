@@ -1,10 +1,10 @@
 <template>
-  <v-card 
-    class="custom-card" 
-    :class="{ 'hover-enabled': hover }" 
-    rounded="xl" 
-    :height="height" 
-    width="100%"
+  <v-card
+    class="custom-card"
+    :class="{ 'hover-enabled': hover }"
+    rounded="xl"
+    :height="height"
+    :width="width"
   >
     <slot />
     <v-card-title>
@@ -28,6 +28,10 @@ defineProps({
   hover: {
     type: Boolean,
     default: true,
+  },
+  width: {
+    type: String,
+    default: "100%",
   },
 });
 </script>
