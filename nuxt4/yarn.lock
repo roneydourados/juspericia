@@ -2063,10 +2063,10 @@
   resolved "https://registry.yarnpkg.com/@yr/monotone-cubic-spline/-/monotone-cubic-spline-1.0.3.tgz#7272d89f8e4f6fb7a1600c28c378cc18d3b577b9"
   integrity sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==
 
-"@zegocloud/zego-uikit-prebuilt@^2.15.2":
-  version "2.15.2"
-  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-prebuilt/-/zego-uikit-prebuilt-2.15.2.tgz#b07e258e75b4b781fc25efbb9a9c50ad3cb26fea"
-  integrity sha512-HJOoj19CdSOLoiOt/ChPjbLaJ0UhtASfqCIexR5N56w+aBQcqIQc7K2VidF71+ebv70RxT0BSoDnwbqEXkShQA==
+"@zegocloud/zego-uikit-prebuilt@^2.16.0":
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-prebuilt/-/zego-uikit-prebuilt-2.16.0.tgz#db063ee429e3f0c84608ed13529a3dea3331167f"
+  integrity sha512-VJSTdeizc4cKI/fcPKDy6XlzKBGOQpuFIt5SmxbjNBBuB9A3oa1ZcDuHHZhX9XfmT+vbeI9DzlTJAvH59Lh3tQ==
 
 abbrev@^3.0.0:
   version "3.0.1"
