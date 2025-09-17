@@ -5,3 +5,8 @@ export interface TermsProps {
   version?: string;
   createdAt?: Date;
 }
+
+export interface MedicalTermsProps {
+  conductManual: TermsProps;
+  medicalServiceContract: TermsProps;
+}

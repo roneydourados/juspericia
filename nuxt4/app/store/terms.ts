@@ -4,9 +4,11 @@ export const useTermsStore = defineStore("terms", () => {
   const { api } = useAxios();
   const termsList = ref<TermsProps[]>([]);
   const terms = ref<TermsProps>();
+  const medicalTerms = ref<MedicalTermsProps>();
 
   const $all = computed(() => termsList.value);
   const $single = computed(() => terms.value);
+  const $medicalTerms = computed(() => medicalTerms.value);
 
   const getAllTerms = async () => {
     const { data } = await api.get<TermsProps[]>("/terms");
@@ -29,11 +31,18 @@ export const useTermsStore = defineStore("terms", () => {
     await api.post("/terms", { content, category });
   };
 
+  const getMedicalTerms = async () => {
+    const { data } = await api.get<MedicalTermsProps>("/terms/medical");
+    medicalTerms.value = data;
+  };
+
   return {
     getAllTerms,
     getLastTerm,
     store,
+    getMedicalTerms,
     $all,
     $single,
+    $medicalTerms,
   };
 });

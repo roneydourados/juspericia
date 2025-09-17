@@ -5,8 +5,18 @@
         <logo height="50" />
       </p>
     </v-card-text>
-    <v-card-text class="px-12">
+    <v-card-text v-if="$currentUser?.profile?.type !== 'MEDICO'" class="px-12">
       <div v-html="$single?.content" />
+    </v-card-text>
+    <v-card-text
+      v-else-if="$currentUser?.profile?.type === 'MEDICO'"
+      class="px-12"
+    >
+      <div v-html="$medicalTerms?.conductManual?.content" />
+      <div
+        class="mt-12"
+        v-html="$medicalTerms?.medicalServiceContract?.content"
+      />
     </v-card-text>
     <v-card-text>
       <NuxtTurnstile ref="turnstile" v-model="cloudFlareToken" />
@@ -61,6 +71,7 @@ const loading = ref(false);
 const disabledButtons = ref(true); // Inicialmente desabilitado até o Turnstile carregar
 const $currentUser = computed(() => auth.$currentUser);
 const $single = computed(() => termsStore.$single);
+const $medicalTerms = computed(() => termsStore.$medicalTerms);
 const { getIpInfo } = useIpInfo();
 
 // Watch para monitorar o token do Turnstile
@@ -80,7 +91,7 @@ onMounted(async () => {
   if ($currentUser.value?.profile?.type !== "MEDICO") {
     await termsStore.getLastTerm("terms_of_use");
   } else {
-    await termsStore.getLastTerm("medical_service_contract");
+    await termsStore.getMedicalTerms();
   }
 });
 
@@ -93,19 +104,19 @@ const handleAccpetTerms = async () => {
     // Captura informações de IP
     const ipInfo: IpInfo = await getIpInfo();
 
-    let consentType = "terms_of_use";
-
     if ($currentUser.value?.profile?.type === "MEDICO") {
-      consentType = "medical_service_contract";
+      const consentType = "medical_service_contract,conduct_manual";
+      // Envia os dados para o back-end incluindo as informações de IP
+      // médico são 2 tipos de termo, contrato de serviço e manual de conduta
+      await auth.consentTerms(cloudFlareToken.value, consentType, ipInfo);
+    } else {
+      // Envia os dados para o back-end incluindo as informações de IP
+      await auth.consentTerms(cloudFlareToken.value, "terms_of_use", ipInfo);
     }
 
-    // Envia os dados para o back-end incluindo as informações de IP
-    await auth.consentTerms(cloudFlareToken.value, consentType, ipInfo);
     await auth.verifyUser($currentUser.value.publicId!);
-
     // Aguarda a próxima atualização do DOM para garantir que o estado foi atualizado
     await nextTick();
-
     router.push("/");
   } catch (error) {
     console.log(error);
