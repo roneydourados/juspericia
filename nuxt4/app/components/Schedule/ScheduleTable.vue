@@ -37,11 +37,35 @@
           />
         </v-col>
 
-        <v-col cols="12" lg="2">
-          <Button color="primary" @click="getSchedules" size="small">
-            <v-icon icon="mdi-filter-outline" color="colorIcon" />
-            <span class="text-caption"> Filtrar </span>
-          </Button>
+        <v-col cols="12">
+          <div class="d-flex align-center justify-space-between w-100">
+            <Button color="primary" @click="getSchedules" size="small">
+              <v-icon icon="mdi-filter-outline" color="colorIcon" />
+              <span class="text-caption"> Filtrar </span>
+            </Button>
+
+            <div
+              class="d-flex align-center"
+              v-if="isTimerActive"
+              style="gap: 0.5rem"
+            >
+              <span class="text-primary font-weight-bold">
+                Agenda será atualizada em
+              </span>
+              <v-progress-circular
+                :model-value="
+                  ((countDownDefaultValue - countdown) /
+                    countDownDefaultValue) *
+                  100
+                "
+                size="30"
+                width="3"
+                color="primary"
+              >
+                <span class="text-caption">{{ countdown }}</span>
+              </v-progress-circular>
+            </div>
+          </div>
         </v-col>
       </v-row>
     </v-card-title>
@@ -213,7 +237,12 @@ const consultationReport = usePatientConsultationReportStore();
 const router = useRouter();
 const { mobile } = useDisplay();
 
+const countDownDefaultValue = 90;
+
 const autoRefreshInterval = ref<NodeJS.Timeout | null>(null);
+const countdown = ref(countDownDefaultValue);
+const isTimerActive = ref(false);
+const countdownInterval = ref<NodeJS.Timeout | null>(null);
 const serviceDetails = ref(false);
 const showMedicalReportForm = ref(false);
 const model = reactive({
@@ -299,6 +328,7 @@ const formattedDate = computed(() => {
 onMounted(async () => {
   await getSchedules();
   startAutoRefresh();
+  startCountdown(); // Start initial countdown
 });
 
 // Clean up interval when component is unmounted
@@ -517,11 +547,35 @@ const handleCancelSchedule = async (publicId: string) => {
   });
 };
 
+// Start the countdown timer
+const startCountdown = () => {
+  countdown.value = countDownDefaultValue;
+  isTimerActive.value = true;
+
+  countdownInterval.value = setInterval(() => {
+    countdown.value--;
+
+    if (countdown.value <= 0) {
+      stopCountdown();
+    }
+  }, 1000);
+};
+
+// Stop the countdown timer
+const stopCountdown = () => {
+  if (countdownInterval.value) {
+    clearInterval(countdownInterval.value);
+    countdownInterval.value = null;
+  }
+  isTimerActive.value = false;
+};
+
 // Start the auto-refresh interval
 const startAutoRefresh = () => {
   autoRefreshInterval.value = setInterval(async () => {
     await getSchedules();
-  }, 60000); // 60 seconds
+    startCountdown(); // Restart countdown after refresh
+  }, countdown.value * 1000); // 60 seconds
 };
 
 // Stop the auto-refresh interval
@@ -530,5 +584,6 @@ const stopAutoRefresh = () => {
     clearInterval(autoRefreshInterval.value);
     autoRefreshInterval.value = null;
   }
+  stopCountdown(); // Also stop countdown when stopping auto refresh
 };
 </script>
