@@ -123,8 +123,9 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 [] - Recriar tela de controle de crédito do lado administrador
 [] - Disponibilizar o link da consulta na solicitação quando o médico gerar
-[] - Teleconsulta, parametro para salvar gravação da teleconsulta
 [] - Melhoria na interface de acordo com a imagem que desgin mandou
 [] - Fazer uma tela de consulta automática na agenda para evitar de dois médicos ao mesmo tempo pegar o mesmo agendamento
 [] - Consultar um agendamento antes de tentar agendar para ver se outro médico já não pegou
+[x] - Unificar PDFS para um único arquivo
+[] - Efetuar integração com nuvidio para teleconsulta
 ```

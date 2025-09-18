@@ -1,10 +1,18 @@
 <template>
   <div>
     <div
-      class="font-weight-bold mb-4 mt-4 text-primary"
+      class="font-weight-bold mb-4 mt-4 text-primary d-flex align-center justify-space-between"
       :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       Documentos/Anexos
+      <Button
+        variant="outlined"
+        color="primary"
+        size="small"
+        @click="handleDownloadMergedFiles"
+      >
+        Baixar todos
+      </Button>
     </div>
     <div v-for="item in $single?.files" class="w-100 mt-4">
       <AttachementCard
@@ -147,13 +155,37 @@ const handleViewPdf = async (file: FileProps) => {
   }
 };
 
-// Método para fechar o dialog e limpar recursos
-const closePdfDialog = () => {
-  showPdfDialog.value = false;
-  if (pdfUrl.value) {
-    URL.revokeObjectURL(pdfUrl.value);
-    pdfUrl.value = "";
+const handleDownloadMergedFiles = async () => {
+  if (!$single.value || !$single.value?.id) return;
+
+  loading.value = true;
+  try {
+    const { file, fileName } = await fileStore.downloadMergedFiles({
+      fileCategory: "solicitation-consultation",
+      ownerId: $single.value.id,
+    });
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = `${fileName}.pdf`;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Erro ao baixar arquivos mesclados:", error);
+  } finally {
+    loading.value = false;
   }
-  currentPdfName.value = "";
 };
 </script>

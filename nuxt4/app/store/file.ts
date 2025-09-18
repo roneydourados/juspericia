@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { uuidv7 } from "uuidv7";
 
 export const useFileStore = defineStore("file", () => {
   const { api } = useAxios();
@@ -56,6 +57,54 @@ export const useFileStore = defineStore("file", () => {
 
   const removeAws = async (publicId: string) => {
     await api.delete(`/files/aws/${publicId}`);
+  };
+
+  const downloadMergedFiles = async (input: {
+    fileCategory: string;
+    ownerId: number;
+  }) => {
+    const { fileCategory, ownerId } = input;
+    const config = {
+      params: {
+        fileCategory,
+        ownerId,
+      },
+    };
+
+    const resp = await api.get<ArrayBuffer>("files/download-merged", {
+      ...config,
+      responseType: "arraybuffer",
+    });
+
+    const contentDisposition = resp.headers["content-disposition"];
+
+    let fileName = `${uuidv7()}.pdf`;
+    let fileType = "application/octet-stream"; // Tipo padrão
+
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="(.+)"/);
+      if (match && match[1]) {
+        fileName = match[1];
+
+        const fileExtension = fileName.split(".").pop()?.toLowerCase();
+
+        // Mapeamento de tipos MIME
+        const mimeTypes: { [key: string]: string } = {
+          pdf: "application/pdf",
+        };
+
+        fileType = mimeTypes[fileExtension!] || fileType;
+      }
+    }
+
+    const file = new Blob([resp.data], {
+      type: fileType,
+    });
+
+    return {
+      file,
+      fileName,
+    };
   };
 
   const downloadAws = async (publicId: string) => {
@@ -209,5 +258,6 @@ export const useFileStore = defineStore("file", () => {
     uploadManyAws,
     downloadAws,
     removeManyAws,
+    downloadMergedFiles,
   };
 });

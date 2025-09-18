@@ -5,7 +5,7 @@
       :font-size="mobile ? '1.2rem' : '1.8rem'"
     />
   </div>
-  <CardBlur :hover="false" style="max-height: calc(100vh - 120px); overflow-y: auto;">
+  <CardBlur :hover="false">
     <v-row dense>
       <v-col cols="10" class="px-4">
         <span
@@ -38,62 +38,100 @@
     <v-row dense class="px-4">
       <v-divider />
       <v-col cols="12" lg="6">
-        <v-card flat rounded="lg">
-          <div
+        <v-card flat rounded="lg" class="px-2">
+          <v-card
+            height="120"
             v-if="
               $single?.Schedule &&
               $single?.Schedule.length > 0 &&
               $single?.status !== 'finished'
             "
-            class="d-flex bg-green-darken-1 pa-2 rounded-lg"
+            rounded="xl"
+            style="border-top: 4px solid #f57f17"
+            class="pa-2"
+            elevation="2"
+            flat
           >
-            <InfoLabel
-              title="Teleconsulta agendada para"
-              :font-size="mobile ? '0.73' : '1.1'"
-              :font-size-content="mobile ? '0.73' : '1.1'"
-              :content="`${dayjs($single.Schedule[0]?.scheduleDate).format(
-                'DD/MM/YYYY'
-              )} as ${$single?.Schedule?.[0]?.scheduleHour}`"
-              :show-divider="false"
-            />
-          </div>
-          <div
+            <v-card-title>
+              <strong class="text-primary" style="font-size: 1.1rem">
+                Teleconsulta agendada para
+              </strong>
+            </v-card-title>
+            <v-card-text>
+              <strong class="text-primary" style="font-size: 1rem">
+                {{
+                  `${dayjs($single.Schedule[0]?.scheduleDate).format(
+                    "DD/MM/YYYY"
+                  )} as ${$single?.Schedule?.[0]?.scheduleHour}`
+                }}
+              </strong>
+            </v-card-text>
+          </v-card>
+          <v-card
+            height="120"
             v-else-if="$single?.status === 'finished'"
+            rounded="xl"
+            style="border-top: 3px solid #4caf50"
+            class="pa-2"
+            elevation="2"
+            flat
+          >
+            <v-card-title>
+              <strong class="text-primary" style="font-size: 1.1rem">
+                {{
+                  `Solicitação finalizada em ${dayjs($single?.dateClose).format(
+                    "DD/MM/YYYY"
+                  )}`
+                }}
+              </strong>
+            </v-card-title>
+            <v-card-text>
+              <strong class="text-primary" style="font-size: 1rem">
+                {{
+                  `${
+                    $single?.PatientConsultationReport &&
+                    $single?.PatientConsultationReport?.status === "signed"
+                      ? "Laudo médico disponível"
+                      : "Laudo médico Pendente Assinatura"
+                  }`
+                }}
+              </strong>
+            </v-card-text>
+            <v-card-actions class="d-flex justify-end px-2">
+              <Button
+                v-if="
+                  $single?.PatientConsultationReport &&
+                  $single?.PatientConsultationReport?.status === 'signed'
+                "
+                class="text-none font-weight-bold"
+                @click="handleDownloadSignedFile($single)"
+                size="small"
+                :variant="mobile ? 'text' : 'outlined'"
+                color="white"
+              >
+                <v-icon
+                  icon="mdi-file-document-edit"
+                  color="colorIcon"
+                  :start="!mobile"
+                />
+                <span class="text-caption"> Baixar Laudo </span>
+              </Button>
+            </v-card-actions>
+          </v-card>
+
+          <!-- <div
+            
             class="d-flex flex-wrap bg-green-darken-1 pa-2 rounded-lg"
           >
             <InfoLabel
-              :title="`Solicitação finalizada em ${dayjs(
-                $single?.dateClose
-              ).format('DD/MM/YYYY')}`"
+              :title=""
               :font-size="mobile ? '0.73' : '1.1'"
               :font-size-content="mobile ? '0.73' : '1.1'"
               :show-divider="false"
-              :content="`${
-                $single?.PatientConsultationReport &&
-                $single?.PatientConsultationReport?.status === 'signed'
-                  ? 'Laudo médico disponível'
-                  : 'Laudo médico Pendente Assinatura'
-              }`"
+              :content=""
             />
-            <Button
-              v-if="
-                $single?.PatientConsultationReport &&
-                $single?.PatientConsultationReport?.status === 'signed'
-              "
-              class="text-none font-weight-bold"
-              @click="handleDownloadSignedFile($single)"
-              size="small"
-              :variant="mobile ? 'text' : 'outlined'"
-              color="white"
-            >
-              <v-icon
-                icon="mdi-file-document-edit"
-                color="colorIcon"
-                :start="!mobile"
-              />
-              <span class="text-caption"> Baixar Laudo </span>
-            </Button>
-          </div>
+            
+          </div> -->
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
           <SolicitationDetailsOffice
