@@ -213,6 +213,7 @@ const consultationReport = usePatientConsultationReportStore();
 const router = useRouter();
 const { mobile } = useDisplay();
 
+const autoRefreshInterval = ref<NodeJS.Timeout | null>(null);
 const serviceDetails = ref(false);
 const showMedicalReportForm = ref(false);
 const model = reactive({
@@ -282,6 +283,7 @@ const headers = computed(() => {
 const $currentUser = computed(() => auth.$currentUser);
 const $shedules = computed(() => scheduleStore.$all?.schedules || []);
 const $solicitation = computed(() => solicitationStore.$single);
+const $scheduleSingle = computed(() => scheduleStore.$single);
 
 const formattedDate = computed(() => {
   const data = new Date();
@@ -296,6 +298,12 @@ const formattedDate = computed(() => {
 
 onMounted(async () => {
   await getSchedules();
+  startAutoRefresh();
+});
+
+// Clean up interval when component is unmounted
+onUnmounted(() => {
+  stopAutoRefresh();
 });
 
 const getSchedules = async () => {
@@ -360,6 +368,19 @@ const handleServiceDetails = async (item: ScheduleProps) => {
   loading.value = true;
   try {
     await scheduleStore.show(item.publicId!);
+
+    if (
+      $scheduleSingle.value?.medicId &&
+      $scheduleSingle.value?.medicId !== $currentUser.value?.id
+    ) {
+      push.error(
+        "Outro profissional selcionou este agendamento a tela será atualizada!"
+      );
+
+      await getSchedules();
+      return;
+    }
+
     await solicitationStore.show(item.PatientConsultation?.publicId!);
     serviceDetails.value = true;
   } finally {
@@ -494,5 +515,20 @@ const handleCancelSchedule = async (publicId: string) => {
       ],
     },
   });
+};
+
+// Start the auto-refresh interval
+const startAutoRefresh = () => {
+  autoRefreshInterval.value = setInterval(async () => {
+    await getSchedules();
+  }, 60000); // 60 seconds
+};
+
+// Stop the auto-refresh interval
+const stopAutoRefresh = () => {
+  if (autoRefreshInterval.value) {
+    clearInterval(autoRefreshInterval.value);
+    autoRefreshInterval.value = null;
+  }
 };
 </script>
