@@ -46,6 +46,16 @@ export interface UserProps {
   medicalSpecialtyComission?: number;
   medicalSpecialtyComissionType?: number;
   doctorSchedules?: DoctorScheduleProps[];
+  nuvidioId?: string;
+  nuvidioDepartmentId?: number;
+  nuvidioDepartment?: NuvidioDepartmentProps;
+}
+
+export interface NuvidioDepartmentProps {
+  id: number;
+  identifier: string;
+  name: string;
+  nuvidioId: string;
 }
 
 export interface UserProfileProps {
@@ -103,8 +113,8 @@ export interface UserMedicModelProps {
 
 const profileType = ["ADMIN", "ADVOGADO", "MEDICO"] as const;
 
-export type ProfileType = (typeof profileType)[number];
+export type ProfileType = typeof profileType[number];
 
 const paymentType = ["CREDIT_CARD", "PIX", "BOLETO"] as const;
 
-export type PaymentType = (typeof paymentType)[number];
+export type PaymentType = typeof paymentType[number];

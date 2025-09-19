@@ -32,14 +32,14 @@
         <div>Das: {{ item.medicHourStart }} até {{ item.medicHourEnd }}</div>
       </div> -->
     </template>
-    <template v-slot:item.phone="{ item }">
+    <!-- <template v-slot:item.phone="{ item }">
       <span class="d-flex align-center">
         <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
         <span>
           {{ item.phone ? formatTelephoneNumber(item.phone) : "Não informado" }}
         </span>
       </span>
-    </template>
+    </template> -->
     <template v-slot:item.email="{ item }">
       <span class="d-flex align-center">
         <v-icon icon="mdi-email-outline" size="24" color="colorIcon" start />
@@ -101,6 +101,23 @@
           Apagar
         </v-tooltip>
       </v-btn>
+      <v-btn
+        v-if="!item.nuvidioDepartmentId"
+        icon
+        color="blue"
+        variant="text"
+        size="small"
+        @click="createNuvidioAttendent(item)"
+      >
+        <v-icon icon="mdi-headphones" size="20"></v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top center"
+          content-class="tooltip-background"
+        >
+          Criar atendente para atendimento teleconferência
+        </v-tooltip>
+      </v-btn>
     </template>
   </Table>
   <MedicTableMobile
@@ -131,6 +148,7 @@
 import { useDebounceFn } from "@vueuse/core";
 import { useDisplay } from "vuetify";
 const medicStore = useMedicStore();
+const nuvidioStore = useNuvidioStore();
 
 const { formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
@@ -145,10 +163,10 @@ const headers = ref([
     title: "Nome",
     key: "name",
   },
-  {
-    title: "Telefone",
-    key: "phone",
-  },
+  // {
+  //   title: "Telefone",
+  //   key: "phone",
+  // },
   {
     title: "Email",
     key: "email",
@@ -164,7 +182,7 @@ const headers = ref([
   {
     title: "Ações",
     key: "actions",
-    width: "10%",
+    width: "15%",
   },
 ]);
 
@@ -204,5 +222,44 @@ const handleDeleteItem = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const createNuvidioAttendent = async (item: UserProps) => {
+  push.info({
+    title: "Criar atendente teleconsulta",
+    message: `Confirma criar atendente para ${item.name} ?`,
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Criar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await nuvidioStore.createAttendantDepartment(item.publicId!);
+              await handleSearch("", false);
+            } catch (error) {
+              push.error("Erro ao apagar horário");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 </script>

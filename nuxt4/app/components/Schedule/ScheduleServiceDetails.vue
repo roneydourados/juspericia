@@ -2,25 +2,66 @@
   <div class="text-center pa-4">
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
       <v-card>
-        <v-toolbar>
+        <v-toolbar color="white">
           <v-toolbar-title>
             <div class="text-subtitle-1 font-weight-bold">
               Dados da consulta
             </div>
           </v-toolbar-title>
-
-          <v-spacer></v-spacer>
-
-          <v-toolbar-items>
-            <v-btn class="text-none" @click="dialog = false">
-              <strong class="text-error">Cancelar</strong>
-            </v-btn>
-            <v-btn class="text-none" @click="handleQueryStart">
-              <strong class="text-info">Iniciar consulta</strong>
-            </v-btn>
-          </v-toolbar-items>
         </v-toolbar>
-        <SolicitationDetails :show-voltar="false" :show-report="false" />
+        <v-card-text>
+          <v-row dense>
+            <v-col cols="12" lg="4">
+              <SelectInput
+                v-model="sheduleModel.initialTime"
+                label="Tempo para iniciar consulta"
+                hide-details
+                :items="[
+                  {
+                    label: '10 minutos',
+                    value: '10',
+                  },
+                  {
+                    label: '20 minutos',
+                    value: '20',
+                  },
+                  {
+                    label: '30 minutos',
+                    value: '30',
+                  },
+                  {
+                    label: '40 minutos',
+                    value: '40',
+                  },
+                  {
+                    label: '1 hora',
+                    value: '60',
+                  },
+                ]"
+                item-title="label"
+                item-value="value"
+              />
+            </v-col>
+            <v-col
+              cols="12"
+              lg="2"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <Button variant="outlined" @click="dialog = false">
+                <v-icon icon="mdi-close" start color="red" />
+                <span class="text-grey-darken-1">Cancelar</span>
+              </Button>
+              <Button variant="outlined" @click="handleQueryStart">
+                <v-icon icon="mdi-play" color="colorIcon" start />
+                <span class="text-info">Iniciar consulta</span>
+              </Button>
+            </v-col>
+            <v-col cols="12">
+              <SolicitationDetails :show-voltar="false" :show-report="false" />
+            </v-col>
+          </v-row>
+        </v-card-text>
       </v-card>
     </v-dialog>
     <DialogLoading :dialog="loading" />
@@ -34,7 +75,8 @@ const emit = defineEmits(["start-query"]);
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
 const auth = useAuthStore();
-const queryRoomStore = useQueryRoomStore();
+//const queryRoomStore = useQueryRoomStore();
+const nuvidioStore = useNuvidioStore();
 //const router = useRouter();
 
 const $single = computed(() => scheduleStore.$single);
@@ -42,8 +84,12 @@ const $single = computed(() => scheduleStore.$single);
 const $user = computed(() => auth.$currentUser);
 const dialog = defineModel({ default: false });
 const loading = ref(false);
+const sheduleModel = ref({
+  initialTime: "10",
+});
 
-const $roomLink = computed(() => queryRoomStore.$createdRoomLink);
+//const $roomLink = computed(() => queryRoomStore.$createdRoomLink);
+const $nuvidioLinkInvite = computed(() => nuvidioStore.$nuvidioLinkInvite);
 
 const handleQueryStart = async () => {
   if (
@@ -74,23 +120,21 @@ const handleQueryStart = async () => {
       $user.value?.id!
     );
 
-    await queryRoomStore.createRoomLink({
-      scheduleId: $single.value.id,
-    });
+    const payloadCreateRoom = {
+      publicId: $single.value.publicId!,
+      initialDate: dayjs()
+        .add(Number(sheduleModel.value.initialTime), "minutes")
+        .format("YYYY-MM-DD HH:mm:ss"),
+    };
+
+    await nuvidioStore.createInviteTeleConference(payloadCreateRoom);
 
     // Aqui vai abrir a tela para conversação de vídeo criada no back-end
 
-    if ($roomLink.value && $roomLink.value.url) {
-      window.open($roomLink.value.url, "_blank");
+    if ($nuvidioLinkInvite.value && $nuvidioLinkInvite.value.invite) {
+      //direcionar o  médico para atender
+      window.open("https://atendimento.nuvidio.com/login", "_blank");
     }
-
-    // window.open(
-    //   `/teleconference/${$single.value?.PatientConsultation.publicId}`,
-    //   "_blank"
-    // );
-    // await router.push(
-    //   `/teleconference/${$single.value?.PatientConsultation.publicId}`
-    // );
 
     emit("start-query");
   } catch (error) {

@@ -19,6 +19,7 @@
     :clearable="clearable"
     @blur="handleBlur"
     @input="handleChange"
+    :hide-details="hideDetails"
   >
     <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
       <slot v-if="slotProps" :name="name" v-bind="slotProps" />
@@ -78,6 +79,10 @@ const props = defineProps({
     default: false,
   },
   clearable: {
+    type: Boolean,
+    default: false,
+  },
+  hideDetails: {
     type: Boolean,
     default: false,
   },

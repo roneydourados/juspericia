@@ -120,12 +120,23 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - ao abrir a tela de parametrização se o valor vem zerado esta dando erro no campo de pontos
 [x] - Criar novo método para cadastrar mais de um termo de uso
 [x] - Para o médico aparecer o termo de uso de prestação de serviço e não o que esta aparecendo atualmente
-
-[] - Recriar tela de controle de crédito do lado administrador
-[] - Disponibilizar o link da consulta na solicitação quando o médico gerar
-[] - Melhoria na interface de acordo com a imagem que desgin mandou
 [x] - Fazer uma tela de consulta automática na agenda para evitar de dois médicos ao mesmo tempo pegar o mesmo agendamento
 [x] - Consultar um agendamento antes de tentar agendar para ver se outro médico já não pegou
 [x] - Unificar PDFS para um único arquivo
-[] - Efetuar integração com nuvidio para teleconsulta
+
+*************************** Demais Pendências **************************************************************************
+[] - Recriar tela de controle de crédito do lado administrador
+[] - Melhoria na interface de acordo com a imagem que desgin mandou
+
+
+*************************** integração com nuvidio *********************************************************************
+[x] - Criar um departamento por médico
+[x] - Criar um atendente por médico
+[x] - Criar vínculo entre departamento médico e atendente
+[x] - Gerar token para efetuar as requisições
+[x] - Usar o token até que seja expirado, caso contrário gerar um novo (tempo do token expiração 10 minuos)
+[] - Criar um convite para atendimento de chamada
+[] - Enviar convite no whatsapp do advogado e do advogado
+[] - Possibilitar o admin criar um atendente na nuvidio atravéz de um botão na tela de médicos
+[] - Só liberar o médico para criar um atendimento se ele já possuir o atendente criado pelo adm na nuvidio
 ```
