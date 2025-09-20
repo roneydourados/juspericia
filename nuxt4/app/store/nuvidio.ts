@@ -15,14 +15,14 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
 
   const createInviteTeleConference = async (input: {
     publicId: string;
-    initialDate: string;
+    intrevalMinutes: number;
   }) => {
-    const { publicId, initialDate } = input;
+    const { publicId, intrevalMinutes } = input;
     const { data } = await api.post<NuvidioInviteLinkResponse>(
       "/nuvidio/invite-link",
       {
         publicId,
-        initialDate,
+        intrevalMinutes,
       }
     );
 

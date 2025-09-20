@@ -103,6 +103,14 @@ const handleQueryStart = async () => {
     return;
   }
 
+  if (dayjs($single.value.scheduleDate).isBefore(dayjs())) {
+    dialog.value = false;
+    push.warning(
+      "Não é mais possível gerar um atendimento para este agendamento porque a data já passou!"
+    );
+    return;
+  }
+
   dialog.value = false;
   loading.value = true;
   try {
@@ -122,19 +130,18 @@ const handleQueryStart = async () => {
 
     const payloadCreateRoom = {
       publicId: $single.value.publicId!,
-      initialDate: dayjs()
-        .add(Number(sheduleModel.value.initialTime), "minutes")
-        .format("YYYY-MM-DD HH:mm:ss"),
+      intrevalMinutes: Number(sheduleModel.value.initialTime ?? "10"),
     };
 
     await nuvidioStore.createInviteTeleConference(payloadCreateRoom);
-
-    // Aqui vai abrir a tela para conversação de vídeo criada no back-end
 
     if ($nuvidioLinkInvite.value && $nuvidioLinkInvite.value.invite) {
       //direcionar o  médico para atender
       window.open("https://atendimento.nuvidio.com/login", "_blank");
     }
+
+    //voltar 10 min padrão
+    sheduleModel.value.initialTime = "10";
 
     emit("start-query");
   } catch (error) {
