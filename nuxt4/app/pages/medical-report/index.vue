@@ -7,7 +7,8 @@
 import dayjs from "dayjs";
 
 const consultationReport = usePatientConsultationReportStore();
-
+const auth = useAuthStore();
+const $currentUser = computed(() => auth.$currentUser);
 const initialDate = dayjs().startOf("month").format("YYYY-MM-DD");
 const finalDate = dayjs().endOf("month").format("YYYY-MM-DD");
 
@@ -19,6 +20,10 @@ onMounted(async () => {
     await consultationReport.index({
       initialDate,
       finalDate,
+      userId:
+        $currentUser.value?.profile?.type === "MEDICO"
+          ? $currentUser.value?.id
+          : undefined,
     });
   } finally {
     loading.value = false;

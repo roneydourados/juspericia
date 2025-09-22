@@ -211,7 +211,7 @@ const emit = defineEmits([
 const consultationReport = usePatientConsultationReportStore();
 const auth = useAuthStore();
 const { formatCPFOrCNPJ } = useUtils();
-const { mobile } = useDisplay();
+// const { mobile } = useDisplay();
 
 const $all = computed(() => consultationReport.$all ?? []);
 const $currentUser = computed(() => auth.$currentUser);

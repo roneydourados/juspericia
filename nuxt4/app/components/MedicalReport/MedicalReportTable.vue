@@ -534,7 +534,10 @@ const getReports = async () => {
       initialDate: filters.value.initialDate,
       finalDate: filters.value.finalDate,
       patientId: filters.value.patient?.id,
-      medicId: filters.value.medic?.id,
+      userId:
+        $currentUser.value?.profile?.type === "MEDICO"
+          ? $currentUser.value?.id
+          : filters.value.medic?.id,
       emitReport: filters.value.emitReport === "Sim",
     });
   } finally {
