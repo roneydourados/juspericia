@@ -6,7 +6,27 @@
     @dialog="handleClose"
     border-color="#c8e040"
   >
-    <FormCrud :on-submit="submitForm">
+    <div class="text-center font-weight-bold" style="font-size: 1rem">
+      Para solicitar antecipação de laudo, favor entre em contato com suporte.
+    </div>
+    <div class="text-center font-weight-bold" style="font-size: 1rem">
+      <strong> Whatsapp </strong>
+    </div>
+    <div class="pa-4 text-center" style="font-size: 1rem">
+      <v-icon icon="mdi-whatsapp" start color="success" />
+      <strong>
+        {{ formatTelephoneNumber($systemParameters?.suportWhatsapp ?? "") }}
+      </strong>
+    </div>
+    <div class="pa-4 text-center w-100">
+      <Button @click="sendSuport" variant="outlined" color="grey-darken-4">
+        <v-icon icon="mdi-chat-outline" start color="colorIcon" />
+        <span class="text-primary text-caption" style="font-weight: 700">
+          Iniciar conversa
+        </span>
+      </Button>
+    </div>
+    <!-- <FormCrud :on-submit="submitForm">
       <v-row dense class="text-primary">
         <v-col cols="12" class="d-flex justify-center">
           <span style="font-weight: 600">Antecipar em</span>
@@ -41,7 +61,7 @@
           </strong>
         </v-col>
       </v-row>
-    </FormCrud>
+    </FormCrud> -->
   </DialogForm>
 </template>
 
@@ -64,21 +84,25 @@ const props = defineProps({
 });
 
 const { mobile } = useDisplay();
-const { amountFormated } = useUtils();
-
+const { formatTelephoneNumber, whatsappUrl } = useUtils();
+const systemParameters = useSystemParametersStore();
+const auth = useAuthStore();
 const emit = defineEmits(["close"]);
 const show = defineModel<boolean>("show");
 const antecipationValue = ref(props.data.valueAntecipation24 ?? 0);
-const antecipationHours = ref(24);
+//const antecipationHours = ref(24);
 
-const submitForm = () => {
-  show.value = false;
-  emit("close", {
-    value: antecipationValue.value,
-    antecipationHours: antecipationHours.value,
-  });
-  antecipationValue.value = 0;
-};
+const $systemParameters = computed(() => systemParameters.$parameters);
+const $currentUser = computed(() => auth.$currentUser);
+
+// const submitForm = () => {
+//   show.value = false;
+//   emit("close", {
+//     value: antecipationValue.value,
+//     antecipationHours: antecipationHours.value,
+//   });
+//   antecipationValue.value = 0;
+// };
 
 const handleClose = () => {
   show.value = false;
@@ -86,13 +110,42 @@ const handleClose = () => {
   emit("close");
 };
 
-const handleGetAntecipationDays = (value: number) => {
-  if (value === props.data.valueAntecipation24) {
-    antecipationHours.value = 24;
-  } else if (value === props.data.valueAntecipation48) {
-    antecipationHours.value = 48;
-  } else if (value === props.data.valueAntecipation72) {
-    antecipationHours.value = 72;
+// const handleGetAntecipationDays = (value: number) => {
+//   if (value === props.data.valueAntecipation24) {
+//     antecipationHours.value = 24;
+//   } else if (value === props.data.valueAntecipation48) {
+//     antecipationHours.value = 48;
+//   } else if (value === props.data.valueAntecipation72) {
+//     antecipationHours.value = 72;
+//   }
+// };
+
+watch(
+  () => show.value,
+  async (newValue) => {
+    if (newValue) {
+      await systemParameters.index();
+    }
+  }
+);
+
+const sendSuport = () => {
+  try {
+    if ($systemParameters.value?.suportWhatsapp) {
+      const text = `Olá, preciso de suporte para efetuar antecipação de laudo referente a solcitação Nº: ${
+        props.data?.id ?? ""
+      }`;
+
+      const url = whatsappUrl(
+        $systemParameters.value.suportWhatsapp,
+        `${$currentUser.value?.name} \n\n solicita suporte referente a: \n\n ${text}`,
+        mobile.value
+      );
+
+      window.open(url, "_blank");
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 </script>
