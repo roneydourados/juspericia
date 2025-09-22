@@ -186,25 +186,25 @@
                 Iniciar teleatendimento
               </v-tooltip>
             </v-btn>
-            <v-btn
-              v-if="item.status === 'completed'"
-              color="purple-darken-2"
-              icon
-              variant="text"
-              @click="handleDownloadRecord(item)"
-            >
-              <v-icon icon="mdi-video-outline" size="20" color="purple" />
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Baixar gravação do atendimento
-              </v-tooltip>
-            </v-btn>
           </div>
           <v-btn
-            v-else-if="item.status === 'completed'"
+            v-if="item.status === 'completed'"
+            color="purple-darken-2"
+            icon
+            variant="text"
+            @click="handleDownloadRecord(item)"
+          >
+            <v-icon icon="mdi-video-outline" size="20" color="purple" />
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Baixar gravação do atendimento
+            </v-tooltip>
+          </v-btn>
+          <v-btn
+            v-if="item.status === 'completed'"
             color="primary"
             icon
             variant="text"
