@@ -71,7 +71,7 @@ export const useFileStore = defineStore("file", () => {
       },
     };
 
-    const resp = await api.get<ArrayBuffer>("files/download-merged", {
+    const resp = await api.get<ArrayBuffer>("/files/download-merged", {
       ...config,
       responseType: "arraybuffer",
     });

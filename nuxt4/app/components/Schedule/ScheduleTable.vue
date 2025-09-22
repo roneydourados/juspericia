@@ -186,6 +186,22 @@
                 Iniciar teleatendimento
               </v-tooltip>
             </v-btn>
+            <v-btn
+              v-if="item.status === 'completed'"
+              color="purple-darken-2"
+              icon
+              variant="text"
+              @click="handleDownloadRecord(item)"
+            >
+              <v-icon icon="mdi-video-outline" size="20" color="purple" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Baixar gravação do atendimento
+              </v-tooltip>
+            </v-btn>
           </div>
           <v-btn
             v-else-if="item.status === 'completed'"
@@ -232,6 +248,7 @@ const auth = useAuthStore();
 const scheduleStore = useScheduleStore();
 const solicitationStore = useSolicitationConsultationStore();
 const consultationReport = usePatientConsultationReportStore();
+const nuvidioStore = useNuvidioStore();
 
 //const { getInitials } = useUtils();
 const router = useRouter();
@@ -585,5 +602,41 @@ const stopAutoRefresh = () => {
     autoRefreshInterval.value = null;
   }
   stopCountdown(); // Also stop countdown when stopping auto refresh
+};
+
+const handleDownloadRecord = async (item: ScheduleProps) => {
+  if (!item.nuvidioInviteLink || !item.nuvidioInviteLink.nuvidioId) {
+    push.warning("Nenhum link de convite encontrado.");
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const { file, fileName } = await nuvidioStore.getRecordCall(
+      item.nuvidioInviteLink?.nuvidioId!
+    );
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = `${fileName}`;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadRecord ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

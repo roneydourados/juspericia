@@ -116,13 +116,12 @@
         <v-chip
           :color="getReportStatusColor(item.reportStatus).color"
           variant="flat"
-          @click="handleShowConsultationRoom(item)"
         >
           <v-icon :icon="getReportStatusColor(item.reportStatus).icon" start />
           <strong style="font-size: 0.7rem">
             {{
               item.reportStatus === "empty"
-                ? "Sem laudo (clique para consulta)"
+                ? "Sem laudo"
                 : item.reportStatus === "cancel"
                 ? "Cancelado"
                 : item.reportStatus === "sign-pending"
