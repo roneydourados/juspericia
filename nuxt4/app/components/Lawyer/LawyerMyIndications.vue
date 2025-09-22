@@ -157,6 +157,9 @@ import { useDisplay } from "vuetify";
 const { mobile } = useDisplay();
 
 const indicationStore = useUserIndicationStore();
+const auth = useAuthStore();
+
+const $currentUser = computed(() => auth.$currentUser);
 
 const $all = computed(() => indicationStore.$all);
 const $totals = computed(() => {
@@ -241,10 +244,15 @@ const handleDeleteIitem = async () => {
     try {
       await indicationStore.destroy(selected.value.publicId!);
 
+      const userId =
+        $currentUser.value?.profile?.type !== "ADMIN"
+          ? $currentUser.value?.id
+          : undefined;
+
       const initialDate = dayjs().startOf("month").format("YYYY-MM-DD");
       const finalDate = dayjs().endOf("month").format("YYYY-MM-DD");
 
-      await indicationStore.index({ initialDate, finalDate });
+      await indicationStore.index({ initialDate, finalDate, userId });
     } catch (error) {
       console.error(error);
     } finally {
@@ -270,8 +278,13 @@ const handleChangeMonth = async (monthIndex: number) => {
       "YYYY-MM-DD"
     );
 
+    const userId =
+      $currentUser.value?.profile?.type !== "ADMIN"
+        ? $currentUser.value?.id
+        : undefined;
+
     // Chame a função de índice com as datas formatadas
-    await indicationStore.index({ initialDate, finalDate });
+    await indicationStore.index({ initialDate, finalDate, userId });
   } finally {
     loading.value = false;
   }

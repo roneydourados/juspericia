@@ -7,8 +7,11 @@
 import dayjs from "dayjs";
 
 const indicationStore = useUserIndicationStore();
+const auth = useAuthStore();
 
 const loading = ref(false);
+
+const $currentUser = computed(() => auth.$currentUser);
 
 onMounted(async () => {
   loading.value = true;
@@ -16,7 +19,12 @@ onMounted(async () => {
     const initialDate = dayjs().startOf("month").format("YYYY-MM-DD");
     const finalDate = dayjs().endOf("month").format("YYYY-MM-DD");
 
-    await indicationStore.index({ initialDate, finalDate });
+    const userId =
+      $currentUser.value?.profile?.type !== "ADMIN"
+        ? $currentUser.value?.id
+        : undefined;
+
+    await indicationStore.index({ initialDate, finalDate, userId });
   } finally {
     loading.value = false;
   }

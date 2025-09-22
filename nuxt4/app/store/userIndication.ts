@@ -13,6 +13,7 @@ export const useUserIndicationStore = defineStore("userIndication", () => {
     initialDate: string;
     finalDate: string;
     status?: string;
+    userId?: number;
   }) => {
     const config = {
       params: input,
