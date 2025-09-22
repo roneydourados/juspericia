@@ -204,7 +204,10 @@
             </v-tooltip>
           </v-btn>
           <v-btn
-            v-if="item.status === 'completed'"
+            v-if="
+              item.status === 'completed' &&
+              !item.PatientConsultation?.PatientConsultationReport
+            "
             color="primary"
             icon
             variant="text"
@@ -227,6 +230,7 @@
         @service-details="handleServiceDetails($event)"
         @finish="handleFinalizeSchedule($event)"
         @report-details="handleReportDetails($event)"
+        @download-media="handleDownloadRecord($event)"
       />
     </v-cad-text>
   </v-card>

@@ -135,10 +135,10 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [x] - Criar vínculo entre departamento médico e atendente
 [x] - Gerar token para efetuar as requisições
 [x] - Usar o token até que seja expirado, caso contrário gerar um novo (tempo do token expiração 10 minuos)
-[] - Criar um convite para atendimento de chamada
+[x] - Criar um convite para atendimento de chamada
 [] - Enviar convite no whatsapp do advogado e do advogado
-[] - Possibilitar o admin criar um atendente na nuvidio atravéz de um botão na tela de médicos
-[] - Só liberar o médico para criar um atendimento se ele já possuir o atendente criado pelo adm na nuvidio
+[x] - Possibilitar o admin criar um atendente na nuvidio atravéz de um botão na tela de médicos
+[x] - Só liberar o médico para criar um atendimento se ele já possuir o atendente criado pelo adm na nuvidio
 
 Verificar este erro
  [AsaasPaymentService] Erro ao deletar pagamento: {
@@ -150,5 +150,6 @@ Verificar este erro
   ]
 }
 
-[] - Solicitação cancelada esta aparecendo como pendente
+[x] - Solicitação cancelada esta aparecendo como pendente
+[] - Webhook para enviar chamada finalizada do nuvidio
 ```

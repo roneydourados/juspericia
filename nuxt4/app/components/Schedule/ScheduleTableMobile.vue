@@ -149,7 +149,7 @@
           </v-btn>
         </div>
         <v-btn
-          v-else-if="item.status === 'completed'"
+          v-if="item.status === 'completed'"
           color="primary"
           icon
           variant="text"
@@ -163,6 +163,15 @@
           >
             Escrever laudo
           </v-tooltip>
+        </v-btn>
+        <v-btn
+          v-if="item.status === 'completed'"
+          color="purple-darken-2"
+          variant="text"
+          @click="$emit('download-media', item)"
+        >
+          <v-icon icon="mdi-video-outline" size="20" color="purple" />
+          <span class="text-caption"> Gravação </span>
         </v-btn>
       </div>
     </template>
@@ -179,6 +188,7 @@ const emit = defineEmits([
   "finish",
   "solicitation-details",
   "add",
+  "download-media",
 ]);
 const scheduleStore = useScheduleStore();
 const { formatCPFOrCNPJ, formatTelephoneNumber } = useUtils();
