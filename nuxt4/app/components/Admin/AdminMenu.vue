@@ -40,6 +40,11 @@ const itemsMenu = ref([
     text: "Usuários administradores. Gestão dos usuários com acesso total as funcionalidades do sistema.",
   },
   {
+    to: "/admin/sellers",
+    icon: "mdi-account-tie-outline",
+    text: "Usuários vendedores. Gestão dos usuários com acesso para vender consultas.",
+  },
+  {
     to: "/admin/queries",
     icon: "mdi-file-find-outline",
     text: "Consultas. Cadastro das consultas oferecidas pela plataforma",

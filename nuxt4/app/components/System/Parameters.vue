@@ -150,7 +150,6 @@
                 </div>
               </v-card-text>
             </v-card>
-
             <v-card rounded="xl" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">
@@ -173,7 +172,6 @@
                     />
                   </v-col>
                 </v-row>
-
                 <div>
                   Defina quantidade máxima em dias que o advogado pode solicitar
                   uma revisão de laudo e a quantiadade de vezes que isso será
@@ -189,6 +187,9 @@
                 <v-divider class="mt-2"></v-divider>
               </v-card-title>
               <v-card-text class="py-4">
+                <div class="mb-4">
+                  Definição de limites para os vouchers que serão gerados
+                </div>
                 <v-row dense>
                   <v-col cols="12" lg="6">
                     <CurrencyInput
@@ -215,17 +216,16 @@
                     />
                   </v-col>
                 </v-row>
-                <div>
-                  Definição de limites para os vouchers que serão gerados
-                </div>
                 <div class="w-100 mt-4">
+                  <div class="mb-4">
+                    Intervalo em minutos entre as consultas médicas
+                  </div>
                   <IntegerInput
                     label="Intervalo entre consultas (minutos)"
                     v-model="form.medicQueryInterval"
                     required
                   />
                 </div>
-                <div>Intervalo em minutos entre as consultas médicas</div>
               </v-card-text>
             </v-card>
           </v-col>
@@ -249,7 +249,6 @@
                 </div>
               </v-card-text>
             </v-card>
-
             <v-card rounded="xl" height="100%" variant="flat">
               <v-card-title>
                 <div class="font-weight-bold">%Saldo mínimo de crédito</div>

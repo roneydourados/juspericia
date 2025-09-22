@@ -139,4 +139,16 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 [] - Enviar convite no whatsapp do advogado e do advogado
 [] - Possibilitar o admin criar um atendente na nuvidio atravéz de um botão na tela de médicos
 [] - Só liberar o médico para criar um atendimento se ele já possuir o atendente criado pelo adm na nuvidio
+
+Verificar este erro
+ [AsaasPaymentService] Erro ao deletar pagamento: {
+  errors: [
+    {
+      code: 'invalid_action',
+      description: 'A cobrança [637382471] não pode ser removida: Só é possível remover cobranças pendentes ou vencidas.'
+    }
+  ]
+}
+
+[] - Solicitação cancelada esta aparecendo como pendente
 ```
