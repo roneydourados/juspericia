@@ -175,11 +175,11 @@ const headers = [
   { title: "Data", key: "dateCreated" },
   { title: "Descrição", key: "description" },
   { title: "Forma Pgto", key: "billingType" },
+  { title: "Valor Consulta", key: "packgeSaleValue" },
+  { title: "Qtde Consultas", key: "packgeQuantity" },
   { title: "Total", key: "total" },
   { title: "Status", key: "status" },
   { title: "Vendedor", key: "seller" },
-  { title: "Qtde Consultas", key: "packgeQuantity" },
-  { title: "Valor Consulta", key: "packgeSaleValue" },
   { title: "Ações", key: "actions", sortable: false },
 ];
 
@@ -235,6 +235,7 @@ const handleCancelItem = async () => {
 const getTransactionStatusDetails = (item: TransactionProps) => {
   switch (item.status) {
     case "CONFIRMED":
+    case "RECEIVED":
       return {
         label: "Confirmado",
         color: "green",
