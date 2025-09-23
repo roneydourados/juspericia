@@ -142,7 +142,7 @@
         :class="mobile ? 'w-100 px-2' : 'w-100 pa-4'"
         style="
           background-color: rgb(var(--v-theme-background)) !important;
-          max-width: 96.68rem;
+          max-width: 95%;
         "
       >
         <slot />
