@@ -31,21 +31,14 @@
       title="Detalhes documento"
       :show="showPdfDialog"
       @dialog="showPdfDialog = false"
+      fullscreen
     >
-      <v-card>
-        <v-card-title class="d-flex justify-space-between align-center">
-          <span>Visualizar PDF: {{ currentPdfName }}</span>
-        </v-card-title>
-        <v-card-text class="pa-0">
-          <iframe
-            v-if="pdfUrl"
-            :src="pdfUrl"
-            width="100%"
-            height="600px"
-            frameborder="0"
-          ></iframe>
-        </v-card-text>
-      </v-card>
+      <iframe
+        v-if="pdfUrl"
+        :src="pdfUrl"
+        style="height: 100dvh; width: 100%"
+        frameborder="0"
+      />
     </DialogForm>
     <Dialog
       title="Confirmação"

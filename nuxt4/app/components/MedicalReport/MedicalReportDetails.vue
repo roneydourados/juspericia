@@ -65,6 +65,7 @@
               download-visible
               @download="handleDownloadFile(item.publicId!, item.fileName!)"
               :delete-visible="false"
+              :view-visible="false"
             />
           </v-col>
         </v-row>
