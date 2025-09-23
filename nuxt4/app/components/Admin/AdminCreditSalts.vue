@@ -231,6 +231,7 @@ const getStatusName = (item: UserCreditSalt) => {
 
   switch (item.status) {
     case "CONFIRMED":
+    case "RECEIVED":
       // se estiver ativo, então verificar se não expirou
       return {
         text: dayjs(item.expireDate).isBefore(currentDate)
