@@ -39,6 +39,7 @@
           placeholder="CPF"
           required
           icon="mdi-card-account-details-outline"
+          @update:model-value="model.officeCpfCnpj = model.cpfCnpj"
         />
       </v-col>
       <v-col cols="12" lg="3">

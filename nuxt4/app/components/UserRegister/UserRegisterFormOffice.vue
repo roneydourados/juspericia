@@ -42,7 +42,7 @@
               value: 'J',
             },
           ]"
-          @update:model-value="model.officeCpfCnpj = ''"
+          @update:model-value="handleChangePersonType"
         />
       </v-col>
       <v-col cols="12" lg="8">
@@ -52,9 +52,9 @@
             label="CPF"
             placeholder="CPF"
             icon="mdi-card-account-details"
-            :required="model.officePersonType === 'F'"
+            :disabled="model.officePersonType === 'F'"
           />
-          <v-btn
+          <!-- <v-btn
             icon
             color="success"
             variant="flat"
@@ -70,7 +70,7 @@
             >
               Clique para usar mesmo CPF do usuário
             </v-tooltip>
-          </v-btn>
+          </v-btn> -->
         </div>
         <CNPJInput
           v-else
@@ -109,5 +109,13 @@ const model = defineModel<UserModelProps>({
 
 const submitForm = () => {
   emit("next");
+};
+
+const handleChangePersonType = () => {
+  if (model.value.officePersonType === "F") {
+    model.value.officeCpfCnpj = model.value.cpfCnpj;
+  } else {
+    model.value.officeCpfCnpj = "";
+  }
 };
 </script>
