@@ -14,6 +14,7 @@ export interface ScheduleProps {
   atendimentStart?: string;
   atendimentEnd?: string;
   nuvidioInviteLink?: NuvidioInviteLinkProps;
+  nuvidioCallId?: string;
 }
 
 export interface HourProps {

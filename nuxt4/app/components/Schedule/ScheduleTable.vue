@@ -609,15 +609,17 @@ const stopAutoRefresh = () => {
 };
 
 const handleDownloadRecord = async (item: ScheduleProps) => {
-  if (!item.nuvidioInviteLink || !item.nuvidioInviteLink.nuvidioId) {
-    push.warning("Nenhum link de convite encontrado.");
+  if (!item.nuvidioCallId) {
+    push.warning(
+      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada."
+    );
     return;
   }
 
   loading.value = true;
   try {
     const { file, fileName } = await nuvidioStore.getRecordCall(
-      item.nuvidioInviteLink?.nuvidioId!
+      item.nuvidioCallId
     );
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
