@@ -66,7 +66,7 @@
         <div class="d-flex align-center mt-6" style="gap: 0.5rem">
           <CurrencyInput
             v-model="item.comissionValue"
-            label="Valor comissão"
+            label="Valor"
             style="width: 6rem"
           />
           <SelectInput
@@ -85,7 +85,7 @@
         <div class="d-flex align-center mt-6" style="gap: 0.5rem">
           <CurrencyInput
             v-model="item.medicalSpecialtyComission"
-            label="Valor comissão"
+            label="Valor"
             style="width: 6rem"
           />
           <SelectInput
@@ -132,8 +132,8 @@
     @confirm="handleUpdateAllComissions"
     show-cancel
   >
-    <span
-      >Tem certeza que deseja atualizar o valor de todas as comissões ?
+    <span>
+      Tem certeza que deseja atualizar o valor de todas as comissões ?
     </span>
   </Dialog>
 </template>
@@ -149,11 +149,11 @@ const $all = computed(() => medicStore.$all);
 
 const consultationValueTypes = [
   {
-    label: "Valor em R$",
+    label: "R$ Val.",
     value: "V",
   },
   {
-    label: "% Porcentagem",
+    label: "% Perc.",
     value: "P",
   },
 ];
@@ -180,16 +180,19 @@ const headers = ref([
     key: "active",
   },
   {
-    title: "Comissão consulta",
-    key: "comissionValue",
-  },
-  {
     title: "Especialidade",
     key: "medicalSpecialty.medicalSpecialty",
+    width: "20%",
+  },
+  {
+    title: "Comissão clínico geral",
+    key: "comissionValue",
+    width: "25%",
   },
   {
     title: "Comissão especialidade",
     key: "medicalSpecialtyComission",
+    width: "25%",
   },
 ]);
 
