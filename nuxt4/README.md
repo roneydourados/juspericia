@@ -153,5 +153,11 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 }
 
 [x] - Solicitação cancelada esta aparecendo como pendente
-[] - Webhook para enviar chamada finalizada do nuvidio
+[x] - Webhook para enviar chamada finalizada do nuvidio
+
+[] - Criar parametrização no cadastro do médico para indicar se vai usar um assistente de laudo
+[] - Criar parametrização no cadastro do médico para indicar o valor a ser descontado do assitente na comissão do mesmo
+[] - Criar um cadastro de usuário do tipo assistente
+[] - Dentro do cadastro de usuário assistente, ter a possiblidade de vincular quais médicos o mesmo vai atender
+[] - O assiste deve ter uma visão de administrador de (Solicitações, Laudos médicos)
 ```
