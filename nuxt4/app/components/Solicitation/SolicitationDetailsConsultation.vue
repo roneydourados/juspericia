@@ -26,7 +26,14 @@
           title="Valor"
           :font-size="mobile ? '0.8' : '1'"
           :font-size-content="mobile ? '0.8' : '1'"
-          :content="amountFormated($single?.consultationValue ?? 0, true)"
+          :content="
+            amountFormated(
+              $single?.valueCredit
+                ? Number($single?.valueCredit ?? 0)
+                : Number($single?.consultationValue ?? 0),
+              true
+            )
+          "
         />
       </v-col>
       <v-col cols="12" lg="4">
@@ -44,7 +51,7 @@
           :font-size-content="mobile ? '0.8' : '1'"
           :content="
             amountFormated(
-              Number($single?.consultationValue ?? 0) +
+              Number($single?.valueCredit ?? 0) +
                 Number($single?.antecipationValue ?? 0),
               true
             )
