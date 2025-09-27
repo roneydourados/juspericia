@@ -45,6 +45,11 @@ const itemsMenu = ref([
     text: "Usuários vendedores. Gestão dos usuários com acesso para vender consultas.",
   },
   {
+    to: "/admin/atendents",
+    icon: "mdi-account-tie-voice-outline",
+    text: "Atendentes de médico. Gestão dos usuários com acesso para digitação de laudos médicos.",
+  },
+  {
     to: "/admin/queries",
     icon: "mdi-file-find-outline",
     text: "Consultas. Cadastro das consultas oferecidas pela plataforma",
