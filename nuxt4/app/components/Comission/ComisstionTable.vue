@@ -52,6 +52,7 @@
             :items="[
               { title: 'Vendedor', value: 'seller' },
               { title: 'Médico', value: 'medic' },
+              { title: 'Atendente', value: 'atendent' },
             ]"
             item-title="title"
             item-value="value"

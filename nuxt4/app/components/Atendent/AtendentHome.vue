@@ -12,7 +12,7 @@ const cardItems = [
     subtitle:
       "Começe por aqui, verifique os laudos médicos a serem confecionados.",
     icon: "mdi-file-document-edit-outline",
-    to: "/schedules",
+    to: "/atendent/reports",
   },
 ];
 </script>

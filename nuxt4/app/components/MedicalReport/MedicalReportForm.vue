@@ -143,6 +143,7 @@ const reportModelStore = useReportModelStore();
 const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
+const auth = useAuthStore();
 
 const showAlterContent = ref(false);
 
@@ -161,6 +162,7 @@ const attachments = ref<FileProps[]>([]);
 const $reportModel = computed(() => reportModelStore.$single);
 const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
+const $currentUser = computed(() => auth.$currentUser);
 
 watch(
   () => props.data,
@@ -181,36 +183,25 @@ const handleSubmit = async () => {
   }
 
   try {
+    let atendentId = undefined;
+
+    if ($currentUser.value?.profile?.type === "ATENDENTE") {
+      atendentId = $currentUser.value.id;
+    }
+
     if (props.data.reportPublicId) {
       await patientConsultationReport.update({
         content: model.value.content,
-        //patientConsultationId: props.data.id,
         publicId: props.data.reportPublicId,
+        atendentId,
       });
     } else {
       await patientConsultationReport.create({
         content: model.value.content,
         patientConsultationId: $consultationSolicitation.value.id,
+        atendentId,
       });
     }
-
-    // if ($consultationReport.value?.id && attachments.value.length > 0) {
-    //   const payload: FileProps[] = attachments.value
-    //     .filter(
-    //       (
-    //         attachment
-    //       ): attachment is Omit<FileProps, "publicId"> | FileProps => {
-    //         return !attachment.publicId;
-    //       }
-    //     )
-    //     .map((attachment) => ({
-    //       ...attachment,
-    //       ownerId: $consultationReport.value?.id,
-    //       fileCategory: "medical-report",
-    //     }));
-
-    //   await fileStore.uploadManyAws(payload);
-    // }
   } catch (error) {
     console.log("🚀 ~ handleSubmit laudo solicitação ~ error:", error);
   } finally {

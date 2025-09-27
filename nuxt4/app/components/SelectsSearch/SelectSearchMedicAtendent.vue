@@ -105,16 +105,16 @@ defineProps({
 
 const emit = defineEmits(["update:modelValue", "clear"]);
 
-const userMedicStore = useMedicStore();
+const userMedicStore = useAtendentMedicStore();
 const { formatCPFOrCNPJ } = useUtils();
 const search = ref("");
 const loadingSearch = ref(false);
 
-const $all = computed(() => userMedicStore.$all);
+const $all = computed(() => userMedicStore.$medics);
 
-watch(search, async () => {
-  await handleSearch();
-});
+// watch(search, async () => {
+//   await handleSearch();
+// });
 
 onMounted(async () => {
   await handleSearch();
@@ -135,7 +135,7 @@ const { value } = useField<Object>(fieldName, validationRules, {
 const handleSearch = useDebounceFn(async () => {
   loadingSearch.value = true;
   try {
-    await userMedicStore.index(search.value);
+    await userMedicStore.getMedics();
   } finally {
     loadingSearch.value = false;
   }

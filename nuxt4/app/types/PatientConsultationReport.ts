@@ -12,6 +12,7 @@ export interface PatientConsultationReportProps {
   PatientConsultation?: SolicitationConsultationProps;
   attachments?: FileProps[];
   justifies?: PatientConsultationsReportJustifyProps[];
+  atendentId?: number;
 }
 
 export interface PatientConsultationsReportJustifyProps {

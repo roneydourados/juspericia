@@ -45,7 +45,6 @@
       </v-col>
     </v-row>
     <DialogLoading :dialog="loading" />
-    <pre>{{ $medicsAtendent }}</pre>
   </div>
 </template>
 
