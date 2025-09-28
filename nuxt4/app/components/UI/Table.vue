@@ -163,7 +163,7 @@ const props = defineProps({
   },
   itemsPerPage: {
     type: Number,
-    default: 6,
+    default: 10,
   },
   title: {
     type: String,
