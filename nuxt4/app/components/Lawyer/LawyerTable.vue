@@ -20,7 +20,12 @@
       </span>
     </template>
     <template v-slot:item.phone="{ item }">
-      <span class="d-flex align-center">
+      <span
+        class="d-flex align-center"
+        v-ripple
+        @click="handleWhatsapp(item.phone)"
+        style="cursor: pointer"
+      >
         <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
         <span>
           {{ item.phone ? formatTelephoneNumber(item.phone) : "Não informado" }}
@@ -110,7 +115,7 @@
 import { useDisplay } from "vuetify";
 import { useDebounceFn } from "@vueuse/core";
 const userLawyerStore = useUserLawyerStore();
-const { formatTelephoneNumber } = useUtils();
+const { formatTelephoneNumber, whatsappUrl } = useUtils();
 const { mobile } = useDisplay();
 const $all = computed(() => userLawyerStore.$all);
 
@@ -177,5 +182,16 @@ const handleDeleteItem = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleWhatsapp = (phone: string) => {
+  if (!phone) return;
+
+  const url = whatsappUrl(
+    phone,
+    "Olá, aqui quem fala é seu gestor comercial da jusperícia. Podemos conversar ?",
+    mobile.value
+  );
+  window.open(url, "_blank");
 };
 </script>

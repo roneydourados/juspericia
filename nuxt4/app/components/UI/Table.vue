@@ -138,7 +138,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
 import { uuidv7 } from "uuidv7";
 import { useField } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
