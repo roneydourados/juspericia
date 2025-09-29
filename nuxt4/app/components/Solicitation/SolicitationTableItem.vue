@@ -161,7 +161,10 @@
             size="small"
             variant="outlined"
             @click="editItem(solicitation)"
-            :disabled="solicitation.status !== 'open'"
+            :disabled="
+              solicitation.status !== 'open' &&
+              $currentUser?.profile?.type === 'ADVOGADO'
+            "
           >
             <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
             <span class="text-caption text-darkText"> Editar</span>
