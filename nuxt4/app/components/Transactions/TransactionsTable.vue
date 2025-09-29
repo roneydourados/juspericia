@@ -103,17 +103,43 @@
       </v-chip>
     </template>
     <template #item.actions="{ item }">
-      <Button
-        v-if="item.status === 'PENDING'"
-        variant="outlined"
-        color="red"
-        size="small"
-        class="text-none"
-        @click="getTransactionCancel(item.publicId)"
-      >
-        <v-icon icon="mdi-cancel" start />
-        <span class="text-caption">Cancelar</span>
-      </Button>
+      <div class="d-flex align-center w-100" style="gap: 0.5rem">
+        <Button
+          variant="text"
+          color="red"
+          icon
+          class="text-none"
+          @click="getTransactionCancel(item.publicId)"
+          :disabled="item.status !== 'PENDING'"
+        >
+          <v-icon icon="mdi-cancel" />
+
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Cancelar transação
+          </v-tooltip>
+        </Button>
+        <Button
+          variant="text"
+          color="blue"
+          class="text-none"
+          icon
+          @click="getTransactionSetSeller(item)"
+          :disabled="item.sellerId"
+        >
+          <v-icon icon="mdi-account" />
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Vincular vendedor a transação
+          </v-tooltip>
+        </Button>
+      </div>
     </template>
   </Table>
   <DialogLoading :dialog="loading" />
@@ -130,6 +156,11 @@
   >
     <span>Conforma o cancelamento da transação ? </span>
   </Dialog>
+  <TransactionSetSeller
+    v-model:show="showSetSellerForm"
+    :public-id="transactionPublicId"
+    @close="getTransactions"
+  />
 </template>
 
 <script setup lang="ts">
@@ -151,7 +182,9 @@ const $total = computed(() =>
 const showCancelSale = ref(false);
 const loading = ref(false);
 const showFormTransaction = ref(false);
+const showSetSellerForm = ref(false);
 const publicIdCancel = ref("");
+const transactionPublicId = ref("");
 const statusSale = ref([
   {
     label: "Todos",
@@ -266,5 +299,10 @@ const getTransactionStatusDetails = (item: TransactionProps) => {
         icon: "mdi-help-circle",
       };
   }
+};
+
+const getTransactionSetSeller = (item: TransactionProps) => {
+  transactionPublicId.value = item.publicId;
+  showSetSellerForm.value = true;
 };
 </script>
