@@ -64,4 +64,5 @@ export interface SolicitationConsultationFilterProps {
   reportPurpose?: ReportPurposeProps;
   lawyer?: UserProps;
   publicId?: string;
+  medicIsNull?: boolean;
 }

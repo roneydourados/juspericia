@@ -298,6 +298,16 @@
             <span class="text-primary text-caption"> Dar Gorjeta </span>
           </Button>
         </div>
+        <Button
+          v-if="item.Schedule && item.Schedule?.[0]?.nuvidioInviteLink"
+          variant="text"
+          @click="handleCopy(item.Schedule?.[0]?.nuvidioInviteLink.link)"
+        >
+          <v-icon icon="mdi-content-copy" start color="colorIcon" />
+          <span class="font-weight-bold" style="font-size: 0.8rem">
+            Copiar link do agendamento
+          </span>
+        </Button>
       </div>
     </template>
   </CardBlur>
@@ -354,13 +364,6 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
-// const props = defineProps({
-//   solicitation: {
-//     type: Object as PropType<SolicitationConsultationProps>,
-//     default: () => {},
-//   },
-// });
 
 const emit = defineEmits(["edit", "refresh"]);
 const auth = useAuthStore();
@@ -926,5 +929,16 @@ const handleCancelAntecipation = async (publicId: string) => {
       ],
     },
   });
+};
+
+const handleCopy = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      push.success("Link copiado para a área de transferência");
+    })
+    .catch(() => {
+      push.warning("Erro ao copiar link tente novamente");
+    });
 };
 </script>

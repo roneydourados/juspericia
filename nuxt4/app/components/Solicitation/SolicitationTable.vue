@@ -55,7 +55,12 @@
           @update:model-value="getConsultations"
         />
       </v-col>
-      <v-col cols="12" lg="3" class="d-flex" style="gap: 0.5rem">
+      <v-col
+        cols="12"
+        lg="5"
+        class="d-flex align-center mt-n5"
+        style="gap: 0.5rem"
+      >
         <Button
           color="primary"
           size="small"
@@ -75,6 +80,13 @@
           <v-icon icon="mdi-filter-cog-outline" color="colorIcon" start />
           <span class="text-caption"> Mais filtros </span>
         </Button>
+        <v-switch
+          v-model="modelFilters.medicIsNull"
+          hide-details
+          label="Não vinculados"
+          color="green"
+          @update:model-value="getConsultations"
+        />
       </v-col>
     </v-row>
     <v-row v-if="!mobile">
@@ -212,6 +224,7 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
   patient: undefined as PatientProps | undefined,
   reportPurpose: undefined as ReportPurposeProps | undefined,
   lawyer: undefined as UserProps | undefined,
+  medicIsNull: false,
 });
 
 onMounted(async () => {
@@ -270,9 +283,12 @@ const getConsultations = async () => {
       benefitTypeId: modelFilters.value.benefitType?.id,
       patientId: modelFilters.value.patient?.id,
       reportPurposeId: modelFilters.value.reportPurpose?.id,
+      medicIsNull: modelFilters.value.medicIsNull,
     };
 
     await storeConsultation.index(filter);
+
+    setSolicitationsFilters(modelFilters.value);
   } finally {
     loading.value = false;
   }

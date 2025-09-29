@@ -106,7 +106,7 @@ const handleQueryStart = async () => {
   if (
     dayjs(
       `${$single.value.scheduleDate}T${$single.value.scheduleHour}`
-    ).isBefore(dayjs().subtract(60, "minute"))
+    ).isBefore(dayjs().subtract(180, "minute"))
   ) {
     dialog.value = false;
     push.warning(

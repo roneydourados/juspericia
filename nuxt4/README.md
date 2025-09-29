@@ -163,4 +163,9 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 [x] - Gerar comissão do atendente
 [x] - Estornar comissão do atendente
 [x] - Mostrar na gestão de comissão quando é atendente
+
+[] - Só mostrar clínico geral na listagem de especialidades se existir no horário
+[x] - possibilidade de vincular médico em uma solicitação já agendada
+[x] - Aparecer o link da consulta na solicitação agendada
+[x] - Filtrar solicitações não vinculadas a um médico
 ```

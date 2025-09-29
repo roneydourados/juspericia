@@ -334,6 +334,31 @@
             </div>
           </v-chip>
         </v-col>
+        <v-col
+          v-if="
+            solicitation.Schedule &&
+            solicitation.Schedule?.[0]?.nuvidioInviteLink
+          "
+          cols="12"
+          lg="4"
+        >
+          <div class="d-flex align-center mb-4" style="gap: 0.5rem">
+            <span>
+              Agendamento com médico criado, clique no botão para copiar link:
+            </span>
+          </div>
+          <Button
+            variant="outlined"
+            @click="
+              handleCopy(solicitation.Schedule?.[0]?.nuvidioInviteLink.link)
+            "
+          >
+            <v-icon icon="mdi-content-copy" start color="colorIcon" />
+            <span class="font-weight-bold" style="font-size: 0.8rem">
+              Copiar link do agendamento
+            </span>
+          </Button>
+        </v-col>
         <v-col cols="12">
           <v-divider />
         </v-col>
@@ -381,15 +406,15 @@
             </span>
           </Button>
         </v-col>
-        <v-col cols="12" lg="2">
-          <Button
-            v-if="
-              !solicitation.dateAntecipation &&
-              (solicitation.status === 'open' || solicitation.status === 'paid')
-            "
-            variant="text"
-            @click="getItemAntecipation(solicitation)"
-          >
+        <v-col
+          v-if="
+            !solicitation.dateAntecipation &&
+            (solicitation.status === 'open' || solicitation.status === 'paid')
+          "
+          cols="12"
+          lg="2"
+        >
+          <Button variant="text" @click="getItemAntecipation(solicitation)">
             <v-icon icon="mdi-calendar-clock-outline" start color="colorIcon" />
             <span
               class="text-primary"
@@ -398,11 +423,16 @@
               Solicitar antecipação
             </span>
           </Button>
+        </v-col>
+        <v-col
+          v-else-if="
+            solicitation.dateAntecipation &&
+            (solicitation.status === 'open' || solicitation.status === 'paid')
+          "
+          cols="12"
+          lg="2"
+        >
           <Button
-            v-else-if="
-              solicitation.dateAntecipation &&
-              (solicitation.status === 'open' || solicitation.status === 'paid')
-            "
             variant="text"
             @click="handleCancelAntecipation(solicitation.publicId!)"
           >
@@ -429,9 +459,8 @@
             </span>
           </Button>
         </v-col>
-        <v-col cols="12" lg="3">
+        <v-col v-if="solicitation.status === 'finished'" cols="12" lg="3">
           <Button
-            v-if="solicitation.status === 'finished'"
             variant="text"
             @click="showTipValue = true"
             :disabled="Number(solicitation.tipValue) > 0"
@@ -482,6 +511,12 @@
               <v-icon icon="mdi-check" end color="colorIcon" />
             </Button>
           </div>
+        </v-col>
+        <v-col v-if="$currentUser?.profile?.type === 'ADMIN'" cols="12" lg="3">
+          <Button variant="text" @click="showSetMedicSchedule = true">
+            <v-icon icon="mdi-stethoscope" start color="colorIcon" />
+            <span class="text-primary text-caption"> Vincular médico </span>
+          </Button>
         </v-col>
       </v-row>
     </template>
@@ -535,6 +570,11 @@
     @confirm-sale="handleSaleItemForAsaas"
     @cancel="handleCancel"
   />
+  <SolicitatiomSetScheduleMedic
+    v-model:show="showSetMedicSchedule"
+    :solicitation="solicitation"
+    @close="getSolicitations"
+  />
 </template>
 
 <script setup lang="ts">
@@ -564,8 +604,8 @@ const {
   solicitationStatusName,
   solicitationStatusColor,
 } = useUtils();
-const saltCredit = useUserCreditSaltStore();
-const router = useRouter();
+//const saltCredit = useUserCreditSaltStore();
+//const router = useRouter();
 const selected = ref<SolicitationConsultationProps>();
 const showTeleMedicine = ref(false);
 const showSaltCredit = ref(false);
@@ -578,6 +618,7 @@ const loading = ref(false);
 const showSale = ref(false);
 const showRecipt = ref(false);
 const showSolicitationSchedule = ref(false);
+const showSetMedicSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
 
 const modelPrececkout = ref({
@@ -771,6 +812,8 @@ const handleUpdateRate = async (rate: number) => {
 
 const getSolicitations = async () => {
   loading.value = true;
+  filters.value = getSolicitationsFilters();
+  console.log("🚀 ~ getSolicitations ~ filters.value:", filters.value);
   try {
     await storeConsultation.index(filters.value);
   } finally {
@@ -967,55 +1010,55 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
   }
 };
 
-const handleReceipt = (item: SolicitationConsultationProps) => {
-  // se cair aqiu é porque foi pago com saldo em créditos
-  if (!item.sale && item.status === "paid") {
-    showRecipt.value = true;
-    return;
-  }
+// const handleReceipt = (item: SolicitationConsultationProps) => {
+//   // se cair aqiu é porque foi pago com saldo em créditos
+//   if (!item.sale && item.status === "paid") {
+//     showRecipt.value = true;
+//     return;
+//   }
 
-  //se não tem venda então não fazer nada no asaas
-  if (!item.sale) {
-    push.warning("Pagamento não encontrado");
-    return;
-  }
+//   //se não tem venda então não fazer nada no asaas
+//   if (!item.sale) {
+//     push.warning("Pagamento não encontrado");
+//     return;
+//   }
 
-  const popupWidth = 800;
-  const popupHeight = 600;
-  const screenWidth = window.screen.width;
-  const screenHeight = window.screen.height;
+//   const popupWidth = 800;
+//   const popupHeight = 600;
+//   const screenWidth = window.screen.width;
+//   const screenHeight = window.screen.height;
 
-  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-  const popupTop = Math.round((screenHeight - popupHeight) / 2);
+//   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+//   const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-  window.open(
-    item.sale.transactionReceiptUrl,
-    "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-  );
-};
+//   window.open(
+//     item.sale.transactionReceiptUrl,
+//     "_blank",
+//     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+//   );
+// };
 
-const handleUseCreditSalt = async () => {
-  loading.value = true;
-  try {
-    const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
-    const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
-    await saltCredit.index({
-      userId: $currentUser.value?.id!,
-      initialDate,
-      finalDate,
-      status: "CONFIRMED",
-      isSalt: true,
-    });
-    showSaltCredit.value = true;
-  } finally {
-    loading.value = false;
-  }
-};
+// const handleUseCreditSalt = async () => {
+//   loading.value = true;
+//   try {
+//     const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
+//     const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
+//     await saltCredit.index({
+//       userId: $currentUser.value?.id!,
+//       initialDate,
+//       finalDate,
+//       status: "CONFIRMED",
+//       isSalt: true,
+//     });
+//     showSaltCredit.value = true;
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
-const handleQuery = async (item: SolicitationConsultationProps) => {
-  await router.push(`/teleconference/${item.publicId}`);
-};
+// const handleQuery = async (item: SolicitationConsultationProps) => {
+//   await router.push(`/teleconference/${item.publicId}`);
+// };
 
 const handleDownloadFile = async (publicId: string) => {
   loading.value = true;
@@ -1105,5 +1148,16 @@ const handleDownloadSignedFile = async (
   } finally {
     loading.value = false;
   }
+};
+
+const handleCopy = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      push.success("Link copiado para a área de transferência");
+    })
+    .catch(() => {
+      push.warning("Erro ao copiar link tente novamente");
+    });
 };
 </script>
