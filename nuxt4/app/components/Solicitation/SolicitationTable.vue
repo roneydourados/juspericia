@@ -249,23 +249,24 @@ const getQuantity = (status: string) => {
 const getConsultations = async () => {
   loading.value = true;
 
-  let userId: number | undefined;
+  //let userId: number | undefined;
 
   // se for admin, gerente ou vendedor, busca pelo advogado selecionado
-  if (
-    $currentUser.value?.profile?.type === "ADMIN" ||
-    $currentUser.value?.profile?.type === "GERENTE" ||
-    $currentUser.value?.profile?.type === "VENDEDOR"
-  ) {
-    userId = modelFilters.value.lawyer?.id;
-  } else {
-    userId = $currentUser.value?.id;
-  }
+  // if (
+  //   $currentUser.value?.profile?.type === "ADMIN" ||
+  //   $currentUser.value?.profile?.type === "GERENTE" ||
+  //   $currentUser.value?.profile?.type === "VENDEDOR"
+  // ) {
+  //   userId = modelFilters.value.lawyer?.id;
+  // } else {
+  //   userId = $currentUser.value?.id;
+  // }
+  //tratamento acima movido para api
 
   try {
     const filter = {
       ...modelFilters.value,
-      userId,
+      userId: modelFilters.value.lawyer?.id,
       benefitTypeId: modelFilters.value.benefitType?.id,
       patientId: modelFilters.value.patient?.id,
       reportPurposeId: modelFilters.value.reportPurpose?.id,

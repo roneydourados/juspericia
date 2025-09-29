@@ -8,10 +8,10 @@ import dayjs from "dayjs";
 
 const { setSolicitationsFilters } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
-const authStore = useAuthStore();
+//const authStore = useAuthStore();
 const systemParameters = useSystemParametersStore();
 const loading = ref(false);
-const $currentUser = computed(() => authStore.$currentUser);
+//const $currentUser = computed(() => authStore.$currentUser);
 
 onMounted(async () => {
   const modelFilters = ref<SolicitationConsultationFilterProps>({
@@ -21,12 +21,12 @@ onMounted(async () => {
     benefitType: undefined as BenefitTypeProps | undefined,
     patient: undefined as PatientProps | undefined,
     reportPurpose: undefined as ReportPurposeProps | undefined,
-    userId:
-      $currentUser.value?.profile?.type === "ADMIN" ||
-      $currentUser.value?.profile?.type === "GERENTE" ||
-      $currentUser.value?.profile?.type === "VENDEDOR"
-        ? undefined
-        : $currentUser.value?.id,
+    // userId:
+    //   $currentUser.value?.profile?.type === "ADMIN" ||
+    //   $currentUser.value?.profile?.type === "GERENTE" ||
+    //   $currentUser.value?.profile?.type === "VENDEDOR"
+    //     ? undefined
+    //     : $currentUser.value?.id,
   });
 
   loading.value = true;
