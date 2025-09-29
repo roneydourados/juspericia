@@ -197,48 +197,19 @@ const generateAvailableTimeSlots = async () => {
   // Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado) - padrão JavaScript
   const dayOfWeek = dayjs(model.value.scheduleDate).day();
 
-  // Debug logs detalhados
-  console.log("=== DEBUG GENERATEAVAILABLETIMESLOTS ===");
-  console.log("Data selecionada:", model.value.scheduleDate);
-  console.log("Dia da semana (0-6):", dayOfWeek);
-  console.log(
-    "Especialidade da solicitação (ID):",
-    props.solicitation.medicalSpecialtyId
-  );
-  console.log(
-    "Especialidade da solicitação (string):",
-    props.solicitation.medicalSpecialtyId?.toString()
-  );
-  console.log(
-    "Total de dados disponíveis:",
-    $doctorScheduleAvailableDays.value?.length || 0
-  );
-  console.log(
-    "Dados completos ($doctorScheduleAvailableDays):",
-    JSON.stringify($doctorScheduleAvailableDays.value, null, 2)
-  );
+  // // Verifica se há dados para este dia da semana
+  // const schedulesForThisDay =
+  //   $doctorScheduleAvailableDays.value?.filter(
+  //     (schedule: any) => schedule.dayOfWeek === dayOfWeek
+  //   ) ?? [];
 
-  // Verifica se há dados para este dia da semana
-  const schedulesForThisDay =
-    $doctorScheduleAvailableDays.value?.filter(
-      (schedule: any) => schedule.dayOfWeek === dayOfWeek
-    ) ?? [];
-  console.log(
-    `Horários disponíveis para o dia ${dayOfWeek}:`,
-    schedulesForThisDay.length
-  );
-
-  // Verifica se há dados para esta especialidade
-  const schedulesForThisSpecialty =
-    $doctorScheduleAvailableDays.value?.filter(
-      (schedule: any) =>
-        schedule.specialtyId ===
-        props.solicitation.medicalSpecialtyId?.toString()
-    ) ?? [];
-  console.log(
-    `Horários disponíveis para especialidade ${props.solicitation.medicalSpecialtyId}:`,
-    schedulesForThisSpecialty.length
-  );
+  // // Verifica se há dados para esta especialidade
+  // const schedulesForThisSpecialty =
+  //   $doctorScheduleAvailableDays.value?.filter(
+  //     (schedule: any) =>
+  //       schedule.specialtyId ===
+  //       props.solicitation.medicalSpecialtyId?.toString()
+  //   ) ?? [];
 
   // Filtra os horários disponíveis para o dia da semana selecionado e especialidade da solicitação
   const availableSchedules =
@@ -247,17 +218,8 @@ const generateAvailableTimeSlots = async () => {
       const specialtyMatch =
         schedule.specialtyId ===
         props.solicitation.medicalSpecialtyId?.toString();
-      console.log(
-        `Schedule ID ${schedule.id}: dayMatch=${dayMatch}, specialtyMatch=${specialtyMatch}`,
-        schedule
-      );
       return dayMatch && specialtyMatch;
     }) ?? [];
-
-  console.log("=== RESULTADO DO FILTRO ===");
-  console.log("Horários filtrados encontrados:", availableSchedules.length);
-  console.log("Detalhes dos horários filtrados:", availableSchedules);
-  console.log("================================");
 
   // Para cada horário disponível, gera os slots de tempo
   for (const schedule of availableSchedules) {
@@ -332,94 +294,6 @@ const generateAvailableTimeSlots = async () => {
     (a.scheduleHour ?? "").localeCompare(b.scheduleHour ?? "")
   );
 };
-
-// Mantém o método antigo como fallback (comentado)
-// const timeSlots = async () => {
-//   hours.value = [];
-//   hour.value = {};
-
-//   const start = new Date(`1970-01-01T${$systemParameters.value?.hourInitial}`);
-//   const end = new Date(`1970-01-01T${$systemParameters.value?.hourFinal}`);
-
-//   const dayOfWeek = dayjs(model.value.scheduleDate)
-//     .format("ddd")
-//     .toLowerCase()
-//     .slice(0, 3);
-
-//   // Filtra médicos que atendem nesse dia da semana
-//   const availableMedics =
-//     $schedules.value?.medics.filter((medic: any) => {
-//       switch (dayOfWeek) {
-//         case "mon":
-//           return medic.seg;
-//         case "tue":
-//           return medic.ter;
-//         case "wed":
-//           return medic.qua;
-//         case "thu":
-//           return medic.qui;
-//         case "fri":
-//           return medic.sex;
-//         case "sat":
-//           return medic.sab;
-//         case "sun":
-//           return medic.dom;
-//         default:
-//           return false;
-//       }
-//     }) ?? [];
-
-//   while (start <= end) {
-//     const hourStr = start.toLocaleTimeString([], {
-//       hour: "2-digit",
-//       minute: "2-digit",
-//     });
-
-//     // Conta quantos agendamentos existem nesse horário
-//     const schedulesAtThisHour =
-//       $schedules.value?.schedules.filter(
-//         (s) =>
-//           s.scheduleDate === model.value.scheduleDate &&
-//           s.scheduleHour === hourStr
-//       ) ?? [];
-
-//     // Está selecionado se já tem um agendamento para essa solicitação
-//     const isSelected = schedulesAtThisHour.some(
-//       (s) => s.patientConsultationId === props.solicitation.id
-//     );
-
-//     const filter = schedulesAtThisHour.find(
-//       (s) => s.patientConsultationId === props.solicitation.id
-//     );
-
-//     const solicitationId = isSelected ? filter?.id : props.solicitation.id;
-
-//     // Quantos médicos estão disponíveis nesse horário
-//     const availableAtThisHour = availableMedics.filter((medic: UserProps) => {
-//       const start = medic.medicHourStart!;
-//       const end = medic.medicHourEnd!;
-
-//       // Verifica se hourStr está entre start e end
-//       return start <= hourStr && hourStr <= end;
-//     });
-
-//     // ❌ Se já tiver agendamentos ≥ médicos disponíveis, bloqueia
-//     const isDisabled = schedulesAtThisHour.length >= availableAtThisHour.length;
-
-//     hours.value.push({
-//       scheduleHour: hourStr,
-//       patientConsultationId: solicitationId,
-//       scheduleDate: model.value.scheduleDate,
-//       isSelected,
-//       isDisabled,
-//     });
-
-//     start.setMinutes(
-//       start.getMinutes() +
-//         Number($systemParameters.value?.medicQueryInterval ?? 15)
-//     );
-//   }
-// };
 
 const submitForm = async () => {
   try {
