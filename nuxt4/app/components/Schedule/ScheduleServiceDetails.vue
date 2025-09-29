@@ -103,7 +103,11 @@ const handleQueryStart = async () => {
     return;
   }
 
-  if (dayjs($single.value.scheduleDate).isBefore(dayjs())) {
+  if (
+    dayjs(
+      `${$single.value.scheduleDate}T${$single.value.scheduleHour}`
+    ).isBefore(dayjs().subtract(30, "minute"))
+  ) {
     dialog.value = false;
     push.warning(
       "Não é mais possível gerar um atendimento para este agendamento porque a data já passou!"
