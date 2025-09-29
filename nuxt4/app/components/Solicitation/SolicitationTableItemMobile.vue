@@ -130,7 +130,7 @@
             <v-icon icon="mdi-credit-card-outline" color="primary" />
             <span class="text-caption text-primary"> Pagar </span>
           </Button>
-          <Button
+          <!-- <Button
             v-if="
               item.status === 'open' ||
               (item.status === 'payment_pending' &&
@@ -144,8 +144,8 @@
           >
             <v-icon icon="mdi-currency-usd" color="primary" start />
             <span class="text-caption text-primary"> Utilizar Saldo </span>
-          </Button>
-          <Button
+          </Button> -->
+          <!-- <Button
             v-if="item.status === 'scheduled' && item.isTelemedicine"
             color="grey"
             size="small"
@@ -154,7 +154,7 @@
           >
             <v-icon icon="mdi-video-outline" color="colorIcon" />
             <span class="text-caption text-primary"> Consulta </span>
-          </Button>
+          </Button> -->
           <Button
             v-if="item.status === 'paid'"
             color="grey"

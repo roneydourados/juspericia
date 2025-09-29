@@ -105,7 +105,7 @@
             <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
             <span class="text-caption text-primary"> Recibo </span>
           </Button> -->
-          <Button
+          <!-- <Button
             v-if="
               solicitation.status === 'scheduled' && solicitation.isTelemedicine
             "
@@ -116,7 +116,7 @@
           >
             <v-icon icon="mdi-video-outline" start color="colorIcon" />
             <span class="text-caption text-primary"> Consulta </span>
-          </Button>
+          </Button> -->
           <Button
             v-if="solicitation.status === 'paid'"
             color="grey"
