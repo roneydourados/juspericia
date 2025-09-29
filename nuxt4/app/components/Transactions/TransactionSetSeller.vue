@@ -1,6 +1,6 @@
 <template>
   <DialogForm
-    title="Nova transação"
+    title="Vincular vendedor a transação"
     :show="show"
     @dialog="handleClose"
     :width="mobile ? '100%' : '40%'"
