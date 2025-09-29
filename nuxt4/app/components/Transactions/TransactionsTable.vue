@@ -124,11 +124,11 @@
         </Button>
         <Button
           variant="text"
-          color="blue"
+          color="primary"
           class="text-none"
           icon
           @click="getTransactionSetSeller(item)"
-          :disabled="item.sellerId"
+          :disabled="item.sellerId && $currentUser?.profile?.type !== 'ADMIN'"
         >
           <v-icon icon="mdi-account" />
           <v-tooltip
@@ -167,10 +167,10 @@
 import dayjs from "dayjs";
 
 const transactionsStore = useTransactionsStore();
-//const auth = useAuthStore();
+const auth = useAuthStore();
 const { amountFormated, formatDate } = useUtils();
 
-//const $currentUser = computed(() => auth.$currentUser);
+const $currentUser = computed(() => auth.$currentUser);
 const $transactions = computed(() => transactionsStore.$transactions);
 const $total = computed(() =>
   transactionsStore.$transactions.reduce(

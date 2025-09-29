@@ -39,12 +39,6 @@ const model = ref({
   seller: undefined as UserProps | undefined,
 });
 
-const handleClose = () => {
-  show.value = false;
-  model.value.seller = undefined;
-  emit("close");
-};
-
 const handleConfirm = async () => {
   show.value = false;
   try {
@@ -61,11 +55,18 @@ const handleConfirm = async () => {
       sellerId: model.value.seller?.id ?? 0,
     });
 
-    push.success("Seller set successfully");
-
     handleClose();
+    push.success("Seller set successfully");
   } catch (error) {
     console.log(error);
   }
+};
+
+const handleClose = () => {
+  show.value = false;
+  model.value = {
+    seller: undefined,
+  };
+  emit("close");
 };
 </script>
