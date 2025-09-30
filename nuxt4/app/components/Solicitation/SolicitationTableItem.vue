@@ -360,11 +360,12 @@
           </div>
           <div
             v-if="
-              $currentUser?.profile?.type === 'ADMIN' ||
-              $currentUser?.profile?.type === 'VENDEDOR' ||
-              $currentUser?.profile?.type === 'FINANCEIRO' ||
-              $currentUser?.profile?.type === 'ATENDENTE' ||
-              $currentUser?.profile?.type === 'GERENTE'
+              ($currentUser?.profile?.type === 'ADMIN' ||
+                $currentUser?.profile?.type === 'VENDEDOR' ||
+                $currentUser?.profile?.type === 'FINANCEIRO' ||
+                $currentUser?.profile?.type === 'ATENDENTE' ||
+                $currentUser?.profile?.type === 'GERENTE') &&
+              solicitation.medicId
             "
             class="d-flex align-center"
             style="gap: 0.5rem"
@@ -527,9 +528,15 @@
           </div>
         </v-col>
         <v-col v-if="$currentUser?.profile?.type === 'ADMIN'" cols="12" lg="3">
-          <Button variant="text" @click="showSetMedicSchedule = true">
-            <v-icon icon="mdi-stethoscope" start color="colorIcon" />
-            <span class="text-primary text-caption"> Vincular médico </span>
+          <Button variant="text" @click="hadleSetRemoveMedic(solicitation)">
+            <v-icon
+              :icon="solicitation?.medicId ? 'mdi-close' : 'mdi-stethoscope'"
+              start
+              :color="solicitation?.medicId ? 'red' : 'colorIcon'"
+            />
+            <span class="text-primary text-caption">
+              {{ solicitation?.medicId ? "Desvincular" : "Vincular" }} médico
+            </span>
           </Button>
         </v-col>
       </v-row>
@@ -606,6 +613,7 @@ const auth = useAuthStore();
 const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const consultationReport = usePatientConsultationReportStore();
+const scheduleStore = useScheduleStore();
 const rounter = useRouter();
 const fileStore = useFileStore();
 const zapSign = useZapsignStore();
@@ -1173,5 +1181,65 @@ const handleCopy = (text: string) => {
     .catch(() => {
       push.warning("Erro ao copiar link tente novamente");
     });
+};
+
+const hadleSetRemoveMedic = async (
+  solicitation: SolicitationConsultationProps
+) => {
+  if (solicitation.medicId) {
+    push.info({
+      title: "Remover vínculo com médico",
+      message: "Confirma remover o vínculo com o médico?",
+      duration: Infinity, // Não fecha automaticamente
+      props: {
+        isModal: true, // Propriedade customizada para identificar como modal
+        preventOverlayClose: true, // Impede fechar clicando no overlay
+        preventEscapeClose: false, // Permite fechar com ESC
+        actions: [
+          {
+            label: "Remover",
+            variant: "primary",
+            icon: "mdi-file-rotate-right-outline",
+            iconColor: "colorIcon",
+            handler: async () => {
+              loading.value = true;
+              try {
+                await storeConsultation.update({
+                  publicId: solicitation.publicId,
+                  isTelemedicine: false,
+                  medicId: null,
+                  //dateClose: dayjs().format("YYYY-MM-DD"), // vai ficar como data da consulta até que seja finalizada pela tela de laudos ao clicar em digitar laudo
+                });
+
+                if (!solicitation?.Schedule?.[0]?.publicId) {
+                  return;
+                }
+                //atualizar a agenda para start
+                await scheduleStore.clearMedicSchedule(
+                  solicitation.Schedule?.[0]?.publicId!
+                );
+
+                await getSolicitations();
+                push.success("Médico desvinculado com sucesso");
+              } catch (error) {
+                console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+              } finally {
+                loading.value = false;
+              }
+            },
+          },
+          {
+            label: "Cancelar",
+            variant: "secondary",
+            icon: "mdi-close",
+            iconColor: "red",
+            handler: () => {},
+          },
+        ],
+      },
+    });
+  } else {
+    showSetMedicSchedule.value = true;
+  }
 };
 </script>

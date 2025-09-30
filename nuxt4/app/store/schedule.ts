@@ -98,6 +98,10 @@ export const useScheduleStore = defineStore("schedule", () => {
     await api.put("/schedule/start", payload);
   };
 
+  const clearMedicSchedule = async (publicId: string) => {
+    await api.put(`/schedule/clear-medic/${publicId}`);
+  };
+
   const finalizeSchedule = async (consultationId: number) => {
     await api.put(`/schedule/finalize/${consultationId}`);
   };
@@ -119,5 +123,6 @@ export const useScheduleStore = defineStore("schedule", () => {
     startSchedule,
     finalizeSchedule,
     cancelSchedule,
+    clearMedicSchedule,
   };
 });

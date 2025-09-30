@@ -11,7 +11,7 @@ export interface SolicitationConsultationProps {
   id?: number;
   patientId?: number;
   userId?: number;
-  medicId?: number;
+  medicId?: number | null;
   consultationId?: number;
   content?: string;
   benefitTypeId?: number;
