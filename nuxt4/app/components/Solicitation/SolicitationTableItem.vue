@@ -340,24 +340,38 @@
             solicitation.Schedule?.[0]?.nuvidioInviteLink
           "
           cols="12"
-          lg="4"
         >
-          <div class="d-flex align-center mb-4" style="gap: 0.5rem">
+          <div class="d-flex align-center w-100" style="gap: 0.5rem">
             <span>
               Agendamento com médico criado, clique no botão para copiar link:
             </span>
+
+            <Button
+              variant="text"
+              @click="
+                handleCopy(solicitation.Schedule?.[0]?.nuvidioInviteLink.link)
+              "
+            >
+              <v-icon icon="mdi-content-copy" start color="colorIcon" />
+              <span class="font-weight-bold" style="font-size: 0.7rem">
+                Copiar link do agendamento
+              </span>
+            </Button>
           </div>
-          <Button
-            variant="outlined"
-            @click="
-              handleCopy(solicitation.Schedule?.[0]?.nuvidioInviteLink.link)
+          <div
+            v-if="
+              $currentUser?.profile?.type === 'ADMIN' ||
+              $currentUser?.profile?.type === 'VENDEDOR' ||
+              $currentUser?.profile?.type === 'FINANCEIRO' ||
+              $currentUser?.profile?.type === 'ATENDENTE' ||
+              $currentUser?.profile?.type === 'GERENTE'
             "
+            class="d-flex align-center"
+            style="gap: 0.5rem"
           >
-            <v-icon icon="mdi-content-copy" start color="colorIcon" />
-            <span class="font-weight-bold" style="font-size: 0.8rem">
-              Copiar link do agendamento
-            </span>
-          </Button>
+            <span>Médico:</span>
+            <strong>{{ solicitation.Medic?.name }}</strong>
+          </div>
         </v-col>
         <v-col cols="12">
           <v-divider />
