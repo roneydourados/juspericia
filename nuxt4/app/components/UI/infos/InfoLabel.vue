@@ -5,7 +5,9 @@
       <v-icon v-if="icon" :color="colorIcon" class="mr-2">{{ icon }}</v-icon>
 
       <span
-        :class="!mdAndUp ? 'text-truncate' : ''"
+        :class="
+          !mdAndUp ? 'font-weight-bold text-truncate' : 'font-weight-bold'
+        "
         :style="`font-size: ${fontSize}rem`"
       >
         {{ title }}
@@ -14,7 +16,7 @@
       <slot name="icon-title-append" />
     </div>
     <div class="d-flex mt-1" style="font-size: 14px">
-      <p class="font-weight-bold" :style="`font-size: ${fontSizeContent}rem`">
+      <p :style="`font-size: ${fontSizeContent}rem`">
         {{ content }}
       </p>
     </div>

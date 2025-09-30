@@ -70,25 +70,110 @@
         }}</strong>
       </div>
     </template>
-    <template v-slot:item.total="{ item }">
-      <span class="font-weight-bold">
-        {{ amountFormated(item.total ?? 0, false) }}
-      </span>
-    </template>
-    <template v-slot:item.packgeSaleValue="{ item }">
-      <span class="font-weight-bold">
-        {{
-          amountFormated(
-            Number(item.packgeSaleValue ?? 0) / (item.packgeQuantity ?? 1),
-            true
-          )
-        }}
-      </span>
-    </template>
-    <template v-slot:item.dateCreated="{ item }">
-      <span class="font-weight-bold">
-        {{ formatDate(item.dateCreated) }}
-      </span>
+    <template v-slot:item.client="{ item }">
+      <v-expansion-panels flat>
+        <v-expansion-panel>
+          <v-expansion-panel-title>
+            <v-row dense>
+              <v-col cols="12" lg="4">
+                <span class="font-weight-bold text-primary">{{
+                  item.client
+                }}</span>
+              </v-col>
+              <v-col cols="12" lg="2">
+                <span
+                  class="text-caption text-medium-emphasis"
+                  style="width: 7rem"
+                >
+                  Data: {{ formatDate(item.dateCreated) }}
+                </span>
+              </v-col>
+              <v-col cols="12" lg="3">
+                <span
+                  class="text-caption text-medium-emphasis"
+                  style="width: 7rem"
+                >
+                  Vend.:
+                  {{ item.seller || "-" }}
+                </span>
+              </v-col>
+              <v-col
+                cols="12"
+                lg="3"
+                class="d-flex align-center justify-space-between"
+              >
+                <span class="font-weight-bold text-primary">
+                  {{ amountFormated(item.total ?? 0, true) }}
+                </span>
+                <v-chip
+                  density="compact"
+                  variant="flat"
+                  :color="getTransactionStatusDetails(item).color"
+                  style="width: 7rem"
+                  class="mr-2"
+                >
+                  <template #prepend>
+                    <v-icon
+                      :icon="getTransactionStatusDetails(item).icon"
+                      start
+                      size="16"
+                    />
+                  </template>
+                  <span class="text-caption">
+                    {{ getTransactionStatusDetails(item).label }}
+                  </span>
+                </v-chip>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <v-row dense>
+              <v-col cols="12" md="4">
+                <div class="font-weight-bold">Data:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ formatDate(item.dateCreated) }}
+                </div>
+              </v-col>
+              <v-col cols="12" md="4">
+                <div class="font-weight-bold">Forma de Pagamento:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ item.billingType }}
+                </div>
+              </v-col>
+              <v-col cols="12" md="4">
+                <div class="font-weight-bold">Descrição:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ item.description }}
+                </div>
+              </v-col>
+              <v-col cols="12" md="4">
+                <div class="font-weight-bold">Valor por Consulta:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{
+                    amountFormated(
+                      Number(item.packgeSaleValue ?? 0) /
+                        (item.packgeQuantity ?? 1),
+                      true
+                    )
+                  }}
+                </div>
+              </v-col>
+              <v-col cols="12" md="4">
+                <div class="font-weight-bold">Qtde Consultas:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ item.packgeQuantity }}
+                </div>
+              </v-col>
+              <v-col cols="12" md="4">
+                <div class="font-weight-bold">Vendedor:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ item.seller || "-" }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </template>
     <template v-slot:item.status="{ item }">
       <v-chip
@@ -205,14 +290,14 @@ const statusSale = ref([
 ]);
 const headers = [
   { title: "Cliente", key: "client" },
-  { title: "Data", key: "dateCreated" },
-  { title: "Descrição", key: "description" },
-  { title: "Forma Pgto", key: "billingType" },
-  { title: "Valor Consulta", key: "packgeSaleValue" },
-  { title: "Qtde Consultas", key: "packgeQuantity" },
-  { title: "Total", key: "total" },
-  { title: "Status", key: "status" },
-  { title: "Vendedor", key: "seller" },
+  // { title: "Data", key: "dateCreated" },
+  // { title: "Descrição", key: "description" },
+  // { title: "Forma Pgto", key: "billingType" },
+  // { title: "Valor Consulta", key: "packgeSaleValue" },
+  // { title: "Qtde Consultas", key: "packgeQuantity" },
+  // { title: "Total", key: "total" },
+  // { title: "Status", key: "status" },
+  // { title: "Vendedor", key: "seller" },
   { title: "Ações", key: "actions", sortable: false },
 ];
 
@@ -270,7 +355,7 @@ const getTransactionStatusDetails = (item: TransactionProps) => {
     case "CONFIRMED":
     case "RECEIVED":
       return {
-        label: "Confirmado",
+        label: "Pago",
         color: "green",
         icon: "mdi-check-circle",
       };

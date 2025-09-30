@@ -11,7 +11,7 @@
             clearable
           />
         </v-col>
-        <v-col cols="12" lg="1">
+        <v-col cols="12" lg="2">
           <SelectInput
             v-model="filters.emitReport"
             label="Laudo Emitido"

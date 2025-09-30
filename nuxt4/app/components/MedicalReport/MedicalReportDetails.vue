@@ -5,7 +5,6 @@
     @dialog="dialog = false"
     ok-text="OK"
     :width="mobile ? '100%' : '60%'"
-    border-color="#002c9b"
     fullscreen
   >
     <v-card rounded="lg" flat>
