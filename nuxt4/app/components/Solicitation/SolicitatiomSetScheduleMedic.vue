@@ -49,18 +49,34 @@ const handleConfirm = async () => {
   try {
     if (!props.solicitation) {
       push.warning("Solicitação não informada!");
+      handleClose();
+      return;
     }
 
     if (!props.solicitation.Schedule) {
       push.warning("Solicitação não possui Agendamento!");
+      handleClose();
+      return;
     }
 
     if (!props.solicitation.Schedule?.[0]) {
       push.warning("Solicitação não possui Agendamento!");
+      handleClose();
+      return;
     }
 
     if (!model.value.medic) {
       push.warning("Médico não informado!");
+      handleClose();
+      return;
+    }
+
+    if (!model.value.medic?.nuvidioDepartmentId) {
+      push.warning(
+        "Médico não possui departamento no Nuvidio! Não foi vinculado!"
+      );
+      handleClose();
+      return;
     }
 
     //atualizar a agenda para start
