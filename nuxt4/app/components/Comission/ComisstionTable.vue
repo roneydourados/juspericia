@@ -35,7 +35,7 @@
             label="Status"
             v-model="filters.status"
             :items="[
-              { title: 'Todos', value: 'all' },
+              //{ title: 'Todos', value: 'all' },
               { title: 'Pendente', value: 'pending' },
               { title: 'Paga', value: 'paid' },
               { title: 'Canceladas', value: 'cancel' },
@@ -279,7 +279,7 @@ const filters = ref({
   comissionType: "seller",
   initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
-  status: "all",
+  status: "pending",
   user: undefined as UserProps | undefined,
 });
 
