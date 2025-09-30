@@ -813,7 +813,7 @@ const handleUpdateRate = async (rate: number) => {
 const getSolicitations = async () => {
   loading.value = true;
   filters.value = getSolicitationsFilters();
-  console.log("🚀 ~ getSolicitations ~ filters.value:", filters.value);
+
   try {
     await storeConsultation.index(filters.value);
   } finally {
