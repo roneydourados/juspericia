@@ -83,7 +83,15 @@
         :show-crud="false"
       >
         <template v-slot:item.PatientConsultation.Patient="{ item }">
-          <span :class="`${item.Medic ? '' : 'text-red font-weight-bold'}`">
+          <span
+            :class="`${
+              item.Medic
+                ? ''
+                : $currentUser?.profile?.type !== 'MEDICO'
+                ? 'text-red font-weight-bold'
+                : ''
+            }`"
+          >
             {{ item.PatientConsultation?.Patient?.name }}
           </span>
         </template>
@@ -107,7 +115,15 @@
           </Button>
         </template>
         <template v-slot:item.scheduleDate="{ item }">
-          <span :class="`${item.Medic ? '' : 'text-red font-weight-bold'}`">
+          <span
+            :class="`${
+              item.Medic
+                ? ''
+                : $currentUser?.profile?.type !== 'MEDICO'
+                ? 'text-red font-weight-bold'
+                : ''
+            }`"
+          >
             {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} as
             {{ item.scheduleHour }}
             ({{ getWeekdayShort(item.scheduleDate) }})
