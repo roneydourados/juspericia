@@ -208,6 +208,13 @@ const handleSubmit = async () => {
         atendentId,
       });
     } else {
+      await patientConsultationReport.create({
+        content: model.value.content,
+        patientConsultationId: $consultationSolicitation.value.id,
+        atendentId,
+        userId: $consultationSolicitation.value.medicId ?? undefined,
+      });
+
       // Finalizar a solicitação de consulta
       await solicitationStore.update({
         publicId: $consultationSolicitation.value.publicId,
@@ -215,19 +222,6 @@ const handleSubmit = async () => {
         dateClose: dayjs().format("YYYY-MM-DD"), //atualizar a data de fechamento novamente para o dia que foi finalizado de fato
         status: "finished",
         medicId: props.data.medicId,
-      });
-
-      //pegar solicitação atualizada
-      //await solicitationStore.show(props.data.publicId);
-
-      // finalizar qualuqer agenda pendente
-      //await scheduleStore.finalizeSchedule(props.data.id);
-
-      await patientConsultationReport.create({
-        content: model.value.content,
-        patientConsultationId: $consultationSolicitation.value.id,
-        atendentId,
-        userId: $consultationSolicitation.value.medicId ?? undefined,
       });
     }
   } catch (error) {
