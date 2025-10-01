@@ -159,7 +159,6 @@
         </v-tabs>
       </v-col>
     </v-row>
-
     <Table
       v-if="$all?.consultations && $all?.consultations.length > 0 && !mobile"
       title=""

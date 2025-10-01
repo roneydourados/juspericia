@@ -169,7 +169,7 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 [x] - Aparecer o link da consulta na solicitação agendada
 [x] - Filtrar solicitações não vinculadas a um médico
 
-[] - Criar um componente schedule
+[x] - Criar um componente schedule
 [] - Criar uma forma de advertir o médico quando faltar documentação na solicitação
 [] - Filtrar por numero de solicitação
 ```
