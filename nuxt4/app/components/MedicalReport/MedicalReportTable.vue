@@ -294,9 +294,9 @@
 </template>
 
 <script setup lang="ts">
-import { pdfMakeFonts } from "@/utils/pdfMakeFonts";
-import pdfMake from "pdfmake/build/pdfmake";
-import htmlToPdfmake from "html-to-pdfmake";
+// import { pdfMakeFonts } from "@/utils/pdfMakeFonts";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import htmlToPdfmake from "html-to-pdfmake";
 import dayjs from "dayjs";
 import { uuidv7 } from "uuidv7";
 import { useDisplay } from "vuetify";
@@ -361,12 +361,12 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
       const payload = {
         fileBase64: base64.pdfBase64,
         fileName,
-        //fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
         name: $currentUser.value?.name as string,
         email: $currentUser.value?.email as string,
         fileCategory: "medical-report",
         ownerId: item.reportId,
       };
+
       if (!item.signToken) {
         await zapSign.sendDocument(payload);
       } else {
@@ -385,108 +385,6 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
   } finally {
     loading.value = false;
   }
-
-  // return;
-
-  // const CZ = htmlToPdfmake(item.reportContent);
-  // console.log();
-
-  // const report = {
-  //   content: [
-  //     htmlContent,
-  //     "\n",
-  //     {
-  //       text: `Laudo Médico ${dayjs(item.dateClose).format("DD/MM/YYYY")}`,
-  //       style: "subheader",
-  //     },
-  //     {
-  //       text: `Paciente: ${item.patient} CPF: ${formatCPFOrCNPJ(item.cpf)}`,
-  //       style: "subheader",
-  //     },
-  //     {
-  //       text: `Emitido por Dr(a) ${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
-  //       style: "subheader",
-  //     },
-
-  //     //"\n\n\n\n",
-  //     // {
-  //     //   canvas: [
-  //     //     {
-  //     //       type: "line" as const,
-  //     //       x1: 0,
-  //     //       y1: 0,
-  //     //       x2: 400,
-  //     //       y2: 0,
-  //     //       lineWidth: 1,
-  //     //     },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   text: `${item.medic}\nCRM: ${item.medicCrm}/${item.medicCrmUf}`,
-  //     //   style: "subheader",
-  //     // },
-  //   ],
-  //   styles: {
-  //     header: {
-  //       fontSize: 18,
-  //       bold: true,
-  //     },
-  //     subheader: {
-  //       fontSize: 12,
-  //       bold: true,
-  //     },
-  //     quote: {
-  //       italics: true,
-  //     },
-  //     small: {
-  //       fontSize: 8,
-  //     },
-  //   },
-  // };
-
-  // pdfMake.vfs = pdfMakeFonts.vfs;
-  // //@ts-ignore
-  // pdfMake.createPdf(report).getBase64(async (base64) => {
-  //   if (!$currentUser.value) {
-  //     push.error("Usuário não autenticado.");
-  //     return;
-  //   }
-
-  //   loading.value = true;
-  //   try {
-  //     const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
-  //     const payload = {
-  //       fileBase64: base64,
-  //       fileName,
-  //       //fileName: `Laudo_${item.patient}_${item.reportPublicId}.pdf`,
-  //       name: $currentUser.value.name as string,
-  //       email: $currentUser.value.email as string,
-  //       fileCategory: "medical-report",
-  //       ownerId: item.reportId,
-  //     };
-  //     if (!item.signToken) {
-  //       await zapSign.sendDocument(payload);
-  //     } else {
-  //       await zapSign.getDocument(item.signToken);
-  //     }
-
-  //     //atualizar a lista de laudos após o envio
-  //     await getReports();
-
-  //     signerToken.value = $document.value?.signers[0]?.token ?? "";
-  //     console.log(
-  //       "🚀 ~ pdfMake.createPdf ~  $document.value:",
-  //       $document.value
-  //     );
-  //     showSignDocument.value = !!signerToken.value;
-  //   } catch (error) {
-  //     console.error("Erro ao enviar documento para ZapSign:", error);
-  //     push.error("Erro ao enviar documento para ZapSign.");
-  //   } finally {
-  //     loading.value = false;
-  //   }
-  // });
-  // //.download(`Laudo_${item.patient}_${item.publicId}.pdf`);
 };
 
 const handleDownloadSignedFile = async (

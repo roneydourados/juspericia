@@ -1,8 +1,7 @@
 <template>
   <v-card color="transparent" elevation="0">
     <v-card-title class="d-flex flex-column py-8" style="gap: 0.5rem">
-      <HeaderPage title="Horários agendados" font-size="1.8rem" />
-
+      <HeaderPage title="Fluxo Agenda" font-size="1.8rem" />
       <span class="text-grey-darken-1">{{ formattedDate }}</span>
       <v-row dense>
         <v-col cols="12" lg="3" v-if="$currentUser?.profile?.type === 'ADMIN'">
@@ -84,15 +83,35 @@
         :show-crud="false"
       >
         <template v-slot:item.PatientConsultation.Patient="{ item }">
-          {{ item.PatientConsultation?.Patient?.name }}
+          <span :class="`${item.Medic ? '' : 'text-red font-weight-bold'}`">
+            {{ item.PatientConsultation?.Patient?.name }}
+          </span>
         </template>
         <template v-slot:item.Medic="{ item }">
-          {{ item.Medic ? item.Medic.name : "Não informado" }}
+          <span v-if="item.Medic">
+            {{ item.Medic ? item.Medic.name : "Não vinculado" }}
+          </span>
+          <Button
+            v-else
+            variant="text"
+            @click="handleLinkMedic(item.PatientConsultation)"
+          >
+            <v-icon icon="mdi-stethoscope" start color="red" />
+            <span
+              :class="`text-caption ${
+                item.Medic ? 'text-primary' : 'text-red'
+              }`"
+            >
+              Vincular médico
+            </span>
+          </Button>
         </template>
         <template v-slot:item.scheduleDate="{ item }">
-          {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} as
-          {{ item.scheduleHour }}
-          ({{ getWeekdayShort(item.scheduleDate) }})
+          <span :class="`${item.Medic ? '' : 'text-red font-weight-bold'}`">
+            {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} as
+            {{ item.scheduleHour }}
+            ({{ getWeekdayShort(item.scheduleDate) }})
+          </span>
         </template>
         <template v-slot:item.patientConsultationId="{ item }">
           <Button
@@ -188,7 +207,7 @@
               </v-tooltip>
             </v-btn>
           </div>
-          <v-btn
+          <!-- <v-btn
             v-if="item.status === 'completed'"
             color="purple-darken-2"
             icon
@@ -203,7 +222,7 @@
             >
               Baixar gravação do atendimento
             </v-tooltip>
-          </v-btn>
+          </v-btn> -->
           <v-btn
             v-if="
               item.status === 'completed' &&
@@ -244,6 +263,11 @@
   />
   <MedicalReport v-model="showMedicalReportForm" @close="getSchedules" />
   <MedicalReportDetails v-model="showReportDetails" />
+  <SolicitatiomSetScheduleMedic
+    v-model:show="showSetMedicSchedule"
+    :solicitation="$solicitation"
+    @close="getSchedules"
+  />
 </template>
 
 <script setup lang="ts">
@@ -267,6 +291,8 @@ const isTimerActive = ref(false);
 const countdownInterval = ref<NodeJS.Timeout | null>(null);
 const serviceDetails = ref(false);
 const showMedicalReportForm = ref(false);
+const showSetMedicSchedule = ref(false);
+
 const model = reactive({
   date: new Date(),
   medic: undefined as UserProps | undefined,
@@ -651,5 +677,17 @@ const getWeekdayShort = (date: string): string => {
   const day = dayjs(date).day();
   const weekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
   return weekdays[day] ?? "";
+};
+
+const handleLinkMedic = async (item: SolicitationConsultationProps) => {
+  loading.value = true;
+  try {
+    await solicitationStore.show(item.publicId!);
+    showSetMedicSchedule.value = true;
+  } catch (error) {
+    console.log("🚀 ~ handleLinkMedic ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

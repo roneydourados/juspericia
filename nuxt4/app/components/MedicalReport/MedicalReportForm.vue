@@ -181,7 +181,11 @@ watch(
 );
 
 const handleSubmit = async () => {
-  if (!$consultationSolicitation.value || !$consultationSolicitation.value.id) {
+  debugger;
+  if (
+    !$consultationSolicitation.value ||
+    !$consultationSolicitation.value.publicId
+  ) {
     push.warning("Não foi localizada a solicitação referente.");
     return;
   }
@@ -207,7 +211,7 @@ const handleSubmit = async () => {
     } else {
       // Finalizar a solicitação de consulta
       await solicitationStore.update({
-        publicId: props.data.publicId,
+        publicId: $consultationSolicitation.value.publicId,
         isTelemedicine: false,
         dateClose: dayjs().format("YYYY-MM-DD"), //atualizar a data de fechamento novamente para o dia que foi finalizado de fato
         status: "finished",

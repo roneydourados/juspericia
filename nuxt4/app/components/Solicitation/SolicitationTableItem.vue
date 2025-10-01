@@ -527,7 +527,14 @@
             </Button>
           </div>
         </v-col>
-        <v-col v-if="$currentUser?.profile?.type === 'ADMIN'" cols="12" lg="3">
+        <v-col
+          v-if="
+            $currentUser?.profile?.type === 'ADMIN' &&
+            solicitation.status === 'scheduled'
+          "
+          cols="12"
+          lg="3"
+        >
           <Button variant="text" @click="hadleSetRemoveMedic(solicitation)">
             <v-icon
               :icon="solicitation?.medicId ? 'mdi-close' : 'mdi-stethoscope'"
@@ -1204,16 +1211,16 @@ const hadleSetRemoveMedic = async (
             handler: async () => {
               loading.value = true;
               try {
-                await storeConsultation.update({
-                  publicId: solicitation.publicId,
-                  isTelemedicine: false,
-                  medicId: null,
-                  //dateClose: dayjs().format("YYYY-MM-DD"), // vai ficar como data da consulta até que seja finalizada pela tela de laudos ao clicar em digitar laudo
-                });
+                // await storeConsultation.update({
+                //   publicId: solicitation.publicId,
+                //   isTelemedicine: false,
+                //   medicId: null,
+                // });
 
                 if (!solicitation?.Schedule?.[0]?.publicId) {
                   return;
                 }
+
                 //atualizar a agenda para start
                 await scheduleStore.clearMedicSchedule(
                   solicitation.Schedule?.[0]?.publicId!
