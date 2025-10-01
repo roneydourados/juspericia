@@ -182,7 +182,12 @@ watch(
 
 const handleSubmit = async () => {
   if (!$consultationSolicitation.value || !$consultationSolicitation.value.id) {
-    console.error("Patient consultation ID is required.");
+    push.warning("Não foi localizada a solicitação referente.");
+    return;
+  }
+
+  if (!$consultationSolicitation.value.medicId) {
+    push.warning("Solicitação está sem médico vinculado.");
     return;
   }
 
