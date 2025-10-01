@@ -218,7 +218,7 @@ const headers = ref([
 
 const modelFilters = ref<SolicitationConsultationFilterProps>({
   status: "open",
-  initialDateSolicitation: dayjs().startOf("month").format("YYYY-MM-DD"),
+  initialDateSolicitation: dayjs().subtract(3, "month").format("YYYY-MM-DD"),
   finalDateSolicitation: dayjs().endOf("month").format("YYYY-MM-DD"),
   benefitType: undefined as BenefitTypeProps | undefined,
   patient: undefined as PatientProps | undefined,
@@ -229,6 +229,7 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
 
 onMounted(async () => {
   const filters = getSolicitationsFilters();
+  console.log("🚀 ~ filters:", filters);
   if (filters) {
     modelFilters.value = {
       ...filters,

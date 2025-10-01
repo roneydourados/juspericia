@@ -14,7 +14,7 @@ const loading = ref(false);
 //const $currentUser = computed(() => authStore.$currentUser);
 
 onMounted(async () => {
-  const modelFilters = ref<SolicitationConsultationFilterProps>({
+  const modelFilters = {
     status: "open",
     initialDateSolicitation: dayjs().subtract(3, "month").format("YYYY-MM-DD"),
     finalDateSolicitation: dayjs().endOf("month").format("YYYY-MM-DD"),
@@ -27,12 +27,13 @@ onMounted(async () => {
     //   $currentUser.value?.profile?.type === "VENDEDOR"
     //     ? undefined
     //     : $currentUser.value?.id,
-  });
+  };
+  console.log("🚀 ~ modelFilters:", modelFilters);
 
   loading.value = true;
   try {
-    setSolicitationsFilters(modelFilters.value);
-    await storeConsultation.index(modelFilters.value);
+    setSolicitationsFilters(modelFilters);
+    await storeConsultation.index(modelFilters);
     await systemParameters.index();
   } finally {
     loading.value = false;

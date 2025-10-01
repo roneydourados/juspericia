@@ -10,8 +10,8 @@
     :items-per-page="30"
   >
     <template v-slot:top-table>
-      <v-row desnse>
-        <v-col cols="12" lg="3" class="d-flex flex-wrap" style="gap: 0.5rem">
+      <v-row dense>
+        <v-col cols="12" lg="4" class="d-flex flex-wrap" style="gap: 0.5rem">
           <DatePicker
             v-model="filters.initialDate"
             label="Data inicial"
@@ -302,7 +302,7 @@ const headers = [
 ];
 
 const filters = ref({
-  initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+  initialDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
   status: "all",
   client: undefined as UserProps | undefined,
