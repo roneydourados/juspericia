@@ -181,7 +181,6 @@ watch(
 );
 
 const handleSubmit = async () => {
-  debugger;
   if (
     !$consultationSolicitation.value ||
     !$consultationSolicitation.value.publicId

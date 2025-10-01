@@ -22,6 +22,7 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+  <DialogLoading :dialog="loading" />
 </template>
 
 <script setup lang="ts">
@@ -31,7 +32,8 @@ const zapsignStore = useZapsignStore();
 
 const { mobile } = useDisplay();
 const emit = defineEmits(["close"]);
-
+const isSignedResponse = ref(false);
+const loading = ref(false);
 const report = defineModel<PatientConsultationReportListProps>("report", {
   default: () => ({}),
 });
@@ -47,11 +49,17 @@ const token = defineModel("token", {
 });
 
 const handleClose = () => {
+  if (!isSignedResponse.value) {
+    console.log("Ainda não foi processado a resposta da assinatura");
+    return;
+  }
+
   emit("close");
   dialog.value = false;
 };
 
 const handleDocAssinado = async () => {
+  loading.value = true;
   try {
     await zapsignStore.updateReportToSigned({
       publicId: report.value.reportPublicId,
@@ -62,7 +70,21 @@ const handleDocAssinado = async () => {
   } catch (error) {
     console.error("Erro ao atualizar o laudo para assinado:", error);
   } finally {
+    loading.value = false;
+    isSignedResponse.value = true;
     handleClose();
   }
 };
+
+watch(
+  () => dialog.value,
+  (newValue) => {
+    if (newValue) {
+      isSignedResponse.value = false;
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
