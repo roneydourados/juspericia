@@ -92,6 +92,7 @@
         <template v-slot:item.scheduleDate="{ item }">
           {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} as
           {{ item.scheduleHour }}
+          ({{ getWeekdayShort(item.scheduleDate) }})
         </template>
         <template v-slot:item.patientConsultationId="{ item }">
           <Button
@@ -644,5 +645,11 @@ const handleDownloadRecord = async (item: ScheduleProps) => {
   } finally {
     loading.value = false;
   }
+};
+
+const getWeekdayShort = (date: string): string => {
+  const day = dayjs(date).day();
+  const weekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  return weekdays[day] ?? "";
 };
 </script>
