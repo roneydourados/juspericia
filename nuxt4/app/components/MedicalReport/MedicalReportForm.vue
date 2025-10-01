@@ -12,7 +12,6 @@
                   @update:model-value="handleReportModel"
                 />
               </v-col>
-
               <v-col
                 cols="12"
                 class="d-flex align-center justify-space-between"
@@ -33,7 +32,6 @@
                     Perguntar para o ChatGPT
                   </v-tooltip>
                 </v-btn>
-
                 <div class="d-flex flex-wrap" style="gap: 0.54rem">
                   <Button
                     variant="outlined"
@@ -60,42 +58,6 @@
             </v-row>
             <v-card-text>
               <TextEditor v-model="model.content" />
-              <!-- <v-card flat class="mt-4">
-                <v-card-title class="mb-4">
-                  <input
-                    type="file"
-                    @change="handleFileUpload"
-                    style="display: none"
-                    ref="fileInput"
-                    multiple
-                  />
-                  <div
-                    class="d-flex justify-space-between flex-wrap w-100 px-2"
-                  >
-                    <span> Anexos: </span>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      @click="($refs.fileInput as HTMLInputElement).click()"
-                    >
-                      <v-icon icon="mdi-paperclip" color="colorIcon" />
-                      <span class="text-caption"> Novo Anexo </span>
-                    </Button>
-                  </div>
-                </v-card-title>
-                <v-card-text>
-                  <v-row dense v-for="item in attachments">
-                    <v-col cols="12">
-                      <AttachementCard
-                        :file-name="item.fileName!"
-                        @delete="getFileDelete(item)"
-                        :download-visible="false"
-                      />
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card> -->
             </v-card-text>
           </v-card>
         </FormCrud>
@@ -145,8 +107,6 @@ const reportModelStore = useReportModelStore();
 const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
-const scheduleStore = useScheduleStore();
-
 const auth = useAuthStore();
 
 const showAlterContent = ref(false);
@@ -215,13 +175,13 @@ const handleSubmit = async () => {
         userId: $consultationSolicitation.value.medicId ?? undefined,
       });
 
-      // Finalizar a solicitação de consulta
+      // Finalizar a solicitação de consulta, rodar aqui por ultimo porque deixa de aparecer o id do médico porque ele recebe o puyload atualizado e não a consulta feita no show
       await solicitationStore.update({
         publicId: $consultationSolicitation.value.publicId,
         isTelemedicine: false,
         dateClose: dayjs().format("YYYY-MM-DD"), //atualizar a data de fechamento novamente para o dia que foi finalizado de fato
         status: "finished",
-        medicId: props.data.medicId,
+        medicId: props.data.medicId, //aqui se vai undefined não muda nada na api
       });
     }
   } catch (error) {
@@ -254,37 +214,6 @@ const handleChatGpt = () => {
   window.open("https://chatgpt.com", "_blank");
 };
 
-const handleFileUpload = (event: Event) => {
-  // const files = (event.target as HTMLInputElement).files;
-  // if (!files) return;
-  const input = event.target as HTMLInputElement;
-  const files = input.files;
-
-  if (!files) return;
-
-  try {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const exists = attachments.value.some(
-        (attachment) => attachment.fileName === (file?.name ?? "")
-      );
-      if (exists) {
-        // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
-        continue;
-      }
-      attachments.value.push({
-        fileCategory: "medical-report",
-        fileData: file,
-        fileName: file?.name ?? "",
-      });
-    }
-  } catch (error) {
-    console.log("🚀 ~ handleFileUpload ~ error:", error);
-  } finally {
-    input.value = ""; // Limpa o input de arquivo após o upload
-  }
-};
-
 const handleDeleteAttachment = async () => {
   showDelete.value = false;
 
@@ -305,10 +234,5 @@ const handleDeleteAttachment = async () => {
   } finally {
     loading.value = false;
   }
-};
-
-const getFileDelete = (item: FileProps) => {
-  selectedFile.value = item;
-  showDelete.value = true;
 };
 </script>
