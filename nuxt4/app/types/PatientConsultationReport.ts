@@ -37,6 +37,7 @@ export interface PatientConsultationReportListProps {
   reportDate: string;
   reportPublicId: string;
   reportStatus: string;
+  medicId: number;
   medic: string;
   medicCrm: string;
   medicCrmUf: string;

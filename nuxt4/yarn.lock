@@ -6087,6 +6087,11 @@ vue-bundle-renderer@^2.1.2:
   dependencies:
     ufo "^1.6.1"
 
+vue-cal@^5.0.1-rc.29:
+  version "5.0.1-rc.29"
+  resolved "https://registry.yarnpkg.com/vue-cal/-/vue-cal-5.0.1-rc.29.tgz#7cab7f88c0cbbe97a99c63eba70e359e2af3a70d"
+  integrity sha512-kqIv2rujUoDX8CIwHov/4IbBhl51tDDi4QGFyxchXorfGoID+EENXqyn5qZPa86iRSdkHBAI/WIB5c0mEqI3xw==
+
 vue-devtools-stub@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/vue-devtools-stub/-/vue-devtools-stub-0.1.0.tgz#a65b9485edecd4273cedcb8102c739b83add2c81"

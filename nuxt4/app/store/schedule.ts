@@ -4,9 +4,11 @@ export const useScheduleStore = defineStore("schedule", () => {
   const { api } = useAxios();
   const schedule = ref<ScheduleProps>();
   const schedules = ref<ScheduleListProps>();
+  const scheduleEvents = ref<EventListProps>();
 
   const $single = computed(() => schedule.value);
   const $all = computed(() => schedules.value);
+  const $scheduleEvents = computed(() => scheduleEvents.value);
 
   const create = async (payload: ScheduleProps) => {
     const { data } = await api.post<ScheduleProps>("/schedule", payload);
@@ -110,9 +112,22 @@ export const useScheduleStore = defineStore("schedule", () => {
     await api.put(`/schedule/cancel/${publicId}`);
   };
 
+  const indexEvents = async (month: number) => {
+    const config = {
+      params: {
+        month,
+      },
+    };
+
+    const { data } = await api.get<EventListProps>("/schedule-month", config);
+
+    scheduleEvents.value = data;
+  };
+
   return {
     $all,
     $single,
+    $scheduleEvents,
     create,
     update,
     destroy,
@@ -124,5 +139,6 @@ export const useScheduleStore = defineStore("schedule", () => {
     finalizeSchedule,
     cancelSchedule,
     clearMedicSchedule,
+    indexEvents,
   };
 });

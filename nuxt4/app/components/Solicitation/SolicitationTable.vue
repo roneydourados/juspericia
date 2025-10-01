@@ -192,6 +192,7 @@
     @update:model-value="getConsultations"
   />
   <DialogLoading :dialog="loading" />
+  <ScheduleCalendar />
 </template>
 
 <script setup lang="ts">

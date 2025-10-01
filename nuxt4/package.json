@@ -35,6 +35,7 @@
     "uuidv7": "^1.0.2",
     "vee-validate": "^4.15.1",
     "vue": "^3.5.18",
+    "vue-cal": "^5.0.1-rc.29",
     "vue-json-pretty": "^2.5.0",
     "vue-router": "^4.5.1",
     "vue3-apexcharts": "^1.8.0",

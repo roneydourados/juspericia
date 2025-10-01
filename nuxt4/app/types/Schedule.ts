@@ -30,3 +30,19 @@ export interface ScheduleListProps {
   schedules: ScheduleProps[];
   medics: UserProps[];
 }
+
+export interface EventProps {
+  start: string;
+  end: string;
+  title: string;
+  content: string;
+  contentFull: string;
+  backgroundColor: string;
+  color: string;
+  schedulePublicId: string;
+  solicitationPublicId: string;
+}
+
+export interface EventListProps {
+  schedule: EventProps[];
+}

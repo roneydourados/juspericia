@@ -130,6 +130,8 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from "dayjs";
+
 const props = defineProps({
   data: {
     type: Object as () => PatientConsultationReportListProps,
@@ -143,6 +145,8 @@ const reportModelStore = useReportModelStore();
 const fileStore = useFileStore();
 const patientConsultationReport = usePatientConsultationReportStore();
 const solicitationStore = useSolicitationConsultationStore();
+const scheduleStore = useScheduleStore();
+
 const auth = useAuthStore();
 
 const showAlterContent = ref(false);
@@ -196,10 +200,26 @@ const handleSubmit = async () => {
         atendentId,
       });
     } else {
+      // Finalizar a solicitação de consulta
+      await solicitationStore.update({
+        publicId: props.data.publicId,
+        isTelemedicine: false,
+        dateClose: dayjs().format("YYYY-MM-DD"), //atualizar a data de fechamento novamente para o dia que foi finalizado de fato
+        status: "finished",
+        medicId: props.data.medicId,
+      });
+
+      //pegar solicitação atualizada
+      //await solicitationStore.show(props.data.publicId);
+
+      // finalizar qualuqer agenda pendente
+      //await scheduleStore.finalizeSchedule(props.data.id);
+
       await patientConsultationReport.create({
         content: model.value.content,
         patientConsultationId: $consultationSolicitation.value.id,
         atendentId,
+        userId: $consultationSolicitation.value.medicId ?? undefined,
       });
     }
   } catch (error) {
