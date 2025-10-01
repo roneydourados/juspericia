@@ -197,6 +197,7 @@
               icon
               variant="text"
               @click="handleFinalizeSchedule(item)"
+              :disabled="!item.medicId"
             >
               <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
               <v-tooltip
