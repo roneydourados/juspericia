@@ -49,6 +49,7 @@ export interface SolicitationConsultationProps {
   medicalSpecialty?: MedicalSpecialtyProps;
   medicalSpecialtyValue?: number;
   antecipationHours?: number;
+  criticisms?: PatientConsultationCriticismsProps[];
 }
 
 export interface SolicitationConsultationFilterProps {
@@ -65,4 +66,5 @@ export interface SolicitationConsultationFilterProps {
   lawyer?: UserProps;
   publicId?: string;
   medicIsNull?: boolean;
+  number?: number;
 }

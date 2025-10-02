@@ -197,7 +197,7 @@
             size="small"
             variant="text"
             @click="editItem(item)"
-            :disabled="item.status !== 'open'"
+            :disabled="item.status === 'finished' || item.status === 'canceled'"
           >
             <v-icon icon="mdi-pencil-outline" color="colorIcon" />
             <span class="text-caption text-darkText"> Editar</span>

@@ -272,16 +272,12 @@ const publicIdCancel = ref("");
 const transactionPublicId = ref("");
 const statusSale = ref([
   {
-    label: "Todos",
-    value: "all",
+    label: "Pago",
+    value: "CONFIRMED",
   },
   {
     label: "Pendente",
     value: "PENDING",
-  },
-  {
-    label: "Confirmado",
-    value: "CONFIRMED",
   },
   {
     label: "Cancelado",
@@ -304,7 +300,7 @@ const headers = [
 const filters = ref({
   initialDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
-  status: "all",
+  status: "CONFIRMED",
   client: undefined as UserProps | undefined,
 });
 

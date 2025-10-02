@@ -162,8 +162,8 @@
             variant="outlined"
             @click="editItem(solicitation)"
             :disabled="
-              solicitation.status !== 'open' &&
-              $currentUser?.profile?.type === 'ADVOGADO'
+              solicitation.status === 'finished' ||
+              solicitation.status === 'canceled'
             "
           >
             <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
@@ -320,7 +320,7 @@
           v-if="$currentUser?.profile?.type !== 'MEDICO'"
           cols="12"
           lg="4"
-          class="d-flex justify-end"
+          class="d-flex flex-wrap justify-end"
         >
           <v-chip color="grey" class="pa-6" label rounded="xl">
             <div class="d-flex align-center" style="gap: 0.5rem">
@@ -333,6 +333,29 @@
               </span>
             </div>
           </v-chip>
+          <Button
+            v-if="solicitation.criticisms?.length ?? 0 > 0"
+            color="warning"
+            @click="handleShowCriticism(solicitation)"
+          >
+            <v-icon icon="mdi-alert-circle-outline" start />
+            <span class="text-caption"> Solicitação possui críticas </span>
+          </Button>
+          <!-- Esses dois botões tem a mesma função, diferença que o debaixo sempre vai estar visivel para quem é adm -->
+          <Button
+            v-if="
+              $currentUser?.profile?.type !== 'MEDICO' &&
+              $currentUser?.profile?.type !== 'ADVOGADO' &&
+              solicitation.status !== 'finished' &&
+              solicitation.status !== 'canceled'
+            "
+            variant="outlined"
+            color="grey-darken-3"
+            @click="handleShowCriticism(solicitation)"
+          >
+            <v-icon icon="mdi-alert-circle-outline" start color="colorIcon" />
+            <span class="text-caption">Lançar/Ver críticas</span>
+          </Button>
         </v-col>
         <v-col
           v-if="
@@ -603,6 +626,10 @@
     :solicitation="solicitation"
     @close="getSolicitations"
   />
+  <SolicitationCriticism
+    v-model:show="showCriticism"
+    :solicitation="solicitation"
+  />
 </template>
 
 <script setup lang="ts">
@@ -625,6 +652,8 @@ const rounter = useRouter();
 const fileStore = useFileStore();
 const zapSign = useZapsignStore();
 const systemParameters = useSystemParametersStore();
+const criticismStore = usePatientConsultationCriticismStore();
+
 // const transactionsStore = useTransactionsStore();
 
 const {
@@ -636,6 +665,8 @@ const {
 //const saltCredit = useUserCreditSaltStore();
 //const router = useRouter();
 const selected = ref<SolicitationConsultationProps>();
+const showCriticism = ref(false);
+
 const showTeleMedicine = ref(false);
 const showSaltCredit = ref(false);
 const isRate = ref(false);
@@ -1039,56 +1070,6 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
   }
 };
 
-// const handleReceipt = (item: SolicitationConsultationProps) => {
-//   // se cair aqiu é porque foi pago com saldo em créditos
-//   if (!item.sale && item.status === "paid") {
-//     showRecipt.value = true;
-//     return;
-//   }
-
-//   //se não tem venda então não fazer nada no asaas
-//   if (!item.sale) {
-//     push.warning("Pagamento não encontrado");
-//     return;
-//   }
-
-//   const popupWidth = 800;
-//   const popupHeight = 600;
-//   const screenWidth = window.screen.width;
-//   const screenHeight = window.screen.height;
-
-//   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-//   const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-//   window.open(
-//     item.sale.transactionReceiptUrl,
-//     "_blank",
-//     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-//   );
-// };
-
-// const handleUseCreditSalt = async () => {
-//   loading.value = true;
-//   try {
-//     const initialDate = dayjs().startOf("year").format("YYYY-MM-DD");
-//     const finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
-//     await saltCredit.index({
-//       userId: $currentUser.value?.id!,
-//       initialDate,
-//       finalDate,
-//       status: "CONFIRMED",
-//       isSalt: true,
-//     });
-//     showSaltCredit.value = true;
-//   } finally {
-//     loading.value = false;
-//   }
-// };
-
-// const handleQuery = async (item: SolicitationConsultationProps) => {
-//   await router.push(`/teleconference/${item.publicId}`);
-// };
-
 const handleDownloadFile = async (publicId: string) => {
   loading.value = true;
   try {
@@ -1211,12 +1192,6 @@ const hadleSetRemoveMedic = async (
             handler: async () => {
               loading.value = true;
               try {
-                // await storeConsultation.update({
-                //   publicId: solicitation.publicId,
-                //   isTelemedicine: false,
-                //   medicId: null,
-                // });
-
                 if (!solicitation?.Schedule?.[0]?.publicId) {
                   return;
                 }
@@ -1247,6 +1222,18 @@ const hadleSetRemoveMedic = async (
     });
   } else {
     showSetMedicSchedule.value = true;
+  }
+};
+
+const handleShowCriticism = async (item: SolicitationConsultationProps) => {
+  loading.value = true;
+  try {
+    await criticismStore.listCriticisms(item.id!);
+    showCriticism.value = true;
+  } catch (error) {
+    console.log("🚀 ~ handleShowCriticism ~ error:", error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
