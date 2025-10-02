@@ -157,78 +157,58 @@
           </v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn
-            v-if="
-              item.status === 'completed' &&
-              item.PatientConsultation?.PatientConsultationReport
-            "
-            color="primary"
-            icon
-            variant="text"
-            @click="handleReportDetails(item)"
-            size="x-small"
-          >
-            <v-icon icon="mdi-file-document-arrow-right-outline" color="info" />
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
-            >
-              Detalhes do laudo gerado
-            </v-tooltip>
-          </v-btn>
-          <div v-else-if="item.status === 'active'" class="d-flex">
-            <v-btn
-              color="primary"
-              icon
-              variant="text"
-              @click="handleCancelSchedule(item.publicId)"
-              size="x-small"
-            >
-              <v-icon icon="mdi-account-off-outline" color="red" />
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Paciente não compareceu a consulta
-              </v-tooltip>
-            </v-btn>
-            <v-btn
-              color="primary"
-              icon
-              variant="text"
-              @click="handleFinalizeSchedule(item)"
-              :disabled="!item.medicId"
-              size="x-small"
-            >
-              <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Finalizar atendiento
-              </v-tooltip>
-            </v-btn>
-            <v-btn
-              color="purple-darken-2"
-              icon
-              variant="text"
-              @click="handleServiceDetails(item)"
-              size="x-small"
-            >
-              <v-icon icon="mdi-stethoscope" size="20" color="purple" />
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Iniciar teleatendimento
-              </v-tooltip>
-            </v-btn>
-          </div>
           <div class="d-flex align-center w-100">
+            <div v-if="item.status === 'active'" class="d-flex">
+              <v-btn
+                color="primary"
+                icon
+                variant="text"
+                @click="handleCancelSchedule(item.publicId)"
+                size="x-small"
+              >
+                <v-icon icon="mdi-account-off-outline" color="red" />
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Paciente não compareceu a consulta
+                </v-tooltip>
+              </v-btn>
+              <v-btn
+                color="primary"
+                icon
+                variant="text"
+                @click="handleFinalizeSchedule(item)"
+                :disabled="!item.medicId"
+                size="x-small"
+              >
+                <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Finalizar atendiento
+                </v-tooltip>
+              </v-btn>
+              <v-btn
+                color="purple-darken-2"
+                icon
+                variant="text"
+                @click="handleServiceDetails(item)"
+                size="x-small"
+              >
+                <v-icon icon="mdi-stethoscope" size="20" color="purple" />
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Iniciar teleatendimento
+                </v-tooltip>
+              </v-btn>
+            </div>
             <v-btn
               v-if="item.status === 'completed' && item.nuvidioCallId"
               color="purple-darken-2"
@@ -244,6 +224,29 @@
                 content-class="tooltip-background"
               >
                 Baixar gravação do atendimento
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="
+                item.status === 'completed' &&
+                item.PatientConsultation?.PatientConsultationReport
+              "
+              color="primary"
+              icon
+              variant="text"
+              @click="handleReportDetails(item)"
+              size="x-small"
+            >
+              <v-icon
+                icon="mdi-file-document-arrow-right-outline"
+                color="info"
+              />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Detalhes do laudo gerado
               </v-tooltip>
             </v-btn>
             <v-btn
