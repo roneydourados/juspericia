@@ -107,6 +107,9 @@
                   <div class="message-bubble">
                     <div class="message-content">{{ message.message }}</div>
                     <div class="message-time">
+                      {{ message.user?.name || "Usuário" }}
+                    </div>
+                    <div class="message-time">
                       {{ formatDateTime(message.createdAt) }}
                     </div>
                   </div>
