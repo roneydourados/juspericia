@@ -54,38 +54,40 @@
       </span>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-btn
-        icon
-        color="colorIcon"
-        variant="text"
-        size="small"
-        @click="handleEdit(item)"
-      >
-        <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
-        <v-tooltip
-          activator="parent"
-          location="top center"
-          content-class="tooltip-background"
+      <div class="d-flex">
+        <v-btn
+          icon
+          color="colorIcon"
+          variant="text"
+          size="small"
+          @click="handleEdit(item)"
         >
-          Editar
-        </v-tooltip>
-      </v-btn>
-      <v-btn
-        icon
-        color="red"
-        variant="text"
-        size="small"
-        @click="getItemDelete(item)"
-      >
-        <v-icon icon="mdi-delete-outline" size="20"></v-icon>
-        <v-tooltip
-          activator="parent"
-          location="top center"
-          content-class="tooltip-background"
+          <v-icon icon="mdi-pencil-outline" size="20"></v-icon>
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Editar
+          </v-tooltip>
+        </v-btn>
+        <v-btn
+          icon
+          color="red"
+          variant="text"
+          size="small"
+          @click="getItemDelete(item)"
         >
-          Apagar
-        </v-tooltip>
-      </v-btn>
+          <v-icon icon="mdi-delete-outline" size="20"></v-icon>
+          <v-tooltip
+            activator="parent"
+            location="top center"
+            content-class="tooltip-background"
+          >
+            Apagar
+          </v-tooltip>
+        </v-btn>
+      </div>
     </template>
   </Table>
   <PatientTableMobile
