@@ -81,6 +81,7 @@
           <span class="text-caption"> Mais filtros </span>
         </Button>
         <v-switch
+          v-if="$currentUser?.profile?.type === 'ADMIN'"
           v-model="modelFilters.medicIsNull"
           hide-details
           label="Não vinculados"

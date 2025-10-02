@@ -1,12 +1,14 @@
 <template>
-  <DialogForm title="Críticas" :show="show" fullscreen @dialog="show = false">
+  <DialogForm title="" :show="show" fullscreen @dialog="show = false">
     <v-row class="fill-height">
       <!-- Coluna da Lista de Críticas -->
       <v-col cols="12" md="6" lg="5" class="border-e">
         <v-card flat class="h-100 d-flex flex-column">
-          <v-card-title class="d-flex justify-between align-center flex-shrink-0">
+          <v-card-title
+            class="d-flex justify-space-between align-center flex-shrink-0"
+          >
             <span>Críticas da Solicitação</span>
-            <v-btn
+            <Button
               color="primary"
               variant="outlined"
               size="small"
@@ -14,11 +16,11 @@
             >
               <v-icon icon="mdi-plus" start />
               Nova Crítica
-            </v-btn>
+            </Button>
           </v-card-title>
           <v-card-text class="pa-0">
             <div class="criticisms-list">
-              <v-list v-if="criticisms?.length" density="compact">
+              <v-list v-if="criticisms?.length" density="compact" lines="three">
                 <v-list-item
                   v-for="criticism in criticisms"
                   :key="criticism.id"
@@ -27,21 +29,24 @@
                   class="mb-2"
                 >
                   <template #prepend>
-                    <v-avatar :color="getStatusColor(criticism.status)" size="small">
-                      <v-icon icon="mdi-comment-text" size="small" />
+                    <v-avatar
+                      :color="getStatusColor(criticism.status)"
+                      size="small"
+                    >
+                      <v-icon icon="mdi-comment-text-outline" size="small" />
                     </v-avatar>
                   </template>
-                  
+
                   <v-list-item-title class="text-wrap">
-                    {{ criticism.description || 'Crítica sem descrição' }}
+                    {{ criticism.description || "Crítica sem descrição" }}
                   </v-list-item-title>
-                  
+
                   <v-list-item-subtitle>
-                    Status: {{ criticism.status || 'Pendente' }}
-                    <br>
+                    Status: {{ criticism.status || "Pendente" }}
+                    <br />
                     Mensagens: {{ criticism.messages?.length || 0 }}
                   </v-list-item-subtitle>
-                  
+
                   <template #append>
                     <v-btn
                       icon="mdi-pencil"
@@ -63,41 +68,36 @@
           </v-card-text>
         </v-card>
       </v-col>
-
       <!-- Coluna das Mensagens -->
       <v-col cols="12" md="6" lg="7">
         <v-card v-if="selectedCriticism" flat class="h-100 d-flex flex-column">
-          <v-card-title class="d-flex justify-between align-center flex-shrink-0">
-            <div>
+          <v-card-title>
+            <div
+              class="d-flex justify-space-between align-center flex-shrink-0"
+            >
               <span>Mensagens da Crítica</span>
               <v-chip color="primary" size="small" class="ml-2">
-                {{ selectedCriticism.status || 'Pendente' }}
+                {{ selectedCriticism.status || "Pendente" }}
               </v-chip>
             </div>
-            <v-btn
-              color="secondary"
-              variant="outlined"
-              size="small"
-              @click="showEditDescriptionDialog = true"
-            >
-              <v-icon icon="mdi-pencil" start />
-              Editar Descrição
-            </v-btn>
           </v-card-title>
-          <v-card-subtitle v-if="selectedCriticism.description" class="text-wrap flex-shrink-0">
-            <strong>Descrição:</strong> {{ selectedCriticism.description }}
-          </v-card-subtitle>
-          
+
           <!-- Chat Container -->
           <v-card-text class="pa-0 flex-grow-1 d-flex flex-column">
             <div class="messages-container">
-              <div v-if="selectedCriticism.messages?.length" class="messages-list" ref="chatContainer">
+              <div
+                v-if="selectedCriticism.messages?.length"
+                class="messages-list"
+                ref="chatContainer"
+              >
                 <div
                   v-for="message in selectedCriticism.messages"
                   :key="message.id"
                   :class="[
                     'message-item',
-                    message.userId === currentUserId ? 'message-sent' : 'message-received'
+                    message.userId === currentUserId
+                      ? 'message-sent'
+                      : 'message-received',
                   ]"
                 >
                   <div class="message-bubble">
@@ -170,14 +170,17 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn @click="showNewCriticismDialog = false">Cancelar</v-btn>
-          <v-btn
+          <Button variant="text" @click="showNewCriticismDialog = false">
+            Cancelar
+          </Button>
+          <Button
             color="primary"
+            variant="text"
             :disabled="!newCriticismDescription.trim()"
             @click="createNewCriticism"
           >
             Criar
-          </v-btn>
+          </Button>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -198,14 +201,17 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn @click="showEditDescriptionDialog = false">Cancelar</v-btn>
-          <v-btn
+          <Button variant="text" @click="showEditDescriptionDialog = false"
+            >Cancelar</Button
+          >
+          <Button
             color="primary"
+            variant="text"
             :disabled="!editDescription.trim()"
             @click="updateCriticismDescription"
           >
             Salvar
-          </v-btn>
+          </Button>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -213,178 +219,174 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick, watch } from 'vue'
-import type { PatientConsultationCriticismsProps } from '~/types/PatientConsultationCriticism'
-
-interface Props {
-  show: boolean
-  patientConsultationId: number
-}
-
-const props = defineProps<Props>()
-const emit = defineEmits<{
-  dialog: [value: boolean]
-}>()
+const props = defineProps({
+  solicitation: {
+    type: Object as PropType<SolicitationConsultationProps>,
+    default: () => {},
+  },
+});
 
 // Stores
-const criticismStore = usePatientConsultationCriticismStore()
-const auth = useAuthStore()
+const criticismStore = usePatientConsultationCriticismStore();
+const auth = useAuthStore();
 
 // Reactive data
-const selectedCriticism = ref<PatientConsultationCriticismsProps | null>(null)
-const newMessage = ref('')
-const newCriticismDescription = ref('')
-const editDescription = ref('')
-const showNewCriticismDialog = ref(false)
-const showEditDescriptionDialog = ref(false)
-const chatContainer = ref<HTMLElement>()
+const selectedCriticism = ref<PatientConsultationCriticismsProps | null>(null);
+const newMessage = ref("");
+const newCriticismDescription = ref("");
+const editDescription = ref("");
+const showNewCriticismDialog = ref(false);
+const showEditDescriptionDialog = ref(false);
+const chatContainer = ref<HTMLElement>();
+const show = defineModel("show", {
+  default: false,
+});
 
-// Computed
-const show = computed({
-  get: () => props.show,
-  set: (value: boolean) => emit('dialog', value)
-})
-
-const criticisms = computed(() => criticismStore.$all?.criticisms || [])
-const currentUserId = computed(() => auth.$currentUser?.id)
+const criticisms = computed(() => criticismStore.$all?.criticisms || []);
+const currentUserId = computed(() => auth.$currentUser?.id);
 
 // Methods
 const loadCriticisms = async () => {
   try {
-    await criticismStore.listCriticisms(props.patientConsultationId)
+    await criticismStore.listCriticisms(props.solicitation.id!);
   } catch (error) {
-    console.error('Erro ao carregar críticas:', error)
+    console.error("Erro ao carregar críticas:", error);
   }
-}
+};
 
-const selectCriticism = async (criticism: PatientConsultationCriticismsProps) => {
+const selectCriticism = async (
+  criticism: PatientConsultationCriticismsProps
+) => {
+  if (!criticism.id) return;
+
   try {
-    await criticismStore.getCriticismDetails(criticism.id!)
-    selectedCriticism.value = criticismStore.$single?.criticism || criticism
-    await nextTick()
-    scrollToBottom()
+    await criticismStore.getCriticismDetails(criticism.id);
+    selectedCriticism.value = criticismStore.$single?.criticism || criticism;
+    await nextTick();
+    scrollToBottom();
   } catch (error) {
-    console.error('Erro ao carregar detalhes da crítica:', error)
-    selectedCriticism.value = criticism
+    console.error("Erro ao carregar detalhes da crítica:", error);
+    selectedCriticism.value = criticism;
   }
-}
+};
 
 const sendMessage = async () => {
-  if (!newMessage.value.trim() || !selectedCriticism.value?.id || !currentUserId.value) return
+  if (
+    !newMessage.value.trim() ||
+    !selectedCriticism.value?.id ||
+    !currentUserId.value
+  )
+    return;
 
   try {
     const messageData = {
       patientConsultationCriticismId: selectedCriticism.value.id,
       userId: currentUserId.value,
-      message: newMessage.value.trim()
-    }
-    await criticismStore.addMessage(messageData)
-    newMessage.value = ''
-    
+      message: newMessage.value.trim(),
+    };
+    await criticismStore.addMessage(messageData);
+    newMessage.value = "";
+
     // Recarregar detalhes da crítica para mostrar a nova mensagem
-    await criticismStore.getCriticismDetails(selectedCriticism.value.id)
-    selectedCriticism.value = criticismStore.$single?.criticism || selectedCriticism.value
-    
-    await nextTick()
-    scrollToBottom()
+    await criticismStore.getCriticismDetails(selectedCriticism.value.id);
+    selectedCriticism.value =
+      criticismStore.$single?.criticism || selectedCriticism.value;
+
+    await nextTick();
+    scrollToBottom();
   } catch (error) {
-    console.error('Erro ao enviar mensagem:', error)
+    console.error("Erro ao enviar mensagem:", error);
   }
-}
+};
 
 const createNewCriticism = async () => {
-  if (!newCriticismDescription.value.trim()) return
+  if (!newCriticismDescription.value.trim()) return;
 
   try {
     await criticismStore.createCriticism({
-      patientConsultationId: props.patientConsultationId,
-      description: newCriticismDescription.value.trim()
-    })
-    newCriticismDescription.value = ''
-    showNewCriticismDialog.value = false
-    await loadCriticisms()
+      patientConsultationId: props.solicitation.id!,
+      description: newCriticismDescription.value.trim(),
+    });
+    newCriticismDescription.value = "";
+    showNewCriticismDialog.value = false;
+    await loadCriticisms();
   } catch (error) {
-    console.error('Erro ao criar crítica:', error)
+    console.error("Erro ao criar crítica:", error);
   }
-}
+};
 
-const editCriticismFromList = (criticism: PatientConsultationCriticismsProps) => {
-  selectedCriticism.value = criticism
-  editDescription.value = criticism.description || ''
-  showEditDescriptionDialog.value = true
-}
+const editCriticismFromList = (
+  criticism: PatientConsultationCriticismsProps
+) => {
+  selectedCriticism.value = criticism;
+  editDescription.value = criticism.description || "";
+  showEditDescriptionDialog.value = true;
+};
 
 const updateCriticismDescription = async () => {
-  if (!editDescription.value.trim() || !selectedCriticism.value?.id) return
+  if (!editDescription.value.trim() || !selectedCriticism.value?.id) return;
 
   try {
-    await criticismStore.updateCriticismStatus({
+    await criticismStore.updateCriticism({
       id: selectedCriticism.value.id,
-      patientConsultationId: props.patientConsultationId,
       description: editDescription.value.trim(),
-      status: selectedCriticism.value.status || 'Pendente'
-    })
-    
+      status: selectedCriticism.value.status || "ABERTO",
+    });
+
     // Atualizar a crítica selecionada
-    selectedCriticism.value.description = editDescription.value.trim()
-    
-    editDescription.value = ''
-    showEditDescriptionDialog.value = false
-    
+    selectedCriticism.value.description = editDescription.value.trim();
+
+    editDescription.value = "";
+    showEditDescriptionDialog.value = false;
+
     // Recarregar lista de críticas
-    await loadCriticisms()
+    await loadCriticisms();
   } catch (error) {
-    console.error('Erro ao atualizar descrição:', error)
+    console.error("Erro ao atualizar descrição:", error);
   }
-}
+};
 
 const scrollToBottom = () => {
   if (chatContainer.value) {
-    chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+    chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
   }
-}
-
-const formatDate = (date: string | undefined) => {
-  if (!date) return "Data não disponível"
-  return new Date(date).toLocaleDateString('pt-BR')
-}
+};
 
 const formatDateTime = (date: string | undefined) => {
-  if (!date) return ""
-  return new Date(date).toLocaleString('pt-BR')
-}
+  if (!date) return "";
+  return new Date(date).toLocaleString("pt-BR");
+};
 
 const getStatusColor = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
-    case 'resolvido':
-      return 'success'
-    case 'em_andamento':
-      return 'warning'
-    case 'pendente':
+    case "resolvido":
+      return "success";
+    case "em_andamento":
+      return "warning";
+    case "pendente":
     default:
-      return 'primary'
+      return "primary";
   }
-}
+};
 
 // Watchers
-watch(() => props.show, (newValue) => {
-  if (newValue) {
-    loadCriticisms()
+watch(
+  () => show.value,
+  (newValue) => {
+    if (newValue) {
+      loadCriticisms();
+    }
   }
-})
+);
 
-watch(() => showEditDescriptionDialog.value, (newValue) => {
-  if (newValue && selectedCriticism.value) {
-    editDescription.value = selectedCriticism.value.description || ''
+watch(
+  () => showEditDescriptionDialog.value,
+  (newValue) => {
+    if (newValue && selectedCriticism.value) {
+      editDescription.value = selectedCriticism.value.description || "";
+    }
   }
-})
-
-// Lifecycle
-onMounted(() => {
-  if (props.show) {
-    loadCriticisms()
-  }
-})
+);
 </script>
 
 <style scoped>
@@ -475,11 +477,11 @@ onMounted(() => {
   .messages-container {
     height: 300px;
   }
-  
+
   .criticisms-list {
     height: 300px;
   }
-  
+
   .criticism-list {
     max-height: 40vh;
   }
@@ -489,15 +491,15 @@ onMounted(() => {
   .messages-container {
     height: 250px;
   }
-  
+
   .criticisms-list {
     height: 200px;
   }
-  
+
   .message-bubble {
     max-width: 85%;
   }
-  
+
   .criticism-list {
     max-height: 35vh;
   }

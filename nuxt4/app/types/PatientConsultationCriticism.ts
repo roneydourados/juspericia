@@ -1,12 +1,13 @@
 export interface PatientConsultationCriticismsProps {
   id?: number;
   userId?: number;
-  patientConsultationId: number;
+  patientConsultationId?: number;
   description: string;
   status?: string;
   createdAt?: string;
   updatedAt?: string;
   messages?: PatientConsultationCriticismsMessagesProps[];
+  user?: UserProps;
 }
 
 export interface PatientConsultationCriticismsMessagesProps {
@@ -16,6 +17,7 @@ export interface PatientConsultationCriticismsMessagesProps {
   message: string;
   createdAt?: string;
   updatedAt?: string;
+  user?: UserProps;
 }
 
 export interface PatientConsultationCriticismsList {

@@ -58,13 +58,15 @@ export const usePatientConsultationCriticismStore = defineStore(
       await api.post("/patient-consultation-criticism/message", payload);
     };
 
-    const updateCriticismStatus = async ({
+    const updateCriticism = async ({
       id,
       status,
+      description,
     }: PatientConsultationCriticismsProps) => {
       const payload = {
         status,
         id,
+        description,
       };
       await api.put("/patient-consultation-criticism", payload);
     };
@@ -76,7 +78,7 @@ export const usePatientConsultationCriticismStore = defineStore(
       getCriticismDetails,
       createCriticism,
       addMessage,
-      updateCriticismStatus,
+      updateCriticism,
     };
   }
 );
