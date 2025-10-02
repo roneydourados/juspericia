@@ -224,41 +224,43 @@
               </v-tooltip>
             </v-btn>
           </div>
-          <!-- <v-btn
-            v-if="item.status === 'completed'"
-            color="purple-darken-2"
-            icon
-            variant="text"
-            @click="handleDownloadRecord(item)"
-          >
-            <v-icon icon="mdi-video-outline" size="20" color="purple" />
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
+          <div class="d-flex align-center">
+            <v-btn
+              v-if="item.status === 'completed' && item.nuvidioCallId"
+              color="purple-darken-2"
+              icon
+              variant="text"
+              @click="handleDownloadRecord(item)"
             >
-              Baixar gravação do atendimento
-            </v-tooltip>
-          </v-btn> -->
-          <v-btn
-            v-if="
-              item.status === 'completed' &&
-              !item.PatientConsultation?.PatientConsultationReport
-            "
-            color="primary"
-            icon
-            variant="text"
-            @click="handleShowMedicalReportForm(item)"
-          >
-            <v-icon icon="mdi-file-document-edit-outline" color="colorIcon" />
-            <v-tooltip
-              activator="parent"
-              location="top center"
-              content-class="tooltip-background"
+              <v-icon icon="mdi-video-outline" size="20" color="purple" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Baixar gravação do atendimento
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="
+                item.status === 'completed' &&
+                !item.PatientConsultation?.PatientConsultationReport
+              "
+              color="primary"
+              icon
+              variant="text"
+              @click="handleShowMedicalReportForm(item)"
             >
-              Escrever laudo
-            </v-tooltip>
-          </v-btn>
+              <v-icon icon="mdi-file-document-edit-outline" color="colorIcon" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Escrever laudo
+              </v-tooltip>
+            </v-btn>
+          </div>
         </template>
       </Table>
       <ScheduleTableMobile

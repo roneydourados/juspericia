@@ -333,16 +333,20 @@
               </span>
             </div>
           </v-chip>
-          <Button
-            v-if="solicitation.criticisms?.length ?? 0 > 0"
+          <!-- <Button
+            v-if="
+              solicitation.criticisms &&
+              solicitation.criticisms.length > 0 &&
+              $currentUser?.profile?.type === 'ADVOGADO'
+            "
             color="warning"
             @click="handleShowCriticism(solicitation)"
           >
             <v-icon icon="mdi-alert-circle-outline" start />
             <span class="text-caption"> Solicitação possui críticas </span>
-          </Button>
+          </Button> -->
           <!-- Esses dois botões tem a mesma função, diferença que o debaixo sempre vai estar visivel para quem é adm -->
-          <Button
+          <!-- <Button
             v-if="
               $currentUser?.profile?.type !== 'MEDICO' &&
               $currentUser?.profile?.type !== 'ADVOGADO' &&
@@ -355,7 +359,7 @@
           >
             <v-icon icon="mdi-alert-circle-outline" start color="colorIcon" />
             <span class="text-caption">Lançar/Ver críticas</span>
-          </Button>
+          </Button> -->
         </v-col>
         <v-col
           v-if="
