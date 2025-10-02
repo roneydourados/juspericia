@@ -7,7 +7,7 @@
     font-size="1.5rem"
     @add="showForm = true"
     @search="handleSearch($event)"
-    :items-per-page="mobile ? 3 : 6"
+    :items-per-page="10"
     :loading="loading"
   >
     <template v-slot:item.name="{ item }">
