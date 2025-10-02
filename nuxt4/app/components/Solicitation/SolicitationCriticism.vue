@@ -2,20 +2,23 @@
   <DialogForm title="" :show="show" fullscreen @dialog="show = false">
     <v-row class="fill-height">
       <!-- Coluna da Lista de Críticas -->
-      <v-col cols="12" md="6" lg="5" class="border-e">
+      <v-col cols="12" md="6" class="border-e">
         <v-card flat class="h-100 d-flex flex-column">
           <v-card-title
             class="d-flex justify-space-between align-center flex-shrink-0"
           >
-            <span>Críticas da Solicitação</span>
+            <span style="font-size: 1.2rem; font-weight: 600"
+              >Observações da Solicitação</span
+            >
             <Button
+              v-if="$currentUser?.profile?.type === 'ADMIN'"
               color="primary"
               variant="outlined"
               size="small"
               @click="showNewCriticismDialog = true"
             >
               <v-icon icon="mdi-plus" start />
-              Nova Crítica
+              Nova Observação
             </Button>
           </v-card-title>
           <v-card-text class="pa-0">
@@ -49,6 +52,7 @@
 
                   <template #append>
                     <v-btn
+                      v-if="$currentUser?.profile?.type === 'ADMIN'"
                       icon="mdi-pencil"
                       size="small"
                       variant="text"
@@ -69,7 +73,7 @@
         </v-card>
       </v-col>
       <!-- Coluna das Mensagens -->
-      <v-col cols="12" md="6" lg="7">
+      <v-col cols="12" md="6">
         <v-card v-if="selectedCriticism" flat class="h-100 d-flex flex-column">
           <v-card-title>
             <div
@@ -95,7 +99,7 @@
                   :key="message.id"
                   :class="[
                     'message-item',
-                    message.userId === currentUserId
+                    message.userId === $currentUser?.id
                       ? 'message-sent'
                       : 'message-received',
                   ]"
@@ -120,26 +124,35 @@
 
           <!-- Input de Nova Mensagem -->
           <v-card-actions class="pa-4 flex-shrink-0">
-            <v-text-field
-              v-model="newMessage"
-              placeholder="Digite sua mensagem..."
-              variant="outlined"
-              density="compact"
-              hide-details
-              @keyup.enter="sendMessage"
-              class="flex-grow-1"
+            <FormCrud
+              :on-submit="sendMessage"
+              :show-submit-button="false"
+              class="w-100"
             >
-              <template #append-inner>
-                <v-btn
-                  icon="mdi-send"
-                  color="primary"
-                  variant="text"
-                  size="small"
-                  :disabled="!newMessage.trim()"
-                  @click="sendMessage"
-                />
-              </template>
-            </v-text-field>
+              <v-row>
+                <v-col cols="12">
+                  <StringInput
+                    v-model="newMessage"
+                    placeholder="Digite sua mensagem..."
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                    @keyup.enter="sendMessage"
+                  >
+                    <template #append-inner>
+                      <v-btn
+                        icon="mdi-send"
+                        color="primary"
+                        variant="text"
+                        size="small"
+                        type="submit"
+                        :disabled="!newMessage.trim()"
+                      />
+                    </template>
+                  </StringInput>
+                </v-col>
+              </v-row>
+            </FormCrud>
           </v-card-actions>
         </v-card>
 
@@ -157,12 +170,12 @@
     <!-- Dialog para Nova Crítica -->
     <v-dialog v-model="showNewCriticismDialog" max-width="500">
       <v-card>
-        <v-card-title>Nova Crítica</v-card-title>
+        <v-card-title>Nova Observação</v-card-title>
         <v-card-text>
           <v-textarea
             v-model="newCriticismDescription"
-            label="Descrição da crítica"
-            placeholder="Descreva a crítica..."
+            label="Descrição da Observação"
+            placeholder="Descreva a observação..."
             variant="outlined"
             rows="4"
             required
@@ -188,12 +201,12 @@
     <!-- Dialog para Editar Descrição -->
     <v-dialog v-model="showEditDescriptionDialog" max-width="500">
       <v-card>
-        <v-card-title>Editar Descrição da Crítica</v-card-title>
+        <v-card-title>Editar Observação</v-card-title>
         <v-card-text>
           <v-textarea
             v-model="editDescription"
-            label="Descrição da crítica"
-            placeholder="Descreva a crítica..."
+            label="Descrição da Observação"
+            placeholder="Descreva a observação..."
             variant="outlined"
             rows="4"
             required
@@ -201,9 +214,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <Button variant="text" @click="showEditDescriptionDialog = false"
-            >Cancelar</Button
-          >
+          <Button variant="text" @click="showEditDescriptionDialog = false">
+            Cancelar
+          </Button>
           <Button
             color="primary"
             variant="text"
@@ -243,7 +256,7 @@ const show = defineModel("show", {
 });
 
 const criticisms = computed(() => criticismStore.$all?.criticisms || []);
-const currentUserId = computed(() => auth.$currentUser?.id);
+const $currentUser = computed(() => auth.$currentUser);
 
 // Methods
 const loadCriticisms = async () => {
@@ -274,14 +287,14 @@ const sendMessage = async () => {
   if (
     !newMessage.value.trim() ||
     !selectedCriticism.value?.id ||
-    !currentUserId.value
+    !$currentUser.value?.id
   )
     return;
 
   try {
     const messageData = {
       patientConsultationCriticismId: selectedCriticism.value.id,
-      userId: currentUserId.value,
+      userId: $currentUser.value?.id,
       message: newMessage.value.trim(),
     };
     await criticismStore.addMessage(messageData);

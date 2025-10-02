@@ -17,7 +17,12 @@
     :clearable="clearable"
     @blur="blur"
     @input="$emit('input', handleChange($event))"
-  />
+  >
+    <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+      <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+      <slot v-else :name="name" v-bind="slotProps" />
+    </template>
+  </v-text-field>
 </template>
 
 <script setup lang="ts">
