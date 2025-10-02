@@ -1,185 +1,158 @@
 <template>
-  <DialogForm title="" :show="show" fullscreen @dialog="show = false">
-    <v-tabs v-model="activeTab" color="primary" align-tabs="center">
-      <v-tab value="criticisms" class="text-none">
-        <v-icon icon="mdi-comment-alert-outline" start />
-        Lista de Críticas
-      </v-tab>
-      <v-tab value="messages" :disabled="!selectedCriticism" class="text-none">
-        <v-icon icon="mdi-chat-outline" start />
-        Mensagens
-      </v-tab>
-    </v-tabs>
-
-    <v-tabs-window v-model="activeTab" class="mt-4">
-      <!-- Tab 1: Lista de Críticas -->
-      <v-tabs-window-item value="criticisms">
-        <v-row dense>
-          <v-col cols="12">
-            <v-card flat>
-              <div class="d-flex justify-space-between align-center w-100">
-                <strong style="font-size: 1.2rem"
-                  >Críticas da Solicitação</strong
+  <DialogForm title="Críticas" :show="show" fullscreen @dialog="show = false">
+    <v-row class="fill-height">
+      <!-- Coluna da Lista de Críticas -->
+      <v-col cols="12" md="6" lg="5" class="border-e">
+        <v-card flat class="h-100 d-flex flex-column">
+          <v-card-title class="d-flex justify-between align-center flex-shrink-0">
+            <span>Críticas da Solicitação</span>
+            <v-btn
+              color="primary"
+              variant="outlined"
+              size="small"
+              @click="showNewCriticismDialog = true"
+            >
+              <v-icon icon="mdi-plus" start />
+              Nova Crítica
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="pa-0">
+            <div class="criticisms-list">
+              <v-list v-if="criticisms?.length" density="compact">
+                <v-list-item
+                  v-for="criticism in criticisms"
+                  :key="criticism.id"
+                  :active="selectedCriticism?.id === criticism.id"
+                  @click="selectCriticism(criticism)"
+                  class="mb-2"
                 >
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                  @click="showNewCriticismDialog = true"
-                >
-                  <v-icon icon="mdi-plus" start />
-                  Nova Crítica
-                </Button>
-              </div>
-
-              <v-card-text>
-                <v-list
-                  v-if="criticisms?.length"
-                  lines="three"
-                  variant="tonal"
-                  rounded="xl"
-                >
-                  <v-list-item
-                    v-for="criticism in criticisms"
-                    :key="criticism.id"
-                    @click="selectCriticism(criticism)"
-                    class="cursor-pointer"
-                    :class="{
-                      'bg-primary-lighten-5':
-                        selectedCriticism?.id === criticism.id,
-                    }"
-                  >
-                    <template #prepend>
-                      <v-avatar color="primary" size="40">
-                        <v-icon icon="mdi-comment-alert" />
-                      </v-avatar>
-                    </template>
-                    <v-list-item-title>
-                      {{ criticism.description || "Sem descrição" }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      Criado em: {{ formatDate(criticism.createdAt) }}
-                      <v-chip
-                        :color="getStatusColor(criticism.status)"
-                        size="small"
-                        class="ml-2"
-                      >
-                        {{ criticism.status || "Pendente" }}
-                      </v-chip>
-                    </v-list-item-subtitle>
-                    <template #append>
-                      <v-badge
-                        v-if="criticism.messages?.length"
-                        :content="criticism.messages.length"
-                        color="primary"
-                      >
-                        <v-icon icon="mdi-message" />
-                      </v-badge>
-                      <v-icon icon="mdi-chevron-right" />
-                    </template>
-                  </v-list-item>
-                </v-list>
-                <v-empty-state
-                  v-else
-                  icon="mdi-comment-alert-outline"
-                  title="Nenhuma crítica encontrada"
-                  text="Não há críticas para esta solicitação."
-                />
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-tabs-window-item>
-
-      <!-- Tab 2: Chat de Mensagens -->
-      <v-tabs-window-item value="messages">
-        <v-row v-if="selectedCriticism">
-          <v-col cols="12">
-            <v-card>
-              <v-card-title class="d-flex justify-between align-center">
-                <div>
-                  <span>Mensagens da Crítica</span>
-                  <v-chip color="primary" size="small" class="ml-2">
-                    {{ selectedCriticism.status || "Pendente" }}
-                  </v-chip>
-                </div>
-                <v-btn
-                  color="secondary"
-                  variant="outlined"
-                  size="small"
-                  @click="showEditDescriptionDialog = true"
-                >
-                  <v-icon icon="mdi-pencil" start />
-                  Editar Descrição
-                </v-btn>
-              </v-card-title>
-              <v-card-subtitle v-if="selectedCriticism.description">
-                <strong>Descrição:</strong> {{ selectedCriticism.description }}
-              </v-card-subtitle>
-
-              <!-- Chat Container -->
-              <v-card-text class="pa-0">
-                <div class="chat-container" ref="chatContainer">
-                  <div
-                    v-if="selectedCriticism.messages?.length"
-                    class="messages-list"
-                  >
-                    <div
-                      v-for="message in selectedCriticism.messages"
-                      :key="message.id"
-                      :class="[
-                        'message-item',
-                        message.userId === currentUserId
-                          ? 'message-sent'
-                          : 'message-received',
-                      ]"
-                    >
-                      <div class="message-bubble">
-                        <div class="message-content">{{ message.message }}</div>
-                        <div class="message-time">
-                          {{ formatDateTime(message.createdAt) }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <v-empty-state
-                    v-else
-                    icon="mdi-chat-outline"
-                    title="Nenhuma mensagem"
-                    text="Seja o primeiro a enviar uma mensagem."
-                    class="my-8"
-                  />
-                </div>
-              </v-card-text>
-
-              <!-- Input de Nova Mensagem -->
-              <v-card-actions class="pa-4">
-                <v-text-field
-                  v-model="newMessage"
-                  placeholder="Digite sua mensagem..."
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                  @keyup.enter="sendMessage"
-                  class="flex-grow-1"
-                >
-                  <template #append-inner>
+                  <template #prepend>
+                    <v-avatar :color="getStatusColor(criticism.status)" size="small">
+                      <v-icon icon="mdi-comment-text" size="small" />
+                    </v-avatar>
+                  </template>
+                  
+                  <v-list-item-title class="text-wrap">
+                    {{ criticism.description || 'Crítica sem descrição' }}
+                  </v-list-item-title>
+                  
+                  <v-list-item-subtitle>
+                    Status: {{ criticism.status || 'Pendente' }}
+                    <br>
+                    Mensagens: {{ criticism.messages?.length || 0 }}
+                  </v-list-item-subtitle>
+                  
+                  <template #append>
                     <v-btn
-                      icon="mdi-send"
-                      color="primary"
-                      variant="text"
+                      icon="mdi-pencil"
                       size="small"
-                      :disabled="!newMessage.trim()"
-                      @click="sendMessage"
+                      variant="text"
+                      @click.stop="editCriticismFromList(criticism)"
                     />
                   </template>
-                </v-text-field>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-tabs-window-item>
-    </v-tabs-window>
+                </v-list-item>
+              </v-list>
+              <v-empty-state
+                v-else
+                icon="mdi-comment-alert-outline"
+                title="Nenhuma crítica encontrada"
+                text="Clique no botão acima para criar uma nova crítica."
+                class="my-8"
+              />
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <!-- Coluna das Mensagens -->
+      <v-col cols="12" md="6" lg="7">
+        <v-card v-if="selectedCriticism" flat class="h-100 d-flex flex-column">
+          <v-card-title class="d-flex justify-between align-center flex-shrink-0">
+            <div>
+              <span>Mensagens da Crítica</span>
+              <v-chip color="primary" size="small" class="ml-2">
+                {{ selectedCriticism.status || 'Pendente' }}
+              </v-chip>
+            </div>
+            <v-btn
+              color="secondary"
+              variant="outlined"
+              size="small"
+              @click="showEditDescriptionDialog = true"
+            >
+              <v-icon icon="mdi-pencil" start />
+              Editar Descrição
+            </v-btn>
+          </v-card-title>
+          <v-card-subtitle v-if="selectedCriticism.description" class="text-wrap flex-shrink-0">
+            <strong>Descrição:</strong> {{ selectedCriticism.description }}
+          </v-card-subtitle>
+          
+          <!-- Chat Container -->
+          <v-card-text class="pa-0 flex-grow-1 d-flex flex-column">
+            <div class="messages-container">
+              <div v-if="selectedCriticism.messages?.length" class="messages-list" ref="chatContainer">
+                <div
+                  v-for="message in selectedCriticism.messages"
+                  :key="message.id"
+                  :class="[
+                    'message-item',
+                    message.userId === currentUserId ? 'message-sent' : 'message-received'
+                  ]"
+                >
+                  <div class="message-bubble">
+                    <div class="message-content">{{ message.message }}</div>
+                    <div class="message-time">
+                      {{ formatDateTime(message.createdAt) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <v-empty-state
+                v-else
+                icon="mdi-chat-outline"
+                title="Nenhuma mensagem"
+                text="Seja o primeiro a enviar uma mensagem."
+                class="my-8"
+              />
+            </div>
+          </v-card-text>
+
+          <!-- Input de Nova Mensagem -->
+          <v-card-actions class="pa-4 flex-shrink-0">
+            <v-text-field
+              v-model="newMessage"
+              placeholder="Digite sua mensagem..."
+              variant="outlined"
+              density="compact"
+              hide-details
+              @keyup.enter="sendMessage"
+              class="flex-grow-1"
+            >
+              <template #append-inner>
+                <v-btn
+                  icon="mdi-send"
+                  color="primary"
+                  variant="text"
+                  size="small"
+                  :disabled="!newMessage.trim()"
+                  @click="sendMessage"
+                />
+              </template>
+            </v-text-field>
+          </v-card-actions>
+        </v-card>
+
+        <!-- Estado quando nenhuma crítica está selecionada -->
+        <v-card v-else flat class="h-100 d-flex align-center justify-center">
+          <v-empty-state
+            icon="mdi-chat-processing-outline"
+            title="Selecione uma crítica"
+            text="Clique em uma crítica da lista para visualizar e enviar mensagens."
+          />
+        </v-card>
+      </v-col>
+    </v-row>
 
     <!-- Dialog para Nova Crítica -->
     <v-dialog v-model="showNewCriticismDialog" max-width="500">
@@ -240,233 +213,214 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import type { PatientConsultationCriticismsProps } from '~/types/PatientConsultationCriticism'
 
-const props = defineProps({
-  solicitation: {
-    type: Object as PropType<SolicitationConsultationProps>,
-    default: () => {},
-  },
-});
+interface Props {
+  show: boolean
+  patientConsultationId: number
+}
 
-const criticismStore = usePatientConsultationCriticismStore();
-const authStore = useAuthStore();
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  dialog: [value: boolean]
+}>()
 
-const show = defineModel("show", {
-  type: Boolean,
-  default: false,
-});
+// Stores
+const criticismStore = usePatientConsultationCriticismStore()
+const auth = useAuthStore()
 
-// Estados reativos
-const activeTab = ref("criticisms");
-const selectedCriticism = ref<PatientConsultationCriticismsProps | null>(null);
-const criticisms = ref<PatientConsultationCriticismsProps[]>([]);
-const newMessage = ref("");
-const newCriticismDescription = ref("");
-const editDescription = ref("");
-const showNewCriticismDialog = ref(false);
-const showEditDescriptionDialog = ref(false);
-const chatContainer = ref<HTMLElement>();
+// Reactive data
+const selectedCriticism = ref<PatientConsultationCriticismsProps | null>(null)
+const newMessage = ref('')
+const newCriticismDescription = ref('')
+const editDescription = ref('')
+const showNewCriticismDialog = ref(false)
+const showEditDescriptionDialog = ref(false)
+const chatContainer = ref<HTMLElement>()
 
 // Computed
-const currentUserId = computed(() => authStore.$currentUser?.id);
+const show = computed({
+  get: () => props.show,
+  set: (value: boolean) => emit('dialog', value)
+})
 
-// Watchers
-watch(
-  () => props.solicitation,
-  async (newSolicitation) => {
-    if (newSolicitation?.id) {
-      await loadCriticisms();
-    }
-  },
-  { immediate: true }
-);
+const criticisms = computed(() => criticismStore.$all?.criticisms || [])
+const currentUserId = computed(() => auth.$currentUser?.id)
 
-watch(
-  () => show.value,
-  (isVisible) => {
-    if (isVisible && props.solicitation?.id) {
-      loadCriticisms();
-    }
-  }
-);
-
-watch(
-  () => selectedCriticism.value,
-  () => {
-    nextTick(() => {
-      scrollToBottom();
-    });
-  }
-);
-
-// Métodos
+// Methods
 const loadCriticisms = async () => {
-  if (!props.solicitation?.id) return;
-
   try {
-    await criticismStore.listCriticisms(props.solicitation.id);
-    criticisms.value = criticismStore.$all?.criticisms || [];
+    await criticismStore.listCriticisms(props.patientConsultationId)
   } catch (error) {
-    console.error("Erro ao carregar críticas:", error);
+    console.error('Erro ao carregar críticas:', error)
   }
-};
+}
 
-const selectCriticism = async (
-  criticism: PatientConsultationCriticismsProps
-) => {
-  selectedCriticism.value = criticism;
-  activeTab.value = "messages";
-
-  // Carregar detalhes da crítica com mensagens
-  if (criticism.id) {
-    try {
-      await criticismStore.getCriticismDetails(criticism.id);
-      const criticismDetails = criticismStore.$single?.criticism;
-      if (criticismDetails) {
-        selectedCriticism.value = criticismDetails;
-      }
-    } catch (error) {
-      console.error("Erro ao carregar detalhes da crítica:", error);
-    }
+const selectCriticism = async (criticism: PatientConsultationCriticismsProps) => {
+  try {
+    await criticismStore.getCriticismDetails(criticism.id!)
+    selectedCriticism.value = criticismStore.$single?.criticism || criticism
+    await nextTick()
+    scrollToBottom()
+  } catch (error) {
+    console.error('Erro ao carregar detalhes da crítica:', error)
+    selectedCriticism.value = criticism
   }
-};
+}
 
 const sendMessage = async () => {
-  if (
-    !newMessage.value.trim() ||
-    !selectedCriticism.value?.id ||
-    !currentUserId.value
-  )
-    return;
+  if (!newMessage.value.trim() || !selectedCriticism.value?.id || !currentUserId.value) return
 
   try {
-    await criticismStore.addMessage({
+    const messageData = {
       patientConsultationCriticismId: selectedCriticism.value.id,
       userId: currentUserId.value,
-      message: newMessage.value.trim(),
-    });
-
-    // Recarregar detalhes da crítica para atualizar mensagens
-    await criticismStore.getCriticismDetails(selectedCriticism.value.id);
-    const criticismDetails = criticismStore.$single?.criticism;
-    if (criticismDetails) {
-      selectedCriticism.value = criticismDetails;
+      message: newMessage.value.trim()
     }
-
-    newMessage.value = "";
-    nextTick(() => {
-      scrollToBottom();
-    });
+    await criticismStore.addMessage(messageData)
+    newMessage.value = ''
+    
+    // Recarregar detalhes da crítica para mostrar a nova mensagem
+    await criticismStore.getCriticismDetails(selectedCriticism.value.id)
+    selectedCriticism.value = criticismStore.$single?.criticism || selectedCriticism.value
+    
+    await nextTick()
+    scrollToBottom()
   } catch (error) {
-    console.error("Erro ao enviar mensagem:", error);
+    console.error('Erro ao enviar mensagem:', error)
   }
-};
+}
 
 const createNewCriticism = async () => {
-  if (!newCriticismDescription.value.trim() || !props.solicitation?.id) return;
+  if (!newCriticismDescription.value.trim()) return
 
   try {
     await criticismStore.createCriticism({
-      patientConsultationId: props.solicitation.id,
-      description: newCriticismDescription.value.trim(),
-    });
-
-    // Recarregar lista de críticas
-    await loadCriticisms();
-
-    newCriticismDescription.value = "";
-    showNewCriticismDialog.value = false;
+      patientConsultationId: props.patientConsultationId,
+      description: newCriticismDescription.value.trim()
+    })
+    newCriticismDescription.value = ''
+    showNewCriticismDialog.value = false
+    await loadCriticisms()
   } catch (error) {
-    console.error("Erro ao criar crítica:", error);
+    console.error('Erro ao criar crítica:', error)
   }
-};
+}
+
+const editCriticismFromList = (criticism: PatientConsultationCriticismsProps) => {
+  selectedCriticism.value = criticism
+  editDescription.value = criticism.description || ''
+  showEditDescriptionDialog.value = true
+}
 
 const updateCriticismDescription = async () => {
-  if (!editDescription.value.trim() || !selectedCriticism.value?.id) return;
+  if (!editDescription.value.trim() || !selectedCriticism.value?.id) return
 
   try {
-    // Assumindo que existe um método para atualizar a descrição
-    // Se não existir, você pode precisar criar no store
     await criticismStore.updateCriticismStatus({
       id: selectedCriticism.value.id,
-      patientConsultationId: selectedCriticism.value.patientConsultationId,
+      patientConsultationId: props.patientConsultationId,
       description: editDescription.value.trim(),
-      status: selectedCriticism.value.status,
-    });
-
-    // Recarregar detalhes
-    await criticismStore.getCriticismDetails(selectedCriticism.value.id);
-    const criticismDetails = criticismStore.$single?.criticism;
-    if (criticismDetails) {
-      selectedCriticism.value = criticismDetails;
-    }
-
-    // Recarregar lista
-    await loadCriticisms();
-
-    showEditDescriptionDialog.value = false;
+      status: selectedCriticism.value.status || 'Pendente'
+    })
+    
+    // Atualizar a crítica selecionada
+    selectedCriticism.value.description = editDescription.value.trim()
+    
+    editDescription.value = ''
+    showEditDescriptionDialog.value = false
+    
+    // Recarregar lista de críticas
+    await loadCriticisms()
   } catch (error) {
-    console.error("Erro ao atualizar descrição:", error);
+    console.error('Erro ao atualizar descrição:', error)
   }
-};
+}
 
 const scrollToBottom = () => {
   if (chatContainer.value) {
-    chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+    chatContainer.value.scrollTop = chatContainer.value.scrollHeight
   }
-};
+}
 
 const formatDate = (date: string | undefined) => {
-  if (!date) return "Data não disponível";
-  return dayjs(date).format("DD/MM/YYYY HH:mm");
-};
+  if (!date) return "Data não disponível"
+  return new Date(date).toLocaleDateString('pt-BR')
+}
 
 const formatDateTime = (date: string | undefined) => {
-  if (!date) return "";
-  return dayjs(date).format("DD/MM HH:mm");
-};
+  if (!date) return ""
+  return new Date(date).toLocaleString('pt-BR')
+}
 
 const getStatusColor = (status: string | undefined) => {
   switch (status?.toLowerCase()) {
-    case "resolvido":
-      return "success";
-    case "em_andamento":
-      return "warning";
-    case "pendente":
+    case 'resolvido':
+      return 'success'
+    case 'em_andamento':
+      return 'warning'
+    case 'pendente':
     default:
-      return "error";
+      return 'primary'
   }
-};
+}
 
-// Preparar dados para edição
-watch(
-  () => showEditDescriptionDialog.value,
-  (isVisible) => {
-    if (isVisible && selectedCriticism.value) {
-      editDescription.value = selectedCriticism.value.description || "";
-    }
+// Watchers
+watch(() => props.show, (newValue) => {
+  if (newValue) {
+    loadCriticisms()
   }
-);
+})
+
+watch(() => showEditDescriptionDialog.value, (newValue) => {
+  if (newValue && selectedCriticism.value) {
+    editDescription.value = selectedCriticism.value.description || ''
+  }
+})
+
+// Lifecycle
+onMounted(() => {
+  if (props.show) {
+    loadCriticisms()
+  }
+})
 </script>
 
 <style scoped>
-.chat-container {
-  height: 400px;
+.criticism-list {
+  max-height: 70vh;
   overflow-y: auto;
-  padding: 16px;
-  background-color: #f5f5f5;
+}
+
+.criticism-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para o chat */
+.messages-container {
+  height: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .messages-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  max-height: 100%;
+}
+
+.criticisms-list {
+  height: 500px;
+  overflow-y: auto;
+  padding: 8px;
 }
 
 .message-item {
+  margin-bottom: 16px;
   display: flex;
-  width: 100%;
 }
 
 .message-sent {
@@ -481,36 +435,71 @@ watch(
   max-width: 70%;
   padding: 12px 16px;
   border-radius: 18px;
-  word-wrap: break-word;
+  position: relative;
 }
 
 .message-sent .message-bubble {
-  background-color: #1976d2;
+  background-color: rgb(var(--v-theme-primary));
   color: white;
   border-bottom-right-radius: 4px;
 }
 
 .message-received .message-bubble {
-  background-color: white;
-  color: #333;
-  border: 1px solid #e0e0e0;
+  background-color: rgb(var(--v-theme-surface-variant));
+  color: rgb(var(--v-theme-on-surface-variant));
   border-bottom-left-radius: 4px;
 }
 
 .message-content {
-  margin-bottom: 4px;
+  word-wrap: break-word;
+  line-height: 1.4;
 }
 
 .message-time {
   font-size: 0.75rem;
   opacity: 0.7;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.message-received .message-time {
+  text-align: left;
 }
 
 .cursor-pointer {
   cursor: pointer;
 }
 
-.cursor-pointer:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+/* Responsividade */
+@media (max-width: 960px) {
+  .messages-container {
+    height: 300px;
+  }
+  
+  .criticisms-list {
+    height: 300px;
+  }
+  
+  .criticism-list {
+    max-height: 40vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .messages-container {
+    height: 250px;
+  }
+  
+  .criticisms-list {
+    height: 200px;
+  }
+  
+  .message-bubble {
+    max-width: 85%;
+  }
+  
+  .criticism-list {
+    max-height: 35vh;
+  }
 }
 </style>
