@@ -166,6 +166,7 @@
             icon
             variant="text"
             @click="handleReportDetails(item)"
+            size="x-small"
           >
             <v-icon icon="mdi-file-document-arrow-right-outline" color="info" />
             <v-tooltip
@@ -182,6 +183,7 @@
               icon
               variant="text"
               @click="handleCancelSchedule(item.publicId)"
+              size="x-small"
             >
               <v-icon icon="mdi-account-off-outline" color="red" />
               <v-tooltip
@@ -198,6 +200,7 @@
               variant="text"
               @click="handleFinalizeSchedule(item)"
               :disabled="!item.medicId"
+              size="x-small"
             >
               <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
               <v-tooltip
@@ -213,6 +216,7 @@
               icon
               variant="text"
               @click="handleServiceDetails(item)"
+              size="x-small"
             >
               <v-icon icon="mdi-stethoscope" size="20" color="purple" />
               <v-tooltip
@@ -224,13 +228,14 @@
               </v-tooltip>
             </v-btn>
           </div>
-          <div class="d-flex align-center">
+          <div class="d-flex align-center w-100">
             <v-btn
               v-if="item.status === 'completed' && item.nuvidioCallId"
               color="purple-darken-2"
               icon
               variant="text"
               @click="handleDownloadRecord(item)"
+              size="x-small"
             >
               <v-icon icon="mdi-video-outline" size="20" color="purple" />
               <v-tooltip
@@ -250,6 +255,7 @@
               icon
               variant="text"
               @click="handleShowMedicalReportForm(item)"
+              size="x-small"
             >
               <v-icon icon="mdi-file-document-edit-outline" color="colorIcon" />
               <v-tooltip
