@@ -390,6 +390,8 @@ watch(
   () => show.value,
   (newValue) => {
     if (newValue) {
+      // Limpar crítica selecionada ao abrir o componente
+      selectedCriticism.value = null;
       loadCriticisms();
     }
   }
