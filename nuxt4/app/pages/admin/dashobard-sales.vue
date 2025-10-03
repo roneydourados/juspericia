@@ -16,18 +16,7 @@ onMounted(async () => {
   await dash.getDashboardSales({
     initialDate,
     finalDate,
+    ufs: [],
   });
-  // try {
-  //   loading.value = true;
-  //   const initialDate = dayjs().format("YYYY-MM-DD");
-  //   const finalDate = dayjs().format("YYYY-MM-DD");
-
-  //   await dash.getDashboardSales({
-  //     initialDate,
-  //     finalDate,
-  //   });
-  // } finally {
-  //   loading.value = false;
-  // }
 });
 </script>
