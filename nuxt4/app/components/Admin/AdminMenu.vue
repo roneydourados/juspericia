@@ -4,7 +4,7 @@
       <v-col cols="12" class="pa-6">
         <HeaderPage title="Administração" font-size="1.8rem" />
       </v-col>
-      <v-col v-for="(item, index) in itemsMenu" :key="index" cols="12" lg="3">
+      <v-col v-for="(item, index) in itemsMenu" :key="index" cols="12" lg="4">
         <CardBlur @click="handlClick(item.to)" height="100%">
           <template #content>
             <div class="d-flex flex-column">
