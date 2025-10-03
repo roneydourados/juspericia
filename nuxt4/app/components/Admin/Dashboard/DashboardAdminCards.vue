@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12" lg="6">
       <CardLeftBorderColor
-        title="Pendente"
+        title="Vendas Pendente"
         color="#c8e040"
         icon="mdi-currency-usd"
         icon-color="warning"
@@ -17,7 +17,7 @@
     </v-col>
     <v-col cols="12" lg="6">
       <CardLeftBorderColor
-        title="Total Pendente"
+        title="Vendas Confirmadas"
         color="#0F91C3"
         icon="mdi-currency-usd"
         icon-color="success"

@@ -33,15 +33,15 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" lg="4">
+        <v-col cols="12">
           <DashboardAdminMedicHours />
         </v-col>
-        <v-col cols="12" lg="4">
+        <v-col cols="12">
           <DashboardAdminMedicRateRange />
         </v-col>
-        <v-col cols="12" lg="4">
+        <!-- <v-col cols="12">
           <DashboardAdminMedicReportRevision />
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-card-text>
     <DialogLoading :dialog="loading" />
