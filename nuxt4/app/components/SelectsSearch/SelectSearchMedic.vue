@@ -64,7 +64,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useDebounceFn } from "@vueuse/core";
 
-defineProps({
+const props = defineProps({
   type: {
     type: String,
     default: "",
@@ -101,6 +101,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  medicalSpecialtyId: {
+    type: Number,
+    default: undefined,
+  },
 });
 
 const emit = defineEmits(["update:modelValue", "clear"]);
@@ -110,7 +114,17 @@ const { formatCPFOrCNPJ } = useUtils();
 const search = ref("");
 const loadingSearch = ref(false);
 
-const $all = computed(() => userMedicStore.$all);
+const $all = computed(() => {
+  if (props.medicalSpecialtyId) {
+    return userMedicStore.$all.filter((item) =>
+      item.medicalSpecialtiesMedic?.some(
+        (speciality) =>
+          speciality.medicalSpecialtyId === props.medicalSpecialtyId
+      )
+    );
+  }
+  return userMedicStore.$all;
+});
 
 watch(search, async () => {
   await handleSearch();
