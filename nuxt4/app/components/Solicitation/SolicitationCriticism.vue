@@ -41,7 +41,7 @@
                   </template>
 
                   <v-list-item-title class="text-wrap">
-                    {{ criticism.description || "Crítica sem descrição" }}
+                    {{ criticism.description || "Observação sem descrição" }}
                   </v-list-item-title>
 
                   <v-list-item-subtitle>
@@ -53,19 +53,37 @@
                   <template #append>
                     <v-btn
                       v-if="$currentUser?.profile?.type === 'ADMIN'"
-                      icon="mdi-pencil"
+                      icon="mdi-pencil-outline"
                       size="small"
                       variant="text"
+                      color="orange-darken-2"
                       @click.stop="editCriticismFromList(criticism)"
                     />
+                    <v-btn
+                      v-if="$currentUser?.profile?.type === 'ADMIN'"
+                      icon
+                      color="green"
+                      variant="text"
+                      size="small"
+                      @click.stop="markCriticismAsResolved(criticism)"
+                    >
+                      <v-icon icon="mdi-check-circle-outline" />
+                      <v-tooltip
+                        activator="parent"
+                        location="top center"
+                        content-class="tooltip-background"
+                      >
+                        Marcar como Resolvido
+                      </v-tooltip>
+                    </v-btn>
                   </template>
                 </v-list-item>
               </v-list>
               <v-empty-state
                 v-else
                 icon="mdi-comment-alert-outline"
-                title="Nenhuma crítica encontrada"
-                text="Clique no botão acima para criar uma nova crítica."
+                title="Nenhuma observação encontrada"
+                text="Clique no botão acima para criar uma nova observação."
                 class="my-8"
               />
             </div>
@@ -76,12 +94,20 @@
       <v-col cols="12" md="6">
         <v-card v-if="selectedCriticism" flat class="h-100 d-flex flex-column">
           <v-card-title>
+            <div style="font-size: 1rem; font-weight: 600">Descrição:</div>
+            <div
+              class="mb-4 text-pre-wrap"
+              style="white-space: pre-wrap; word-break: break-word"
+            >
+              {{ selectedCriticism?.description }}
+            </div>
+            <v-divider class="mb-2"></v-divider>
             <div
               class="d-flex justify-space-between align-center flex-shrink-0"
             >
-              <span>Mensagens da Crítica</span>
+              <span>Mensagens da Observação</span>
               <v-chip color="primary" size="small" class="ml-2">
-                {{ selectedCriticism.status || "Pendente" }}
+                {{ selectedCriticism.status || "ABERTO" }}
               </v-chip>
             </div>
           </v-card-title>
@@ -163,14 +189,14 @@
         <v-card v-else flat class="h-100 d-flex align-center justify-center">
           <v-empty-state
             icon="mdi-chat-processing-outline"
-            title="Selecione uma crítica"
-            text="Clique em uma crítica da lista para visualizar e enviar mensagens."
+            title="Selecione uma observação"
+            text="Clique em uma observação da lista para visualizar e enviar mensagens."
           />
         </v-card>
       </v-col>
     </v-row>
 
-    <!-- Dialog para Nova Crítica -->
+    <!-- Dialog para Nova observação -->
     <v-dialog v-model="showNewCriticismDialog" max-width="500">
       <v-card>
         <v-card-title>Nova Observação</v-card-title>
@@ -266,7 +292,7 @@ const loadCriticisms = async () => {
   try {
     await criticismStore.listCriticisms(props.solicitation.id!);
   } catch (error) {
-    console.error("Erro ao carregar críticas:", error);
+    console.error("Erro ao carregar observações:", error);
   }
 };
 
@@ -281,7 +307,7 @@ const selectCriticism = async (
     await nextTick();
     scrollToBottom();
   } catch (error) {
-    console.error("Erro ao carregar detalhes da crítica:", error);
+    console.error("Erro ao carregar detalhes da observação:", error);
     selectedCriticism.value = criticism;
   }
 };
@@ -327,7 +353,7 @@ const createNewCriticism = async () => {
     showNewCriticismDialog.value = false;
     await loadCriticisms();
   } catch (error) {
-    console.error("Erro ao criar crítica:", error);
+    console.error("Erro ao criar a observação:", error);
   }
 };
 
@@ -383,6 +409,55 @@ const getStatusColor = (status: string | undefined) => {
     default:
       return "primary";
   }
+};
+
+const markCriticismAsResolved = async (
+  criticism: PatientConsultationCriticismsProps
+) => {
+  if (!criticism.id) return;
+
+  push.info({
+    title: "Marcar observação como resolvida",
+    message: "Confirma marcar a observação como resolvida?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            try {
+              await criticismStore.updateCriticism({
+                id: criticism.id,
+                status: "RESOLVIDO",
+                description: criticism.description || "",
+              });
+
+              // Atualizar a crítica selecionada
+              criticism.status = "RESOLVIDO";
+
+              // Recarregar lista de críticas
+              //await loadCriticisms();
+            } catch (error) {
+              console.error("Erro ao marcar crítica como resolvida:", error);
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 
 // Watchers
