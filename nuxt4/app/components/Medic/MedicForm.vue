@@ -20,11 +20,6 @@
         <v-tab value="address" class="text-none">
           <span class="text-primary" style="font-weight: 500"> Endereço </span>
         </v-tab>
-        <!-- <v-tab value="parameters" class="text-none">
-          <span class="text-primary" style="font-weight: 500">
-            Parâmetros de Consulta
-          </span>
-        </v-tab> -->
       </v-tabs>
       <v-tabs-window v-model="tab" class="mt-4">
         <v-tabs-window-item value="personalData">
@@ -84,11 +79,61 @@
                 :required="!model.id"
               />
             </v-col>
-            <v-col cols="12" lg="8">
-              <SelectSearchMedicalSpecialty
-                v-model="model.medicalSpecialty"
-                required
-              />
+            <v-col cols="12" lg="8" class="d-flex flex-column">
+              <div class="d-flex" style="gap: 0.5rem">
+                <SelectSearchMedicalSpecialty
+                  v-model="model.medicalSpecialty"
+                />
+                <Button
+                  variant="tonal"
+                  icon
+                  size="small"
+                  @click="handleAddMedicalSpecialty(model.medicalSpecialty)"
+                >
+                  <v-icon icon="mdi-loupe" color="primary" />
+                  <v-tooltip
+                    activator="parent"
+                    location="top center"
+                    content-class="tooltip-background"
+                  >
+                    Adicionar Especialidade
+                  </v-tooltip>
+                </Button>
+              </div>
+              <strong
+                v-if="
+                  !model.medicalSpecialtiesMedic ||
+                  model.medicalSpecialtiesMedic.length === 0
+                "
+                class="text-red mb-4 ml-3 mt-n4"
+              >
+                Informe pelo menos uma especialidade!
+              </strong>
+            </v-col>
+            <v-col cols="12" class="px-4">
+              <div class="mb-2" style="font-weight: 700">Especialidades:</div>
+              <div
+                v-for="speciality in model.medicalSpecialtiesMedic"
+                :key="speciality.medicalSpecialtyId"
+                class="d-flex flex-column mt-2"
+              >
+                <div class="d-flex justify-space-between">
+                  <strong>
+                    {{ speciality.medicalSpecialty.medicalSpecialty }}
+                  </strong>
+                  <Button
+                    size="x-small"
+                    variant="text"
+                    icon
+                    @click="
+                      handleRemoveMedicalSpecialty(speciality.medicalSpecialty)
+                    "
+                  >
+                    <v-icon icon="mdi-delete-outline" color="red" />
+                  </Button>
+                </div>
+                <v-divider />
+              </div>
             </v-col>
           </v-row>
         </v-tabs-window-item>
@@ -252,12 +297,7 @@ const { mobile } = useDisplay();
 
 const medicStore = useMedicStore();
 const tab = ref("personalData");
-// const tabs = ref([
-//   { title: "Dados Pessoais", icon: "mdi-account" },
-//   { title: "Dados Bancários", icon: "mdi-bank" },
-//   { title: "Endereço", icon: "mdi-map" },
-//   { title: "Parâmetros de Consulta", icon: "mdi-cog" },
-// ]);
+
 const loading = ref(false);
 const model = ref({
   id: 0,
@@ -294,6 +334,7 @@ const model = ref({
   bankAccountNumber: "",
   bankAccountType: "CONTA_CORRENTE",
   medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
+  medicalSpecialtiesMedic: [] as MedicalSpecialtyMedicProps[],
 });
 
 const clearModel = () => {
@@ -332,6 +373,7 @@ const clearModel = () => {
     bankAccountNumber: "",
     bankAccountType: "CONTA_CORRENTE",
     medicalSpecialty: undefined,
+    medicalSpecialtiesMedic: [],
   };
 };
 
@@ -380,13 +422,22 @@ const loadModel = () => {
     bankAgency: props.data.bankAgency ?? "",
     bankAccountNumber: props.data.bankAccountNumber ?? "",
     bankAccountType: props.data.bankAccountType ?? "CONTA_CORRENTE",
-    medicalSpecialty: props.data.medicalSpecialty,
+    medicalSpecialty: undefined,
+    medicalSpecialtiesMedic: props.data.medicalSpecialtiesMedic ?? [],
   };
 };
 
 const submitForm = async () => {
   loading.value = true;
   try {
+    if (
+      !model.value.medicalSpecialtiesMedic ||
+      model.value.medicalSpecialtiesMedic.length === 0
+    ) {
+      push.warning("Informe pelo menos uma especialidade!");
+      return;
+    }
+
     if (model.value.id && model.value.id > 0) {
       await update();
     } else {
@@ -435,7 +486,8 @@ const create = async () => {
     bankAgency: model.value.bankAgency,
     bankAccountNumber: model.value.bankAccountNumber,
     bankAccountType: model.value.bankAccountType,
-    medicalSpecialtyId: model.value.medicalSpecialty?.id,
+    //medicalSpecialtyId: model.value.medicalSpecialty?.id,
+    medicalSpecialtiesMedic: model.value.medicalSpecialtiesMedic,
   });
 };
 
@@ -475,12 +527,38 @@ const update = async () => {
     bankAgency: model.value.bankAgency,
     bankAccountNumber: model.value.bankAccountNumber,
     bankAccountType: model.value.bankAccountType,
-    medicalSpecialtyId: model.value.medicalSpecialty?.id,
+    //medicalSpecialtyId: model.value.medicalSpecialty?.id,
+    medicalSpecialtiesMedic: model.value.medicalSpecialtiesMedic,
   });
 };
 
 const handleClose = () => {
   clearModel();
   emit("close");
+};
+
+const handleAddMedicalSpecialty = (item?: MedicalSpecialtyProps) => {
+  if (!item) return;
+
+  const alreadyExists = model.value.medicalSpecialtiesMedic.some(
+    (specialty) => specialty.medicalSpecialtyId === item.id
+  );
+
+  if (alreadyExists) return;
+
+  model.value.medicalSpecialtiesMedic.push({
+    medicalSpecialtyId: item.id!,
+    medicId: model.value.id,
+    medicalSpecialty: item,
+  });
+};
+
+const handleRemoveMedicalSpecialty = (item?: MedicalSpecialtyProps) => {
+  if (!item) return;
+
+  model.value.medicalSpecialtiesMedic =
+    model.value.medicalSpecialtiesMedic.filter(
+      (specialty) => specialty.medicalSpecialtyId !== item.id
+    );
 };
 </script>

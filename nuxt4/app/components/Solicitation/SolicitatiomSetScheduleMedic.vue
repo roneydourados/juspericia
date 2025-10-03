@@ -28,7 +28,19 @@
         <v-col cols="12">
           <SelectSearchMedic v-model="model.medic" clearable required />
         </v-col>
+        <v-col v-if="model.medic" cols="12">
+          <div class="mb-2" style="font-weight: 700">Especialidades:</div>
+          <div
+            v-for="speciality in model.medic?.medicalSpecialtiesMedic"
+            :key="speciality.medicalSpecialtyId"
+            class="d-flex flex-column"
+          >
+            <strong>{{ speciality.medicalSpecialty.medicalSpecialty }}</strong>
+            <v-divider class="my-2" />
+          </div>
+        </v-col>
         <v-col
+          v-if="model.medic"
           cols="12"
           class="d-flex align-center px-4 mb-8"
           style="gap: 0.5rem"

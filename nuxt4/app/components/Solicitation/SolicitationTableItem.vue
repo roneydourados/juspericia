@@ -361,14 +361,15 @@
             <span class="text-caption">Lançar/Ver observações</span>
           </Button>
         </v-col>
-        <v-col
-          v-if="
-            solicitation.Schedule &&
-            solicitation.Schedule?.[0]?.nuvidioInviteLink
-          "
-          cols="12"
-        >
-          <div class="d-flex align-center w-100" style="gap: 0.5rem">
+        <v-col cols="12">
+          <div
+            v-if="
+              solicitation.Schedule &&
+              solicitation.Schedule?.[0]?.nuvidioInviteLink
+            "
+            class="d-flex align-center w-100"
+            style="gap: 0.5rem"
+          >
             <span>
               Agendamento com médico criado, clique no botão para copiar link:
             </span>

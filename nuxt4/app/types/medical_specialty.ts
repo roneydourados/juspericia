@@ -13,3 +13,13 @@ export interface MedicalSpecialtyListResponse {
 export interface MedicalSpecialtySingleResponse {
   medicalSpecialtys: MedicalSpecialtyProps[];
 }
+
+export interface MedicalSpecialtyMedicProps {
+  medicalSpecialtyId: number;
+  medicId: number;
+  medicalSpecialty: MedicalSpecialtyProps;
+}
+
+export interface MedicalSpecialtyAssociationsProps {
+  medicalSpecialtyAssociations: MedicalSpecialtyMedicProps[];
+}

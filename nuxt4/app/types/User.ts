@@ -49,6 +49,7 @@ export interface UserProps {
   nuvidioId?: string;
   nuvidioDepartmentId?: number;
   nuvidioDepartment?: NuvidioDepartmentProps;
+  medicalSpecialtiesMedic?: MedicalSpecialtyMedicProps[];
 }
 
 export interface NuvidioDepartmentProps {
