@@ -162,8 +162,9 @@
             variant="outlined"
             @click="editItem(solicitation)"
             :disabled="
-              solicitation.status === 'finished' ||
-              solicitation.status === 'canceled'
+              (solicitation.status === 'finished' ||
+                solicitation.status === 'canceled') &&
+              $currentUser?.profile?.type !== 'ADMIN'
             "
           >
             <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
