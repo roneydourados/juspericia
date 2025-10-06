@@ -26,7 +26,10 @@
               CPF/CNPJ: {{ formatCPFOrCNPJ(item.raw.cpfCnpj) }}
             </div>
             <div class="text-caption text-grey-darken-2">
-              {{ item.raw.medicalSpecialty?.medicalSpecialty }}
+              {{
+                item.raw.medicalSpecialtiesMedic?.[0].medicalSpecialty
+                  .medicalSpecialty
+              }}
             </div>
           </div>
         </template>
