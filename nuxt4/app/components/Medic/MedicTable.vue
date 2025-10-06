@@ -19,27 +19,16 @@
         <v-icon icon="mdi-account-outline" size="24" start color="colorIcon" />
         <span>{{ item.name }}</span>
       </span>
-
-      <!-- <div class="d-flex flex-wrap" style="gap: 0.5rem">
-        <div>Atendimento:</div>
-        <div v-if="item.seg" class="font-weight-bold">Seg</div>
-        <div v-if="item.ter" class="font-weight-bold">Ter</div>
-        <div v-if="item.qua" class="font-weight-bold">Qua</div>
-        <div v-if="item.qui" class="font-weight-bold">Qui</div>
-        <div v-if="item.sex" class="font-weight-bold">Sex</div>
-        <div v-if="item.sab" class="font-weight-bold">Sab</div>
-        <div v-if="item.dom" class="font-weight-bold">Dom</div>
-        <div>Das: {{ item.medicHourStart }} até {{ item.medicHourEnd }}</div>
-      </div> -->
-    </template>
-    <!-- <template v-slot:item.phone="{ item }">
-      <span class="d-flex align-center">
-        <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
-        <span>
-          {{ item.phone ? formatTelephoneNumber(item.phone) : "Não informado" }}
+      <div
+        v-for="medicalSpecialty in item.medicalSpecialtiesMedic"
+        class="d-flex flex-column"
+      >
+        <span class="text-caption">
+          {{ medicalSpecialty.medicalSpecialty.medicalSpecialty }}
         </span>
-      </span>
-    </template> -->
+      </div>
+    </template>
+
     <template v-slot:item.email="{ item }">
       <span class="d-flex align-center">
         <v-icon icon="mdi-email-outline" size="24" color="colorIcon" start />
@@ -58,16 +47,7 @@
         />
       </span>
     </template>
-    <template v-slot:item.medicalSpecialty="{ item }">
-      <v-icon icon="mdi-medical-bag" start color="colorIcon" />
-      <strong>
-        {{
-          item.medicalSpecialty
-            ? item.medicalSpecialty.medicalSpecialty
-            : "Não  informado"
-        }}
-      </strong>
-    </template>
+    <template v-slot:item.medicalSpecialty="{ item }"> </template>
     <template v-slot:item.actions="{ item }">
       <v-btn
         icon
@@ -150,7 +130,7 @@ import { useDisplay } from "vuetify";
 const medicStore = useMedicStore();
 const nuvidioStore = useNuvidioStore();
 
-const { formatTelephoneNumber } = useUtils();
+//const { formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
 const $all = computed(() => medicStore.$all);
 
@@ -175,10 +155,10 @@ const headers = ref([
     title: "Ativo",
     key: "active",
   },
-  {
-    title: "Especialidade",
-    key: "medicalSpecialty",
-  },
+  // {
+  //   title: "Especialidade",
+  //   key: "medicalSpecialty",
+  // },
   {
     title: "Ações",
     key: "actions",
