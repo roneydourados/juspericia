@@ -414,6 +414,9 @@ onUnmounted(() => {
 
 const getSchedules = async () => {
   // if (!model.date) return;
+  // Para a contagem antes de executar a busca
+  stopCountdown();
+  
   loading.value = true;
   try {
     if ($currentUser.value?.profile?.type !== "MEDICO") {
@@ -434,6 +437,8 @@ const getSchedules = async () => {
     }
   } finally {
     loading.value = false;
+    // Reinicia a contagem regressiva após executar getSchedules
+    startCountdown();
   }
 };
 
