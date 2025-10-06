@@ -118,20 +118,6 @@
               </Button>
             </v-card-actions>
           </v-card>
-
-          <!-- <div
-            
-            class="d-flex flex-wrap bg-green-darken-1 pa-2 rounded-lg"
-          >
-            <InfoLabel
-              :title=""
-              :font-size="mobile ? '0.73' : '1.1'"
-              :font-size-content="mobile ? '0.73' : '1.1'"
-              :show-divider="false"
-              :content=""
-            />
-            
-          </div> -->
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
           <SolicitationDetailsOffice

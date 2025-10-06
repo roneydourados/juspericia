@@ -7,6 +7,28 @@
       Dados da consulta
     </div>
     <v-row dense class="text-primary">
+      <v-col v-if="$single?.processSituation" cols="12" lg="6">
+        <InfoLabel
+          title="Situação do processo"
+          :font-size="mobile ? '0.8' : '1'"
+          :font-size-content="mobile ? '0.8' : '1'"
+          :content="
+            $single?.processSituation
+              ? $single?.processSituation === 'PD'
+                ? 'Processo distribuido'
+                : 'Processo andamento'
+              : ''
+          "
+        />
+      </v-col>
+      <v-col v-if="$single?.proccessNumber" cols="12" lg="6">
+        <InfoLabel
+          title="Número do processo"
+          :font-size="mobile ? '0.8' : '1'"
+          :font-size-content="mobile ? '0.8' : '1'"
+          :content="$single?.proccessNumber"
+        />
+      </v-col>
       <v-col cols="12">
         <InfoLabel
           title="Email"
