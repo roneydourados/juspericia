@@ -625,6 +625,9 @@ const handleCancelSchedule = async (publicId: string) => {
 
 // Start the countdown timer
 const startCountdown = () => {
+  // Limpa qualquer countdown anterior para evitar múltiplos intervalos
+  stopCountdown();
+  
   countdown.value = countDownDefaultValue;
   isTimerActive.value = true;
 
@@ -633,6 +636,8 @@ const startCountdown = () => {
 
     if (countdown.value <= 0) {
       stopCountdown();
+      // Quando o countdown termina, executa o refresh e reinicia
+      refreshAndRestart();
     }
   }, 1000);
 };
@@ -646,12 +651,21 @@ const stopCountdown = () => {
   isTimerActive.value = false;
 };
 
-// Start the auto-refresh interval
+// Função para fazer refresh e reiniciar o countdown
+const refreshAndRestart = async () => {
+  await getSchedules();
+  startCountdown();
+};
+
+// Start the auto-refresh interval (agora usa intervalo fixo)
 const startAutoRefresh = () => {
+  // Limpa qualquer intervalo anterior
+  stopAutoRefresh();
+  
+  // Usa intervalo fixo baseado no valor padrão do countdown
   autoRefreshInterval.value = setInterval(async () => {
-    await getSchedules();
-    startCountdown(); // Restart countdown after refresh
-  }, countdown.value * 1000); // 60 seconds
+    await refreshAndRestart();
+  }, countDownDefaultValue * 1000);
 };
 
 // Stop the auto-refresh interval
