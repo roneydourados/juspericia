@@ -2,7 +2,7 @@
   <v-row justify="end">
     <v-col v-if="showReportStatus" cols="12" lg="4">
       <SelectInput
-        label="Status"
+        label="Status Laudo"
         v-model="model.reportStatus"
         item-title="text"
         item-value="value"
