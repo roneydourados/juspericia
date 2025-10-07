@@ -193,7 +193,7 @@
             color="grey"
           >
             <span class="text-primary">Nº Processo:</span>
-            <span class="font-weight-bold text-primary">
+            <span class="font-weight-bold text-primary ml-2">
               {{ solicitation.proccessNumber }}
             </span>
           </v-chip>

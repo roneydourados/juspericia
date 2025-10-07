@@ -159,11 +159,21 @@
           </v-tab>
         </v-tabs>
       </v-col>
+      <v-col cols="12" style="padding-right: 8rem">
+        <SolicitationTableLocalFilters
+          :showReportStatus="tab === 'finished'"
+          v-model="localFilters"
+        />
+      </v-col>
     </v-row>
     <Table
-      v-if="$all?.consultations && $all?.consultations.length > 0 && !mobile"
+      v-if="
+        displayConsultations?.consultations &&
+        displayConsultations?.consultations.length > 0 &&
+        !mobile
+      "
       title=""
-      :items="$all?.consultations"
+      :items="displayConsultations?.consultations"
       hide-dfault-header
       :headers="headers"
       :showCrud="false"
@@ -179,12 +189,14 @@
     </Table>
     <SolicitationTableItemMobile
       v-else-if="
-        $all?.consultations && $all?.consultations.length > 0 && mobile
+        displayConsultations?.consultations &&
+        displayConsultations?.consultations.length > 0 &&
+        mobile
       "
       @edit="getItemEdit($event)"
       @refresh="getConsultations"
     />
-    <EmptyContent v-if="$all?.consultations.length === 0" />
+    <EmptyContent v-if="displayConsultations?.consultations.length === 0" />
   </div>
   <SolicitationFilters
     v-model:drawer="showFilters"
@@ -204,11 +216,72 @@ const rounter = useRouter();
 const { mobile } = useDisplay();
 const storeConsultation = useSolicitationConsultationStore();
 const auth = useAuthStore();
-const $all = computed(() => storeConsultation.$all);
+//const $all = computed(() => storeConsultation.$all);
 const $currentUser = computed(() => auth.$currentUser);
 const tab = ref("open");
 const loading = ref(false);
 const showFilters = ref(false);
+
+// Variáveis para filtros locais
+const localFilters = ref({
+  reportStatus: "report_all",
+  solicitationId: "",
+});
+
+// Computed que aplica os filtros localmente
+const filteredConsultations = computed(() => {
+  if (!storeConsultation.$all?.consultations) return storeConsultation.$all;
+
+  let filtered = [...storeConsultation.$all.consultations];
+
+  // Filtro por reportStatus
+  if (localFilters.value.reportStatus !== "report_all") {
+    switch (localFilters.value.reportStatus) {
+      case "signature_pending":
+        filtered = filtered.filter(
+          (consultation) =>
+            consultation.PatientConsultationReport?.status === "sign-pending"
+        );
+        break;
+      case "report_pending":
+        filtered = filtered.filter(
+          (consultation) => !consultation.PatientConsultationReport
+        );
+        break;
+      case "report_ready":
+        filtered = filtered.filter(
+          (consultation) =>
+            consultation.PatientConsultationReport?.status === "signed"
+        );
+        break;
+    }
+  }
+
+  // Filtro por solicitationId (opcional)
+  if (localFilters.value.solicitationId) {
+    filtered = filtered.filter((consultation) =>
+      consultation.id?.toString().includes(localFilters.value.solicitationId)
+    );
+  }
+
+  return {
+    ...storeConsultation.$all,
+    consultations: filtered,
+  };
+});
+
+// Computed que substitui $all?.consultations no template
+const displayConsultations = computed(() => {
+  // Se não há filtros ativos, retorna os dados originais
+  if (
+    localFilters.value.reportStatus === "report_all" &&
+    !localFilters.value.solicitationId
+  ) {
+    return storeConsultation.$all;
+  }
+
+  return filteredConsultations.value;
+});
 
 const headers = ref([
   {
@@ -230,7 +303,6 @@ const modelFilters = ref<SolicitationConsultationFilterProps>({
 
 onMounted(async () => {
   const filters = getSolicitationsFilters();
-  console.log("🚀 ~ filters:", filters);
   if (filters) {
     modelFilters.value = {
       ...filters,
@@ -248,9 +320,10 @@ const handleChangeTable = async () => {
 };
 
 const getQuantity = (status: string) => {
-  if (!$all.value || !$all.value.totals) return 0;
+  if (!displayConsultations.value || !displayConsultations.value.totals)
+    return 0;
 
-  const quantity = $all.value?.totals.find((item) => {
+  const quantity = displayConsultations.value?.totals.find((item) => {
     return item.status === status;
   });
 
@@ -264,21 +337,12 @@ const getQuantity = (status: string) => {
 const getConsultations = async () => {
   loading.value = true;
 
-  //let userId: number | undefined;
-
-  // se for admin, gerente ou vendedor, busca pelo advogado selecionado
-  // if (
-  //   $currentUser.value?.profile?.type === "ADMIN" ||
-  //   $currentUser.value?.profile?.type === "GERENTE" ||
-  //   $currentUser.value?.profile?.type === "VENDEDOR"
-  // ) {
-  //   userId = modelFilters.value.lawyer?.id;
-  // } else {
-  //   userId = $currentUser.value?.id;
-  // }
-  //tratamento acima movido para api
-
   try {
+    localFilters.value = {
+      reportStatus: "report_all",
+      solicitationId: "",
+    };
+
     const filter = {
       ...modelFilters.value,
       userId: modelFilters.value.lawyer?.id,
