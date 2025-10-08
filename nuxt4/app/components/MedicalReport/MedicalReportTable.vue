@@ -63,7 +63,6 @@
         </v-col>
       </v-row>
     </div>
-
     <Table
       title="Laudos Médicos"
       font-size="1.5rem"
@@ -213,7 +212,7 @@
               </v-tooltip>
             </v-btn>
           </div>
-          <div class="d-flex justify-content-center">
+          <div class="d-flex">
             <v-btn
               v-if="!item.reportContent && item.reportStatus === 'empty'"
               icon
@@ -237,17 +236,32 @@
               variant="text"
               size="small"
               @click="handleReportDetails(item)"
+              :disabled="!item.reportPublicId"
             >
-              <v-icon
-                icon="mdi-dots-vertical-circle-outline"
-                size="20"
-              ></v-icon>
+              <v-icon icon="mdi-dots-vertical-circle-outline" size="20" />
               <v-tooltip
                 activator="parent"
                 location="top center"
                 content-class="tooltip-background"
               >
                 Detalhes do laudo
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              color="purple-darken-2"
+              icon
+              variant="text"
+              @click="handleDownloadRecord(item.nuvidioCallId)"
+              size="small"
+              :disabled="!item.nuvidioCallId"
+            >
+              <v-icon icon="mdi-video-outline" size="20" color="purple" />
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                Baixar gravação do atendimento
               </v-tooltip>
             </v-btn>
           </div>
@@ -305,7 +319,7 @@ const { mobile } = useDisplay();
 const auth = useAuthStore();
 const consultationReport = usePatientConsultationReportStore();
 const storeConsultation = useSolicitationConsultationStore();
-//const scheduleStore = useScheduleStore();
+const nuvidioStore = useNuvidioStore();
 const zapSign = useZapsignStore();
 const fileStore = useFileStore();
 
@@ -572,33 +586,69 @@ const handleReportCorrection = async (
   showJustificationCorrection.value = true;
 };
 
-const handleShowConsultationRoom = async (
-  item: PatientConsultationReportListProps
-) => {
-  if (!item.publicId) {
-    push.error("Consulta não encontrada.");
-    return;
-  }
+// const handleShowConsultationRoom = async (
+//   item: PatientConsultationReportListProps
+// ) => {
+//   if (!item.publicId) {
+//     push.error("Consulta não encontrada.");
+//     return;
+//   }
 
-  if (item.reportStatus !== "empty") {
+//   if (item.reportStatus !== "empty") {
+//     push.warning(
+//       "Laudo já iniciado, não é possível acessar a sala de consulta."
+//     );
+
+//     return;
+//   }
+
+//   const url = `/teleconference/${item.publicId}`;
+
+//   navigator.clipboard
+//     .writeText(url)
+//     .then(() => {
+//       push.success("Texto copiado para a área de transferência");
+//     })
+//     .catch((err) => {
+//       push.error("Erro ao copiar texto: " + err);
+//     });
+
+//   window.open(url, "_blank");
+// };
+
+const handleDownloadRecord = async (nuvidioCallId?: string) => {
+  if (!nuvidioCallId) {
     push.warning(
-      "Laudo já iniciado, não é possível acessar a sala de consulta."
+      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada."
     );
-
     return;
   }
 
-  const url = `/teleconference/${item.publicId}`;
+  loading.value = true;
+  try {
+    const { file, fileName } = await nuvidioStore.getRecordCall(nuvidioCallId);
 
-  navigator.clipboard
-    .writeText(url)
-    .then(() => {
-      push.success("Texto copiado para a área de transferência");
-    })
-    .catch((err) => {
-      push.error("Erro ao copiar texto: " + err);
-    });
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
 
-  window.open(url, "_blank");
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = `${fileName}`;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadRecord ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
