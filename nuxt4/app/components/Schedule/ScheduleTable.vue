@@ -180,7 +180,7 @@
                 icon
                 variant="text"
                 @click="handleFinalizeSchedule(item)"
-                :disabled="!item.medicId"
+                :disabled="!item.medicId || !item.nuvidioCallId"
                 size="x-small"
               >
                 <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
@@ -416,7 +416,7 @@ const getSchedules = async () => {
   // if (!model.date) return;
   // Para a contagem antes de executar a busca
   stopCountdown();
-  
+
   loading.value = true;
   try {
     if ($currentUser.value?.profile?.type !== "MEDICO") {
@@ -632,7 +632,7 @@ const handleCancelSchedule = async (publicId: string) => {
 const startCountdown = () => {
   // Limpa qualquer countdown anterior para evitar múltiplos intervalos
   stopCountdown();
-  
+
   countdown.value = countDownDefaultValue;
   isTimerActive.value = true;
 
@@ -666,7 +666,7 @@ const refreshAndRestart = async () => {
 const startAutoRefresh = () => {
   // Limpa qualquer intervalo anterior
   stopAutoRefresh();
-  
+
   // Usa intervalo fixo baseado no valor padrão do countdown
   autoRefreshInterval.value = setInterval(async () => {
     await refreshAndRestart();
