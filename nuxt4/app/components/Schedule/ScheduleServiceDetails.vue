@@ -2,7 +2,6 @@
   <div class="text-center pa-4">
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
       <v-card>
-        <pre>{{ $single }}</pre>
         <v-toolbar color="white">
           <v-toolbar-title>
             <div class="text-subtitle-1 font-weight-bold">

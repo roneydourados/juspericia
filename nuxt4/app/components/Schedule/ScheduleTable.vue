@@ -480,6 +480,11 @@ const handleServiceDetails = async (item: ScheduleProps) => {
   try {
     await scheduleStore.show(item.publicId!);
 
+    // if (dayjs($scheduleSingle.value?.scheduleDate).isAfter(dayjs(), "day")) {
+    //   push.error("Consulta já passada, não é possível visualizar os detalhes!");
+    //   return;
+    // }
+
     if (
       $scheduleSingle.value?.medicId &&
       $scheduleSingle.value?.medicId !== $currentUser.value?.id
