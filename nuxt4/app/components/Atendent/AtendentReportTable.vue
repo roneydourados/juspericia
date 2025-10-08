@@ -261,12 +261,12 @@ const headers = ref([
   { title: "Laudo Nº", key: "reportId" },
   { title: "Solicitação Nº", key: "id" },
   { title: "Data consulta", key: "dateClose" },
-  { title: "Benefício", key: "benefitType" },
+  //{ title: "Benefício", key: "benefitType" },
   // { title: "Finalidade", key: "reportPurpose" },
-  //{ title: "Paciente", key: "patient" },
+  { title: "Médico", key: "medic" },
+  { title: "Paciente", key: "patient" },
   // { title: "CPF", key: "cpf" },
   { title: "Status", key: "reportStatus" },
-  { title: "Médico", key: "medic" },
   { title: "Ações", key: "actions", sortable: false },
 ]);
 

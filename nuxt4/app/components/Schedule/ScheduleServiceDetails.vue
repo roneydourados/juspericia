@@ -2,6 +2,7 @@
   <div class="text-center pa-4">
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
       <v-card>
+        <pre>{{ $single }}</pre>
         <v-toolbar color="white">
           <v-toolbar-title>
             <div class="text-subtitle-1 font-weight-bold">
@@ -89,7 +90,7 @@ const sheduleModel = ref({
 });
 
 //const $roomLink = computed(() => queryRoomStore.$createdRoomLink);
-const $nuvidioLinkInvite = computed(() => nuvidioStore.$nuvidioLinkInvite);
+//const $nuvidioLinkInvite = computed(() => nuvidioStore.$nuvidioLinkInvite);
 
 const handleQueryStart = async () => {
   if (
@@ -132,14 +133,22 @@ const handleQueryStart = async () => {
       $user.value?.id!
     );
 
-    const payloadCreateRoom = {
-      publicId: $single.value.publicId!,
-      intrevalMinutes: Number(sheduleModel.value.initialTime ?? "10"),
-    };
+    //somente se o agendamento não possuir um invite criado, ai sim chamar para criar outro
+    if (!$single.value.nuvidioInviteLink) {
+      const payloadCreateRoom = {
+        publicId: $single.value.publicId!,
+        intrevalMinutes: Number(sheduleModel.value.initialTime ?? "10"),
+      };
 
-    await nuvidioStore.createInviteTeleConference(payloadCreateRoom);
+      await nuvidioStore.createInviteTeleConference(payloadCreateRoom); //criar novo invite e link
+      await scheduleStore.show($single.value.publicId!); //recarregar os dados do agendamento
+    }
 
-    if ($nuvidioLinkInvite.value && $nuvidioLinkInvite.value.invite) {
+    if (
+      $single.value.nuvidioInviteLink &&
+      $single.value.nuvidioInviteLink.link
+      /*$nuvidioLinkInvite.value && $nuvidioLinkInvite.value.invite*/
+    ) {
       //direcionar o  médico para atender
       window.open("https://atendimento.nuvidio.com/login", "_blank");
     }
