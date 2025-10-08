@@ -47,7 +47,7 @@ const itemsMenu = ref([
   {
     to: "/admin/atendents",
     icon: "mdi-account-tie-voice-outline",
-    text: "Atendentes de médico. Gestão dos usuários com acesso para digitação de laudos médicos.",
+    text: "Atendente. Gestão dos usuários com acesso para digitação de laudos médicos.",
   },
   {
     to: "/admin/queries",

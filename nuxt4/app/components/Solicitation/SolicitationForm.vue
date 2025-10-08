@@ -70,7 +70,7 @@
               </div>
             </v-chip>
           </v-col>
-          <v-col cols="12" lg="3">
+          <v-col v-if="!form.id" cols="12" lg="3">
             <Button
               v-if="!form.selectOtherSpecialty"
               variant="outlined"
