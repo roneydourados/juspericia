@@ -47,4 +47,5 @@ export interface PatientConsultationReportListProps {
   reasonCorrection?: string;
   justifyId?: number;
   attachments?: FileProps[];
+  nuvidioCallId?: string;
 }

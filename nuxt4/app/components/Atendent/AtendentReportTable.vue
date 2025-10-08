@@ -98,7 +98,7 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <div class="d-flex justify-content-center">
-          <div
+          <!-- <div
             v-if="item.reportContent && item.reportStatus !== 'cancel'"
             class="d-flex justify-content-center"
           >
@@ -114,7 +114,7 @@
               variant="text"
               size="small"
               @click="handleEditCorrection(item)"
-              :disabled="item.reportStatus === 'signed'"
+              :disabled="item.reportStatus === 'signed' || !item.reportContent"
             >
               <v-icon icon="mdi-clock-edit-outline" size="20"></v-icon>
               <v-tooltip
@@ -124,46 +124,76 @@
               >
                 Correção/Editar
               </v-tooltip>
-            </v-btn>
+            </v-btn> 
           </div>
-          <div class="d-flex justify-content-center">
-            <v-btn
-              v-if="!item.reportContent && item.reportStatus === 'empty'"
-              icon
-              color="info"
-              variant="text"
-              size="small"
-              @click="handleNewReport(item)"
+          -->
+          <v-btn
+            icon
+            color="orange"
+            variant="text"
+            size="small"
+            @click="handleEditCorrection(item)"
+            :disabled="item.reportStatus === 'signed' || !item.reportContent"
+          >
+            <v-icon icon="mdi-clock-edit-outline" size="20"></v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
             >
-              <v-icon icon="mdi-file-document-edit-outline" size="20"></v-icon>
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Digitar laudo
-              </v-tooltip>
-            </v-btn>
-            <v-btn
-              icon
-              color="purple"
-              variant="text"
-              size="small"
-              @click="handleReportDetails(item)"
+              Correção/Editar
+            </v-tooltip>
+          </v-btn>
+          <v-btn
+            icon
+            color="info"
+            variant="text"
+            size="small"
+            @click="handleNewReport(item)"
+            :disabled="item.reportContent && item.reportStatus !== 'empty'"
+          >
+            <v-icon icon="mdi-file-document-edit-outline" size="20"></v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
             >
-              <v-icon
-                icon="mdi-dots-vertical-circle-outline"
-                size="20"
-              ></v-icon>
-              <v-tooltip
-                activator="parent"
-                location="top center"
-                content-class="tooltip-background"
-              >
-                Detalhes do laudo
-              </v-tooltip>
-            </v-btn>
-          </div>
+              Digitar laudo
+            </v-tooltip>
+          </v-btn>
+          <v-btn
+            icon
+            color="purple"
+            variant="text"
+            size="small"
+            @click="handleReportDetails(item)"
+          >
+            <v-icon icon="mdi-dots-vertical-circle-outline" size="20"></v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Detalhes do laudo
+            </v-tooltip>
+          </v-btn>
+          <v-btn
+            color="purple-darken-2"
+            icon
+            variant="text"
+            @click="handleDownloadRecord(item.nuvidioCallId)"
+            size="small"
+            :disabled="!item.nuvidioCallId"
+          >
+            <v-icon icon="mdi-video-outline" size="20" color="purple" />
+            <v-tooltip
+              activator="parent"
+              location="top center"
+              content-class="tooltip-background"
+            >
+              Baixar gravação do atendimento
+            </v-tooltip>
+          </v-btn>
         </div>
       </template>
     </Table>
@@ -197,6 +227,7 @@ const consultationReport = usePatientConsultationReportStore();
 const atendentMedicStore = useAtendentMedicStore();
 const storeConsultation = useSolicitationConsultationStore();
 const scheduleStore = useScheduleStore();
+const nuvidioStore = useNuvidioStore();
 //const zapSign = useZapsignStore();
 
 const { formatCPFOrCNPJ } = useUtils();
@@ -342,6 +373,42 @@ const getReportStatusColor = (status: string) => {
         color: "grey",
         icon: "mdi-help-circle-outline",
       };
+  }
+};
+
+const handleDownloadRecord = async (nuvidioCallId?: string) => {
+  if (!nuvidioCallId) {
+    push.warning(
+      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada."
+    );
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const { file, fileName } = await nuvidioStore.getRecordCall(nuvidioCallId);
+
+    // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
+    const url = window.URL.createObjectURL(file);
+
+    // Cria um link temporário
+    const link = document.createElement("a");
+    link.href = url;
+
+    // Define o nome do arquivo
+    link.download = `${fileName}`;
+
+    // Adiciona e clica no link
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove o link temporário
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log("🚀 ~ handleDownloadRecord ~ error:", error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
