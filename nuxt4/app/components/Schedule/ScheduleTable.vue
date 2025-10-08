@@ -478,12 +478,12 @@ const getStatusProps = (status: string) => {
 const handleServiceDetails = async (item: ScheduleProps) => {
   loading.value = true;
   try {
-    await scheduleStore.show(item.publicId!);
+    if (dayjs(item.scheduleDate).isAfter(dayjs())) {
+      push.warning("Consulta fora do prazo de visualização!");
+      return;
+    }
 
-    // if (dayjs($scheduleSingle.value?.scheduleDate).isAfter(dayjs(), "day")) {
-    //   push.error("Consulta já passada, não é possível visualizar os detalhes!");
-    //   return;
-    // }
+    await scheduleStore.show(item.publicId!);
 
     if (
       $scheduleSingle.value?.medicId &&

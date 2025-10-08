@@ -923,6 +923,13 @@ const cancel = async () => {
 };
 
 const handleSchedule = (item: SolicitationConsultationProps) => {
+  if (item.medicId) {
+    push.warning(
+      "Para agendar ou reagendar uma  solicitação, é necessário desvincular o médico primeiro !"
+    );
+    return;
+  }
+
   selected.value = item;
   showSolicitationSchedule.value = true;
 };
