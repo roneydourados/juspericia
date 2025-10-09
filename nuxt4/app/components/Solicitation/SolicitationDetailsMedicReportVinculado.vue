@@ -30,7 +30,8 @@
         cols="12"
       >
         <AttachementCard
-          :file-name="`${item.fileName!} - ${dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}`"
+          :file-name="item.fileName!"
+          :file-created-at="dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')"
           download-visible
           @download="handleDownloadFile(item.publicId!, item.fileName!)"
           :delete-visible="false"

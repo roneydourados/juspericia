@@ -3,12 +3,16 @@
     rounded="lg"
     prepend-icon="mdi-file-document-outline"
     rel="noopener"
-    subtitle="Documento em anexo"
     target="_blank"
     flat
   >
     <template #title>
       <span class="text-info">{{ fileName }}</span>
+    </template>
+    <template #subtitle>
+      <span class="text-grey-darken-1"
+        >Documento em anexado em {{ fileCreatedAt }}</span
+      >
     </template>
     <template #append>
       <div class="d-flex" style="gap: 0.5rem">
@@ -83,6 +87,10 @@ const props = defineProps({
   viewVisible: {
     type: Boolean,
     default: true,
+  },
+  fileCreatedAt: {
+    type: String,
+    required: true,
   },
 });
 

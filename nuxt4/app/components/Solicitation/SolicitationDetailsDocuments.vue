@@ -16,7 +16,8 @@
     </div>
     <div v-for="item in $single?.files" class="w-100 mt-4">
       <AttachementCard
-        :file-name="`${item.fileName!} - ${dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}`"
+        :file-name="item.fileName!"
+        :file-created-at="dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')"
         download-visible
         :delete-visible="$single?.status === 'open'"
         @download="handleDownloadFile(item.publicId!, item.fileName!)"
