@@ -150,6 +150,7 @@
             :disabled="
               solicitation.status !== 'open' &&
               solicitation.status !== 'payment_pending' &&
+              solicitation.status !== 'scheduled' &&
               solicitation.status !== 'paid'
             "
           >
