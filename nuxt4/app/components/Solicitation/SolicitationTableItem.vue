@@ -141,17 +141,15 @@
             <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
             <span class="text-caption text-primary"> Reagendar </span>
           </Button>
-
           <Button
             color="grey"
             size="small"
             variant="outlined"
             @click="getItemCancel(solicitation)"
             :disabled="
-              solicitation.status !== 'open' &&
-              solicitation.status !== 'payment_pending' &&
-              solicitation.status !== 'scheduled' &&
-              solicitation.status !== 'paid'
+              (solicitation.status === 'finished' ||
+                solicitation.status === 'canceled') &&
+              $currentUser?.profile?.type !== 'ADMIN'
             "
           >
             <v-icon icon="mdi-cancel" start color="red" />
