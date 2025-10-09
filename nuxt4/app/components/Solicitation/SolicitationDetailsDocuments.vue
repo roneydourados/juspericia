@@ -16,7 +16,7 @@
     </div>
     <div v-for="item in $single?.files" class="w-100 mt-4">
       <AttachementCard
-        :file-name="item.fileName!"
+        :file-name="`${item.fileName!} - ${dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}`"
         download-visible
         :delete-visible="$single?.status === 'open'"
         @download="handleDownloadFile(item.publicId!, item.fileName!)"
@@ -25,8 +25,6 @@
       />
     </div>
     <DialogLoading :dialog="loading" />
-
-    <!-- Dialog para visualizar PDF -->
     <DialogForm
       title="Detalhes documento"
       :show="showPdfDialog"
@@ -57,6 +55,7 @@
 
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
+import dayjs from "dayjs";
 const { mobile } = useDisplay();
 
 const storeConsultation = useSolicitationConsultationStore();

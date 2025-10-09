@@ -8,4 +8,5 @@ export interface FileProps {
   fileData?: File;
   signToken?: string;
   signStatus?: string;
+  createdAt?: string;
 }
