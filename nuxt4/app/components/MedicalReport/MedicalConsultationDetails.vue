@@ -45,7 +45,7 @@
             <div class="font-weight-bold mb-4 mt-4" style="font-size: 1.2rem">
               Descrição dos fatos
             </div>
-            <div v-html="$single?.PatientConsultation?.content" />
+            <div v-html="$single?.PatientConsultation?.content" class="tiptap-content" />
           </v-card>
         </v-col>
       </v-row>

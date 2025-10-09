@@ -12,7 +12,7 @@
     </div>
     <div
       v-html="data?.PatientConsultationReport?.content"
-      class="text-primary"
+      class="text-primary tiptap-content"
     />
     <div
       v-if="

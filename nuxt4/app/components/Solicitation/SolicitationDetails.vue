@@ -133,7 +133,7 @@
           >
             Descrição dos fatos
           </div>
-          <div v-html="$single?.content" class="text-primary" />
+          <div v-html="$single?.content" class="text-primary tiptap-content" />
         </v-card>
         <SolicitationDetailsDocuments />
         <v-card flat rounded="lg">

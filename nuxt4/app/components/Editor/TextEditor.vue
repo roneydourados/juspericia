@@ -278,6 +278,8 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Image from "@tiptap/extension-image";
 import { Color, TextStyle, FontFamily } from "@tiptap/extension-text-style";
+import HardBreak from "@tiptap/extension-hard-break";
+import Gapcursor from "@tiptap/extension-gapcursor";
 //********IMPORTS*********
 
 //********COMPOSABLES*********
@@ -338,9 +340,22 @@ onMounted(() => {
     content: editorContent.value,
     extensions: [
       Document,
-      Paragraph,
+      Paragraph.configure({
+        HTMLAttributes: {
+          class: "tiptap-paragraph",
+        },
+      }),
       Text,
-      StarterKit,
+      StarterKit.configure({
+        hardBreak: false, // Desabilita o HardBreak do StarterKit para usar nossa configuração
+      }),
+      HardBreak.configure({
+        HTMLAttributes: {
+          class: "tiptap-hard-break",
+        },
+        keepMarks: false,
+      }),
+      Gapcursor,
       Color,
       TextStyle,
       FontFamily,
@@ -355,13 +370,16 @@ onMounted(() => {
     onUpdate: () => {
       emit("update:modelValue", editor.value.getHTML());
     },
+    editorProps: {
+      attributes: {
+        class: "tiptap-editor-content",
+      },
+    },
   });
-  console.log("🚀 ~ mounted editor.value:", editor.value);
 });
 
 onBeforeUnmount(() => {
   editor.value.destroy();
-  console.log("🚀 ~ destroy editor.value:", editor.value);
 });
 //********LIFECYCLE HOOKS*********
 
@@ -454,6 +472,27 @@ const handleUploadImage = () => {
     font-size: 1rem;
   }
 
+  /* Paragraph styles */
+  p {
+    margin: 1rem 0;
+    line-height: 1.6;
+    
+    &:first-child {
+      margin-top: 0;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  /* Hard break styles */
+  br {
+    display: block;
+    margin: 0.5rem 0;
+    content: "";
+  }
+
   /* Code and preformatted text styles */
   code {
     background-color: rgb(var(--v-theme-purple-lighten-3)) !important;
@@ -498,12 +537,93 @@ const handleUploadImage = () => {
     margin: 2rem 0;
   }
 }
+
 .tiptap:focus {
   outline: none;
 }
 
-.tiptap:focus {
-  outline: none;
-  //background-color: #f0f0f0; /* Light gray color */
+/* Estilos globais para conteúdo renderizado com v-html */
+:global(.tiptap-content) {
+  p {
+    margin: 1rem 0;
+    line-height: 1.6;
+    
+    &:first-child {
+      margin-top: 0;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  br {
+    display: block;
+    margin: 0.5rem 0;
+    content: "";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    text-wrap: pretty;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem;
+  }
+
+  ul, ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+
+    li p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+
+  blockquote {
+    border-left: 3px solid #e0e0e0;
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+  }
+
+  code {
+    background-color: #f5f5f5;
+    border-radius: 0.4rem;
+    color: #333;
+    font-size: 0.85rem;
+    padding: 0.25em 0.3em;
+  }
+
+  pre {
+    background: #333;
+    border-radius: 0.5rem;
+    color: #fff;
+    font-family: "Roboto", monospace;
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+
+    code {
+      background: none;
+      color: inherit;
+      font-size: 0.8rem;
+      padding: 0;
+    }
+  }
 }
 </style>

@@ -54,6 +54,7 @@
           <v-col cols="12">
             <div
               v-html="$report?.content"
+              class="tiptap-content"
               style="max-height: 25rem; overflow-y: auto"
             />
           </v-col>

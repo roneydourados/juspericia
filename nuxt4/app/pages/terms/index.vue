@@ -6,7 +6,7 @@
       </div>
     </v-card-title>
     <v-card-text class="px-12">
-      <div v-html="$single?.content" />
+      <div v-html="$single?.content" class="tiptap-content" />
     </v-card-text>
   </v-card>
 </template>
@@ -24,7 +24,7 @@ const termsStore = useTermsStore();
 const $single = computed(() => termsStore.$single);
 
 onMounted(async () => {
-  await termsStore.getLastTerm();
+  await termsStore.getLastTerm("terms_of_use");
 });
 </script>
 

@@ -6,15 +6,15 @@
       </p>
     </v-card-text>
     <v-card-text v-if="$currentUser?.profile?.type !== 'MEDICO'" class="px-12">
-      <div v-html="$single?.content" />
+      <div v-html="$single?.content" class="tiptap-content" />
     </v-card-text>
     <v-card-text
       v-else-if="$currentUser?.profile?.type === 'MEDICO'"
       class="px-12"
     >
-      <div v-html="$medicalTerms?.conductManual?.content" />
+      <div v-html="$medicalTerms?.conductManual?.content" class="tiptap-content" />
       <div
-        class="mt-12"
+        class="mt-12 tiptap-content"
         v-html="$medicalTerms?.medicalServiceContract?.content"
       />
     </v-card-text>

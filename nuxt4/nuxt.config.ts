@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "notivue/notification.css", // Only needed if using built-in notifications
     "notivue/animations.css", // Only needed if using built-in animations
     "@/assets/styles/main.css",
+    "@/assets/styles/tiptap-content.css",
   ],
   components: [{ path: "@/components", pathPrefix: false }],
   modules: [

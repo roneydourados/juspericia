@@ -472,18 +472,7 @@ const handleReportDetails = async (
 const handleNewReport = async (item: PatientConsultationReportListProps) => {
   loading.value = true;
   try {
-    // // Finalizar a solicitação de consulta
-    //  await storeConsultation.update({
-    //    publicId: item.publicId,
-    //    isTelemedicine: false,
-    //    dateClose: dayjs().format("YYYY-MM-DD"), //atualizar a data de fechamento novamente para o dia que foi finalizado de fato
-    //    status: "finished",
-    //    medicId: item.medicId,
-    //  });
-    //pegar solicitação atualizada
     await storeConsultation.show(item.publicId!);
-    // finalizar qualuqer agenda pendente
-    // await scheduleStore.finalizeSchedule(item.id!);
     selectedReport.value = item;
     showReportForm.value = true;
   } finally {
