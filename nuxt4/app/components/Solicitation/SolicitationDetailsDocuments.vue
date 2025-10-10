@@ -19,7 +19,9 @@
         :file-name="item.fileName!"
         :file-created-at="dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')"
         download-visible
-        :delete-visible="$single?.status === 'open'"
+        :delete-visible="
+          $single?.status === 'open' && ($single?.files?.length ?? 0) > 1
+        "
         @download="handleDownloadFile(item.publicId!, item.fileName!)"
         @view="handleViewPdf(item)"
         @delete="getFileDelete(item)"

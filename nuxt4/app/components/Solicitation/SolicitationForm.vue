@@ -182,6 +182,13 @@
                 </span>
               </template>
             </v-switch>
+            <div v-if="$isInValidFiles" class="text-red font-weight-bold">
+              Identificamos que o presente pedido está sendo enviado sem a
+              documentação mínima necessária para a elaboração do laudo médico
+              pericial. Sem essa documentação, o pedido não poderá ser
+              processado.
+            </div>
+
             <v-divider class="mt-4" />
             <div class="d-flex mt-4" style="gap: 0.5rem">
               <Button
@@ -198,7 +205,6 @@
                 />
                 <span class="text-caption"> Enviar </span>
               </Button>
-
               <Button
                 @click="handleClose"
                 size="small"
@@ -209,28 +215,6 @@
                 <v-icon icon="mdi-cancel" color="red" start />
                 <span class="text-caption text-primary"> Cancelar </span>
               </Button>
-
-              <!-- <v-btn
-                prepend-icon="mdi-check"
-                color="primary"
-                class="text-none"
-                flat
-                size="small"
-                type="submit"
-                :disabled="!form.factsRealityConfirm"
-              >
-                Enviar
-              </v-btn> -->
-              <!-- <v-btn
-                prepend-icon="mdi-cancel"
-                class="text-none"
-                size="small"
-                color="error"
-                variant="flat"
-                @click="handleClose"
-              >
-                Cancelar
-              </v-btn> -->
             </div>
           </v-col>
         </v-row>
@@ -311,7 +295,7 @@ const form = ref({
 });
 
 const filters = ref(getSolicitationsFilters());
-
+const isValidFiles = ref(false);
 const $currentUser = computed(() => authStore.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
@@ -325,6 +309,10 @@ const $isSelectMedicalSpecialty = computed(() => {
   //     Number(form.value.consultation.valueCredit ?? 0) +
   //       Number(form.value.medicalSpecialty?.value ?? 0)
   // );
+});
+
+const $isInValidFiles = computed(() => {
+  return isValidFiles.value;
 });
 
 onMounted(async () => {
@@ -382,6 +370,8 @@ const handleClose = async () => {
 };
 
 const submitForm = async () => {
+  isValidFiles.value = false;
+
   if (!form.value.content) {
     push.warning("Informe a descrição detalhada da realidade dos fatos.");
     return;
@@ -391,6 +381,12 @@ const submitForm = async () => {
     push.warning(
       "Informe a descrição detalhada da realidade dos fatos. Explicação está muito curta."
     );
+    return;
+  }
+
+  if (form.value.files.length === 0) {
+    push.warning("Informe ao menos um documento.");
+    isValidFiles.value = true;
     return;
   }
 
@@ -524,6 +520,8 @@ const handleFileUpload = (event: Event) => {
   const files = input.files;
 
   if (!files) return;
+
+  isValidFiles.value = false;
 
   try {
     for (let i = 0; i < files.length; i++) {
