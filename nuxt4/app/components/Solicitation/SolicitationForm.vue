@@ -182,12 +182,6 @@
                 </span>
               </template>
             </v-switch>
-            <div v-if="$isInValidFiles" class="text-red font-weight-bold">
-              Identificamos que o presente pedido está sendo enviado sem a
-              documentação mínima necessária para a elaboração do laudo médico
-              pericial. Sem essa documentação, o pedido não poderá ser
-              processado.
-            </div>
 
             <v-divider class="mt-4" />
             <div class="d-flex mt-4" style="gap: 0.5rem">
@@ -232,6 +226,14 @@
         Apagar documento
         <strong>{{ selectedFile?.fileName }}</strong> ?
       </span>
+    </Dialog>
+
+    <Dialog title="Documentação inválida" :dialog="isInValidFiles" okText="OK">
+      <div class="text-red font-weight-bold" style="font-size: 1.2rem">
+        Identificamos que o presente pedido está sendo enviado sem a
+        documentação mínima necessária para a elaboração do laudo médico
+        pericial. Sem essa documentação, o pedido não poderá ser processado.
+      </div>
     </Dialog>
   </CardBlur>
 </template>
@@ -295,7 +297,7 @@ const form = ref({
 });
 
 const filters = ref(getSolicitationsFilters());
-const isValidFiles = ref(false);
+const isInValidFiles = ref(true);
 const $currentUser = computed(() => authStore.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
@@ -309,10 +311,6 @@ const $isSelectMedicalSpecialty = computed(() => {
   //     Number(form.value.consultation.valueCredit ?? 0) +
   //       Number(form.value.medicalSpecialty?.value ?? 0)
   // );
-});
-
-const $isInValidFiles = computed(() => {
-  return isValidFiles.value;
 });
 
 onMounted(async () => {
@@ -370,7 +368,7 @@ const handleClose = async () => {
 };
 
 const submitForm = async () => {
-  isValidFiles.value = false;
+  isInValidFiles.value = false;
 
   if (!form.value.content) {
     push.warning("Informe a descrição detalhada da realidade dos fatos.");
@@ -386,7 +384,7 @@ const submitForm = async () => {
 
   if (form.value.files.length === 0) {
     push.warning("Informe ao menos um documento.");
-    isValidFiles.value = true;
+    isInValidFiles.value = true;
     return;
   }
 
@@ -521,7 +519,7 @@ const handleFileUpload = (event: Event) => {
 
   if (!files) return;
 
-  isValidFiles.value = false;
+  isInValidFiles.value = false;
 
   try {
     for (let i = 0; i < files.length; i++) {
