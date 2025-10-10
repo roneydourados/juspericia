@@ -303,7 +303,7 @@ const form = ref({
 });
 
 const filters = ref(getSolicitationsFilters());
-const isInValidFiles = ref(true);
+const isInValidFiles = ref(false);
 const $currentUser = computed(() => authStore.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
