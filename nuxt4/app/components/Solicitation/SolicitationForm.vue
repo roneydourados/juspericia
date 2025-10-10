@@ -228,7 +228,13 @@
       </span>
     </Dialog>
 
-    <Dialog title="Documentação inválida" :dialog="isInValidFiles" okText="OK">
+    <Dialog
+      title="Documentação inválida"
+      :dialog="isInValidFiles"
+      okText="OK"
+      @cancel="isInValidFiles = false"
+      @confirm="isInValidFiles = false"
+    >
       <div class="text-red font-weight-bold" style="font-size: 1.2rem">
         Identificamos que o presente pedido está sendo enviado sem a
         documentação mínima necessária para a elaboração do laudo médico
