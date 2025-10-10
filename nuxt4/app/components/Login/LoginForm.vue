@@ -25,6 +25,7 @@
                   required
                   base-color="primary"
                   color="primary"
+                  is-lower-case
                 />
               </v-col>
             </v-row>

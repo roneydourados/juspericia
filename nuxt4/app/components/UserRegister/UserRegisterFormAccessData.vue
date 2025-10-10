@@ -8,6 +8,7 @@
           placeholder="E-mail"
           icon="mdi-email-outline"
           required
+          is-lower-case
         />
       </v-col>
     </v-row>

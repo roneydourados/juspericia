@@ -81,6 +81,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isLowerCase: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["update:modelValue", "blur", "input"]);
@@ -162,6 +166,12 @@ watch(value, (newValue) => {
       value.value = upper;
     }
     emit("update:modelValue", upper);
+  } else if (props.isLowerCase && newValue) {
+    const lower = newValue.toLowerCase();
+    if (newValue !== lower) {
+      value.value = lower;
+    }
+    emit("update:modelValue", lower);
   } else {
     emit("update:modelValue", newValue);
   }

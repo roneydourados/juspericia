@@ -82,6 +82,7 @@
             label="E-mail"
             placeholder="E-mail"
             type="email"
+            is-lower-case
           />
         </v-col>
         <v-col cols="12" lg="4">

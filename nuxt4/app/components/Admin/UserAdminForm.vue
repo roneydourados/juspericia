@@ -21,6 +21,7 @@
             label="E-mail"
             placeholder="E-mail"
             required
+            is-lower-case
           />
         </v-col>
       </v-row>
