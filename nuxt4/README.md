@@ -173,4 +173,5 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 [x] - Criar uma forma de advertir o médico quando faltar documentação na solicitação
 [x] - Filtrar por numero de solicitação
 [x] - Criar uma trava para evitar de vincular o médico com um dia no qual ele não atende
+[] - Possibilidade de importar PDF para gerar laudo
 ```
