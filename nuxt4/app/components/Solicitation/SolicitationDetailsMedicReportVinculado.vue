@@ -11,9 +11,18 @@
       }}
     </div>
     <div
+      v-if="!data?.PatientConsultationReport?.isPdfMode"
       v-html="data?.PatientConsultationReport?.content"
       class="text-primary tiptap-content"
     />
+    <div v-else>
+      <iframe
+        :src="pdfPreviewUrl(data?.PatientConsultationReport)"
+        width="100%"
+        height="500px"
+        style="border: none"
+      ></iframe>
+    </div>
     <div
       v-if="
         data?.PatientConsultationReport?.attachments &&
@@ -86,5 +95,24 @@ const handleDownloadFile = async (publicId: string, fileName: string) => {
   } finally {
     loading.value = false;
   }
+};
+
+const pdfPreviewUrl = (item: PatientConsultationReportProps) => {
+  if (item?.isPdfMode && item.content) {
+    // Converte base64 para Blob e carrega em modelFile
+    const byteCharacters = atob(item.content);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: "application/pdf" });
+    const file = new File([blob], "document.pdf", {
+      type: "application/pdf",
+    });
+
+    return window.URL.createObjectURL(file);
+  }
+  return "";
 };
 </script>
