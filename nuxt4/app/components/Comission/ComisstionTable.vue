@@ -205,7 +205,11 @@
               <v-col cols="12" lg="3">
                 <div class="font-weight-bold">Data pagamento:</div>
                 <div class="text-caption text-medium-emphasis">
-                  {{ formatDate(item.comissionDatePaid) }}
+                  {{
+                    item.comissionDatePaid
+                      ? formatDate(item.comissionDatePaid)
+                      : "/ /"
+                  }}
                 </div>
               </v-col>
               <v-col cols="12" lg="3">
