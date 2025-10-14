@@ -226,6 +226,17 @@
                     required
                   />
                 </div>
+                <div class="w-100 mt-4">
+                  <div class="mb-4">
+                    Dias para o advogado efetuar um agendamento de consulta
+                    médica
+                  </div>
+                  <IntegerInput
+                    label="Dias para agendamento"
+                    v-model="form.daysLawyerSchedule"
+                    required
+                  />
+                </div>
               </v-card-text>
             </v-card>
           </v-col>
@@ -367,6 +378,7 @@ const form = ref({
   medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
   medicalReportRevisionMaxCount: "1",
   medicalReportRevisionMaxDays: "7",
+  daysLawyerSchedule: "4",
 });
 
 watch(
@@ -414,6 +426,7 @@ watch(
           newData.medicalReportRevisionMaxCount?.toString() ?? "",
         medicalReportRevisionMaxDays:
           newData.medicalReportRevisionMaxDays?.toString() ?? "",
+        daysLawyerSchedule: newData.daysLawyerSchedule?.toString() ?? "4",
       };
     }
   },
@@ -453,6 +466,7 @@ const handleSubmit = async () => {
       medicalReportRevisionMaxDays: Number(
         form.value.medicalReportRevisionMaxDays ?? "7"
       ),
+      daysLawyerSchedule: Number(form.value.daysLawyerSchedule ?? "4"),
     });
   } catch (error) {
     console.error(error);

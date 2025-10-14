@@ -25,4 +25,5 @@ export interface SystemParametersProps {
   medicalSpecialtyIdDefault?: number;
   medicalReportRevisionMaxCount?: number;
   medicalReportRevisionMaxDays?: number;
+  daysLawyerSchedule?: number;
 }

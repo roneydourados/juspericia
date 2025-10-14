@@ -42,7 +42,7 @@
             hide-header
             color="primary"
             :view-mode="viewMode"
-            :min="props.min ? new Date(props.min) : undefined"
+            :min="props.min"
             @update:model-value="handleUpdateDatePickerData"
           />
         </v-locale-provider>
@@ -70,7 +70,7 @@ const props = defineProps({
   required: { type: Boolean, default: false },
   clearable: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  min: { type: String },
+  min: { type: String, default: undefined },
   viewMode: { type: String as PropType<ViewMode>, default: "month" },
 });
 
@@ -99,17 +99,20 @@ const validationSchema = computed(() => {
     }, "Data inválida.")
     .refine((val) => {
       if (!val || !props.min) return true;
-      
+
       const selectedDate = dayjs(val, "YYYY-MM-DD");
       const minDate = dayjs(props.min, "YYYY-MM-DD");
-      
+
       // Verifica se as datas são válidas antes de comparar
       if (!selectedDate.isValid() || !minDate.isValid()) {
         return false;
       }
-      
+
       // Compara apenas as datas (ignora horário) - deve ser maior ou igual à data mínima
-      return selectedDate.isAfter(minDate, 'day') || selectedDate.isSame(minDate, 'day');
+      return (
+        selectedDate.isAfter(minDate, "day") ||
+        selectedDate.isSame(minDate, "day")
+      );
     }, "Data deve ser posterior ou igual à data mínima permitida.");
 
   if (props.required) {

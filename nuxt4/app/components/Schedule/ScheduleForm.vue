@@ -96,11 +96,7 @@
             v-model="model.scheduleDate"
             label="Agendar para o dia"
             required
-            :min="
-              $currentUser?.profile?.type === 'ADVOGADO'
-                ? minDate
-                : dayjs().format('YYYY-MM-DD')
-            "
+            :min="minDate"
             @click:day="clickDay($event)"
             @update:model-value="datePickerModelValue($event)"
           />
@@ -115,7 +111,6 @@
           />
         </v-col>
       </v-row>
-      <!-- <pre>{{ $doctorScheduleAvailableDays }}</pre> -->
     </FormCrud>
   </DialogForm>
 </template>
@@ -163,13 +158,16 @@ const $doctorScheduleAvailableDays = computed(
 
 const minDate = computed(() => {
   if ($currentUser.value?.profile?.type === "ADVOGADO") {
-    return dayjs().add(5, "days").format("YYYY-MM-DD");
+    const days = $systemParameters.value?.daysLawyerSchedule
+      ? Number($systemParameters.value.daysLawyerSchedule)
+      : 5;
+
+    const mDate = dayjs().add(days, "day").format("YYYY-MM-DD");
+
+    return mDate;
   }
   return dayjs().format("YYYY-MM-DD");
 });
-
-// onMounted(async () => {
-// });
 
 watch(
   () => show.value,
@@ -179,7 +177,7 @@ watch(
       await doctorScheduleStore.availableDays();
 
       if ($currentUser.value?.profile?.type === "ADVOGADO") {
-        model.value.scheduleDate = dayjs().add(5, "days").format("YYYY-MM-DD");
+        model.value.scheduleDate = minDate.value; //dayjs().add(5, "days").format("YYYY-MM-DD");
       }
 
       await getSchedules();
