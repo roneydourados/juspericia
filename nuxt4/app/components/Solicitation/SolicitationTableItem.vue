@@ -635,6 +635,7 @@
     v-model:show="showCriticism"
     :solicitation="solicitation"
   />
+  <SolicitationDetailsDialog v-model:show="showSolicitationDetails" />
 </template>
 
 <script setup lang="ts">
@@ -684,6 +685,7 @@ const showSale = ref(false);
 const showRecipt = ref(false);
 const showSolicitationSchedule = ref(false);
 const showSetMedicSchedule = ref(false);
+const showSolicitationDetails = ref(false);
 const filters = ref(getSolicitationsFilters());
 
 const modelPrececkout = ref({
@@ -750,7 +752,9 @@ watch(
 );
 
 const handleDetailsClick = async (id: string) => {
-  await rounter.push(`/solicitations/${id}`);
+  //await rounter.push(`/solicitations/${id}`);
+  await storeConsultation.show(id);
+  showSolicitationDetails.value = true;
 };
 
 const editItem = (item: SolicitationConsultationProps) => {

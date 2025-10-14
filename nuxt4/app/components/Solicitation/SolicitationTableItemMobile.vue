@@ -360,6 +360,7 @@
     @confirm-sale="handleSaleItemForAsaas"
     @cancel="handleCancel"
   />
+  <SolicitationDetailsDialog v-model:show="showSolicitationDetails" />
 </template>
 
 <script setup lang="ts">
@@ -394,6 +395,7 @@ const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
 const showSale = ref(false);
+const showSolicitationDetails = ref(false);
 //const showRecipt = ref(false);
 const showSolicitationSchedule = ref(false);
 const filters = ref(getSolicitationsFilters());
@@ -438,7 +440,9 @@ const pageCount = computed(() => {
 });
 
 const handleDetailsClick = async (id: string) => {
-  await rounter.push(`/solicitations/${id}`);
+  //await rounter.push(`/solicitations/${id}`);
+  await storeConsultation.show(id);
+  showSolicitationDetails.value = true;
 };
 
 const isEnableCorrection = (item: SolicitationConsultationProps) => {

@@ -97,7 +97,7 @@
                 }}
               </strong>
             </v-card-text>
-            <v-card-actions class="d-flex justify-end px-2">
+            <!-- <v-card-actions class="d-flex justify-end px-2">
               <Button
                 v-if="
                   $single?.PatientConsultationReport &&
@@ -116,7 +116,7 @@
                 />
                 <span class="text-caption"> Baixar Laudo </span>
               </Button>
-            </v-card-actions>
+            </v-card-actions> -->
           </v-card>
           <SolicitationDetailsConsultation />
           <SolicitationDetailsPatient />
