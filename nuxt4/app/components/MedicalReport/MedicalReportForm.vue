@@ -16,22 +16,31 @@
                 cols="12"
                 class="d-flex align-center justify-space-between"
               >
-                <v-btn
-                  icon
-                  variant="text"
-                  class="text-none"
-                  size="small"
-                  @click="handleChatGpt"
-                >
-                  <ChatGptIcon height="28" />
-                  <v-tooltip
-                    activator="parent"
-                    location="top center"
-                    content-class="tooltip-background"
+                <div class="d-flex align-center flex-wrap" style="gap: 3rem">
+                  <v-btn
+                    icon
+                    variant="text"
+                    class="text-none"
+                    size="small"
+                    @click="handleChatGpt"
                   >
-                    Perguntar para o ChatGPT
-                  </v-tooltip>
-                </v-btn>
+                    <ChatGptIcon height="28" />
+                    <v-tooltip
+                      activator="parent"
+                      location="top center"
+                      content-class="tooltip-background"
+                    >
+                      Perguntar para o ChatGPT
+                    </v-tooltip>
+                  </v-btn>
+                  <v-switch
+                    v-model="model.isPDFMode"
+                    :label="model.isPDFMode ? 'Digitar laudo' : 'Importar PDF'"
+                    hide-details
+                    color="primary"
+                    @update:model-value="handleClearModels"
+                  />
+                </div>
                 <div class="d-flex flex-wrap" style="gap: 0.54rem">
                   <Button
                     variant="outlined"
@@ -56,8 +65,45 @@
                 </div>
               </v-col>
             </v-row>
-            <v-card-text>
+            <v-card-text v-if="!model.isPDFMode">
               <TextEditor v-model="model.content" />
+            </v-card-text>
+            <v-card-text v-else>
+              <v-file-upload
+                v-if="!modelFile"
+                v-model="modelFile"
+                browse-text="Buscar PDF"
+                divider-text="Localizar arquivo PDF"
+                icon="mdi-cloud-arrow-up-outline"
+                title="Arraste e solte aqui"
+                accept=".pdf"
+              />
+              <v-card v-if="modelFile" class="mt-4" outlined>
+                <v-card-title class="d-flex justify-space-between">
+                  <span class="font-weight-bold"> Pré-visualização </span>
+                  <Button
+                    color="grey-darken-4"
+                    variant="outlined"
+                    @click="handleClearModels"
+                  >
+                    <v-icon
+                      icon="mdi-file-cancel-outline"
+                      start
+                      color="colorIcon"
+                    />
+                    <span class="text-caption"> Limpar </span>
+                  </Button>
+                </v-card-title>
+                <v-card-text>
+                  <iframe
+                    v-if="modelFile"
+                    :src="pdfPreviewUrl"
+                    width="100%"
+                    height="500px"
+                    style="border: none"
+                  ></iframe>
+                </v-card-text>
+              </v-card>
             </v-card-text>
           </v-card>
         </FormCrud>
@@ -110,12 +156,13 @@ const solicitationStore = useSolicitationConsultationStore();
 const auth = useAuthStore();
 
 const showAlterContent = ref(false);
-
+const modelFile = ref<File>();
 const model = ref({
   publicId: "",
   title: "",
   content: "",
   reportModel: undefined as ReportModelProps | undefined,
+  isPDFMode: false,
 });
 
 const showDelete = ref(false);
@@ -123,6 +170,9 @@ const loading = ref(false);
 const selectedFile = ref<FileProps>();
 const attachments = ref<FileProps[]>([]);
 
+const pdfPreviewUrl = computed(() => {
+  return modelFile.value ? window.URL.createObjectURL(modelFile.value) : "";
+});
 const $reportModel = computed(() => reportModelStore.$single);
 const $consultationSolicitation = computed(() => solicitationStore.$single);
 const $consultationReport = computed(() => patientConsultationReport.$single);
@@ -135,6 +185,24 @@ watch(
       model.value.publicId = newData.reportPublicId || "";
       model.value.content = newData.reportContent || "";
       attachments.value = $consultationReport.value?.attachments || [];
+      model.value.isPDFMode = newData.isPdfMode || false;
+
+      if (model.value.isPDFMode) {
+        if (newData.reportContent) {
+          // Converte base64 para Blob e carrega em modelFile
+          const byteCharacters = atob(newData.reportContent);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: "application/pdf" });
+          const file = new File([blob], "document.pdf", {
+            type: "application/pdf",
+          });
+          modelFile.value = file;
+        }
+      }
     }
   },
   { immediate: true }
@@ -161,11 +229,26 @@ const handleSubmit = async () => {
       atendentId = $currentUser.value.id;
     }
 
+    if (model.value.isPDFMode && modelFile.value) {
+      model.value.content = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          // Remove the prefix "data:application/pdf;base64," if you want only the base64 string
+          const base64 = result.split(",")[1];
+          resolve(base64 ?? "");
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(modelFile.value as File);
+      });
+    }
+
     if (props.data.reportPublicId) {
       await patientConsultationReport.update({
         content: model.value.content,
         publicId: props.data.reportPublicId,
         atendentId,
+        isPdfMode: model.value.isPDFMode,
       });
     } else {
       await patientConsultationReport.create({
@@ -173,6 +256,7 @@ const handleSubmit = async () => {
         patientConsultationId: $consultationSolicitation.value.id,
         atendentId,
         userId: $consultationSolicitation.value.medicId ?? undefined,
+        isPdfMode: model.value.isPDFMode,
       });
 
       // Finalizar a solicitação de consulta, rodar aqui por ultimo porque deixa de aparecer o id do médico porque ele recebe o puyload atualizado e não a consulta feita no show
@@ -234,5 +318,10 @@ const handleDeleteAttachment = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleClearModels = () => {
+  model.value.content = "";
+  modelFile.value = undefined;
 };
 </script>

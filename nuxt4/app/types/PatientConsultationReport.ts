@@ -13,6 +13,7 @@ export interface PatientConsultationReportProps {
   attachments?: FileProps[];
   justifies?: PatientConsultationsReportJustifyProps[];
   atendentId?: number;
+  isPdfMode?: boolean;
 }
 
 export interface PatientConsultationsReportJustifyProps {
@@ -48,4 +49,5 @@ export interface PatientConsultationReportListProps {
   justifyId?: number;
   attachments?: FileProps[];
   nuvidioCallId?: string;
+  isPdfMode?: boolean;
 }

@@ -368,7 +368,16 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
 
   loading.value = true;
   try {
-    const base64 = await consultationReport.getPdfBase64(item.reportPublicId);
+    let base64 = {
+      pdfBase64: "",
+    };
+
+    if (item.isPdfMode) {
+      //se for PDF mode o content já é um base 64 de PDF então não precisa buscar, ja passar direto
+      base64.pdfBase64 = item.reportContent;
+    } else {
+      base64 = await consultationReport.getPdfBase64(item.reportPublicId);
+    }
 
     if (base64.pdfBase64) {
       const fileName = `Laudo_${item.patient}_${uuidv7()}.pdf`;
