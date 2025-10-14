@@ -53,10 +53,19 @@
         <v-row dense>
           <v-col cols="12">
             <div
+              v-if="!$report?.isPdfMode"
               v-html="$report?.content"
               class="tiptap-content"
               style="max-height: 25rem; overflow-y: auto"
             />
+            <div v-else>
+              <iframe
+                :src="pdfPreviewUrl($report!)"
+                width="100%"
+                height="600px"
+                style="border: none"
+              ></iframe>
+            </div>
           </v-col>
         </v-row>
         <v-row>
@@ -122,5 +131,24 @@ const handleDownloadFile = async (publicId: string, fileName: string) => {
   } finally {
     loading.value = false;
   }
+};
+
+const pdfPreviewUrl = (item: PatientConsultationReportProps) => {
+  if (item?.isPdfMode && item.content) {
+    // Converte base64 para Blob e carrega em modelFile
+    const byteCharacters = atob(item.content);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: "application/pdf" });
+    const file = new File([blob], "document.pdf", {
+      type: "application/pdf",
+    });
+
+    return window.URL.createObjectURL(file);
+  }
+  return "";
 };
 </script>
