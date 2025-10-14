@@ -63,10 +63,17 @@
           <SelectSearchSeller
             v-if="filters.comissionType === 'seller'"
             v-model="filters.user"
+            @update:model-value="handleGetComissions"
           />
           <SelectSearchMedic
             v-else-if="filters.comissionType === 'medic'"
             v-model="filters.user"
+            @update:model-value="handleGetComissions"
+          />
+          <SelectSearchAtendent
+            v-else-if="filters.comissionType === 'atendent'"
+            v-model="filters.user"
+            @update:model-value="handleGetComissions"
           />
         </v-col>
       </v-row>
