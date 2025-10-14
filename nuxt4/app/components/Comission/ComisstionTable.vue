@@ -145,8 +145,115 @@
         </v-col>
       </v-row>
     </template>
-
     <template v-slot:item.user="{ item }">
+      <v-expansion-panels flat>
+        <v-expansion-panel>
+          <v-expansion-panel-title>
+            <v-row dense>
+              <v-col cols="12" lg="4">
+                <span class="font-weight-bold text-primary">{{
+                  item.user.name
+                }}</span>
+              </v-col>
+              <v-col cols="12" lg="2">
+                <span
+                  class="text-caption text-medium-emphasis"
+                  style="width: 7rem"
+                >
+                  Data: {{ formatDate(item.comissionDate) }}
+                </span>
+              </v-col>
+              <v-col cols="12" lg="2">
+                Valor:
+                <strong class="ml-1">
+                  {{ amountFormated(Number(item.comissionValue ?? "0"), true) }}
+                </strong>
+              </v-col>
+              <v-col cols="12" lg="2">
+                Tipo:
+                <strong class="ml-1">
+                  {{ getComissionType(item.comissionType) }}
+                </strong>
+              </v-col>
+              <v-col cols="12" lg="2">
+                <v-chip
+                  density="compact"
+                  :color="item.comissionStatus === 'paid' ? 'green' : 'orange'"
+                  :prepend-icon="
+                    item.comissionStatus === 'paid'
+                      ? 'mdi-check-all'
+                      : 'mdi-clock-outline'
+                  "
+                  class="text-none"
+                >
+                  <strong>
+                    {{ getComisstionStatus(item.comissionStatus) }}
+                  </strong>
+                </v-chip>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <v-row dense>
+              <v-col cols="12" lg="3">
+                <div class="font-weight-bold">Data pagamento:</div>
+                <div class="text-caption text-medium-emphasis">
+                  {{ formatDate(item.comissionDatePaid) }}
+                </div>
+              </v-col>
+              <v-col cols="12" lg="3">
+                <div class="font-weight-bold">Tipo comissão:</div>
+                <div class="text-caption text-medium-emphasis">
+                  <span>
+                    {{
+                      Number(item.comissionPercentage ?? 0) > 0
+                        ? `${amountFormated(
+                            Number(item.comissionPercentage ?? "0"),
+                            false
+                          )}%`
+                        : "Comissão fixa"
+                    }}
+                  </span>
+                </div>
+              </v-col>
+              <v-col cols="12" lg="3">
+                <div class="font-weight-bold">Base Comissão:</div>
+                <div class="text-caption text-medium-emphasis">
+                  <span>
+                    {{
+                      amountFormated(Number(item.comissionBase ?? "0"), true)
+                    }}
+                  </span>
+                </div>
+              </v-col>
+              <v-col cols="12" lg="3" class="d-flex justify-end">
+                <Button
+                  color="blue"
+                  variant="text"
+                  size="small"
+                  @click="getComissionDetails(item)"
+                >
+                  <v-icon
+                    icon="mdi-dots-vertical-circle-outline"
+                    size="20"
+                    start
+                  />
+
+                  Detalhar comissão
+                </Button>
+              </v-col>
+              <v-col cols="12">
+                <div class="text-caption text-medium-emphasis">
+                  {{ item.comissionObservation }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </template>
+
+    <!-- <template v-slot:item.user="{ item }">
       <span>{{ item.user.name }}</span>
     </template>
     <template v-slot:item.comissionDate="{ item }">
@@ -215,7 +322,7 @@
           Detalhar comissão
         </v-tooltip>
       </v-btn>
-    </template>
+    </template> -->
   </Table>
   <Dialog
     title="Cancelar comissão"
@@ -285,14 +392,14 @@ const filters = ref({
 
 const headers = ref([
   { title: "Beneficiado", key: "user" },
-  { title: "Data comissão", key: "comissionDate" },
-  { title: "%Comissão", key: "comissionPercentage" },
-  { title: "Base comissão", key: "comissionBase" },
-  { title: "Valor comissão", key: "comissionValue" },
-  { title: "Status", key: "comissionStatus" },
-  { title: "Data pagamento", key: "comissionDatePaid" },
-  { title: "Tipo", key: "comissionType" },
-  { title: "Ações", key: "actions" },
+  // { title: "Data comissão", key: "comissionDate" },
+  // { title: "%Comissão", key: "comissionPercentage" },
+  // { title: "Base comissão", key: "comissionBase" },
+  // { title: "Valor comissão", key: "comissionValue" },
+  // { title: "Status", key: "comissionStatus" },
+  // { title: "Data pagamento", key: "comissionDatePaid" },
+  // { title: "Tipo", key: "comissionType" },
+  // { title: "Ações", key: "actions" },
 ]);
 
 onUnmounted(() => {
