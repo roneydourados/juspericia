@@ -917,10 +917,8 @@ const cancel = async () => {
       status: "canceled",
     });
 
-    if (selected.value.sale) {
-      if (selected.value.sale.saleId) {
-        await asaas.deletePayment(selected.value.sale.saleId);
-      }
+    if (selected.value.sale && selected.value.sale.saleId) {
+      await asaas.deletePayment(selected.value.sale.saleId);
     }
 
     await getSolicitations();
