@@ -753,8 +753,13 @@ watch(
 
 const handleDetailsClick = async (id: string) => {
   //await rounter.push(`/solicitations/${id}`);
-  await storeConsultation.show(id);
-  showSolicitationDetails.value = true;
+  loading.value = true;
+  try {
+    await storeConsultation.show(id);
+    showSolicitationDetails.value = true;
+  } finally {
+    loading.value = false;
+  }
 };
 
 const editItem = (item: SolicitationConsultationProps) => {
