@@ -530,13 +530,21 @@ const handleFileUpload = (event: Event) => {
   try {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+
       const exists = form.value.files.some(
         (attachment) => attachment.fileName === (file?.name ?? "")
       );
+
       if (exists) {
         // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);
         continue;
       }
+
+      if (file?.type !== "application/pdf") {
+        push.warning(`O arquivo "${file?.name}" não é um PDF.`);
+        continue;
+      }
+
       form.value.files.push({
         fileCategory: "solicitation-consultation",
         fileData: file,
