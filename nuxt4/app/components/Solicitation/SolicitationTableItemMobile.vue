@@ -587,10 +587,8 @@ const cancel = async () => {
       status: "canceled",
     });
 
-    if (selected.value.sale) {
-      if (selected.value.sale.saleId) {
-        await asaas.deletePayment(selected.value.sale.saleId);
-      }
+    if (selected.value.sale && selected.value.sale.saleId) {
+      await asaas.deletePayment(selected.value.sale.saleId);
     }
 
     await getSolicitations();
@@ -609,11 +607,9 @@ const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps
 ) => {
   //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
-  if (item.sale) {
-    if (item.sale.saleId) {
-      // este método aqui já cancela a venda vinculada ao pagament
-      await asaas.deletePayment(item.sale.saleId);
-    }
+  if (item.sale && item.sale.saleId) {
+    // este método aqui já cancela a venda vinculada ao pagament
+    await asaas.deletePayment(item.sale.saleId);
   }
   const total =
     Number(item.consultationValue ?? 0) + Number(item.antecipationValue ?? 0);
