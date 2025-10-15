@@ -580,39 +580,14 @@ const handleSetSignedCancel = async () => {
 const handleReportCorrection = async (
   item: PatientConsultationReportListProps
 ) => {
-  await consultationReport.show(item.reportPublicId!);
-  showJustificationCorrection.value = true;
+  loading.value = true;
+  try {
+    await consultationReport.show(item.reportPublicId!);
+    showJustificationCorrection.value = true;
+  } finally {
+    loading.value = true;
+  }
 };
-
-// const handleShowConsultationRoom = async (
-//   item: PatientConsultationReportListProps
-// ) => {
-//   if (!item.publicId) {
-//     push.error("Consulta não encontrada.");
-//     return;
-//   }
-
-//   if (item.reportStatus !== "empty") {
-//     push.warning(
-//       "Laudo já iniciado, não é possível acessar a sala de consulta."
-//     );
-
-//     return;
-//   }
-
-//   const url = `/teleconference/${item.publicId}`;
-
-//   navigator.clipboard
-//     .writeText(url)
-//     .then(() => {
-//       push.success("Texto copiado para a área de transferência");
-//     })
-//     .catch((err) => {
-//       push.error("Erro ao copiar texto: " + err);
-//     });
-
-//   window.open(url, "_blank");
-// };
 
 const handleDownloadRecord = async (nuvidioCallId?: string) => {
   if (!nuvidioCallId) {
