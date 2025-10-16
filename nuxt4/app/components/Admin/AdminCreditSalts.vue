@@ -115,7 +115,11 @@
                 color="info"
                 icon
                 @click="getItemUpdateExpireAt(item)"
-                :disabled="dayjs(item.expireDate).isAfter(dayjs())"
+                :disabled="
+                  (dayjs(item.expireDate).isAfter(dayjs()) &&
+                    $currentUser?.profile?.type !== 'ADMIN') ||
+                  Number(item.salt ?? 0) <= 0
+                "
               >
                 <v-icon icon="mdi-calendar-month"></v-icon>
                 <v-tooltip
@@ -189,6 +193,7 @@
 import dayjs from "dayjs";
 
 const saltCredit = useUserCreditSaltStore();
+const auth = useAuthStore();
 
 const { amountFormated } = useUtils();
 const showFormSaltTransfer = ref(false);
@@ -225,6 +230,7 @@ const headers = ref([
 ]);
 
 const $salts = computed(() => saltCredit.$credits);
+const $currentUser = computed(() => auth.$currentUser);
 
 const getStatusName = (item: UserCreditSalt) => {
   const currentDate = dayjs();
