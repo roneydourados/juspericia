@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "juspericia-app",
   "private": true,
   "type": "module",
