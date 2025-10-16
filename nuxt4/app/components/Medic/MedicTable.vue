@@ -38,13 +38,14 @@
       </span>
     </template>
     <template v-slot:item.active="{ item }">
-      <span class="d-flex align-center">
-        <v-icon
-          :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
-          size="24"
-          :color="item.active ? 'colorIcon' : 'red'"
-          start
-        />
+      <v-icon
+        :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
+        size="24"
+        :color="item.active ? 'colorIcon' : 'red'"
+        start
+      />
+      <span>
+        {{ item.active ? "Ativo" : "Inativo" }}
       </span>
     </template>
     <template v-slot:item.medicalSpecialty="{ item }"> </template>
@@ -152,7 +153,7 @@ const headers = ref([
     key: "email",
   },
   {
-    title: "Ativo",
+    title: "Status",
     key: "active",
   },
   // {

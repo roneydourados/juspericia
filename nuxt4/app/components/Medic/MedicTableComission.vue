@@ -39,10 +39,14 @@
           />
           <span>{{ item.name }}</span>
         </span>
-      </template>
-      <template v-slot:item.medicalSpecialty.medicalSpecialty="{ item }">
-        <v-icon icon="mdi-medical-bag" start color="colorIcon" />
-        <strong>{{ item.medicalSpecialty.medicalSpecialty }}</strong>
+        <div
+          v-for="medicalSpecialty in item.medicalSpecialtiesMedic"
+          class="d-flex flex-column"
+        >
+          <span class="text-caption">
+            {{ medicalSpecialty.medicalSpecialty.medicalSpecialty }}
+          </span>
+        </div>
       </template>
       <template v-slot:item.phone="{ item }">
         <span class="d-flex align-center">
@@ -101,13 +105,14 @@
         </div>
       </template>
       <template v-slot:item.active="{ item }">
-        <span class="d-flex align-center">
-          <v-icon
-            :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
-            size="24"
-            :color="item.active ? 'colorIcon' : 'red'"
-            start
-          />
+        <v-icon
+          :icon="item.active ? 'mdi-check-circle' : 'mdi-cancel'"
+          size="24"
+          :color="item.active ? 'colorIcon' : 'red'"
+          start
+        />
+        <span>
+          {{ item.active ? "Ativo" : "Inativo" }}
         </span>
       </template>
     </Table>
@@ -176,14 +181,14 @@ const headers = ref([
   //   key: "email",
   // },
   {
-    title: "Ativo",
+    title: "Status",
     key: "active",
   },
-  {
-    title: "Especialidade",
-    key: "medicalSpecialty.medicalSpecialty",
-    width: "20%",
-  },
+  // {
+  //   title: "Especialidade",
+  //   key: "medicalSpecialty.medicalSpecialty",
+  //   width: "20%",
+  // },
   {
     title: "Comissão clínico geral",
     key: "comissionValue",
