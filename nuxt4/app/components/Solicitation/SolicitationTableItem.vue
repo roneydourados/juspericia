@@ -89,22 +89,22 @@
             <v-icon icon="mdi-credit-card-outline" color="primary" start />
             <span class="text-caption text-primary"> Pagar </span>
           </Button>
-          <!-- <Button
-            v-else-if="
-              solicitation.status !== 'open' &&
-              solicitation.status !== 'canceled' &&
-              solicitation.status !== 'payment_pending' &&
-              $currentUser?.profile?.type === 'ADVOGADO'
+          <Button
+            v-if="
+              solicitation.sale &&
+              solicitation.sale?.status === 'PENDING' &&
+              solicitation.sale?.saleId &&
+              $currentUser?.profile?.type === 'ADMIN'
             "
             class="text-none text-white"
             color="grey"
             variant="outlined"
             size="small"
-            @click="handleReceipt(solicitation)"
+            @click="handleCancelCobranca(solicitation)"
           >
-            <v-icon icon="mdi-file-document-outline" color="colorIcon" start />
-            <span class="text-caption text-primary"> Recibo </span>
-          </Button> -->
+            <v-icon icon="mdi-cancel" color="red" start />
+            <span class="text-caption text-primary"> Cancelar Cobrança </span>
+          </Button>
           <!-- <Button
             v-if="
               solicitation.status === 'scheduled' && solicitation.isTelemedicine
@@ -1046,6 +1046,7 @@ const handleSaleItemForAsaas = async () => {
     if ($paymentResponse.value?.data?.invoiceUrl) {
       window.open($paymentResponse.value.data.invoiceUrl, "_blank");
     }
+    await getSolicitations();
   } catch (error) {
     push.error("Erro ao finalizar pagamento");
     console.log("🚀 ~ handleSaleItem ~ error:", error);
@@ -1127,7 +1128,8 @@ const handleDownloadFile = async (publicId: string) => {
   }
 };
 
-const handleCancel = () => {
+const handleCancel = async () => {
+  await getSolicitations();
   showSale.value = false;
   modelPrececkout.value = {
     name: "",
@@ -1264,5 +1266,45 @@ const handleShowCriticism = async (item: SolicitationConsultationProps) => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleCancelCobranca = (item: SolicitationConsultationProps) => {
+  push.info({
+    title: "Cancelar cobrança gerada",
+    message:
+      "Esta função irá apagar a cobrança gerada para esta solicitação, não poderá ser desfeita. Deseja continuar ?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await asaas.deletePayment(item.sale?.saleId!);
+              await getSolicitations();
+            } catch (error) {
+              push.error("Erro ao cancelar cobrança");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 </script>
