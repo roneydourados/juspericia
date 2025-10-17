@@ -1019,7 +1019,7 @@ const handleSaleItemForAsaas = async () => {
         dueDays: modelPrececkout.value.dueDays,
         billingType: modelPrececkout.value.paymentForm,
         voucherId: modelPrececkout.value.voucherId,
-        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        userId: modelPrececkout.value.userId ?? $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
         discount: {
           value: modelPrececkout.value.discountValue ?? 0,
           type: modelPrececkout.value.discountType,
