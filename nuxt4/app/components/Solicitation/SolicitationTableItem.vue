@@ -720,7 +720,7 @@ const $solicitationTotal = computed(() => {
     Number(props.solicitation.medicalSpecialtyValue ?? 0)
   );
 });
-
+const $single = computed(() => storeConsultation.$single);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $systemParameters = computed(() => systemParameters.$parameters);
 const $isEnableCorrection = computed(() => {
@@ -944,6 +944,15 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
 const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps
 ) => {
+  //refazer a consulta aqui só para garantir que está com os dados mais recentes
+  await storeConsultation.show(item.publicId!);
+
+  //caso já tenha uma venda vinculada, recarregar o pagamento
+  if ($single.value?.sale) {
+    await handleReloadPayment(item);
+    return;
+  }
+
   //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
   if (item.sale && item.sale.saleId) {
     // este método aqui já cancela a venda vinculada ao pagament
