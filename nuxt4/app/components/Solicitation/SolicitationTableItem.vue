@@ -706,6 +706,7 @@ const modelPrececkout = ref({
   publicSaleId: "",
   packgeSaleValue: 0,
   packgeQuantity: 1,
+  userId: undefined as number | undefined,
 });
 
 const $currentUser = computed(() => auth.$currentUser);
@@ -967,6 +968,7 @@ const handleMountModelPrececkout = async (
     publicSaleId: "",
     packgeSaleValue: $solicitationTotal.value, // valor do pacote, no caso é uma solicitação única
     packgeQuantity: 1, //atende apenas uma solicitação
+    userId: item.userId,
   };
 };
 
@@ -995,7 +997,7 @@ const handleSaleItemForAsaas = async () => {
         installmentCount: modelPrececkout.value.installmentCount,
         billingType: modelPrececkout.value.paymentForm,
         voucherId: modelPrececkout.value.voucherId,
-        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        userId: modelPrececkout.value.userId ?? $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
         discount: {
           value: modelPrececkout.value.discountValue ?? 0,
           type: modelPrececkout.value.discountType,
@@ -1136,6 +1138,7 @@ const handleCancel = () => {
     publicSaleId: "",
     packgeSaleValue: 0,
     packgeQuantity: 1,
+    userId: undefined,
   };
 };
 
