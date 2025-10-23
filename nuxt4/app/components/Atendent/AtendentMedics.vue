@@ -9,16 +9,27 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col></v-col>
+      <v-col cols="12" lg="6">
+        <Button variant="outlined" @click="handleAddMedics">
+          <span class="text-caption"> Enviar selecionados </span>
+          <v-icon icon="mdi-arrow-right" color="colorIcon" end />
+        </Button>
+      </v-col>
+      <v-col cols="12" lg="6" class="d-flex justify-end">
+        <Button variant="outlined" @click="handleRemoveMedics">
+          <v-icon icon="mdi-arrow-left" color="colorIcon" start />
+          <span class="text-caption"> Remover selecionados </span>
+        </Button>
+      </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" lg="6" class="d-flex flex-column">
-        <div class="d-flex justify-center">
+      <v-col cols="12" lg="6">
+        <!-- <div class="d-flex justify-center">
           <Button variant="outlined" @click="handleAddMedics">
             <span class="text-caption"> Enviar selecionados </span>
             <v-icon icon="mdi-arrow-right" color="colorIcon" end />
           </Button>
-        </div>
+        </div> -->
 
         <Table
           v-model="selectedNotAssociated"
@@ -50,13 +61,13 @@
           </template>
         </Table>
       </v-col>
-      <v-col cols="12" lg="6" class="d-flex flex-column">
-        <div class="d-flex justify-center">
+      <v-col cols="12" lg="6">
+        <!-- <div class="d-flex justify-center">
           <Button variant="outlined" @click="handleRemoveMedics">
             <v-icon icon="mdi-arrow-left" color="colorIcon" start />
             <span class="text-caption"> Remover selecionados </span>
           </Button>
-        </div>
+        </div> -->
         <Table
           v-model="selectedAssociated"
           title="Médicos Associados"
