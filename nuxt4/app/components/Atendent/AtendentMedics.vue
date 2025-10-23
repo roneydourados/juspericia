@@ -9,6 +9,9 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col></v-col>
+    </v-row>
+    <v-row>
       <v-col cols="12" lg="6" class="d-flex flex-column">
         <div class="d-flex justify-center">
           <Button variant="outlined" @click="handleAddMedics">
@@ -16,6 +19,7 @@
             <v-icon icon="mdi-arrow-right" color="colorIcon" end />
           </Button>
         </div>
+
         <Table
           v-model="selectedNotAssociated"
           title="Médicos Não Associados"
@@ -24,7 +28,27 @@
           :show-crud="false"
           is-virtual
           show-select
-        />
+        >
+          <template v-slot:item.name="{ item }">
+            <span style="cursor: pointer" class="d-flex align-center text-info">
+              <v-icon
+                icon="mdi-account-outline"
+                size="24"
+                start
+                color="colorIcon"
+              />
+              <span>{{ item.name }}</span>
+            </span>
+            <div
+              v-for="medicalSpecialty in item.medicalSpecialtiesMedic"
+              class="d-flex flex-column"
+            >
+              <span class="text-caption">
+                {{ medicalSpecialty.medicalSpecialty.medicalSpecialty }}
+              </span>
+            </div>
+          </template>
+        </Table>
       </v-col>
       <v-col cols="12" lg="6" class="d-flex flex-column">
         <div class="d-flex justify-center">
@@ -41,7 +65,27 @@
           :show-crud="false"
           is-virtual
           show-select
-        />
+        >
+          <template v-slot:item.medic.name="{ item }">
+            <span style="cursor: pointer" class="d-flex align-center text-info">
+              <v-icon
+                icon="mdi-account-outline"
+                size="24"
+                start
+                color="colorIcon"
+              />
+              <span>{{ item.medic.name }}</span>
+            </span>
+            <div
+              v-for="medicalSpecialty in item.medic.medicalSpecialtiesMedic"
+              class="d-flex flex-column"
+            >
+              <span class="text-caption">
+                {{ medicalSpecialty.medicalSpecialty.medicalSpecialty }}
+              </span>
+            </div>
+          </template>
+        </Table>
       </v-col>
     </v-row>
     <DialogLoading :dialog="loading" />
@@ -64,10 +108,10 @@ const headersMedicAssociated = ref([
     title: "Nome do médico",
     key: "medic.name",
   },
-  {
-    title: "Especialidade",
-    key: "medic.medicalSpecialty.medicalSpecialty",
-  },
+  // {
+  //   title: "Especialidade",
+  //   key: "medic.medicalSpecialty.medicalSpecialty",
+  // },
 ]);
 
 const headersMedicNotAssociated = ref([
@@ -75,10 +119,10 @@ const headersMedicNotAssociated = ref([
     title: "Nome do médico",
     key: "name",
   },
-  {
-    title: "Especialidade",
-    key: "medicalSpecialty.medicalSpecialty",
-  },
+  // {
+  //   title: "Especialidade",
+  //   key: "medicalSpecialty.medicalSpecialty",
+  // },
 ]);
 
 const $medicsAtendent = computed(() => attendentMedicStore.$all);
