@@ -50,4 +50,5 @@ export interface PatientConsultationReportListProps {
   attachments?: FileProps[];
   nuvidioCallId?: string;
   isPdfMode?: boolean;
+  medicalSpecialty?: string;
 }
