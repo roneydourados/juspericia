@@ -49,10 +49,10 @@ const token = defineModel("token", {
 });
 
 const handleClose = () => {
-  if (!isSignedResponse.value) {
-    console.log("Ainda não foi processado a resposta da assinatura");
-    return;
-  }
+  // if (!isSignedResponse.value) {
+  //   console.log("Ainda não foi processado a resposta da assinatura");
+  //   return;
+  // }
 
   emit("close");
   dialog.value = false;
