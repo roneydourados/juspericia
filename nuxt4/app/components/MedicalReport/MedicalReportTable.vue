@@ -376,19 +376,19 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
       //se for PDF mode o content já é um base 64 de PDF então não precisa buscar, ja passar direto
       base64.pdfBase64 = item.reportContent;
 
-      const infoBlock = `
-      <div style="margin-bottom: 24px; font-size: 14px; color: #333;">
-        <strong>Paciente:</strong> ${item.patient}<br/>
-        <strong>Data do Laudo:</strong> ${item.dateClose}<br/>
-        <strong>Médico Responsável:</strong> ${item.medic}<br/>
-        <strong>CRM:</strong> ${item.medicCrm}
-        <strong>UF:</strong> ${item.medicCrmUf}<br/>
-        ${
-          item.medicalSpecialty
-            ? `<br/><strong>Especialidade:</strong> ${item.medicalSpecialty}`
-            : ""
-        }
-      </div>`;
+      // const infoBlock = `
+      // <div style="margin-bottom: 24px; font-size: 14px; color: #333;">
+      //   <strong>Paciente:</strong> ${item.patient}<br/>
+      //   <strong>Data do Laudo:</strong> ${item.dateClose}<br/>
+      //   <strong>Médico Responsável:</strong> ${item.medic}<br/>
+      //   <strong>CRM:</strong> ${item.medicCrm}
+      //   <strong>UF:</strong> ${item.medicCrmUf}<br/>
+      //   ${
+      //     item.medicalSpecialty
+      //       ? `<br/><strong>Especialidade:</strong> ${item.medicalSpecialty}`
+      //       : ""
+      //   }
+      // </div>`;
     } else {
       base64 = await consultationReport.getPdfBase64(item.reportPublicId);
     }
