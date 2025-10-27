@@ -1224,6 +1224,7 @@ const hadleSetRemoveMedic = async (
               loading.value = true;
               try {
                 if (!solicitation?.Schedule?.[0]?.publicId) {
+                  push.success("Não foi possível encontrar a agenda!");
                   return;
                 }
 
