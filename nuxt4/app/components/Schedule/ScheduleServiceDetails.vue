@@ -115,6 +115,25 @@ const handleQueryStart = async () => {
     return;
   }
 
+  if (
+    !$single.value.nuvidioInviteLink ||
+    !$single.value.nuvidioInviteLink.link
+  ) {
+    dialog.value = false;
+    push.warning(
+      "Não foi criada uma sala com link de atendimento. Entre em contato com os administradores do sistema."
+    );
+    return;
+
+    // const payloadCreateRoom = {
+    //   publicId: $single.value.publicId!,
+    //   intrevalMinutes: Number(sheduleModel.value.initialTime ?? "10"),
+    // };
+
+    // await nuvidioStore.createInviteTeleConference(payloadCreateRoom); //criar novo invite e link
+    // await scheduleStore.show($single.value.publicId!); //recarregar os dados do agendamento
+  }
+
   dialog.value = false;
   loading.value = true;
   try {
@@ -131,17 +150,6 @@ const handleQueryStart = async () => {
       $single.value.PatientConsultation.id,
       $user.value?.id!
     );
-
-    //somente se o agendamento não possuir um invite criado, ai sim chamar para criar outro
-    if (!$single.value.nuvidioInviteLink) {
-      const payloadCreateRoom = {
-        publicId: $single.value.publicId!,
-        intrevalMinutes: Number(sheduleModel.value.initialTime ?? "10"),
-      };
-
-      await nuvidioStore.createInviteTeleConference(payloadCreateRoom); //criar novo invite e link
-      await scheduleStore.show($single.value.publicId!); //recarregar os dados do agendamento
-    }
 
     if (
       $single.value.nuvidioInviteLink &&
