@@ -128,10 +128,27 @@
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <v-row dense>
-              <v-col cols="12" md="4">
-                <div class="font-weight-bold">Data:</div>
-                <div class="text-caption text-medium-emphasis">
-                  {{ formatDate(item.dateCreated) }}
+              <v-col
+                cols="12"
+                md="4"
+                class="d-flex flex-wrap"
+                style="gap: 1rem"
+              >
+                <div class="d-flex flex-column">
+                  <div class="font-weight-bold">Criada em:</div>
+                  <div class="text-caption text-medium-emphasis">
+                    {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
+                  </div>
+                </div>
+                <div class="d-flex flex-column">
+                  <div class="font-weight-bold">Paga em:</div>
+                  <div class="text-caption text-medium-emphasis">
+                    {{
+                      item.status === "CONFIRMED" || item.status === "RECEIVED"
+                        ? dayjs(item.updatedAt).format("DD/MM/YYYY HH:mm")
+                        : "-"
+                    }}
+                  </div>
                 </div>
               </v-col>
               <v-col cols="12" md="4">

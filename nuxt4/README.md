@@ -175,7 +175,8 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 [x] - Criar uma trava para evitar de vincular o médico com um dia no qual ele não atende
 [x] - Possibilidade de importar PDF para gerar laudo
 
-[] - Permitir copiar o link de cobrança para compartilhar com cliente
-[] - Permitir voltar status da solicitação de finalizada para agendata
-[] - Ao lançar uma transação, ter a opção do valor que o cliente pagou e o valor que será gerado re crédito
+[x] - Permitir copiar o link de cobrança para compartilhar com cliente
+[x] - Permitir voltar status da solicitação de finalizada para agendada
+[x] - Ao lançar uma transação, ter a opção do valor que o cliente pagou e o valor que será gerado re crédito
+[x] - Mostrar data e hora na tela de transações
 ```

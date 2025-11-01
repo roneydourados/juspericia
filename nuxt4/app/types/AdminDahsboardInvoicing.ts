@@ -51,4 +51,6 @@ export interface TransactionProps {
   seller: string;
   packgeQuantity: number;
   packgeSaleValue: number;
+  updatedAt: string;
+  createdAt: string;
 }

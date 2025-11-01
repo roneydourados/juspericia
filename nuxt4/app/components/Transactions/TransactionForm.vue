@@ -7,7 +7,7 @@
     borderColor="#c8e040"
   >
     <FormCrud :on-submit="handleConfirm">
-      <v-row dense class="mt-">
+      <v-row dense>
         <v-col cols="12">
           <StringInput
             label="Descrição"
@@ -57,12 +57,7 @@
           />
         </v-col>
         <v-col cols="12" lg="4">
-          <CurrencyInput
-            label="Valor"
-            v-model="model.itemValue"
-            required
-            :readonly="!!model.servicePackage"
-          />
+          <CurrencyInput label="Valor" v-model="model.itemValue" required />
         </v-col>
         <v-col cols="12" lg="4">
           <IntegerInput
@@ -111,9 +106,27 @@
             color="success"
             label="Lançar venda confirmada"
             v-model="model.saleConfirmed"
+            hide-details
           />
         </v-col>
-        <v-col v-if="model.saleConfirmed" cols="12">
+      </v-row>
+      <v-row v-if="model.saleConfirmed" dense justify="end">
+        <v-col cols="12" lg="6">
+          <CurrencyInput
+            label="Valor Gerar de crédito"
+            v-model="model.creditValue"
+            :required="model.saleConfirmed"
+            @update:model-value="handleValueChangeCalcDiscount"
+          />
+        </v-col>
+        <v-col cols="12" lg="6">
+          <CurrencyInput
+            label="Valor Desconto"
+            v-model="model.discount"
+            readonly
+          />
+        </v-col>
+        <v-col cols="12">
           <strong class="text-danger">
             Antes de lançar uma venda confirmada, confira no sistema de
             pagamento se o mesmo foi devidamente realizado!
@@ -144,7 +157,14 @@ const $currentUser = computed(() => auth.$currentUser);
 const $packgeValueMedia = computed(() => {
   let media = 0;
 
-  if (model.value.packageQuantity && model.value.itemValue) {
+  if (model.value.packageQuantity && model.value.creditValue) {
+    media = Number(
+      (
+        Number(model.value.creditValue) /
+        Number(model.value.packageQuantity ?? 1)
+      ).toFixed(2)
+    );
+  } else if (model.value.packageQuantity && model.value.itemValue) {
     media = Number(
       (
         Number(model.value.itemValue) / Number(model.value.packageQuantity ?? 1)
@@ -162,6 +182,8 @@ const model = ref({
   seller: undefined as UserProps | undefined,
   dueDays: 10,
   itemValue: undefined as string | undefined,
+  creditValue: undefined as string | undefined,
+  discount: undefined as string | undefined,
   servicePackage: undefined as ServicePackagesProps | undefined,
   saleConfirmed: false,
 });
@@ -175,6 +197,26 @@ const handleCancel = () => {
 
 const handleConfirm = async () => {
   try {
+    let discountType = "none";
+    let discountValue = 0;
+    let packgeSaleValue = Number(model.value.itemValue ?? "0");
+
+    //calcular o desconto caso o não seja o mesmo gerado de crédito
+    if (
+      model.value.creditValue &&
+      model.value.itemValue &&
+      model.value.saleConfirmed
+    ) {
+      const creditValueNum = Number(model.value.creditValue ?? "0");
+      const itemValueNum = Number(model.value.itemValue ?? "0");
+
+      if (Number(creditValueNum) > Number(itemValueNum)) {
+        discountType = "value";
+        discountValue = Number(creditValueNum) - Number(itemValueNum);
+        packgeSaleValue = Number(creditValueNum); //se o valor de saldo de crédito for maior, o valor da venda será esse
+      }
+    }
+
     await saleStore.create({
       saleId: uuidv7(),
       dueDate: dayjs().add(model.value.dueDays, "day").format("YYYY-MM-DD"),
@@ -183,13 +225,15 @@ const handleConfirm = async () => {
       status: model.value.saleConfirmed ? "CONFIRMED" : "PENDING",
       userId: model.value.client!.id!, // aqui vem quem esta comprando o pacote
       value: Number(model.value.itemValue ?? "0"),
+      discountType,
+      discountValue,
       category: "package",
       billingType: "none",
       sellerId: model.value.seller
         ? model.value.seller.id
         : $currentUser.value!.id!,
       packgeQuantity: Number(model.value.packageQuantity),
-      packgeSaleValue: Number(model.value.itemValue ?? "0"),
+      packgeSaleValue,
       expiredAt: dayjs().add(30, "day").format("YYYY-MM-DD"),
       saleType: "manual",
       packageId: model.value.servicePackage
@@ -214,8 +258,10 @@ const clearModel = () => {
     client: undefined,
     dueDays: 10,
     itemValue: undefined,
+    creditValue: undefined,
     seller: undefined,
     servicePackage: undefined,
+    discount: undefined,
     saleConfirmed: false,
   };
 };
@@ -231,6 +277,28 @@ const handlePackageValues = () => {
     model.value.description = "Venda de pacote sob medida";
     model.value.itemValue = "";
     model.value.packageQuantity = "1";
+  }
+  handleItemValueChange(model.value.itemValue ?? "");
+  handleValueChangeCalcDiscount(model.value.creditValue ?? "");
+};
+
+const handleItemValueChange = (value: string) => {
+  if (model.value.saleConfirmed) {
+    model.value.creditValue = value;
+  }
+};
+
+const handleValueChangeCalcDiscount = (value: string) => {
+  if (model.value.saleConfirmed) {
+    const itemValueNum = Number(model.value.itemValue ?? "0");
+    const creditValueNum = Number(value ?? "0");
+
+    if (creditValueNum <= itemValueNum) {
+      model.value.discount = "0";
+    } else {
+      const discountNum = creditValueNum - itemValueNum;
+      model.value.discount = amountFormated(discountNum, false);
+    }
   }
 };
 </script>

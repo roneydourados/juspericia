@@ -88,6 +88,10 @@ export const useSolicitationConsultationStore = defineStore(
       );
     };
 
+    const returnScheduled = async (id: string) => {
+      await api.put(`/solicitation-consultation/return-scheduled/${id}`);
+    };
+
     return {
       $single,
       $all,
@@ -99,6 +103,7 @@ export const useSolicitationConsultationStore = defineStore(
       paidUseSalt,
       solicitationSetAntecipation,
       solicitationCancelAntecipation,
+      returnScheduled,
     };
   }
 );

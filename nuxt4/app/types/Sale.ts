@@ -28,6 +28,8 @@ export interface SaleProps {
   packgeQuantity?: number;
   packgeSaleValue?: number;
   saleType?: string;
+  discountValue?: number;
+  discountType?: string;
 }
 
 export interface SaleFilterProps {

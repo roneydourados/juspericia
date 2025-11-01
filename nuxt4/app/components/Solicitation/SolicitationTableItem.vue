@@ -37,6 +37,21 @@
         <div class="d-flex flex-wrap align-center" style="gap: 1rem">
           <Button
             v-if="
+              solicitation.status === 'finished' &&
+              !solicitation.PatientConsultationReport &&
+              $currentUser?.profile?.type === 'ADMIN'
+            "
+            class="text-none font-weight-bold"
+            color="info"
+            variant="outlined"
+            size="small"
+            @click="handleGoSchedule(solicitation)"
+          >
+            <v-icon icon="mdi-calendar-clock" color="info" start />
+            <span class="text-caption"> Voltar agenda </span>
+          </Button>
+          <Button
+            v-if="
               solicitation.PatientConsultationReport &&
               solicitation.PatientConsultationReport.status === 'signed'
             "
@@ -1072,18 +1087,21 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
     }
 
     //caso contrário, apenas abrir a fatura
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
-    const popupWidth = Math.round(screenWidth * 0.95);
-    const popupHeight = Math.round(screenHeight * 0.95);
-    const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-    const popupTop = Math.round((screenHeight - popupHeight) / 2);
+    // const screenWidth = window.screen.width;
+    // const screenHeight = window.screen.height;
+    // const popupWidth = Math.round(screenWidth * 0.95);
+    // const popupHeight = Math.round(screenHeight * 0.95);
+    // const popupLeft = Math.round((screenWidth - popupWidth) / 2);
+    // const popupTop = Math.round((screenHeight - popupHeight) / 2);
 
-    const popup = window.open(
-      item.sale.invoiceUrl,
-      "_blank",
-      `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-    );
+    // const popup = window.open(
+    //   item.sale.invoiceUrl,
+    //   "_blank",
+    //   `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    // );
+    // abrir a fatura em uma nova aba
+    const popup = window.open(item.sale.invoiceUrl, "_blank");
+    if (popup) popup.focus();
 
     // verificar se o popup foi fechado
     const popupChecker = setInterval(async () => {
@@ -1292,6 +1310,48 @@ const handleCancelCobranca = (item: SolicitationConsultationProps) => {
               await getSolicitations();
             } catch (error) {
               push.error("Erro ao cancelar cobrança");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+};
+
+const handleGoSchedule = async (item: SolicitationConsultationProps) => {
+  push.info({
+    title: "Retornar ao agendamento",
+    message:
+      "Tem certeza que deseja retornar solicitação finalizada para agendamento ? Esta acção não pode ser desfeita.",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            filters.value = getSolicitationsFilters();
+
+            try {
+              await storeConsultation.returnScheduled(item.publicId!);
+              await getSolicitations();
+            } catch (error) {
+              push.error("Erro ao retornar ao agendamento");
             } finally {
               loading.value = false;
             }
