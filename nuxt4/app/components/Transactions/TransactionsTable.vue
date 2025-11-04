@@ -315,7 +315,7 @@ const headers = [
 ];
 
 const filters = ref({
-  initialDate: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+  initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
   status: "CONFIRMED",
   client: undefined as UserProps | undefined,
