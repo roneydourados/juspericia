@@ -599,7 +599,7 @@ const handleReportCorrection = async (
     await consultationReport.show(item.reportPublicId!);
     showJustificationCorrection.value = true;
   } finally {
-    loading.value = true;
+    loading.value = false;
   }
 };
 
