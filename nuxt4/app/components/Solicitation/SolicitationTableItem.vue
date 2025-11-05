@@ -536,10 +536,13 @@
           v-if="$currentUser?.profile?.type === 'ADVOGADO'"
           cols="12"
           lg="3"
-          class="d-flex flex-wrap align-center px-4"
+          class="d-flex flex-wrap align-center"
         >
           <Button
-            v-if="solicitation.rate === 0 && solicitation.status === 'finished'"
+            v-if="
+              Number(solicitation.rate ?? 0) === 0 &&
+              solicitation.status === 'finished'
+            "
             variant="text"
             @click="solicitation.rate = 1"
           >
@@ -551,7 +554,10 @@
               Avaliar solicitação
             </span>
           </Button>
-          <div v-if="solicitation.rate ?? 0 > 0" class="d-flex align-center">
+          <div
+            v-if="Number(solicitation.rate ?? 0) > 0"
+            class="d-flex align-center"
+          >
             <v-rating
               v-model="solicitation.rate"
               active-color="colorIcon"

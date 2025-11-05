@@ -184,13 +184,14 @@
             color="grey"
             size="small"
             variant="text"
-            @click="getItemCancel(item)"
+            @click="cancelSolicitation(item)"
             :disabled="
-              item.status !== 'open' && item.status !== 'payment_pending'
+              (item.status === 'finished' || item.status === 'canceled') &&
+              $currentUser?.profile?.type !== 'ADMIN'
             "
           >
             <v-icon icon="mdi-cancel" color="red" />
-            <span class="text-caption text-primary"> cancelar </span>
+            <span class="text-caption text-primary"> Cancelar </span>
           </Button>
           <Button
             color="grey"
@@ -257,7 +258,7 @@
           class="d-flex justify-end"
         >
           <Button
-            v-if="item.rate === 0 && item.status === 'finished'"
+            v-if="Number(item.rate ?? 0) === 0 && item.status === 'finished'"
             variant="text"
             @click="handleClickRate(item)"
           >
@@ -269,7 +270,7 @@
               Avaliar solicitação
             </span>
           </Button>
-          <div v-if="item.rate ?? 0 > 0" class="d-flex align-center">
+          <div v-if="Number(item.rate ?? 0) > 0" class="d-flex align-center">
             <v-rating
               v-model="item.rate"
               active-color="colorIcon"
@@ -342,14 +343,14 @@
     width="50%"
   />
   <DialogLoading :dialog="loading" />
-  <Dialog
+  <!-- <Dialog
     title="Cancelar consulta"
     :dialog="showCancel"
     @cancel="showCancel = false"
     @confirm="cancel"
   >
     Tem certeza que deseja cancelar a consulta?
-  </Dialog>
+  </Dialog> -->
   <!-- <SolicitationPaymentReciptSalt
     v-model="showRecipt"
     :solicitation="solicitation"
@@ -565,9 +566,49 @@ const getSolicitations = async () => {
   }
 };
 
-const getItemCancel = (item: SolicitationConsultationProps) => {
-  selected.value = item;
-  showCancel.value = true;
+const cancelSolicitation = (item: SolicitationConsultationProps) => {
+  push.info({
+    title: "Cancelar Solicitação",
+    message: "Tem certeza que deseja cancelar esta solicitação ?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Sim",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await storeConsultation.update({
+                ...item,
+                status: "canceled",
+              });
+
+              if (item.sale && item.sale.saleId) {
+                await asaas.deletePayment(item.sale.saleId);
+              }
+
+              await getSolicitations();
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Não",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 
 const getItemAntecipation = (item: SolicitationConsultationProps) => {
@@ -575,28 +616,28 @@ const getItemAntecipation = (item: SolicitationConsultationProps) => {
   showDateAntecipation.value = true;
 };
 
-const cancel = async () => {
-  showCancel.value = false;
-  if (!selected.value) return;
+// const cancel = async () => {
+//   showCancel.value = false;
+//   if (!selected.value) return;
 
-  loading.value = true;
+//   loading.value = true;
 
-  try {
-    await storeConsultation.update({
-      ...selected.value,
-      status: "canceled",
-    });
+//   try {
+//     await storeConsultation.update({
+//       ...selected.value,
+//       status: "canceled",
+//     });
 
-    if (selected.value.sale && selected.value.sale.saleId) {
-      await asaas.deletePayment(selected.value.sale.saleId);
-    }
+//     if (selected.value.sale && selected.value.sale.saleId) {
+//       await asaas.deletePayment(selected.value.sale.saleId);
+//     }
 
-    await getSolicitations();
-    selected.value = undefined;
-  } finally {
-    loading.value = false;
-  }
-};
+//     await getSolicitations();
+//     selected.value = undefined;
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
 const handleSchedule = (item: SolicitationConsultationProps) => {
   selected.value = item;
