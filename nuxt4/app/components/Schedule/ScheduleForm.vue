@@ -195,20 +195,6 @@ const generateAvailableTimeSlots = async () => {
   // Obtém o dia da semana (0 = Domingo, 1 = Segunda, ..., 6 = Sábado) - padrão JavaScript
   const dayOfWeek = dayjs(model.value.scheduleDate).day();
 
-  // // Verifica se há dados para este dia da semana
-  // const schedulesForThisDay =
-  //   $doctorScheduleAvailableDays.value?.filter(
-  //     (schedule: any) => schedule.dayOfWeek === dayOfWeek
-  //   ) ?? [];
-
-  // // Verifica se há dados para esta especialidade
-  // const schedulesForThisSpecialty =
-  //   $doctorScheduleAvailableDays.value?.filter(
-  //     (schedule: any) =>
-  //       schedule.specialtyId ===
-  //       props.solicitation.medicalSpecialtyId?.toString()
-  //   ) ?? [];
-
   // Filtra os horários disponíveis para o dia da semana selecionado e especialidade da solicitação
   const availableSchedules =
     $doctorScheduleAvailableDays.value?.filter((schedule: any) => {
