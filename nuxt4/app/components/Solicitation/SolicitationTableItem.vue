@@ -160,7 +160,7 @@
             color="grey"
             size="small"
             variant="outlined"
-            @click="getItemCancel(solicitation)"
+            @click="cancelSolicitation(solicitation)"
             :disabled="
               (solicitation.status === 'finished' ||
                 solicitation.status === 'canceled') &&
@@ -618,14 +618,14 @@
     width="50%"
   />
   <DialogLoading :dialog="loading" />
-  <Dialog
+  <!-- <Dialog
     title="Cancelar consulta"
     :dialog="showCancel"
     @cancel="showCancel = false"
     @confirm="cancel"
   >
     Tem certeza que deseja cancelar a consulta?
-  </Dialog>
+  </Dialog> -->
   <UserCreditSaltForm
     v-model="showSaltCredit"
     :solicitation="solicitation"
@@ -693,7 +693,7 @@ const showSaltCredit = ref(false);
 const isRate = ref(false);
 const showDateCorrection = ref(false);
 const showDateAntecipation = ref(false);
-const showCancel = ref(false);
+//const showCancel = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
 const showSale = ref(false);
@@ -911,9 +911,51 @@ const getSolicitations = async () => {
   }
 };
 
-const getItemCancel = (item: SolicitationConsultationProps) => {
-  selected.value = item;
-  showCancel.value = true;
+const cancelSolicitation = (item: SolicitationConsultationProps) => {
+  push.info({
+    title: "Cancelar Solicitação",
+    message: "Tem certeza que deseja cancelar esta solicitação ?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Sim",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await storeConsultation.update({
+                ...item,
+                status: "canceled",
+              });
+
+              if (item.sale && item.sale.saleId) {
+                await asaas.deletePayment(item.sale.saleId);
+              }
+
+              await getSolicitations();
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Não",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+  // selected.value = item;
+  // showCancel.value = true;
 };
 
 const getItemAntecipation = (item: SolicitationConsultationProps) => {
@@ -921,28 +963,28 @@ const getItemAntecipation = (item: SolicitationConsultationProps) => {
   showDateAntecipation.value = true;
 };
 
-const cancel = async () => {
-  showCancel.value = false;
-  if (!selected.value) return;
+// const cancel = async () => {
+//   showCancel.value = false;
+//   if (!selected.value) return;
 
-  loading.value = true;
+//   loading.value = true;
 
-  try {
-    await storeConsultation.update({
-      ...selected.value,
-      status: "canceled",
-    });
+//   try {
+//     await storeConsultation.update({
+//       ...selected.value,
+//       status: "canceled",
+//     });
 
-    if (selected.value.sale && selected.value.sale.saleId) {
-      await asaas.deletePayment(selected.value.sale.saleId);
-    }
+//     if (selected.value.sale && selected.value.sale.saleId) {
+//       await asaas.deletePayment(selected.value.sale.saleId);
+//     }
 
-    await getSolicitations();
-    selected.value = undefined;
-  } finally {
-    loading.value = false;
-  }
-};
+//     await getSolicitations();
+//     selected.value = undefined;
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
 const handleSchedule = (item: SolicitationConsultationProps) => {
   if (item.medicId) {
