@@ -220,7 +220,7 @@ const generateLooseTimeSlots = async () => {
   hour.value = {};
 
   // Início: 00:00, Fim: 23:55 (para não passar da meia-noite)
-  const startTime = new Date(`1970-01-01T00:00:00`);
+  const startTime = new Date(`1970-01-01T06:00:00`);
   const endTime = new Date(`1970-01-01T23:55:00`);
   const interval = 5; // 5 minutos
 
