@@ -102,7 +102,13 @@
           />
           <div class="mb-4 font-weight-bold">Horários disponíveis</div>
         </v-col>
-
+        <v-col v-if="$currentUser?.profile?.type === 'ADMIN'" cols="12" lg="3">
+          <v-checkbox
+            v-model="model.isLoose"
+            label="Horário avulso"
+            hide-details
+          />
+        </v-col>
         <v-col cols="12">
           <ScheduleHours
             :solicitation="solicitation"
@@ -147,6 +153,7 @@ const hour = ref<HourProps>({});
 const model = ref({
   scheduleDate: dayjs().format("YYYY-MM-DD"),
   medic: undefined as UserProps | undefined,
+  isLoose: false,
 });
 
 const $currentUser = computed(() => authStore.$currentUser);
@@ -182,10 +189,87 @@ watch(
 
       await getSchedules();
 
-      generateAvailableTimeSlots();
+      if (model.value.isLoose) {
+        generateLooseTimeSlots();
+      } else {
+        generateAvailableTimeSlots();
+      }
     }
   }
 );
+
+// Observa mudanças no campo isLoose para regenerar horários
+watch(
+  () => model.value.isLoose,
+  async () => {
+    if (show.value) {
+      await getSchedules();
+
+      if (model.value.isLoose) {
+        generateLooseTimeSlots();
+      } else {
+        generateAvailableTimeSlots();
+      }
+    }
+  }
+);
+
+// Gera horários de 5 em 5 minutos para as 24 horas do dia (horário avulso)
+const generateLooseTimeSlots = async () => {
+  hours.value = [];
+  hour.value = {};
+
+  // Início: 00:00, Fim: 23:55 (para não passar da meia-noite)
+  const startTime = new Date(`1970-01-01T00:00:00`);
+  const endTime = new Date(`1970-01-01T23:55:00`);
+  const interval = 5; // 5 minutos
+
+  const currentTime = new Date(startTime);
+
+  while (currentTime <= endTime) {
+    const hourStr = currentTime.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    // Para horários avulsos, verifica se já existe agendamento neste horário específico
+    const schedulesAtThisHour =
+      $schedules.value?.schedules.filter(
+        (s) =>
+          s.scheduleDate === model.value.scheduleDate &&
+          s.scheduleHour === hourStr
+      ) ?? [];
+
+    // Está selecionado se já tem um agendamento para essa solicitação
+    const isSelected = schedulesAtThisHour.some(
+      (s) => s.patientConsultationId === props.solicitation.id
+    );
+
+    const filter = schedulesAtThisHour.find(
+      (s) => s.patientConsultationId === props.solicitation.id
+    );
+
+    const solicitationId = isSelected ? filter?.id : props.solicitation.id;
+
+    // Para horários avulsos, desabilita apenas se já existe agendamento neste horário exato
+    const isDisabled = schedulesAtThisHour.length > 0 && !isSelected;
+
+    hours.value.push({
+      scheduleHour: hourStr,
+      patientConsultationId: solicitationId,
+      scheduleDate: model.value.scheduleDate,
+      isSelected,
+      isDisabled,
+    });
+
+    currentTime.setMinutes(currentTime.getMinutes() + interval);
+  }
+
+  // Ordena os horários em ordem crescente
+  hours.value.sort((a, b) =>
+    (a.scheduleHour ?? "").localeCompare(b.scheduleHour ?? "")
+  );
+};
 
 // Gera horários disponíveis baseado no array $doctorScheduleAvailableDays
 const generateAvailableTimeSlots = async () => {
@@ -288,6 +372,9 @@ const submitForm = async () => {
       scheduleHour: hour.value.scheduleHour,
       patientConsultationId: hour.value.patientConsultationId,
     };
+    console.log("🚀 ~ submitForm ~ schedule:", schedule);
+
+    return;
 
     if (props.data.id) {
       await scheduleStore.update({ ...schedule, id: props.data.id });
@@ -306,6 +393,7 @@ const handleDialog = () => {
   model.value = {
     medic: undefined,
     scheduleDate: dayjs().format("YYYY-MM-DD"),
+    isLoose: false,
   };
   hours.value = [];
   scheduleStore.clear();
@@ -328,7 +416,12 @@ const clickDay = async (date: string) => {
   model.value.scheduleDate = date;
 
   await getSchedules();
-  generateAvailableTimeSlots();
+
+  if (model.value.isLoose) {
+    generateLooseTimeSlots();
+  } else {
+    generateAvailableTimeSlots();
+  }
 };
 
 const datePickerModelValue = async (date: string | null) => {
@@ -339,6 +432,11 @@ const datePickerModelValue = async (date: string | null) => {
   model.value.scheduleDate = date;
 
   await getSchedules();
-  generateAvailableTimeSlots();
+
+  if (model.value.isLoose) {
+    generateLooseTimeSlots();
+  } else {
+    generateAvailableTimeSlots();
+  }
 };
 </script>

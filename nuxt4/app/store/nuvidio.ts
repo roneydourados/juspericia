@@ -30,20 +30,21 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
     nuvidioLinkInvite.value = data;
   };
 
-  // const getInviteLink = async (scheduleId: number) => {
-  //   const config = {
-  //     params: {
-  //       scheduleId,
-  //     },
-  //   };
+  const createInviteTeleConferenceLoose = async (input: {
+    publicId: string;
+    intrevalMinutes: number;
+  }) => {
+    const { publicId, intrevalMinutes } = input;
+    const { data } = await api.post<NuvidioInviteLinkResponse>(
+      "/nuvidio/invite-link/loose",
+      {
+        publicId,
+        intrevalMinutes,
+      }
+    );
 
-  //   const { data } = await api.get<NuvidioInviteLinkResponse>(
-  //     "/nuvidio/invite-link",
-  //     config
-  //   );
-
-  //   nuvidioLinkInvite.value = data;
-  // };
+    nuvidioLinkInvite.value = data;
+  };
 
   const getRecordCall = async (inviteId: string) => {
     const config = {
@@ -99,5 +100,6 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
     //getInviteLink,
     getRecordCall,
     deleteInviteLink,
+    createInviteTeleConferenceLoose,
   };
 });
