@@ -5,7 +5,6 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
   const { api } = useAxios();
 
   const nuvidioLinkInvite = ref<NuvidioInviteLinkResponse>();
-
   const $nuvidioLinkInvite = computed(() => nuvidioLinkInvite.value);
 
   const createAttendantDepartment = async (publicId: string) => {
@@ -21,22 +20,6 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
     const { publicId, intrevalMinutes } = input;
     const { data } = await api.post<NuvidioInviteLinkResponse>(
       "/nuvidio/invite-link",
-      {
-        publicId,
-        intrevalMinutes,
-      }
-    );
-
-    nuvidioLinkInvite.value = data;
-  };
-
-  const createInviteTeleConferenceLoose = async (input: {
-    publicId: string;
-    intrevalMinutes: number;
-  }) => {
-    const { publicId, intrevalMinutes } = input;
-    const { data } = await api.post<NuvidioInviteLinkResponse>(
-      "/nuvidio/invite-link/loose",
       {
         publicId,
         intrevalMinutes,
@@ -100,6 +83,5 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
     //getInviteLink,
     getRecordCall,
     deleteInviteLink,
-    createInviteTeleConferenceLoose,
   };
 });

@@ -372,9 +372,6 @@ const submitForm = async () => {
       scheduleHour: hour.value.scheduleHour,
       patientConsultationId: hour.value.patientConsultationId,
     };
-    console.log("🚀 ~ submitForm ~ schedule:", schedule);
-
-    return;
 
     if (props.data.id) {
       await scheduleStore.update({ ...schedule, id: props.data.id });
