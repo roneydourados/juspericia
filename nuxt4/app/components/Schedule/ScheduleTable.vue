@@ -180,7 +180,10 @@
                 icon
                 variant="text"
                 @click="handleFinalizeSchedule(item)"
-                :disabled="!item.medicId || !item.nuvidioCallId"
+                :disabled="
+                  (!item.medicId || !item.nuvidioCallId) &&
+                  $currentUser?.profile?.type !== 'ADMIN'
+                "
                 size="x-small"
               >
                 <v-icon icon="mdi-clock-check-outline" color="colorIcon" />
