@@ -41,6 +41,7 @@
             <SelectSearchUserCreditTrasnferDestiny
               v-model="userCreditDestiny"
               :public-id-exclude="originTransfer?.publicId"
+              :client-id="originTransfer?.userId"
               clearable
             />
           </v-card-text>
