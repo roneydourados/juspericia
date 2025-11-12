@@ -183,6 +183,17 @@
       <v-col cols="12">
         <SolicitationDetailsMedicReportVinculado :data="$single" />
       </v-col>
+      <v-col
+        v-if="$single?.corrections && $single?.corrections.length > 0"
+        cols="12"
+      >
+        <strong
+          >Correções solicitadas ({{ $single?.corrections?.length }}):</strong
+        >
+      </v-col>
+      <v-col v-for="item in $single?.corrections" :key="item.id" cols="12">
+        <SolicitationDetailsCorrections :data="item" :solicitation="$single" />
+      </v-col>
     </v-row>
   </CardBlur>
   <DialogLoading :dialog="loading" />

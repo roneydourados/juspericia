@@ -50,6 +50,17 @@ export interface SolicitationConsultationProps {
   medicalSpecialtyValue?: number;
   antecipationHours?: number;
   criticisms?: PatientConsultationCriticismsProps[];
+  corrections?: SolicitationCorrectionProps[];
+}
+
+export interface SolicitationCorrectionProps {
+  id?: number;
+  publicId?: string;
+  patientConsultationId: number;
+  correctionReason: string;
+  createdAt?: string;
+  updatedAt?: string;
+  status?: string;
 }
 
 export interface SolicitationConsultationFilterProps {

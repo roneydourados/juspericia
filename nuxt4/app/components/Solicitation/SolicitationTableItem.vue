@@ -281,7 +281,8 @@
           <div class="d-flex" style="gap: 0.5rem">
             <span>Data limite para solicitar correção:</span>
             <span class="font-weight-bold">
-              {{ dayjs(solicitation.deadline).format("DD/MM/YYYY") }}
+              <!-- {{ dayjs(solicitation.deadline).format("DD/MM/YYYY") }} -->
+              {{ $limiteDateCorrection }}
             </span>
           </div>
 
@@ -305,13 +306,23 @@
         </v-col>
         <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
           <div class="d-flex" style="gap: 0.5rem">
-            <span>Data de solicitação de correção:</span>
+            <span>Data do laudo:</span>
             <span class="font-weight-bold">
               {{
+                solicitation.PatientConsultationReport
+                  ? dayjs(
+                      solicitation.PatientConsultationReport.reportDate?.substring(
+                        0,
+                        10
+                      )
+                    ).format("DD/MM/YYYY")
+                  : "-"
+              }}
+              <!-- {{
                 solicitation.dateCorrection
                   ? dayjs(solicitation.dateCorrection).format("DD/MM/YYYY")
                   : "Não solicitado"
-              }}
+              }} -->
             </span>
           </div>
           <div class="d-flex" style="gap: 0.5rem">
@@ -446,7 +457,7 @@
           <Button
             variant="text"
             color="grey"
-            @click="showDateCorrection = true"
+            @click="handleShowCorrectionForm(solicitation)"
             :disabled="
               !solicitation.PatientConsultationReport || !$isEnableCorrection
             "
@@ -601,7 +612,8 @@
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"
-    @close="handleUpdateCorrection($event)"
+    :patient-consultation="selected"
+    @close="selected = undefined"
   />
   <SolicitationAntecipationForm
     title="Solicitar antecipação"
@@ -744,6 +756,25 @@ const $solicitationTotal = computed(() => {
 const $single = computed(() => storeConsultation.$single);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $systemParameters = computed(() => systemParameters.$parameters);
+const $limiteDateCorrection = computed(() => {
+  if (
+    props.solicitation.PatientConsultationReport &&
+    props.solicitation.PatientConsultationReport.reportDate
+  ) {
+    const dateLimit = dayjs(
+      props.solicitation.PatientConsultationReport.reportDate.substring(0, 10)
+    )
+      .add(
+        Number($systemParameters.value?.medicalReportRevisionMaxDays ?? 0),
+        "day"
+      )
+      .format("DD/MM/YYYY");
+
+    return dateLimit;
+  }
+
+  return "-";
+});
 const $isEnableCorrection = computed(() => {
   if (
     props.solicitation.PatientConsultationReport &&
@@ -751,8 +782,13 @@ const $isEnableCorrection = computed(() => {
   ) {
     const daysPassed =
       dayjs().diff(
-        dayjs(props.solicitation.PatientConsultationReport.reportDate),
-        "days"
+        dayjs(
+          props.solicitation.PatientConsultationReport.reportDate.substring(
+            0,
+            10
+          )
+        ),
+        "day"
       ) <= Number($systemParameters.value?.medicalReportRevisionMaxDays ?? 0);
 
     return (
@@ -1415,5 +1451,10 @@ const handleGoSchedule = async (item: SolicitationConsultationProps) => {
       ],
     },
   });
+};
+
+const handleShowCorrectionForm = (item: SolicitationConsultationProps) => {
+  selected.value = item;
+  showDateCorrection.value = true;
 };
 </script>

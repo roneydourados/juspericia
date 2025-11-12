@@ -92,6 +92,21 @@ export const useSolicitationConsultationStore = defineStore(
       await api.put(`/solicitation-consultation/return-scheduled/${id}`);
     };
 
+    const createSolicitationCorrection = async (input: {
+      patientConsultationId: number;
+      correctionReason: string;
+    }) => {
+      await api.post("/solicitation-consultation/correction", input);
+    };
+
+    const deleteSolicitationCorrection = async (publicId: string) => {
+      await api.delete(`/solicitation-consultation/correction/${publicId}`);
+    };
+
+    const closeSolicitationCorrection = async (publicId: string) => {
+      await api.put(`/solicitation-consultation/correction/close/${publicId}`);
+    };
+
     return {
       $single,
       $all,
@@ -104,6 +119,9 @@ export const useSolicitationConsultationStore = defineStore(
       solicitationSetAntecipation,
       solicitationCancelAntecipation,
       returnScheduled,
+      createSolicitationCorrection,
+      deleteSolicitationCorrection,
+      closeSolicitationCorrection,
     };
   }
 );

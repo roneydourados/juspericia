@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: "",
@@ -34,12 +34,18 @@ defineProps({
     type: String,
     default: "500",
   },
+  patientConsultation: {
+    type: Object as PropType<SolicitationConsultationProps>,
+    required: true,
+  },
 });
 
 const { mobile } = useDisplay();
-
+const storeConsultation = useSolicitationConsultationStore();
 const emit = defineEmits(["close"]);
-const show = defineModel<boolean>("show");
+const show = defineModel("show", {
+  default: false,
+});
 const motive = ref("");
 
 watch(
@@ -52,9 +58,19 @@ watch(
   { immediate: true }
 );
 
-const submitForm = () => {
-  show.value = false;
-  emit("close", motive.value);
+const submitForm = async () => {
+  try {
+    await storeConsultation.createSolicitationCorrection({
+      patientConsultationId: props.patientConsultation.id!,
+      correctionReason: motive.value,
+    });
+
+    show.value = false;
+
+    emit("close", motive.value);
+  } catch (error) {
+    console.log(`Erro ao tentar criar uma correção de solicitação: ${error}`);
+  }
 };
 
 const handleClose = () => {
