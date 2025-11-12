@@ -284,8 +284,7 @@ const generateAvailableTimeSlots = async () => {
     $doctorScheduleAvailableDays.value?.filter((schedule: any) => {
       const dayMatch = schedule.dayOfWeek === dayOfWeek;
       const specialtyMatch =
-        schedule.specialtyId ===
-        props.solicitation.medicalSpecialtyId?.toString();
+        schedule.specialtyId === props.solicitation.medicalSpecialtyId;
       return dayMatch && specialtyMatch;
     }) ?? [];
 
@@ -327,7 +326,7 @@ const generateAvailableTimeSlots = async () => {
         (doctorSchedule: any) =>
           doctorSchedule.dayOfWeek === dayOfWeek &&
           doctorSchedule.specialtyId ===
-            props.solicitation.medicalSpecialtyId?.toString() &&
+            props.solicitation.medicalSpecialtyId &&
           doctorSchedule.startTime <= hourStr &&
           doctorSchedule.endTime > hourStr
       );
