@@ -267,8 +267,8 @@ const { /*amountFormated,*/ getSolicitationsFilters } = useUtils();
 const { mobile } = useDisplay();
 const router = useRouter();
 
-const authStore = useAuthStore();
-const saltCredit = useUserCreditSaltStore();
+//const authStore = useAuthStore();
+//const saltCredit = useUserCreditSaltStore();
 const storeConsultation = useSolicitationConsultationStore();
 const sistemParametersStore = useSystemParametersStore();
 const fileStore = useFileStore();
@@ -304,7 +304,7 @@ const form = ref({
 
 const filters = ref(getSolicitationsFilters());
 const isInValidFiles = ref(false);
-const $currentUser = computed(() => authStore.$currentUser);
+//const $currentUser = computed(() => authStore.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
 //const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
@@ -321,7 +321,7 @@ const $isSelectMedicalSpecialty = computed(() => {
 
 onMounted(async () => {
   await sistemParametersStore.index();
-  await saltCredit.getTotalSalt($currentUser.value?.publicId!);
+  //await saltCredit.getTotalSalt($currentUser.value?.publicId!);
 
   if (props.data.id && props.show) {
     loadModel();

@@ -687,11 +687,12 @@ const asaas = useAsaasStore();
 const storeConsultation = useSolicitationConsultationStore();
 const consultationReport = usePatientConsultationReportStore();
 const scheduleStore = useScheduleStore();
-const rounter = useRouter();
+//const rounter = useRouter();
 const fileStore = useFileStore();
 const zapSign = useZapsignStore();
 const systemParameters = useSystemParametersStore();
 const criticismStore = usePatientConsultationCriticismStore();
+const saltCredit = useUserCreditSaltStore();
 
 // const transactionsStore = useTransactionsStore();
 
@@ -742,6 +743,7 @@ const modelPrececkout = ref({
   userId: undefined as number | undefined,
 });
 
+const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
 const $currentUser = computed(() => auth.$currentUser);
 const $solicitationTotal = computed(() => {
   const value = props.solicitation.valueCredit
@@ -1043,6 +1045,57 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
 const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps
 ) => {
+  //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
+  await saltCredit.getTotalSalt($currentUser.value?.publicId!);
+
+  if (
+    $userCreditTotalSalt.value &&
+    Number($userCreditTotalSalt.value.totalSalt) >=
+      Number($solicitationTotal.value)
+  ) {
+    push.info({
+      title: "Saldo de crédito disponível",
+      message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
+        $userCreditTotalSalt.value?.totalSalt ?? 0,
+        true
+      )}. Esta solicitação será baixada automaticamente.`,
+      duration: Infinity, // Não fecha automaticamente
+      props: {
+        isModal: true, // Propriedade customizada para identificar como modal
+        preventOverlayClose: true, // Impede fechar clicando no overlay
+        preventEscapeClose: false, // Permite fechar com ESC
+        actions: [
+          {
+            label: "Confirmar",
+            variant: "primary",
+            icon: "mdi-file-rotate-right-outline",
+            iconColor: "colorIcon",
+            handler: async () => {
+              loading.value = true;
+              try {
+                await storeConsultation.paidUseSalt(item.publicId!);
+                await getSolicitations();
+              } catch (error) {
+                console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+              } finally {
+                loading.value = false;
+              }
+            },
+          },
+          {
+            label: "Cancelar",
+            variant: "secondary",
+            icon: "mdi-close",
+            iconColor: "red",
+            handler: () => {},
+          },
+        ],
+      },
+    });
+
+    return;
+  }
+
   //refazer a consulta aqui só para garantir que está com os dados mais recentes
   await storeConsultation.show(item.publicId!);
 
