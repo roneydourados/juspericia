@@ -425,7 +425,7 @@ const itemsPerPage = ref(10);
 const page = ref(1);
 
 const $currentUser = computed(() => auth.$currentUser);
-
+const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
 const $all = computed(() => storeConsultation.$all?.consultations);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $systemParameters = computed(() => systemParameters.$parameters);
@@ -435,6 +435,7 @@ const paginatedItems = computed(() => {
   const start = (page.value - 1) * itemsPerPage.value;
   return all.slice(start, start + itemsPerPage.value);
 });
+
 const pageCount = computed(() => {
   const all = $all.value || [];
   return Math.ceil(all.length / itemsPerPage.value);
@@ -647,6 +648,65 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
 const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps
 ) => {
+  //calcular o valor total da solicitação
+  let value = Number(item.valueCredit ?? 0)
+    ? Number(item.valueCredit ?? 0)
+    : Number(item.consultationValue ?? 0);
+
+  value =
+    Number(value ?? 0) +
+    Number(item.antecipationValue ?? 0) +
+    Number(item.medicalSpecialtyValue ?? 0);
+
+  //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
+  await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
+
+  if (
+    $userCreditTotalSalt.value &&
+    Number($userCreditTotalSalt.value.totalSalt) >= Number(value)
+  ) {
+    push.info({
+      title: "Saldo de crédito disponível",
+      message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
+        $userCreditTotalSalt.value?.totalSalt ?? 0,
+        true
+      )}. Esta solicitação será baixada automaticamente.`,
+      duration: Infinity, // Não fecha automaticamente
+      props: {
+        isModal: true, // Propriedade customizada para identificar como modal
+        preventOverlayClose: true, // Impede fechar clicando no overlay
+        preventEscapeClose: false, // Permite fechar com ESC
+        actions: [
+          {
+            label: "Confirmar",
+            variant: "primary",
+            icon: "mdi-file-rotate-right-outline",
+            iconColor: "colorIcon",
+            handler: async () => {
+              loading.value = true;
+              try {
+                await storeConsultation.paidUseSalt(item.publicId!);
+                await getSolicitations();
+              } catch (error) {
+                console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+              } finally {
+                loading.value = false;
+              }
+            },
+          },
+          {
+            label: "Cancelar",
+            variant: "secondary",
+            icon: "mdi-close",
+            iconColor: "red",
+            handler: () => {},
+          },
+        ],
+      },
+    });
+    return;
+  }
+
   //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
   if (item.sale && item.sale.saleId) {
     // este método aqui já cancela a venda vinculada ao pagament

@@ -1046,7 +1046,7 @@ const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps
 ) => {
   //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
-  await saltCredit.getTotalSalt($currentUser.value?.publicId!);
+  await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
 
   if (
     $userCreditTotalSalt.value &&
