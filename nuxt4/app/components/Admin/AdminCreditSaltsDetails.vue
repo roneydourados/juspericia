@@ -2,11 +2,20 @@
   <DialogForm :title="item?.name" :show="show" @dialog="handleClose" fullscreen>
     <CardBlur :hover="false">
       <v-row dense>
-        <v-col cols="12">
+        <v-col cols="12" class="d-flex align-center" style="gap: 1rem">
           <Tabs
             v-model="tabFilter"
             :tabs="tabsFilter"
             @update:model-value="handleChangeTabFilter"
+          />
+          <v-switch
+            v-model="filters.isSalt"
+            :label="`Mostrar créditos com saldo (${
+              filters.isSalt ? 'Sim' : 'Não'
+            })`"
+            hide-details
+            color="green"
+            @update:model-value="filterData"
           />
         </v-col>
         <v-col cols="12" lg="6">
@@ -24,6 +33,7 @@
       </v-row>
       <!-- <pre>{{ $estatisticsByAdmin }}</pre> -->
     </CardBlur>
+    <DialogLoading :dialog="loading" />
   </DialogForm>
 </template>
 
@@ -38,7 +48,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
-
+const loading = ref(false);
 const userLaywerStore = useUserLawyerStore();
 const tabFilter = ref(4);
 const tabsFilter = ref<TabProps[]>([
@@ -72,10 +82,7 @@ const tabsFilter = ref<TabProps[]>([
 const filters = ref({
   initialDate: dayjs().startOf("year").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("year").format("YYYY-MM-DD"),
-});
-
-const $estatisticsByAdmin = computed(() => {
-  return userLaywerStore.$estatisticsByAdmin;
+  isSalt: false,
 });
 
 const show = defineModel({
@@ -86,10 +93,7 @@ watch(
   () => show.value,
   async (value) => {
     if (value && props.item) {
-      await userLaywerStore.getEstatisticsByAdmin({
-        ...filters.value,
-        userId: props.item.id!,
-      });
+      await filterData();
     }
   }
 );
@@ -123,11 +127,20 @@ const handleChangeTabFilter = async () => {
       break;
   }
 
+  await filterData();
+};
+
+const filterData = async () => {
   if (!props.item) return;
 
-  await userLaywerStore.getEstatisticsByAdmin({
-    ...filters.value,
-    userId: props.item.id!,
-  });
+  loading.value = true;
+  try {
+    await userLaywerStore.getEstatisticsByAdmin({
+      ...filters.value,
+      userId: props.item.id!,
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
