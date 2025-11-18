@@ -70,13 +70,15 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     initialDate: string;
     finalDate: string;
     userId: number;
+    isSalt: boolean;
   }) => {
-    const { initialDate, finalDate, userId } = input;
+    const { initialDate, finalDate, userId, isSalt } = input;
     const config = {
       params: {
         initialDate,
         finalDate,
         userId,
+        isSalt,
       },
     };
 
