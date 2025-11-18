@@ -82,7 +82,7 @@ const tabsFilter = ref<TabProps[]>([
 const filters = ref({
   initialDate: dayjs().startOf("year").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("year").format("YYYY-MM-DD"),
-  isSalt: false,
+  isSalt: true,
 });
 
 const show = defineModel({
