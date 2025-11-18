@@ -132,6 +132,7 @@
 
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
+import { uuidv7 } from "uuidv7";
 const auth = useAuthStore();
 const systemParametersStore = useSystemParametersStore();
 const config = useRuntimeConfig();
@@ -160,6 +161,7 @@ onMounted(() => {
 watch(
   cloudFlareToken,
   (newToken) => {
+    if (config.public.disabledCloudflare) return;
     // Se o token estiver vazio, desabilita os botões
     // Se o token tiver valor, habilita os botões
     disabledButtons.value = !newToken || newToken.trim() === "";
@@ -175,6 +177,8 @@ const $isDevelop = computed(() => config.public.develop);
 const submmitForm = async () => {
   isError.value = false;
   try {
+    if (config.public.disabledCloudflare) cloudFlareToken.value = uuidv7();
+
     await auth.login({
       email: form.value.email,
       password: form.value.password,

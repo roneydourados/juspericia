@@ -3,10 +3,10 @@
     <v-card flat class="mb-2 pa-2" rounded="lg" color="transparent">
       <v-card-title>
         <v-row align="center">
-          <v-col cols="12" lg="11" class="d-flex align-center">
+          <v-col cols="12" lg="10" class="d-flex align-center">
             <HeaderPage title="Estatísticas" font-size="1.8rem" />
           </v-col>
-          <v-col cols="12" lg="1">
+          <v-col cols="12" lg="2">
             <Years @year="handleYear($event)" />
           </v-col>
         </v-row>

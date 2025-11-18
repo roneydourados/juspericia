@@ -153,6 +153,8 @@ export default defineNuxtConfig({
       develop: process.env.DEVELOP === "true" ? true : false,
       zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
       zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
+      disabledCloudflare:
+        process.env.DISABLED_CLOUDFLARE === "true" ? true : false,
     },
   },
 });
