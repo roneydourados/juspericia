@@ -6,10 +6,11 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
   const userCreditSalts = ref<UserCreditSaltResponseProps>();
   const userCreditLog = ref<any[]>([]);
   const userCreditTotalSalt = ref<UserCreditTotalSaltProps>();
-
+  const lawyers = ref<laywersUserCreditProps>();
   const $credits = computed(() => userCreditSalts.value);
   const $userCreditLog = computed(() => userCreditLog.value);
   const $userCreditTotalSalt = computed(() => userCreditTotalSalt.value);
+  const $lawyers = computed(() => lawyers.value);
 
   const index = async (input: {
     status?: string;
@@ -99,6 +100,20 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     userCreditTotalSalt.value = data;
   };
 
+  const getLawyers = async (userId?: number) => {
+    const config = {
+      params: {
+        userId,
+      },
+    };
+    const { data } = await api.get<laywersUserCreditProps>(
+      "/user-credit-salt-lawyers",
+      config
+    );
+
+    lawyers.value = data;
+  };
+
   return {
     indexAdmin,
     index,
@@ -107,7 +122,9 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     $credits,
     $userCreditLog,
     $userCreditTotalSalt,
+    $lawyers,
     updateExpireAt,
     getTotalSalt,
+    getLawyers,
   };
 });

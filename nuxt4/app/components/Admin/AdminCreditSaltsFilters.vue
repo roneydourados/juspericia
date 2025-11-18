@@ -81,6 +81,7 @@ const handleFilter = async () => {
       userId: filters.value.lawyer?.id,
       isSalt: filters.value.isSalt,
     });
+    await saltCredit.getLawyers(filters.value.lawyer?.id);
   } finally {
     loading.value = false;
   }

@@ -67,6 +67,64 @@
         </v-row>
         <div class="py-4">
           <Table
+            title="Clientes"
+            :headers="headers"
+            :items="$lawyers?.lawyers"
+            :show-crud="false"
+          >
+            <template v-slot:item.phone="{ item }">
+              <span
+                class="d-flex align-center"
+                v-ripple
+                @click="handleWhatsapp(item.phone)"
+                style="cursor: pointer"
+              >
+                <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
+                <span>
+                  {{
+                    item.phone
+                      ? formatTelephoneNumber(item.phone)
+                      : "Não informado"
+                  }}
+                </span>
+              </span>
+            </template>
+            <template v-slot:item.whatsapp="{ item }">
+              <span
+                class="d-flex align-center"
+                v-ripple
+                @click="handleWhatsapp(item.whatsapp)"
+                style="cursor: pointer"
+              >
+                <v-icon icon="mdi-whatsapp" size="24" color="colorIcon" start />
+                <span>
+                  {{
+                    item.phone
+                      ? formatTelephoneNumber(item.whatsapp)
+                      : "Não informado"
+                  }}
+                </span>
+              </span>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-btn
+                variant="text"
+                color="info"
+                icon
+                @click="handleShowDetails(item)"
+              >
+                <v-icon icon="mdi-account-details-outline"></v-icon>
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                >
+                  Detalhes
+                </v-tooltip>
+              </v-btn>
+            </template>
+          </Table>
+          <!-- <Table
             title="Compras"
             font-size="1.5rem"
             :headers="headers"
@@ -147,15 +205,10 @@
                 </v-tooltip>
               </v-btn>
             </template>
-          </Table>
+          </Table> -->
         </div>
       </v-card-text>
     </v-card>
-    <AdminCreditSaltTransferSaltForm
-      v-model="showFormSaltTransfer"
-      :origin-transfer="selectedUserCreditSalt"
-      @close="handleCloseFormTrasnfer"
-    />
     <v-snackbar
       v-model="showErrorAlert"
       vertical
@@ -177,31 +230,29 @@
       </template>
     </v-snackbar>
     <DialogLoading :dialog="loading" />
-    <Dialog
-      title="Atualizar Data de expiração crédito"
-      :dialog="showUpdateExpireAt"
-      @cancel="showUpdateExpireAt = false"
-      @confirm="handleUpdateExpireAt"
-      show-cancel
-    >
-      <DatePicker label="Nova data" v-model="newExpireAt" />
-    </Dialog>
+    <AdminCreditSaltsDetails
+      v-model="showDetails"
+      :item="selectedLawyer"
+      @close="handleFilter"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
+import { useDisplay } from "vuetify";
 
 const saltCredit = useUserCreditSaltStore();
-const auth = useAuthStore();
+//const auth = useAuthStore();
 
-const { amountFormated } = useUtils();
-const showFormSaltTransfer = ref(false);
+const { amountFormated, whatsappUrl, formatTelephoneNumber } = useUtils();
+const { mobile } = useDisplay();
+
 const loading = ref(false);
 const showErrorAlert = ref(false);
-const showUpdateExpireAt = ref(false);
-const selectedUserCreditSalt = ref<UserCreditSalt>();
-const newExpireAt = ref("");
+const showDetails = ref(false);
+
+const selectedLawyer = ref<LawyerEstatisticsByAdmin>();
 const filters = ref({
   initialDate: "",
   finalDate: "",
@@ -213,67 +264,57 @@ const filters = ref({
 
 const headers = ref([
   {
-    title: "Status",
-    align: "start",
-    sortable: false,
-    key: "status",
+    title: "Id",
+    key: "id",
   },
-  { title: "Data da compra", key: "dateCreated" },
-  { title: "Data de expiração", key: "expireDate" },
-  { title: "Valor", key: "value" },
-  { title: "Saldo", key: "salt" },
   {
-    title: "Cliente",
-    key: "user.name",
+    title: "Nome",
+    key: "name",
+  },
+  // {
+  //   title: "Email",
+  //   key: "email",
+  // },
+  {
+    title: "Telefone",
+    key: "phone",
+  },
+  {
+    title: "Whatsapp",
+    key: "whatsapp",
   },
   { title: "Ações", key: "actions" },
+  // {
+  //   title: "Email-Escritório",
+  //   key: "officeEmail",
+  // },
+  // {
+  //   title: "Tel. Escritório",
+  //   key: "officePhone",
+  // },
 ]);
 
+// const headers = ref([
+//   {
+//     title: "Status",
+//     align: "start",
+//     sortable: false,
+//     key: "status",
+//   },
+//   { title: "Data da compra", key: "dateCreated" },
+//   { title: "Data de expiração", key: "expireDate" },
+//   { title: "Valor", key: "value" },
+//   { title: "Saldo", key: "salt" },
+//   {
+//     title: "Cliente",
+//     key: "user.name",
+//   },
+//   { title: "Ações", key: "actions" },
+// ]);
+
 const $salts = computed(() => saltCredit.$credits);
-const $currentUser = computed(() => auth.$currentUser);
-
-const getStatusName = (item: UserCreditSalt) => {
-  const currentDate = dayjs();
-
-  switch (item.status) {
-    case "CONFIRMED":
-    case "RECEIVED":
-      // se estiver ativo, então verificar se não expirou
-      return {
-        text: dayjs(item.expireDate).isBefore(currentDate)
-          ? "Expirado"
-          : "Disponível",
-        color: dayjs(item.expireDate).isBefore(currentDate)
-          ? "warning"
-          : "success",
-        icon: "mdi-check-circle-outline",
-      };
-    case "PENDING":
-      return {
-        text: "Pendente",
-        color: "warning",
-        icon: "mdi-circle-outline",
-      };
-    case "REFUNDED":
-      return {
-        text: "Cancelado",
-        color: "error",
-        icon: "mdi-cancel",
-      };
-    default:
-      return {
-        text: "Indefinido",
-        color: "grey",
-        icon: "mdi-circle-outline",
-      };
-  }
-};
-
-const handleShowFormSaltTransfer = (item: UserCreditSalt) => {
-  selectedUserCreditSalt.value = item;
-  //await handleFilter();
-  showFormSaltTransfer.value = true;
-};
+const $lawyers = computed(() => saltCredit.$lawyers);
+//const $currentUser = computed(() => auth.$currentUser);
 
 const handleFilter = async () => {
   loading.value = true;
@@ -285,35 +326,25 @@ const handleFilter = async () => {
       userId: filters.value.lawyer?.id,
       isSalt: filters.value.isSalt,
     });
+    await saltCredit.getLawyers(filters.value.lawyer?.id);
   } finally {
     loading.value = false;
   }
 };
 
-const handleCloseFormTrasnfer = async () => {
-  selectedUserCreditSalt.value = undefined;
-  await handleFilter();
+const handleWhatsapp = (phone: string) => {
+  if (!phone) return;
+
+  const url = whatsappUrl(
+    phone,
+    "Olá, aqui quem fala é seu gestor comercial da jusperícia. Podemos conversar ?",
+    mobile.value
+  );
+  window.open(url, "_blank");
 };
 
-const getItemUpdateExpireAt = (item: UserCreditSalt) => {
-  selectedUserCreditSalt.value = item;
-  showUpdateExpireAt.value = true;
-};
-
-const handleUpdateExpireAt = async () => {
-  if (!selectedUserCreditSalt.value) return;
-
-  loading.value = true;
-  try {
-    await saltCredit.updateExpireAt({
-      publicId: selectedUserCreditSalt.value.publicId!,
-      newExpireAt: newExpireAt.value,
-    });
-
-    await handleFilter();
-  } finally {
-    loading.value = false;
-    showUpdateExpireAt.value = false;
-  }
+const handleShowDetails = (item: LawyerEstatisticsByAdmin) => {
+  selectedLawyer.value = item;
+  showDetails.value = true;
 };
 </script>

@@ -12,6 +12,7 @@ onMounted(async () => {
   loading.value = true;
   try {
     await saltCredit.indexAdmin({ status: "CONFIRMED", isSalt: true });
+    await saltCredit.getLawyers();
   } finally {
     loading.value = false;
   }

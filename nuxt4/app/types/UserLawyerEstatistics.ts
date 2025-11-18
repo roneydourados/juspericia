@@ -42,3 +42,61 @@ export interface UserLawyerEstatisticsFilterProps {
   initialDate: string;
   finalDate: string;
 }
+
+export interface LawyerSolicitationEstatisticsByAdmin {
+  id: number;
+  patient: string;
+  dateOpen: string;
+  dateClose: string | null;
+  reportPurpose: string;
+  benefitType: string;
+  consultationName: string;
+  valueCredit: number;
+  total: number;
+  medicalSpecialtyValue: number;
+  status: string;
+  statusName: string;
+}
+
+export interface LawyerSolicitationStatusEstatisticsByAdmin {
+  quantity: number;
+  status: string;
+}
+
+export interface LawyerSolicitationBenefitTypeEstatisticsByAdmin {
+  quantity: number;
+  benefitType: string;
+}
+
+export interface LawyerSolicitationReportPurposeEstatisticsByAdmin {
+  quantity: number;
+  reportPurpose: string;
+}
+
+export interface UserCreditLogDto {
+  history: string;
+  type: string;
+  value: string;
+  userCreditId: number;
+  createdAt: string;
+  id: number;
+}
+
+export interface UserCreditDto {
+  id: number;
+  value: string;
+  salt: string;
+  status: string;
+  UserCreditLog: UserCreditLogDto[];
+}
+
+export interface LawyerDashboardEstatisticsByAdmin {
+  laywerSolicitations: LawyerSolicitationEstatisticsByAdmin[];
+  laywerSolicitationsStatus: LawyerSolicitationStatusEstatisticsByAdmin[];
+  laywerSolicitationsBenefitType: LawyerSolicitationBenefitTypeEstatisticsByAdmin[];
+  laywerSolicitationsReportPropurse: LawyerSolicitationReportPurposeEstatisticsByAdmin[];
+  totalSaltCreditExpired: number;
+  totalSaltCredit: number;
+  totalSaltCreditPending: number;
+  userCredit: UserCreditDto[];
+}

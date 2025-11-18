@@ -40,3 +40,17 @@ export interface UserCreditSaltResponseProps {
 export interface UserCreditTotalSaltProps {
   totalSalt: number;
 }
+
+export interface LawyerEstatisticsByAdmin {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  whatsapp: string;
+  officeEmail: string;
+  officePhone: string | null;
+}
+
+export interface laywersUserCreditProps {
+  lawyers: LawyerEstatisticsByAdmin[];
+}

@@ -6,9 +6,11 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
   const user = ref<UserProps>();
   const users = ref<UserProps[]>([]);
   const estatistics = ref<UserLawyerEstatisticsProps>();
+  const estatisticsByAdmin = ref<LawyerDashboardEstatisticsByAdmin>();
   const $single = computed(() => user.value);
   const $all = computed(() => users.value);
   const $estatistics = computed(() => estatistics.value);
+  const $estatisticsByAdmin = computed(() => estatisticsByAdmin.value);
 
   const index = async (inputQuery: string) => {
     const config = {
@@ -35,7 +37,7 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
   };
 
   const update = async (input: UserProps) => {
-    console.log(input)
+    console.log(input);
     const { data } = await api.put<UserProps>("/user-lawyer", input);
 
     user.value = data;
@@ -64,15 +66,39 @@ export const useUserLawyerStore = defineStore("userLawyer", () => {
     estatistics.value = data;
   };
 
+  const getEstatisticsByAdmin = async (input: {
+    initialDate: string;
+    finalDate: string;
+    userId: number;
+  }) => {
+    const { initialDate, finalDate, userId } = input;
+    const config = {
+      params: {
+        initialDate,
+        finalDate,
+        userId,
+      },
+    };
+
+    const { data } = await api.get<LawyerDashboardEstatisticsByAdmin>(
+      "/user-lawyer-estatistics/admin",
+      config
+    );
+
+    estatisticsByAdmin.value = data;
+  };
+
   return {
     $single,
     $all,
     $estatistics,
+    $estatisticsByAdmin,
     index,
     create,
     update,
     destroy,
     show,
     getEstatistics,
+    getEstatisticsByAdmin,
   };
 });
