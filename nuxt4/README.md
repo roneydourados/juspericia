@@ -181,4 +181,6 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 [x] - Mostrar data e hora na tela de transações
 [x] - Criar uma tela com mais detalhes no controle de crédito de cliente
 [x] - Mostrar o id do advogado
+[] - Verificar se o filtro isSalt esta correto ao mostrar os que estão com saldo zerado
+[] - Mostrar quantidade de transações retornadas na tela de controle de transações
 ```
