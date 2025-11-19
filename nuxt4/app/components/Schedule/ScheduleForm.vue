@@ -5,7 +5,7 @@
     :width="mobile ? '' : width"
     @dialog="handleDialog"
   >
-    <FormCrud :on-submit="submitForm">
+    <FormCrud :on-submit="submitForm" :show-submit-button="false">
       <v-row dense>
         <v-col cols="12">
           <strong>Dados da solicitação de consulta</strong>
@@ -116,6 +116,20 @@
             v-model:hour="hour"
           />
         </v-col>
+        <v-col cols="12" class="d-flex justify-center mt-4">
+          <Button
+            color="primary"
+            variant="flat"
+            size="small"
+            type="submit"
+            :disabled="loading || !hour.scheduleHour"
+          >
+            <div v-if="!loading" class="d-flex align-center">
+              <v-icon icon="mdi-check" start />
+              <span class="text-caption"> Salvar </span>
+            </div>
+          </Button>
+        </v-col>
       </v-row>
     </FormCrud>
   </DialogForm>
@@ -149,6 +163,7 @@ const authStore = useAuthStore();
 const { mobile } = useDisplay();
 const hours = ref<HourProps[]>([]);
 const hour = ref<HourProps>({});
+const loading = ref(false);
 
 const model = ref({
   scheduleDate: dayjs().format("YYYY-MM-DD"),
@@ -363,6 +378,7 @@ const generateAvailableTimeSlots = async () => {
 };
 
 const submitForm = async () => {
+  loading.value = true;
   try {
     const schedule = {
       title: `Agendamento de consulta referente a solicitação de ${props.solicitation.Patient?.name} ${props.solicitation.Patient?.surname}`,
@@ -379,6 +395,7 @@ const submitForm = async () => {
     }
     await getSchedules();
   } finally {
+    loading.value = false;
     handleDialog();
     emit("scheduled");
   }

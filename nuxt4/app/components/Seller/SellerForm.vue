@@ -198,20 +198,8 @@
           </Button>
         </v-col>
       </v-row>
-
-      <!-- <v-row dense>
-        <v-col cols="12" class="d-flex justify-end px-8">
-          <v-switch
-            v-model="model.active"
-            color="success"
-            :label="model.active ? 'Ativo' : 'Inativo'"
-            hide-details
-          ></v-switch>
-        </v-col>
-      </v-row> -->
     </FormCrud>
   </DialogForm>
-  <!-- <DialogLoading :dialog="loading" /> -->
 </template>
 
 <script setup lang="ts">
@@ -242,12 +230,11 @@ const { mobile } = useDisplay();
 const sellerStore = useSellerStore();
 const formCrudRef = ref();
 const tab = ref(1);
-const tabs = ref([
-  { title: "Dados Pessoais", icon: "mdi-account" },
-  { title: "Dados Bancários", icon: "mdi-bank" },
-  { title: "Endereço", icon: "mdi-map" },
-]);
-
+// const tabs = ref([
+//   { title: "Dados Pessoais", icon: "mdi-account" },
+//   { title: "Dados Bancários", icon: "mdi-bank" },
+//   { title: "Endereço", icon: "mdi-map" },
+// ]);
 // const loading = ref(false);
 const model = ref({
   id: 0,
