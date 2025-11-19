@@ -106,6 +106,9 @@
                 </span>
               </span>
             </template>
+            <template v-slot:item.salt="{ item }">
+              <strong>{{ amountFormated(item.salt, true) }}</strong>
+            </template>
             <template v-slot:item.actions="{ item }">
               <v-btn
                 variant="text"
@@ -271,10 +274,6 @@ const headers = ref([
     title: "Nome",
     key: "name",
   },
-  // {
-  //   title: "Email",
-  //   key: "email",
-  // },
   {
     title: "Telefone",
     key: "phone",
@@ -282,6 +281,10 @@ const headers = ref([
   {
     title: "Whatsapp",
     key: "whatsapp",
+  },
+  {
+    title: "Saldo",
+    key: "salt",
   },
   { title: "Ações", key: "actions" },
   // {

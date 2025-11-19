@@ -223,7 +223,7 @@ import dayjs from "dayjs";
 const userLawyer = useUserLawyerStore();
 const saltCredit = useUserCreditSaltStore();
 const auth = useAuthStore();
-const { amountFormated, solicitationStatusColor, formatDate } = useUtils();
+const { amountFormated, formatDate } = useUtils();
 
 const selectedUserCreditSalt = ref<UserCreditSalt>();
 const showFormSaltTransfer = ref(false);

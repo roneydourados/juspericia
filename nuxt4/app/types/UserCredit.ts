@@ -49,6 +49,7 @@ export interface LawyerEstatisticsByAdmin {
   whatsapp: string;
   officeEmail: string;
   officePhone: string | null;
+  salt: number;
 }
 
 export interface laywersUserCreditProps {
