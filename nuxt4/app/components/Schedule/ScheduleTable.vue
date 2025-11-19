@@ -83,17 +83,23 @@
         :show-crud="false"
       >
         <template v-slot:item.PatientConsultation.Patient="{ item }">
-          <span
+          <div
             :class="`${
               item.Medic
-                ? ''
+                ? 'd-flex align-center'
                 : $currentUser?.profile?.type !== 'MEDICO'
-                ? 'text-red font-weight-bold'
-                : ''
+                ? 'text-red font-weight-bold d-flex align-center'
+                : 'd-flex align-center'
             }`"
+            style="gap: 0.5rem"
           >
-            {{ item.PatientConsultation?.Patient?.name }}
-          </span>
+            <span>
+              {{ String(item.PatientConsultation?.Patient?.name).trim() }}
+            </span>
+            <span>
+              {{ String(item.PatientConsultation?.Patient?.surname).trim() }}
+            </span>
+          </div>
         </template>
         <template v-slot:item.Medic="{ item }">
           <span v-if="item.Medic">
