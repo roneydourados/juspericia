@@ -128,6 +128,7 @@ const $single = computed(() => itemStore.$single);
 const headers = computed(() => {
   if (auth.$currentUser?.profile?.type === "ADVOGADO") {
     return [
+      { title: "Id", key: "id" },
       { title: "Nome", key: "name" },
       { title: "CPF", key: "cpf" },
       { title: "Whatsapp", key: "phone" },
@@ -136,6 +137,7 @@ const headers = computed(() => {
   }
 
   return [
+    { title: "Id", key: "id" },
     { title: "Nome", key: "name" },
     { title: "CPF", key: "cpf" },
     { title: "Whatsapp", key: "phone" },

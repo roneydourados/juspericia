@@ -140,6 +140,7 @@ const loading = ref(false);
 const showForm = ref(false);
 const showDelete = ref(false);
 const headers = ref([
+  { title: "Id", key: "id" },
   {
     title: "Nome",
     key: "name",
