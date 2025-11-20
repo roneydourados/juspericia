@@ -5,6 +5,7 @@
     :label="label"
     placeholder="Digite algo para pesquisar..."
     item-title="name"
+    item-value="id"
     return-object
     :required="required"
     icon="mdi-magnify"
@@ -16,7 +17,11 @@
     :disabled="disabled"
   >
     <template #item="{ item, props }">
-      <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+      <v-list-item
+        v-bind="props"
+        :title="`${item.raw.id} - ${item.raw.name}`"
+        density="compact"
+      >
         <template #subtitle>
           <div class="d-flex flex-column">
             <div class="text-caption text-grey-darken-2">

@@ -5,6 +5,7 @@
     :label="label"
     placeholder="Digite algo para pesquisar..."
     item-title="description"
+    item-value="id"
     return-object
     :required="required"
     icon="mdi-magnify"

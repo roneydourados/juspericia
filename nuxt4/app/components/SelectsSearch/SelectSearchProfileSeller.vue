@@ -6,6 +6,7 @@
       :label="label"
       placeholder="Digite algo para pesquisar..."
       item-title="profileName"
+      item-value="id"
       return-object
       :required="required"
       icon="mdi-magnify"

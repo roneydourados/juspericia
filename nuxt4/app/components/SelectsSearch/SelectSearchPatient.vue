@@ -6,6 +6,7 @@
       :label="label"
       placeholder="Digite algo para pesquisar..."
       item-title="name"
+      item-value="id"
       return-object
       :required="required"
       icon="mdi-magnify"
@@ -19,7 +20,7 @@
       <template #item="{ item, props }">
         <v-list-item
           v-bind="props"
-          :title="`${item.raw.name} ${item.raw.surname}`"
+          :title="`${item.raw.id} - ${item.raw.name} ${item.raw.surname}`"
           density="compact"
         >
           <template #subtitle>

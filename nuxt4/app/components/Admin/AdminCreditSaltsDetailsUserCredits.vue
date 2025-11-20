@@ -143,10 +143,12 @@
                       color="info"
                       icon
                       @click="handleShowFormSaltTransfer(item)"
+                      :disabled="
+                        item.status !== 'RECEIVED' ||
+                        item.status !== 'CONFIRMED'
+                      "
                     >
-                      <v-icon
-                        icon="mdi-briefcase-arrow-left-right-outline"
-                      ></v-icon>
+                      <v-icon icon="mdi-briefcase-arrow-left-right-outline" />
                       <v-tooltip
                         activator="parent"
                         location="top center"
@@ -268,6 +270,12 @@ const getStatusName = (item: UserCreditSalt) => {
         text: "Cancelado",
         color: "error",
         icon: "mdi-cancel",
+      };
+    case "FINISHED":
+      return {
+        text: "Finalizado",
+        color: "blue-grey-darken-2",
+        icon: "mdi-check-circle-outline",
       };
     default:
       return {
