@@ -64,20 +64,24 @@
         </v-col>
       </v-row>
       <v-row dense>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3">
           <div class="d-flex align-center py-6" style="gap: 0.5rem">
             <span>Total:</span>
-            <strong style="font-size: 1.2rem">
-              {{ amountFormated($total ?? 0, true) }}
-            </strong>
+            <v-chip variant="flat" color="primary" size="large">
+              <strong style="font-size: 1.2rem">
+                {{ amountFormated($total ?? 0, true) }}
+              </strong>
+            </v-chip>
           </div>
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="3">
           <div class="d-flex align-center py-6" style="gap: 0.5rem">
             <span>Quantidade:</span>
-            <strong style="font-size: 1.2rem">
-              {{ $transactions.length }}
-            </strong>
+            <v-chip variant="flat" color="primary" size="large">
+              <strong style="font-size: 1.2rem">
+                {{ $transactions.length }}
+              </strong>
+            </v-chip>
           </div>
         </v-col>
       </v-row>
