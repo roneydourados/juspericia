@@ -66,8 +66,42 @@
     >
       <template v-slot:item.reportId="{ item }">
         <div class="d-flex flex-column">
-          <span>{{ item.reportId }}</span>
+          <span v-if="!item.solicitationCorrections.length">{{
+            item.reportId
+          }}</span>
+          <div v-else-if="item.solicitationCorrections.length">
+            <v-chip
+              label
+              color="warning"
+              variant="flat"
+              @click="handleReportCorrection(item)"
+            >
+              <strong>
+                {{ item.reportId }} - Laudo contém justificativas
+              </strong>
+              <v-tooltip
+                activator="parent"
+                location="top center"
+                content-class="tooltip-background"
+              >
+                <p
+                  style="
+                    white-space: normal;
+                    max-width: 260px;
+                    word-break: break-word;
+                  "
+                >
+                  Laudo contém justificativas, seja de solicitação de correção
+                  ou de informações adicionais, como cancelamento de assinatura.
+                  Clique para ver a justificativa.
+                </p>
+              </v-tooltip>
+            </v-chip>
+          </div>
         </div>
+        <!-- <div class="d-flex flex-column">
+          <span>{{ item.reportId }}</span>
+        </div> -->
       </template>
       <template v-slot:item.dateClose="{ item }">
         <span>{{ dayjs(item.dateClose).format("DD/MM/YYYY") }}</span>
@@ -407,6 +441,18 @@ const handleDownloadRecord = async (nuvidioCallId?: string) => {
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.log("🚀 ~ handleDownloadRecord ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleReportCorrection = async (
+  item: PatientConsultationReportListProps
+) => {
+  loading.value = true;
+  try {
+    await consultationReport.show(item.reportPublicId!);
+    showJustificationCorrection.value = true;
   } finally {
     loading.value = false;
   }

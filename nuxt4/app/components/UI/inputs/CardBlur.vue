@@ -7,7 +7,16 @@
     :width="width"
   >
     <slot />
-    <v-card-title>
+    <v-card-title v-if="$slots.title">
+      <slot name="title" />
+    </v-card-title>
+    <v-card-text v-if="$slots.content">
+      <slot name="content" />
+    </v-card-text>
+    <v-card-actions v-if="$slots.actions">
+      <slot name="actions" />
+    </v-card-actions>
+    <!-- <v-card-title>
       <slot name="title" />
     </v-card-title>
     <v-card-text>
@@ -15,7 +24,7 @@
     </v-card-text>
     <v-card-actions>
       <slot name="actions" />
-    </v-card-actions>
+    </v-card-actions> -->
   </v-card>
 </template>
 

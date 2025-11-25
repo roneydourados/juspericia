@@ -7,7 +7,26 @@
     :width="mobile ? '100%' : '70%'"
     border-color="#002c9b"
   >
-    <Table
+    <v-row dense>
+      <v-col
+        cols="12"
+        v-for="item in $single?.PatientConsultation?.corrections"
+        :key="item.id"
+      >
+        <CardBlur>
+          <v-card-title>
+            <strong>
+              Data Solicitação de correção:
+              {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
+            </strong>
+          </v-card-title>
+          <v-card-text>
+            <div v-html="item.correctionReason" />
+          </v-card-text>
+        </CardBlur>
+      </v-col>
+    </v-row>
+    <!-- <Table
       title=""
       font-size="1.5rem"
       :headers="headers"
@@ -20,7 +39,9 @@
       <template v-slot:item.user.name="{ item }">
         <strong>{{ item.user.name }}</strong>
       </template>
-    </Table>
+    </Table> 
+    <pre>{{ $single?.PatientConsultation?.corrections }}</pre>
+    -->
   </DialogForm>
 </template>
 

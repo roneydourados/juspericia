@@ -73,8 +73,10 @@
     >
       <template v-slot:item.reportId="{ item }">
         <div class="d-flex flex-column">
-          <span v-if="!item.justifyId">{{ item.reportId }}</span>
-          <div v-else-if="item.justifyId">
+          <span v-if="!item.solicitationCorrections.length">{{
+            item.reportId
+          }}</span>
+          <div v-else-if="item.solicitationCorrections.length">
             <v-chip
               label
               color="warning"

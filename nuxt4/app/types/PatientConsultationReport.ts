@@ -14,6 +14,7 @@ export interface PatientConsultationReportProps {
   justifies?: PatientConsultationsReportJustifyProps[];
   atendentId?: number;
   isPdfMode?: boolean;
+  solicitationCorrections?: SolicitationCorrectionsProps[];
 }
 
 export interface PatientConsultationsReportJustifyProps {
@@ -51,4 +52,14 @@ export interface PatientConsultationReportListProps {
   nuvidioCallId?: string;
   isPdfMode?: boolean;
   medicalSpecialty?: string;
+  solicitationCorrections?: SolicitationCorrectionsProps[];
+}
+
+interface SolicitationCorrectionsProps {
+  correctionReason: string;
+  patientConsultationId: number;
+  publicId: string;
+  status: string;
+  id: number;
+  createdAt: string;
 }
