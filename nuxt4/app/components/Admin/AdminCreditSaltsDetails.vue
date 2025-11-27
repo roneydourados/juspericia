@@ -28,7 +28,7 @@
           <AdminCreditSaltsDetailsSolicitations />
         </v-col>
         <v-col cols="12">
-          <AdminCreditSaltsDetailsUserCredits />
+          <AdminCreditSaltsDetailsUserCredits @refresh="filterData" />
         </v-col>
       </v-row>
       <!-- <pre>{{ $estatisticsByAdmin }}</pre> -->

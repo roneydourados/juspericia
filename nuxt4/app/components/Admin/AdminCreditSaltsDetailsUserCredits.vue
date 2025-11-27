@@ -222,6 +222,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+const emit = defineEmits(["refresh"]);
 const userLawyer = useUserLawyerStore();
 const saltCredit = useUserCreditSaltStore();
 const auth = useAuthStore();
@@ -293,6 +294,7 @@ const handleShowFormSaltTransfer = (item: UserCreditSalt) => {
 
 const handleCloseFormTrasnfer = () => {
   selectedUserCreditSalt.value = undefined;
+  emit("refresh");
 };
 
 const getItemUpdateExpireAt = (item: UserCreditSalt) => {
@@ -312,6 +314,7 @@ const handleUpdateExpireAt = async () => {
   } finally {
     loading.value = false;
     showUpdateExpireAt.value = false;
+    emit("refresh");
   }
 };
 </script>
