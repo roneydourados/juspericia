@@ -144,7 +144,7 @@
                       icon
                       @click="handleShowFormSaltTransfer(item)"
                       :disabled="
-                        item.status !== 'RECEIVED' ||
+                        item.status !== 'RECEIVED' &&
                         item.status !== 'CONFIRMED'
                       "
                     >
