@@ -18,7 +18,7 @@
             >
               {{ item.status }}
             </v-chip>
-            <span class="text-caption text-grey"> ID: {{ item.id }} </span>
+            <span class="text-caption text-grey"> Nº: {{ item.id }} </span>
           </div>
 
           <!-- Paciente -->
