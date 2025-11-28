@@ -33,7 +33,7 @@
 
       <template #selection="{ item }">
         <div class="d-flex align-center">
-          <span class="ml-2 d-inline-block text-truncate">
+          <span class="text-truncate">
             {{ item.raw.name }} {{ item.raw.surname }}
           </span>
         </div>

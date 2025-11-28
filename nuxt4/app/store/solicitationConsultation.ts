@@ -7,8 +7,11 @@ export const useSolicitationConsultationStore = defineStore(
 
     const solicitationConsultation = ref<SolicitationConsultationProps>();
     const solicitationConsultations = ref<SolicitationConsultationList>();
+    const solicitationReports = ref<SolicitationReportProps[]>([]);
+
     const $single = computed(() => solicitationConsultation.value);
     const $all = computed(() => solicitationConsultations.value);
+    const $solicitationReports = computed(() => solicitationReports.value);
 
     const create = async (payload: SolicitationConsultationProps) => {
       const { data } = await api.post<SolicitationConsultationProps>(
@@ -107,9 +110,48 @@ export const useSolicitationConsultationStore = defineStore(
       await api.put(`/solicitation-consultation/correction/close/${publicId}`);
     };
 
+    const indexSolicitationReports = async (input: {
+      initialDate: string;
+      finalDate: string;
+      patientId?: number;
+      userId?: number;
+      status?: string;
+      medicalSpecialtyId?: number;
+    }) => {
+      const {
+        finalDate,
+        initialDate,
+        patientId,
+        userId,
+        status,
+        medicalSpecialtyId,
+      } = input;
+
+      const { data } = await api.get<SolicitationReportProps[]>(
+        "/solicitation-consultation-report",
+        {
+          params: {
+            initialDate,
+            finalDate,
+            patientId,
+            userId,
+            status,
+            medicalSpecialtyId,
+          },
+        }
+      );
+
+      solicitationReports.value = data;
+    };
+
+    const clearReport = () => {
+      solicitationReports.value = [];
+    };
+
     return {
       $single,
       $all,
+      $solicitationReports,
       create,
       update,
       destroy,
@@ -122,6 +164,8 @@ export const useSolicitationConsultationStore = defineStore(
       createSolicitationCorrection,
       deleteSolicitationCorrection,
       closeSolicitationCorrection,
+      indexSolicitationReports,
+      clearReport,
     };
   }
 );
