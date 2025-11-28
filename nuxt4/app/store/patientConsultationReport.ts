@@ -9,9 +9,11 @@ export const usePatientConsultationReportStore = defineStore(
     const patientConsultationReports = ref<
       PatientConsultationReportListProps[]
     >([]);
+    const solicitationReports = ref<SolicitationReportProps[]>([]);
 
     const $single = computed(() => patientConsultationReport.value);
     const $all = computed(() => patientConsultationReports.value);
+    const $solicitationReports = computed(() => solicitationReports.value);
 
     const index = async (input: {
       initialDate: string;
@@ -19,8 +21,10 @@ export const usePatientConsultationReportStore = defineStore(
       patientId?: number;
       userId?: number;
       emitReport?: boolean;
+      justify?: boolean;
     }) => {
-      const { finalDate, initialDate, patientId, userId, emitReport } = input;
+      const { finalDate, initialDate, patientId, userId, emitReport, justify } =
+        input;
 
       const { data } = await api.get<PatientConsultationReportListProps[]>(
         "/patient-consultation-report",
@@ -31,6 +35,7 @@ export const usePatientConsultationReportStore = defineStore(
             patientId,
             userId,
             emitReport,
+            justify,
           },
         }
       );
@@ -92,9 +97,44 @@ export const usePatientConsultationReportStore = defineStore(
       return data;
     };
 
+    const indexSolicitationReports = async (input: {
+      initialDate: string;
+      finalDate: string;
+      patientId?: number;
+      userId?: number;
+      status?: string;
+      medicalSpecialtyId?: number;
+    }) => {
+      const {
+        finalDate,
+        initialDate,
+        patientId,
+        userId,
+        status,
+        medicalSpecialtyId,
+      } = input;
+
+      const { data } = await api.get<SolicitationReportProps[]>(
+        "/solicitation-consultation-report",
+        {
+          params: {
+            initialDate,
+            finalDate,
+            patientId,
+            userId,
+            status,
+            medicalSpecialtyId,
+          },
+        }
+      );
+
+      solicitationReports.value = data;
+    };
+
     return {
       $single,
       $all,
+      $solicitationReports,
       create,
       show,
       index,
@@ -102,6 +142,7 @@ export const usePatientConsultationReportStore = defineStore(
       addJustify,
       update,
       getPdfBase64,
+      indexSolicitationReports,
     };
   }
 );

@@ -79,3 +79,22 @@ export interface SolicitationConsultationFilterProps {
   medicIsNull?: boolean;
   number?: number;
 }
+
+export interface SolicitationReportProps {
+  id: number;
+  publicId: string;
+  medic: string;
+  lawyer: string;
+  patient: string;
+  status: string;
+  benefitType: string;
+  reportPurpose: string;
+  processSituation: string;
+  medicalSpecialty: string;
+  processNumber: string;
+  solicitationValue: number;
+  medicalSpecialtyValue: number;
+  total: number;
+  dateOpen: string;
+  dateClose: string;
+}

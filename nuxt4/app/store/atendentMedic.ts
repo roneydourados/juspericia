@@ -44,8 +44,10 @@ export const useAtendentMedicStore = defineStore("atendentMedic", () => {
     patientId?: number;
     medicId?: number;
     emitReport?: boolean;
+    justify?: boolean;
   }) => {
-    const { finalDate, initialDate, patientId, emitReport, medicId } = input;
+    const { finalDate, initialDate, patientId, emitReport, medicId, justify } =
+      input;
 
     const config = {
       params: {
@@ -54,6 +56,7 @@ export const useAtendentMedicStore = defineStore("atendentMedic", () => {
         patientId,
         emitReport,
         medicId,
+        justify,
       },
     };
 

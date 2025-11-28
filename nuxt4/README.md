@@ -185,6 +185,6 @@ porém não havia sido sincronizada porque tinha um problema de configuração n
 [x] - Mostrar quantidade de transações retornadas na tela de controle de transações
 
 [] - Relatório de solicitações por período
-[] - Filtro para DAVI de todos os laudos que precisa de correção
-[] - Quando sobe PDF de laudo PDF mostrar laudo aguardando assinatura
+[x] - Filtro para DAVI de todos os laudos que precisa de correção
+[x] - Quando sobe PDF de laudo PDF mostrar laudo aguardando assinatura
 ```

@@ -2,7 +2,7 @@
   <div v-if="!showReportForm">
     <div class="d-flex flex-column w-100">
       <HeaderPage title="Gestão de laudos" font-size="1.8rem" />
-      <v-row class="mt-4" dense>
+      <v-row class="mt-4" dense align="center">
         <v-col cols="12" lg="4">
           <SelectSearchPatient
             label="Paciente"
@@ -43,7 +43,20 @@
             clearable
           />
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col
+          cols="12"
+          lg="6"
+          class="d-flex align-center flex-wrap"
+          style="gap: 1rem"
+        >
+          <v-checkbox
+            v-model="filters.justify"
+            label="Mostrar somente laudos com justificativas"
+            hide-details
+            @update:model-value="getReports"
+            color="blue"
+            class="mt-n2"
+          />
           <Button
             color="primary"
             size="small"
@@ -54,6 +67,17 @@
             <span class="text-caption">Filtrar</span>
           </Button>
         </v-col>
+        <!-- <v-col cols="12" lg="2">
+          <Button
+            color="primary"
+            size="small"
+            variant="flat"
+            @click="getReports"
+          >
+            <v-icon icon="mdi-filter-outline" color="colorIcon" start />
+            <span class="text-caption">Filtrar</span>
+          </Button>
+        </v-col> -->
       </v-row>
     </div>
     <Table
@@ -66,10 +90,8 @@
     >
       <template v-slot:item.reportId="{ item }">
         <div class="d-flex flex-column">
-          <span v-if="!item.solicitationCorrections.length">{{
-            item.reportId
-          }}</span>
-          <div v-else-if="item.solicitationCorrections.length">
+          <span v-if="!item.justifyId">{{ item.reportId }}</span>
+          <div v-else-if="item.justifyId">
             <v-chip
               label
               color="warning"
@@ -289,6 +311,7 @@ const filters = ref({
   patient: undefined as PatientProps | undefined,
   medic: undefined as UserProps | undefined,
   emitReport: "Não",
+  justify: false,
 });
 
 const headers = ref([
@@ -313,6 +336,7 @@ const getReports = async () => {
       patientId: filters.value.patient?.id,
       emitReport: filters.value.emitReport === "Sim",
       medicId: filters.value.medic?.id,
+      justify: filters.value.justify,
     });
   } finally {
     loading.value = false;
