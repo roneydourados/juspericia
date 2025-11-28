@@ -6,7 +6,7 @@
 
   <v-row v-else dense>
     <v-col v-for="item in items" :key="item.id" cols="12" lg="6">
-      <CardBlur>
+      <CardBlur height="100%">
         <div class="d-flex flex-column" style="gap: 1rem">
           <!-- Header com Status -->
           <div class="d-flex align-center justify-space-between">
