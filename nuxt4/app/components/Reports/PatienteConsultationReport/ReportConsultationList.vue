@@ -6,7 +6,7 @@
 
   <v-row v-else dense>
     <v-col v-for="item in items" :key="item.id" cols="12" lg="6">
-      <CardBlur class="report-card" :hover="true">
+      <CardBlur>
         <div class="d-flex flex-column" style="gap: 1rem">
           <!-- Header com Status -->
           <div class="d-flex align-center justify-space-between">
@@ -18,7 +18,7 @@
             >
               {{ item.status }}
             </v-chip>
-            <span class="text-caption text-grey"> Nº: {{ item.id }} </span>
+            <strong class="text-grey"> Nº: {{ item.id }} </strong>
           </div>
 
           <!-- Paciente -->
@@ -85,19 +85,21 @@
             <div class="d-flex flex-column">
               <span class="text-caption text-grey">Solicitação</span>
               <span class="text-body-2 text-darkText font-weight-medium">
-                R$ {{ formatCurrency(item.solicitationValue) }}
+                {{ amountFormated(Number(item.solicitationValue ?? 0), true) }}
               </span>
             </div>
             <div class="d-flex flex-column">
               <span class="text-caption text-grey">Especialidade</span>
               <span class="text-body-2 text-darkText font-weight-medium">
-                R$ {{ formatCurrency(item.medicalSpecialtyValue) }}
+                {{
+                  amountFormated(Number(item.medicalSpecialtyValue ?? 0), true)
+                }}
               </span>
             </div>
             <div class="d-flex flex-column">
               <span class="text-caption text-grey">Total</span>
               <span class="text-h6 text-success font-weight-bold">
-                R$ {{ formatCurrency(item.total) }}
+                {{ amountFormated(Number(item.total ?? 0), true) }}
               </span>
             </div>
           </div>
@@ -131,15 +133,27 @@
           </div>
 
           <!-- Número do Processo (se houver) -->
-          <div
-            v-if="item.processNumber"
-            class="d-flex align-center"
-            style="gap: 0.5rem"
-          >
-            <v-icon icon="mdi-folder-open" color="wharning" size="16" />
-            <span class="text-caption text-darkText">
-              Processo: {{ item.processNumber }}
-            </span>
+          <div class="d-flex flex-column">
+            <div
+              v-if="item.processNumber"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <v-icon icon="mdi-folder-open" color="wharning" size="16" />
+              <div class="text-caption text-darkText">
+                Processo: <strong>{{ item.processNumber }}</strong>
+              </div>
+            </div>
+            <div
+              v-if="item.processNumber"
+              class="d-flex align-center"
+              style="gap: 0.5rem"
+            >
+              <v-icon icon="mdi-circle" color="wharning" size="16" />
+              <span class="text-caption text-darkText">
+                Situação: <strong>{{ item.processSituation }}</strong>
+              </span>
+            </div>
           </div>
         </div>
       </CardBlur>
@@ -150,31 +164,14 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 
-interface ReportItem {
-  id: number;
-  publicId: string;
-  medic: string;
-  lawyer: string;
-  patient: string;
-  status: string;
-  benefitType: string;
-  reportPurpose: string;
-  processNumber: string | null;
-  processSituation: string | null;
-  medicalSpecialty: string;
-  solicitationValue: number;
-  medicalSpecialtyValue: number;
-  total: number;
-  dateOpen: string;
-  dateClose: string | null;
-}
-
 defineProps({
   items: {
-    type: Array as PropType<ReportItem[]>,
+    type: Array as PropType<SolicitationReportProps[]>,
     default: () => [],
   },
 });
+
+const { amountFormated } = useUtils();
 
 const getStatusColor = (status: string) => {
   const statusColors: Record<string, string> = {
@@ -188,22 +185,7 @@ const getStatusColor = (status: string) => {
   return statusColors[status] || "grey";
 };
 
-const formatCurrency = (value: number) => {
-  return value.toFixed(2).replace(".", ",");
-};
-
 const formatDate = (date: string) => {
   return dayjs(date).format("DD/MM/YYYY");
 };
 </script>
-
-<style scoped>
-.report-card {
-  height: 100%;
-  transition: all 0.3s ease;
-}
-
-.report-card:hover {
-  transform: translateY(-2px);
-}
-</style>
