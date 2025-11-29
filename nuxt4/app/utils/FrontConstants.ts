@@ -173,3 +173,5 @@ export const profileTypes = [
   "CLIENTE",
   "VENDEDOR",
 ];
+
+export const PAGINATION_TOTAL_VISIBLE = 5;

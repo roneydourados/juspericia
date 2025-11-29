@@ -6,6 +6,7 @@
       color="primary"
       rounded="circle"
       density="comfortable"
+      :total-visible="PAGINATION_TOTAL_VISIBLE"
     />
     <span class="text-caption text-primary">
       Pg. {{ page }} de {{ pageCount }}

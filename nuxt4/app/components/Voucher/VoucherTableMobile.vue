@@ -3,6 +3,7 @@
     <v-pagination
       v-model="page"
       :length="pageCount"
+      :total-visible="PAGINATION_TOTAL_VISIBLE"
       color="primary"
       rounded="circle"
       density="comfortable"
@@ -112,6 +113,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { length } from "zod";
 
 const emit = defineEmits(["edit", "delete", "search", "add", "info"]);
 const voucher = useVoucherStore();

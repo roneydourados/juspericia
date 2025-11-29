@@ -98,6 +98,7 @@
           <v-pagination
             v-model="page"
             :length="pageCount"
+            :total-visible="PAGINATION_TOTAL_VISIBLE"
             rounded="circle"
             color="primary"
             density="comfortable"
