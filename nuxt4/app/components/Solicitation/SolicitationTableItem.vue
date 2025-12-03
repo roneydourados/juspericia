@@ -375,9 +375,7 @@
           <Button
             v-if="
               $currentUser?.profile?.type !== 'MEDICO' &&
-              $currentUser?.profile?.type !== 'ADVOGADO' &&
-              solicitation.status !== 'finished' &&
-              solicitation.status !== 'canceled'
+              $currentUser?.profile?.type !== 'ADVOGADO'
             "
             variant="outlined"
             color="grey-darken-3"
