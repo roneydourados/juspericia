@@ -125,27 +125,27 @@ export default defineNuxtConfig({
     addValidateEndpoint: true,
   },
   runtimeConfig: {
-    s3: {
-      secretAccessKeyId: process.env.S3_ACCESS_KEYID ?? "",
-      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
-      bucketName: process.env.S3_BUCKET ?? "",
-      region: process.env.S3_REGION ?? "",
-    },
-    emailProvider: {
-      host: process.env.MAIL_HOST ?? "",
-      port: process.env.MAIL_PORT ?? "",
-      user: process.env.MAIL_USER ?? "",
-      pass: process.env.MAIL_PASS ?? "",
-    },
-    tokenSecret: process.env.JWT_SECRET ?? "",
-    asaasApikey: process.env.ASAAS_API_KEY ?? "",
-    asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
+    // s3: {
+    //   secretAccessKeyId: process.env.S3_ACCESS_KEYID ?? "",
+    //   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+    //   bucketName: process.env.S3_BUCKET ?? "",
+    //   region: process.env.S3_REGION ?? "",
+    // },
+    // emailProvider: {
+    //   host: process.env.MAIL_HOST ?? "",
+    //   port: process.env.MAIL_PORT ?? "",
+    //   user: process.env.MAIL_USER ?? "",
+    //   pass: process.env.MAIL_PASS ?? "",
+    // },
+    //tokenSecret: process.env.JWT_SECRET ?? "",
+    //asaasApikey: process.env.ASAAS_API_KEY ?? "",
+    //asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
     // turnstile: {
     //   secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
     // },
-    zapsignApiToken: process.env.ZAPSIGN_API_TOKEN ?? "",
-    zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
-    zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
+    //zapsignApiToken: process.env.ZAPSIGN_API_TOKEN ?? "",
+    //zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
+    //zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
     public: {
       zapSignUrl:
         process.env.ZAPSIGN_VERIFICAR_URL ??
