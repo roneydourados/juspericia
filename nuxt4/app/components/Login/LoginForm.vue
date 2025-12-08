@@ -189,7 +189,7 @@ const submmitForm = async () => {
 
     if (form.value.saveCredentials) {
       localStorage.setItem("email", form.value.email);
-      localStorage.setItem("password", form.value.password);
+      localStorage.setItem("password", "");
       localStorage.setItem("saveCredentials", "true");
     } else {
       localStorage.setItem("email", "");
