@@ -121,6 +121,7 @@ export default defineNuxtConfig({
   // },
   turnstile: {
     siteKey: process.env.NUXT_TURNSTILE_SITE_KEY,
+    secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
     addValidateEndpoint: true,
   },
   runtimeConfig: {
@@ -139,20 +140,20 @@ export default defineNuxtConfig({
     tokenSecret: process.env.JWT_SECRET ?? "",
     asaasApikey: process.env.ASAAS_API_KEY ?? "",
     asaasBaseUrl: process.env.ASAAS_BASE_URL ?? "",
-    turnstile: {
-      secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
-    },
+    // turnstile: {
+    //   secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
+    // },
+    zapsignApiToken: process.env.ZAPSIGN_API_TOKEN ?? "",
+    zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
+    zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
     public: {
       zapSignUrl:
         process.env.ZAPSIGN_VERIFICAR_URL ??
         "https://sandbox.app.zapsign.com.br",
-      zapsignApiToken: process.env.ZAPSIGN_API_TOKEN ?? "",
       apiBaseUrl: process.env.API_BASE_URL ?? "",
       appUrl: process.env.APP_URL,
       version: process.env.VERSION ?? "",
       develop: process.env.DEVELOP === "true" ? true : false,
-      zegoCloudAppSecret: process.env.ZEGOCLOUD_SECRET ?? "",
-      zegoCloudAppId: process.env.ZEGOCLOUD_APP_ID ?? "0",
       disabledCloudflare:
         process.env.DISABLED_CLOUDFLARE === "true" ? true : false,
     },
