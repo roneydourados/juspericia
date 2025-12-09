@@ -101,7 +101,7 @@
                   class="text-caption text-medium-emphasis"
                   style="width: 7rem"
                 >
-                  Data: {{ formatDate(item.dateCreated) }}
+                  Data: {{ dayjs(item.createdAt).format("DD/MM/YYYY HH:mm") }}
                 </span>
               </v-col>
               <v-col cols="12" lg="3">
