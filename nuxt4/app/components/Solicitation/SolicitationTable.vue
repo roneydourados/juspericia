@@ -169,8 +169,7 @@
     <Table
       v-if="
         displayConsultations?.consultations &&
-        displayConsultations?.consultations.length > 0 &&
-        !mobile
+        displayConsultations?.consultations.length > 0
       "
       title=""
       :items="displayConsultations?.consultations"
@@ -187,7 +186,7 @@
         />
       </template>
     </Table>
-    <SolicitationTableItemMobile
+    <!-- <SolicitationTableItemMobile
       v-else-if="
         displayConsultations?.consultations &&
         displayConsultations?.consultations.length > 0 &&
@@ -195,7 +194,7 @@
       "
       @edit="getItemEdit($event)"
       @refresh="getConsultations"
-    />
+    /> -->
     <EmptyContent v-if="displayConsultations?.consultations.length === 0" />
   </div>
   <SolicitationFilters

@@ -6,7 +6,7 @@
     :hover="false"
   >
     <template #title style="gap: 1rem; font-size: 1rem">
-      <div class="d-flex align-center justify-space-between">
+      <div class="d-flex align-center justify-space-between item-header">
         <div class="d-flex align-center" style="gap: 1rem">
           <div
             @click="handleDetailsClick(solicitation.publicId!)"
@@ -34,7 +34,7 @@
             </strong>
           </div>
         </div>
-        <div class="d-flex flex-wrap align-center" style="gap: 1rem">
+        <div class="d-flex flex-wrap align-center item-actions" style="gap: 1rem">
           <Button
             v-if="
               solicitation.status === 'finished' &&
@@ -1513,3 +1513,30 @@ const handleShowCorrectionForm = (item: SolicitationConsultationProps) => {
   showDateCorrection.value = true;
 };
 </script>
+
+<style scoped>
+.item-header {
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .item-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .item-actions :deep(.v-btn),
+  .item-actions :deep(.v-chip) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
