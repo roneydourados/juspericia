@@ -377,6 +377,7 @@ const handleConfirm = () => {
   show.value = false;
   voucherStore.clear();
   asaas.clear();
+  model.value.discountValue = Number(model.value.discount ?? 0);
   emit("confirm-sale", model.value);
 };
 </script>

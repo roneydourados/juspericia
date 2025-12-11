@@ -671,7 +671,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
+import { useDisplay } from "vuetify";
 const props = defineProps({
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
@@ -691,6 +691,8 @@ const zapSign = useZapsignStore();
 const systemParameters = useSystemParametersStore();
 const criticismStore = usePatientConsultationCriticismStore();
 const saltCredit = useUserCreditSaltStore();
+
+const { mobile } = useDisplay();
 
 // const transactionsStore = useTransactionsStore();
 
@@ -1166,6 +1168,7 @@ const handleSaleItemForAsaas = async () => {
         packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
         packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
         solicitationId: props.solicitation.id,
+        discountValue: modelPrececkout.value.discountValue ?? 0,
       });
     } else {
       const payload = {
@@ -1188,6 +1191,7 @@ const handleSaleItemForAsaas = async () => {
         packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
         packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
         solicitationId: props.solicitation.id,
+        discountValue: modelPrececkout.value.discountValue ?? 0,
       };
 
       await asaas.createPayment(payload);

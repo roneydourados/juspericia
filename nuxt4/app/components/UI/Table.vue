@@ -66,75 +66,72 @@
     <v-row align="center">
       <slot name="filters" />
     </v-row>
-    <v-card-text>
-      <v-data-table
-        v-if="!isVirtual"
-        v-model="value"
-        v-model:page="page"
-        :item-value="itemValue"
-        :headers="headers"
-        :items="items"
-        :items-per-page="itemsPerPage"
-        :show-select="showSelect"
-        return-object
-        :loading="loading"
-        :group-by="groupBy"
-        sticky
-        fixed-header
-        :hide-default-header="hideDfaultHeader"
-        no-data-text="Nenhum dado encontrado"
-        loading-text="Buscando dados aguarde..."
-        select-strategy="all"
-        @update:model-value="$emit('update:modelValue', $event)"
-        color="transparent"
-        :mobile="mobile"
-      >
-        <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
-          <slot v-if="slotProps" :name="name" v-bind="slotProps" />
-          <slot v-else :name="name" v-bind="slotProps" />
-        </template>
 
-        <template v-slot:bottom>
-          <v-pagination
-            v-model="page"
-            :length="pageCount"
-            :total-visible="PAGINATION_TOTAL_VISIBLE"
-            rounded="circle"
-            color="primary"
-            density="comfortable"
-          />
-        </template>
-        <template v-slot:top>
-          <slot name="top-table" />
-        </template>
-      </v-data-table>
-      <v-data-table-virtual
-        v-else
-        v-model="value"
-        :item-value="itemValue"
-        :headers="headers"
-        :items="items"
-        no-data-text="Nenhum dado encontrado"
-        :show-select="showSelect"
-        :hide-default-header="hideDfaultHeader"
-        return-object
-        :height="`${mobile ? '' : height}`"
-        fixed-header
-        sticky
-        :loading="loading"
-        loading-text="Buscando dados aguarde..."
-        select-strategy="all"
-        @update:model-value="$emit('update:modelValue', $event)"
-        color="transparent"
-        :mobile="mobile"
-        :group-by="groupBy"
-      >
-        <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
-          <slot v-if="slotProps" :name="name" v-bind="slotProps" />
-          <slot v-else :name="name" v-bind="slotProps" />
-        </template>
-      </v-data-table-virtual>
-    </v-card-text>
+    <v-data-table
+      v-if="!isVirtual"
+      v-model="value"
+      v-model:page="page"
+      :item-value="itemValue"
+      :headers="headers"
+      :items="items"
+      :items-per-page="itemsPerPage"
+      :show-select="showSelect"
+      return-object
+      :loading="loading"
+      :group-by="groupBy"
+      sticky
+      fixed-header
+      :hide-default-header="hideDfaultHeader"
+      no-data-text="Nenhum dado encontrado"
+      loading-text="Buscando dados aguarde..."
+      select-strategy="all"
+      @update:model-value="$emit('update:modelValue', $event)"
+      color="transparent"
+    >
+      <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+        <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+        <slot v-else :name="name" v-bind="slotProps" />
+      </template>
+
+      <template v-slot:bottom>
+        <v-pagination
+          v-model="page"
+          :length="pageCount"
+          :total-visible="PAGINATION_TOTAL_VISIBLE"
+          rounded="circle"
+          color="primary"
+          density="comfortable"
+        />
+      </template>
+      <template v-slot:top>
+        <slot name="top-table" />
+      </template>
+    </v-data-table>
+    <v-data-table-virtual
+      v-else
+      v-model="value"
+      :item-value="itemValue"
+      :headers="headers"
+      :items="items"
+      no-data-text="Nenhum dado encontrado"
+      :show-select="showSelect"
+      :hide-default-header="hideDfaultHeader"
+      return-object
+      :height="`${mobile ? '' : height}`"
+      fixed-header
+      sticky
+      :loading="loading"
+      loading-text="Buscando dados aguarde..."
+      select-strategy="all"
+      @update:model-value="$emit('update:modelValue', $event)"
+      color="transparent"
+      :group-by="groupBy"
+    >
+      <template v-for="(_, name) in $slots" v-slot:[name]="slotProps">
+        <slot v-if="slotProps" :name="name" v-bind="slotProps" />
+        <slot v-else :name="name" v-bind="slotProps" />
+      </template>
+    </v-data-table-virtual>
   </v-card>
 </template>
 

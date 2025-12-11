@@ -857,34 +857,6 @@ const handleReloadPayment = async (item: SolicitationConsultationProps) => {
   }
 };
 
-// const handleReceipt = (item: SolicitationConsultationProps) => {
-//   // se cair aqiu é porque foi pago com saldo em créditos
-//   if (!item.sale && item.status === "paid") {
-//     showRecipt.value = true;
-//     return;
-//   }
-
-//   //se não tem venda então não fazer nada no asaas
-//   if (!item.sale) {
-//     push.warning("Pagamento não encontrado");
-//     return;
-//   }
-
-//   const popupWidth = 800;
-//   const popupHeight = 600;
-//   const screenWidth = window.screen.width;
-//   const screenHeight = window.screen.height;
-
-//   const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-//   const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-//   window.open(
-//     item.sale.transactionReceiptUrl,
-//     "_blank",
-//     `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-//   );
-// };
-
 const handleUseCreditSalt = async (item: SolicitationConsultationProps) => {
   loading.value = true;
   try {
