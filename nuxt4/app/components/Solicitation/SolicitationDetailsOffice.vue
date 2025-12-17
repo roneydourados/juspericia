@@ -7,7 +7,7 @@
       Dados do escritório
     </div>
     <v-row dense class="text-primary">
-      <v-col cols="12">
+      <v-col v-if="$currentUser?.profile?.type !== 'MEDICO'" cols="12">
         <InfoLabel
           title="Email"
           :font-size="mobile ? '0.8' : '1'"
@@ -39,7 +39,7 @@
           :content="$single?.Patient?.User?.oabUf ?? 'NN'"
         />
       </v-col>
-      <v-col cols="12" lg="6">
+      <v-col v-if="$currentUser?.profile?.type !== 'MEDICO'" cols="12" lg="6">
         <InfoLabel
           title="CNPJ"
           :font-size="mobile ? '0.8' : '1'"
@@ -51,7 +51,7 @@
           "
         />
       </v-col>
-      <v-col cols="12" lg="6">
+      <v-col v-if="$currentUser?.profile?.type !== 'MEDICO'" cols="12" lg="6">
         <InfoLabel
           title="Telefone"
           :font-size="mobile ? '0.8' : '1'"
@@ -73,6 +73,7 @@ import { useDisplay } from "vuetify";
 const { mobile } = useDisplay();
 const { formatTelephoneNumber, formatCPFOrCNPJ } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
-
+const auth = useAuthStore();
+const $currentUser = computed(() => auth.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 </script>

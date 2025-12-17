@@ -23,7 +23,7 @@
           :content="formatCPFOrCNPJ($single?.Patient?.cpf ?? '')"
         />
       </v-col>
-      <v-col cols="12" lg="4">
+      <v-col v-if="$currentUser?.profile?.type !== 'MEDICO'" cols="12" lg="4">
         <InfoLabel
           title="Telefone"
           :font-size="mobile ? '0.8' : '1'"
@@ -59,7 +59,7 @@
           :content="$single?.Patient?.motherName ?? 'Não informado'"
         />
       </v-col>
-      <v-col cols="12">
+      <v-col v-if="$currentUser?.profile?.type !== 'MEDICO'" cols="12">
         <InfoLabel
           title="Email"
           :font-size="mobile ? '0.8' : '1'"
@@ -75,9 +75,10 @@
 import dayjs from "dayjs";
 import { useDisplay } from "vuetify";
 const { mobile } = useDisplay();
-
+const auth = useAuthStore();
 const { formatTelephoneNumber, formatCPFOrCNPJ, age } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 
 const $single = computed(() => storeConsultation.$single);
+const $currentUser = computed(() => auth.$currentUser);
 </script>
