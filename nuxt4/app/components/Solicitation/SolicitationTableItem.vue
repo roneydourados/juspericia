@@ -34,7 +34,10 @@
             </strong>
           </div>
         </div>
-        <div class="d-flex flex-wrap align-center item-actions" style="gap: 1rem">
+        <div
+          class="d-flex flex-wrap align-center item-actions"
+          style="gap: 1rem"
+        >
           <Button
             v-if="
               solicitation.status === 'finished' &&
@@ -424,6 +427,29 @@
           >
             <span>Médico:</span>
             <strong>{{ solicitation.Medic?.name }}</strong>
+          </div>
+          <div
+            v-if="
+              $currentUser?.profile?.type === 'ADMIN' ||
+              $currentUser?.profile?.type === 'VENDEDOR' ||
+              $currentUser?.profile?.type === 'FINANCEIRO' ||
+              $currentUser?.profile?.type === 'ATENDENTE' ||
+              $currentUser?.profile?.type === 'GERENTE'
+            "
+          >
+            <v-switch
+              v-model="solicitation.showMedicalSpeciality"
+              color="success"
+              @update:model-value="
+                handleUpdateShowMedicalSpeciality(
+                  solicitation.showMedicalSpeciality
+                )
+              "
+            >
+              <template #label>
+                <span>Mostrar especialidade no laudo</span>
+              </template>
+            </v-switch>
           </div>
         </v-col>
         <v-col cols="12">
@@ -854,6 +880,26 @@ const handleUpdateCorrection = async (motive: string) => {
     } finally {
       loading.value = false;
     }
+  }
+};
+
+const handleUpdateShowMedicalSpeciality = async (
+  showMedicalSpeciality?: boolean
+) => {
+  loading.value = true;
+  try {
+    if (showMedicalSpeciality === undefined) {
+      return;
+    }
+    // incrementa a quantidade de correções
+    await storeConsultation.update({
+      publicId: props.solicitation.publicId,
+      showMedicalSpeciality,
+    });
+
+    await getSolicitations();
+  } finally {
+    loading.value = false;
   }
 };
 

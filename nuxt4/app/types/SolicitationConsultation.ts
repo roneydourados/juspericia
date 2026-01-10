@@ -51,6 +51,7 @@ export interface SolicitationConsultationProps {
   antecipationHours?: number;
   criticisms?: PatientConsultationCriticismsProps[];
   corrections?: SolicitationCorrectionProps[];
+  showMedicalSpeciality?: boolean;
 }
 
 export interface SolicitationCorrectionProps {

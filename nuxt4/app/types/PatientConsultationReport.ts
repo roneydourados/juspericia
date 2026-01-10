@@ -14,6 +14,8 @@ export interface PatientConsultationReportProps {
   justifies?: PatientConsultationsReportJustifyProps[];
   atendentId?: number;
   isPdfMode?: boolean;
+  signToken?: string;
+  signStatus?: string;
   solicitationCorrections?: SolicitationCorrectionsProps[];
 }
 
