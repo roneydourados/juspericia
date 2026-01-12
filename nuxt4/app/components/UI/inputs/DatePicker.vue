@@ -159,9 +159,6 @@ watch(modelValue, (newValue) => {
 });
 
 const handleInputAndFormat = (newVal: string) => {
-  // Atualiza diretamente o inputValue com o que o usuário digitou
-  inputValue.value = newVal;
-
   const cleaned = newVal.replace(/\D/g, "");
   let formatted = "";
 
@@ -176,7 +173,7 @@ const handleInputAndFormat = (newVal: string) => {
     )}`;
   }
 
-  if (formatted !== inputValue.value) {
+  if (formatted !== newVal) {
     inputValue.value = formatted;
   }
 
