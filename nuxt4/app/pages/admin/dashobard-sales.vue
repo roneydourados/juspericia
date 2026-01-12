@@ -12,11 +12,13 @@ const dash = useUserAdminStore();
 onMounted(async () => {
   const initialDate = dayjs().format("YYYY-MM-DD");
   const finalDate = dayjs().format("YYYY-MM-DD");
+  const yearInvoice = dayjs().year();
 
   await dash.getDashboardSales({
     initialDate,
     finalDate,
     ufs: [],
+    yearInvoice,
   });
 });
 </script>
