@@ -8,10 +8,12 @@ export const useSolicitationConsultationStore = defineStore(
     const solicitationConsultation = ref<SolicitationConsultationProps>();
     const solicitationConsultations = ref<SolicitationConsultationList>();
     const solicitationReports = ref<SolicitationReportProps[]>([]);
+    const solicitationHistories = ref<SolicitationHisytoryProps[]>([]);
 
     const $single = computed(() => solicitationConsultation.value);
     const $all = computed(() => solicitationConsultations.value);
     const $solicitationReports = computed(() => solicitationReports.value);
+    const $solicitationHistories = computed(() => solicitationHistories.value);
 
     const create = async (payload: SolicitationConsultationProps) => {
       const { data } = await api.post<SolicitationConsultationProps>(
@@ -148,10 +150,34 @@ export const useSolicitationConsultationStore = defineStore(
       solicitationReports.value = [];
     };
 
+    const revertSolicitation = async (publicId: string) => {
+      const payload = {
+        publicId,
+      };
+
+      await api.post("/solicitation-consultation-revert", payload);
+    };
+
+    const getHistories = async (publicId: string) => {
+      const config = {
+        params: {
+          publicId,
+        },
+      };
+
+      const { data } = await api.get<SolicitationHisytoryProps[]>(
+        "solicitation-consultation-histories",
+        config
+      );
+
+      solicitationHistories.value = data;
+    };
+
     return {
       $single,
       $all,
       $solicitationReports,
+      $solicitationHistories,
       create,
       update,
       destroy,
@@ -166,6 +192,8 @@ export const useSolicitationConsultationStore = defineStore(
       closeSolicitationCorrection,
       indexSolicitationReports,
       clearReport,
+      revertSolicitation,
+      getHistories,
     };
   }
 );

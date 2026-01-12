@@ -307,7 +307,7 @@
             </span>
           </div>
         </v-col>
-        <v-col cols="12" lg="4" class="d-flex flex-column" style="gap: 0.5rem">
+        <v-col cols="12" lg="5" class="d-flex flex-column" style="gap: 0.5rem">
           <div class="d-flex" style="gap: 0.5rem">
             <span>Data do laudo:</span>
             <span class="font-weight-bold">
@@ -348,20 +348,22 @@
         <v-col
           v-if="$currentUser?.profile?.type !== 'MEDICO'"
           cols="12"
-          lg="4"
-          class="d-flex flex-wrap justify-end"
+          lg="3"
+          class="d-flex flex-column align-end"
+          style="gap: 0.5rem"
         >
-          <v-chip color="grey" class="pa-6" label rounded="xl">
-            <div class="d-flex align-center" style="gap: 0.5rem">
-              <span class="text-primary">Total:</span>
-              <span
-                class="font-weight-bold text-primary"
-                style="font-size: 1.3rem"
-              >
-                {{ amountFormated($solicitationTotal, true) }}
-              </span>
-            </div>
-          </v-chip>
+          <div
+            class="pa-2 px-4 d-flex align-center justify-space-between w-100"
+            style="background-color: #eeee; border-radius: 2rem"
+          >
+            <span class="text-primary">Total:</span>
+            <span
+              class="font-weight-bold text-primary"
+              style="font-size: 1.3rem"
+            >
+              {{ amountFormated($solicitationTotal, true) }}
+            </span>
+          </div>
           <Button
             v-if="
               solicitation.criticisms &&
@@ -383,11 +385,36 @@
             variant="outlined"
             color="grey-darken-3"
             @click="handleShowCriticism(solicitation)"
+            block
           >
             <v-icon icon="mdi-alert-circle-outline" start color="colorIcon" />
             <span class="text-caption">Lançar/Ver observações</span>
           </Button>
+          <Button
+            v-if="$currentUser?.profile?.type === 'ADMIN'"
+            variant="outlined"
+            color="warning"
+            block
+            @click="handleGetHistory(solicitation)"
+          >
+            <v-icon icon="mdi-history" start />
+            <span class="text-caption"> Históricos </span>
+          </Button>
+          <Button
+            v-if="
+              $currentUser?.profile?.type === 'ADMIN' &&
+              solicitation.status === 'finished'
+            "
+            variant="outlined"
+            color="red"
+            @click="handleRevertSolicitation(solicitation)"
+            block
+          >
+            <v-icon icon="mdi-close" start />
+            <span class="text-caption"> Estornar solicitação </span>
+          </Button>
         </v-col>
+
         <v-col cols="12">
           <div
             v-if="
@@ -693,6 +720,7 @@
     :solicitation="solicitation"
   />
   <SolicitationDetailsDialog v-model:show="showSolicitationDetails" />
+  <SolicitationHistories v-model:show="showHistories" />
 </template>
 
 <script setup lang="ts">
@@ -738,7 +766,7 @@ const showSaltCredit = ref(false);
 const isRate = ref(false);
 const showDateCorrection = ref(false);
 const showDateAntecipation = ref(false);
-//const showCancel = ref(false);
+const showHistories = ref(false);
 const showTipValue = ref(false);
 const loading = ref(false);
 const showSale = ref(false);
@@ -1557,6 +1585,60 @@ const handleGoSchedule = async (item: SolicitationConsultationProps) => {
 const handleShowCorrectionForm = (item: SolicitationConsultationProps) => {
   selected.value = item;
   showDateCorrection.value = true;
+};
+
+const handleRevertSolicitation = async (
+  item: SolicitationConsultationProps
+) => {
+  push.info({
+    title: "Estornar solicitação",
+    message:
+      "Tem certeza que deseja estornar esta solicitação ? Todo trabalho realizado será perdido e a solicitação volta para status de um novo agendamento. Esta ação não pode ser desfeita. Confirma ?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Confirmar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await storeConsultation.revertSolicitation(item.publicId!);
+              await getSolicitations();
+            } catch (error) {
+              push.error("Erro ao cancelar antecipação");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+};
+
+const handleGetHistory = async (item: SolicitationConsultationProps) => {
+  loading.value = true;
+  try {
+    await storeConsultation.getHistories(item.publicId!);
+    showHistories.value = true;
+  } catch (error) {
+    console.log("🚀 ~ handleGetHistory ~ error:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

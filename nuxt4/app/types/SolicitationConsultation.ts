@@ -99,3 +99,11 @@ export interface SolicitationReportProps {
   dateOpen: string;
   dateClose: string;
 }
+
+export interface SolicitationHisytoryProps {
+  id: number;
+  patientConsultationId: number;
+  content: string;
+  user: UserProps;
+  createdAt: string;
+}

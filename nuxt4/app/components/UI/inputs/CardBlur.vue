@@ -5,6 +5,7 @@
     rounded="xl"
     :height="height"
     :width="width"
+    :color="color"
   >
     <slot />
     <v-card-title v-if="$slots.title">
@@ -41,6 +42,10 @@ defineProps({
   width: {
     type: String,
     default: "100%",
+  },
+  color: {
+    type: String,
+    default: undefined,
   },
 });
 </script>
