@@ -2,9 +2,11 @@ export interface AdminDashBoardSalesFilterProps {
   initialDate: string;
   finalDate: string;
   ufs?: string[];
+  yearInvoice?: number;
 }
 
 export interface SalesAdminDashboardProps {
+  yearsArray: number[];
   totalPending: number;
   totalConfirmed: number;
   newClients: number;

@@ -16,6 +16,32 @@
       />
     </v-card-title>
     <v-card-text class="px-12">
+      <v-row dense v-if="tabDate === 5">
+        <v-col cols="12" class="mb-4">
+          <strong class="text-primary">Outro períodos</strong>
+        </v-col>
+        <v-col cols="12" lg="2">
+          <DatePicker label="Data inicial" v-model="modelFilters.initialDate" />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <DatePicker label="Data final" v-model="modelFilters.finalDate" />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <SelectInput
+            label="Ano do faturamento"
+            :items="$yearsList"
+            v-model="modelFilters.yearInvoice"
+            hide-details
+            @update:model-value="handleChangeYear"
+          />
+        </v-col>
+        <v-col cols="12" lg="2">
+          <Button @click="handleFilterData">
+            <v-icon icon="mdi-filter-outline" start />
+            Filtrar
+          </Button>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col cols="12">
           <DashboardAdminCards />
@@ -79,6 +105,11 @@ const tabsDate = ref<TabProps[]>([
     icon: "",
     colorIcon: "colorIcon",
   },
+  {
+    title: "Outros períodos",
+    icon: "",
+    colorIcon: "colorIcon",
+  },
 ]);
 
 const tabsRegion = ref<TabProps[]>([
@@ -118,6 +149,16 @@ const modelFilters = ref<AdminDashBoardSalesFilterProps>({
   initialDate: dayjs().format("YYYY-MM-DD"),
   finalDate: dayjs().format("YYYY-MM-DD"),
   ufs: [],
+  yearInvoice: dayjs().year(),
+});
+
+const $yearsList = computed(() => {
+  const currentYear = dayjs().year();
+  if (dash.$dashboard?.yearsArray) {
+    return dash.$dashboard?.yearsArray;
+  }
+
+  return [currentYear];
 });
 
 const handleChangeRegion = async () => {
@@ -181,7 +222,30 @@ const handleDateChange = async () => {
       modelFilters.value.finalDate = dayjs().endOf("year").format("YYYY-MM-DD");
       break;
   }
+  modelFilters.value.yearInvoice = dayjs(modelFilters.value.finalDate).year();
 
+  await getData();
+};
+
+const handleChangeYear = async (year: number) => {
+  tabDate.value = 5;
+
+  modelFilters.value.initialDate = dayjs()
+    .year(year)
+    .startOf("year")
+    .format("YYYY-MM-DD");
+
+  modelFilters.value.finalDate = dayjs()
+    .year(year)
+    .endOf("year")
+    .format("YYYY-MM-DD");
+
+  modelFilters.value.yearInvoice = year;
+  await getData();
+};
+
+const handleFilterData = async () => {
+  modelFilters.value.yearInvoice = dayjs(modelFilters.value.finalDate).year();
   await getData();
 };
 

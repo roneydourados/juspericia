@@ -2,7 +2,16 @@
   <CardBlur>
     <template #title>
       <div class="pa-4">
-        <HeaderPage :title="`Faturamento - ${currentYear}`" />
+        <HeaderPage>
+          <div class="d-flex align-center">
+            <span
+              class="text-primary"
+              :style="`font-size: 1rem; font-weight: 600`"
+            >
+              Faturamento - {{ currentYear }}
+            </span>
+          </div>
+        </HeaderPage>
       </div>
     </template>
     <template #content>
@@ -23,7 +32,10 @@ const { amountFormated } = useUtils();
 const dash = useUserAdminStore();
 
 const $dash = computed(() => dash.$dashboard);
-const currentYear = computed(() => dayjs().year());
+
+const currentYear = defineModel({
+  default: dayjs().year(),
+});
 
 const chartData = computed(() => {
   return {

@@ -51,12 +51,14 @@ export const useUserAdminStore = defineStore("userAdmin", () => {
     finalDate,
     initialDate,
     ufs,
+    yearInvoice,
   }: AdminDashBoardSalesFilterProps) => {
     const config = {
       params: {
         finalDate,
         initialDate,
         ufs: JSON.stringify(ufs),
+        yearInvoice,
       },
     };
     const { data } = await api.get<SalesAdminDashboardProps>(

@@ -6,6 +6,7 @@
     >
       {{ title }}
     </span>
+    <slot />
   </div>
 </template>
 
