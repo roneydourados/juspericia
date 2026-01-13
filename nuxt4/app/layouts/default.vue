@@ -72,21 +72,88 @@
             {{ $currentUser?.profile?.profileName }}
           </span>
         </div>
-        <!-- <v-avatar
-          size="40"
-          color="black"
-          variant="tonal"
-          class="mr-2"
-          @click="menuAvatar = true"
-        >
-          <v-icon icon="mdi-account-outline" color="white" />
-        </v-avatar> -->
         <div
           :class="
             mobile ? 'd-flex align-center px-2' : 'px-2 d-flex align-center'
           "
           style="gap: 1rem"
         >
+          <v-menu rounded :close-on-content-click="false">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                size="small"
+                variant="text"
+                class="text-none"
+                stacked
+                color="white"
+                v-bind="props"
+              >
+                <v-badge
+                  color="error"
+                  :content="$npsPending.length"
+                  v-if="$npsPending.length > 0"
+                >
+                  <v-icon icon="mdi-bell-outline" />
+                </v-badge>
+                <v-icon v-else icon="mdi-bell-outline" />
+              </v-btn>
+            </template>
+
+            <v-card rounded="xl" min-width="300">
+              <v-list lines="three">
+                <v-list-item>
+                  <v-list-item-title>
+                    <div class="d-flex justify-space-between px-2">
+                      <strong style="font-size: 1.3rem">Notificações</strong>
+                      <v-icon
+                        icon="mdi-history"
+                        color="orange-darken-1"
+                        size="30"
+                      />
+                    </div>
+                  </v-list-item-title>
+                </v-list-item>
+                <div
+                  v-if="$npsPending.length === 0"
+                  class="d-flex flex-column align-center pa-4"
+                  style="gap: 0.5rem"
+                >
+                  <v-icon icon="mdi-history" color="grey" size="30" />
+                  <span style="font-size: 1rem" class="text-grey-darken-2">
+                    Sem notificações por enquanto
+                  </span>
+                </div>
+                <v-list-item v-for="nps in $npsPending" :key="nps.id">
+                  <v-list-item-title class="font-weight-bold">
+                    Nova pesquisa de satisfação disponível!
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    <div class="d-flex flex-column mb-6" style="gap: 0.5rem">
+                      <span>
+                        Clique aqui para responder a pesquisa de satisfação.
+                      </span>
+                      <span>
+                        Solicitação Nº: {{ nps.patientConsultationId }},
+                        paciente: {{ nps.patientConsultation?.Patient?.name }}
+                        {{ nps.patientConsultation?.Patient?.surname }}
+                      </span>
+                    </div>
+                  </v-list-item-subtitle>
+                  <v-list-item-action>
+                    <Button size="small" color="primary" variant="outlined">
+                      <v-icon
+                        icon="mdi-message-arrow-right-outline"
+                        color="primary"
+                        start
+                      />
+                      <span class="text-caption text-primary"> Responder </span>
+                    </Button>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+            </v-card>
+          </v-menu>
+
           <v-menu rounded>
             <template v-slot:activator="{ props }">
               <v-btn
@@ -171,14 +238,16 @@ const { mobile } = useDisplay();
 const config = useRuntimeConfig();
 const router = useRouter();
 const auth = useAuthStore();
+const npsStore = useNpsStore();
 //const { getInitials } = useUtils();
 
 const drawer = ref(true);
-const menuAvatar = ref(false);
+//const menuNotifications = ref(false);
 // const $currentScreen = computed(() => screen.$currentScreen);
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
-const $isDevelop = computed(() => config.public.develop);
+const $npsPending = computed(() => npsStore.$npsList);
+//const $isDevelop = computed(() => config.public.develop);
 // const $currentTheme = computed(() => storeTheme.$theme);
 
 // const $user = computed(() => {
@@ -189,7 +258,8 @@ const $isDevelop = computed(() => config.public.develop);
 //   };
 // });
 
-onMounted(() => {
+onMounted(async () => {
+  await npsStore.getNpsPending();
   closeDrawer();
 });
 
