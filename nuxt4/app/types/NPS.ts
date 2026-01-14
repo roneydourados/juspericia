@@ -20,3 +20,43 @@ export interface NPSCreateProps {
   rating: number;
   feedback_text?: string;
 }
+
+export interface NPSDashboardMetricsDTO {
+  overview: {
+    totalEvaluations: number;
+    averageRating: number;
+    npsScore: number;
+    ratingDistribution: {
+      1: number;
+      2: number;
+      3: number;
+      4: number;
+      5: number;
+    };
+  };
+  byPhase: {
+    phase: number;
+    totalEvaluations: number;
+    averageRating: number;
+    npsScore: number;
+  }[];
+  byMonth: {
+    month: string;
+    totalEvaluations: number;
+    averageRating: number;
+    npsScore: number;
+  }[];
+  topMedics: {
+    medicId: number;
+    medicName: string;
+    average: number;
+    count: number;
+  }[];
+  topSpecialties: {
+    specialtyId: number;
+    specialtyName: string;
+    average: number;
+    count: number;
+  }[];
+  years: number[];
+}

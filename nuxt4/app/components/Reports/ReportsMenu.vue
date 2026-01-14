@@ -32,6 +32,11 @@ const itemsMenu = ref([
     icon: "mdi-file-document-edit-outline",
     text: "Relatório de solicitações de consulta",
   },
+  {
+    to: "/reports/nps-analysis",
+    icon: "mdi-star-cog-outline",
+    text: "Análise de NPS",
+  },
 ]);
 
 const handlClick = async (route: string) => {
