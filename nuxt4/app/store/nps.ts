@@ -14,7 +14,7 @@ export const useNpsStore = defineStore("nps", () => {
 
   //usuário logado criar um nps
   const createNps = async (npsData: NPSCreateProps) => {
-    await api.post<NPSProps>("/nps", npsData);
+    await api.post<NPSProps>("/nps/evaluations", npsData);
   };
 
   return {

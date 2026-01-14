@@ -78,7 +78,11 @@
           "
           style="gap: 1rem"
         >
-          <v-menu rounded :close-on-content-click="false">
+          <v-menu
+            rounded
+            v-model="menuFeedback"
+            :close-on-content-click="false"
+          >
             <template v-slot:activator="{ props }">
               <v-btn
                 size="small"
@@ -87,6 +91,7 @@
                 stacked
                 color="white"
                 v-bind="props"
+                @click="menuFeedback = true"
               >
                 <v-badge
                   color="error"
@@ -140,7 +145,12 @@
                     </div>
                   </v-list-item-subtitle>
                   <v-list-item-action>
-                    <Button size="small" color="primary" variant="outlined">
+                    <Button
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                      @click="showFeedbackDialogHandler(nps)"
+                    >
                       <v-icon
                         icon="mdi-message-arrow-right-outline"
                         color="primary"
@@ -223,6 +233,7 @@
       <v-spacer></v-spacer>
       <span class="text-caption font-weight-bold">v{{ $version }}</span>
     </v-footer>
+    <FeedbackDialog v-model="showFeedbackDialog" :nps="selectedNps" />
   </v-app>
 </template>
 <script setup lang="ts">
@@ -242,21 +253,13 @@ const npsStore = useNpsStore();
 //const { getInitials } = useUtils();
 
 const drawer = ref(true);
-//const menuNotifications = ref(false);
-// const $currentScreen = computed(() => screen.$currentScreen);
+const showFeedbackDialog = ref(false);
+const menuFeedback = ref(false);
+
+const selectedNps = ref<NPSProps>();
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
 const $npsPending = computed(() => npsStore.$npsList);
-//const $isDevelop = computed(() => config.public.develop);
-// const $currentTheme = computed(() => storeTheme.$theme);
-
-// const $user = computed(() => {
-//   const initials = getInitials(auth.$currentUser?.name!);
-//   return {
-//     ...auth.$currentUser,
-//     initials,
-//   };
-// });
 
 onMounted(async () => {
   await npsStore.getNpsPending();
@@ -312,16 +315,11 @@ const handleRevokeConsent = async () => {
   });
 };
 
-// const toggleTheme = () => {
-//   storeTheme.storeTheme(
-//     globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME
-//   );
-
-//   globalTheme.global.name.value =
-//     globalTheme.global.name.value === MAIN_THEME ? MAIN_THEME_DARK : MAIN_THEME;
-
-//   storeTheme.getTheme();
-// };
+const showFeedbackDialogHandler = (item: NPSProps) => {
+  selectedNps.value = item;
+  showFeedbackDialog.value = true;
+  menuFeedback.value = false;
+};
 </script>
 
 <style scoped>
