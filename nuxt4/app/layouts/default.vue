@@ -79,6 +79,7 @@
           style="gap: 1rem"
         >
           <v-menu
+            v-if="$currentUser?.profile?.type === 'ADVOGADO'"
             rounded
             v-model="menuFeedback"
             :close-on-content-click="false"
