@@ -42,20 +42,13 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+
 const monthIndex = ref(dayjs().month());
 
 const emit = defineEmits(["month"]);
 
 const $months = computed(() => {
   return monthsObject;
-});
-
-onMounted(() => {
-  const currentMonth = dayjs().month();
-  const index = $months.value.findIndex(
-    (month) => month.monthIndex === currentMonth
-  );
-  monthIndex.value = index;
 });
 
 const selectMonth = () => {
@@ -65,20 +58,23 @@ const selectMonth = () => {
   }
 };
 
-// Métodos para lidar com os cliques
+watch(
+  monthIndex,
+  () => {
+    selectMonth();
+  },
+  { immediate: true }
+);
+
 const handlePrevClick = (props: any) => {
   if (props && props.onClick) {
     props.onClick();
   }
-
-  selectMonth();
 };
 
 const handleNextClick = (props: any) => {
   if (props && props.onClick) {
     props.onClick();
   }
-
-  selectMonth();
 };
 </script>

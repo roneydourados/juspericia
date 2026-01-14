@@ -1,31 +1,25 @@
 <template>
   <v-container fluid>
-    <v-row
-      v-if="loading"
-      class="justify-center align-center"
-      style="min-height: 400px"
-    >
-      <v-col cols="12" class="text-center">
-        <v-progress-circular indeterminate color="primary" size="64" />
-        <div class="mt-4 text-h6">Carregando dados...</div>
+    <!-- Filtros -->
+    <v-row>
+      <v-col cols="12" lg="2">
+        <SelectInput
+          label="Ano"
+          :items="$npsDahsboard?.years || []"
+          v-model="filters.year"
+          hide-details
+        />
+      </v-col>
+      <v-col cols="12" lg="10">
+        <Months @month="handleChangeMonth($event)" />
       </v-col>
     </v-row>
 
-    <div v-else-if="$npsDahsboard">
-      <!-- Filtros -->
-      <v-row>
-        <v-col cols="12" lg="2">
-          <SelectInput
-            label="Ano"
-            :items="$npsDahsboard.years"
-            v-model="filters.year"
-            hide-details
-          />
-        </v-col>
-        <v-col cols="12" lg="10">
-          <Months @month="handleChangeMonth($event)" />
-        </v-col>
-      </v-row>
+    <div
+      v-if="
+        $npsDahsboard && ($npsDahsboard?.overview?.totalEvaluations ?? 0) > 0
+      "
+    >
       <!-- Cards de Visão Geral -->
       <v-row>
         <v-col cols="12">
@@ -57,13 +51,13 @@
 
       <!-- Top Médicos e Especialidades -->
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12">
           <NPSTopMedics
             v-if="$npsDahsboard.topMedics?.length"
             :top-medics="$npsDahsboard.topMedics"
           />
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12">
           <NPSTopSpecialties
             v-if="$npsDahsboard.topSpecialties?.length"
             :top-specialties="$npsDahsboard.topSpecialties"
@@ -94,7 +88,7 @@ import dayjs from "dayjs";
 
 const npsStore = useNpsStore();
 
-const loading = ref(true);
+const loading = ref(false);
 
 const filters = ref({
   monthReference: dayjs().startOf("month").format("YYYY-MM"),
@@ -103,9 +97,18 @@ const filters = ref({
 
 const $npsDahsboard = computed(() => npsStore.$npsDahsboard);
 
-onMounted(async () => {
-  await getDashboard();
-});
+watch(
+  () => filters.value.year,
+  async (newYear) => {
+    const currentMonth = dayjs(filters.value.monthReference + "-01").month();
+
+    filters.value.monthReference = dayjs(
+      new Date(newYear, currentMonth, 1)
+    ).format("YYYY-MM");
+
+    await getDashboard();
+  }
+);
 
 const handleChangeMonth = async (monthIndex: number) => {
   const currentYear = filters.value.year;
