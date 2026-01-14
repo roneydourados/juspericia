@@ -80,6 +80,7 @@
         </div>
       </v-col>
     </v-row>
+    <DialogLoading :dialog="loading" />
   </v-container>
 </template>
 
