@@ -64,6 +64,21 @@
               <span class="text-caption"> Filtrar </span>
             </Button>
           </v-col>
+          <v-col
+            v-if="$currentUser?.profile?.type === 'ADMIN'"
+            cols="12"
+            lg="2"
+          >
+            <Button
+              variant="flat"
+              color="primary"
+              class="text-none mt-4"
+              @click="showAdminCreditSalt = true"
+            >
+              <v-icon icon="mdi-plus" color="colorIcon" start />
+              <span class="text-caption"> Lançar avulso </span>
+            </Button>
+          </v-col>
         </v-row>
         <div class="py-4">
           <Table
@@ -127,88 +142,6 @@
               </v-btn>
             </template>
           </Table>
-          <!-- <Table
-            title="Compras"
-            font-size="1.5rem"
-            :headers="headers"
-            :items="$salts?.credits"
-            :show-crud="false"
-          >
-            <template #item.status="{ item }">
-              <v-chip :color="getStatusName(item).color">
-                <v-icon
-                  :color="getStatusName(item).color"
-                  :icon="getStatusName(item).icon"
-                  size="20"
-                  start
-                />
-                {{ getStatusName(item).text }}
-              </v-chip>
-            </template>
-            <template #item.dateCreated="{ item }">
-              <strong>
-                {{ dayjs(item.dateCreated).format("DD/MM/YYYY") }}
-              </strong>
-            </template>
-            <template #item.value="{ item }">
-              <strong>{{ amountFormated(item.value, true) }}</strong>
-            </template>
-            <template #item.salt="{ item }">
-              <strong>{{ amountFormated(item.salt, true) }}</strong>
-            </template>
-            <template #item.solicitationConsultationValue="{ item }">
-              <strong>{{
-                amountFormated(item.solicitationConsultationValue, true)
-              }}</strong>
-            </template>
-
-            <template #item.expireDate="{ item }">
-              <strong>
-                {{ dayjs(item.expireDate).format("DD/MM/YYYY") }}
-              </strong>
-            </template>
-            <template #item.createdAt="{ item }">
-              <strong>{{ dayjs(item.createdAt).format("DD/MM/YYYY") }}</strong>
-            </template>
-            <template #item.actions="{ item }">
-              <v-btn
-                variant="text"
-                color="info"
-                icon
-                @click="getItemUpdateExpireAt(item)"
-                :disabled="
-                  (dayjs(item.expireDate).isAfter(dayjs()) &&
-                    $currentUser?.profile?.type !== 'ADMIN') ||
-                  Number(item.salt ?? 0) <= 0
-                "
-              >
-                <v-icon icon="mdi-calendar-month"></v-icon>
-                <v-tooltip
-                  activator="parent"
-                  location="top center"
-                  content-class="tooltip-background"
-                >
-                  Ajustar data de expiração
-                </v-tooltip>
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="info"
-                icon
-                @click="handleShowFormSaltTransfer(item)"
-                :disabled="!filters.lawyer"
-              >
-                <v-icon icon="mdi-briefcase-arrow-left-right-outline"></v-icon>
-                <v-tooltip
-                  activator="parent"
-                  location="top center"
-                  content-class="tooltip-background"
-                >
-                  Transferência de de saldo
-                </v-tooltip>
-              </v-btn>
-            </template>
-          </Table> -->
         </div>
       </v-card-text>
     </v-card>
@@ -238,6 +171,7 @@
       :item="selectedLawyer"
       @close="handleFilter"
     />
+    <AdminCreditSaltsForm v-model="showAdminCreditSalt" @close="handleFilter" />
   </div>
 </template>
 
@@ -246,7 +180,7 @@
 import { useDisplay } from "vuetify";
 
 const saltCredit = useUserCreditSaltStore();
-//const auth = useAuthStore();
+const auth = useAuthStore();
 
 const { amountFormated, whatsappUrl, formatTelephoneNumber } = useUtils();
 const { mobile } = useDisplay();
@@ -254,8 +188,9 @@ const { mobile } = useDisplay();
 const loading = ref(false);
 const showErrorAlert = ref(false);
 const showDetails = ref(false);
-
+const showAdminCreditSalt = ref(false);
 const selectedLawyer = ref<LawyerEstatisticsByAdmin>();
+
 const filters = ref({
   initialDate: "",
   finalDate: "",
@@ -287,37 +222,11 @@ const headers = ref([
     key: "salt",
   },
   { title: "Ações", key: "actions" },
-  // {
-  //   title: "Email-Escritório",
-  //   key: "officeEmail",
-  // },
-  // {
-  //   title: "Tel. Escritório",
-  //   key: "officePhone",
-  // },
 ]);
-
-// const headers = ref([
-//   {
-//     title: "Status",
-//     align: "start",
-//     sortable: false,
-//     key: "status",
-//   },
-//   { title: "Data da compra", key: "dateCreated" },
-//   { title: "Data de expiração", key: "expireDate" },
-//   { title: "Valor", key: "value" },
-//   { title: "Saldo", key: "salt" },
-//   {
-//     title: "Cliente",
-//     key: "user.name",
-//   },
-//   { title: "Ações", key: "actions" },
-// ]);
 
 const $salts = computed(() => saltCredit.$credits);
 const $lawyers = computed(() => saltCredit.$lawyers);
-//const $currentUser = computed(() => auth.$currentUser);
+const $currentUser = computed(() => auth.$currentUser);
 
 const handleFilter = async () => {
   loading.value = true;

@@ -114,6 +114,26 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     lawyers.value = data;
   };
 
+  const storeManualCredit = async (input: {
+    userId: number;
+    value: number;
+    solicitationConsultationValue: number;
+  }) => {
+    const { userId, value, solicitationConsultationValue } = input;
+    const payload = {
+      userId,
+      value,
+      type: "C",
+      solicitationConsultationValue,
+    };
+
+    await api.post("/user-credit-salt", payload);
+  };
+
+  const destroyManualCredit = async (publicId: string) => {
+    await api.delete(`/user-credit-salt/${publicId}`);
+  };
+
   return {
     indexAdmin,
     index,
@@ -126,5 +146,7 @@ export const useUserCreditSaltStore = defineStore("userCreditSalt", () => {
     updateExpireAt,
     getTotalSalt,
     getLawyers,
+    storeManualCredit,
+    destroyManualCredit,
   };
 });

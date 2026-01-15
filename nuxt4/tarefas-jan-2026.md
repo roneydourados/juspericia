@@ -12,7 +12,7 @@
 
 # Solicitações
 
-[] - Verificar filtro que não esta salvando corretamente o advogado selecionado
+[x] - Verificar filtro que não esta salvando corretamente o advogado selecionado
 
 # Controle de saldo de créditos
 
@@ -29,4 +29,4 @@
 
 # Transações
 
-[] - Implementar tela para mostrar detalhes do webhook nas transações de venda
+[x] - Implementar tela para mostrar detalhes do webhook nas transações de venda

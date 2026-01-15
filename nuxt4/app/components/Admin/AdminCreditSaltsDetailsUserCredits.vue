@@ -157,6 +157,21 @@
                         Transferência de de saldo
                       </v-tooltip>
                     </v-btn>
+                    <v-btn
+                      variant="text"
+                      color="red"
+                      icon
+                      @click="handleDeleteCredit(item)"
+                    >
+                      <v-icon icon="mdi-delete-outline"></v-icon>
+                      <v-tooltip
+                        activator="parent"
+                        location="top center"
+                        content-class="tooltip-background"
+                      >
+                        Deletar crédito
+                      </v-tooltip>
+                    </v-btn>
                   </div>
                 </v-col>
               </v-row>
@@ -316,5 +331,45 @@ const handleUpdateExpireAt = async () => {
     showUpdateExpireAt.value = false;
     emit("refresh");
   }
+};
+
+const handleDeleteCredit = async (item: UserCreditSalt) => {
+  push.info({
+    title: "Apagar Crédito",
+    message:
+      "Tem certeza que deseja apagar crédito ? Esta ação é irreversível, confirme.",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Apagar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await saltCredit.destroyManualCredit(item.publicId!);
+              emit("refresh");
+            } catch (error) {
+              push.error("Erro ao apagar crédito.");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 </script>

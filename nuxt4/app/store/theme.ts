@@ -16,7 +16,7 @@ export const useThemeStore = defineStore("theme", () => {
 
   // Inicializa o tema do localStorage ou usa o padrão
   const initTheme = () => {
-    if (process.client) {
+    if (import.meta.client) {
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
 
       if (savedTheme) {
@@ -40,7 +40,7 @@ export const useThemeStore = defineStore("theme", () => {
     currentTheme.value = newTheme;
     vuetifyTheme.global.name.value = newTheme;
 
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem(THEME_STORAGE_KEY, newTheme);
     }
   };
@@ -51,7 +51,7 @@ export const useThemeStore = defineStore("theme", () => {
     currentTheme.value = themeName;
     vuetifyTheme.global.name.value = themeName;
 
-    if (process.client) {
+    if (import.meta.client) {
       localStorage.setItem(THEME_STORAGE_KEY, themeName);
     }
   };

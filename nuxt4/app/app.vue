@@ -12,23 +12,9 @@
   <DialogLoading :dialog="loading" />
 </template>
 <script setup lang="ts">
-// import { useTheme } from "vuetify";
 const nuxtApp = useNuxtApp();
 
-// const globalTheme = useTheme();
-// const storeTheme = useThemeStore();
-
 const loading = ref(false);
-
-// const theme = computed(() => {
-//   return storeTheme.$currentTheme;
-// });
-
-// onMounted(() => {
-//   storeTheme.initTheme();
-
-//   globalTheme.global.name.value = theme.value;
-// });
 
 nuxtApp.hook("page:start", () => {
   loading.value = true;

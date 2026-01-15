@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 
-const { setSolicitationsFilters } = useUtils();
+const { setSolicitationsFilters, getSolicitationsFilters } = useUtils();
 const storeConsultation = useSolicitationConsultationStore();
 //const authStore = useAuthStore();
 const systemParameters = useSystemParametersStore();
@@ -14,35 +14,44 @@ const loading = ref(false);
 //const $currentUser = computed(() => authStore.$currentUser);
 
 onMounted(async () => {
-  const modelFilters = {
+  const filtes = getSolicitationsFilters();
+
+  let modelFilters = {
     status: "open",
     initialDateSolicitation: dayjs().subtract(3, "month").format("YYYY-MM-DD"),
     finalDateSolicitation: dayjs().endOf("month").format("YYYY-MM-DD"),
     benefitType: undefined as BenefitTypeProps | undefined,
     patient: undefined as PatientProps | undefined,
     reportPurpose: undefined as ReportPurposeProps | undefined,
-    // userId:
-    //   $currentUser.value?.profile?.type === "ADMIN" ||
-    //   $currentUser.value?.profile?.type === "GERENTE" ||
-    //   $currentUser.value?.profile?.type === "VENDEDOR"
-    //     ? undefined
-    //     : $currentUser.value?.id,
+    lawyer: undefined as UserProps | undefined,
   };
-  console.log("🚀 ~ modelFilters:", modelFilters);
+
+  if (filtes) {
+    modelFilters = {
+      status: "open",
+      initialDateSolicitation:
+        filtes.initialDateSolicitation ??
+        dayjs().subtract(3, "month").format("YYYY-MM-DD"),
+      finalDateSolicitation:
+        filtes.finalDateSolicitation ??
+        dayjs().endOf("month").format("YYYY-MM-DD"),
+      lawyer: filtes.lawyer,
+      benefitType: undefined as BenefitTypeProps | undefined,
+      patient: undefined as PatientProps | undefined,
+      reportPurpose: undefined as ReportPurposeProps | undefined,
+    };
+  }
 
   loading.value = true;
   try {
     setSolicitationsFilters(modelFilters);
-    await storeConsultation.index(modelFilters);
+    await storeConsultation.index({
+      ...modelFilters,
+      userId: modelFilters.lawyer?.id,
+    });
     await systemParameters.index();
   } finally {
     loading.value = false;
   }
 });
-
-// await useAsyncData("solicitations", async () => {
-//   //atualizar filtros para padrão
-//   setSolicitationsFilters(modelFilters.value);
-//   await storeConsultation.index(modelFilters.value);
-// });
 </script>
