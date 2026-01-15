@@ -7,6 +7,7 @@
   >
     <template #title style="gap: 1rem; font-size: 1rem">
       <div class="d-flex align-center justify-space-between item-header">
+        <!-- <pre>{{ solicitation }}</pre> -->
         <div class="d-flex align-center" style="gap: 1rem">
           <div
             @click="handleDetailsClick(solicitation.publicId!)"

@@ -186,15 +186,7 @@
         />
       </template>
     </Table>
-    <!-- <SolicitationTableItemMobile
-      v-else-if="
-        displayConsultations?.consultations &&
-        displayConsultations?.consultations.length > 0 &&
-        mobile
-      "
-      @edit="getItemEdit($event)"
-      @refresh="getConsultations"
-    /> -->
+
     <EmptyContent v-if="displayConsultations?.consultations.length === 0" />
   </div>
   <SolicitationFilters
