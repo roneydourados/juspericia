@@ -1,26 +1,66 @@
 import { defineStore } from "pinia";
-import { MAIN_THEME } from "@/utils/vuetifyTheme";
+import { useTheme as useVuetifyTheme } from "vuetify";
+import { MAIN_THEME, MAIN_THEME_DARK } from "@/utils/vuetifyTheme";
 
 export const useThemeStore = defineStore("theme", () => {
-  const theme = ref(MAIN_THEME);
+  const vuetifyTheme = useVuetifyTheme();
+  const THEME_STORAGE_KEY = "app-theme-mode";
 
-  const $theme = computed(() => {
-    return theme.value;
-  });
+  // Estado reativo para o tema atual
+  const isDark = ref(false);
+  const currentTheme = ref(MAIN_THEME);
 
-  const storeTheme = (themeName: string) => {
-    localStorage.setItem("theme", themeName);
+  // Computed para expor o estado
+  const $isDark = computed(() => isDark.value);
+  const $currentTheme = computed(() => currentTheme.value);
 
-    theme.value = themeName;
+  // Inicializa o tema do localStorage ou usa o padrão
+  const initTheme = () => {
+    if (process.client) {
+      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
+      if (savedTheme) {
+        isDark.value = savedTheme === MAIN_THEME_DARK;
+        currentTheme.value = savedTheme;
+        vuetifyTheme.global.name.value = savedTheme;
+      } else {
+        // Usa o tema padrão
+        isDark.value = false;
+        currentTheme.value = MAIN_THEME;
+        vuetifyTheme.global.name.value = MAIN_THEME;
+      }
+    }
   };
 
-  const getTheme = () => {
-    theme.value = localStorage.getItem("theme") ?? MAIN_THEME;
+  // Alterna entre tema claro e escuro
+  const toggleTheme = () => {
+    isDark.value = !isDark.value;
+    const newTheme = isDark.value ? MAIN_THEME_DARK : MAIN_THEME;
+
+    currentTheme.value = newTheme;
+    vuetifyTheme.global.name.value = newTheme;
+
+    if (process.client) {
+      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    }
+  };
+
+  // Define um tema específico
+  const setTheme = (themeName: string) => {
+    isDark.value = themeName === MAIN_THEME_DARK;
+    currentTheme.value = themeName;
+    vuetifyTheme.global.name.value = themeName;
+
+    if (process.client) {
+      localStorage.setItem(THEME_STORAGE_KEY, themeName);
+    }
   };
 
   return {
-    $theme,
-    storeTheme,
-    getTheme,
+    $isDark,
+    $currentTheme,
+    toggleTheme,
+    setTheme,
+    initTheme,
   };
 });

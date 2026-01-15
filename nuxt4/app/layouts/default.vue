@@ -72,6 +72,18 @@
             {{ $currentUser?.profile?.profileName }}
           </span>
         </div>
+        <!-- <v-btn
+          icon
+          @click="themeStore.toggleTheme"
+          :aria-label="
+            themeStore.$isDark ? 'Ativar modo claro' : 'Ativar modo escuro'
+          "
+        >
+          <v-icon color="white">
+            {{ themeStore.$isDark ? "mdi-weather-sunny" : "mdi-weather-night" }}
+          </v-icon>
+        </v-btn> -->
+
         <div
           :class="
             mobile ? 'd-flex align-center px-2' : 'px-2 d-flex align-center'
@@ -253,6 +265,7 @@ const config = useRuntimeConfig();
 const router = useRouter();
 const auth = useAuthStore();
 const npsStore = useNpsStore();
+const themeStore = useThemeStore();
 //const { getInitials } = useUtils();
 
 const drawer = ref(true);
@@ -271,11 +284,10 @@ onMounted(async () => {
 
     await npsStore.getNpsPending();
     const isEligible = await npsStore.checkUserEligibleForNps(monthRef);
-    console.log("🚀 ~ isEligible:", isEligible);
 
     showFeedbackGeneralDialog.value = isEligible;
   }
-
+  themeStore.initTheme();
   closeDrawer();
 });
 

@@ -20,22 +20,24 @@ export const MainThemeColors = {
 };
 
 const MainDarkThemeColors = {
-  background: "#141625",
-  primary: "#5D5FEF",
+  background: "#111827",
+  bgcolor: "#1F2937",
+  grey: "#71717A",
+  primary: "#7C3AED",
   success: "#10B981",
-  danger: "#e11d48",
+  danger: "#F43F5E",
   darkButton: "#334155",
   wharning: "#E07706",
   info: "#178DCC",
   purple: "#5574ED",
-  surface: "#1E223B",
-  itemMenu: "#FFFFFF",
-  itemInternalMenu: "#ffffff",
+  surface: "#FFFFFF",
+  itemMenu: "#ffffff",
+  itemInternalMenu: "#000",
   tooltipColor: "#E3F2FD",
   tooltipTextColor: "#424242",
   colorIcon: "#C7D82F",
-  darkText: "#1A1E4E",
   greenLime: "#c8e040",
+  darkText: "#505df0",
 };
 
 export const MAIN_THEME = "mainTheme";
