@@ -16,7 +16,7 @@
 
 # Controle de saldo de créditos
 
-[] - possibilidade de lançar um crédito avulso através do usuário Admin
+[x] - possibilidade de lançar um crédito avulso através do usuário Admin
 
 # Interface
 
@@ -30,3 +30,7 @@
 # Transações
 
 [x] - Implementar tela para mostrar detalhes do webhook nas transações de venda
+
+# Comissão
+
+[] - analisar e testar o porque anda gerando comissão com valor zerado
