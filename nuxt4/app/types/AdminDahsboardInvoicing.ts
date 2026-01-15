@@ -53,4 +53,5 @@ export interface TransactionProps {
   packgeSaleValue: number;
   updatedAt: string;
   createdAt: string;
+  webhookData: string;
 }

@@ -1,6 +1,6 @@
 <template>
-  <CardBlur class="pa-4" @click="$emit('click')" height="100">
-    <v-card-text class="d-flex align-center justify-space-between pa-4">
+  <CardBlur class="pa-4" @click="$emit('click')" height="100%">
+    <div class="d-flex align-center justify-space-between pa-4">
       <span class="text-subtitle-1 text-primary">
         {{ title }}
       </span>
@@ -8,7 +8,8 @@
         <v-icon :icon="icon" start size="30" :color="iconColor" />
         <span class="text-h5 font-weight-bold text-primary">{{ value }}</span>
       </div>
-    </v-card-text>
+    </div>
+    <slot />
   </CardBlur>
 </template>
 

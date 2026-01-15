@@ -24,7 +24,7 @@
 
 # NPS
 
-[] - Finalizar ajustes do NPS, para avaliação de funcionalidade e qualidade do serviço em geral
+[x] - Finalizar ajustes do NPS, para avaliação de funcionalidade e qualidade do serviço em geral
 [] - Enviar email solicitando para avalidar a solicitação finalizada ao gerar o laudo
 
 # Transações

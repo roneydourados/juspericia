@@ -105,7 +105,7 @@
               </v-btn>
             </template>
 
-            <v-card rounded="xl" min-width="300">
+            <v-card rounded="xl" min-width="300" max-height="500">
               <v-list lines="three">
                 <v-list-item>
                   <v-list-item-title>
@@ -235,11 +235,13 @@
       <span class="text-caption font-weight-bold">v{{ $version }}</span>
     </v-footer>
     <FeedbackDialog v-model="showFeedbackDialog" :nps="selectedNps" />
+    <FeedbackDialogGeneralNps v-model="showFeedbackGeneralDialog" />
   </v-app>
 </template>
 <script setup lang="ts">
 // import { useThemeStore } from "@/store/theme";
 // import { MAIN_THEME_DARK, MAIN_THEME } from "@/utils/vuetifyTheme";
+import dayjs from "dayjs";
 import { useDisplay } from "vuetify";
 
 // const storeTheme = useThemeStore();
@@ -255,6 +257,7 @@ const npsStore = useNpsStore();
 
 const drawer = ref(true);
 const showFeedbackDialog = ref(false);
+const showFeedbackGeneralDialog = ref(false);
 const menuFeedback = ref(false);
 
 const selectedNps = ref<NPSProps>();
@@ -263,7 +266,16 @@ const $version = computed(() => config.public.version);
 const $npsPending = computed(() => npsStore.$npsList);
 
 onMounted(async () => {
-  await npsStore.getNpsPending();
+  if ($currentUser.value?.profile?.type === "ADVOGADO") {
+    const monthRef = dayjs().format("YYYY-MM");
+
+    await npsStore.getNpsPending();
+    const isEligible = await npsStore.checkUserEligibleForNps(monthRef);
+    console.log("🚀 ~ isEligible:", isEligible);
+
+    showFeedbackGeneralDialog.value = isEligible;
+  }
+
   closeDrawer();
 });
 

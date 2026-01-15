@@ -203,6 +203,17 @@
                   {{ item.seller || "-" }}
                 </div>
               </v-col>
+              <v-col cols="12" md="4">
+                <Button
+                  variant="text"
+                  color="primary"
+                  class="text-none"
+                  @click="webhookDetails(item)"
+                >
+                  <v-icon icon="mdi-webhook" start />
+                  <span class="text-caption"> Ver detalhes do Webhook </span>
+                </Button>
+              </v-col>
             </v-row>
           </v-expansion-panel-text>
         </v-expansion-panel>
@@ -279,6 +290,10 @@
     :public-id="transactionPublicId"
     @close="getTransactions"
   />
+  <TransactionWebhookDetails
+    :transaction="selectedTransaction"
+    v-model="showWebhookDetails"
+  />
 </template>
 
 <script setup lang="ts">
@@ -298,11 +313,13 @@ const $total = computed(() =>
 );
 
 const showCancelSale = ref(false);
+const showWebhookDetails = ref(false);
 const loading = ref(false);
 const showFormTransaction = ref(false);
 const showSetSellerForm = ref(false);
 const publicIdCancel = ref("");
 const transactionPublicId = ref("");
+const selectedTransaction = ref<TransactionProps>();
 const statusSale = ref([
   {
     label: "Pago",
@@ -418,5 +435,10 @@ const getTransactionStatusDetails = (item: TransactionProps) => {
 const getTransactionSetSeller = (item: TransactionProps) => {
   transactionPublicId.value = item.publicId;
   showSetSellerForm.value = true;
+};
+
+const webhookDetails = (item: TransactionProps) => {
+  selectedTransaction.value = item;
+  showWebhookDetails.value = true;
 };
 </script>
