@@ -26,3 +26,7 @@
 
 [] - Finalizar ajustes do NPS, para avaliação de funcionalidade e qualidade do serviço em geral
 [] - Enviar email solicitando para avalidar a solicitação finalizada ao gerar o laudo
+
+# Transações
+
+[] - Implementar tela para mostrar detalhes do webhook nas transações de venda
