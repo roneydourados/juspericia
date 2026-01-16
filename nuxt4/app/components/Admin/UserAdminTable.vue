@@ -96,7 +96,7 @@
     />
   </div>
   <UserAdminForm
-    width="800"
+    width="500"
     title="Administrador"
     :show="showForm"
     :data="selected"
@@ -118,9 +118,11 @@ import { useDebounceFn } from "@vueuse/core";
 import { useDisplay } from "vuetify";
 
 const userAdminStore = useUserAdminStore();
+const auth = useAuthStore();
 const { mobile } = useDisplay();
 const { formatTelephoneNumber } = useUtils();
 const $all = computed(() => userAdminStore.$all);
+const $currentUser = computed(() => auth.$currentUser);
 
 const selected = ref<UserProps>();
 const loading = ref(false);

@@ -7,7 +7,7 @@
   >
     <FormCrud :on-submit="submitForm">
       <v-row dense>
-        <v-col cols="12" lg="6">
+        <v-col cols="12">
           <StringInput
             v-model="model.name"
             label="Nome"
@@ -15,7 +15,7 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="6">
+        <v-col cols="12">
           <StringInput
             v-model="model.email"
             label="E-mail"
@@ -24,8 +24,17 @@
             is-lower-case
           />
         </v-col>
+        <v-col cols="12">
+          <PasswordInput
+            v-model="model.password"
+            label="Senha temporária"
+            placeholder="crie uma senha temporária"
+            :required="!model.id"
+            :strong="!!(model.id && model.id > 0 && model.password)"
+          />
+        </v-col>
       </v-row>
-      <v-row dense>
+      <!-- <v-row dense>
         <v-col cols="12" lg="4">
           <TelefoneInput
             v-model="model.phone"
@@ -41,19 +50,10 @@
             required
           />
         </v-col>
-        <v-col cols="12" lg="4">
-          <PasswordInput
-            v-model="model.password"
-            label="Senha temporária"
-            placeholder="crie uma senha temporária"
-            :required="!model.id"
-            :strong="!!(model.id && model.id > 0 && model.password)"
-          />
-        </v-col>
-      </v-row>
+      </v-row> -->
 
-      <v-row dense>
-        <v-col cols="12" lg="2">
+      <v-row class="px-6" justify="center">
+        <v-col cols="12" lg="6">
           <v-switch
             v-model="model.active"
             color="success"
@@ -61,7 +61,7 @@
             hide-details
           ></v-switch>
         </v-col>
-        <v-col v-if="$currentUser?.isMaster" cols="12" lg="4">
+        <v-col v-if="$currentUser?.isMaster" cols="12" lg="6">
           <v-switch
             v-model="model.isMaster"
             color="info"
@@ -88,7 +88,7 @@ const props = defineProps({
   },
   width: {
     type: String,
-    default: "500",
+    default: "400",
   },
   data: {
     type: Object as PropType<UserProps>,
