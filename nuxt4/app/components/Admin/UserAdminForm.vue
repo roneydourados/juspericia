@@ -61,7 +61,7 @@
             hide-details
           ></v-switch>
         </v-col>
-        <v-col cols="12" lg="4">
+        <v-col v-if="$currentUser?.isMaster" cols="12" lg="4">
           <v-switch
             v-model="model.isMaster"
             color="info"
@@ -98,7 +98,7 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const { mobile } = useDisplay();
-
+const auth = useAuthStore();
 const userAdminStore = useUserAdminStore();
 
 const model = ref({
@@ -111,6 +111,8 @@ const model = ref({
   active: true,
   isMaster: false,
 });
+
+const $currentUser = computed(() => auth.$currentUser);
 
 const clearModel = () => {
   model.value = {
