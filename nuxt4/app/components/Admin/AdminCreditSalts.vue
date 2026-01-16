@@ -64,11 +64,7 @@
               <span class="text-caption"> Filtrar </span>
             </Button>
           </v-col>
-          <v-col
-            v-if="$currentUser?.profile?.type === 'ADMIN'"
-            cols="12"
-            lg="2"
-          >
+          <v-col v-if="$currentUser?.isMaster" cols="12" lg="2">
             <Button
               variant="flat"
               color="primary"

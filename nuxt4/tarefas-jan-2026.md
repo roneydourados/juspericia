@@ -17,6 +17,7 @@
 # Controle de saldo de créditos
 
 [x] - possibilidade de lançar um crédito avulso através do usuário Admin
+[x] - Implementar validação que além de ser admin o usuário precisa ser master para lançar créditos avulsos
 
 # Interface
 
@@ -25,7 +26,7 @@
 # NPS
 
 [x] - Finalizar ajustes do NPS, para avaliação de funcionalidade e qualidade do serviço em geral
-[] - Enviar email solicitando para avalidar a solicitação finalizada ao gerar o laudo
+[x] - Enviar email solicitando para avalidar a solicitação finalizada
 
 # Transações
 

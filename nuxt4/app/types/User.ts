@@ -50,6 +50,7 @@ export interface UserProps {
   nuvidioDepartmentId?: number;
   nuvidioDepartment?: NuvidioDepartmentProps;
   medicalSpecialtiesMedic?: MedicalSpecialtyMedicProps[];
+  isMaster?: boolean;
 }
 
 export interface NuvidioDepartmentProps {

@@ -53,11 +53,19 @@
       </v-row>
 
       <v-row dense>
-        <v-col cols="12" lg="4">
+        <v-col cols="12" lg="2">
           <v-switch
             v-model="model.active"
             color="success"
             :label="model.active ? 'Ativo' : 'Inativo'"
+            hide-details
+          ></v-switch>
+        </v-col>
+        <v-col cols="12" lg="4">
+          <v-switch
+            v-model="model.isMaster"
+            color="info"
+            :label="model.isMaster ? 'Master' : 'Não Master'"
             hide-details
           ></v-switch>
         </v-col>
@@ -101,6 +109,7 @@ const model = ref({
   password: "",
   phone: "",
   active: true,
+  isMaster: false,
 });
 
 const clearModel = () => {
@@ -112,6 +121,7 @@ const clearModel = () => {
     password: "",
     email: "",
     active: true,
+    isMaster: false,
   };
 };
 
@@ -132,6 +142,7 @@ const loadModel = () => {
     password: "",
     email: props.data.email ?? "",
     active: props.data.active ?? false,
+    isMaster: props.data.isMaster ?? false,
   };
 };
 
@@ -156,6 +167,7 @@ const create = async () => {
     phone: model.value.phone,
     cpfCnpj: model.value.cpfCnpj,
     password: model.value.password,
+    isMaster: model.value.isMaster,
   });
 };
 
@@ -169,6 +181,7 @@ const update = async () => {
     cpfCnpj: model.value.cpfCnpj,
     password: model.value.password,
     active: model.value.active,
+    isMaster: model.value.isMaster,
   });
 };
 

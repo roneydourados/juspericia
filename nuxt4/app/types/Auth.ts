@@ -22,6 +22,7 @@ export interface AuthProps {
   email?: string;
   userConsent?: UserConsentProps;
   profile?: Profile;
+  isMaster: boolean;
 }
 
 export interface Token {
