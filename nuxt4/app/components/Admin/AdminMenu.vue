@@ -84,6 +84,11 @@ const itemsMenu = ref([
     icon: "mdi-file-document-multiple-outline",
     text: "Atualizar dados de termos e condições de uso do sistema.",
   },
+  {
+    to: "/admin/atendments",
+    icon: "mdi-headset",
+    text: "Acompanhar Atendimentos",
+  },
 ]);
 
 const handlClick = async (route: string) => {

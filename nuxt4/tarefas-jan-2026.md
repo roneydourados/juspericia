@@ -2,13 +2,21 @@
 
 # Nuvidio
 
-[] - Implementar as funcionalidades da nuvio para acompanhar fila de espera
-[] - Implementar as funcionalidades da nuvidio para acompanhar chamadas atendidas
-[] - Implementar as funcionalidades da nuvidio para acompanhar chamadas encerradas
-[] - Implementar as funcionalidades da nuvidio para acompanhar chamadas canceladas
-[] - Implementar as funcionalidades da nuvidio para acompanhar chamadas abandonadas
-[] - Implementar para acompanhar se o cliente saiu da fila
-[] - Implementar para ver questão da finalização do atendimento
+[x] - Implementar as funcionalidades da nuvio para acompanhar fila de espera
+[x] - Implementar as funcionalidades da nuvidio para acompanhar chamadas atendidas
+[x] - Implementar as funcionalidades da nuvidio para acompanhar chamadas encerradas
+[x] - Implementar as funcionalidades da nuvidio para acompanhar chamadas canceladas
+[x] - Implementar as funcionalidades da nuvidio para acompanhar chamadas abandonadas
+[x] - Implementar para acompanhar se o cliente saiu da fila
+[x] - Implementar para ver questão da finalização do atendimento
+
+# Interface
+
+[] - Implementar modo dark
+
+# Comissão
+
+[] - analisar e testar o porque anda gerando comissão com valor zerado
 
 # Solicitações
 
@@ -19,10 +27,6 @@
 [x] - possibilidade de lançar um crédito avulso através do usuário Admin
 [x] - Implementar validação que além de ser admin o usuário precisa ser master para lançar créditos avulsos
 
-# Interface
-
-[] - Implementar modo dark
-
 # NPS
 
 [x] - Finalizar ajustes do NPS, para avaliação de funcionalidade e qualidade do serviço em geral
@@ -31,7 +35,3 @@
 # Transações
 
 [x] - Implementar tela para mostrar detalhes do webhook nas transações de venda
-
-# Comissão
-
-[] - analisar e testar o porque anda gerando comissão com valor zerado

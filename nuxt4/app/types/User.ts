@@ -58,6 +58,7 @@ export interface NuvidioDepartmentProps {
   identifier: string;
   name: string;
   nuvidioId: string;
+  queueQuantity: number;
 }
 
 export interface UserProfileProps {

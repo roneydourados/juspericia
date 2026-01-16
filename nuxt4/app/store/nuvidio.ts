@@ -7,6 +7,12 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
   const nuvidioLinkInvite = ref<NuvidioInviteLinkResponse>();
   const $nuvidioLinkInvite = computed(() => nuvidioLinkInvite.value);
 
+  const nuvidioDepartments = ref<NuvidioDepartmentProps[]>([]);
+  const $nuvidioDepartments = computed(() => nuvidioDepartments.value);
+
+  const nuvidioWebhookEvents = ref<NuvidioWebhookRespProps[]>([]);
+  const $nuvidioWebhookEvents = computed(() => nuvidioWebhookEvents.value);
+
   const createAttendantDepartment = async (publicId: string) => {
     await api.post("/nuvidio/department", {
       publicId,
@@ -76,12 +82,53 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
     await api.delete(`/nuvidio/invite-link/${nuvidioId}`);
   };
 
+  const getNuvidioDepartments = async (inputQuery: string) => {
+    const config = {
+      params: {
+        inputQuery,
+      },
+    };
+    const { data } = await api.get<NuvidioDepartmentProps[]>(
+      "/nuvidio/webhook/departments",
+      config
+    );
+    nuvidioDepartments.value = data;
+  };
+
+  const getWebhookEventsLog = async (input: {
+    initialDate: string;
+    finalDate: string;
+    hookType?: string;
+    departmentId?: number;
+  }) => {
+    const { initialDate, finalDate, hookType, departmentId } = input;
+
+    const config = {
+      params: {
+        initialDate,
+        finalDate,
+        hookType,
+        departmentId,
+      },
+    };
+
+    const { data } = await api.get<NuvidioWebhookRespProps[]>(
+      "/nuvidio/webhook/events-log",
+      config
+    );
+
+    nuvidioWebhookEvents.value = data;
+  };
+
   return {
     $nuvidioLinkInvite,
+    $nuvidioDepartments,
+    $nuvidioWebhookEvents,
     createAttendantDepartment,
     createInviteTeleConference,
-    //getInviteLink,
     getRecordCall,
     deleteInviteLink,
+    getNuvidioDepartments,
+    getWebhookEventsLog,
   };
 });
