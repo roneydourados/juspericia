@@ -13,6 +13,11 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
   const nuvidioWebhookEvents = ref<NuvidioWebhookRespProps[]>([]);
   const $nuvidioWebhookEvents = computed(() => nuvidioWebhookEvents.value);
 
+  const nuvidioDepartmentDetails = ref<NuvidioDepartmentDetailsProps>();
+  const $nuvidioDepartmentDetails = computed(
+    () => nuvidioDepartmentDetails.value
+  );
+
   const createAttendantDepartment = async (publicId: string) => {
     await api.post("/nuvidio/department", {
       publicId,
@@ -120,15 +125,25 @@ export const useNuvidioStore = defineStore("nuvidio", () => {
     nuvidioWebhookEvents.value = data;
   };
 
+  const getDepartmentDetails = async (departmentId: number) => {
+    const { data } = await api.get<NuvidioDepartmentDetailsProps>(
+      `/nuvidio/webhook/departments/${departmentId}`
+    );
+
+    nuvidioDepartmentDetails.value = data;
+  };
+
   return {
     $nuvidioLinkInvite,
     $nuvidioDepartments,
     $nuvidioWebhookEvents,
+    $nuvidioDepartmentDetails,
     createAttendantDepartment,
     createInviteTeleConference,
     getRecordCall,
     deleteInviteLink,
     getNuvidioDepartments,
     getWebhookEventsLog,
+    getDepartmentDetails,
   };
 });

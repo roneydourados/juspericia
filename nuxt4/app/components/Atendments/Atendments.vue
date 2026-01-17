@@ -37,13 +37,18 @@
           <div class="d-flex flex-column mt-4" style="gap: 0.5rem">
             <span>
               <v-icon icon="mdi-stethoscope" start color="info" />
-
               {{ item.name }}
             </span>
             <div class="d-flex align-center">
               <v-icon icon="mdi-account" start color="info" />
               <span>
                 Fila espera: <strong>{{ item.queueQuantity ?? 0 }}</strong>
+              </span>
+            </div>
+            <div class="d-flex align-center">
+              <v-icon icon="mdi-headset" start color="green-darken-1" />
+              <span>
+                Atendendo: <strong>{{ item.callQuantity ?? 0 }}</strong>
               </span>
             </div>
           </div>
@@ -164,12 +169,7 @@ const handleGetNuvidioDepartments = async () => {
 const handleGetDetails = async (item: NuvidioDepartmentProps) => {
   loading.value = true;
   try {
-    await nuvidioStore.getWebhookEventsLog({
-      initialDate: filters.value.initialDate,
-      finalDate: filters.value.finalDate,
-      departmentId: item.id,
-      hookType: "new_client_waiting",
-    });
+    await nuvidioStore.getDepartmentDetails(item.id);
     showDetails.value = true;
     stopCountdown();
   } finally {

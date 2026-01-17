@@ -31,3 +31,8 @@ export interface NuvidioWebhookRespProps {
   nuvidioDepartment: NuvidioDepartmentProps;
   createdAt: string;
 }
+
+export interface NuvidioDepartmentDetailsProps {
+  clientQueue: NuvidioWebhookRespProps[];
+  clientInCall: NuvidioWebhookRespProps[];
+}
