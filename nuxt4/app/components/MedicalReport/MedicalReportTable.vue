@@ -134,12 +134,12 @@
               item.reportStatus === "empty"
                 ? "Sem laudo"
                 : item.reportStatus === "cancel"
-                ? "Cancelado"
-                : item.reportStatus === "sign-pending"
-                ? "Assinatura pendente"
-                : item.reportStatus === "signed"
-                ? "Assinado"
-                : "Desconhecido"
+                  ? "Cancelado"
+                  : item.reportStatus === "sign-pending"
+                    ? "Assinatura pendente"
+                    : item.reportStatus === "signed"
+                      ? "Assinado"
+                      : "Desconhecido"
             }}
           </strong>
         </v-chip>
@@ -430,6 +430,8 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
     //atualizar a lista de laudos após o envio
     await getReports();
   } catch (error) {
+    //atualizar a lista de laudos após o envio
+    await getReports();
     console.error("Erro ao enviar documento para ZapSign:", error);
     push.error("Erro ao enviar documento para ZapSign.");
   } finally {
@@ -438,7 +440,7 @@ const handleSignDocument = async (item: PatientConsultationReportListProps) => {
 };
 
 const handleDownloadSignedFile = async (
-  item: PatientConsultationReportListProps
+  item: PatientConsultationReportListProps,
 ) => {
   if (!item.reportPublicId) {
     push.error("Documento não assinado.");
@@ -448,7 +450,7 @@ const handleDownloadSignedFile = async (
   loading.value = true;
   try {
     const { fileBlob, fileName } = await zapSign.getSignedFile(
-      item.reportPublicId
+      item.reportPublicId,
     );
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
@@ -495,7 +497,7 @@ const getReports = async () => {
 };
 
 const handleReportDetails = async (
-  item: PatientConsultationReportListProps
+  item: PatientConsultationReportListProps,
 ) => {
   loading.value = true;
   try {
@@ -524,7 +526,7 @@ const handleCloseForm = async () => {
 };
 
 const handleEditCorrection = async (
-  item: PatientConsultationReportListProps
+  item: PatientConsultationReportListProps,
 ) => {
   loading.value = true;
   try {
@@ -606,7 +608,7 @@ const handleSetSignedCancel = async () => {
 };
 
 const handleReportCorrection = async (
-  item: PatientConsultationReportListProps
+  item: PatientConsultationReportListProps,
 ) => {
   loading.value = true;
   try {
@@ -620,7 +622,7 @@ const handleReportCorrection = async (
 const handleDownloadRecord = async (nuvidioCallId?: string) => {
   if (!nuvidioCallId) {
     push.warning(
-      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada."
+      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada.",
     );
     return;
   }
