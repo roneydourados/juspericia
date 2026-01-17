@@ -37,7 +37,7 @@
           <div class="d-flex flex-column mt-4" style="gap: 0.5rem">
             <span>
               <v-icon icon="mdi-stethoscope" start color="info" />
-              {{ item.name }}
+              <strong>{{ item.name }}</strong>
             </span>
             <div class="d-flex align-center">
               <v-icon icon="mdi-account" start color="info" />
