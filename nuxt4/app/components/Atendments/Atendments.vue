@@ -66,7 +66,7 @@ import dayjs from "dayjs";
 const nuvidioStore = useNuvidioStore();
 const router = useRouter();
 
-const countDownDefaultValue = 30;
+const countDownDefaultValue = 60;
 
 const autoRefreshInterval = ref<NodeJS.Timeout | null>(null);
 const countdown = ref(countDownDefaultValue);
