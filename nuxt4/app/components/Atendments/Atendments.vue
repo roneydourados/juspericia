@@ -57,7 +57,7 @@
     </v-col>
   </v-row>
   <DialogLoading :dialog="loading" />
-  <AtendmentsDetails v-model="showDetails" @close="startCountdown" />
+  <AtendmentsDetails v-model="showDetails" />
 </template>
 
 <script setup lang="ts">
@@ -171,9 +171,19 @@ const handleGetDetails = async (item: NuvidioDepartmentProps) => {
   try {
     await nuvidioStore.getDepartmentDetails(item.id);
     showDetails.value = true;
-    stopCountdown();
   } finally {
     loading.value = false;
   }
 };
+
+// Pause auto-refresh and countdown while details dialog is open
+watch(showDetails, (val) => {
+  if (val) {
+    stopAutoRefresh();
+    stopCountdown();
+  } else {
+    startAutoRefresh();
+    startCountdown();
+  }
+});
 </script>
