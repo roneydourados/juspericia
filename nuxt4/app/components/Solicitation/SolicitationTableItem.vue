@@ -416,11 +416,11 @@
               solicitation.status === 'finished'
             "
             variant="outlined"
-            color="red"
+            color="error"
             @click="handleRevertSolicitation(solicitation)"
             block
           >
-            <v-icon icon="mdi-close" start />
+            <v-icon icon="mdi-arrow-u-left-top" start />
             <span class="text-caption"> Estornar solicitação </span>
           </Button>
         </v-col>
