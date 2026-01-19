@@ -6,7 +6,12 @@
       @update:drawer="drawer = $event"
     />
 
-    <v-app-bar elevation="0" class="toolbar-color" border="0">
+    <v-app-bar
+      elevation="0"
+      :class="`${$currentTheme === 'mainThemeDark' ? '' : 'toolbar-color'}`"
+      :color="`${$currentTheme === 'mainThemeDark' ? 'bgcolor' : ''}`"
+      border="0"
+    >
       <template #title>
         <v-app-bar-nav-icon
           v-if="mobile"
@@ -72,7 +77,7 @@
             {{ $currentUser?.profile?.profileName }}
           </span>
         </div>
-        <!-- <v-btn
+        <v-btn
           icon
           @click="themeStore.toggleTheme"
           :aria-label="
@@ -82,7 +87,7 @@
           <v-icon color="white">
             {{ themeStore.$isDark ? "mdi-weather-sunny" : "mdi-weather-night" }}
           </v-icon>
-        </v-btn> -->
+        </v-btn>
 
         <div
           :class="
@@ -277,6 +282,7 @@ const selectedNps = ref<NPSProps>();
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
 const $npsPending = computed(() => npsStore.$npsList);
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 onMounted(async () => {
   if ($currentUser.value?.profile?.type === "ADVOGADO") {

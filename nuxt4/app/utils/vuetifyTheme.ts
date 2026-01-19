@@ -17,6 +17,7 @@ export const MainThemeColors = {
   colorIcon: "#C7D82F",
   greenLime: "#c8e040",
   darkText: "#1A1E4E",
+  colorTextPrimary: "#002c9b",
 };
 
 const MainDarkThemeColors = {
@@ -38,6 +39,7 @@ const MainDarkThemeColors = {
   colorIcon: "#C7D82F",
   greenLime: "#c8e040",
   darkText: "#505df0",
+  colorTextPrimary: "#FFFFFF",
 };
 
 export const MAIN_THEME = "mainTheme";

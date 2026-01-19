@@ -3,7 +3,8 @@
     v-model="changeDrawer"
     @update:model-value="$emit('update:drawer', changeDrawer)"
     :width="mobile ? '' : '350'"
-    class="drawer-color"
+    :class="`${$currentTheme === 'mainThemeDark' ? '' : 'drawer-color'}`"
+    :color="$currentTheme === 'mainThemeDark' ? 'bgcolor' : ''"
     border="0"
   >
     <template v-slot:prepend>
@@ -69,11 +70,13 @@ const props = defineProps({
 
 const auth = useAuthStore();
 const route = useRouter();
-
+const themeStore = useThemeStore();
 const emit = defineEmits(["update:drawer"]);
 
 const changeDrawer = ref(props.drawer);
 const loading = ref(false);
+
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 watchEffect(() => {
   changeDrawer.value = props.drawer;
