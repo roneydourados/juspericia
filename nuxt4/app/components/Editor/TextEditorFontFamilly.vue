@@ -1,12 +1,10 @@
 <template>
-  <v-autocomplete
+  <AutoCompleteInput
     label="Fonte"
     :items="fontFamilyList"
     v-model="fontFamily"
     item-title="title"
     item-value="value"
-    variant="solo"
-    density="compact"
     rounded="xl"
     style="max-width: 20%"
     class="mt-n1"

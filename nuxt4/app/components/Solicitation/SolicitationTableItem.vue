@@ -357,7 +357,10 @@
         >
           <div
             class="pa-2 px-4 d-flex align-center justify-space-between w-100"
-            style="background-color: #eeee; border-radius: 2rem"
+            style="
+              background-color: rgb(var(--v-theme-background)) !important;
+              border-radius: 2rem;
+            "
           >
             <span class="text-colorTextPrimary">Total:</span>
             <span
@@ -386,7 +389,11 @@
               $currentUser?.profile?.type !== 'ADVOGADO'
             "
             variant="outlined"
-            color="grey-darken-3"
+            :color="
+              $currentTheme === 'mainThemeDark'
+                ? 'grey-lighten-3'
+                : 'grey-darken-3'
+            "
             @click="handleShowCriticism(solicitation)"
             block
           >
@@ -749,7 +756,8 @@ const systemParameters = useSystemParametersStore();
 const criticismStore = usePatientConsultationCriticismStore();
 const saltCredit = useUserCreditSaltStore();
 
-const { mobile } = useDisplay();
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 // const transactionsStore = useTransactionsStore();
 

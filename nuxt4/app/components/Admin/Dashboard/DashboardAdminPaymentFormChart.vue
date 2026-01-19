@@ -20,13 +20,20 @@
 const dash = useUserAdminStore();
 const $dash = computed(() => dash.$dashboard);
 
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
+
 const chartData = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
   return {
     series: $dash.value?.salesPaymentForm.map((item) => Number(item.total)),
     chartOptions: {
       chart: {
         height: "480",
         type: "pie",
+        background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+        foreColor: isDark ? "#d4d4d4" : "#373d3f",
       },
       theme: {
         palette: "palette1",

@@ -13,23 +13,25 @@
 
 <script setup lang="ts">
 const userLawyer = useUserLawyerStore();
-const storeTheme = useThemeStore();
 
 const $estatistics = computed(
-  () => userLawyer.$estatisticsByAdmin?.laywerSolicitationsReportPropurse
+  () => userLawyer.$estatisticsByAdmin?.laywerSolicitationsReportPropurse,
 );
 
-const $currentTheme = computed(() => {
-  return storeTheme.$theme;
-});
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 const chartConfig = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
   return {
     series: $estatistics.value?.map((propurse) => propurse.quantity),
     chartOptions: {
       chart: {
         type: "pie",
         height: "400",
+        background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+        foreColor: isDark ? "#d4d4d4" : "#373d3f",
       },
       theme: {
         palette: "palette1",
@@ -48,7 +50,7 @@ const chartConfig = computed(() => {
       legend: {
         labels: {
           colors: $estatistics.value?.map(() => {
-            return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+            return isDark ? "#fff" : "";
           }),
         },
         show: true,

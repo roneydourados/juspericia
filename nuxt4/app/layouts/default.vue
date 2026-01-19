@@ -272,7 +272,6 @@ const config = useRuntimeConfig();
 const router = useRouter();
 const auth = useAuthStore();
 const npsStore = useNpsStore();
-const themeStore = useThemeStore();
 //const { getInitials } = useUtils();
 
 const drawer = ref(true);
@@ -284,6 +283,8 @@ const selectedNps = ref<NPSProps>();
 const $currentUser = computed(() => auth.$currentUser);
 const $version = computed(() => config.public.version);
 const $npsPending = computed(() => npsStore.$npsList);
+
+const themeStore = useThemeStore();
 const $currentTheme = computed(() => themeStore.$currentTheme);
 
 onMounted(async () => {

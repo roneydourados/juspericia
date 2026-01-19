@@ -18,8 +18,7 @@
                 v-for="(item, i) in itemsList"
                 :key="i"
                 :value="item.title"
-                :class="{ 'selected-item': selectedItem === item.title }"
-                color="primary"
+                active-class="item-menu"
               >
                 <template v-slot:prepend>
                   <v-icon :icon="item.icon"></v-icon>
@@ -138,7 +137,7 @@ watch(
       loadModel();
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const handleMenuClick = (event: any) => {
@@ -176,9 +175,9 @@ const handleUpdate = async () => {
 </script>
 
 <style scoped>
-.selected-item {
-  background-color: rgb(var(--v-theme-backMenu)) !important;
-  color: rgb(var(--v-theme-itemInternalMenu)) !important;
+.item-menu {
+  background-color: rgb(var(--v-theme-primary)) !important;
+  color: rgb(var(--v-theme-itemMenu)) !important;
 }
 
 .v-list,

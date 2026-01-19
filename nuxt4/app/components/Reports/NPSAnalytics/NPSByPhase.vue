@@ -54,6 +54,9 @@ const props = defineProps<{
   byPhase: PhaseData[];
 }>();
 
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
+
 const chartSeries = computed(() => [
   {
     name: "NPS Score",
@@ -65,43 +68,49 @@ const chartSeries = computed(() => [
   },
 ]);
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: "line",
-    toolbar: {
-      show: false,
-    },
-  },
-  stroke: {
-    width: [3, 3],
-    curve: "smooth",
-  },
-  colors: ["#2196f3", "#ff9800"],
-  xaxis: {
-    categories: props.byPhase.map((p) => `Fase ${p.phase}`),
-    labels: {
-      style: {
-        fontSize: "12px",
+const chartOptions = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
+  return {
+    chart: {
+      type: "line",
+      background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+      foreColor: isDark ? "#d4d4d4" : "#373d3f",
+      toolbar: {
+        show: false,
       },
     },
-  },
-  yaxis: {
-    title: {
-      text: "Score",
+    stroke: {
+      width: [3, 3],
+      curve: "smooth",
     },
-    min: 0,
-    max: 100,
-  },
-  legend: {
-    position: "top",
-  },
-  tooltip: {
-    y: {
-      formatter: (value: number, { seriesIndex }: any) => {
-        if (seriesIndex === 0) return `${value}`;
-        return `${(value / 20).toFixed(1)}`;
+    colors: ["#2196f3", "#ff9800"],
+    xaxis: {
+      categories: props.byPhase.map((p) => `Fase ${p.phase}`),
+      labels: {
+        style: {
+          fontSize: "12px",
+        },
       },
     },
-  },
-}));
+    yaxis: {
+      title: {
+        text: "Score",
+      },
+      min: 0,
+      max: 100,
+    },
+    legend: {
+      position: "top",
+    },
+    tooltip: {
+      y: {
+        formatter: (value: number, { seriesIndex }: any) => {
+          if (seriesIndex === 0) return `${value}`;
+          return `${(value / 20).toFixed(1)}`;
+        },
+      },
+    },
+  };
+});
 </script>

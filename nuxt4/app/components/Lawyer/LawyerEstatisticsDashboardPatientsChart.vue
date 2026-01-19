@@ -13,27 +13,28 @@
 
 <script setup lang="ts">
 const userLawyer = useUserLawyerStore();
-const storeTheme = useThemeStore();
 
 const $estatistics = computed(() => userLawyer.$estatistics);
-
-const $currentTheme = computed(() => {
-  return storeTheme.$theme;
-});
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 const chartConfig = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
   return {
     series: [
       {
         name: "Pacientes cadastrados",
         data: $estatistics.value?.laywerPatientsRegistered.map(
-          (patient) => patient.quantity
+          (patient) => patient.quantity,
         ),
       },
     ],
     chartOptions: {
       chart: {
         type: "area",
+        background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+        foreColor: isDark ? "#d4d4d4" : "#373d3f",
         height: 350,
         zoom: {
           enabled: false,
@@ -62,7 +63,7 @@ const chartConfig = computed(() => {
       // },
 
       labels: $estatistics.value?.laywerPatientsRegistered.map(
-        (patient) => patient.month
+        (patient) => patient.month,
       ),
       xaxis: {
         type: "",
@@ -85,7 +86,7 @@ const chartConfig = computed(() => {
 
           style: {
             colors: $estatistics.value?.laywerPatientsRegistered.map(() => {
-              return $currentTheme.value === MAIN_THEME_DARK ? "#fff" : "";
+              return isDark ? "#fff" : "";
             }),
           },
         },
@@ -95,7 +96,7 @@ const chartConfig = computed(() => {
       },
       tooltip: {
         show: true,
-        theme: $currentTheme.value === MAIN_THEME_DARK ? "dark" : "light",
+        theme: "dark",
         style: {
           fontSize: "16px",
         },

@@ -22,7 +22,7 @@
                 v-for="(item, i) in itemsList"
                 :key="i"
                 :value="item.title"
-                :class="{ 'selected-item': selectedItem === item.title }"
+                active-class="item-menu"
                 color="transparent"
               >
                 <template v-slot:prepend>
@@ -217,13 +217,13 @@ const handleUpdate = async () => {
 </script>
 
 <style scoped>
-.selected-item {
-  background-color: rgb(var(--v-theme-backMenu)) !important;
-  color: rgb(var(--v-theme-itemInternalMenu)) !important;
-}
-
 .v-list,
 .v-list-item {
   background: transparent !important;
+}
+
+.item-menu {
+  background-color: rgb(var(--v-theme-primary)) !important;
+  color: rgb(var(--v-theme-itemMenu)) !important;
 }
 </style>

@@ -20,15 +20,22 @@
 const dash = useUserAdminStore();
 const $dash = computed(() => dash.$dashboard);
 
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
+
 const chartData = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
   return {
     series: $dash.value?.solicitationConsultationStatus.map((item) =>
-      Number(item.quantity)
+      Number(item.quantity),
     ),
     chartOptions: {
       chart: {
         height: "480",
         type: "pie",
+        background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+        foreColor: isDark ? "#d4d4d4" : "#373d3f",
       },
       // theme: {
       //   palette: "palette4",
@@ -45,7 +52,7 @@ const chartData = computed(() => {
         "#546E7A",
       ],
       labels: $dash.value?.solicitationConsultationStatus.map(
-        (item) => item.status
+        (item) => item.status,
       ),
       plotOptions: {
         pie: {

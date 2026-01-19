@@ -1,5 +1,5 @@
 <template>
-  <v-card flat color="transparent">
+  <v-card flat color="bgcolor">
     <v-card-text class="pa-4">
       <FormCrud :show-submit-button="false" :on-submit="handleSubmit">
         <div
@@ -32,7 +32,7 @@
         </div>
         <v-row>
           <v-col cols="12" lg="4">
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" height="100%" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">Pontos por indicação</div>
                 <v-divider class="mt-2"></v-divider>
@@ -84,53 +84,8 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <!-- <v-col cols="12" lg="4">
-            <v-card rounded="xl" height="100%" variant="flat">
-              <v-card-title>
-                <div class="font-weight-bold">
-                  Prazo em dias para expirar créditos
-                </div>
-                <v-divider class="mt-2"></v-divider>
-              </v-card-title>
-              <v-card-text class="py-4">
-                <IntegerInput
-                  label="Crédito expira em dias"
-                  v-model="form.daysCreditExpire"
-                />
-                <div>
-                  Os créditos que os advogados adquirir pela plataforma vão
-                  expirar em
-                  <strong>{{ form.daysCreditExpire }} dias</strong>
-                </div>
-                <div class="font-weight-bold mt-8">
-                  Horário geral de atendimento dos médicos
-                </div>
-                <v-divider class="mt-2"></v-divider>
-                <div class="d-flex flex-column align-center px-12">
-                  <div
-                    class="d-flex flex-wrap align-center mt-4 w-100"
-                    style="gap: 0.5rem"
-                  >
-                    <TimeInput
-                      label="Início"
-                      v-model="form.hourInitial"
-                      required
-                    />
-                    <TimeInput label="Fim" v-model="form.hourFinal" required />
-                  </div>
-                  <div class="w-100">
-                    <IntegerInput
-                      label="Intervalo entre consultas (minutos)"
-                      v-model="form.medicQueryInterval"
-                      required
-                    />
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col> -->
           <v-col cols="12" lg="4">
-            <v-card rounded="xl" variant="flat">
+            <v-card rounded="xl" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">Whatsapp do suporte</div>
                 <v-divider class="mt-2"></v-divider>
@@ -150,7 +105,7 @@
                 </div>
               </v-card-text>
             </v-card>
-            <v-card rounded="xl" variant="flat">
+            <v-card rounded="xl" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">
                   Limites para solicitar revisão de laudo
@@ -181,7 +136,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4">
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" height="100%" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">Parametrizações de voucher</div>
                 <v-divider class="mt-2"></v-divider>
@@ -241,7 +196,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4" class="d-flex flex-column">
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" height="100%" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">Taxas de antecipações</div>
                 <v-divider class="mt-2"></v-divider>
@@ -260,7 +215,7 @@
                 </div>
               </v-card-text>
             </v-card>
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" height="100%" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">%Saldo mínimo de crédito</div>
                 <v-divider class="mt-2"></v-divider>
@@ -283,7 +238,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4" class="d-flex flex-column">
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" height="100%" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">Especialidade padrão</div>
                 <v-divider class="mt-2"></v-divider>
@@ -304,7 +259,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" lg="4">
-            <v-card rounded="xl" height="100%" variant="flat">
+            <v-card rounded="xl" height="100%" variant="flat" color="bgcolor">
               <v-card-title>
                 <div class="font-weight-bold">Token de integração com CRM</div>
                 <v-divider class="mt-2"></v-divider>
@@ -322,7 +277,7 @@
                       >Expira em:
                       {{
                         dayjs(form.crmTokenExpiration).format(
-                          "DD/MM/YYYY HH:mm:ss"
+                          "DD/MM/YYYY HH:mm:ss",
                         )
                       }}</strong
                     >
@@ -390,7 +345,7 @@ watch(
         pointsExchange: newData.pointsExchange?.toString() ?? "",
         pointsExchangeValue: amountFormated(
           Number(newData.pointsExchangeValue ?? 0),
-          false
+          false,
         ),
         daysPointsExpire: newData.daysPointsExpire?.toString() ?? "",
         comission: amountFormated(newData.comission ?? 0, false),
@@ -401,25 +356,25 @@ watch(
         medicQueryInterval: newData.medicQueryInterval?.toString() ?? "",
         voucherMaxDiscountPercentage: amountFormated(
           newData.voucherMaxDiscountPercentage ?? 0,
-          false
+          false,
         ),
         voucherMaxDiscountValue: amountFormated(
           newData.voucherMaxDiscountValue ?? 0,
-          false
+          false,
         ),
         voucherMaxQuantityUse: newData.voucherMaxQuantityUse?.toString() ?? "",
         voucherMaxQuantityDays:
           newData.voucherMaxQuantityDays?.toString() ?? "",
         cardFeeInstallment: amountFormated(
           newData.cardFeeInstallment ?? 0,
-          false
+          false,
         ),
         crmTokenName: newData.crmTokenName ?? "",
         crmToken: newData.crmToken ?? "",
         crmTokenExpiration: newData.crmTokenExpiration ?? "",
         minValueSaltCredits: amountFormated(
           newData.minValueSaltCredits ?? 0,
-          false
+          false,
         ),
         medicalSpecialty: newData.medicalSpecialty,
         medicalReportRevisionMaxCount:
@@ -430,7 +385,7 @@ watch(
       };
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const handleSubmit = async () => {
@@ -447,10 +402,10 @@ const handleSubmit = async () => {
       daysCreditExpire: Number(form.value.daysCreditExpire ?? "0"),
       medicQueryInterval: Number(form.value.medicQueryInterval ?? "15"),
       voucherMaxDiscountPercentage: Number(
-        form.value.voucherMaxDiscountPercentage ?? "0"
+        form.value.voucherMaxDiscountPercentage ?? "0",
       ),
       voucherMaxDiscountValue: Number(
-        form.value.voucherMaxDiscountValue ?? "0"
+        form.value.voucherMaxDiscountValue ?? "0",
       ),
       voucherMaxQuantityUse: Number(form.value.voucherMaxQuantityUse ?? "0"),
       voucherMaxQuantityDays: Number(form.value.voucherMaxQuantityDays ?? "0"),
@@ -461,10 +416,10 @@ const handleSubmit = async () => {
       minValueSaltCredits: Number(form.value.minValueSaltCredits ?? "0"),
       medicalSpecialtyIdDefault: form.value.medicalSpecialty?.id,
       medicalReportRevisionMaxCount: Number(
-        form.value.medicalReportRevisionMaxCount ?? "1"
+        form.value.medicalReportRevisionMaxCount ?? "1",
       ),
       medicalReportRevisionMaxDays: Number(
-        form.value.medicalReportRevisionMaxDays ?? "7"
+        form.value.medicalReportRevisionMaxDays ?? "7",
       ),
       daysLawyerSchedule: Number(form.value.daysLawyerSchedule ?? "4"),
     });

@@ -87,7 +87,7 @@
       </v-row>
     </template>
     <template v-slot:item.client="{ item }">
-      <v-expansion-panels flat>
+      <v-expansion-panels flat color="background">
         <v-expansion-panel>
           <v-expansion-panel-title>
             <v-row dense>
@@ -142,7 +142,9 @@
               </v-col>
             </v-row>
           </v-expansion-panel-title>
-          <v-expansion-panel-text>
+          <v-expansion-panel-text
+            style="background-color: rgb(var(--v-theme-background)) !important"
+          >
             <v-row dense>
               <v-col
                 cols="12"

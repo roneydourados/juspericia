@@ -35,46 +35,38 @@
         </Button>
       </v-col>
       <v-col v-for="report in $all" cols="12" lg="3" :key="report.id">
-        <CardBlur>
-          <template #content>
+        <CardBlur height="100%">
+          <v-card-text>
             <v-row class="text-colorTextPrimary pa-6">
               <v-col cols="12" style="gap: 0.2rem">
                 <strong>
                   {{ report.title }}
                 </strong>
-                <!-- <div class="d-flex align-center w-100" style="gap: 0.5rem">
-                  <strong>Modelo:</strong>
-                  <span>
-                    {{ report.title }}
-                  </span>
-                </div> -->
               </v-col>
             </v-row>
-          </template>
-          <template #actions>
-            <div class="d-flex justify-center w-100" style="gap: 0.5rem">
-              <Button
-                color="grey"
-                class="text-none"
-                variant="outlined"
-                size="small"
-                @click="editItem(report)"
-              >
-                <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
-                <span class="text-colorTextPrimary text-caption"> Editar </span>
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                color="grey"
-                class="text-none"
-                @click="deleteItem(report)"
-              >
-                <v-icon icon="mdi-delete-outline" start color="red" />
-                <span class="text-colorTextPrimary text-caption"> Apagar </span>
-              </Button>
-            </div>
-          </template>
+          </v-card-text>
+          <v-card-actions class="d-flex justify-end" style="gap: 0.5rem">
+            <Button
+              color="grey"
+              class="text-none"
+              variant="outlined"
+              size="small"
+              @click="editItem(report)"
+            >
+              <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
+              <span class="text-colorTextPrimary text-caption"> Editar </span>
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              color="grey"
+              class="text-none"
+              @click="deleteItem(report)"
+            >
+              <v-icon icon="mdi-delete-outline" start color="red" />
+              <span class="text-colorTextPrimary text-caption"> Apagar </span>
+            </Button>
+          </v-card-actions>
         </CardBlur>
       </v-col>
     </v-row>

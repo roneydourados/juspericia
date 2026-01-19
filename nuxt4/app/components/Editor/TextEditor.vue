@@ -11,7 +11,7 @@
           icon
           @click="editor.chain().focus().toggleBold().run()"
           :disabled="!editor.can().chain().focus().toggleBold().run()"
-          :color="editor.isActive('bold') ? '' : 'primary'"
+          :color="`${editor.isActive('bold') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-bold" size="15" />
           <v-tooltip
@@ -28,7 +28,7 @@
           icon
           @click="editor.chain().focus().toggleItalic().run()"
           :disabled="!editor.can().chain().focus().toggleItalic().run()"
-          :color="editor.isActive('italic') ? '' : 'primary'"
+          :color="`${editor.isActive('italic') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-italic" size="15" />
           <v-tooltip
@@ -44,7 +44,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().setTextAlign('left').run()"
-          :color="editor.isActive({ textAlign: 'left' }) ? '' : 'primary'"
+          :color="`${editor.isActive('left') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-align-left" size="16" />
           <v-tooltip
@@ -60,7 +60,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().setTextAlign('right').run()"
-          :color="editor.isActive({ textAlign: 'right' }) ? '' : 'primary'"
+          :color="`${editor.isActive('right') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-align-right" size="16" />
           <v-tooltip
@@ -76,7 +76,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().setTextAlign('center').run()"
-          :color="editor.isActive({ textAlign: 'center' }) ? '' : 'primary'"
+          :color="`${editor.isActive('center') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-align-center" size="16" />
           <v-tooltip
@@ -92,7 +92,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().setTextAlign('justify').run()"
-          :color="editor.isActive({ textAlign: 'justify' }) ? '' : 'primary'"
+          :color="`${editor.isActive('justify') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-align-justify" size="16" />
           <v-tooltip
@@ -108,7 +108,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().setParagraph().run()"
-          :color="editor.isActive('paragraph') ? '' : 'primary'"
+          :color="`${editor.isActive('paragraph') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-paragraph" size="15" />
           <v-tooltip
@@ -124,7 +124,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-          :color="editor.isActive('heading', { level: 1 }) ? '' : 'primary'"
+          :color="`${editor.isActive('heading', { level: 1 }) ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-header-1" size="15" />
           <v-tooltip
@@ -140,7 +140,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-          :color="editor.isActive('heading', { level: 2 }) ? '' : 'primary'"
+          :color="`${editor.isActive('heading', { level: 2 }) ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-header-2" size="15" />
           <v-tooltip
@@ -156,7 +156,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-          :color="editor.isActive('heading', { level: 3 }) ? '' : 'primary'"
+          :color="`${editor.isActive('heading', { level: 3 }) ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-header-3" size="15" />
           <v-tooltip
@@ -172,7 +172,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
-          :color="editor.isActive('heading', { level: 4 }) ? '' : 'primary'"
+          :color="`${editor.isActive('heading', { level: 4 }) ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-header-4" size="15" />
           <v-tooltip
@@ -188,7 +188,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
-          :color="editor.isActive('heading', { level: 5 }) ? '' : 'primary'"
+          :color="`${editor.isActive('heading', { level: 5 }) ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-header-5" size="15" />
           <v-tooltip
@@ -204,7 +204,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
-          :color="editor.isActive('heading', { level: 6 }) ? '' : 'primary'"
+          :color="`${editor.isActive('heading', { level: 6 }) ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-format-header-6" size="15" />
           <v-tooltip
@@ -220,7 +220,7 @@
           size="x-small"
           icon
           @click="editor.chain().focus().toggleCodeBlock().run()"
-          :color="editor.isActive('codeBlock') ? '' : 'primary'"
+          :color="`${editor.isActive('codeBlock') ? 'darkText' : $currentTheme === 'mainThemeDark' ? 'white' : 'primary'}`"
         >
           <v-icon icon="mdi-code-block-parentheses" size="15" />
           <v-tooltip

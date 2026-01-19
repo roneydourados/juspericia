@@ -19,6 +19,9 @@ const props = defineProps<{
   ratingDistribution: Record<string, number>;
 }>();
 
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
+
 const chartSeries = computed(() => [
   {
     name: "Avaliações",
@@ -32,51 +35,56 @@ const chartSeries = computed(() => [
   },
 ]);
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: "bar",
-    toolbar: {
-      show: false,
-    },
-  },
-  plotOptions: {
-    bar: {
-      borderRadius: 8,
-      distributed: true,
-      horizontal: false,
-      columnWidth: "60%",
-    },
-  },
-  colors: ["#f44336", "#ff9800", "#ffc107", "#4caf50", "#2e7d32"],
-  dataLabels: {
-    enabled: true,
-  },
-  xaxis: {
-    categories: [
-      "1 Estrela",
-      "2 Estrelas",
-      "3 Estrelas",
-      "4 Estrelas",
-      "5 Estrelas",
-    ],
-    labels: {
-      style: {
-        fontSize: "12px",
+const chartOptions = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+  return {
+    chart: {
+      type: "bar",
+      background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+      foreColor: isDark ? "#d4d4d4" : "#373d3f",
+      toolbar: {
+        show: false,
       },
     },
-  },
-  yaxis: {
-    title: {
-      text: "Quantidade",
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        distributed: true,
+        horizontal: false,
+        columnWidth: "60%",
+      },
     },
-  },
-  legend: {
-    show: false,
-  },
-  tooltip: {
-    y: {
-      formatter: (value: number) => `${value} avaliações`,
+    colors: ["#f44336", "#ff9800", "#ffc107", "#4caf50", "#2e7d32"],
+    dataLabels: {
+      enabled: true,
     },
-  },
-}));
+    xaxis: {
+      categories: [
+        "1 Estrela",
+        "2 Estrelas",
+        "3 Estrelas",
+        "4 Estrelas",
+        "5 Estrelas",
+      ],
+      labels: {
+        style: {
+          fontSize: "12px",
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Quantidade",
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      y: {
+        formatter: (value: number) => `${value} avaliações`,
+      },
+    },
+  };
+});
 </script>

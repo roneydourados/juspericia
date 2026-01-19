@@ -95,7 +95,7 @@ watch(
     if (value && props.item) {
       await filterData();
     }
-  }
+  },
 );
 
 const handleClose = () => {

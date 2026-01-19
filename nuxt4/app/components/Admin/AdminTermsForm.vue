@@ -19,7 +19,11 @@
             />
           </v-col>
           <v-col cols="12" lg="6" class="d-flex justify-end">
-            <Button @click="handleSubmit" variant="outlined">
+            <Button
+              @click="handleSubmit"
+              variant="outlined"
+              :color="$currentTheme === 'mainThemeDark' ? 'white' : 'primary'"
+            >
               <v-icon icon="mdi-check" start color="colorIcon" />
               Salvar
             </Button>
@@ -63,6 +67,9 @@ const termsStore = useTermsStore();
 
 const $single = computed(() => termsStore.$single);
 
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
+
 const show = defineModel("show", {
   default: false,
 });
@@ -103,7 +110,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 
 const handleSubmit = async () => {

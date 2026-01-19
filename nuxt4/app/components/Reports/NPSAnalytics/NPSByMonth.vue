@@ -26,6 +26,9 @@ const props = defineProps<{
   byMonth: MonthData[];
 }>();
 
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
+
 const formatMonth = (monthStr: string) => {
   const [year, month] = monthStr.split("-");
   const months = [
@@ -56,71 +59,77 @@ const chartSeries = computed(() => [
   },
 ]);
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: "area",
-    toolbar: {
-      show: true,
-      tools: {
-        download: true,
-        selection: false,
-        zoom: false,
-        zoomin: false,
-        zoomout: false,
-        pan: false,
-        reset: false,
+const chartOptions = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
+  return {
+    chart: {
+      type: "area",
+      background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+      foreColor: isDark ? "#d4d4d4" : "#373d3f",
+      toolbar: {
+        show: true,
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+        },
       },
     },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    curve: "smooth",
-    width: 2,
-  },
-  fill: {
-    type: "gradient",
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.7,
-      opacityTo: 0.2,
-      stops: [0, 90, 100],
+    dataLabels: {
+      enabled: false,
     },
-  },
-  colors: ["#2196f3", "#4caf50"],
-  xaxis: {
-    categories: props.byMonth.map((m) => formatMonth(m.month)),
-    labels: {
-      style: {
-        fontSize: "12px",
+    stroke: {
+      curve: "smooth",
+      width: 2,
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.2,
+        stops: [0, 90, 100],
       },
     },
-  },
-  yaxis: [
-    {
-      title: {
-        text: "NPS Score",
-      },
-      min: 0,
-      max: 100,
-    },
-    {
-      opposite: true,
-      title: {
-        text: "Avaliações",
+    colors: ["#2196f3", "#4caf50"],
+    xaxis: {
+      categories: props.byMonth.map((m) => formatMonth(m.month)),
+      labels: {
+        style: {
+          fontSize: "12px",
+        },
       },
     },
-  ],
-  legend: {
-    position: "top",
-  },
-  tooltip: {
-    shared: true,
-    intersect: false,
-    y: {
-      formatter: (value: number) => `${value}`,
+    yaxis: [
+      {
+        title: {
+          text: "NPS Score",
+        },
+        min: 0,
+        max: 100,
+      },
+      {
+        opposite: true,
+        title: {
+          text: "Avaliações",
+        },
+      },
+    ],
+    legend: {
+      position: "top",
     },
-  },
-}));
+    tooltip: {
+      shared: true,
+      intersect: false,
+      y: {
+        formatter: (value: number) => `${value}`,
+      },
+    },
+  };
+});
 </script>

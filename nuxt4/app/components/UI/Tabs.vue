@@ -66,10 +66,10 @@ const tab = defineModel<Number>();
 
 <style scoped>
 .v-tab {
-  color: #1e3c98 !important;
+  color: rgb(var(--v-theme-colorTextPrimary)) !important;
   font-weight: 800;
   margin-right: 0.5rem;
-  background-color: #f7f7f7 !important;
+  background-color: rgb(var(--v-theme-tabbgcolor)) !important;
   border-radius: 2.5rem !important;
 
   height: 2.25rem !important;
@@ -81,12 +81,12 @@ const tab = defineModel<Number>();
 }
 
 .v-tab--selected {
-  background-color: #1e3c98 !important;
+  background-color: rgb(var(--v-theme-primary)) !important;
   border-radius: 2.5rem !important;
 }
 
 .v-tab.v-tab--selected {
-  background-color: #1e3c98 !important;
+  background-color: rgb(var(--v-theme-primary)) !important;
   color: #fff !important;
 }
 

@@ -30,26 +30,11 @@
         </div>
       </CardLeftBorderColor>
     </v-col>
-    <!-- <v-col cols="12" lg="3">
-      <DashboardCard
-        title="Pendente"
-        icon="mdi-currency-usd"
-        :value="amountFormated($dash?.totalPending ?? 0, false)"
-        icon-color="warning"
-        elevation="4"
-      />
-    </v-col>
     <v-col cols="12" lg="3">
-      <DashboardCard
-        title="Recebido"
-        icon="mdi-currency-usd"
-        :value="amountFormated($dash?.totalConfirmed ?? 0, false)"
-        icon-color="success"
-        elevation="4"
-      />
-    </v-col> -->
-    <v-col cols="12" lg="3">
-      <CardLeftBorderColor title="Novos Clientes" color="#FFF">
+      <CardLeftBorderColor
+        title="Novos Clientes"
+        :color="`rgb(var(--v-theme-tabbgcolor))`"
+      >
         <div
           class="text-colorTextPrimary"
           style="font-size: 1.88rem; font-weight: 600"
@@ -61,7 +46,7 @@
     <v-col cols="12" lg="3">
       <CardLeftBorderColor
         title="Total de Clientes"
-        color="#FFF"
+        :color="`rgb(var(--v-theme-tabbgcolor))`"
         icon="mdi-account-group-outline"
       >
         <div
@@ -75,7 +60,7 @@
     <v-col cols="12" lg="3">
       <CardLeftBorderColor
         title="Qtde Pacotes a vencer"
-        color="#FFF"
+        :color="`rgb(var(--v-theme-tabbgcolor))`"
         icon="mdi-package-variant"
       >
         <div
@@ -89,7 +74,7 @@
     <v-col cols="12" lg="3">
       <CardLeftBorderColor
         title="40 dias última consulta"
-        color="#FFF"
+        :color="`rgb(var(--v-theme-tabbgcolor))`"
         icon="mdi-calendar-month"
       >
         <div

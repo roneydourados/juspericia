@@ -153,7 +153,7 @@
       </v-row>
     </template>
     <template v-slot:item.user="{ item }">
-      <v-expansion-panels flat>
+      <v-expansion-panels flat color="bgcolor">
         <v-expansion-panel>
           <v-expansion-panel-title>
             <v-row dense>
@@ -200,7 +200,12 @@
               </v-col>
             </v-row>
           </v-expansion-panel-title>
-          <v-expansion-panel-text>
+          <v-expansion-panel-text
+            style="
+              background-color: rgb(var(--v-theme-bgcolor)) !important;
+              color: rgb(var(--v-theme-colorTextPrimary)) !important;
+            "
+          >
             <v-row dense>
               <v-col cols="12" lg="3">
                 <div class="font-weight-bold">Data pagamento:</div>

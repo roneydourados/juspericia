@@ -32,12 +32,16 @@ const { amountFormated } = useUtils();
 const dash = useUserAdminStore();
 
 const $dash = computed(() => dash.$dashboard);
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 const currentYear = defineModel({
   default: dayjs().year(),
 });
 
 const chartData = computed(() => {
+  const isDark = $currentTheme.value === "mainThemeDark";
+
   return {
     series: [
       {
@@ -49,6 +53,8 @@ const chartData = computed(() => {
       chart: {
         height: 350,
         type: "bar",
+        background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
+        foreColor: isDark ? "#d4d4d4" : "#373d3f",
       },
       plotOptions: {
         bar: {
@@ -66,7 +72,7 @@ const chartData = computed(() => {
         offsetY: -20,
         style: {
           fontSize: "12px",
-          colors: ["#304758"],
+          colors: [isDark ? "#d4d4d4" : "#304758"],
         },
       },
 
@@ -83,8 +89,8 @@ const chartData = computed(() => {
           fill: {
             type: "gradient",
             gradient: {
-              colorFrom: "#D8E3F0",
-              colorTo: "#BED1E6",
+              colorFrom: isDark ? "#2d2d30" : "#D8E3F0",
+              colorTo: isDark ? "#404040" : "#BED1E6",
               stops: [0, 100],
               opacityFrom: 0.4,
               opacityTo: 0.5,
@@ -93,6 +99,11 @@ const chartData = computed(() => {
         },
         tooltip: {
           enabled: true,
+        },
+        labels: {
+          style: {
+            colors: isDark ? "#d4d4d4" : "#373d3f",
+          },
         },
       },
       yaxis: {
@@ -107,9 +118,14 @@ const chartData = computed(() => {
           formatter: function (val: number) {
             return amountFormated(val ?? 0, true);
           },
+          style: {
+            colors: isDark ? "#d4d4d4" : "#373d3f",
+          },
         },
       },
-
+      grid: {
+        borderColor: isDark ? "#404040" : "#e0e0e0",
+      },
       // title: {
       //   text: "Faturamento",
       //   align: "left",
@@ -125,7 +141,7 @@ const chartData = computed(() => {
       // },
       tooltip: {
         show: false,
-        theme: "dark",
+        theme: isDark ? "dark" : "light",
         style: {
           fontSize: "16px",
         },
