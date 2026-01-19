@@ -12,7 +12,7 @@
 
 # Interface
 
-[] - Implementar modo dark
+[x] - Implementar modo dark
 
 # Comissão
 
