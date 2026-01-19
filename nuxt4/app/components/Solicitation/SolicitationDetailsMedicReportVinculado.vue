@@ -1,7 +1,7 @@
 <template>
   <v-card flat rounded="lg">
     <div
-      class="font-weight-bold mb-4 mt-4 text-primary"
+      class="font-weight-bold mb-4 mt-4 text-colorTextPrimary"
       :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       {{
@@ -13,7 +13,7 @@
     <div
       v-if="!data?.PatientConsultationReport?.isPdfMode"
       v-html="data?.PatientConsultationReport?.content"
-      class="text-primary tiptap-content"
+      class="text-colorTextPrimary tiptap-content"
     />
     <div v-else>
       <iframe
@@ -30,7 +30,7 @@
       "
       class="mt-4"
     >
-      <strong class="text-primary">Anexos</strong>
+      <strong class="text-colorTextPrimary">Anexos</strong>
     </div>
     <v-row>
       <v-col

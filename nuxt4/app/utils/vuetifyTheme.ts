@@ -3,6 +3,7 @@ import { type ThemeDefinition } from "vuetify";
 export const MainThemeColors = {
   background: "#fff", //"#f5f5fa",
   primary: "#002c9b",
+  bgcolor: "#fff",
   success: "#10B981",
   danger: "#F43F5E",
   darkButton: "#334155",
@@ -24,7 +25,7 @@ const MainDarkThemeColors = {
   background: "#111827",
   bgcolor: "#1F2937",
   grey: "#71717A",
-  primary: "#7C3AED",
+  primary: "#673AB7",
   success: "#10B981",
   danger: "#F43F5E",
   darkButton: "#334155",
@@ -35,10 +36,10 @@ const MainDarkThemeColors = {
   itemMenu: "#ffffff",
   itemInternalMenu: "#000",
   tooltipColor: "#E3F2FD",
-  tooltipTextColor: "#424242",
-  colorIcon: "#C7D82F",
+  tooltipTextColor: "#fff",
+  colorIcon: "#a0b012",
   greenLime: "#c8e040",
-  darkText: "#505df0",
+  darkText: "#2196F3",
   colorTextPrimary: "#FFFFFF",
 };
 

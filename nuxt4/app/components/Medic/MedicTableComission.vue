@@ -9,7 +9,7 @@
         @click="showUpdateComissions = true"
       >
         <v-icon icon="mdi-reload" size="20" start color="colorIcon"></v-icon>
-        <span class="text-caption text-primary">
+        <span class="text-caption text-colorTextPrimary">
           Atualizar valores comissão
         </span>
       </Button>
@@ -210,7 +210,7 @@ const handleSearch = useDebounceFn(
       loading.value = false;
     }
   },
-  500
+  500,
 );
 
 const handleCloseForm = () => {

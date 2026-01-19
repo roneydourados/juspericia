@@ -22,7 +22,7 @@
         :title="item.raw.medicalSpecialty"
         density="compact"
       >
-        <span class="text-caption text-primary">
+        <span class="text-caption text-colorTextPrimary">
           {{ amountFormated(item.raw.value ?? 0, true) }}
         </span>
       </v-list-item>
@@ -32,7 +32,7 @@
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
           {{ item.raw.medicalSpecialty }}
-          <span class="text-caption text-primary">
+          <span class="text-caption text-colorTextPrimary">
             {{ amountFormated(item.raw.value ?? 0, true) }}
           </span>
         </span>
@@ -109,7 +109,7 @@ const search = ref("");
 const loadingSearch = ref(false);
 
 const $all = computed(
-  () => storeMedicalSpecialty.$all?.medicalSpecialtys ?? []
+  () => storeMedicalSpecialty.$all?.medicalSpecialtys ?? [],
 );
 
 watch(search, async () => {

@@ -99,7 +99,7 @@
           :length="pageCount"
           :total-visible="PAGINATION_TOTAL_VISIBLE"
           rounded="circle"
-          color="primary"
+          :color="`${$currentTheme === 'mainThemeDark' ? '' : 'primary'}`"
           density="comfortable"
         />
       </template>
@@ -214,7 +214,8 @@ const props = defineProps({
 
 const emit = defineEmits(["search", "add", "update:modelValue"]);
 const router = useRouter();
-
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 const search = ref("");
 const page = ref(1);
 

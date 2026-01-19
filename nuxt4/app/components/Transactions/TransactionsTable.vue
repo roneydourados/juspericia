@@ -92,7 +92,7 @@
           <v-expansion-panel-title>
             <v-row dense>
               <v-col cols="12" lg="4">
-                <span class="font-weight-bold text-primary">{{
+                <span class="font-weight-bold text-colorTextPrimary">{{
                   item.client
                 }}</span>
               </v-col>
@@ -118,7 +118,7 @@
                 lg="3"
                 class="d-flex align-center justify-space-between"
               >
-                <span class="font-weight-bold text-primary">
+                <span class="font-weight-bold text-colorTextPrimary">
                   {{ amountFormated(item.total ?? 0, true) }}
                 </span>
                 <v-chip
@@ -186,7 +186,7 @@
                     amountFormated(
                       Number(item.packgeSaleValue ?? 0) /
                         (item.packgeQuantity ?? 1),
-                      true
+                      true,
                     )
                   }}
                 </div>
@@ -308,8 +308,8 @@ const $transactions = computed(() => transactionsStore.$transactions);
 const $total = computed(() =>
   transactionsStore.$transactions.reduce(
     (acc, transaction) => acc + Number(transaction.total ?? 0),
-    0
-  )
+    0,
+  ),
 );
 
 const showCancelSale = ref(false);

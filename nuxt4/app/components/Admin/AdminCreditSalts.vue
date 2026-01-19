@@ -13,7 +13,7 @@
               icon="mdi-calendar-month"
             >
               <div
-                class="mt-4 text-primary"
+                class="mt-4 text-colorTextPrimary"
                 style="font-size: 1.88rem; font-weight: 600"
               >
                 {{ amountFormated($salts?.totals?.total ?? 0, true) }}
@@ -27,7 +27,7 @@
               icon="mdi-calendar-month"
             >
               <div
-                class="mt-4 text-primary"
+                class="mt-4 text-colorTextPrimary"
                 style="font-size: 1.88rem; font-weight: 600"
               >
                 {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
@@ -41,7 +41,7 @@
               icon="mdi-calendar-month"
             >
               <div
-                class="mt-4 text-primary"
+                class="mt-4 text-colorTextPrimary"
                 style="font-size: 1.88rem; font-weight: 600"
               >
                 {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
@@ -246,7 +246,7 @@ const handleWhatsapp = (phone: string) => {
   const url = whatsappUrl(
     phone,
     "Olá, aqui quem fala é seu gestor comercial da jusperícia. Podemos conversar ?",
-    mobile.value
+    mobile.value,
   );
   window.open(url, "_blank");
 };

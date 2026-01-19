@@ -2,7 +2,7 @@
   <CardBlur style="border-top: 6px solid #c7d82f">
     <v-card-title>
       <div class="d-flex justify-space-between align-center">
-        <strong class="text-primary" style="font-size: 1.1rem">
+        <strong class="text-colorTextPrimary" style="font-size: 1.1rem">
           Correção
         </strong>
         <v-chip :color="data?.status === 'open' ? 'orange' : 'green'">
@@ -23,7 +23,7 @@
           </strong>
         </v-col>
       </v-row>
-      <strong class="text-primary">
+      <strong class="text-colorTextPrimary">
         {{ data?.correctionReason }}
       </strong>
     </v-card-text>

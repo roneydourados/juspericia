@@ -1,12 +1,12 @@
 <template>
   <div>
     <div
-      class="font-weight-bold mb-4 mt-4 text-primary"
+      class="font-weight-bold mb-4 mt-4 text-colorTextPrimary"
       :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       Dados da consulta
     </div>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col v-if="$single?.processSituation" cols="12" lg="6">
         <InfoLabel
           title="Situação do processo"
@@ -41,7 +41,7 @@
     <v-row
       v-if="$currentUser?.profile?.type === 'ADMIN'"
       dense
-      class="text-primary"
+      class="text-colorTextPrimary"
     >
       <v-col cols="12" lg="4">
         <InfoLabel
@@ -53,7 +53,7 @@
               $single?.valueCredit
                 ? Number($single?.valueCredit ?? 0)
                 : Number($single?.consultationValue ?? 0),
-              true
+              true,
             )
           "
         />
@@ -75,13 +75,13 @@
             amountFormated(
               Number($single?.valueCredit ?? 0) +
                 Number($single?.antecipationValue ?? 0),
-              true
+              true,
             )
           "
         />
       </v-col>
     </v-row>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col cols="12" lg="6">
         <InfoLabel
           title="Tipo benefício"

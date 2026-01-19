@@ -66,7 +66,9 @@
             >
               <div v-if="!loading" class="d-flex align-center">
                 <v-icon icon="mdi-clock-out " start color="colorIcon" />
-                <span class="text-caption text-primary"> Adiocionar </span>
+                <span class="text-caption text-colorTextPrimary">
+                  Adiocionar
+                </span>
               </div>
             </Button>
           </v-col>
@@ -184,7 +186,7 @@ const clearForm = () => {
 
 const getWeekDay = (day: number) => {
   return daysOfWeekList.value.find(
-    (item: { label: string; value: number }) => item.value === day
+    (item: { label: string; value: number }) => item.value === day,
   )?.label;
 };
 

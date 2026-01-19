@@ -4,7 +4,7 @@
   </div>
   <CardBlur style="margin: 0 auto" :hover="false">
     <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
-      <v-card flat rounded="lg">
+      <v-card flat rounded="lg" color="bgcolor">
         <v-card-title>
           <v-row dense class="pa-4">
             <v-col cols="12" lg="4">

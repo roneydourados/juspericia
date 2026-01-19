@@ -9,7 +9,7 @@
             </v-avatar>
             <v-card-title>
               <span
-                class="font-weight-bold text-primary"
+                class="font-weight-bold text-colorTextPrimary"
                 style="font-size: 1.2rem"
               >
                 {{ item.title }}

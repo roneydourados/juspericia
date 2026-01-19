@@ -43,7 +43,10 @@
                   color="grey"
                   @click="getSolicitationDetails(item.consultationPublicId)"
                 >
-                  <strong style="font-size: 0.8rem" class="text-primary">
+                  <strong
+                    style="font-size: 0.8rem"
+                    class="text-colorTextPrimary"
+                  >
                     {{ item.solicitationId }}
                   </strong>
                 </Button>

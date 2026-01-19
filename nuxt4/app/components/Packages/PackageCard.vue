@@ -27,7 +27,7 @@
           style="white-space: pre-line"
         >
           <span
-            class="font-weight-bold text-primary text-truncate"
+            class="font-weight-bold text-colorTextPrimary text-truncate"
             style="
               font-size: 1.5rem;
               max-width: 80%;
@@ -43,7 +43,7 @@
             <v-icon color="colorIcon" icon="mdi-fire-circle" size="small" />
           </v-avatar>
         </span>
-        <div class="text-caption text-primary">
+        <div class="text-caption text-colorTextPrimary">
           Expira em {{ item.dueDays }} dias a contar da data da compra
         </div>
       </v-card-title>
@@ -62,9 +62,12 @@
 
     <v-card-title>Preço</v-card-title>
 
-    <div class="d-flex justify-space-between text-primary px-4 mb-2">
+    <div class="d-flex justify-space-between text-colorTextPrimary px-4 mb-2">
       <v-chip variant="tonal" color="grey">
-        <span style="font-size: 1rem; font-weight: 600" class="text-primary">
+        <span
+          style="font-size: 1rem; font-weight: 600"
+          class="text-colorTextPrimary"
+        >
           R$ {{ amountFormated(item.value ?? 0, false) }}
         </span>
       </v-chip>
@@ -84,7 +87,7 @@
         @click="handleShowHistory"
       >
         <v-icon icon="mdi-weather-cloudy-clock" color="primary" start />
-        <span class="text-caption text-primary"> Histórico </span>
+        <span class="text-caption text-colorTextPrimary"> Histórico </span>
       </Button>
       <Button
         color="grey"
@@ -93,7 +96,7 @@
         @click="showForm = true"
       >
         <v-icon icon="mdi-pencil-outline" color="colorIcon" start />
-        <span class="text-caption text-primary"> Editar </span>
+        <span class="text-caption text-colorTextPrimary"> Editar </span>
       </Button>
       <Button
         color="grey"
@@ -102,13 +105,13 @@
         @click="showDelete = true"
       >
         <v-icon icon="mdi-delete-outline" color="red" start />
-        <span class="text-caption text-primary"> Apagar </span>
+        <span class="text-caption text-colorTextPrimary"> Apagar </span>
       </Button>
     </v-card-actions>
     <v-card-actions v-else class="d-flex flex-wrap justify-center">
       <Button color="grey" variant="outlined" @click="showRecover = true">
         <v-icon icon="mdi-reload-alert" color="colorIcon" start />
-        <span class="text-caption text-primary"> Recuperar </span>
+        <span class="text-caption text-colorTextPrimary"> Recuperar </span>
       </Button>
     </v-card-actions>
   </CardBlur>

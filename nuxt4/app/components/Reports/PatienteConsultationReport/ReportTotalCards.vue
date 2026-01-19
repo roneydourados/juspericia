@@ -9,7 +9,7 @@
         height="200"
       >
         <div class="d-flex flex-column mt-2">
-          <span class="text-h4 text-primary font-weight-bold">
+          <span class="text-h4 text-colorTextPrimary font-weight-bold">
             {{ amountFormated(totalSolicitation, true) }}
           </span>
           <span class="text-grey my-6">

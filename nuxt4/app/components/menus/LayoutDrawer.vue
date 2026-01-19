@@ -41,13 +41,17 @@
     <template v-slot:append>
       <div class="d-flex justify-center pa-2">
         <Button
-          color="white"
           class="text-none mb-12"
           variant="flat"
           @click="logout"
+          :color="$currentTheme === 'mainThemeDark' ? 'primary' : 'white'"
         >
-          <span class="text-primary"> Sair </span>
-          <v-icon icon="mdi-close-circle" end color="primary" />
+          <span class="text-colorTextPrimary"> Sair </span>
+          <v-icon
+            icon="mdi-close-circle"
+            end
+            :color="$currentTheme === 'mainThemeDark' ? 'colorIcon' : 'primary'"
+          />
         </Button>
       </div>
     </template>
@@ -70,12 +74,12 @@ const props = defineProps({
 
 const auth = useAuthStore();
 const route = useRouter();
-const themeStore = useThemeStore();
 const emit = defineEmits(["update:drawer"]);
 
 const changeDrawer = ref(props.drawer);
 const loading = ref(false);
 
+const themeStore = useThemeStore();
 const $currentTheme = computed(() => themeStore.$currentTheme);
 
 watchEffect(() => {

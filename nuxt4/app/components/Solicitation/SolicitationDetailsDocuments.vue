@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="font-weight-bold mb-4 mt-4 text-primary d-flex align-center justify-space-between"
+      class="font-weight-bold mb-4 mt-4 text-colorTextPrimary d-flex align-center justify-space-between"
       :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       Documentos/Anexos

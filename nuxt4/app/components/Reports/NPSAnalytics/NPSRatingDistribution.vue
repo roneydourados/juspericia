@@ -1,6 +1,6 @@
 <template>
   <CardBlur height="100%">
-    <v-card-title class="text-h6 font-weight-bold text-primary">
+    <v-card-title class="text-h6 font-weight-bold text-colorTextPrimary">
       Distribuição de Avaliações
     </v-card-title>
     <v-card-text>

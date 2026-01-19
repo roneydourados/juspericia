@@ -10,28 +10,34 @@
       <v-col
         cols="12"
         lg="6"
-        class="d-flex text-primary align-center"
+        class="d-flex text-colorTextPrimary align-center"
         style="gap: 0.5rem"
       >
         <span style="font-weight: 500">Saldo Créditos</span>
         <v-icon icon="mdi-currency-usd" color="colorIcon" />
-        <span class="font-weight-bold text-primary" style="font-size: 1.2rem">
+        <span
+          class="font-weight-bold text-colorTextPrimary"
+          style="font-size: 1.2rem"
+        >
           {{ amountFormated($totals?.total ?? 0, false) }}
         </span>
       </v-col>
       <v-col
         cols="12"
         lg="6"
-        class="d-flex text-primary align-center"
+        class="d-flex text-colorTextPrimary align-center"
         style="gap: 0.5rem"
       >
         <span style="font-weight: 500">Saldo Futuro</span>
         <v-icon icon="mdi-currency-usd" color="info" />
-        <span class="font-weight-bold text-primary" style="font-size: 1.2rem">
+        <span
+          class="font-weight-bold text-colorTextPrimary"
+          style="font-size: 1.2rem"
+        >
           {{
             amountFormated(
               Number($totals?.total ?? 0) - Number($solicitationTotalPaidSalt),
-              false
+              false,
             )
           }}
         </span>
@@ -41,36 +47,45 @@
       </v-col>
     </v-row>
     <v-row class="mb-8 px-4">
-      <v-col cols="12" lg="4" class="d-flex text-primary flex-column">
+      <v-col cols="12" lg="4" class="d-flex text-colorTextPrimary flex-column">
         <div class="d-flex align-center">
           <v-icon icon="mdi-plus" start />
           <span style="font-weight: 500">Valor original</span>
         </div>
-        <div class="text-primary font-weight-bold" style="font-size: 1.5rem">
+        <div
+          class="text-colorTextPrimary font-weight-bold"
+          style="font-size: 1.5rem"
+        >
           {{ amountFormated(solicitation.consultationValue ?? 0, true) }}
         </div>
       </v-col>
-      <v-col cols="12" lg="4" class="d-flex text-primary flex-column">
+      <v-col cols="12" lg="4" class="d-flex text-colorTextPrimary flex-column">
         <div class="d-flex align-center">
           <v-icon icon="mdi-minus" start />
           <span style="font-weight: 500">Desconto</span>
         </div>
-        <div class="text-primary font-weight-bold" style="font-size: 1.5rem">
+        <div
+          class="text-colorTextPrimary font-weight-bold"
+          style="font-size: 1.5rem"
+        >
           {{
             amountFormated(
               Number(solicitation.consultationValue ?? 0) -
                 Number(solicitation.valueCredit ?? 0),
-              true
+              true,
             )
           }}
         </div>
       </v-col>
-      <v-col cols="12" lg="4" class="d-flex text-primary flex-column">
+      <v-col cols="12" lg="4" class="d-flex text-colorTextPrimary flex-column">
         <div class="d-flex align-center">
           <v-icon icon="mdi-equal" start />
           <span style="font-weight: 500">Valor a debitar do saldo</span>
         </div>
-        <div class="text-primary font-weight-bold" style="font-size: 1.5rem">
+        <div
+          class="text-colorTextPrimary font-weight-bold"
+          style="font-size: 1.5rem"
+        >
           {{ amountFormated($solicitationTotalPaidSalt, true) }}
         </div>
       </v-col>

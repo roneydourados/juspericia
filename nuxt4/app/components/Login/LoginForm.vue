@@ -1,7 +1,12 @@
 <template>
   <v-row dense align="center">
     <v-col cols="12" :lg="mobile ? '12' : '3'">
-      <v-card rounded="lg" flat color="transparent" class="text-primary">
+      <v-card
+        rounded="lg"
+        flat
+        color="transparent"
+        class="text-colorTextPrimary"
+      >
         <v-card-title>
           <v-row dense class="pa-8" justify="center">
             <v-col cols="12">
@@ -72,7 +77,7 @@
                   :disabled="disabledButtons"
                 >
                   <v-icon icon="mdi-login" start color="primary" />
-                  <span class="text-primary"> Acessar </span>
+                  <span class="text-colorTextPrimary"> Acessar </span>
                 </Button>
               </v-col>
             </v-row>
@@ -168,7 +173,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 
 const $user = computed(() => auth.$currentUser);

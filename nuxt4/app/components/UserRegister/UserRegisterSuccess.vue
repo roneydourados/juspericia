@@ -15,7 +15,9 @@
       </div>
       <Button color="grey" variant="outlined" @click="router.push('/')">
         <v-icon icon="mdi-login" start color="colorIcon" />
-        <span class="text-caption text-primary"> Voltar para login </span>
+        <span class="text-caption text-colorTextPrimary">
+          Voltar para login
+        </span>
       </Button>
 
       <!-- <v-btn

@@ -36,7 +36,7 @@ defineProps({
   },
   color: {
     type: String,
-    default: undefined,
+    default: "bgcolor",
   },
 });
 </script>

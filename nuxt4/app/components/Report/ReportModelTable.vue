@@ -37,7 +37,7 @@
       <v-col v-for="report in $all" cols="12" lg="3" :key="report.id">
         <CardBlur>
           <template #content>
-            <v-row class="text-primary pa-6">
+            <v-row class="text-colorTextPrimary pa-6">
               <v-col cols="12" style="gap: 0.2rem">
                 <strong>
                   {{ report.title }}
@@ -61,7 +61,7 @@
                 @click="editItem(report)"
               >
                 <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
-                <span class="text-primary text-caption"> Editar </span>
+                <span class="text-colorTextPrimary text-caption"> Editar </span>
               </Button>
               <Button
                 variant="outlined"
@@ -71,7 +71,7 @@
                 @click="deleteItem(report)"
               >
                 <v-icon icon="mdi-delete-outline" start color="red" />
-                <span class="text-primary text-caption"> Apagar </span>
+                <span class="text-colorTextPrimary text-caption"> Apagar </span>
               </Button>
             </div>
           </template>
@@ -154,6 +154,6 @@ const handleSearch = useDebounceFn(
       loading.value = false;
     }
   },
-  500
+  500,
 );
 </script>

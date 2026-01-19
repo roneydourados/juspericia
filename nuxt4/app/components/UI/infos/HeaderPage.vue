@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column flex-wrap">
     <span
-      class="text-primary"
+      class="text-colorTextPrimary"
       :style="`font-size: ${fontSize}; font-weight: 600`"
     >
       {{ title }}

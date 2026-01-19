@@ -8,17 +8,19 @@
     <FormCrud :on-submit="submitForm" :show-submit-button="false">
       <v-tabs v-model="tab" color="primary">
         <v-tab value="personalData" class="text-none">
-          <span class="text-primary" style="font-weight: 500">
+          <span class="text-colorTextPrimary" style="font-weight: 500">
             Dados Pessoais
           </span>
         </v-tab>
         <v-tab value="bankData" class="text-none">
-          <span class="text-primary" style="font-weight: 500">
+          <span class="text-colorTextPrimary" style="font-weight: 500">
             Dados Bancários
           </span>
         </v-tab>
         <v-tab value="address" class="text-none">
-          <span class="text-primary" style="font-weight: 500"> Endereço </span>
+          <span class="text-colorTextPrimary" style="font-weight: 500">
+            Endereço
+          </span>
         </v-tab>
       </v-tabs>
       <v-tabs-window v-model="tab" class="mt-4">
@@ -542,7 +544,7 @@ const handleAddMedicalSpecialty = (item?: MedicalSpecialtyProps) => {
   if (!item) return;
 
   const alreadyExists = model.value.medicalSpecialtiesMedic.some(
-    (specialty) => specialty.medicalSpecialtyId === item.id
+    (specialty) => specialty.medicalSpecialtyId === item.id,
   );
 
   if (alreadyExists) return;
@@ -559,7 +561,7 @@ const handleRemoveMedicalSpecialty = (item?: MedicalSpecialtyProps) => {
 
   model.value.medicalSpecialtiesMedic =
     model.value.medicalSpecialtiesMedic.filter(
-      (specialty) => specialty.medicalSpecialtyId !== item.id
+      (specialty) => specialty.medicalSpecialtyId !== item.id,
     );
 };
 </script>

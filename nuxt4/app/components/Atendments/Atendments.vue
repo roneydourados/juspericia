@@ -2,7 +2,7 @@
   <div style="font-size: 1.2rem; font-weight: 700" class="my-4">
     Atendimentos
     <div class="d-flex align-center" v-if="isTimerActive" style="gap: 0.5rem">
-      <span class="text-primary font-weight-bold">
+      <span class="text-colorTextPrimary font-weight-bold">
         Próxima atualização em
       </span>
       <v-progress-circular
@@ -17,12 +17,12 @@
       </v-progress-circular>
       <Button variant="outlined" @click="handleFilterData" class="ml-4">
         <v-icon icon="mdi-reload" start color="colorIcon" />
-        <span class="text-primary"> Atualizar </span>
+        <span class="text-colorTextPrimary"> Atualizar </span>
       </Button>
 
       <Button variant="outlined" @click="router.back()" class="ml-2">
         <v-icon icon="mdi-arrow-left" start color="colorIcon" />
-        <span class="text-primary"> voltar </span>
+        <span class="text-colorTextPrimary"> voltar </span>
       </Button>
     </div>
   </div>

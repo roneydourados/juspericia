@@ -2,7 +2,7 @@
   <CardBlur :style="`border-left: 6px solid ${color}`" height="150">
     <div class="d-flex flex-column pa-2">
       <div class="d-flex align-center justify-space-between">
-        <span class="text-primary">{{ title }}</span>
+        <span class="text-colorTextPrimary">{{ title }}</span>
         <v-avatar :color="iconColor" size="36">
           <v-icon :icon="icon" />
         </v-avatar>
@@ -19,7 +19,7 @@
   >
     <div class="d-flex flex-column pa-4">
       <div class="d-flex align-center justify-space-between">
-        <span class="text-primary">{{ title }}</span>
+        <span class="text-colorTextPrimary">{{ title }}</span>
         <v-icon :color="iconColor" size="24" :icon="icon" />
       </div>
       <slot />

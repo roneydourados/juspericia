@@ -8,7 +8,7 @@
           icon="mdi-calendar-month"
         >
           <div
-            class="mt-4 text-primary"
+            class="mt-4 text-colorTextPrimary"
             style="font-size: 1.88rem; font-weight: 600"
           >
             {{
@@ -24,13 +24,13 @@
           icon="mdi-calendar-month"
         >
           <div
-            class="mt-4 text-primary"
+            class="mt-4 text-colorTextPrimary"
             style="font-size: 1.88rem; font-weight: 600"
           >
             {{
               amountFormated(
                 $estatisticsByAdmin?.totalSaltCreditPending ?? 0,
-                true
+                true,
               )
             }}
           </div>
@@ -43,13 +43,13 @@
           icon="mdi-calendar-month"
         >
           <div
-            class="mt-4 text-primary"
+            class="mt-4 text-colorTextPrimary"
             style="font-size: 1.88rem; font-weight: 600"
           >
             {{
               amountFormated(
                 $estatisticsByAdmin?.totalSaltCreditExpired ?? 0,
-                true
+                true,
               )
             }}
           </div>
@@ -112,7 +112,7 @@
                       {{
                         amountFormated(
                           Number(item.solicitationConsultationValue ?? 0),
-                          true
+                          true,
                         )
                       }}
                     </strong>

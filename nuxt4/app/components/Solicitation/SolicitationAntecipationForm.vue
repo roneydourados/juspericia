@@ -21,13 +21,16 @@
     <div class="pa-4 text-center w-100">
       <Button @click="sendSuport" variant="outlined" color="grey-darken-4">
         <v-icon icon="mdi-chat-outline" start color="colorIcon" />
-        <span class="text-primary text-caption" style="font-weight: 700">
+        <span
+          class="text-colorTextPrimary text-caption"
+          style="font-weight: 700"
+        >
           Iniciar conversa
         </span>
       </Button>
     </div>
     <!-- <FormCrud :on-submit="submitForm">
-      <v-row dense class="text-primary">
+      <v-row dense class="text-colorTextPrimary">
         <v-col cols="12" class="d-flex justify-center">
           <span style="font-weight: 600">Antecipar em</span>
         </v-col>
@@ -126,7 +129,7 @@ watch(
     if (newValue) {
       await systemParameters.index();
     }
-  }
+  },
 );
 
 const sendSuport = () => {
@@ -139,7 +142,7 @@ const sendSuport = () => {
       const url = whatsappUrl(
         $systemParameters.value.suportWhatsapp,
         `${$currentUser.value?.name} \n\n solicita suporte referente a: \n\n ${text}`,
-        mobile.value
+        mobile.value,
       );
 
       window.open(url, "_blank");

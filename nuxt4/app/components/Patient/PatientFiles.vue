@@ -15,7 +15,7 @@
         @click="($refs.fileInput as HTMLInputElement).click()"
       >
         <v-icon icon="mdi-attachment" color="colorIcon" start />
-        <span class="text-caption text-primary"> Novo anexo </span>
+        <span class="text-caption text-colorTextPrimary"> Novo anexo </span>
       </Button>
       <div v-for="item in fileList" class="w-100 mt-4">
         <AttachementCard
@@ -63,7 +63,7 @@ watch(
       fileList.value = newFiles;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const handleFileUpload = async (event: Event) => {
@@ -77,7 +77,7 @@ const handleFileUpload = async (event: Event) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const exists = fileList.value.some(
-        (attachment) => attachment.fileName === file?.name
+        (attachment) => attachment.fileName === file?.name,
       );
       if (exists) {
         // push.warning(`Já existe um arquivo com o nome "${file.name}" anexado.`);

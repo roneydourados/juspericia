@@ -22,7 +22,7 @@
         :title="item.raw.consultationName"
         density="compact"
       >
-        <!-- <span class="text-caption text-primary">
+        <!-- <span class="text-caption text-colorTextPrimary">
           {{ amountFormated(item.raw.value ?? 0, true) }}
         </span> -->
       </v-list-item>
@@ -33,7 +33,7 @@
         <span class="ml-2 d-inline-block text-truncate">
           {{ item.raw.consultationName }}
         </span>
-        <!-- <span class="text-caption text-primary ml-2">
+        <!-- <span class="text-caption text-colorTextPrimary ml-2">
           {{ amountFormated(item.raw.value ?? 0, true) }}
         </span> -->
       </div>

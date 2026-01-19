@@ -1,12 +1,12 @@
 <template>
   <div>
     <div
-      class="font-weight-bold text-primary mb-4 mt-4"
+      class="font-weight-bold text-colorTextPrimary mb-4 mt-4"
       :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       Dados do escritório
     </div>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col v-if="$currentUser?.profile?.type !== 'MEDICO'" cols="12">
         <InfoLabel
           title="Email"

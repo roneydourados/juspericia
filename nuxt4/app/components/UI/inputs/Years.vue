@@ -23,7 +23,7 @@
       <v-carousel-item v-for="item in $years" :key="item.year">
         <v-card variant="outlined" rounded="xl" height="100%" color="grey">
           <div class="d-flex fill-height justify-center align-center">
-            <strong style="font-size: 0.8rem" class="text-primary">
+            <strong style="font-size: 0.8rem" class="text-colorTextPrimary">
               {{ item.year }}
             </strong>
           </div>

@@ -65,7 +65,9 @@
       <v-col cols="12" class="d-flex justify-space-between">
         <Button color="grey" variant="outlined" @click="router.push('/')">
           <v-icon icon="mdi-login" start color="colorIcon" />
-          <span class="text-caption text-primary"> Voltar para login </span>
+          <span class="text-caption text-colorTextPrimary">
+            Voltar para login
+          </span>
         </Button>
         <Button color="primary" variant="flat" type="submit">
           <span class="text-caption text-white"> Próximo </span>

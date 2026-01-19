@@ -8,10 +8,14 @@
   >
     <CardBlur class="pa-4" height="100%">
       <div class="d-flex align-center justify-space-between pa-4">
-        <span class="text-subtitle-1 text-primary"> Detalhes Webhook </span>
+        <span class="text-subtitle-1 text-colorTextPrimary">
+          Detalhes Webhook
+        </span>
         <div class="d-flex align-center" style="gap: 0.5rem">
           <v-icon icon="mdi-webhook" start size="30" color="orange" />
-          <span class="text-h5 font-weight-bold text-primary">Details</span>
+          <span class="text-h5 font-weight-bold text-colorTextPrimary"
+            >Details</span
+          >
         </div>
       </div>
       <v-card-text>

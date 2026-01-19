@@ -4,19 +4,19 @@
       <div class="d-flex flex-wrap justify-space-between">
         <div class="d-flex flex-wrap" style="gap: 2rem">
           <div
-            class="text-primary"
+            class="text-colorTextPrimary"
             style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem"
           >
             Início
           </div>
-          <div class="d-flex flex-column text-primary">
+          <div class="d-flex flex-column text-colorTextPrimary">
             Olá Bem vindo(a) de volta,
             <strong>{{ $currentUser?.name }}</strong>
           </div>
         </div>
-        <div class="d-flex flex-column text-primary">
+        <div class="d-flex flex-column text-colorTextPrimary">
           <div class="text-body-2 d-flex align-center justify-end">
-            <span class="text-primary font-weight-bold">
+            <span class="text-colorTextPrimary font-weight-bold">
               {{ $now.diaDaSemana }}
             </span>
           </div>

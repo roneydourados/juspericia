@@ -1,15 +1,17 @@
 <template>
-  <v-card variant="flat" rounded="xl" elevation="8">
+  <v-card variant="flat" rounded="xl" elevation="8" color="bgcolor">
     <v-card-text>
       <v-tabs v-model="tab" color="primary">
         <v-tab value="atendent" class="text-none">
-          <span class="font-weight-bold text-primary"> Atendentes </span>
+          <span class="font-weight-bold text-colorTextPrimary">
+            Atendentes
+          </span>
         </v-tab>
         <v-tab value="comission" class="text-none">
-          <span class="font-weight-bold text-primary"> Comissão </span>
+          <span class="font-weight-bold text-colorTextPrimary"> Comissão </span>
         </v-tab>
         <v-tab value="medics" class="text-none">
-          <span class="font-weight-bold text-primary">
+          <span class="font-weight-bold text-colorTextPrimary">
             Relação de médicos
           </span>
         </v-tab>

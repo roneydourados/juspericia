@@ -1,6 +1,6 @@
 <template>
   <CardBlur>
-    <v-card-title class="text-h6 font-weight-bold text-primary">
+    <v-card-title class="text-h6 font-weight-bold text-colorTextPrimary">
       Top Médicos
     </v-card-title>
     <v-card-text>

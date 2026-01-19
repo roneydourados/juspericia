@@ -2,7 +2,7 @@
   <CardBlur
     v-if="!showTeleMedicine"
     style="border-top: 6px solid #c8e040"
-    class="text-primary mt-2 mb-2"
+    class="text-colorTextPrimary mt-2 mb-2"
     :hover="false"
   >
     <template #title style="gap: 1rem; font-size: 1rem">
@@ -27,7 +27,7 @@
             <strong>
               {{
                 dayjs(solicitation.Schedule?.[0]?.scheduleDate).format(
-                  "DD/MM/YYYY"
+                  "DD/MM/YYYY",
                 )
               }}
               as
@@ -106,7 +106,7 @@
             "
           >
             <v-icon icon="mdi-credit-card-outline" color="primary" start />
-            <span class="text-caption text-primary"> Pagar </span>
+            <span class="text-caption text-colorTextPrimary"> Pagar </span>
           </Button>
           <Button
             v-if="
@@ -122,7 +122,9 @@
             @click="handleCancelCobranca(solicitation)"
           >
             <v-icon icon="mdi-cancel" color="red" start />
-            <span class="text-caption text-primary"> Cancelar Cobrança </span>
+            <span class="text-caption text-colorTextPrimary">
+              Cancelar Cobrança
+            </span>
           </Button>
           <!-- <Button
             v-if="
@@ -134,7 +136,7 @@
             @click="handleQuery(solicitation)"
           >
             <v-icon icon="mdi-video-outline" start color="colorIcon" />
-            <span class="text-caption text-primary"> Consulta </span>
+            <span class="text-caption text-colorTextPrimary"> Consulta </span>
           </Button> -->
           <Button
             v-if="solicitation.status === 'paid'"
@@ -144,7 +146,7 @@
             @click="handleSchedule(solicitation)"
           >
             <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
-            <span class="text-caption text-primary"> Agendar </span>
+            <span class="text-caption text-colorTextPrimary"> Agendar </span>
           </Button>
           <Button
             v-else-if="
@@ -158,7 +160,7 @@
             @click="handleSchedule(solicitation)"
           >
             <v-icon icon="mdi-calendar-clock" start color="colorIcon" />
-            <span class="text-caption text-primary"> Reagendar </span>
+            <span class="text-caption text-colorTextPrimary"> Reagendar </span>
           </Button>
           <Button
             color="grey"
@@ -172,7 +174,7 @@
             "
           >
             <v-icon icon="mdi-cancel" start color="red" />
-            <span class="text-caption text-primary"> cancelar </span>
+            <span class="text-caption text-colorTextPrimary"> cancelar </span>
           </Button>
           <Button
             color="grey"
@@ -210,8 +212,8 @@
             label
             color="grey"
           >
-            <span class="text-primary">Nº Processo:</span>
-            <span class="font-weight-bold text-primary ml-2">
+            <span class="text-colorTextPrimary">Nº Processo:</span>
+            <span class="font-weight-bold text-colorTextPrimary ml-2">
               {{ solicitation.proccessNumber }}
             </span>
           </v-chip>
@@ -261,7 +263,7 @@
                 solicitation.valueCredit
                   ? Number(solicitation.valueCredit ?? 0)
                   : Number(solicitation.consultationValue ?? 0),
-                true
+                true,
               )
             }}</span>
           </div>
@@ -317,8 +319,8 @@
                   ? dayjs(
                       solicitation.PatientConsultationReport.reportDate?.substring(
                         0,
-                        10
-                      )
+                        10,
+                      ),
                     ).format("DD/MM/YYYY")
                   : "-"
               }}
@@ -357,9 +359,9 @@
             class="pa-2 px-4 d-flex align-center justify-space-between w-100"
             style="background-color: #eeee; border-radius: 2rem"
           >
-            <span class="text-primary">Total:</span>
+            <span class="text-colorTextPrimary">Total:</span>
             <span
-              class="font-weight-bold text-primary"
+              class="font-weight-bold text-colorTextPrimary"
               style="font-size: 1.3rem"
             >
               {{ amountFormated($solicitationTotal, true) }}
@@ -470,7 +472,7 @@
               color="success"
               @update:model-value="
                 handleUpdateShowMedicalSpeciality(
-                  solicitation.showMedicalSpeciality
+                  solicitation.showMedicalSpeciality,
                 )
               "
             >
@@ -520,7 +522,7 @@
               color="colorIcon"
             />
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               style="font-weight: 500; font-size: 0.8rem"
             >
               Solicitar correção
@@ -538,7 +540,7 @@
           <Button variant="text" @click="getItemAntecipation(solicitation)">
             <v-icon icon="mdi-calendar-clock-outline" start color="colorIcon" />
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               style="font-weight: 500; font-size: 0.8rem"
             >
               Solicitar antecipação
@@ -559,7 +561,7 @@
           >
             <v-icon icon="mdi-close" start color="red" />
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               style="font-weight: 500; font-size: 0.8rem"
             >
               Cancelar antecipação
@@ -573,7 +575,7 @@
           >
             <v-icon icon="mdi-dots-vertical" start color="colorIcon" />
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               style="font-weight: 500; font-size: 0.8rem"
             >
               Visualizar detalhes
@@ -588,7 +590,7 @@
           >
             <v-icon icon="mdi-currency-usd" start color="colorIcon" />
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               style="font-weight: 500; font-size: 0.8rem"
             >
               Dar Gorjeta
@@ -611,7 +613,7 @@
           >
             <v-icon icon="mdi-star" start color="colorIcon" />
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               style="font-weight: 500; font-size: 0.8rem"
             >
               Avaliar solicitação
@@ -634,7 +636,7 @@
               variant="text"
               @click="handleUpdateRate(solicitation.rate ?? 0)"
             >
-              <span class="text-primary text-caption"> Enviar </span>
+              <span class="text-colorTextPrimary text-caption"> Enviar </span>
               <v-icon icon="mdi-check" end color="colorIcon" />
             </Button>
           </div>
@@ -653,7 +655,7 @@
               start
               :color="solicitation?.medicId ? 'red' : 'colorIcon'"
             />
-            <span class="text-primary text-caption">
+            <span class="text-colorTextPrimary text-caption">
               {{ solicitation?.medicId ? "Desvincular" : "Vincular" }} médico
             </span>
           </Button>
@@ -819,11 +821,11 @@ const $limiteDateCorrection = computed(() => {
     props.solicitation.PatientConsultationReport.reportDate
   ) {
     const dateLimit = dayjs(
-      props.solicitation.PatientConsultationReport.reportDate.substring(0, 10)
+      props.solicitation.PatientConsultationReport.reportDate.substring(0, 10),
     )
       .add(
         Number($systemParameters.value?.medicalReportRevisionMaxDays ?? 0),
-        "day"
+        "day",
       )
       .format("DD/MM/YYYY");
 
@@ -842,10 +844,10 @@ const $isEnableCorrection = computed(() => {
         dayjs(
           props.solicitation.PatientConsultationReport.reportDate.substring(
             0,
-            10
-          )
+            10,
+          ),
         ),
-        "day"
+        "day",
       ) <= Number($systemParameters.value?.medicalReportRevisionMaxDays ?? 0);
 
     return (
@@ -863,7 +865,7 @@ watch(
   () => {
     isRate.value = Number(props.solicitation.rate ?? 0) <= 0;
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const handleDetailsClick = async (id: string) => {
@@ -913,7 +915,7 @@ const handleUpdateCorrection = async (motive: string) => {
 };
 
 const handleUpdateShowMedicalSpeciality = async (
-  showMedicalSpeciality?: boolean
+  showMedicalSpeciality?: boolean,
 ) => {
   loading.value = true;
   try {
@@ -1108,7 +1110,7 @@ const getItemAntecipation = (item: SolicitationConsultationProps) => {
 const handleSchedule = (item: SolicitationConsultationProps) => {
   if (item.medicId) {
     push.warning(
-      "Para agendar ou reagendar uma  solicitação, é necessário desvincular o médico primeiro !"
+      "Para agendar ou reagendar uma  solicitação, é necessário desvincular o médico primeiro !",
     );
     return;
   }
@@ -1118,7 +1120,7 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
 };
 
 const handleMountModelPrececkout = async (
-  item: SolicitationConsultationProps
+  item: SolicitationConsultationProps,
 ) => {
   //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
   await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
@@ -1132,7 +1134,7 @@ const handleMountModelPrececkout = async (
       title: "Saldo de crédito disponível",
       message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
         $userCreditTotalSalt.value?.totalSalt ?? 0,
-        true
+        true,
       )}. Esta solicitação será baixada automaticamente.`,
       duration: Infinity, // Não fecha automaticamente
       props: {
@@ -1386,7 +1388,7 @@ const handleCancel = async () => {
 };
 
 const handleDownloadSignedFile = async (
-  item: SolicitationConsultationProps
+  item: SolicitationConsultationProps,
 ) => {
   if (!item.PatientConsultationReport) {
     push.error("Documento não assinado.");
@@ -1396,7 +1398,7 @@ const handleDownloadSignedFile = async (
   loading.value = true;
   try {
     const { fileBlob, fileName } = await zapSign.getSignedFile(
-      item.PatientConsultationReport.publicId!
+      item.PatientConsultationReport.publicId!,
     );
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
@@ -1435,7 +1437,7 @@ const handleCopy = (text: string) => {
 };
 
 const hadleSetRemoveMedic = async (
-  solicitation: SolicitationConsultationProps
+  solicitation: SolicitationConsultationProps,
 ) => {
   if (solicitation.medicId) {
     push.info({
@@ -1462,7 +1464,7 @@ const hadleSetRemoveMedic = async (
 
                 //atualizar a agenda para start
                 await scheduleStore.clearMedicSchedule(
-                  solicitation.Schedule?.[0]?.publicId!
+                  solicitation.Schedule?.[0]?.publicId!,
                 );
 
                 await getSolicitations();
@@ -1589,7 +1591,7 @@ const handleShowCorrectionForm = (item: SolicitationConsultationProps) => {
 };
 
 const handleRevertSolicitation = async (
-  item: SolicitationConsultationProps
+  item: SolicitationConsultationProps,
 ) => {
   push.info({
     title: "Estornar solicitação",

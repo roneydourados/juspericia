@@ -61,7 +61,7 @@
               color="grey"
             >
               <div class="w-100 d-flex flex-column pa-1">
-                <div class="text-caption text-primary">
+                <div class="text-caption text-colorTextPrimary">
                   Especialidade médica
                 </div>
                 <div class="w-100">
@@ -79,7 +79,7 @@
               :disabled="$isSelectMedicalSpecialty"
             >
               <v-icon icon="mdi-medical-bag" color="colorIcon" />
-              <span class="text-caption text-primary">
+              <span class="text-caption text-colorTextPrimary">
                 Selecionar outra especialidade
               </span>
             </Button>
@@ -91,7 +91,9 @@
               :disabled="$isSelectMedicalSpecialty"
             >
               <v-icon icon="mdi-medical-bag" color="colorIcon" />
-              <span class="text-caption text-primary"> Voltar padrão </span>
+              <span class="text-caption text-colorTextPrimary">
+                Voltar padrão
+              </span>
             </Button>
           </v-col>
         </v-row>
@@ -207,7 +209,9 @@
                 variant="outlined"
               >
                 <v-icon icon="mdi-cancel" color="red" start />
-                <span class="text-caption text-primary"> Cancelar </span>
+                <span class="text-caption text-colorTextPrimary">
+                  Cancelar
+                </span>
               </Button>
             </div>
           </v-col>
@@ -254,7 +258,7 @@ const props = defineProps({
   },
   data: {
     type: Object as PropType<SolicitationConsultationProps>,
-    default: () => ({} as SolicitationConsultationProps),
+    default: () => ({}) as SolicitationConsultationProps,
   },
   showGoBack: {
     type: Boolean,
@@ -383,7 +387,7 @@ const submitForm = async () => {
 
   if (form.value.content.length < 100) {
     push.warning(
-      "Informe a descrição detalhada da realidade dos fatos. Explicação está muito curta."
+      "Informe a descrição detalhada da realidade dos fatos. Explicação está muito curta.",
     );
     return;
   }
@@ -470,10 +474,10 @@ const update = async () => {
       const payload: FileProps[] = form.value.files
         .filter(
           (
-            attachment
+            attachment,
           ): attachment is Omit<FileProps, "publicId"> | FileProps => {
             return !attachment.publicId;
-          }
+          },
         )
         .map((attachment) => ({
           ...attachment,
@@ -507,11 +511,11 @@ const handleDeleteAttachment = async () => {
     if (selectedFile.value.publicId) {
       await fileStore.removeAws(selectedFile.value.publicId);
       form.value.files = form.value.files.filter(
-        (attachment) => attachment.fileName !== selectedFile.value?.fileName
+        (attachment) => attachment.fileName !== selectedFile.value?.fileName,
       );
     } else {
       form.value.files = form.value.files.filter(
-        (attachment) => attachment !== selectedFile.value
+        (attachment) => attachment !== selectedFile.value,
       );
     }
   } finally {
@@ -532,7 +536,7 @@ const handleFileUpload = (event: Event) => {
       const file = files[i];
 
       const exists = form.value.files.some(
-        (attachment) => attachment.fileName === (file?.name ?? "")
+        (attachment) => attachment.fileName === (file?.name ?? ""),
       );
 
       if (exists) {

@@ -4,11 +4,11 @@
       v-model="page"
       :length="pageCount"
       :total-visible="PAGINATION_TOTAL_VISIBLE"
-      color="primary"
+      :color="`${$currentTheme === 'mainThemeDark' ? '' : 'primary'}`"
       rounded="circle"
       density="comfortable"
     />
-    <span class="text-caption text-primary">
+    <span class="text-caption text-colorTextPrimary">
       Pg. {{ page }} de {{ pageCount }}
     </span>
   </div>
@@ -16,7 +16,7 @@
   <CardBlur
     v-for="item in paginatedItems"
     :key="item.id"
-    class="mb-2 text-primary"
+    class="mb-2 text-colorTextPrimary"
     :hover="false"
     style="border-top: 3px solid #c8e040"
     height="280"
@@ -120,6 +120,9 @@ const voucher = useVoucherStore();
 const { amountFormated } = useUtils();
 
 const $all = computed(() => voucher.$all);
+
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 const itemsPerPage = ref(10);
 const page = ref(1);

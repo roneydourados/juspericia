@@ -13,11 +13,13 @@
           />
         </div>
         <div class="px-12 mb-4">
-          <div class="text-primary text-h5">Serviço {{ item + 1 }}</div>
-          <div class="text-primary text-caption mb-2">
+          <div class="text-colorTextPrimary text-h5">
+            Serviço {{ item + 1 }}
+          </div>
+          <div class="text-colorTextPrimary text-caption mb-2">
             Dados informativos sobre o sistema
           </div>
-          <div class="text-primary">
+          <div class="text-colorTextPrimary">
             Descrição detalhada do serviço prestado em questão no título deste
             card, todas as informações serão referente ao
             <strong>Serviço({{ item + 1 }})</strong>

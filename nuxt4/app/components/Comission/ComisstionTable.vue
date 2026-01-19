@@ -81,7 +81,7 @@
         <v-col
           cols="12"
           lg="2"
-          class="d-flex align-center text-primary"
+          class="d-flex align-center text-colorTextPrimary"
           style="gap: 0.5rem"
         >
           <span>Total:</span>
@@ -90,7 +90,7 @@
         <v-col
           cols="12"
           lg="2"
-          class="d-flex align-center text-primary"
+          class="d-flex align-center text-colorTextPrimary"
           style="gap: 0.5rem"
         >
           <span>Total Selecionado:</span>
@@ -158,7 +158,7 @@
           <v-expansion-panel-title>
             <v-row dense>
               <v-col cols="12" lg="4">
-                <span class="font-weight-bold text-primary">{{
+                <span class="font-weight-bold text-colorTextPrimary">{{
                   item.user.name
                 }}</span>
               </v-col>
@@ -220,7 +220,7 @@
                       Number(item.comissionPercentage ?? 0) > 0
                         ? `${amountFormated(
                             Number(item.comissionPercentage ?? "0"),
-                            false
+                            false,
                           )}%`
                         : "Comissão fixa"
                     }}
@@ -524,7 +524,7 @@ const handleShowQRCodePix = () => {
       Number($totalSelected.value.replace(",", ".").replace("R$", "").trim()) ||
       0,
     message: `Pagamento de comissão referente a ${formatDate(
-      comissionsSelecteds.value?.[0]?.comissionDate
+      comissionsSelecteds.value?.[0]?.comissionDate,
     )}`,
   };
 

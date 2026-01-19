@@ -10,12 +10,12 @@
       <v-pagination
         v-model="page"
         :length="pageCount"
-        color="primary"
+        :color="`${$currentTheme === 'mainThemeDark' ? '' : 'primary'}`"
         rounded="circle"
         density="comfortable"
         :total-visible="PAGINATION_TOTAL_VISIBLE"
       />
-      <span class="text-caption text-primary">
+      <span class="text-caption text-colorTextPrimary">
         Pg. {{ page }} de {{ pageCount }}
       </span>
     </div>
@@ -23,7 +23,7 @@
     <v-list lines="two">
       <v-list-item v-for="item in paginatedItems" :key="item.id">
         <v-list-item-title>
-          <div class="d-flex flex-column text-primary w-100">
+          <div class="d-flex flex-column text-colorTextPrimary w-100">
             <div class="d-flex justify-space-between align-center w-100">
               Data:
               <strong>
@@ -43,7 +43,7 @@
           </div>
         </v-list-item-title>
         <v-list-item-subtitle>
-          <div class="d-flex flex-column text-primary w-100 mt-2">
+          <div class="d-flex flex-column text-colorTextPrimary w-100 mt-2">
             <strong>Histórico:</strong>
             {{ item.history }}
           </div>
@@ -66,6 +66,8 @@ const { amountFormated } = useUtils();
 const { mobile } = useDisplay();
 
 const $all = computed(() => saltCredit.$userCreditLog);
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 const itemsPerPage = ref(10);
 const page = ref(1);

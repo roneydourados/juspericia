@@ -25,7 +25,7 @@
         style="white-space: pre-line"
       >
         <span
-          class="font-weight-bold text-primary text-truncate"
+          class="font-weight-bold text-colorTextPrimary text-truncate"
           :style="`
             font-size: ${mobile ? '0.8rem' : '1.5rem'};
             max-width: 80%;
@@ -54,7 +54,7 @@
               :style="`font-size: ${
                 mobile ? '0.8rem' : '1.3rem;'
               }  font-weight: 600`"
-              class="text-black text-primary"
+              class="text-black text-colorTextPrimary"
             >
               {{ amountFormated(item.value ?? 0, true) }}
             </div>

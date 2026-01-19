@@ -1,12 +1,12 @@
 <template>
   <div>
     <div
-      class="font-weight-bold mb-4 mt-4 text-primary"
+      class="font-weight-bold mb-4 mt-4 text-colorTextPrimary"
       :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
     >
       Dados do paciente
     </div>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col cols="12" lg="8">
         <InfoLabel
           title="Paciente"
@@ -45,7 +45,7 @@
           :font-size="mobile ? '0.8' : '1'"
           :font-size-content="mobile ? '0.8' : '1'"
           :content="`${dayjs($single?.Patient?.birthDate).format(
-            'DD/MM/YYYY'
+            'DD/MM/YYYY',
           )} - ${
             $single?.Patient?.birthDate ? age($single?.Patient?.birthDate) : ''
           }`"

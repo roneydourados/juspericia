@@ -12,17 +12,19 @@
     >
       <v-tabs v-model="tab" color="primary">
         <v-tab value="personalData" class="text-none">
-          <span class="text-primary" style="font-weight: 500">
+          <span class="text-colorTextPrimary" style="font-weight: 500">
             Dados Pessoais
           </span>
         </v-tab>
         <v-tab value="bankData" class="text-none">
-          <span class="text-primary" style="font-weight: 500">
+          <span class="text-colorTextPrimary" style="font-weight: 500">
             Dados Bancários
           </span>
         </v-tab>
         <v-tab value="address" class="text-none">
-          <span class="text-primary" style="font-weight: 500"> Endereço </span>
+          <span class="text-colorTextPrimary" style="font-weight: 500">
+            Endereço
+          </span>
         </v-tab>
       </v-tabs>
       <v-tabs-window v-model="tab" class="mt-4">

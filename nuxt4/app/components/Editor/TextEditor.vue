@@ -1,5 +1,8 @@
 <template>
-  <div v-if="editor">
+  <div
+    v-if="editor"
+    :class="{ 'tiptap-dark-mode': $currentTheme === 'mainThemeDark' }"
+  >
     <v-row dense class="mb-2">
       <v-col cols="12" class="d-flex flex-wrap" style="gap: 0.2rem">
         <v-btn
@@ -258,7 +261,10 @@
 
       <v-col cols="12">
         <v-card variant="flat" class="pa-0 border-thin">
-          <div :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }">
+          <div
+            :style="{ height: `${height}rem`, 'overflow-y': 'scroll' }"
+            :class="{ 'editor-dark': $currentTheme === 'mainThemeDark' }"
+          >
             <EditorContent :editor="editor" />
           </div>
         </v-card>
@@ -304,10 +310,8 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 //********EMITS*********
 
-//********EXPOSE*********
-//Expose: insira aqui os exposes do componente.
-//Ex. defineExpose({ load });
-//********EXPOSE*********
+const themeStore = useThemeStore();
+const $currentTheme = computed(() => themeStore.$currentTheme);
 
 //********VARIAVEIS*********
 //Variáveis reativas: insira aqui as variáveis reativas do componente.
@@ -476,11 +480,11 @@ const handleUploadImage = () => {
   p {
     margin: 1rem 0;
     line-height: 1.6;
-    
+
     &:first-child {
       margin-top: 0;
     }
-    
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -542,16 +546,61 @@ const handleUploadImage = () => {
   outline: none;
 }
 
+/* Dark Mode Styles */
+.tiptap-dark-mode {
+  .editor-dark {
+    background-color: rgb(var(--v-theme-bgcolor)) !important;
+    color: #d4d4d4;
+  }
+
+  .tiptap {
+    background-color: rgb(var(--v-theme-bgcolor)) !important;
+    color: #d4d4d4;
+
+    /* Code styles for dark mode */
+    code {
+      background-color: rgb(var(--v-theme-bgcolor)) !important;
+      color: #ce9178 !important;
+    }
+
+    pre {
+      background: rgb(var(--v-theme-bgcolor)) !important;
+      color: #d4d4d4 !important;
+
+      code {
+        background: none;
+        color: inherit;
+      }
+    }
+
+    /* Blockquote for dark mode */
+    blockquote {
+      border-left: 3px solid rgb(var(--v-theme-bgcolor)) !important;
+    }
+
+    /* HR for dark mode */
+    hr {
+      border-top: 1px solid rgb(var(--v-theme-bgcolor)) !important;
+    }
+
+    /* Mark for dark mode */
+    mark {
+      background-color: #5a5a2d;
+      color: #d4d4d4;
+    }
+  }
+}
+
 /* Estilos globais para conteúdo renderizado com v-html */
 :global(.tiptap-content) {
   p {
     margin: 1rem 0;
     line-height: 1.6;
-    
+
     &:first-child {
       margin-top: 0;
     }
-    
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -563,7 +612,12 @@ const handleUploadImage = () => {
     content: "";
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     line-height: 1.1;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -582,11 +636,14 @@ const handleUploadImage = () => {
     font-size: 1.1rem;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     font-size: 1rem;
   }
 
-  ul, ol {
+  ul,
+  ol {
     padding: 0 1rem;
     margin: 1.25rem 1rem 1.25rem 0.4rem;
 

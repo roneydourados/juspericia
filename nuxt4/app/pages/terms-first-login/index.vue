@@ -12,7 +12,10 @@
       v-else-if="$currentUser?.profile?.type === 'MEDICO'"
       class="px-12"
     >
-      <div v-html="$medicalTerms?.conductManual?.content" class="tiptap-content" />
+      <div
+        v-html="$medicalTerms?.conductManual?.content"
+        class="tiptap-content"
+      />
       <div
         class="mt-12 tiptap-content"
         v-html="$medicalTerms?.medicalServiceContract?.content"
@@ -31,7 +34,7 @@
         :disabled="disabledButtons"
       >
         <v-icon icon="mdi-close" color="colorIcon" start />
-        <span class="text-primary text-caption">
+        <span class="text-colorTextPrimary text-caption">
           Li e concordo com os termos
         </span>
       </Button>
@@ -44,7 +47,7 @@
         :disabled="disabledButtons"
       >
         <v-icon icon="mdi-close" color="red" start />
-        <span class="text-primary text-caption"> Não concordo </span>
+        <span class="text-colorTextPrimary text-caption"> Não concordo </span>
       </Button>
     </v-card-actions>
     <v-overlay :model-value="loading" class="align-center justify-center">
@@ -84,7 +87,7 @@ watch(
   },
   {
     immediate: true,
-  }
+  },
 );
 
 onMounted(async () => {

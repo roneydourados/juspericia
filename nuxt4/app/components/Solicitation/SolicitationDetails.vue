@@ -10,13 +10,13 @@
       <v-col cols="10" class="px-4">
         <span
           :style="`${mobile ? 'font-size: 1rem' : 'font-size: 1.5rem'}`"
-          class="font-weight-bold text-primary"
+          class="font-weight-bold text-colorTextPrimary"
         >
           #{{ $single?.id }}
         </span>
         <span
           :style="`${mobile ? 'font-size: 1rem' : 'font-size: 1.5rem'}`"
-          class="text-primary"
+          class="text-colorTextPrimary"
         >
           Detalhes
         </span>
@@ -53,15 +53,15 @@
             flat
           >
             <v-card-title>
-              <strong class="text-primary" style="font-size: 1.1rem">
+              <strong class="text-colorTextPrimary" style="font-size: 1.1rem">
                 Teleconsulta agendada para
               </strong>
             </v-card-title>
             <v-card-text>
-              <strong class="text-primary" style="font-size: 1rem">
+              <strong class="text-colorTextPrimary" style="font-size: 1rem">
                 {{
                   `${dayjs($single.Schedule[0]?.scheduleDate).format(
-                    "DD/MM/YYYY"
+                    "DD/MM/YYYY",
                   )} as ${$single?.Schedule?.[0]?.scheduleHour}`
                 }}
               </strong>
@@ -77,16 +77,16 @@
             flat
           >
             <v-card-title>
-              <strong class="text-primary" style="font-size: 1.1rem">
+              <strong class="text-colorTextPrimary" style="font-size: 1.1rem">
                 {{
                   `Solicitação finalizada em ${dayjs($single?.dateClose).format(
-                    "DD/MM/YYYY"
+                    "DD/MM/YYYY",
                   )}`
                 }}
               </strong>
             </v-card-title>
             <v-card-text>
-              <strong class="text-primary" style="font-size: 1rem">
+              <strong class="text-colorTextPrimary" style="font-size: 1rem">
                 {{
                   `${
                     $single?.PatientConsultationReport &&
@@ -128,17 +128,20 @@
       <v-col cols="12" lg="6">
         <v-card flat rounded="lg">
           <div
-            class="font-weight-bold mb-4 mt-4 text-primary"
+            class="font-weight-bold mb-4 mt-4 text-colorTextPrimary"
             :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
           >
             Descrição dos fatos
           </div>
-          <div v-html="$single?.content" class="text-primary tiptap-content" />
+          <div
+            v-html="$single?.content"
+            class="text-colorTextPrimary tiptap-content"
+          />
         </v-card>
         <SolicitationDetailsDocuments />
         <v-card flat rounded="lg">
           <div
-            class="font-weight-bold mb-4 mt-4 text-primary"
+            class="font-weight-bold mb-4 mt-4 text-colorTextPrimary"
             :style="`${mobile ? 'font-size: 0.8rem' : 'font-size: 1.2rem'}`"
           >
             Motivos para correção
@@ -146,7 +149,7 @@
           <div
             v-for="justify in $single?.PatientConsultationReport?.justifies"
             :key="justify.id"
-            class="mb-2 text-primary"
+            class="mb-2 text-colorTextPrimary"
           >
             <strong> - {{ justify.justify }}</strong>
           </div>
@@ -225,7 +228,7 @@ const $currentUser = computed(() => authStore.$currentUser);
 const loading = ref(false);
 
 const handleDownloadSignedFile = async (
-  item: SolicitationConsultationProps
+  item: SolicitationConsultationProps,
 ) => {
   if (!item.PatientConsultationReport) {
     push.error("Documento não assinado.");
@@ -235,7 +238,7 @@ const handleDownloadSignedFile = async (
   loading.value = true;
   try {
     const { fileBlob, fileName } = await zapSign.getSignedFile(
-      item.PatientConsultationReport.publicId!
+      item.PatientConsultationReport.publicId!,
     );
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo

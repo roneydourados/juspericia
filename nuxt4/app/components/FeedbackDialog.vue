@@ -68,7 +68,7 @@
           type="submit"
         >
           <v-icon icon="mdi-send" start />
-          <span class="text-primary"> Enviar feedback </span>
+          <span class="text-colorTextPrimary"> Enviar feedback </span>
         </Button>
       </FormCrud>
       <!-- <pre>{{ nps }}</pre> -->

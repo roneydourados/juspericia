@@ -6,15 +6,19 @@
     :width="mobile ? '' : width"
     :fullscreen="mobile || fullscreen"
   >
-    <v-card rounded="xl" :style="`border-top: 6px solid ${borderColor}`">
-      <v-toolbar density="default" color="background">
+    <v-card
+      rounded="xl"
+      :style="`border-top: 6px solid ${borderColor}`"
+      color="bgcolor"
+    >
+      <v-toolbar density="default" color="bgcolor">
         <v-toolbar-title>
           <span
             class="d-flex align-center text-subtitle-2 text-md-body-2 text-lg-h6 font-weight-bold"
           >
             <slot name="title-preppend" />
             <v-icon v-if="icon" :icon="icon" start />
-            <p class="ml-2 text-primary font-weight-bold">
+            <p class="ml-2 text-colorTextPrimary font-weight-bold">
               {{ title }}
             </p>
           </span>
@@ -24,7 +28,7 @@
           <v-icon icon="mdi-close" />
         </v-btn>
       </v-toolbar>
-      <v-card flat style="overflow-y: auto">
+      <v-card flat style="overflow-y: auto" color="bgcolor">
         <v-card-text>
           <slot />
         </v-card-text>

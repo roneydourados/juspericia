@@ -10,7 +10,7 @@
         <v-card-title class="d-flex justify-space-between align-center">
           <div class="d-flex">
             <v-icon icon="mdi-chat-question-outline" color="colorIcon" start />
-            <div :id="titleId" class="font-weight-bold text-primary">
+            <div :id="titleId" class="font-weight-bold text-colorTextPrimary">
               {{ item.title }}
             </div>
           </div>
@@ -39,7 +39,7 @@
             color="grey"
             size="small"
           >
-            <span class="text-caption text-primary">
+            <span class="text-caption text-colorTextPrimary">
               <v-icon icon="mdi-close" color="colorIcon" start />
               Fechar
             </span>
@@ -90,7 +90,7 @@ const dialogVisible = ref(false);
 // IDs únicos para acessibilidade
 const titleId = computed(() => `modal-title-${props.item.id || Date.now()}`);
 const messageId = computed(
-  () => `modal-message-${props.item.id || Date.now()}`
+  () => `modal-message-${props.item.id || Date.now()}`,
 );
 
 // Observa quando o item é modal para mostrar o dialog
@@ -101,7 +101,7 @@ watch(
       dialogVisible.value = true;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const handleClose = () => {

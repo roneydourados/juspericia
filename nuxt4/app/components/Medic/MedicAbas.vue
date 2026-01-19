@@ -1,15 +1,17 @@
 <template>
-  <v-card variant="flat" rounded="xl" elevation="8">
+  <v-card variant="flat" rounded="xl" elevation="8" color="bgcolor">
     <v-card-text>
-      <v-tabs v-model="tab" color="primary">
+      <v-tabs v-model="tab">
         <v-tab value="medic" class="text-none">
-          <span class="font-weight-bold text-primary"> Médicos </span>
+          <span class="font-weight-bold text-colorTextPrimary"> Médicos </span>
         </v-tab>
         <v-tab value="comission" class="text-none">
-          <span class="font-weight-bold text-primary"> Comissão consulta </span>
+          <span class="font-weight-bold text-colorTextPrimary">
+            Comissão consulta
+          </span>
         </v-tab>
         <v-tab value="schedule" class="text-none">
-          <span class="font-weight-bold text-primary"> Agenda </span>
+          <span class="font-weight-bold text-colorTextPrimary"> Agenda </span>
         </v-tab>
       </v-tabs>
       <v-tabs-window v-model="tab">

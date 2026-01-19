@@ -2,7 +2,9 @@
   <v-card flat width="100%">
     <v-card-title>
       <div class="d-flex justify-end w-100 px-12">
-        <strong class="text-primary"> Versão: {{ $single?.version }} </strong>
+        <strong class="text-colorTextPrimary">
+          Versão: {{ $single?.version }}
+        </strong>
       </div>
     </v-card-title>
     <v-card-text class="px-12">

@@ -12,7 +12,7 @@
             icon="mdi-calendar-month"
           >
             <div
-              class="mt-4 text-primary"
+              class="mt-4 text-colorTextPrimary"
               style="font-size: 1.88rem; font-weight: 600"
             >
               {{ amountFormated($salts?.totals?.total ?? 0, true) }}
@@ -26,7 +26,7 @@
             icon="mdi-calendar-month"
           >
             <div
-              class="mt-4 text-primary"
+              class="mt-4 text-colorTextPrimary"
               style="font-size: 1.88rem; font-weight: 600"
             >
               {{ amountFormated($salts?.totals?.totalPending ?? 0, true) }}
@@ -40,7 +40,7 @@
             icon="mdi-calendar-month"
           >
             <div
-              class="mt-4 text-primary"
+              class="mt-4 text-colorTextPrimary"
               style="font-size: 1.88rem; font-weight: 600"
             >
               {{ amountFormated($salts?.totals?.totalExpired ?? 0, true) }}
@@ -284,7 +284,7 @@ const handleReceipt = (item: SaleProps) => {
   const popup = window.open(
     item.transactionReceiptUrl,
     "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`,
   );
 
   // verificar se o popup foi fechado

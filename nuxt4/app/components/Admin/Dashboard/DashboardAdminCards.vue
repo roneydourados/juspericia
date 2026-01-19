@@ -8,7 +8,7 @@
         icon-color="warning"
       >
         <div
-          class="text-primary w-100"
+          class="text-colorTextPrimary w-100"
           style="font-size: 1.88rem; font-weight: 600"
         >
           {{ amountFormated($dash?.totalPending ?? 0, true) }}
@@ -22,7 +22,10 @@
         icon="mdi-currency-usd"
         icon-color="success"
       >
-        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
+        <div
+          class="text-colorTextPrimary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
           {{ amountFormated($dash?.totalConfirmed ?? 0, true) }}
         </div>
       </CardLeftBorderColor>
@@ -47,7 +50,10 @@
     </v-col> -->
     <v-col cols="12" lg="3">
       <CardLeftBorderColor title="Novos Clientes" color="#FFF">
-        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
+        <div
+          class="text-colorTextPrimary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
           {{ $dash?.newClients ? $dash?.newClients.toString() : "0" }}
         </div>
       </CardLeftBorderColor>
@@ -58,7 +64,10 @@
         color="#FFF"
         icon="mdi-account-group-outline"
       >
-        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
+        <div
+          class="text-colorTextPrimary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
           {{ $dash?.totalClients ? $dash?.totalClients.toString() : "0" }}
         </div>
       </CardLeftBorderColor>
@@ -69,7 +78,10 @@
         color="#FFF"
         icon="mdi-package-variant"
       >
-        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
+        <div
+          class="text-colorTextPrimary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
           {{ $dash?.credisToExpire.toString() }}
         </div>
       </CardLeftBorderColor>
@@ -80,7 +92,10 @@
         color="#FFF"
         icon="mdi-calendar-month"
       >
-        <div class="text-primary" style="font-size: 1.88rem; font-weight: 600">
+        <div
+          class="text-colorTextPrimary"
+          style="font-size: 1.88rem; font-weight: 600"
+        >
           {{ $dash?.client40DaysSolicitation.toString() }}
         </div>
       </CardLeftBorderColor>

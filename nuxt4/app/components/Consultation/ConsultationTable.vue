@@ -37,7 +37,7 @@
       <CardBlur height="100%">
         <template #content>
           <v-row>
-            <v-col cols="12" class="d-flex flex-column text-primary">
+            <v-col cols="12" class="d-flex flex-column text-colorTextPrimary">
               <!-- <div class="d-flex" style="gap: 0.5rem">
                 <strong class="">Título:</strong>
                 <strong class="text-truncate">
@@ -58,7 +58,7 @@
                 </v-avatar>
                 <span>Preço</span>
               </div>
-              <strong style="font-size: 1.2rem" class="text-primary">
+              <strong style="font-size: 1.2rem" class="text-colorTextPrimary">
                 {{ amountFormated(consultation.value ?? 0, false) }}
               </strong>
             </v-col>
@@ -69,7 +69,7 @@
                 </v-avatar>
                 <span>Preço Crédito</span>
               </div>
-              <strong style="font-size: 1.2rem" class="text-primary">
+              <strong style="font-size: 1.2rem" class="text-colorTextPrimary">
                 {{ amountFormated(consultation.valueCredit ?? 0, false) }}
               </strong>
             </v-col>
@@ -85,7 +85,7 @@
               @click="editItem(consultation)"
             >
               <v-icon icon="mdi-pencil-outline" start color="colorIcon" />
-              <span class="text-primary text-caption"> Editar </span>
+              <span class="text-colorTextPrimary text-caption"> Editar </span>
             </Button>
             <Button
               variant="outlined"
@@ -95,7 +95,7 @@
               @click="deleteItem(consultation)"
             >
               <v-icon icon="mdi-delete-outline" start color="red" />
-              <span class="text-primary text-caption"> Apagar </span>
+              <span class="text-colorTextPrimary text-caption"> Apagar </span>
             </Button>
           </div>
         </template>
@@ -177,6 +177,6 @@ const handleSearch = useDebounceFn(
       loading.value = false;
     }
   },
-  500
+  500,
 );
 </script>

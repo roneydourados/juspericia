@@ -21,7 +21,7 @@
         color="grey"
       >
         <v-icon icon="mdi-pencil-outline" color="colorIcon" start />
-        <span class="text-caption text-primary"> Editar </span>
+        <span class="text-caption text-colorTextPrimary"> Editar </span>
       </Button>
     </v-toolbar>
 

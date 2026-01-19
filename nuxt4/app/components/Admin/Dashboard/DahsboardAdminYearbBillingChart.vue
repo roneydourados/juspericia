@@ -5,7 +5,7 @@
         <HeaderPage>
           <div class="d-flex align-center">
             <span
-              class="text-primary"
+              class="text-colorTextPrimary"
               :style="`font-size: 1rem; font-weight: 600`"
             >
               Faturamento - {{ currentYear }}

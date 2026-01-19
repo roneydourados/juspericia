@@ -174,7 +174,9 @@
                         color="primary"
                         start
                       />
-                      <span class="text-caption text-primary"> Responder </span>
+                      <span class="text-caption text-colorTextPrimary">
+                        Responder
+                      </span>
                     </Button>
                   </v-list-item-action>
                 </v-list-item>
@@ -244,7 +246,7 @@
         <SuportButton />
       </div>
     </v-main>
-    <v-footer app name="footer" height="30">
+    <v-footer app name="footer" height="30" color="bgcolor">
       <span class="text-caption">
         &copy; GaleCode - {{ new Date().getFullYear() }}
       </span>

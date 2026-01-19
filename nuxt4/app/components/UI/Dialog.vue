@@ -16,7 +16,7 @@
         <div class="d-flex align-center justify-space-between">
           <div class="d-flex align-center">
             <v-icon :icon="icon" color="amber" size="24" start />
-            <strong class="text-primary">{{ title }}</strong>
+            <strong class="text-colorTextPrimary">{{ title }}</strong>
           </div>
           <v-btn color="primary" icon variant="text" @click="$emit('cancel')">
             <v-icon icon="mdi-close" />
@@ -26,7 +26,7 @@
         <v-divider class="mt-8" />
       </v-card-title>
 
-      <v-card-text class="text-primary">
+      <v-card-text class="text-colorTextPrimary">
         <slot />
       </v-card-text>
 

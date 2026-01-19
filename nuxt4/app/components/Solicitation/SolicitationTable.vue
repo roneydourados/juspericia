@@ -105,14 +105,14 @@
               start
               color="primary"
             />
-            <span v-if="!mobile" class="text-primary"> Abertas </span>
+            <span v-if="!mobile" class="text-colorTextPrimary"> Abertas </span>
             <span class="text-info" style="font-weight: 500">
               ({{ getQuantity("open") }})
             </span>
           </v-tab>
           <v-tab value="payment_pending" class="text-none">
             <v-icon icon="mdi-cash-clock" size="24" start color="primary" />
-            <span v-if="!mobile" class="text-primary">
+            <span v-if="!mobile" class="text-colorTextPrimary">
               Pendente de pagamento
             </span>
             <span class="text-info" style="font-weight: 500">
@@ -121,7 +121,7 @@
           </v-tab>
           <v-tab value="paid" class="text-none">
             <v-icon icon="mdi-currency-usd" size="24" start color="primary" />
-            <span v-if="!mobile" class="text-primary"> Paga </span>
+            <span v-if="!mobile" class="text-colorTextPrimary"> Paga </span>
             <span class="text-info" style="font-weight: 500">
               ({{ getQuantity("paid") }})
             </span>
@@ -133,14 +133,16 @@
               start
               color="primary"
             />
-            <span v-if="!mobile" class="text-primary"> Agendado </span>
+            <span v-if="!mobile" class="text-colorTextPrimary"> Agendado </span>
             <span class="text-info" style="font-weight: 500">
               ({{ getQuantity("scheduled") }})
             </span>
           </v-tab>
           <v-tab value="canceled" class="text-none">
             <v-icon icon="mdi-cancel" size="24" start color="primary" />
-            <span v-if="!mobile" class="text-primary">Canceladas </span>
+            <span v-if="!mobile" class="text-colorTextPrimary"
+              >Canceladas
+            </span>
             <span class="text-info" style="font-weight: 500">
               ({{ getQuantity("canceled") }})
             </span>
@@ -152,7 +154,9 @@
               color="primary"
               start
             />
-            <span v-if="!mobile" class="text-primary">Finalizadas </span>
+            <span v-if="!mobile" class="text-colorTextPrimary"
+              >Finalizadas
+            </span>
             <span class="text-info" style="font-weight: 500">
               ({{ getQuantity("finished") }})
             </span>
@@ -231,18 +235,18 @@ const filteredConsultations = computed(() => {
       case "signature_pending":
         filtered = filtered.filter(
           (consultation) =>
-            consultation.PatientConsultationReport?.status === "sign-pending"
+            consultation.PatientConsultationReport?.status === "sign-pending",
         );
         break;
       case "report_pending":
         filtered = filtered.filter(
-          (consultation) => !consultation.PatientConsultationReport
+          (consultation) => !consultation.PatientConsultationReport,
         );
         break;
       case "report_ready":
         filtered = filtered.filter(
           (consultation) =>
-            consultation.PatientConsultationReport?.status === "signed"
+            consultation.PatientConsultationReport?.status === "signed",
         );
         break;
     }
@@ -251,7 +255,7 @@ const filteredConsultations = computed(() => {
   // Filtro por solicitationId (opcional)
   if (localFilters.value.solicitationId) {
     filtered = filtered.filter((consultation) =>
-      consultation.id?.toString().includes(localFilters.value.solicitationId)
+      consultation.id?.toString().includes(localFilters.value.solicitationId),
     );
   }
 

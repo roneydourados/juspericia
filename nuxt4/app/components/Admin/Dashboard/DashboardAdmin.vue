@@ -18,7 +18,7 @@
     <v-card-text class="px-12">
       <v-row dense v-if="tabDate === 5">
         <v-col cols="12" class="mb-4">
-          <strong class="text-primary">Outro períodos</strong>
+          <strong class="text-colorTextPrimary">Outro períodos</strong>
         </v-col>
         <v-col cols="12" lg="2">
           <DatePicker label="Data inicial" v-model="modelFilters.initialDate" />

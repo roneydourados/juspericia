@@ -7,7 +7,7 @@
         icon-color="blue"
       >
         <div class="d-flex justify-center w-100">
-          <span class="text-primary" style="font-size: 2rem">
+          <span class="text-colorTextPrimary" style="font-size: 2rem">
             {{ overview.totalEvaluations }}
           </span>
         </div>
@@ -16,7 +16,7 @@
     <v-col cols="12" md="6" lg="3">
       <DashboardCard title="Média Geral" icon="mdi-star" icon-color="orange">
         <div class="d-flex justify-center w-100">
-          <span class="text-primary" style="font-size: 2rem">
+          <span class="text-colorTextPrimary" style="font-size: 2rem">
             {{ overview.averageRating }}
           </span>
         </div>
@@ -29,7 +29,7 @@
         :icon-color="npsColor"
       >
         <div class="d-flex justify-center w-100">
-          <span class="text-primary" style="font-size: 2rem">
+          <span class="text-colorTextPrimary" style="font-size: 2rem">
             {{ overview.npsScore }}
           </span>
         </div>
@@ -42,7 +42,7 @@
         :icon-color="npsColor"
       >
         <div class="d-flex justify-center w-100">
-          <span class="text-primary" style="font-size: 1.8rem">
+          <span class="text-colorTextPrimary" style="font-size: 1.8rem">
             {{ npsClassification }}
           </span>
         </div>

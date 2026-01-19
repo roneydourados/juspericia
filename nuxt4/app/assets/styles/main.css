@@ -38,7 +38,7 @@ body {
 .v-data-table,
 .v-data-table-virtual {
   background: transparent !important;
-  color: #002c9b !important;
+  color: rgb(var(--v-theme-darkText)) !important;
 }
 .v-data-table .v-data-table__wrapper,
 .v-data-table-virtual .v-data-table__wrapper {
@@ -54,4 +54,11 @@ body {
 .v-data-table__th,
 .v-data-table-header__th {
   background: transparent !important;
+}
+
+.v-data-table__td,
+.v-data-table-column--align-start,
+.v-data-table-group-header-row__column {
+  background: transparent !important;
+  color: rgb(var(--v-theme-colorTextPrimary)) !important;
 }

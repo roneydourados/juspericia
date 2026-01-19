@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col cols="12" lg="3">
         <InfoLabel
           font-size="0.9"
@@ -56,7 +56,7 @@
         />
       </v-col>
     </v-row>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col cols="12" lg="3">
         <InfoLabel
           title="CPF"
@@ -101,7 +101,7 @@
         <strong style="font-size: 1rem">Dados endereço</strong>
       </v-col>
     </v-row>
-    <v-row dense class="text-primary">
+    <v-row dense class="text-colorTextPrimary">
       <v-col cols="12" lg="3">
         <InfoLabel
           title="Cep"

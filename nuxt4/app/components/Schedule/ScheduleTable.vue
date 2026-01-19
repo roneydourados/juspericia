@@ -48,7 +48,7 @@
               v-if="isTimerActive"
               style="gap: 0.5rem"
             >
-              <span class="text-primary font-weight-bold">
+              <span class="text-colorTextPrimary font-weight-bold">
                 Agenda será atualizada em
               </span>
               <v-progress-circular
@@ -88,8 +88,8 @@
               item.Medic
                 ? 'd-flex align-center'
                 : $currentUser?.profile?.type !== 'MEDICO'
-                ? 'text-red font-weight-bold d-flex align-center'
-                : 'd-flex align-center'
+                  ? 'text-red font-weight-bold d-flex align-center'
+                  : 'd-flex align-center'
             }`"
             style="gap: 0.5rem"
           >
@@ -113,7 +113,7 @@
             <v-icon icon="mdi-stethoscope" start color="red" />
             <span
               :class="`text-caption ${
-                item.Medic ? 'text-primary' : 'text-red'
+                item.Medic ? 'text-colorTextPrimary' : 'text-red'
               }`"
             >
               Vincular médico
@@ -126,8 +126,8 @@
               item.Medic
                 ? ''
                 : $currentUser?.profile?.type !== 'MEDICO'
-                ? 'text-red font-weight-bold'
-                : ''
+                  ? 'text-red font-weight-bold'
+                  : ''
             }`"
           >
             {{ dayjs(item.scheduleDate).format("DD/MM/YYYY") }} as
@@ -147,7 +147,7 @@
               color="colorIcon"
               start
             />
-            <strong class="text-primary">
+            <strong class="text-colorTextPrimary">
               {{ item.patientConsultationId }}
             </strong>
           </Button>
@@ -499,7 +499,7 @@ const handleServiceDetails = async (item: ScheduleProps) => {
       $scheduleSingle.value?.medicId !== $currentUser.value?.id
     ) {
       push.error(
-        "Outro profissional selcionou este agendamento a tela será atualizada!"
+        "Outro profissional selcionou este agendamento a tela será atualizada!",
       );
 
       await getSchedules();
@@ -519,7 +519,7 @@ const handleShowMedicalReportForm = async (item: ScheduleProps) => {
     item.PatientConsultation?.PatientConsultationReport
   ) {
     push.warning(
-      "Consulta já finalizada, con laudo médico informado, acesse módulo de laudos para mais detalhes"
+      "Consulta já finalizada, con laudo médico informado, acesse módulo de laudos para mais detalhes",
     );
     return;
   }
@@ -541,11 +541,11 @@ const handleReportDetails = async (item: ScheduleProps) => {
 
     if ($solicitation.value?.PatientConsultationReport?.publicId) {
       await consultationReport.show(
-        $solicitation.value?.PatientConsultationReport?.publicId!
+        $solicitation.value?.PatientConsultationReport?.publicId!,
       );
 
       await consultationReport.show(
-        $solicitation.value?.PatientConsultationReport?.publicId!
+        $solicitation.value?.PatientConsultationReport?.publicId!,
       );
 
       showReportDetails.value = true;
@@ -699,7 +699,7 @@ const stopAutoRefresh = () => {
 const handleDownloadRecord = async (item: ScheduleProps) => {
   if (!item.nuvidioCallId) {
     push.warning(
-      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada."
+      "Agendamento ainda não possui uma chamada de vídeo totalmente finalizada.",
     );
     return;
   }
@@ -707,7 +707,7 @@ const handleDownloadRecord = async (item: ScheduleProps) => {
   loading.value = true;
   try {
     const { file, fileName } = await nuvidioStore.getRecordCall(
-      item.nuvidioCallId
+      item.nuvidioCallId,
     );
 
     // Exemplo: Se o fileStore.download retornar um blob com metadados do nome do arquivo
