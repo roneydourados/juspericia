@@ -28,7 +28,16 @@
   </div>
   <v-row>
     <v-col v-for="item in $nuvidioDepartments" :key="item.id" cols="12" lg="4">
-      <CardBlur @click="handleGetDetails(item)" height="100%">
+      <CardBlur
+        @click="handleGetDetails(item)"
+        height="100%"
+        :color="
+          item.queueQuantity > 0 || item.callQuantity > 0
+            ? 'deep-orange-lighten-4'
+            : 'surface'
+        "
+        style="cursor: pointer"
+      >
         <v-card-title>
           <v-icon icon="mdi-headset" start size="40" color="colorIcon" />
           Departamento
