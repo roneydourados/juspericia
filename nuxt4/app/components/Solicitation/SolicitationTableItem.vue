@@ -84,11 +84,9 @@
               solicitation.PatientConsultationReport.status !== 'signed'
             "
             variant="flat"
-            color="grey"
+            color="warning"
           >
-            <span class="text-white text-caption">
-              Laudo aguardando assinatura
-            </span>
+            <span class="text-caption"> Laudo aguardando assinatura </span>
           </v-chip>
           <Button
             v-if="
