@@ -18,6 +18,7 @@
         <div
           v-for="item in $nuvidioDepartmentDetails?.clientQueue"
           :key="item.id"
+          class="mb-2"
         >
           <CardBlur height="100%">
             <v-card-text>
@@ -49,8 +50,9 @@
         <div
           v-for="item in $nuvidioDepartmentDetails?.clientInCall"
           :key="item.id"
+          class="mb-2"
         >
-          <CardBlur height="100%" class="mb-2">
+          <CardBlur height="100%">
             <v-card-text>
               <div class="d-flex flex-column" style="gap: 0.5rem">
                 <div class="d-flex align-center">
@@ -72,7 +74,7 @@
     </v-row>
     <v-row v-else>
       <v-col cols="12">
-        <CardBlur height="100%" class="mb-2">
+        <CardBlur height="100%">
           <v-card-text>
             <div class="d-flex flex-column align-center justify-center">
               <v-icon
