@@ -81,6 +81,7 @@ const chartOptions = computed(() => {
       show: false,
     },
     tooltip: {
+      theme: isDark ? "dark" : "light",
       y: {
         formatter: (value: number) => `${value} avaliações`,
       },

@@ -104,6 +104,7 @@ const chartOptions = computed(() => {
       position: "top",
     },
     tooltip: {
+      theme: isDark ? "dark" : "light",
       y: {
         formatter: (value: number, { seriesIndex }: any) => {
           if (seriesIndex === 0) return `${value}`;

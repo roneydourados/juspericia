@@ -58,5 +58,19 @@ export interface NPSDashboardMetricsDTO {
     average: number;
     count: number;
   }[];
+  topBestEvaluations: {
+    rating: number;
+    medicName: string;
+    solicitationId: number;
+    specialtyName: string;
+    feedbackText: string;
+  }[];
+  topWorstEvaluations: {
+    rating: number;
+    medicName: string;
+    solicitationId: number;
+    specialtyName: string;
+    feedbackText: string;
+  }[];
   years: number[];
 }

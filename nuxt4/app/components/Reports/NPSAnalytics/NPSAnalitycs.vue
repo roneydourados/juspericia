@@ -63,6 +63,18 @@
             :top-specialties="$npsDahsboard.topSpecialties"
           />
         </v-col>
+        <v-col cols="12">
+          <NPSTopBestEvaluations
+            v-if="$npsDahsboard.topBestEvaluations?.length"
+            :top-best-evaluations="$npsDahsboard.topBestEvaluations"
+          />
+        </v-col>
+        <v-col cols="12">
+          <NPSTopWorstEvaluations
+            v-if="$npsDahsboard.topWorstEvaluations?.length"
+            :top-worst-evaluations="$npsDahsboard.topWorstEvaluations"
+          />
+        </v-col>
       </v-row>
     </div>
 
@@ -104,23 +116,23 @@ watch(
     const currentMonth = dayjs(filters.value.monthReference + "-01").month();
 
     filters.value.monthReference = dayjs(
-      new Date(newYear, currentMonth, 1)
+      new Date(newYear, currentMonth, 1),
     ).format("YYYY-MM");
 
     await getDashboard();
-  }
+  },
 );
 
 const handleChangeMonth = async (monthIndex: number) => {
   const currentYear = filters.value.year;
 
   filters.value.monthReference = dayjs(
-    new Date(currentYear, monthIndex, 1)
+    new Date(currentYear, monthIndex, 1),
   ).format("YYYY-MM");
 
   console.log(
     "🚀 ~ handleChangeMonth ~ filters.value.monthReference:",
-    filters.value.monthReference
+    filters.value.monthReference,
   );
 
   await getDashboard();

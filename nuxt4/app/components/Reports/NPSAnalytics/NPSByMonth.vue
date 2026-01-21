@@ -67,6 +67,7 @@ const chartOptions = computed(() => {
       type: "area",
       background: isDark ? "rgb(var(--v-theme-tabbgcolor))" : "#ffffff",
       foreColor: isDark ? "#d4d4d4" : "#373d3f",
+
       toolbar: {
         show: true,
         tools: {
@@ -126,6 +127,7 @@ const chartOptions = computed(() => {
     tooltip: {
       shared: true,
       intersect: false,
+      theme: isDark ? "dark" : "light",
       y: {
         formatter: (value: number) => `${value}`,
       },
