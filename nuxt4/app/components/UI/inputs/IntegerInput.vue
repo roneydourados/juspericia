@@ -23,8 +23,6 @@ import * as zod from "zod";
 import { useField } from "vee-validate";
 import { uuidv7 as uuid } from "uuidv7";
 
-const textField = ref(null);
-
 const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps({
@@ -93,7 +91,7 @@ const validationRules = computed(() => {
                 valid = false;
               } else {
                 valid = !isNaN(
-                  Number(val.trim().replaceAll(".", "").replaceAll(",", ""))
+                  Number(val.trim().replaceAll(".", "").replaceAll(",", "")),
                 );
               }
             }
@@ -106,14 +104,14 @@ const validationRules = computed(() => {
           },
           {
             message: "Valor inválido!!",
-          }
+          },
         )
         .refine(validateValue, {
           message:
             props.min !== undefined
               ? `Valor deve ser maior ou igual a ${props.min}`
               : "Valor inválido!!",
-        })
+        }),
     );
   }
 
@@ -133,7 +131,7 @@ const validationRules = computed(() => {
               valid = false;
             } else {
               valid = !isNaN(
-                Number(val.trim().replaceAll(".", "").replaceAll(",", ""))
+                Number(val.trim().replaceAll(".", "").replaceAll(",", "")),
               );
             }
           }
@@ -146,14 +144,14 @@ const validationRules = computed(() => {
         },
         {
           message: "Valor inválido!!",
-        }
+        },
       )
       .refine(validateValue, {
         message:
           props.min !== undefined
             ? `Valor deve ser maior ou igual a ${props.min}`
             : "Valor inválido!!",
-      })
+      }),
   );
 });
 
