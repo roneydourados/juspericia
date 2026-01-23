@@ -82,7 +82,7 @@
                 :required="!model.id"
               />
             </v-col>
-            <v-col cols="12" lg="8" class="d-flex flex-column">
+            <v-col cols="12" class="d-flex flex-column">
               <div class="d-flex" style="gap: 0.5rem">
                 <SelectSearchMedicalSpecialty
                   v-model="model.medicalSpecialty"
