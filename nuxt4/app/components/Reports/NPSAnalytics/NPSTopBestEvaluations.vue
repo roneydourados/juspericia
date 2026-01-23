@@ -23,7 +23,11 @@
               </v-chip>
             </td>
             <td class="font-weight-medium">
-              {{ item.medicName ?? "Usabilidade Geral" }}
+              {{
+                item.medicName === "Desconhecido"
+                  ? "Usabilidade Geral"
+                  : item.medicName
+              }}
             </td>
             <td class="text-center">
               <v-rating
@@ -41,7 +45,11 @@
               </v-chip>
             </td>
             <td class="font-weight-bold">
-              {{ item.specialtyName ?? "Usabilidade Geral" }}
+              {{
+                item.specialtyName === "Desconhecido"
+                  ? "Usabilidade Geral"
+                  : item.specialtyName
+              }}
             </td>
             <td class="text-caption">
               {{ item.feedbackText }}
