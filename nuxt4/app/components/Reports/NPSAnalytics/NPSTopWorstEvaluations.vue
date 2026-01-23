@@ -25,7 +25,7 @@
             <td class="font-weight-medium">
               {{
                 item.medicName === "Desconhecido"
-                  ? "Usabilidade Geral"
+                  ? "Usabilidade Geral/Qualidade"
                   : item.medicName
               }}
             </td>
@@ -47,7 +47,7 @@
             <td class="font-weight-bold">
               {{
                 item.specialtyName === "Desconhecido"
-                  ? "Usabilidade Geral"
+                  ? "Usabilidade Geral/Qualidade"
                   : item.specialtyName
               }}
             </td>
