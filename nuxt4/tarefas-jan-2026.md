@@ -35,3 +35,10 @@
 # Transações
 
 [x] - Implementar tela para mostrar detalhes do webhook nas transações de venda
+
+# Tratamento para transações
+
+[] - Dar possibilidade do ADM gerar a cobrança da transação caso o usuário não queira fazer, criar cobrança no asaas ou apenas pegar o link da mesma.
+Deixar um botão no front-end para copiar link, um endpoint na api que já faça esta tarefa retornar o link ou gerar uma nova cobrança caso a anterior tenha expirado.
+
+[] - Criar uma tabela para gravar todos os logs gerados pelo webhook do assass, para facilitar o debug e acompanhamento das transações
