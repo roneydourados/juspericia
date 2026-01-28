@@ -54,4 +54,8 @@ export interface TransactionProps {
   updatedAt: string;
   createdAt: string;
   webhookData: string;
+  invoiceUrl: string | null;
+  dueDate: string;
+  saleId: string;
+  userId: number;
 }

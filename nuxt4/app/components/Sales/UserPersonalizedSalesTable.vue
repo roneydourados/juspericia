@@ -78,7 +78,7 @@
         {{
           amountFormated(
             Number(item.packgeSaleValue ?? 0) / (item.packgeQuantity ?? 1),
-            true
+            true,
           )
         }}
       </span>
@@ -181,8 +181,8 @@ const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $total = computed(() =>
   salesStore.$all.reduce(
     (acc, transaction) => acc + Number(transaction.packgeSaleValue ?? 0),
-    0
-  )
+    0,
+  ),
 );
 
 const showPrececkout = ref(false);
@@ -277,6 +277,12 @@ const hanelMountModelPrececkout = async (item: SaleProps) => {
     await getTransactions();
 
     showErrorAlert.value = true;
+
+    return;
+  }
+
+  if (item.invoiceUrl) {
+    window.open(item.invoiceUrl, "_blank");
 
     return;
   }
@@ -466,7 +472,7 @@ const handleReceipt = (item: SaleProps) => {
   const popup = window.open(
     item.transactionReceiptUrl,
     "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
+    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`,
   );
 
   // verificar se o popup foi fechado

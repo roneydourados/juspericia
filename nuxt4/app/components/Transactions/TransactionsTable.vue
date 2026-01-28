@@ -216,6 +216,19 @@
                   <span class="text-caption"> Ver detalhes do Webhook </span>
                 </Button>
               </v-col>
+              <v-col cols="12" md="4">
+                <Button
+                  variant="text"
+                  color="orange-darken-4"
+                  class="text-none"
+                  @click="hanelMountModelPrececkout(item)"
+                >
+                  <v-icon icon="mdi-link" start />
+                  <span class="text-caption">
+                    Copiar/Gerar link de pagamento
+                  </span>
+                </Button>
+              </v-col>
             </v-row>
           </v-expansion-panel-text>
         </v-expansion-panel>
@@ -293,12 +306,19 @@
     @close="getTransactions"
   />
   <TransactionWebhookDetails v-model="showWebhookDetails" />
+  <AsaasPreCheckout
+    v-model:show="showPrececkout"
+    v-model="modelPrececkout"
+    @confirm-sale="handleSaleItem"
+    @cancel="handleCancel"
+  />
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs";
 
 const transactionsStore = useTransactionsStore();
+const asaas = useAsaasStore();
 const auth = useAuthStore();
 const { amountFormated, formatDate } = useUtils();
 
@@ -311,6 +331,7 @@ const $total = computed(() =>
   ),
 );
 
+const showPrececkout = ref(false);
 const showCancelSale = ref(false);
 const showWebhookDetails = ref(false);
 const loading = ref(false);
@@ -319,6 +340,26 @@ const showSetSellerForm = ref(false);
 const publicIdCancel = ref("");
 const transactionPublicId = ref("");
 const selectedTransaction = ref<TransactionProps>();
+const modelPrececkout = ref({
+  name: "",
+  description: "",
+  dueDays: 2,
+  paymentForm: "CREDIT_CARD",
+  discountValue: undefined as number | undefined,
+  discountType: undefined as string | undefined,
+  installmentCount: 1,
+  itemValue: 0,
+  totalValue: 0,
+  category: "package",
+  packageId: undefined as number | undefined,
+  voucherDesconto: "",
+  totalBruteValue: 0,
+  voucherId: undefined as number | undefined,
+  publicSaleId: "",
+  packgeSaleValue: 0,
+  packgeQuantity: 1,
+  userId: undefined as number | undefined,
+});
 const statusSale = ref([
   {
     label: "Pago",
@@ -352,6 +393,34 @@ const filters = ref({
   status: "CONFIRMED",
   client: undefined as UserProps | undefined,
 });
+
+const $paymentResponse = computed(() => asaas.$paymentReponse);
+
+const copyToClipboard = async (text: string) => {
+  try {
+    // Tenta usar a API moderna do clipboard
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    // Fallback para o método antigo se a API moderna falhar
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const successful = document.execCommand("copy");
+      document.body.removeChild(textArea);
+      return successful;
+    } catch (error) {
+      console.error("Erro ao copiar:", error);
+      return false;
+    }
+  }
+};
 
 const getTransactions = async () => {
   loading.value = true;
@@ -444,6 +513,191 @@ const webhookDetails = async (item: TransactionProps) => {
     showWebhookDetails.value = true;
   } catch (error) {
     console.error("Error fetching transaction details:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const hanelMountModelPrececkout = async (item: TransactionProps) => {
+  loading.value = true;
+  try {
+    //verificar se já expirou, se sim então cancelar a cobrança anterior e gerar uma nova cobrança
+    const dueDate = item.dueDate?.substring(0, 10);
+    if (dayjs().isAfter(dayjs(dueDate)) && item.saleId) {
+      // se a cobrança venceu, então apagar a mesma do asaas
+      await asaas.deletePayment(item.saleId!);
+
+      //pegar o públicId da venda que vai ser cancelada
+      publicIdCancel.value = item.publicId!;
+
+      //cancelar a venda
+      await handleCancelItem();
+
+      //atualizar a lista de vendas
+      await getTransactions();
+
+      push.warning(
+        "Link de pagamento expirado. Clique novamente para gerar uma nova cobrança.",
+      );
+
+      return;
+    }
+
+    //se não venceu e tem uma url apenas copiar a URl
+    if (item.invoiceUrl) {
+      const copied = await copyToClipboard(item.invoiceUrl);
+      if (copied) {
+        push.success("Link de pagamento copiado para a área de transferência");
+      } else {
+        push.error("Opps! Erro ao copiar link de pagamento, tente novamente.");
+      }
+      return;
+    }
+
+    //se ainda não tem nada então gerar a cobrança
+    modelPrececkout.value = {
+      name: item.description ?? "",
+      description: item.description ?? "",
+      dueDays: 2,
+      paymentForm: "CREDIT_CARD",
+      discountValue: undefined,
+      discountType: undefined,
+      installmentCount: 1,
+      itemValue: Number(item.total ?? 0),
+      totalValue: Number(item.total ?? 0),
+      category: "package",
+      totalBruteValue: Number(item.total ?? 0),
+      packageId: undefined,
+      voucherDesconto: "",
+      voucherId: undefined,
+      publicSaleId: item.publicId ?? "",
+      packgeSaleValue: item.packgeSaleValue ?? 0,
+      packgeQuantity: item.packgeQuantity ?? 1,
+      userId: item.userId,
+    };
+
+    showPrececkout.value = true;
+  } catch (error) {
+    console.error("Error preparing pre-checkout:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleSaleItem = async () => {
+  showPrececkout.value = false;
+  loading.value = true;
+  try {
+    if (
+      !modelPrececkout.value.name ||
+      !modelPrececkout.value.itemValue ||
+      !modelPrececkout.value.userId
+    ) {
+      push.warning("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    if (
+      modelPrececkout.value.installmentCount &&
+      modelPrececkout.value.installmentCount > 1
+    ) {
+      //se for parcelada enviar quantidade de parcelas e o valor total
+      await asaas.createPaymentManualSale({
+        dueDate: dayjs()
+          .add(modelPrececkout.value.dueDays, "days")
+          .format("YYYY-MM-DD"),
+        description: modelPrececkout.value.name,
+        //category: modelPrececkout.value.category,
+        //packageId: props.item.id,
+        dueDays: modelPrececkout.value.dueDays,
+        totalValue: modelPrececkout.value.totalValue,
+        installmentCount: modelPrececkout.value.installmentCount,
+        billingType: modelPrececkout.value.paymentForm,
+        voucherId: modelPrececkout.value.voucherId,
+        userId: modelPrececkout.value.userId, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        discount: {
+          value: modelPrececkout.value.discountValue ?? 0,
+          type: modelPrececkout.value.discountType,
+        },
+        saleValue: modelPrececkout.value.totalValue ?? 0,
+        //packgeSaleValue: modelPrececkout.value.itemValue ?? 0,
+        //packgeQuantity: props.item.packageQuantity ?? 1,
+        publicSaleId: modelPrececkout.value.publicSaleId,
+        packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
+        packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
+      });
+    } else {
+      const payload = {
+        dueDate: dayjs()
+          .add(modelPrececkout.value.dueDays, "days")
+          .format("YYYY-MM-DD"),
+        //value: props.item.value!,
+        value: modelPrececkout.value.totalValue,
+        description: modelPrececkout.value.name!,
+        category: modelPrececkout.value.category,
+        //packageId: props.item.id,
+        dueDays: modelPrececkout.value.dueDays,
+        billingType: modelPrececkout.value.paymentForm,
+        voucherId: modelPrececkout.value.voucherId,
+        userId: modelPrececkout.value.userId, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
+        discount: {
+          value: modelPrececkout.value.discountValue ?? 0,
+          type: modelPrececkout.value.discountType,
+        },
+        saleValue: modelPrececkout.value.totalValue ?? 0,
+        publicSaleId: modelPrececkout.value.publicSaleId,
+        packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
+        packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
+      };
+
+      await asaas.createPaymentManualSale(payload);
+    }
+
+    if ($paymentResponse.value?.data?.invoiceUrl) {
+      const copied = await copyToClipboard(
+        $paymentResponse.value.data.invoiceUrl,
+      );
+      if (copied) {
+        push.success("Link de pagamento copiado para a área de transferência");
+      } else {
+        push.error("Opps! Erro ao copiar link de pagamento, tente novamente.");
+      }
+    }
+
+    await getTransactions();
+  } catch (error) {
+    console.error("Error creating sale:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleCancel = async () => {
+  loading.value = true;
+  try {
+    showPrececkout.value = false;
+    modelPrececkout.value = {
+      name: "",
+      description: "",
+      dueDays: 2,
+      paymentForm: "CREDIT_CARD",
+      discountValue: undefined,
+      discountType: undefined,
+      installmentCount: 1,
+      itemValue: 0,
+      totalValue: 0,
+      category: "package",
+      packageId: 0,
+      voucherDesconto: "",
+      totalBruteValue: 0,
+      voucherId: undefined,
+      publicSaleId: "",
+      packgeSaleValue: 0,
+      packgeQuantity: 1,
+      userId: undefined,
+    };
+
+    await getTransactions();
   } finally {
     loading.value = false;
   }
