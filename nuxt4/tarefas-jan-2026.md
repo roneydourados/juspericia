@@ -38,7 +38,8 @@
 
 # Tratamento para transações
 
-[] - Dar possibilidade do ADM gerar a cobrança da transação caso o usuário não queira fazer, criar cobrança no asaas ou apenas pegar o link da mesma.
+[x] - Dar possibilidade do ADM gerar a cobrança da transação caso o usuário não queira fazer, criar cobrança no asaas ou apenas pegar o link da mesma.
 Deixar um botão no front-end para copiar link, um endpoint na api que já faça esta tarefa retornar o link ou gerar uma nova cobrança caso a anterior tenha expirado.
 
-[] - Criar uma tabela para gravar todos os logs gerados pelo webhook do assass, para facilitar o debug e acompanhamento das transações
+[x] - Criar uma tabela para gravar todos os logs gerados pelo webhook do assass, para facilitar o debug e acompanhamento das transações
+[] - Verificar o que esta acontecendo quando esquece de colocar todas as informações do laudo por exemplo CPF, edita o mesmo adiciona a informação correta, porém ao assinar some

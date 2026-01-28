@@ -30,6 +30,7 @@ export interface SaleProps {
   saleType?: string;
   discountValue?: number;
   discountType?: string;
+  SaleWebhookEvents?: SaleWebhookEventProps[];
 }
 
 export interface SaleFilterProps {
@@ -37,4 +38,17 @@ export interface SaleFilterProps {
   finalDate?: string;
   status?: string;
   userId?: number;
+}
+
+export interface SaleWebhookEventProps {
+  payId: string;
+  event: string;
+  description: string;
+  billingType: string;
+  netValue: number;
+  value: number;
+  status: string;
+  reason: string;
+  content: string;
+  createdAt: string;
 }

@@ -292,10 +292,7 @@
     :public-id="transactionPublicId"
     @close="getTransactions"
   />
-  <TransactionWebhookDetails
-    :transaction="selectedTransaction"
-    v-model="showWebhookDetails"
-  />
+  <TransactionWebhookDetails v-model="showWebhookDetails" />
 </template>
 
 <script setup lang="ts">
@@ -439,8 +436,16 @@ const getTransactionSetSeller = (item: TransactionProps) => {
   showSetSellerForm.value = true;
 };
 
-const webhookDetails = (item: TransactionProps) => {
-  selectedTransaction.value = item;
-  showWebhookDetails.value = true;
+const webhookDetails = async (item: TransactionProps) => {
+  loading.value = true;
+  try {
+    await transactionsStore.show(item.publicId);
+    selectedTransaction.value = item;
+    showWebhookDetails.value = true;
+  } catch (error) {
+    console.error("Error fetching transaction details:", error);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

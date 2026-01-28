@@ -13,6 +13,9 @@ export const useTransactionsStore = defineStore("transactions", () => {
   const transactions = ref<TransactionProps[]>([]);
   const $transactions = computed(() => transactions.value);
 
+  const transaction = ref<SaleProps>();
+  const $transaction = computed(() => transaction.value);
+
   const getTransactions = async ({
     initialDate,
     finalDate,
@@ -43,5 +46,17 @@ export const useTransactionsStore = defineStore("transactions", () => {
     await api.put("/transactions/seller", input);
   };
 
-  return { $transactions, getTransactions, cancelTransaction, setSeller };
+  const show = async (publicId: string) => {
+    const { data } = await api.get<SaleProps>(`/transactions/${publicId}`);
+    transaction.value = data;
+  };
+
+  return {
+    $transactions,
+    $transaction,
+    getTransactions,
+    cancelTransaction,
+    setSeller,
+    show,
+  };
 });
