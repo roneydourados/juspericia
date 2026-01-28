@@ -262,6 +262,11 @@ const getPaymentForm = (value: string) => {
 };
 
 const hanelMountModelPrececkout = async (item: SaleProps) => {
+  if (item.status !== "PENDING") {
+    push.info("Compra não esta mais pendente.");
+    return;
+  }
+
   const dueDate = item.dueDate?.substring(0, 10);
   if (dayjs().isAfter(dayjs(dueDate)) && item.saleId) {
     // se a cobrança venceu, então apagar a mesma do asaas

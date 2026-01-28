@@ -521,6 +521,13 @@ const webhookDetails = async (item: TransactionProps) => {
 const hanelMountModelPrececkout = async (item: TransactionProps) => {
   loading.value = true;
   try {
+    if (item.status !== "PENDING") {
+      push.warning(
+        "Somente transações pendentes podem gerar link de pagamento.",
+      );
+      return;
+    }
+
     //verificar se já expirou, se sim então cancelar a cobrança anterior e gerar uma nova cobrança
     const dueDate = item.dueDate?.substring(0, 10);
     if (dayjs().isAfter(dayjs(dueDate)) && item.saleId) {
