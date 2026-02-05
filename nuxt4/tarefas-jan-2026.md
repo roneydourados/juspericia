@@ -42,4 +42,10 @@
 Deixar um botão no front-end para copiar link, um endpoint na api que já faça esta tarefa retornar o link ou gerar uma nova cobrança caso a anterior tenha expirado.
 
 [x] - Criar uma tabela para gravar todos os logs gerados pelo webhook do assass, para facilitar o debug e acompanhamento das transações
-[] - Verificar o que esta acontecendo quando esquece de colocar todas as informações do laudo por exemplo CPF, edita o mesmo adiciona a informação correta, porém ao assinar some
+[x] - Verificar o que esta acontecendo quando esquece de colocar todas as informações do laudo por exemplo CPF, edita o mesmo adiciona a informação correta, porém ao assinar some
+
+# Implementações Fevereiro
+
+[] - Criar Cofre de senhas apenas usuário master
+[] - Criar Controle de desepesas para o usuário master
+[] - Tirar a trava da correção para usuário admin
