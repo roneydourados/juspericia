@@ -517,9 +517,7 @@
             variant="text"
             color="grey"
             @click="handleShowCorrectionForm(solicitation)"
-            :disabled="
-              !solicitation.PatientConsultationReport || !$isEnableCorrection
-            "
+            :disabled="!$isEnableCorrection"
           >
             <v-icon
               icon="mdi-file-document-refresh-outline"
@@ -841,6 +839,10 @@ const $limiteDateCorrection = computed(() => {
   return "-";
 });
 const $isEnableCorrection = computed(() => {
+  if (auth.$currentUser?.profile?.type === "ADMIN") {
+    return false;
+  }
+
   if (
     props.solicitation.PatientConsultationReport &&
     props.solicitation.PatientConsultationReport.reportDate
