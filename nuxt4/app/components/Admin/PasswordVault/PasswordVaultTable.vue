@@ -70,7 +70,7 @@
         md="6"
         lg="4"
       >
-        <v-card variant="outlined" rounded="xl" class="pa-2">
+        <CardBlur class="pa-2" height="100%">
           <v-card-title class="d-flex align-center" style="gap: 0.75rem">
             <v-avatar color="primary" size="36">
               <span class="text-white text-caption">{{
@@ -163,7 +163,7 @@
               </v-btn>
             </div>
           </v-card-actions>
-        </v-card>
+        </CardBlur>
       </v-col>
     </v-row>
     <EmptyContent
