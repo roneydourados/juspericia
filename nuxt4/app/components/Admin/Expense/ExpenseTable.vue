@@ -7,6 +7,8 @@
       :headers="headers"
       :loading="loading"
       :show-crud="false"
+      show-select
+      v-model="selectedDown"
     >
       <template #filters>
         <v-col cols="12" lg="2"
@@ -71,10 +73,19 @@
             size="small"
             class="text-none"
             @click="router.back()"
-            ><v-icon icon="mdi-arrow-left" start /><span class="text-caption"
-              >Voltar</span
-            ></Button
-          >
+            ><v-icon icon="mdi-arrow-left" start />
+            <span class="text-caption"> Voltar </span>
+          </Button>
+
+          <Button
+            color="warning"
+            variant="flat"
+            size="small"
+            class="text-none"
+            @click="handleDownMany"
+            ><v-icon icon="mdi-arrow-down" start />
+            <span class="text-caption"> Dar Baixa </span>
+          </Button>
         </v-col>
       </template>
       <template #item.description="{ item }"
@@ -139,13 +150,13 @@ const financeStore = useFinanceStore();
 const router = useRouter();
 const { formatDate, amountFormated } = useUtils();
 const loading = ref(false);
-const search = ref("");
 const showForm = ref(false);
 const selected = ref<FinanceProps | undefined>(undefined);
+const selectedDown = ref<FinanceProps[]>([]);
 const filters = ref<FinanceFiltersProps>({
   initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
   finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
-  status: "",
+  status: "open",
   financeType: "expense",
 });
 const statusItems = [
@@ -168,6 +179,7 @@ const modelForm = ref({
   value: "",
   status: "open",
 });
+
 const $all = computed(() => financeStore.$all);
 
 const statusName = (status?: string) =>
@@ -248,6 +260,56 @@ const handleSubmit = async () => {
   resetForm();
   await handleFilter();
 };
+
+const handleDownMany = () => {
+  if (selectedDown.value.length === 0) {
+    push.warning("Selecione ao menos uma despesa para dar baixa.");
+    return;
+  }
+
+  push.info({
+    title: "Dar baixa em despesas",
+    message: "Tem certeza que deseja dar baixa nas despesas selecionadas?",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Baixar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              const ids = selectedDown.value.map(
+                (expense) => expense.publicId!,
+              );
+
+              await financeStore.downMany(ids);
+
+              push.success("Despesas baixadas com sucesso.");
+            } catch (error) {
+              push.error("Erro ao dar baixa nas despesas.");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+};
+
 onMounted(async () => {
   resetForm();
   await handleFilter();

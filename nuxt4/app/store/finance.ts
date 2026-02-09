@@ -38,6 +38,10 @@ export const useFinanceStore = defineStore("finance", () => {
     expense.value = data;
   };
 
+  const downMany = async (payload: string[]) => {
+    await api.post("/finance-down-many", { ids: payload });
+  };
+
   return {
     $all,
     $single,
@@ -45,5 +49,6 @@ export const useFinanceStore = defineStore("finance", () => {
     store,
     updated,
     show,
+    downMany,
   };
 });
