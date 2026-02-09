@@ -101,7 +101,12 @@
                   class="text-caption text-medium-emphasis"
                   style="width: 7rem"
                 >
-                  Data: {{ dayjs(item.paymentDate).format("DD/MM/YYYY HH:mm") }}
+                  Data:
+                  {{
+                    item.paymentDate
+                      ? dayjs(item.paymentDate).format("DD/MM/YYYY HH:mm")
+                      : dayjs(item.createdAt).format("DD/MM/YYYY HH:mm")
+                  }}
                 </span>
               </v-col>
               <v-col cols="12" lg="3">
@@ -162,9 +167,11 @@
                   <div class="font-weight-bold">Paga em:</div>
                   <div class="text-caption text-medium-emphasis">
                     {{
-                      item.status === "CONFIRMED" || item.status === "RECEIVED"
+                      (item.status === "CONFIRMED" ||
+                        item.status === "RECEIVED") &&
+                      item.paymentDate
                         ? dayjs(item.paymentDate).format("DD/MM/YYYY HH:mm")
-                        : "-"
+                        : dayjs(item.createdAt).format("DD/MM/YYYY HH:mm")
                     }}
                   </div>
                 </div>

@@ -58,4 +58,5 @@ export interface TransactionProps {
   dueDate: string;
   saleId: string;
   userId: number;
+  paymentDate: string;
 }
