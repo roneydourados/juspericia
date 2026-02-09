@@ -363,6 +363,8 @@ import dayjs from "dayjs";
 
 const comission = useComissionStore();
 const router = useRouter();
+const financeStore = useFinanceStore();
+
 const { formatDate, amountFormated } = useUtils();
 
 const $all = computed(() => comission.$all);
@@ -474,9 +476,23 @@ const handlePaidComissions = async () => {
 
   loading.value = true;
   try {
+    let totalExpenseValue = 0;
     for (const comissionItem of comissionsSelecteds.value) {
       if (!comissionItem.publicId) continue;
+      totalExpenseValue += Number(comissionItem.comissionValue) || 0;
       await comission.paidComission(comissionItem.publicId);
+    }
+
+    //lançar a despesa referente ao pagamento da comissão
+    if (totalExpenseValue > 0) {
+      await financeStore.store({
+        emissionDate: dayjs().format("YYYY-MM-DD"),
+        dueDate: dayjs().format("YYYY-MM-DD"),
+        description: `Referente a pagamento de comissão de ${filters.value.user?.name || "colaborador"}`,
+        value: totalExpenseValue,
+        valueOpen: 0,
+        status: "paid",
+      });
     }
 
     comissionsSelecteds.value = [];
