@@ -1,3 +1,3 @@
 <template>
-  <div>despesas</div>
+  <ExpenseTable />
 </template>

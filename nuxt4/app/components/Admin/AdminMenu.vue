@@ -4,6 +4,16 @@
       <v-col cols="12" class="pa-6">
         <HeaderPage title="Administração" font-size="1.8rem" />
       </v-col>
+      <v-col cols="12">
+        <StringInput
+          v-model="search"
+          placeholder="Pesquisar no menu"
+          rounded
+          clearable
+          class="mb-4"
+          @update:model-value="handleFilterMenu"
+        />
+      </v-col>
       <v-col v-for="(item, index) in itemsMenu" :key="index" cols="12" lg="4">
         <CardBlur
           v-if="item.visible"
@@ -32,6 +42,8 @@
 const router = useRouter();
 const termsStore = useTermsStore();
 const authStore = useAuthStore();
+
+const search = ref("");
 
 const showTermsForm = ref(false);
 
@@ -147,5 +159,12 @@ const handlClick = async (route: string) => {
     default:
       await router.push(route);
   }
+};
+
+const handleFilterMenu = () => {
+  const searchLower = search.value.toLowerCase();
+  itemsMenu.value.forEach((item) => {
+    item.visible = item.text.toLowerCase().includes(searchLower);
+  });
 };
 </script>
