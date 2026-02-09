@@ -3,11 +3,9 @@
     <Table
       title="Despesas"
       font-size="1.5rem"
-      :items="filteredItems"
+      :items="$all"
       :headers="headers"
       :loading="loading"
-      @search="handleSearch"
-      @add="openCreate"
       :show-crud="false"
     >
       <template #filters>
@@ -31,7 +29,7 @@
         /></v-col>
         <v-col
           cols="12"
-          lg="3"
+          lg="6"
           class="d-flex flex-wrap mt-n6"
           style="gap: 0.5rem"
         >
@@ -44,6 +42,16 @@
             ><v-icon icon="mdi-filter-outline" start /><span
               class="text-caption"
               >Filtrar</span
+            ></Button
+          >
+          <Button
+            color="green"
+            variant="flat"
+            size="small"
+            class="text-none"
+            @click="openCreate"
+            ><v-icon icon="mdi-plus" start /><span class="text-caption"
+              >Adicionar</span
             ></Button
           >
           <Button
@@ -115,52 +123,13 @@
       </template>
     </Table>
 
-    <DialogForm
-      :show="showForm"
-      title="Despesa"
-      width="600"
-      @dialog="closeForm"
-      border-color="#c8e040"
-    >
-      <FormCrud :on-submit="handleSubmit">
-        <v-row dense>
-          <v-col cols="12" lg="6"
-            ><DatePicker
-              v-model="modelForm.emissionDate"
-              label="Data de emissão"
-              required
-          /></v-col>
-          <v-col cols="12" lg="6"
-            ><DatePicker
-              v-model="modelForm.dueDate"
-              label="Data de vencimento"
-              required
-          /></v-col>
-          <v-col cols="12"
-            ><TextInput
-              v-model="modelForm.description"
-              label="Descrição"
-              required
-              icon="mdi-text-box-outline"
-          /></v-col>
-          <v-col cols="12" lg="6"
-            ><CurrencyInput
-              v-model="modelForm.value"
-              label="Valor"
-              required
-              icon="mdi-currency-brl"
-          /></v-col>
-          <v-col cols="12" lg="6"
-            ><SelectInput
-              v-model="modelForm.status"
-              label="Status"
-              item-title="name"
-              item-value="type"
-              :items="statusItems"
-          /></v-col>
-        </v-row>
-      </FormCrud>
-    </DialogForm>
+    <ExpenseForm
+      v-model:show="showForm"
+      v-model:data="modelForm"
+      @submit="handleSubmit"
+      @close="closeForm"
+    />
+    <DialogLoading :dialog="loading" />
   </div>
 </template>
 
@@ -200,18 +169,7 @@ const modelForm = ref({
   status: "open",
 });
 const $all = computed(() => financeStore.$all);
-const filteredItems = computed(() => {
-  const query = search.value.trim().toLowerCase();
-  if (!query) return $all.value;
-  return $all.value.filter((item) =>
-    [item.description, item.status, item.publicId]
-      .map((value) => String(value || "").toLowerCase())
-      .some((value) => value.includes(query)),
-  );
-});
-const handleSearch = (value: string) => {
-  search.value = value;
-};
+
 const statusName = (status?: string) =>
   (status || "open").toLowerCase() === "paid"
     ? "Pago"
@@ -280,6 +238,7 @@ const handleSubmit = async () => {
     dueDate: modelForm.value.dueDate,
     description: modelForm.value.description,
     value: Number(modelForm.value.value || 0),
+    valueOpen: Number(modelForm.value.value || 0),
     financeType: "expense",
     status: modelForm.value.status,
   };
