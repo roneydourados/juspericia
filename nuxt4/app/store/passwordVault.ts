@@ -30,10 +30,15 @@ export const usePasswordVaultStore = defineStore("passwordVault", () => {
     await api.put(`/password-vault/${payload.publicId}`, payload);
   };
 
+  const destroy = async (publicId: string) => {
+    await api.delete(`/password-vault/${publicId}`);
+  };
+
   return {
     $all,
     index,
     store,
     updated,
+    destroy,
   };
 });

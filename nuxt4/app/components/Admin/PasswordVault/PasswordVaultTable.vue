@@ -35,10 +35,11 @@
       rounded="lg"
       class="mb-4"
     >
-      <strong>Nota de Seguranca:</strong> Este e um ambiente de demonstracao. As
-      senhas sao armazenadas apenas na memoria do navegador e serao perdidas ao
-      recarregar a pagina. Em um ambiente real, utilize criptografia
-      ponta-a-ponta.
+      <strong>Nota de Seguranca:</strong> Este e um ambiente logado. As senhas
+      sao armazenadas são de total responsabilidade do usuário que as cadastrou.
+      Mantenha suas credenciais seguras e evite compartilhar este ambiente com
+      outras pessoas. O acesso não autorizado pode comprometer a segurança de
+      suas informações.
     </v-alert>
 
     <v-row dense class="mb-4" align="center">
@@ -94,21 +95,38 @@
             />
             <div class="mt-3">
               <span class="text-caption text-medium-emphasis">SENHA</span>
-              <v-text-field
-                :model-value="passwordValue(item)"
-                readonly
-                variant="outlined"
-                density="compact"
-                rounded="xl"
-                base-color="tooltipTextColor"
-                color="tooltipTextColor"
-                :append-inner-icon="
-                  item.publicId && reveal[item.publicId]
-                    ? 'mdi-eye'
-                    : 'mdi-eye-off'
-                "
-                @click:append-inner="toggleReveal(item.publicId)"
-              />
+              <div class="d-flex align-center justify-space-between">
+                <strong>
+                  {{ passwordValue(item) }}
+                </strong>
+                <v-btn
+                  icon
+                  variant="text"
+                  size="small"
+                  color="colorIcon"
+                  @click="toggleReveal(item.publicId)"
+                >
+                  <v-icon
+                    :icon="
+                      item.publicId && reveal[item.publicId]
+                        ? 'mdi-eye'
+                        : 'mdi-eye-off'
+                    "
+                    size="18"
+                  />
+                  <v-tooltip
+                    activator="parent"
+                    location="top center"
+                    content-class="tooltip-background"
+                  >
+                    {{
+                      item.publicId && reveal[item.publicId]
+                        ? "Ocultar"
+                        : "Mostrar"
+                    }}
+                  </v-tooltip>
+                </v-btn>
+              </div>
             </div>
             <div v-if="item.observation" class="mt-2">
               <InfoLabel
@@ -159,6 +177,21 @@
                   location="top center"
                   content-class="tooltip-background"
                   >Editar</v-tooltip
+                >
+              </v-btn>
+              <v-btn
+                icon
+                variant="text"
+                color="red"
+                size="small"
+                @click="handleDelete(item)"
+              >
+                <v-icon icon="mdi-delete-outline" size="18" />
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                  content-class="tooltip-background"
+                  >Apagar</v-tooltip
                 >
               </v-btn>
             </div>
@@ -227,6 +260,7 @@ const filteredItems = computed(() => {
       item.usuarioLogin,
       item.appUrl,
       item.observation,
+      item.password,
     ].map((val) => String(val || "").toLowerCase());
     const matchQuery = !query || values.some((val) => val.includes(query));
     return matchUser && matchQuery;
@@ -313,6 +347,47 @@ const getDomain = (url?: string) => {
   } catch (error) {
     return url;
   }
+};
+
+const handleDelete = (item: PasswordVaultProps) => {
+  push.info({
+    title: "Apagar Senha",
+    message:
+      "Tem certeza que deseja apagar senha ? Esta ação é irreversível, confirme.",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Apagar",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: async () => {
+            loading.value = true;
+            try {
+              await passwordVaultStore.destroy(item.publicId!);
+              await passwordVaultStore.index(search.value || "");
+              push.success("Senha apagada com sucesso.");
+            } catch (error) {
+              push.error("Erro ao apagar senha.");
+            } finally {
+              loading.value = false;
+            }
+          },
+        },
+        {
+          label: "Cancelar",
+          variant: "secondary",
+          icon: "mdi-close",
+          iconColor: "red",
+          handler: () => {},
+        },
+      ],
+    },
+  });
 };
 
 onMounted(async () => {
