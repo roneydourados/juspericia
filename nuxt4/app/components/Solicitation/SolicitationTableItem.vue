@@ -517,7 +517,7 @@
             variant="text"
             color="grey"
             @click="handleShowCorrectionForm(solicitation)"
-            :disabled="!$isEnableCorrection"
+            :disabled="$isEnableCorrection"
           >
             <v-icon
               icon="mdi-file-document-refresh-outline"
