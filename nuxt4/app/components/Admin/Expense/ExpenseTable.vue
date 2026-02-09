@@ -27,6 +27,7 @@
             item-title="name"
             item-value="type"
             :items="statusItems"
+            @update:modelValue="handleFilter"
             clearable
         /></v-col>
         <v-col
