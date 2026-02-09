@@ -46,8 +46,8 @@ Deixar um botão no front-end para copiar link, um endpoint na api que já faça
 
 # Implementações Fevereiro
 
-[] - Criar Cofre de senhas apenas usuário master
-[] - Criar Controle de desepesas para o usuário master
+[x] - Criar Cofre de senhas apenas usuário master
+[x] - Criar Controle de desepesas para o usuário master
 [x] - Tirar a trava da correção para usuário admin
 [] - Analisar quando seleciona um laudo para assinar, pegar os dados do médico que o laudo está vinculado e não do usuário logado
 [] - analisar porque não esta gerando comissão de atendente todos os laudos assinados
