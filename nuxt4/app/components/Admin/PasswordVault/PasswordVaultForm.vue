@@ -28,7 +28,6 @@
           <StringInput
             v-model="data.appUrl"
             label="URL do app"
-            required
             icon="mdi-link-variant"
           />
         </v-col>
