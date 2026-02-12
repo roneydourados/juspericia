@@ -134,6 +134,29 @@
             />
           </v-col>
         </v-row>
+        <v-row v-if="$currentUser?.profile?.type === 'ADMIN'">
+          <v-col copls="12" lg="3">
+            <GutGravity v-model="form.consultationGravity" />
+          </v-col>
+          <v-col copls="12" lg="3">
+            <GutUrgency v-model="form.consultationUrgency" />
+          </v-col>
+          <v-col copls="12" lg="3">
+            <GutTendency v-model="form.consultationTendency" />
+          </v-col>
+          <v-col cols="12" lg="3">
+            <div class="d-flex flex-column">
+              <span class="text-caption text-colorTextPrimary">
+                Score GUT
+              </span>
+              <strong
+                :style="{ color: gutScoreColor($gutScore), fontSize: '1.2rem' }"
+              >
+                {{ $gutScore }}
+              </strong>
+            </div>
+          </v-col>
+        </v-row>
         <v-row dense>
           <v-col cols="12">
             <span class="text-subtitle-2 text-lg-h6">
@@ -267,9 +290,11 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
-const { /*amountFormated,*/ getSolicitationsFilters } = useUtils();
+const { /*amountFormated,*/ getSolicitationsFilters, gutScoreColor } =
+  useUtils();
 const { mobile } = useDisplay();
 const router = useRouter();
+const auth = useAuthStore();
 
 //const authStore = useAuthStore();
 //const saltCredit = useUserCreditSaltStore();
@@ -304,11 +329,14 @@ const form = ref({
   files: [] as FileProps[],
   medicalSpecialty: undefined as MedicalSpecialtyProps | undefined,
   selectOtherSpecialty: false,
+  consultationGravity: 1,
+  consultationUrgency: 1,
+  consultationTendency: 1,
 });
 
 const filters = ref(getSolicitationsFilters());
 const isInValidFiles = ref(false);
-//const $currentUser = computed(() => authStore.$currentUser);
+const $currentUser = computed(() => auth.$currentUser);
 const $single = computed(() => storeConsultation.$single);
 const $systemParameters = computed(() => sistemParametersStore.$parameters);
 //const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
@@ -321,6 +349,14 @@ const $isSelectMedicalSpecialty = computed(() => {
   //     Number(form.value.consultation.valueCredit ?? 0) +
   //       Number(form.value.medicalSpecialty?.value ?? 0)
   // );
+});
+
+const $gutScore = computed(() => {
+  const gravity = form.value.consultationGravity ?? 1;
+  const urgency = form.value.consultationUrgency ?? 1;
+  const tendency = form.value.consultationTendency ?? 1;
+
+  return gravity * urgency * tendency;
 });
 
 onMounted(async () => {
@@ -349,6 +385,9 @@ const clearModel = () => {
     judicialProcessNumber: "",
     content: "",
     factsRealityConfirm: false,
+    consultationGravity: 1,
+    consultationUrgency: 1,
+    consultationTendency: 1,
     files: [],
     medicalSpecialty: $systemParameters.value?.medicalSpecialty,
     selectOtherSpecialty: false,
@@ -369,6 +408,9 @@ const loadModel = () => {
     benefitTypeId: props.data.benefitTypeId ?? 0,
     medicalSpecialty: props.data.medicalSpecialty,
     selectOtherSpecialty: false,
+    consultationGravity: Number(props.data.gravity ?? 1),
+    consultationUrgency: Number(props.data.urgency ?? 1),
+    consultationTendency: Number(props.data.tendency ?? 1),
   };
 };
 
@@ -431,6 +473,9 @@ const create = async () => {
       valueCredit: form.value.consultation?.valueCredit ?? 0,
       medicalSpecialtyId: form.value.medicalSpecialty?.id,
       medicalSpecialtyValue: form.value.medicalSpecialty?.value,
+      gravity: form.value.consultationGravity,
+      urgency: form.value.consultationUrgency,
+      tendency: form.value.consultationTendency,
     });
 
     if ($single.value?.id && form.value.files && form.value.files.length > 0) {
@@ -468,6 +513,9 @@ const update = async () => {
       consultationValue: form.value.consultation?.value ?? 0,
       medicalSpecialtyId: form.value.medicalSpecialty?.id,
       medicalSpecialtyValue: form.value.medicalSpecialty?.value,
+      gravity: form.value.consultationGravity,
+      urgency: form.value.consultationUrgency,
+      tendency: form.value.consultationTendency,
     });
 
     if ($single.value?.id && form.value.files && form.value.files.length > 0) {

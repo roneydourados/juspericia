@@ -52,6 +52,10 @@ export interface SolicitationConsultationProps {
   criticisms?: PatientConsultationCriticismsProps[];
   corrections?: SolicitationCorrectionProps[];
   showMedicalSpeciality?: boolean;
+  gravity?: number;
+  urgency?: number;
+  tendency?: number;
+  gutScore?: number;
 }
 
 export interface SolicitationCorrectionProps {

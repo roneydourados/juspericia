@@ -421,6 +421,22 @@
             <v-icon icon="mdi-arrow-u-left-top" start />
             <span class="text-caption"> Estornar solicitação </span>
           </Button>
+          <div v-if="$currentUser?.profile?.type === 'ADMIN'" class="w-100">
+            <div
+              class="d-flex align-center justify-space-between"
+              style="gap: 0.5rem"
+            >
+              <strong class="text-colorTextPrimary"> Score GUT </strong>
+              <strong
+                :style="{
+                  color: gutScoreColor(Number(solicitation.gutScore ?? 1)),
+                  fontSize: '1.2rem',
+                }"
+              >
+                {{ solicitation.gutScore }}
+              </strong>
+            </div>
+          </div>
         </v-col>
 
         <v-col cols="12">
@@ -762,6 +778,7 @@ const {
   getSolicitationsFilters,
   solicitationStatusName,
   solicitationStatusColor,
+  gutScoreColor,
 } = useUtils();
 //const saltCredit = useUserCreditSaltStore();
 //const router = useRouter();

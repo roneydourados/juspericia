@@ -367,6 +367,25 @@ export const useUtils = () => {
     return url;
   };
 
+  const gutScoreColor = (score: number) => {
+    switch (true) {
+      case score <= 20:
+        return "#26A69A"; // Verde (baixa)
+
+      case score <= 60:
+        return "#a89911"; // Amarelo (média)
+
+      case score <= 100:
+        return "#FF9800"; // Laranja (alta)
+
+      case score <= 125:
+        return "#F44336"; // Vermelho (crítica)
+
+      default:
+        return "#9C27B0"; // Roxo fallback (inválido ou >125)
+    }
+  };
+
   return {
     amountFormated,
     cardInvoices,
@@ -391,5 +410,6 @@ export const useUtils = () => {
     formatDateExtenso,
     whatsappUrl,
     formatDateExtensoObjeto,
+    gutScoreColor,
   };
 };

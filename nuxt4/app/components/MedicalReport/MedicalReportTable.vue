@@ -120,6 +120,11 @@
       <template v-slot:item.dateClose="{ item }">
         <span>{{ dayjs(item.dateClose).format("DD/MM/YYYY") }}</span>
       </template>
+      <template v-slot:item.gutScore="{ item }">
+        <strong :style="{ color: gutScoreColor(item.gutScore) }">{{
+          item.gutScore ?? "N/A"
+        }}</strong>
+      </template>
       <template v-slot:item.cpf="{ item }">
         <span>{{ formatCPFOrCNPJ(item.cpf) }}</span>
       </template>
@@ -335,7 +340,7 @@ const nuvidioStore = useNuvidioStore();
 const zapSign = useZapsignStore();
 const fileStore = useFileStore();
 
-const { formatCPFOrCNPJ } = useUtils();
+const { formatCPFOrCNPJ, gutScoreColor } = useUtils();
 const $consultationReports = computed(() => consultationReport.$all);
 const $consultationReport = computed(() => consultationReport.$single);
 const $document = computed(() => zapSign.$document);
@@ -363,6 +368,7 @@ const filters = ref({
 const headers = ref([
   { title: "Laudo Nº", key: "reportId" },
   { title: "Solicitação Nº", key: "id" },
+  { title: "Score", key: "gutScore" },
   { title: "Data consulta", key: "dateClose" },
   { title: "Benefício", key: "benefitType" },
   { title: "Finalidade", key: "reportPurpose" },
