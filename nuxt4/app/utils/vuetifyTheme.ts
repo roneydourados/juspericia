@@ -26,7 +26,7 @@ const MainDarkThemeColors = {
   background: "#111827",
   bgcolor: "#1F2937",
   grey: "#71717A",
-  primary: "#673AB7",
+  primary: "#1D5C95",//"#673AB7",
   success: "#10B981",
   danger: "#F43F5E",
   darkButton: "#334155",
