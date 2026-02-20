@@ -1,132 +1,51 @@
 <template>
-  <v-row dense>
-    <v-col cols="12" lg="2">
+  <!-- Filters -->
+  <v-row dense align="center" class="mb-2">
+    <v-col cols="12" sm="4" md="3">
       <DatePicker v-model="filters.initialDate" label="Data inicial" />
     </v-col>
-    <v-col cols="12" lg="2">
+    <v-col cols="12" sm="4" md="3">
       <DatePicker v-model="filters.finalDate" label="Data final" />
     </v-col>
-    <v-col cols="12" lg="2">
+    <v-col cols="12" sm="4" md="2" class="d-flex align-center">
       <Button
         color="primary"
         variant="flat"
         size="small"
-        class="text-none"
         @click="getTransactions"
       >
-        <v-icon icon="mdi-filter-outline" color="colorIcon" start />
-        <span class="text-caption"> Filtrar </span>
+        <v-icon icon="mdi-filter-outline" start />
+        Filtrar
       </Button>
     </v-col>
     <v-col
       cols="12"
-      class="d-flex align-center w-100 py-6 justify-end"
+      class="d-flex justify-end align-center"
       style="gap: 0.5rem"
     >
-      <span class="text-subtitle-1 font-weight-bold"> Total: </span>
-      <span style="font-weight: 700; font-size: 1.2rem">
-        {{ amountFormated($total ?? 0, true) }}
+      <span class="text-caption text-medium-emphasis">Total</span>
+      <span class="text-h6 font-weight-bold text-primary">
+        {{ amountFormated($total, true) }}
       </span>
     </v-col>
   </v-row>
 
-  <Table
-    v-if="!mobile"
-    title="Minhas compras personalizadas"
-    font-size="1.5rem"
-    :headers="headers"
-    :items="$sales"
-    class="elevation-1"
-    :loading="loading"
-    :show-crud="false"
-    :items-per-page="30"
-  >
-    <template v-slot:top-table> </template>
-    <template v-slot:item.value="{ item }">
-      <span class="font-weight-bold">
-        {{ amountFormated(item.value ?? 0, true) }}
-      </span>
-    </template>
-    <template v-slot:item.dateCreated="{ item }">
-      <span class="font-weight-bold">
-        {{ formatDate(item.dateCreated) }}
-      </span>
-    </template>
-    <template v-slot:item.dueDate="{ item }">
-      <span class="font-weight-bold">
-        {{ formatDate(item.dueDate) }}
-      </span>
-    </template>
-    <template v-slot:item.billingType="{ item }">
-      <span class="font-weight-bold">
-        {{ getPaymentForm(item.billingType) }}
-      </span>
-    </template>
-    <template v-slot:item.status="{ item }">
-      <v-chip
-        :prepend-icon="getTransactionStatusDetails(item).icon"
-        variant="flat"
-        :color="getTransactionStatusDetails(item).color"
-      >
-        <span class="text-caption">
-          {{ getTransactionStatusDetails(item).label }}
-        </span>
-      </v-chip>
-    </template>
-    <template v-slot:item.packgeSaleValue="{ item }">
-      <span class="font-weight-bold">
-        {{
-          amountFormated(
-            Number(item.packgeSaleValue ?? 0) / (item.packgeQuantity ?? 1),
-            true,
-          )
-        }}
-      </span>
-    </template>
-    <template #item.actions="{ item }">
-      <div class="d-flex align-center" style="gap: 0.5rem">
-        <v-btn
-          v-if="item.status === 'PENDING'"
-          variant="text"
-          color="success"
-          icon
-          @click="hanelMountModelPrececkout(item)"
-        >
-          <v-icon icon="mdi-cash-multiple" />
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Efetuar pagamento
-          </v-tooltip>
-        </v-btn>
-        <v-btn
-          v-if="item.status === 'PENDING'"
-          variant="text"
-          color="error"
-          size="small"
-          class="text-none"
-          icon
-          @click="getTransactionCancel(item.publicId)"
-        >
-          <v-icon icon="mdi-cancel" />
-          <v-tooltip
-            activator="parent"
-            location="top center"
-            content-class="tooltip-background"
-          >
-            Cancelar compra
-          </v-tooltip>
-        </v-btn>
-      </div>
-    </template>
-  </Table>
-  <UserPersonalizedSalesTableMobile
-    v-else
-    @cancel-transaction="getTransactionCancel($event)"
-    @pre-checkout="hanelMountModelPrececkout($event)"
-  />
+  <!-- Empty state -->
+  <EmptyContent v-if="!$sales.length && !loading" />
+
+  <!-- Items list -->
+  <v-row dense>
+    <v-col v-for="item in $sales" :key="item.id" cols="12" class="mb-1">
+      <UserPersonalizedSalesItem
+        :item="item"
+        @cancel-transaction="getTransactionCancel"
+        @pre-checkout="hanelMountModelPrececkout"
+        @view-receipt="handleReceipt"
+      />
+    </v-col>
+  </v-row>
+
+  <!-- Dialogs -->
   <DialogLoading :dialog="loading" />
   <AsaasPreCheckout
     v-model:show="showPrececkout"
@@ -137,11 +56,11 @@
   <Dialog
     title="CONFIRME"
     :dialog="showCancelSale"
+    show-cancel
     @cancel="showCancelSale = false"
     @confirm="handleCancelItem"
-    show-cancel
   >
-    <span>Confirma o cancelamento da compra ? </span>
+    <span>Confirma o cancelamento da compra?</span>
   </Dialog>
   <v-snackbar
     v-model="showErrorAlert"
@@ -150,44 +69,46 @@
     :timeout="10000"
   >
     <div class="text-subtitle-1 pb-2">Compra fora do prazo de pagamento</div>
-    <div class="text-subtitle-1 pb-2">
+    <div class="text-body-2">
       Não foi possível gerar cobrança desta compra porque passou o prazo para
-      pagamento. Entre em contato com nossa equipe de vendas para que seja
-      gerada uma nova compra personalizada. Não se preocupe, não será gerada
-      nenhuma cobrança adicional para você. COMPRA FOI CANCELADA
-      AUTOMATICAMENTE.
+      pagamento. Entre em contato com nossa equipe de vendas para gerar uma nova
+      compra personalizada. COMPRA FOI CANCELADA AUTOMATICAMENTE.
     </div>
     <template #actions>
-      <v-btn color="white" variant="text" @click="showErrorAlert = false">
-        Fechar
-      </v-btn>
+      <v-btn color="white" variant="text" @click="showErrorAlert = false"
+        >Fechar</v-btn
+      >
     </template>
   </v-snackbar>
 </template>
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { useDisplay } from "vuetify";
+
 const salesStore = useSaleStore();
 const auth = useAuthStore();
 const asaas = useAsaasStore();
 const transactionsStore = useTransactionsStore();
-const { amountFormated, formatDate } = useUtils();
-const { mobile } = useDisplay();
+const { amountFormated } = useUtils();
 
 const $sales = computed(() => salesStore.$all);
 const $currentUser = computed(() => auth.$currentUser);
 const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $total = computed(() =>
-  salesStore.$all.reduce(
-    (acc, transaction) => acc + Number(transaction.packgeSaleValue ?? 0),
-    0,
-  ),
+  salesStore.$all.reduce((acc, t) => acc + Number(t.packgeSaleValue ?? 0), 0),
 );
 
-const showPrececkout = ref(false);
 const loading = ref(false);
-const modelPrececkout = ref({
+const showPrececkout = ref(false);
+const showCancelSale = ref(false);
+const publicIdCancel = ref("");
+const showErrorAlert = ref(false);
+const filters = ref({
+  initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+  finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
+});
+
+const defaultModel = () => ({
   name: "",
   description: "",
   dueDays: 2,
@@ -206,32 +127,7 @@ const modelPrececkout = ref({
   packgeSaleValue: 0,
   packgeQuantity: 1,
 });
-
-const showCancelSale = ref(false);
-const publicIdCancel = ref("");
-const showErrorAlert = ref(false);
-const headers = [
-  { title: "Data", key: "dateCreated" },
-  { title: "Valida até", key: "dueDate" },
-  { title: "Descrição", key: "description" },
-  { title: "Forma Pgto", key: "billingType" },
-  { title: "Total", key: "value" },
-  { title: "Status", key: "status" },
-  { title: "Vendedor", key: "Seller.name" },
-  { title: "Qtde Consultas", key: "packgeQuantity" },
-  { title: "Valor Consulta", key: "packgeSaleValue" },
-  { title: "Ações", key: "actions" },
-];
-
-const filters = ref({
-  initialDate: dayjs().startOf("month").format("YYYY-MM-DD"),
-  finalDate: dayjs().endOf("month").format("YYYY-MM-DD"),
-});
-
-const getTransactionCancel = (publicId: string) => {
-  publicIdCancel.value = publicId;
-  showCancelSale.value = true;
-};
+const modelPrececkout = ref(defaultModel());
 
 const getTransactions = async () => {
   loading.value = true;
@@ -241,77 +137,62 @@ const getTransactions = async () => {
       userId: $currentUser.value!.id!,
       saleType: "manual",
     });
-  } catch (error) {
-    console.error("Error fetching transactions:", error);
+  } catch (e) {
+    console.error(e);
   } finally {
     loading.value = false;
   }
 };
 
-const getPaymentForm = (value: string) => {
-  switch (value) {
-    case "CREDIT_CARD":
-      return "Cartão de Crédito";
-    case "BOLETO":
-      return "Boleto";
-    case "PIX":
-      return "Pix";
-    default:
-      return "Nenhum";
-  }
+const getTransactionCancel = (publicId: string) => {
+  publicIdCancel.value = publicId;
+  showCancelSale.value = true;
+};
+
+const handleReceipt = (item: SaleProps) => {
+  const popup = window.open(
+    item.transactionReceiptUrl,
+    "_blank",
+    "width=800,height=600,resizable=yes,scrollbars=yes",
+  );
+  const checker = setInterval(async () => {
+    if (popup?.closed) {
+      clearInterval(checker);
+      await getTransactions();
+    }
+  }, 700);
 };
 
 const hanelMountModelPrececkout = async (item: SaleProps) => {
   if (item.status !== "PENDING") {
-    push.info("Compra não esta mais pendente.");
+    push.info("Compra não está mais pendente.");
     return;
   }
-
   const dueDate = item.dueDate?.substring(0, 10);
   if (dayjs().isAfter(dayjs(dueDate)) && item.saleId) {
-    // se a cobrança venceu, então apagar a mesma do asaas
     await asaas.deletePayment(item.saleId!);
-
-    //pegar o públicId da venda que vai ser cancelada
     publicIdCancel.value = item.publicId!;
-
-    //cancelar a venda
     await handleCancelItem();
-
-    //atualizar a lista de vendas
     await getTransactions();
-
     showErrorAlert.value = true;
-
     return;
   }
-
   if (item.invoiceUrl) {
     window.open(item.invoiceUrl, "_blank");
-
     return;
   }
-
   modelPrececkout.value = {
+    ...defaultModel(),
     name: item.description ?? "",
     description: item.description ?? "",
-    dueDays: 2,
-    paymentForm: "CREDIT_CARD",
-    discountValue: undefined,
-    discountType: undefined,
-    installmentCount: 1,
     itemValue: Number(item.value ?? 0),
     totalValue: Number(item.value ?? 0),
     category: item.category ?? "package",
     totalBruteValue: Number(item.value ?? 0),
-    packageId: undefined,
-    voucherDesconto: "",
-    voucherId: undefined,
     publicSaleId: item.publicId ?? "",
-    packgeSaleValue: item.packgeSaleValue ?? 0,
+    packgeSaleValue: Number(item.packgeSaleValue ?? 0),
     packgeQuantity: item.packgeQuantity ?? 1,
   };
-
   showPrececkout.value = true;
 };
 
@@ -323,71 +204,38 @@ const handleSaleItem = async () => {
       push.warning("Preencha todos os campos obrigatórios");
       return;
     }
-
-    if (
-      modelPrececkout.value.installmentCount &&
-      modelPrececkout.value.installmentCount > 1
-    ) {
-      //se for parcelada enviar quantidade de parcelas e o valor total
+    const m = modelPrececkout.value;
+    const base = {
+      dueDate: dayjs().add(m.dueDays, "days").format("YYYY-MM-DD"),
+      description: m.name,
+      dueDays: m.dueDays,
+      billingType: m.paymentForm,
+      voucherId: m.voucherId,
+      userId: $currentUser.value!.id!,
+      discount: { value: m.discountValue ?? 0, type: m.discountType },
+      saleValue: m.totalValue ?? 0,
+      publicSaleId: m.publicSaleId,
+      packgeQuantity: m.packgeQuantity ?? 1,
+      packgeSaleValue: m.packgeSaleValue ?? 0,
+    };
+    if (m.installmentCount && m.installmentCount > 1) {
       await asaas.createPaymentManualSale({
-        dueDate: dayjs()
-          .add(modelPrececkout.value.dueDays, "days")
-          .format("YYYY-MM-DD"),
-        description: modelPrececkout.value.name,
-        //category: modelPrececkout.value.category,
-        //packageId: props.item.id,
-        dueDays: modelPrececkout.value.dueDays,
-        totalValue: modelPrececkout.value.totalValue,
-        installmentCount: modelPrececkout.value.installmentCount,
-        billingType: modelPrececkout.value.paymentForm,
-        voucherId: modelPrececkout.value.voucherId,
-        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
-        discount: {
-          value: modelPrececkout.value.discountValue ?? 0,
-          type: modelPrececkout.value.discountType,
-        },
-        saleValue: modelPrececkout.value.totalValue ?? 0,
-        //packgeSaleValue: modelPrececkout.value.itemValue ?? 0,
-        //packgeQuantity: props.item.packageQuantity ?? 1,
-        publicSaleId: modelPrececkout.value.publicSaleId,
-        packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
-        packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
+        ...base,
+        totalValue: m.totalValue,
+        installmentCount: m.installmentCount,
       });
     } else {
-      const payload = {
-        dueDate: dayjs()
-          .add(modelPrececkout.value.dueDays, "days")
-          .format("YYYY-MM-DD"),
-        //value: props.item.value!,
-        value: modelPrececkout.value.totalValue,
-        description: modelPrececkout.value.name!,
-        category: modelPrececkout.value.category,
-        //packageId: props.item.id,
-        dueDays: modelPrececkout.value.dueDays,
-        billingType: modelPrececkout.value.paymentForm,
-        voucherId: modelPrececkout.value.voucherId,
-        userId: $currentUser.value!.id!, // aqui é o código do usuário que está comprando, no caso o cliente/advogado
-        discount: {
-          value: modelPrececkout.value.discountValue ?? 0,
-          type: modelPrececkout.value.discountType,
-        },
-        saleValue: modelPrececkout.value.totalValue ?? 0,
-        publicSaleId: modelPrececkout.value.publicSaleId,
-        packgeQuantity: modelPrececkout.value.packgeQuantity ?? 1,
-        packgeSaleValue: modelPrececkout.value.packgeSaleValue ?? 0,
-      };
-
-      await asaas.createPaymentManualSale(payload);
+      await asaas.createPaymentManualSale({
+        ...base,
+        value: m.totalValue,
+        category: m.category,
+      });
     }
-
-    if ($paymentResponse.value?.data?.invoiceUrl) {
-      //window.location.href = $paymentResponse.value.data.invoiceUrl;
+    if ($paymentResponse.value?.data?.invoiceUrl)
       window.open($paymentResponse.value.data.invoiceUrl, "_blank");
-    }
-
     await getTransactions();
-  } catch (error) {
-    console.error("Error creating sale:", error);
+  } catch (e) {
+    console.error(e);
   } finally {
     loading.value = false;
   }
@@ -395,111 +243,17 @@ const handleSaleItem = async () => {
 
 const handleCancel = async () => {
   showPrececkout.value = false;
-  modelPrececkout.value = {
-    name: "",
-    description: "",
-    dueDays: 2,
-    paymentForm: "CREDIT_CARD",
-    discountValue: undefined,
-    discountType: undefined,
-    installmentCount: 1,
-    itemValue: 0,
-    totalValue: 0,
-    category: "package",
-    packageId: 0,
-    voucherDesconto: "",
-    totalBruteValue: 0,
-    voucherId: undefined,
-    publicSaleId: "",
-    packgeSaleValue: 0,
-    packgeQuantity: 1,
-  };
-
+  Object.assign(modelPrececkout.value, defaultModel());
   await getTransactions();
-};
-const getTransactionStatusDetails = (item: SaleProps) => {
-  //se a venda for vencida e ainda esta pendente, já retornar este status
-  const dueDate = item.dueDate?.substring(0, 10);
-  if (
-    dayjs().isAfter(dayjs(dueDate)) &&
-    item.saleId &&
-    item.status === "PENDING"
-  ) {
-    return {
-      label: "Vencida",
-      color: "orange-darken-2",
-      icon: "mdi-clock-outline",
-    };
-  }
-  switch (item.status) {
-    case "CONFIRMED":
-      return {
-        label: "Confirmado",
-        color: "green",
-        icon: "mdi-check-circle",
-      };
-    case "PENDING":
-      return {
-        label: "Pendente",
-        color: "orange-darken-2",
-        icon: "mdi-clock-outline",
-      };
-    case "CANCELED":
-      return {
-        label: "Cancelado",
-        color: "red",
-        icon: "mdi-close-circle",
-      };
-    case "REFUNDED":
-      return {
-        label: "Reembolsado",
-        color: "blue-grey",
-        icon: "mdi-undo",
-      };
-    default:
-      return {
-        label: "Desconhecido",
-        color: "grey",
-        icon: "mdi-help-circle",
-      };
-  }
-};
-
-const handleReceipt = (item: SaleProps) => {
-  const popupWidth = 800;
-  const popupHeight = 600;
-  const screenWidth = window.screen.width;
-  const screenHeight = window.screen.height;
-
-  const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-  const popupTop = Math.round((screenHeight - popupHeight) / 2);
-
-  const popup = window.open(
-    item.transactionReceiptUrl,
-    "_blank",
-    `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`,
-  );
-
-  // verificar se o popup foi fechado
-  const popupChecker = setInterval(async () => {
-    if (popup && popup.closed) {
-      clearInterval(popupChecker);
-      await getTransactions();
-    }
-  }, 700);
 };
 
 const handleCancelItem = async () => {
-  if (!publicIdCancel.value) {
-    console.warn("Selecione uma transação para cancelar.");
-    return;
-  }
-
+  if (!publicIdCancel.value) return;
   loading.value = true;
   try {
     await transactionsStore.cancelTransaction(publicIdCancel.value);
-  } catch (error) {
-    console.error("Error canceling transaction:", error);
+  } catch (e) {
+    console.error(e);
   } finally {
     loading.value = false;
     showCancelSale.value = false;
