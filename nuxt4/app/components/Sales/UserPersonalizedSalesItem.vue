@@ -16,19 +16,46 @@
             </v-chip>
           </v-col>
           <v-col cols="12" sm="5" class="mb-1 mb-sm-0">
-            <span class="text-body-2 font-weight-medium">{{
+            <span class="text-body-2 text-grey-darken-1">{{
               item.description
             }}</span>
           </v-col>
           <v-col cols="6" sm="3" class="text-sm-center">
-            <span class="text-body-2 font-weight-bold">
+            <span class="font-weight-bold">
               {{ amountFormated(Number(item.value ?? 0), true) }}
             </span>
           </v-col>
-          <v-col cols="6" sm="2" class="text-right">
-            <span class="text-caption text-medium-emphasis">
+          <v-col
+            cols="6"
+            sm="2"
+            class="d-flex align-center justify-end"
+            style="gap: 0.25rem"
+          >
+            <span class="text-caption text-medium-emphasis me-1">
               {{ formatDate(item.dateCreated) }}
             </span>
+            <v-btn
+              v-if="item.status === 'PENDING'"
+              icon
+              size="x-small"
+              color="success"
+              variant="tonal"
+              @click.stop="emit('pre-checkout', item)"
+            >
+              <v-icon size="14" icon="mdi-cash-multiple" />
+              <v-tooltip activator="parent" location="top">Pagar</v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="item.status === 'PENDING' && item.publicId"
+              icon
+              size="x-small"
+              color="error"
+              variant="tonal"
+              @click.stop="emit('cancel-transaction', item.publicId!)"
+            >
+              <v-icon size="14" icon="mdi-cancel" />
+              <v-tooltip activator="parent" location="top">Cancelar</v-tooltip>
+            </v-btn>
           </v-col>
         </v-row>
       </v-expansion-panel-title>
@@ -59,31 +86,17 @@
             </div>
             <div class="text-body-2 font-weight-medium">{{ unitValue }}</div>
           </v-col>
+          <v-col cols="12" sm="2">
+            <div class="text-caption text-medium-emphasis">Vendedor</div>
+            <div class="text-body-2 font-weight-medium">
+              {{ item.Seller?.name ?? "—" }}
+            </div>
+          </v-col>
         </v-row>
 
         <v-divider class="mb-3" />
 
         <div class="d-flex flex-wrap" style="gap: 0.5rem">
-          <Button
-            v-if="item.status === 'PENDING'"
-            color="success"
-            variant="tonal"
-            size="small"
-            @click="emit('pre-checkout', item)"
-          >
-            <v-icon icon="mdi-cash-multiple" start />
-            Efetuar pagamento
-          </Button>
-          <Button
-            v-if="item.status === 'PENDING' && item.publicId"
-            color="error"
-            variant="tonal"
-            size="small"
-            @click="emit('cancel-transaction', item.publicId)"
-          >
-            <v-icon icon="mdi-cancel" start />
-            Cancelar
-          </Button>
           <Button
             v-if="item.transactionReceiptUrl"
             color="info"

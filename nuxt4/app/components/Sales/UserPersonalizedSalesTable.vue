@@ -1,13 +1,16 @@
 <template>
   <!-- Filters -->
-  <v-row dense align="center" class="mb-2">
-    <v-col cols="12" sm="4" md="3">
+  <v-row dense class="mb-2">
+    <v-col cols="12" class="mb-4">
+      <div class="text-h6 font-weight-bold">Minhas Compras Personalizadas</div>
+    </v-col>
+    <v-col cols="12" md="3">
       <DatePicker v-model="filters.initialDate" label="Data inicial" />
     </v-col>
-    <v-col cols="12" sm="4" md="3">
+    <v-col cols="12" md="3">
       <DatePicker v-model="filters.finalDate" label="Data final" />
     </v-col>
-    <v-col cols="12" sm="4" md="2" class="d-flex align-center">
+    <v-col cols="12" md="2">
       <Button
         color="primary"
         variant="flat"
@@ -35,12 +38,25 @@
 
   <!-- Items list -->
   <v-row dense>
-    <v-col v-for="item in $sales" :key="item.id" cols="12" class="mb-1">
+    <v-col v-for="item in pagedSales" :key="item.id" cols="12" class="mb-1">
       <UserPersonalizedSalesItem
         :item="item"
         @cancel-transaction="getTransactionCancel"
         @pre-checkout="hanelMountModelPrececkout"
         @view-receipt="handleReceipt"
+      />
+    </v-col>
+  </v-row>
+
+  <!-- Pagination -->
+  <v-row v-if="totalPages > 1" dense justify="center" class="mt-2">
+    <v-col cols="auto">
+      <v-pagination
+        v-model="page"
+        :length="totalPages"
+        :total-visible="5"
+        density="compact"
+        rounded="lg"
       />
     </v-col>
   </v-row>
@@ -97,6 +113,19 @@ const $paymentResponse = computed(() => asaas.$paymentReponse);
 const $total = computed(() =>
   salesStore.$all.reduce((acc, t) => acc + Number(t.packgeSaleValue ?? 0), 0),
 );
+
+const page = ref(1);
+const perPage = 10;
+const totalPages = computed(() => Math.ceil($sales.value.length / perPage));
+const pagedSales = computed(() => {
+  const start = (page.value - 1) * perPage;
+  return $sales.value.slice(start, start + perPage);
+});
+
+// Reset page when data changes
+watch($sales, () => {
+  page.value = 1;
+});
 
 const loading = ref(false);
 const showPrececkout = ref(false);

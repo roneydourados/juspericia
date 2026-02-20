@@ -31,6 +31,7 @@ export interface SaleProps {
   discountValue?: number;
   discountType?: string;
   SaleWebhookEvents?: SaleWebhookEventProps[];
+  Seller?: UserProps;
 }
 
 export interface SaleFilterProps {
