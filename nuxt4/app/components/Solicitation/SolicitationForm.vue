@@ -455,6 +455,7 @@ const submitForm = async () => {
 };
 
 const create = async () => {
+  debugger;
   try {
     await storeConsultation.create({
       consultationId: form.value.consultation?.id,
@@ -472,7 +473,7 @@ const create = async () => {
       consultationValue: form.value.consultation?.value ?? 0,
       valueCredit: form.value.consultation?.valueCredit ?? 0,
       medicalSpecialtyId: form.value.medicalSpecialty?.id,
-      medicalSpecialtyValue: form.value.medicalSpecialty?.value,
+      medicalSpecialtyValue: Number(form.value.medicalSpecialty?.value ?? "0"),
       gravity: form.value.consultationGravity,
       urgency: form.value.consultationUrgency,
       tendency: form.value.consultationTendency,
@@ -512,7 +513,7 @@ const update = async () => {
       dateOpen: dayjs().format("YYYY-MM-DD"),
       consultationValue: form.value.consultation?.value ?? 0,
       medicalSpecialtyId: form.value.medicalSpecialty?.id,
-      medicalSpecialtyValue: form.value.medicalSpecialty?.value,
+      medicalSpecialtyValue: Number(form.value.medicalSpecialty?.value ?? "0"),
       gravity: form.value.consultationGravity,
       urgency: form.value.consultationUrgency,
       tendency: form.value.consultationTendency,
