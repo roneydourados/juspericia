@@ -19,6 +19,29 @@
             @update:model-value="getReports"
           />
         </v-col>
+        <v-col v-if="filters.emitReport === 'Sim'" cols="12" lg="2">
+          <SelectInput
+            v-model="filters.status"
+            label="Status"
+            item-value="value"
+            item-title="text"
+            :items="[
+              {
+                text: 'Todos',
+                value: undefined,
+              },
+              {
+                text: 'Pendente de assinatura',
+                value: 'sign-pending',
+              },
+              {
+                text: 'Assinado',
+                value: 'signed',
+              },
+            ]"
+            @update:model-value="getReports"
+          />
+        </v-col>
         <v-col
           v-if="
             $currentUser?.profile?.type === 'ADMIN' ||
@@ -363,6 +386,7 @@ const filters = ref({
   medic: undefined as UserProps | undefined,
   emitReport: "Não",
   justify: false,
+  status: undefined as string | undefined,
 });
 
 const headers = ref([
@@ -496,6 +520,7 @@ const getReports = async () => {
           : filters.value.medic?.id,
       emitReport: filters.value.emitReport === "Sim",
       justify: filters.value.justify,
+      status: filters.value.status,
     });
   } finally {
     loading.value = false;

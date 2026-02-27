@@ -20,13 +20,12 @@ export const usePatientConsultationReportStore = defineStore(
       userId?: number;
       emitReport?: boolean;
       justify?: boolean;
+      status?: string;
     }) => {
-      const { finalDate, initialDate, patientId, userId, emitReport, justify } =
+      const { finalDate, initialDate, patientId, userId, emitReport, justify, status } =
         input;
-
-      const { data } = await api.get<PatientConsultationReportListProps[]>(
-        "/patient-consultation-report",
-        {
+      
+      const config = {
           params: {
             initialDate,
             finalDate,
@@ -34,9 +33,12 @@ export const usePatientConsultationReportStore = defineStore(
             userId,
             emitReport,
             justify,
+            status,
           },
         }
-      );
+
+      const { data } = await api.get<PatientConsultationReportListProps[]>(
+        "/patient-consultation-report", config);
 
       patientConsultationReports.value = data;
     };
