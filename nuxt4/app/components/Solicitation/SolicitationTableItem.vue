@@ -682,6 +682,35 @@
       </v-row>
     </template>
   </CardBlur>
+  <!-- <pre>
+ReportDate: {{
+      solicitation.PatientConsultationReport?.reportDate?.substring(0, 10)
+    }}</pre
+  >
+  <pre>
+diff days {{
+      dayjs().diff(
+        dayjs(
+          solicitation.PatientConsultationReport?.reportDate?.substring(0, 10),
+        ),
+        "day",
+      )
+    }}</pre
+  >
+  <pre>
+max days {{ Number($systemParameters?.medicalReportRevisionMaxDays ?? 0) }}</pre
+  >
+
+  <pre>
+quantidade correção {{
+      Number(props.solicitation.correctionQuantity ?? 0)
+    }}</pre
+  >
+  <pre>
+max correçao {{
+      Number($systemParameters?.medicalReportRevisionMaxCount ?? 0)
+    }}</pre
+  > -->
   <SolicitationCorrectionForm
     title="Solicitação de correção"
     v-model:show="showDateCorrection"
@@ -709,14 +738,6 @@
     width="50%"
   />
   <DialogLoading :dialog="loading" />
-  <!-- <Dialog
-    title="Cancelar consulta"
-    :dialog="showCancel"
-    @cancel="showCancel = false"
-    @confirm="cancel"
-  >
-    Tem certeza que deseja cancelar a consulta?
-  </Dialog> -->
   <UserCreditSaltForm
     v-model="showSaltCredit"
     :solicitation="solicitation"
@@ -875,11 +896,12 @@ const $isEnableCorrection = computed(() => {
         "day",
       ) <= Number($systemParameters.value?.medicalReportRevisionMaxDays ?? 0);
 
-    return (
+    const isDisable =
       daysPassed &&
       Number(props.solicitation.correctionQuantity ?? 0) <
-        Number($systemParameters.value?.medicalReportRevisionMaxCount ?? 0)
-    );
+        Number($systemParameters.value?.medicalReportRevisionMaxCount ?? 0);
+
+    return !isDisable;
   }
 
   return false;
