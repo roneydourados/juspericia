@@ -23,9 +23,101 @@
 import * as zod from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useField } from "vee-validate";
-import { isValidPhone } from "@brazilian-utils/brazilian-utils";
 import { textRequired } from "../utils";
 import { uuidv7 as uuid } from "uuidv7";
+
+const VALID_DDDS = new Set([
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19, // SP
+  21,
+  22,
+  24, // RJ
+  27,
+  28, // ES
+  31,
+  32,
+  33,
+  34,
+  35,
+  37,
+  38, // MG
+  41,
+  42,
+  43,
+  44,
+  45,
+  46, // PR
+  47,
+  48,
+  49, // SC
+  51,
+  53,
+  54,
+  55, // RS
+  61, // DF
+  62,
+  64, // GO
+  63, // TO
+  65,
+  66, // MT
+  67, // MS
+  68, // AC
+  69, // RO
+  71,
+  73,
+  74,
+  75,
+  77, // BA
+  79, // SE
+  81,
+  87, // PE
+  82, // AL
+  83, // PB
+  84, // RN
+  85,
+  88, // CE
+  86,
+  89, // PI
+  91,
+  93,
+  94, // PA
+  92,
+  97, // AM
+  95, // RR
+  96, // AP
+  98,
+  99, // MA
+]);
+
+const isValidBrazilianPhone = (phone: string): boolean => {
+  const digits = phone.replace(/\D/g, "");
+
+  if (digits.length !== 10 && digits.length !== 11) return false;
+
+  // Rejeita todos os dígitos iguais
+  if (/^(\d)\1+$/.test(digits)) return false;
+
+  const ddd = parseInt(digits.substring(0, 2));
+  if (!VALID_DDDS.has(ddd)) return false;
+
+  // Celular (11 dígitos): 3º dígito deve ser 9
+  if (digits.length === 11 && digits[2] !== "9") return false;
+
+  // Fixo (10 dígitos): 3º dígito deve ser 2-5
+  if (digits.length === 10) {
+    const firstDigit = parseInt(digits.charAt(2));
+    if (firstDigit < 2 || firstDigit > 5) return false;
+  }
+
+  return true;
+};
 
 const textField = ref(null);
 
@@ -62,7 +154,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const dynamicLabel = computed(() =>
-  props.required ? props.label + "*" : props.label
+  props.required ? props.label + "*" : props.label,
 );
 
 const inputValue = ref();
@@ -87,12 +179,12 @@ const validationRules = computed<MaybeRef>(() => {
         .min(1, textRequired)
         .refine(
           (val: string) => {
-            return isValidPhone(val);
+            return isValidBrazilianPhone(val);
           },
           {
             message: `Telefone inválido!`,
-          }
-        )
+          },
+        ),
     );
   }
 
@@ -104,15 +196,15 @@ const validationRules = computed<MaybeRef>(() => {
       .refine(
         (val: string | undefined | null) => {
           if (val) {
-            return isValidPhone(val);
+            return isValidBrazilianPhone(val);
           }
 
           return true;
         },
         {
           message: "Telefone inválido!",
-        }
-      )
+        },
+      ),
   );
 });
 
@@ -127,18 +219,18 @@ const formatPhone = (phoneNumber: string) => {
     if (cleanedValue.length > 2) {
       cleanedValue = `(${cleanedValue.substring(
         0,
-        2
+        2,
       )}) ${cleanedValue.substring(2)}`;
     }
     if (cleanedValue.length > 6) {
       cleanedValue = `${cleanedValue.substring(0, 9)}-${cleanedValue.substring(
-        9
+        9,
       )}`;
     }
   } else {
     cleanedValue = `(${cleanedValue.substring(0, 2)}) ${cleanedValue.substring(
       2,
-      7
+      7,
     )}-${cleanedValue.substring(7)}`;
   }
 
@@ -176,7 +268,7 @@ watch(
     //   value.value = inputValue.value.replace(/\D/g, "");
     //   emit("update:modelValue", value.value);
     // }
-  }
+  },
 );
 
 const inputFormated = (event: string) => {
