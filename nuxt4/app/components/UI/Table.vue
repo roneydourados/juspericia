@@ -105,6 +105,12 @@
       </template>
       <template v-slot:top>
         <slot name="top-table" />
+        <v-row v-if="items && items.length > 0" class="pa-4">
+          <v-col cols="12">
+            Foram encontrados
+            <span class="font-weight-bold">{{ items.length }}</span> itens
+          </v-col>
+        </v-row>
       </template>
     </v-data-table>
     <v-data-table-virtual

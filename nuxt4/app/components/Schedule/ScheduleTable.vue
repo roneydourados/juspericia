@@ -68,12 +68,12 @@
         </v-col>
       </v-row>
     </v-card-title>
-    <v-card-subtitle>
+    <!-- <v-card-subtitle>
       <span>
         Encontrado um total de
         {{ $shedules.length }} agendamento(s)
       </span>
-    </v-card-subtitle>
+    </v-card-subtitle> -->
     <v-cad-text>
       <Table
         v-if="!mobile"
