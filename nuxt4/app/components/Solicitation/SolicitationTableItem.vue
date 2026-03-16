@@ -8,7 +8,7 @@
     <template #title style="gap: 1rem; font-size: 1rem">
       <div class="d-flex align-center justify-space-between item-header">
         <!-- <pre>{{ solicitation }}</pre> -->
-        <div class="d-flex align-center" style="gap: 1rem">
+        <div class="d-flex flex-wrap align-center" style="gap: 1rem">
           <div
             @click="handleDetailsClick(solicitation.publicId!)"
             class="text-truncate font-weight-bold"
@@ -18,6 +18,14 @@
             #{{ solicitation.id }} - Solicitação
             {{ solicitation.Consultation?.consultationName }}
           </div>
+          <v-chip v-if="$inRevision" color="orange-darken-4">
+            <div
+              class="font-weight-bold text-center w-100"
+              style="font-size: 1rem"
+            >
+              Laudo em revisão
+            </div>
+          </v-chip>
           <div
             class="d-flex align-center flex-wrap text-deep-purple"
             style="gap: 0.5rem"
@@ -68,6 +76,7 @@
             <v-icon icon="mdi-file-document-edit" color="colorIcon" start />
             <span class="text-caption"> Baixar Laudo </span>
           </Button>
+
           <v-chip
             v-else-if="
               !solicitation.PatientConsultationReport &&
@@ -768,7 +777,7 @@ max correçao {{
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { useDisplay } from "vuetify";
+
 const props = defineProps({
   solicitation: {
     type: Object as PropType<SolicitationConsultationProps>,
@@ -842,6 +851,13 @@ const modelPrececkout = ref({
   userId: undefined as number | undefined,
 });
 
+const $inRevision = computed(() => {
+  const correctionOpen = props.solicitation.corrections?.find(
+    (item) => item.status === "open",
+  );
+
+  return !!correctionOpen;
+});
 const $userCreditTotalSalt = computed(() => saltCredit.$userCreditTotalSalt);
 const $currentUser = computed(() => auth.$currentUser);
 const $solicitationTotal = computed(() => {
@@ -1689,6 +1705,38 @@ const handleGetHistory = async (item: SolicitationConsultationProps) => {
   } finally {
     loading.value = false;
   }
+};
+
+const handleReportStatus = (solicitation: SolicitationConsultationProps) => {
+  if ($inRevision.value) {
+    return {
+      color: "#F6BF0C",
+      text: "Em revisão",
+    };
+  }
+
+  if (
+    !solicitation.PatientConsultationReport &&
+    solicitation.status === "finished"
+  ) {
+    return {
+      color: "#F6BF0C",
+      text: "Aguardando laudo",
+    };
+  } else if (
+    solicitation.PatientConsultationReport &&
+    solicitation.PatientConsultationReport.status !== "signed"
+  ) {
+    return {
+      color: "warning",
+      text: "Laudo aguardando assinatura",
+    };
+  }
+
+  return {
+    color: "success",
+    text: "Laudo assinado",
+  };
 };
 </script>
 

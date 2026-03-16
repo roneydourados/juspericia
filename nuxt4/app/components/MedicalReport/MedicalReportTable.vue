@@ -57,15 +57,14 @@
             clearable
           />
         </v-col>
-        <v-col cols="12" lg="2">
+        <v-col cols="12" lg="4" class="d-flex align-center ga-2">
           <DatePicker
             v-model="filters.initialDate"
             label="Data inicial"
             outlined
             dense
           />
-        </v-col>
-        <v-col cols="12" lg="2">
+
           <DatePicker
             v-model="filters.finalDate"
             label="Data final"
@@ -81,7 +80,7 @@
         >
           <v-checkbox
             v-model="filters.justify"
-            label="Mostrar somente laudos com justificativas"
+            label="Mostrar apenas com pedido de revisão/correção"
             hide-details
             @update:model-value="getReports"
             color="blue"
@@ -344,7 +343,10 @@
       será revertida, tem certeza que deseja cancelar assinatura atual ?
     </span>
   </Dialog>
-  <MedicalReportJustifies v-model="showJustificationCorrection" />
+  <MedicalReportJustifies
+    v-model="showJustificationCorrection"
+    @close="getReports"
+  />
 </template>
 
 <script setup lang="ts">

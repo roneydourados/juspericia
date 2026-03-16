@@ -2,7 +2,7 @@
   <DialogForm
     title="Justificativas cadastradas"
     :show="show"
-    @dialog="show = false"
+    @dialog="handleClose"
     ok-text="OK"
     :width="mobile ? '100%' : '70%'"
     border-color="#002c9b"
@@ -78,6 +78,8 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { useDisplay } from "vuetify";
+
+const emit = defineEmits(["close"]);
 const { mobile } = useDisplay();
 //const { formatDate } = useUtils();
 const auth = useAuthStore();
@@ -116,13 +118,13 @@ const resolveCorrection = (item: SolicitationCorrectionProps) => {
                 return;
               }
               await patientConsultationStore.closeSolicitationCorrection(
-                item.publicId
+                item.publicId,
               );
 
               await consultationReport.show($single.value?.publicId!);
               //show.value = false;
             } catch (error) {
-              show.value = false;
+              handleClose();
               push.error("Erro ao resolver correção");
             } finally {
               loading.value = false;
@@ -139,5 +141,10 @@ const resolveCorrection = (item: SolicitationCorrectionProps) => {
       ],
     },
   });
+};
+
+const handleClose = () => {
+  show.value = false;
+  emit("close");
 };
 </script>
