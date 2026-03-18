@@ -49,7 +49,11 @@
           </v-col>
           <v-col cols="12" lg="3">
             <SelectSearchMedicalSpecialty
-              v-if="form.selectOtherSpecialty"
+              v-if="
+                form.selectOtherSpecialty ||
+                $currentUser?.profile?.type === 'ADMIN' ||
+                $currentUser?.profile?.type === 'MASTER'
+              "
               v-model="form.medicalSpecialty"
               required
             />
