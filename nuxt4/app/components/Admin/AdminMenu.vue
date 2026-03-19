@@ -148,6 +148,13 @@ const itemsMenu = ref([
     color: "colorIcon",
     visible: $currentUser.value?.isMaster,
   },
+  {
+    to: "/admin/agents",
+    icon: "mdi-robot-outline",
+    visible: true,
+    text: "Cadastro de agentes de IA",
+    color: "colorIcon",
+  },
 ]);
 
 const handlClick = async (route: string) => {

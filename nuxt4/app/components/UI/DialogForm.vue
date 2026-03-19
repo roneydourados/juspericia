@@ -7,7 +7,7 @@
     :fullscreen="mobile || fullscreen"
   >
     <v-card
-      rounded="xl"
+      :rounded="fullscreen ? '' : 'xl'"
       :style="`border-top: 6px solid ${borderColor}`"
       color="bgcolor"
     >
