@@ -31,63 +31,67 @@
       color="background"
     >
       <!-- Header -->
-      <v-card-title class="chat-header pa-0">
-        <div
-          class="d-flex align-center justify-space-between px-4 py-3"
-          style="
-            background: linear-gradient(135deg, #5574ed, #7c4dff);
-            border-radius: 24px 24px 0 0;
-          "
-        >
-          <div class="d-flex align-center" style="gap: 0.75rem">
-            <v-avatar color="white" size="36" variant="tonal">
-              <v-icon icon="mdi-robot-happy-outline" color="purple" size="22" />
-            </v-avatar>
-            <div class="d-flex flex-column">
-              <span class="text-white font-weight-bold text-body-2">
-                Assistente IA
-              </span>
-              <span class="text-white text-caption" style="opacity: 0.8">
-                {{ $loading ? "Digitando..." : "Online" }}
-              </span>
-            </div>
-          </div>
-          <div class="d-flex align-center" style="gap: 0.25rem">
-            <v-btn
-              icon
-              variant="text"
-              size="small"
-              @click="handleClearChat"
-              :disabled="$messages.length === 0"
-            >
-              <v-icon icon="mdi-broom" color="white" size="20" />
-              <v-tooltip
-                activator="parent"
-                location="top"
-                content-class="tooltip-background"
-              >
-                Limpar conversa
-              </v-tooltip>
-            </v-btn>
-            <v-btn icon variant="text" size="small" @click="chatOpen = false">
-              <v-icon icon="mdi-chevron-down" color="white" size="24" />
-              <v-tooltip
-                activator="parent"
-                location="top"
-                content-class="tooltip-background"
-              >
-                Minimizar
-              </v-tooltip>
-            </v-btn>
+      <div
+        class="d-flex align-center justify-space-between px-4 py-3 chat-header"
+      >
+        <div class="d-flex align-center" style="gap: 0.75rem">
+          <v-avatar color="white" size="36" variant="tonal">
+            <v-icon icon="mdi-robot-happy-outline" size="22" />
+          </v-avatar>
+          <div class="d-flex flex-column">
+            <span class="text-white font-weight-bold text-body-2">
+              Assistente IA
+            </span>
+            <span class="text-white text-caption" style="opacity: 0.8">
+              {{ $loading ? "Digitando..." : "Online" }}
+            </span>
           </div>
         </div>
-      </v-card-title>
+        <div class="d-flex align-center" style="gap: 0.25rem">
+          <v-btn icon variant="text" size="small" @click="showHistory = true">
+            <v-icon icon="mdi-history" color="white" size="20" />
+            <v-tooltip
+              activator="parent"
+              location="top"
+              content-class="tooltip-background"
+            >
+              Histórico
+            </v-tooltip>
+          </v-btn>
+          <v-btn
+            icon
+            variant="text"
+            size="small"
+            @click="handleClearChat"
+            :disabled="$chatMessages.length === 0"
+          >
+            <v-icon icon="mdi-chat-plus-outline" color="white" size="20" />
+            <v-tooltip
+              activator="parent"
+              location="top"
+              content-class="tooltip-background"
+            >
+              Nova conversa
+            </v-tooltip>
+          </v-btn>
+          <v-btn icon variant="text" size="small" @click="chatOpen = false">
+            <v-icon icon="mdi-chevron-down" color="white" size="24" />
+            <v-tooltip
+              activator="parent"
+              location="top"
+              content-class="tooltip-background"
+            >
+              Minimizar
+            </v-tooltip>
+          </v-btn>
+        </div>
+      </div>
 
       <!-- Messages Area -->
-      <v-card-text ref="messagesContainer" class="chat-messages pa-4">
+      <div ref="messagesContainer" class="chat-messages pa-4">
         <!-- Empty State -->
         <div
-          v-if="$messages.length === 0"
+          v-if="$chatMessages.length === 0 && !$loading"
           class="d-flex flex-column align-center justify-center"
           style="height: 100%"
         >
@@ -95,21 +99,39 @@
             <v-icon icon="mdi-robot-happy-outline" size="36" color="purple" />
           </v-avatar>
           <span class="text-body-1 font-weight-bold text-colorTextPrimary mb-2">
-            Olá! Como posso ajudar?
+            Faça uma pergunta sobre os dados do sistema
           </span>
           <span
-            class="text-caption text-grey text-center"
-            style="max-width: 250px"
+            class="text-caption text-grey text-center mb-6"
+            style="max-width: 300px"
           >
-            Pergunte qualquer coisa e farei o possível para ajudar você.
+            Posso ajudar com informações sobre pacientes, médicos, solicitações,
+            faturamento e muito mais.
           </span>
+
+          <!-- Sugestões -->
+          <div class="d-flex flex-column" style="gap: 0.5rem; width: 100%">
+            <v-btn
+              v-for="suggestion in suggestions"
+              :key="suggestion"
+              variant="outlined"
+              color="purple"
+              rounded="xl"
+              class="text-none text-caption"
+              size="small"
+              @click="handleSuggestion(suggestion)"
+            >
+              <v-icon icon="mdi-lightbulb-outline" size="16" start />
+              {{ suggestion }}
+            </v-btn>
+          </div>
         </div>
 
         <!-- Messages -->
-        <AIChatMessageBubble
-          v-for="message in $messages"
-          :key="message.id"
-          :message="message"
+        <MessageBubble
+          v-for="msg in $chatMessages"
+          :key="msg.id"
+          :message="msg"
         />
 
         <!-- Typing Indicator -->
@@ -135,12 +157,12 @@
             </div>
           </v-card>
         </div>
-      </v-card-text>
+      </div>
 
       <!-- Input Area -->
-      <v-card-actions class="chat-input-area pa-3 pt-0">
-        <v-divider class="mb-3" />
-        <div class="d-flex align-center w-100" style="gap: 0.5rem">
+      <div class="chat-input-area px-3 pb-3 pt-1">
+        <v-divider class="mb-2" />
+        <div class="d-flex align-end w-100" style="gap: 0.5rem">
           <v-textarea
             v-model="userInput"
             placeholder="Digite sua pergunta..."
@@ -148,7 +170,7 @@
             density="compact"
             rounded="xl"
             rows="1"
-            max-rows="3"
+            max-rows="4"
             auto-grow
             hide-details
             :disabled="$loading"
@@ -167,8 +189,11 @@
             <v-icon icon="mdi-send" size="20" />
           </v-btn>
         </div>
-      </v-card-actions>
+      </div>
     </v-card>
+
+    <!-- History Drawer -->
+    <ChatHistory v-model="showHistory" />
   </div>
 </template>
 
@@ -179,23 +204,29 @@ const { mobile } = useDisplay();
 const reportIAStore = useReportIAStore();
 
 const chatOpen = ref(false);
+const showHistory = ref(false);
 const userInput = ref("");
-const messagesContainer = ref<any>(null);
+const messagesContainer = ref<HTMLElement | null>(null);
 
-const $messages = computed(() => reportIAStore.$messages);
+const $chatMessages = computed(() => reportIAStore.$chatMessages);
 const $loading = computed(() => reportIAStore.$loading);
+
+const suggestions = [
+  "Quantos pacientes estão cadastrados?",
+  "Qual o faturamento deste mês?",
+  "Quantas solicitações foram feitas hoje?",
+];
 
 const scrollToBottom = () => {
   nextTick(() => {
-    const container = messagesContainer.value?.$el || messagesContainer.value;
-    if (container) {
-      container.scrollTop = container.scrollHeight;
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
     }
   });
 };
 
 watch(
-  $messages,
+  $chatMessages,
   () => {
     scrollToBottom();
   },
@@ -216,8 +247,13 @@ const handleSend = async () => {
   await reportIAStore.sendMessage(prompt);
 };
 
+const handleSuggestion = (suggestion: string) => {
+  userInput.value = suggestion;
+  handleSend();
+};
+
 const handleClearChat = () => {
-  reportIAStore.clearMessages();
+  reportIAStore.clearChat();
 };
 </script>
 
@@ -239,10 +275,10 @@ const handleClearChat = () => {
 }
 
 .chat-window-desktop {
-  bottom: 150px;
+  bottom: 170px;
   right: 24px;
-  width: 400px;
-  height: 550px;
+  width: 420px;
+  height: 580px;
 }
 
 .chat-window-mobile {
@@ -255,6 +291,12 @@ const handleClearChat = () => {
   border-radius: 0 !important;
 }
 
+.chat-header {
+  background: linear-gradient(135deg, #5574ed, #7c4dff);
+  border-radius: 24px 24px 0 0;
+  flex-shrink: 0;
+}
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -262,8 +304,7 @@ const handleClearChat = () => {
 }
 
 .chat-input-area {
-  flex-direction: column;
-  border-top: none;
+  flex-shrink: 0;
 }
 
 /* Typing indicator animation */

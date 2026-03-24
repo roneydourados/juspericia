@@ -50,13 +50,7 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
-
-interface ChatMessage {
-  id: number;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
+import type { ChatMessage } from "@/types/ReportIA";
 
 const props = defineProps<{
   message: ChatMessage;
@@ -67,6 +61,17 @@ const formattedTime = computed(() =>
   dayjs(props.message.timestamp).format("HH:mm"),
 );
 </script>
+
+<style scoped>
+.user-bubble {
+  border-bottom-right-radius: 4px !important;
+}
+
+.assistant-bubble {
+  border-bottom-left-radius: 4px !important;
+  border: 1px solid rgba(var(--v-theme-primary), 0.12);
+}
+</style>
 
 <style scoped>
 .user-bubble {
