@@ -243,7 +243,10 @@
         "
       >
         <slot />
-        <SuportButton />
+        <div class="d-flex align-center ga-2">
+          <SuportButton />
+          <ChatWidget />
+        </div>
       </div>
     </v-main>
     <v-footer app name="footer" height="30" color="bgcolor">
