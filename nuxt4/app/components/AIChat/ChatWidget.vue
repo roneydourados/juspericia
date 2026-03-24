@@ -254,6 +254,7 @@ const handleSuggestion = (suggestion: string) => {
 
 const handleClearChat = () => {
   reportIAStore.clearChat();
+  reportIAStore.fetchHistory();
 };
 </script>
 
