@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   css: [
     "notivue/notification.css", // Only needed if using built-in notifications
     "notivue/animations.css", // Only needed if using built-in animations
+    "@/assets/styles/vuetify-compat.css",
     "@/assets/styles/main.css",
     "@/assets/styles/tiptap-content.css",
   ],
@@ -17,7 +18,14 @@ export default defineNuxtConfig({
     (_options, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", (config) => {
         // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }));
+        config.plugins.push(
+          vuetify({
+            autoImport: true,
+            styles: {
+              configFile: "assets/styles/settings.scss",
+            },
+          })
+        );
       });
     },
     "notivue/nuxt",
@@ -103,6 +111,24 @@ export default defineNuxtConfig({
       template: {
         transformAssetUrls,
       },
+    },
+    optimizeDeps: {
+      include: [
+        "@vue/devtools-core",
+        "@vue/devtools-kit",
+        "vue3-apexcharts",
+        "vue3-json-viewer",
+        "dayjs",
+        "dayjs/locale/pt",
+        "dayjs/plugin/customParseFormat",
+        "axios",
+        "uuidv7",
+        "vee-validate",
+        "@vee-validate/zod",
+        "zod",
+        "@brazilian-utils/brazilian-utils",
+        "@vueuse/core",
+      ],
     },
   },
 

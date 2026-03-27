@@ -28,20 +28,18 @@ export default defineNuxtPlugin((app) => {
       },
     },
     defaults: {
-      VApp: {
+      global: {
         style: "font-family: 'Montserrat', sans-serif;",
       },
     },
-    // display: {
-    //   mobileBreakpoint: 'sm',
-    //   thresholds: {
-    //     xs: 0,
-    //     sm: 340,
-    //     md: 540,
-    //     lg: 800,
-    //     xl: 1280,
-    //   },
-    // },
+    display: {
+      thresholds: {
+        md: 960,
+        lg: 1280,
+        xl: 1920,
+        xxl: 2560,
+      },
+    },
     directives,
   });
   app.vueApp.use(vuetify);

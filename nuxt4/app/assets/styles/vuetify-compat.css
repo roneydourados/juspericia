@@ -1,0 +1,179 @@
+/**
+ * Vuetify 4 compatibility layer
+ * Restores MD2 typography classes and CSS reset that were removed in the MD3 migration.
+ * Reference: https://vuetifyjs.com/en/getting-started/upgrade-guide/
+ */
+
+/* Layer order declaration - ensures proper cascade priority */
+@layer base, vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, vuetify-final, overrides;
+
+/* ================================================
+   CSS Reset - Restore base resets removed in V4
+   ================================================ */
+@layer vuetify-core {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+
+  ul,
+  ol,
+  figure,
+  details,
+  summary {
+    padding: 0;
+    margin: 0;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    background-color: transparent;
+    border-style: none;
+  }
+}
+
+/* ================================================
+   MD2 Typography Classes (Legacy Compatibility)
+   These classes were removed in Vuetify 4 (MD3).
+   Restoring them so existing templates continue to work.
+   ================================================ */
+@layer vuetify-utilities {
+  .text-h1 {
+    font-size: 6rem !important;
+    font-weight: 300;
+    line-height: 6rem;
+    letter-spacing: -0.015625em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-h2 {
+    font-size: 3.75rem !important;
+    font-weight: 300;
+    line-height: 3.75rem;
+    letter-spacing: -0.0083333em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-h3 {
+    font-size: 3rem !important;
+    font-weight: 400;
+    line-height: 3.125rem;
+    letter-spacing: normal !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-h4 {
+    font-size: 2.125rem !important;
+    font-weight: 400;
+    line-height: 2.5rem;
+    letter-spacing: 0.0073529em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-h5 {
+    font-size: 1.5rem !important;
+    font-weight: 400;
+    line-height: 2rem;
+    letter-spacing: normal !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-h6 {
+    font-size: 1.25rem !important;
+    font-weight: 500;
+    line-height: 2rem;
+    letter-spacing: 0.0125em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-subtitle-1 {
+    font-size: 1rem !important;
+    font-weight: 400;
+    line-height: 1.75rem;
+    letter-spacing: 0.009375em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-subtitle-2 {
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    line-height: 1.375rem;
+    letter-spacing: 0.0071429em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-body-1 {
+    font-size: 1rem !important;
+    font-weight: 400;
+    line-height: 1.5rem;
+    letter-spacing: 0.03125em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-body-2 {
+    font-size: 0.875rem !important;
+    font-weight: 400;
+    line-height: 1.25rem;
+    letter-spacing: 0.0178571em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-button {
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    line-height: 2.25rem;
+    letter-spacing: 0.0892857em !important;
+    text-transform: uppercase;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-caption {
+    font-size: 0.75rem !important;
+    font-weight: 400;
+    line-height: 1.25rem;
+    letter-spacing: 0.0333333em !important;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  .text-overline {
+    font-size: 0.75rem !important;
+    font-weight: 500;
+    line-height: 2rem;
+    letter-spacing: 0.1666667em !important;
+    text-transform: uppercase;
+    font-family: "Montserrat", sans-serif !important;
+  }
+
+  /* ================================================
+     Font Weight Utilities (ensure they override layers)
+     ================================================ */
+  .font-weight-thin {
+    font-weight: 100 !important;
+  }
+
+  .font-weight-light {
+    font-weight: 300 !important;
+  }
+
+  .font-weight-regular {
+    font-weight: 400 !important;
+  }
+
+  .font-weight-medium {
+    font-weight: 500 !important;
+  }
+
+  .font-weight-bold {
+    font-weight: 700 !important;
+  }
+
+  .font-weight-black {
+    font-weight: 900 !important;
+  }
+}

@@ -1,0 +1,11 @@
+@use "vuetify/settings" with (
+  $body-font-family: (
+    "Montserrat",
+    sans-serif,
+  ),
+  $heading-font-family: (
+    "Montserrat",
+    sans-serif,
+  ),
+  $button-text-transform: "none"
+);
