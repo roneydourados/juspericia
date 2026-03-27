@@ -286,6 +286,7 @@ import Image from "@tiptap/extension-image";
 import { Color, TextStyle, FontFamily } from "@tiptap/extension-text-style";
 import HardBreak from "@tiptap/extension-hard-break";
 import Gapcursor from "@tiptap/extension-gapcursor";
+import { Extension } from "@tiptap/core";
 //********IMPORTS*********
 
 //********COMPOSABLES*********
@@ -369,6 +370,14 @@ onMounted(() => {
       }),
       Image.configure({
         allowBase64: true,
+      }),
+      Extension.create({
+        name: "enterHardBreak",
+        addKeyboardShortcuts() {
+          return {
+            Enter: () => this.editor.commands.setHardBreak(),
+          };
+        },
       }),
     ],
     onUpdate: () => {

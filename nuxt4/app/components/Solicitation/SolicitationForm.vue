@@ -193,6 +193,7 @@
             <div v-for="item in form.files" class="w-100 mt-4">
               <AttachementCard
                 :file-name="item.fileName!"
+                :file-created-at="item.createdAt || new Date().toISOString()"
                 @delete="getFileDelete(item)"
                 :download-visible="false"
               />
