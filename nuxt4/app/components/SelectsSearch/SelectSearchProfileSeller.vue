@@ -20,8 +20,8 @@
       <template #item="{ item, props }">
         <v-list-item
           v-bind="props"
-          :title="item.raw.profileName"
-          :subtitle="item.raw.type"
+          :title="item.profileName"
+          :subtitle="item.type"
           density="compact"
         >
         </v-list-item>
@@ -30,7 +30,7 @@
       <template #selection="{ item }">
         <div class="d-flex align-center">
           <span class="ml-2 d-inline-block text-truncate">
-            {{ item.raw.profileName }}
+            {{ item.profileName }}
           </span>
         </div>
       </template>

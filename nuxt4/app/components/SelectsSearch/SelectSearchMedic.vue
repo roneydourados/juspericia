@@ -17,18 +17,18 @@
     :disabled="disabled"
   >
     <template #item="{ item, props }">
-      <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+      <v-list-item v-bind="props" :title="item.name" density="compact">
         <template #subtitle>
           <div class="d-flex flex-column">
             <div class="text-caption text-grey-darken-2">
-              CRM: {{ item.raw.crm }}/{{ item.raw.crmUf }}
+              CRM: {{ item.crm }}/{{ item.crmUf }}
             </div>
             <div class="text-caption text-grey-darken-2">
-              CPF/CNPJ: {{ formatCPFOrCNPJ(item.raw.cpfCnpj) }}
+              CPF/CNPJ: {{ formatCPFOrCNPJ(item.cpfCnpj) }}
             </div>
             <div class="text-caption text-grey-darken-2">
               {{
-                item.raw.medicalSpecialtiesMedic?.[0].medicalSpecialty
+                item.medicalSpecialtiesMedic?.[0].medicalSpecialty
                   .medicalSpecialty
               }}
             </div>
@@ -40,7 +40,7 @@
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.name }}
+          {{ item.name }}
         </span>
       </div>
     </template>
@@ -123,8 +123,8 @@ const $all = computed(() => {
     return userMedicStore.$all.filter((item) =>
       item.medicalSpecialtiesMedic?.some(
         (speciality) =>
-          speciality.medicalSpecialtyId === props.medicalSpecialtyId
-      )
+          speciality.medicalSpecialtyId === props.medicalSpecialtyId,
+      ),
     );
   }
   return userMedicStore.$all;

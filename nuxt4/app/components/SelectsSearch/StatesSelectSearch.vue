@@ -14,14 +14,14 @@
     <template #item="{ props, item }">
       <v-list-item
         v-bind="props"
-        :title="String((item as any).raw.code)"
+        :title="String((item as any).code)"
         density="compact"
       />
     </template>
 
     <template #item-selection="{ item }">
       <div class="d-flex align-center">
-        {{ (item as any).raw.code }}
+        {{ (item as any).code }}
       </div>
     </template>
   </SelectInput>

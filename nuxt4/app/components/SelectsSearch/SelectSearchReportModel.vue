@@ -17,14 +17,14 @@
     :disabled="disabled"
   >
     <template #item="{ item, props }">
-      <v-list-item v-bind="props" :title="item.raw.title" density="compact">
+      <v-list-item v-bind="props" :title="item.title" density="compact">
       </v-list-item>
     </template>
 
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.title }}
+          {{ item.title }}
         </span>
       </div>
     </template>

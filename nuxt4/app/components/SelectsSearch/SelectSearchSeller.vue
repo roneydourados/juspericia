@@ -17,14 +17,14 @@
     :disabled="disabled"
   >
     <template #item="{ item, props }">
-      <v-list-item v-bind="props" :title="item.raw.name" density="compact">
+      <v-list-item v-bind="props" :title="item.name" density="compact">
         <template #subtitle>
           <div class="d-flex flex-column">
             <div class="text-caption text-grey-darken-2">
-              {{ item.raw.email }}
+              {{ item.email }}
             </div>
             <div class="text-caption text-grey-darken-2">
-              {{ formatCPFOrCNPJ(item.raw.cpfCnpj) }}
+              {{ formatCPFOrCNPJ(item.cpfCnpj) }}
             </div>
           </div>
         </template>
@@ -34,7 +34,7 @@
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.name }}
+          {{ item.name }}
         </span>
       </div>
     </template>

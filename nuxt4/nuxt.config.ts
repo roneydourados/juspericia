@@ -128,6 +128,22 @@ export default defineNuxtConfig({
         "zod",
         "@brazilian-utils/brazilian-utils",
         "@vueuse/core",
+        "@vue/devtools-core",
+        "@vue/devtools-kit",
+        "vue3-apexcharts",
+        "vue3-json-viewer",
+        "dayjs", // CJS
+        "dayjs/locale/pt", // CJS
+        "dayjs/plugin/customParseFormat", // CJS
+        "axios",
+        "uuidv7",
+        "vee-validate",
+        "@vee-validate/zod",
+        "zod",
+        "@brazilian-utils/brazilian-utils",
+        "@vueuse/core",
+        "@tiptap/extension-text-align",
+        "@tiptap/extension-text-style",
       ],
     },
   },

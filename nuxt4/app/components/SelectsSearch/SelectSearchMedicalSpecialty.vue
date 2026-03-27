@@ -19,11 +19,11 @@
     <template #item="{ item, props }">
       <v-list-item
         v-bind="props"
-        :title="item.raw.medicalSpecialty"
+        :title="item.medicalSpecialty"
         density="compact"
       >
         <span class="text-caption text-colorTextPrimary">
-          {{ amountFormated(item.raw.value ?? 0, true) }}
+          {{ amountFormated(item.value ?? 0, true) }}
         </span>
       </v-list-item>
     </template>
@@ -31,9 +31,9 @@
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.medicalSpecialty }}
+          {{ item.medicalSpecialty }}
           <span class="text-caption text-colorTextPrimary">
-            {{ amountFormated(item.raw.value ?? 0, true) }}
+            {{ amountFormated(item.value ?? 0, true) }}
           </span>
         </span>
       </div>

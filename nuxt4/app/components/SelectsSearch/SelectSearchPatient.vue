@@ -20,12 +20,12 @@
       <template #item="{ item, props }">
         <v-list-item
           v-bind="props"
-          :title="`${item.raw.id} - ${item.raw.name} ${item.raw.surname}`"
+          :title="`${item.id} - ${item.name} ${item.surname}`"
           density="compact"
         >
           <template #subtitle>
             <div class="text-caption text-grey-darken-2">
-              CPF: {{ formatCPFOrCNPJ(item.raw.cpf) }}
+              CPF: {{ formatCPFOrCNPJ(item.cpf) }}
             </div>
           </template>
         </v-list-item>
@@ -34,7 +34,7 @@
       <template #selection="{ item }">
         <div class="d-flex align-center">
           <span class="text-truncate">
-            {{ item.raw.name }} {{ item.raw.surname }}
+            {{ item.name }} {{ item.surname }}
           </span>
         </div>
       </template>

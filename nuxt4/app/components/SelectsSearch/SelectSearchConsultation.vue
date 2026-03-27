@@ -19,7 +19,7 @@
     <template #item="{ item, props }">
       <v-list-item
         v-bind="props"
-        :title="item.raw.consultationName"
+        :title="item.consultationName"
         density="compact"
       >
         <!-- <span class="text-caption text-colorTextPrimary">
@@ -31,7 +31,7 @@
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.consultationName }}
+          {{ item.consultationName }}
         </span>
         <!-- <span class="text-caption text-colorTextPrimary ml-2">
           {{ amountFormated(item.raw.value ?? 0, true) }}

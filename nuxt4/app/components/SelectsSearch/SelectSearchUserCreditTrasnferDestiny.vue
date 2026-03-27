@@ -18,11 +18,8 @@
     <template #item="{ item, props }">
       <v-list-item
         v-bind="props"
-        :title="item.raw.description"
-        :subtitle="`Saldo: ${amountFormated(
-          Number(item.raw.salt ?? '0'),
-          true
-        )}`"
+        :title="item.description"
+        :subtitle="`Saldo: ${amountFormated(Number(item.salt ?? '0'), true)}`"
         density="compact"
       />
     </template>
@@ -30,7 +27,7 @@
     <template #selection="{ item }">
       <div class="d-flex align-center">
         <span class="ml-2 d-inline-block text-truncate">
-          {{ item.raw.description }}
+          {{ item.description }}
         </span>
       </div>
     </template>
@@ -84,7 +81,7 @@ onMounted(async () => {
 // VeeValidate
 const fieldName = computed<MaybeRef>(() => uuidv7());
 const validationRules = computed<MaybeRef>(() =>
-  toTypedSchema(zod.object({}).nullish().optional())
+  toTypedSchema(zod.object({}).nullish().optional()),
 );
 const { value } = useField<Object>(fieldName, validationRules, {
   syncVModel: true,

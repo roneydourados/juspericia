@@ -4,7 +4,6 @@
     font-size="1.5rem"
     :headers="headers"
     :items="$transactions"
-    class="elevation-1"
     :loading="loading"
     :show-crud="false"
     :items-per-page="30"
