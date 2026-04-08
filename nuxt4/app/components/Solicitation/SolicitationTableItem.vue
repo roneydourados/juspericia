@@ -1185,92 +1185,111 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
 const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps,
 ) => {
-  //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
-  await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
+  push.info({
+    title: "Fora do ar",
+    message: "Serviço temporariamente fora do ar.",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Entendi",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+  // //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
+  // await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
 
-  if (
-    $userCreditTotalSalt.value &&
-    Number($userCreditTotalSalt.value.totalSalt) >=
-      Number($solicitationTotal.value)
-  ) {
-    push.info({
-      title: "Saldo de crédito disponível",
-      message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
-        $userCreditTotalSalt.value?.totalSalt ?? 0,
-        true,
-      )}. Esta solicitação será baixada automaticamente.`,
-      duration: Infinity, // Não fecha automaticamente
-      props: {
-        isModal: true, // Propriedade customizada para identificar como modal
-        preventOverlayClose: true, // Impede fechar clicando no overlay
-        preventEscapeClose: false, // Permite fechar com ESC
-        actions: [
-          {
-            label: "Confirmar",
-            variant: "primary",
-            icon: "mdi-file-rotate-right-outline",
-            iconColor: "colorIcon",
-            handler: async () => {
-              loading.value = true;
-              try {
-                await storeConsultation.paidUseSalt(item.publicId!);
-                await getSolicitations();
-              } catch (error) {
-                console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
-              } finally {
-                loading.value = false;
-              }
-            },
-          },
-          {
-            label: "Cancelar",
-            variant: "secondary",
-            icon: "mdi-close",
-            iconColor: "red",
-            handler: () => {},
-          },
-        ],
-      },
-    });
+  // if (
+  //   $userCreditTotalSalt.value &&
+  //   Number($userCreditTotalSalt.value.totalSalt) >=
+  //     Number($solicitationTotal.value)
+  // ) {
+  //   push.info({
+  //     title: "Saldo de crédito disponível",
+  //     message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
+  //       $userCreditTotalSalt.value?.totalSalt ?? 0,
+  //       true,
+  //     )}. Esta solicitação será baixada automaticamente.`,
+  //     duration: Infinity, // Não fecha automaticamente
+  //     props: {
+  //       isModal: true, // Propriedade customizada para identificar como modal
+  //       preventOverlayClose: true, // Impede fechar clicando no overlay
+  //       preventEscapeClose: false, // Permite fechar com ESC
+  //       actions: [
+  //         {
+  //           label: "Confirmar",
+  //           variant: "primary",
+  //           icon: "mdi-file-rotate-right-outline",
+  //           iconColor: "colorIcon",
+  //           handler: async () => {
+  //             loading.value = true;
+  //             try {
+  //               await storeConsultation.paidUseSalt(item.publicId!);
+  //               await getSolicitations();
+  //             } catch (error) {
+  //               console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+  //             } finally {
+  //               loading.value = false;
+  //             }
+  //           },
+  //         },
+  //         {
+  //           label: "Cancelar",
+  //           variant: "secondary",
+  //           icon: "mdi-close",
+  //           iconColor: "red",
+  //           handler: () => {},
+  //         },
+  //       ],
+  //     },
+  //   });
 
-    return;
-  }
+  //   return;
+  // }
 
-  //refazer a consulta aqui só para garantir que está com os dados mais recentes
-  await storeConsultation.show(item.publicId!);
+  // //refazer a consulta aqui só para garantir que está com os dados mais recentes
+  // await storeConsultation.show(item.publicId!);
 
-  //caso já tenha uma venda vinculada, recarregar o pagamento
-  if ($single.value?.sale) {
-    await handleReloadPayment(item);
-    return;
-  }
+  // //caso já tenha uma venda vinculada, recarregar o pagamento
+  // if ($single.value?.sale) {
+  //   await handleReloadPayment(item);
+  //   return;
+  // }
 
-  //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
-  if (item.sale && item.sale.saleId) {
-    // este método aqui já cancela a venda vinculada ao pagament
-    await asaas.deletePayment(item.sale.saleId);
-  }
-  showSale.value = true;
-  modelPrececkout.value = {
-    name: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
-    description: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
-    dueDays: 2,
-    paymentForm: "CREDIT_CARD",
-    discountValue: undefined,
-    discountType: undefined,
-    installmentCount: 1,
-    itemValue: $solicitationTotal.value,
-    totalValue: $solicitationTotal.value,
-    category: "solicitation",
-    totalBruteValue: $solicitationTotal.value,
-    packageId: undefined,
-    voucherDesconto: "",
-    voucherId: undefined,
-    publicSaleId: "",
-    packgeSaleValue: $solicitationTotal.value, // valor do pacote, no caso é uma solicitação única
-    packgeQuantity: 1, //atende apenas uma solicitação
-    userId: item.userId,
-  };
+  // //verificar se já existe uma venda vinculada e se ainda está disponível para pagamento no asaas
+  // if (item.sale && item.sale.saleId) {
+  //   // este método aqui já cancela a venda vinculada ao pagament
+  //   await asaas.deletePayment(item.sale.saleId);
+  // }
+  // showSale.value = true;
+  // modelPrececkout.value = {
+  //   name: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
+  //   description: `Solicitação de consulta Nº ${item.id} do paciente ${item.Patient?.name} ${item.Patient?.surname}`,
+  //   dueDays: 2,
+  //   paymentForm: "CREDIT_CARD",
+  //   discountValue: undefined,
+  //   discountType: undefined,
+  //   installmentCount: 1,
+  //   itemValue: $solicitationTotal.value,
+  //   totalValue: $solicitationTotal.value,
+  //   category: "solicitation",
+  //   totalBruteValue: $solicitationTotal.value,
+  //   packageId: undefined,
+  //   voucherDesconto: "",
+  //   voucherId: undefined,
+  //   publicSaleId: "",
+  //   packgeSaleValue: $solicitationTotal.value, // valor do pacote, no caso é uma solicitação única
+  //   packgeQuantity: 1, //atende apenas uma solicitação
+  //   userId: item.userId,
+  // };
 };
 
 const handleSaleItemForAsaas = async () => {
@@ -1350,50 +1369,56 @@ const handleSaleItemForAsaas = async () => {
 };
 
 const handleReloadPayment = async (item: SolicitationConsultationProps) => {
-  loading.value = true;
-  try {
-    if (!item.sale) {
-      push.warning("Pagamento não encontrado");
-      return;
-    }
+  push.info({
+    title: "Fora do ar",
+    message: "Serviço temporariamente fora do ar.",
+    duration: Infinity, // Não fecha automaticamente
+    props: {
+      isModal: true, // Propriedade customizada para identificar como modal
+      preventOverlayClose: true, // Impede fechar clicando no overlay
+      preventEscapeClose: false, // Permite fechar com ESC
+      actions: [
+        {
+          label: "Entendi",
+          variant: "primary",
+          icon: "mdi-file-rotate-right-outline",
+          iconColor: "colorIcon",
+          handler: () => {},
+        },
+      ],
+    },
+  });
+  // loading.value = true;
+  // try {
+  //   if (!item.sale) {
+  //     push.warning("Pagamento não encontrado");
+  //     return;
+  //   }
 
-    // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
-    if (dayjs().isAfter(dayjs(item.sale.dueDate))) {
-      await asaas.deletePayment(item.sale.saleId!);
-      await getSolicitations();
-      await handleSaleItemForAsaas();
-      return;
-    }
+  //   // se a fatura já estiver vencida e em aberto, então apagar e gerar outra
+  //   if (dayjs().isAfter(dayjs(item.sale.dueDate))) {
+  //     await asaas.deletePayment(item.sale.saleId!);
+  //     await getSolicitations();
+  //     await handleSaleItemForAsaas();
+  //     return;
+  //   }
 
-    //caso contrário, apenas abrir a fatura
-    // const screenWidth = window.screen.width;
-    // const screenHeight = window.screen.height;
-    // const popupWidth = Math.round(screenWidth * 0.95);
-    // const popupHeight = Math.round(screenHeight * 0.95);
-    // const popupLeft = Math.round((screenWidth - popupWidth) / 2);
-    // const popupTop = Math.round((screenHeight - popupHeight) / 2);
+  //   // abrir a fatura em uma nova aba
+  //   const popup = window.open(item.sale.invoiceUrl, "_blank");
+  //   if (popup) popup.focus();
 
-    // const popup = window.open(
-    //   item.sale.invoiceUrl,
-    //   "_blank",
-    //   `width=${popupWidth},height=${popupHeight},left=${popupLeft},top=${popupTop},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,directories=no,status=yes`
-    // );
-    // abrir a fatura em uma nova aba
-    const popup = window.open(item.sale.invoiceUrl, "_blank");
-    if (popup) popup.focus();
-
-    // verificar se o popup foi fechado
-    const popupChecker = setInterval(async () => {
-      if (popup && popup.closed) {
-        clearInterval(popupChecker);
-        await getSolicitations();
-      }
-    }, 700);
-  } catch (error) {
-    console.log("🚀 ~ handleReloadPayment ~ error:", error);
-  } finally {
-    loading.value = false;
-  }
+  //   // verificar se o popup foi fechado
+  //   const popupChecker = setInterval(async () => {
+  //     if (popup && popup.closed) {
+  //       clearInterval(popupChecker);
+  //       await getSolicitations();
+  //     }
+  //   }, 700);
+  // } catch (error) {
+  //   console.log("🚀 ~ handleReloadPayment ~ error:", error);
+  // } finally {
+  //   loading.value = false;
+  // }
 };
 
 const handleDownloadFile = async (publicId: string) => {

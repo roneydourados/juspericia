@@ -1,5 +1,9 @@
 <template>
-  <ServicePackages />
+  <!-- <ServicePackages /> -->
+  <EmptyContent
+    head-line="Fora do ar"
+    title="Serviço temporariamente fora do ar."
+  />
   <DialogLoading :dialog="loading" />
 </template>
 
