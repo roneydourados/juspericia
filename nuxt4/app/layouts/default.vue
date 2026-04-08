@@ -245,7 +245,7 @@
         <slot />
 
         <SuportButton />
-        <ChatWidget v-if="$currentUser?.profile?.type === 'ADMIN'" />
+        <!-- <ChatWidget v-if="$currentUser?.profile?.type === 'ADMIN'" /> -->
       </div>
     </v-main>
     <v-footer app name="footer" height="30" color="bgcolor">
