@@ -1185,75 +1185,79 @@ const handleSchedule = (item: SolicitationConsultationProps) => {
 const handleMountModelPrececkout = async (
   item: SolicitationConsultationProps,
 ) => {
-  push.info({
-    title: "Fora do ar",
-    message: "Serviço temporariamente fora do ar.",
-    duration: Infinity, // Não fecha automaticamente
-    props: {
-      isModal: true, // Propriedade customizada para identificar como modal
-      preventOverlayClose: true, // Impede fechar clicando no overlay
-      preventEscapeClose: false, // Permite fechar com ESC
-      actions: [
-        {
-          label: "Entendi",
-          variant: "primary",
-          icon: "mdi-file-rotate-right-outline",
-          iconColor: "colorIcon",
-          handler: () => {},
-        },
-      ],
-    },
-  });
-  // //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
-  // await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
+  if ($currentUser.value?.profile?.type !== "ADMIN") {
+    push.info({
+      title: "Fora do ar",
+      message: "Serviço temporariamente fora do ar.",
+      duration: Infinity, // Não fecha automaticamente
+      props: {
+        isModal: true, // Propriedade customizada para identificar como modal
+        preventOverlayClose: true, // Impede fechar clicando no overlay
+        preventEscapeClose: false, // Permite fechar com ESC
+        actions: [
+          {
+            label: "Entendi",
+            variant: "primary",
+            icon: "mdi-file-rotate-right-outline",
+            iconColor: "colorIcon",
+            handler: () => {},
+          },
+        ],
+      },
+    });
+    return;
+  }
 
-  // if (
-  //   $userCreditTotalSalt.value &&
-  //   Number($userCreditTotalSalt.value.totalSalt) >=
-  //     Number($solicitationTotal.value)
-  // ) {
-  //   push.info({
-  //     title: "Saldo de crédito disponível",
-  //     message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
-  //       $userCreditTotalSalt.value?.totalSalt ?? 0,
-  //       true,
-  //     )}. Esta solicitação será baixada automaticamente.`,
-  //     duration: Infinity, // Não fecha automaticamente
-  //     props: {
-  //       isModal: true, // Propriedade customizada para identificar como modal
-  //       preventOverlayClose: true, // Impede fechar clicando no overlay
-  //       preventEscapeClose: false, // Permite fechar com ESC
-  //       actions: [
-  //         {
-  //           label: "Confirmar",
-  //           variant: "primary",
-  //           icon: "mdi-file-rotate-right-outline",
-  //           iconColor: "colorIcon",
-  //           handler: async () => {
-  //             loading.value = true;
-  //             try {
-  //               await storeConsultation.paidUseSalt(item.publicId!);
-  //               await getSolicitations();
-  //             } catch (error) {
-  //               console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
-  //             } finally {
-  //               loading.value = false;
-  //             }
-  //           },
-  //         },
-  //         {
-  //           label: "Cancelar",
-  //           variant: "secondary",
-  //           icon: "mdi-close",
-  //           iconColor: "red",
-  //           handler: () => {},
-  //         },
-  //       ],
-  //     },
-  //   });
+  //Verificar se o usuário possui um total em saldo de crédito que de para pagar a solicitação
+  await saltCredit.getTotalSalt(item.Patient?.User?.publicId!);
 
-  //   return;
-  // }
+  if (
+    $userCreditTotalSalt.value &&
+    Number($userCreditTotalSalt.value.totalSalt) >=
+      Number($solicitationTotal.value)
+  ) {
+    push.info({
+      title: "Saldo de crédito disponível",
+      message: `Detectamos que você possui um saldo de crédito de ${amountFormated(
+        $userCreditTotalSalt.value?.totalSalt ?? 0,
+        true,
+      )}. Esta solicitação será baixada automaticamente.`,
+      duration: Infinity, // Não fecha automaticamente
+      props: {
+        isModal: true, // Propriedade customizada para identificar como modal
+        preventOverlayClose: true, // Impede fechar clicando no overlay
+        preventEscapeClose: false, // Permite fechar com ESC
+        actions: [
+          {
+            label: "Confirmar",
+            variant: "primary",
+            icon: "mdi-file-rotate-right-outline",
+            iconColor: "colorIcon",
+            handler: async () => {
+              loading.value = true;
+              try {
+                await storeConsultation.paidUseSalt(item.publicId!);
+                await getSolicitations();
+              } catch (error) {
+                console.log("🚀 ~ handleFinalizeSchedule ~ error:", error);
+              } finally {
+                loading.value = false;
+              }
+            },
+          },
+          {
+            label: "Cancelar",
+            variant: "secondary",
+            icon: "mdi-close",
+            iconColor: "red",
+            handler: () => {},
+          },
+        ],
+      },
+    });
+
+    return;
+  }
 
   // //refazer a consulta aqui só para garantir que está com os dados mais recentes
   // await storeConsultation.show(item.publicId!);
