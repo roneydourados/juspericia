@@ -11,10 +11,9 @@
           rounded
           clearable
           class="mb-4"
-          @update:model-value="handleFilterMenu"
         />
       </v-col>
-      <v-col v-for="(item, index) in itemsMenu" :key="index" cols="12" lg="4">
+      <v-col v-for="(item, index) in $itemsMenu" :key="index" cols="12" lg="4">
         <CardBlur
           v-if="item.visible"
           @click="handlClick(item.to)"
@@ -49,113 +48,234 @@ const showTermsForm = ref(false);
 
 const $currentUser = computed(() => authStore.$currentUser);
 
-const itemsMenu = ref([
-  {
-    to: "/admin/medics",
-    icon: "mdi-stethoscope",
-    text: "Cadastro de médicos. Cadastrar/Administrar médicos parceiros que serão prestadores de atendimento via telemedicina.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/admins",
-    icon: "mdi-shield-account",
-    text: "Usuários administradores. Gestão dos usuários com acesso total as funcionalidades do sistema.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/sellers",
-    icon: "mdi-account-tie-outline",
-    text: "Usuários vendedores. Gestão dos usuários com acesso para vender consultas.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/atendents",
-    icon: "mdi-account-tie-voice-outline",
-    text: "Atendente. Gestão dos usuários com acesso para digitação de laudos médicos.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/queries",
-    icon: "mdi-file-find-outline",
-    text: "Consultas. Cadastro das consultas oferecidas pela plataforma",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/packages",
-    icon: "mdi-package-variant-closed-plus",
-    text: "Cadastro de pacote de consultas. Gestão de pacotes de consultas possibilita a venda de consultas em lote e com preço mais acessível ao escritório",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/report-models",
-    icon: "mdi-file-chart-check-outline",
-    text: "Modelos de laudo. Deixar modelos de laudo médico pré-cadastrados para serem utilizados como base no lançamento de um laudo final.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/parameters",
-    icon: "mdi-cog-outline",
-    text: "Parametrizações. Configurações gerais do sistema.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/comissions",
-    icon: "mdi-briefcase-account-outline",
-    text: "Gestão de comissões. Controle de comissões dos médicos e vendedores.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/medical-specialty",
-    icon: "mdi-medical-bag",
-    text: "Cadastro de especialidades médicas. Cadastrar/Administrar especialidades médicas.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "showTerms",
-    icon: "mdi-file-document-multiple-outline",
-    text: "Atualizar dados de termos e condições de uso do sistema.",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/atendments",
-    icon: "mdi-headset",
-    text: "Acompanhar Atendimentos",
-    color: "colorIcon",
-    visible: true,
-  },
-  {
-    to: "/admin/expenses",
-    icon: "mdi-currency-usd",
-    text: "Controle de despesas. Gerenciar as despesas do escritório relacionadas a plataforma.",
-    color: "red",
-    visible: $currentUser.value?.isMaster,
-  },
-  {
-    to: "/admin/password-vault",
-    icon: "mdi-lock-outline",
-    text: "Cofre de senhas. Armazenar senhas de acesso a sistemas relacionados a plataforma.",
-    color: "colorIcon",
-    visible: $currentUser.value?.isMaster,
-  },
-  {
-    to: "/admin/agents",
-    icon: "mdi-robot-outline",
-    visible: true,
-    text: "Cadastro de agentes de IA",
-    color: "colorIcon",
-  },
-]);
+const $baseItems = computed(() => {
+  if (authStore.$currentUser?.isMaster) {
+    return [
+      {
+        to: "/admin/medics",
+        icon: "mdi-stethoscope",
+        text: "Cadastro de médicos. Cadastrar/Administrar médicos parceiros que serão prestadores de atendimento via telemedicina.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/admins",
+        icon: "mdi-shield-account",
+        text: "Usuários administradores. Gestão dos usuários com acesso total as funcionalidades do sistema.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/sellers",
+        icon: "mdi-account-tie-outline",
+        text: "Usuários vendedores. Gestão dos usuários com acesso para vender consultas.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/atendents",
+        icon: "mdi-account-tie-voice-outline",
+        text: "Atendente. Gestão dos usuários com acesso para digitação de laudos médicos.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/queries",
+        icon: "mdi-file-find-outline",
+        text: "Consultas. Cadastro das consultas oferecidas pela plataforma",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/packages",
+        icon: "mdi-package-variant-closed-plus",
+        text: "Cadastro de pacote de consultas. Gestão de pacotes de consultas possibilita a venda de consultas em lote e com preço mais acessível ao escritório",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/report-models",
+        icon: "mdi-file-chart-check-outline",
+        text: "Modelos de laudo. Deixar modelos de laudo médico pré-cadastrados para serem utilizados como base no lançamento de um laudo final.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/parameters",
+        icon: "mdi-cog-outline",
+        text: "Parametrizações. Configurações gerais do sistema.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/comissions",
+        icon: "mdi-briefcase-account-outline",
+        text: "Gestão de comissões. Controle de comissões dos médicos e vendedores.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/medical-specialty",
+        icon: "mdi-medical-bag",
+        text: "Cadastro de especialidades médicas. Cadastrar/Administrar especialidades médicas.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "showTerms",
+        icon: "mdi-file-document-multiple-outline",
+        text: "Atualizar dados de termos e condições de uso do sistema.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/atendments",
+        icon: "mdi-headset",
+        text: "Acompanhar Atendimentos",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/expenses",
+        icon: "mdi-currency-usd",
+        text: "Controle de despesas. Gerenciar as despesas do escritório relacionadas a plataforma.",
+        color: "red",
+        visible: $currentUser.value?.isMaster,
+      },
+      {
+        to: "/admin/password-vault",
+        icon: "mdi-lock-outline",
+        text: "Cofre de senhas. Armazenar senhas de acesso a sistemas relacionados a plataforma.",
+        color: "colorIcon",
+        visible: $currentUser.value?.isMaster,
+      },
+      {
+        to: "/admin/agents",
+        icon: "mdi-robot-outline",
+        visible: true,
+        text: "Cadastro de agentes de IA",
+        color: "colorIcon",
+      },
+    ];
+  } else {
+    return [
+      {
+        to: "/admin/medics",
+        icon: "mdi-stethoscope",
+        text: "Cadastro de médicos. Cadastrar/Administrar médicos parceiros que serão prestadores de atendimento via telemedicina.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/admins",
+        icon: "mdi-shield-account",
+        text: "Usuários administradores. Gestão dos usuários com acesso total as funcionalidades do sistema.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/sellers",
+        icon: "mdi-account-tie-outline",
+        text: "Usuários vendedores. Gestão dos usuários com acesso para vender consultas.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/atendents",
+        icon: "mdi-account-tie-voice-outline",
+        text: "Atendente. Gestão dos usuários com acesso para digitação de laudos médicos.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/queries",
+        icon: "mdi-file-find-outline",
+        text: "Consultas. Cadastro das consultas oferecidas pela plataforma",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/packages",
+        icon: "mdi-package-variant-closed-plus",
+        text: "Cadastro de pacote de consultas. Gestão de pacotes de consultas possibilita a venda de consultas em lote e com preço mais acessível ao escritório",
+        color: "colorIcon",
+        visible: true,
+      },
+      // {
+      //   to: "/admin/report-models",
+      //   icon: "mdi-file-chart-check-outline",
+      //   text: "Modelos de laudo. Deixar modelos de laudo médico pré-cadastrados para serem utilizados como base no lançamento de um laudo final.",
+      //   color: "colorIcon",
+      //   visible: true,
+      // },
+      {
+        to: "/admin/parameters",
+        icon: "mdi-cog-outline",
+        text: "Parametrizações. Configurações gerais do sistema.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/comissions",
+        icon: "mdi-briefcase-account-outline",
+        text: "Gestão de comissões. Controle de comissões dos médicos e vendedores.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/medical-specialty",
+        icon: "mdi-medical-bag",
+        text: "Cadastro de especialidades médicas. Cadastrar/Administrar especialidades médicas.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "showTerms",
+        icon: "mdi-file-document-multiple-outline",
+        text: "Atualizar dados de termos e condições de uso do sistema.",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/atendments",
+        icon: "mdi-headset",
+        text: "Acompanhar Atendimentos",
+        color: "colorIcon",
+        visible: true,
+      },
+      {
+        to: "/admin/expenses",
+        icon: "mdi-currency-usd",
+        text: "Controle de despesas. Gerenciar as despesas do escritório relacionadas a plataforma.",
+        color: "red",
+        visible: $currentUser.value?.isMaster,
+      },
+      {
+        to: "/admin/password-vault",
+        icon: "mdi-lock-outline",
+        text: "Cofre de senhas. Armazenar senhas de acesso a sistemas relacionados a plataforma.",
+        color: "colorIcon",
+        visible: $currentUser.value?.isMaster,
+      },
+      {
+        to: "/admin/agents",
+        icon: "mdi-robot-outline",
+        visible: true,
+        text: "Cadastro de agentes de IA",
+        color: "colorIcon",
+      },
+    ];
+  }
+});
+
+const $itemsMenu = computed(() => {
+  const searchLower = search.value.toLowerCase().trim();
+  if (!searchLower) return $baseItems.value;
+  return $baseItems.value.map((item) => ({
+    ...item,
+    visible: item.visible && item.text.toLowerCase().includes(searchLower),
+  }));
+});
 
 const handlClick = async (route: string) => {
   switch (route) {
@@ -166,12 +286,5 @@ const handlClick = async (route: string) => {
     default:
       await router.push(route);
   }
-};
-
-const handleFilterMenu = () => {
-  const searchLower = search.value.toLowerCase();
-  itemsMenu.value.forEach((item) => {
-    item.visible = item.text.toLowerCase().includes(searchLower);
-  });
 };
 </script>

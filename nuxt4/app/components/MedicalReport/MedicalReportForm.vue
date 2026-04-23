@@ -5,7 +5,7 @@
         <FormCrud :on-submit="handleSubmit" :show-submit-button="false">
           <v-card flat rounded="lg">
             <v-row dense class="pa-4">
-              <v-col cols="12">
+              <v-col v-if="$currentUser?.isMaster" cols="12">
                 <SelectSearchReportModel
                   v-model="model.reportModel"
                   label="Carregar Modelo"
@@ -205,7 +205,7 @@ watch(
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const handleSubmit = async () => {
@@ -308,11 +308,11 @@ const handleDeleteAttachment = async () => {
     if (selectedFile.value.publicId) {
       await fileStore.removeAws(selectedFile.value.publicId);
       attachments.value = attachments.value.filter(
-        (attachment) => attachment.fileName !== selectedFile.value?.fileName
+        (attachment) => attachment.fileName !== selectedFile.value?.fileName,
       );
     } else {
       attachments.value = attachments.value.filter(
-        (attachment) => attachment !== selectedFile.value
+        (attachment) => attachment !== selectedFile.value,
       );
     }
   } finally {

@@ -34,6 +34,16 @@ export default defineNuxtRouteMiddleware((to) => {
           pathUrl = to.path.replace(/\/\d+$/, "");
         }
 
+        //pedido do dudu liberar somente para usuario master
+        if (
+          route.to === pathUrl &&
+          route.visible &&
+          route.to === "/admin/report-models" &&
+          !auth.$currentUser?.isMaster
+        ) {
+          return undefined;
+        }
+
         if (route.to === pathUrl && route.visible) {
           return route;
         }
@@ -44,10 +54,10 @@ export default defineNuxtRouteMiddleware((to) => {
       //screen.setScreen(userRoute?.title ?? "");
 
       if (!isValidRoute) {
-        const userRouteLib = auth.$currentUser.profile?.routes?.find(
-          (route) => route.visible === true
-        );
-        return navigateTo(userRouteLib?.to);
+        // const userRouteLib = auth.$currentUser.profile?.routes?.find(
+        //   (route) => route.visible === true
+        // );
+        return navigateTo("/");
       }
     } catch {
       console.log("Erro ao verificar token");
